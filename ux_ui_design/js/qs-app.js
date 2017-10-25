@@ -1,1 +1,0 @@
-jQuery(function($){    alert( $("<a>HH</a>"));})();
