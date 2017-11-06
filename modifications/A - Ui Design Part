@@ -3,10 +3,11 @@ Ui modifications
 Updates and modifications 
 ----------------------------
 A - Choices bigger like bit typeform.am on mobile and bit difficult to touch Thin selection's   
-B- Should be able to go back if not graded for example if I scrub back
-C- Look at typeform when I use cursor or finger it goes back to previous slide
-D- Choice selected should have a smal tick like typeform as well in addition to animation
-
+B - Should be able to go back if not graded for example if I scrub back
+C - Look at typeform when I use cursor or finger it goes back to previous slide
+D - Choice selected should have a smal tick like typeform as well in addition to animation
+E - Actually if you look above the do have a up and down arrow. May be we can have both left and right button and mouse scroll as well
+F - And and mouse over effects if needed for choices
 
 ++++++++++++++
 The Status 
@@ -15,7 +16,7 @@ The Status
  B ==> 
  C ==> 
  D ==> 
-
-
+ E ==> 
+ F ==> 
 
 Note : this File contain all Client Requiments and Changes in project
