@@ -176,7 +176,12 @@
 															 <div class="clearFix"></div>
 
 															 <input type="text" class="form-control descriptions description-field" placeholder="Description ...">
-															 <a data-toggle="modal" data-target="#myModal"  class="choice-adder add-choices" href="#">Add Choices</a>
+
+															 <label class="choice-adder add-choices enable-description">
+																 <input type="checkbox"  value="option4">
+																 	Enable description
+															 </label>
+															 <!-- <a data-toggle="modal" data-target="#myModal"  class="choice-adder add-choices" href="#">Enable descriptions</a> -->
 													 </div>
 
 													 <div class="edit-choices-block">
@@ -214,15 +219,25 @@
 												 	</div>
 
 
-
+													<!-- Image Case  -->
 													<div class="media-action image-case">
 															<div class="inprogress-uploader">
-																<div style="background-image:url('icons/2741270-3d-nature-wallpapers.jpg')" class="target-image">
-																</div>
+																<div class="completed"></div>
+																<div style="background-image:url('icons/2741270-3d-nature-wallpapers.jpg')" class="target-image"></div>
+																<span class="precentage-upl-val">
+																	100%
+																	<span class="uploaded-txt">Upladed</span>
+																</span>
 															</div>
 													</div>
-													<div class="media-action video-case">
 
+
+													<!-- Video Case  -->
+													<div class="media-action video-case">
+														<div class="form-control-wrapper form-control-icon-left">
+															<input type="text" class="form-control" placeholder="Youtube Url">
+															<i class="fa fa-file-video-o color-blue"></i>
+														</div>
 													</div>
 
 
@@ -243,7 +258,7 @@
 	                    <span class="caret-down fa fa-caret-down"></span>
 	                    <span class="icon fa fa-tasks"></span>
 	                </a>
-	                <span class="text">Muliple Choice</span>
+	                <span class="text">Multiple Choice</span>
 
 	            </div>
 	            <div class="control-item-content">

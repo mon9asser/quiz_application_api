@@ -13,7 +13,7 @@ $(document).ready(function(){
 				   'border-top': '1px solid #eee' ,
 				   'padding': '10px',
 				   'background': '#fff'
-			 });
+			 }); 
 	});
 	// Closing the editor !
 	$('.close-iconix').on('click' , function(){
