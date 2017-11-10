@@ -373,7 +373,7 @@ padding: 25px 0 0;
       .inprogress-uploader ,.media-action{
         width: 100%;
        }
-       
+
 }
 .target-image {
   width: 70px;
@@ -429,4 +429,11 @@ padding: 25px 0 0;
 }
 .enable-description{
   cursor: pointer;
+}
+
+.supersize-image {
+  display: inline-block;
+  position: relative;
+  float: right;
+  margin-top: 20px !important;
 }
