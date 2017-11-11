@@ -1,5 +1,61 @@
 /* ==> Fonts :  */
 
+/* ------------------ */
+/*IcoMoon Font Icon !*/
+/* ------------------ */
+@font-face {
+  font-family: 'icomoon';
+  src:  url('../fonts/icomoon/icomoon.eot?xgs8s');
+  src:  url('../fonts/icomoon/icomoon.eot?xgs8s#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon/icomoon.ttf?xgs8s') format('truetype'),
+    url('../fonts/icomoon/icomoon.woff?xgs8s') format('woff'),
+    url('../fonts/icomoon/icomoon.svg?xgs8s#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-check:before {
+  content: "\e900";
+}
+.icon-check-circle:before {
+  content: "\e901";
+}
+.icon-check-square:before {
+  content: "\e902";
+}
+.icon-list:before {
+  content: "\e903";
+}
+.icon-share-2:before {
+  content: "\e904";
+}
+.icon-image:before {
+  content: "\e90d";
+}
+.icon-ungroup:before {
+  content: "\ea59";
+}
+.icon-insert-template:before {
+  content: "\ea72";
+}
+
+
+
 /*Roboto Family*/
 @font-face {
   font-family: 'RobotoBold';
@@ -382,7 +438,7 @@ padding: 25px 0 0;
   font-family: RobotoRegular;
 }
 .media-editor:last-child{
-  border-left: 1px solid #eee;
+  /*border-left: 1px solid #eee;*/
   padding-left: 6px;
 }
 .media-action {
@@ -707,10 +763,15 @@ vertical-align: baseline;
 
 .x-gridupdatechecklist > label {
   display: inline;
+  margin-left: 20px;
+  font-family: "OpenSansRegular";
 }
 .checkbox-bird input+label{
+  font-size: 14px;
   line-height: 23px;
-  font-family: 'PetitFormalScript' !important;
+  font-family: "OpenSansRegular";
+  padding: 0 0 0 23px;
+  /*font-family: 'PetitFormalScript' !important;*/
 }
 
 .editor-area {
@@ -763,3 +824,237 @@ vertical-align: baseline;
 .cor-action{
       background: #C8F7C5;
 }
+
+
+
+
+/*
+  ----------------------------------------------------------------------------------
+  Update UX
+  ----------------------------------------------------------------------------------
+*/
+.sides-container {
+  width: 100%;
+  display: block;
+  position: relative;
+  min-height: 100px;
+  overflow: hidden;
+}
+
+.question-x {
+  display: block;
+  width: 100%:auto;margin: 0px;
+  padding: 0px;
+  list-style: none;
+  text-align: center;
+}
+.question-x > li {
+    display: inline;
+    position: relative;
+    overflow: hidden;
+    padding: 5px;
+    margin: 5px;
+    width: 29%;
+    display: inline-block;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+ .question-x > li {
+   cursor: move; /* fallback if grab cursor is unsupported */
+   cursor: grab;
+   cursor: -moz-grab;
+   cursor: -webkit-grab;
+ }
+  .question-x > li {
+    border: 1px dashed #eee;
+    margin-top: 10px;
+  }
+ .question-x > li  > span > i {
+   font-size: 30px;
+   color: #999
+ }
+ .titles {
+   width: 100%;
+   display: block;
+   position: relative;
+   text-align: center;
+   color: #999
+ }
+ .question-data {
+   display: block;
+   position: relative;
+   overflow: hidden;
+   width: 100%;
+ }
+.qsdragged-list > ul  {
+  display: block;
+  position: relative;
+  list-style: none;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+.qsdragged-list > ul > li {
+  display: block;
+position: relative;
+overflow: hidden;
+width: 95%;
+margin: 0px auto;
+border: 1px dashed #eee;
+padding: 10px 5px;
+margin: 0px auto 10px auto;
+color: #999;
+/* font-weight: bold; */
+font-size: 14px;
+font-family: OpenSansRegular;
+}
+ .quiz-titles {
+   width: 100%;
+   position: relative;
+   overflow: hidden;
+   margin-bottom: 20px;
+   padding: 15px;
+   font-family: "OpenSansSemiBold";
+   color: #777;
+   border-radius: 5px;
+ }
+ .iconex-movable {
+   display: inline-block;
+   position: relative;
+   margin: 0px 10px  0px 2px;
+   cursor: move; /* fallback if grab cursor is unsupported */
+   cursor: grab;
+   cursor: -moz-grab;
+   cursor: -webkit-grab;
+ }
+
+.iconx-trashable {
+    display: inline-block;
+    position: relative;
+    float: right;
+    margin: 2px 9px 0px 0px;
+    color: #999;
+    cursor: pointer;
+}
+.qsdragged-list > ul > li.dragelement-here{
+  border: 1px dashed #999 !important;
+  text-align: center;
+}
+.editquestion-part{
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: 15px;
+}
+.titles-question {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  color: #999;
+  margin-bottom: 8px;
+}
+.row-cols{
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.row-cols-x {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  width: 68%;
+  float: left;
+}
+.row-cols-xx{
+  display: inline-block;
+      width: 29%;
+      float: left;
+      height: 76px;
+      border: 1px dashed #dfdfdf;
+      margin-top: 30px;
+      margin-left: 5px;
+      padding: 10px;
+      line-height: 54px;
+      text-align: center;
+      cursor: pointer;
+}
+.row-cols-xx > i {
+  color: #999;
+  cursor: pointer;
+}
+.margin-top {
+  margin-top: 15px;
+}
+.description-field-x {
+  margin-top: 0px;
+  width: 100%;
+}
+.choices-right-add{
+  display: inline-block;
+  float: right;
+  font-size: 14px;
+  margin-right: 20px;
+  display: inline-block;
+  font-family: OpenSansRegular;
+}
+.ListallChoices {
+  display: block;
+  width: 99%;
+  padding: 10px;
+  margin: 5px;
+    overflow: hidden;
+  border: 1px dotted #d9d9d9;
+}
+.ListallChoices > ul {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
+}
+.ListallChoices > ul > li {
+  width: 95%;
+  float: right;
+  border: 1px dashed #eee;
+  margin-top: 5px;
+}
+ .choices-stylish {
+   display: block;
+   position: relative;
+   overflow: hidden;
+   padding: 10px 5px;
+ }
+ .checkeditems {
+   margin-left: 10px;
+   margin-top: 5px;
+   padding-left: 10px;
+ }
+.ficonix-bar
+ {    display: inline-block;
+    float: right;
+    margin-top: -6px;
+    margin-right: 11px;
+ }
+ .checkedboxes{
+   float: left;
+    margin-top: -7px;
+  }
+.listSettings-qs
+  {
+    display: block;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+  }
+  .listSettings-qs > li {
+    display: inline-block;
+    margin: 10px;
+    overflow: hidden;
+    width: 44%;
+    float: left;
+  }
