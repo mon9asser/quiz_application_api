@@ -180,10 +180,11 @@ margin-bottom: 13px;
   overflow: hidden;
   position: relative;
 
+  /*border-top: 1px solid #eee ;*/
+
   /*first action*/
   height: auto;
   margin-top: 10px;
-  border-top: 1px solid #eee ;
   padding: 10px;
   background: #fff;
 
@@ -236,7 +237,7 @@ margin-bottom: 13px;
     position: relative;
     overflow: hidden;
     width: 100%;
-    color: #999;
+    color: tomato;
     /* font-weight: bold; */
     font-family: RobotoRegular;
         z-index: 1;
@@ -436,4 +437,177 @@ padding: 25px 0 0;
   position: relative;
   float: right;
   margin-top: 20px !important;
+  color: #999;
+}
+.divider-choices {
+  display: block;
+  position: relative;
+  /*border-top: 1px solid #eee;*/
+}
+.divider-choices {
+  margin-top: 15px;
+  width: 100%;
+  float: right;
+  color: tomato;
+  display: block;
+}
+.divider-choices > div {
+  margin-bottom: 13px;
+}
+.divider-choices > div > .edit-media{
+  padding-top: 15px;
+  margin: 0px;
+}
+.div-choices{
+  display: block;
+  position: relative;
+  width: 90%;
+  float: right;
+  margin: 10px 0px;
+  overflow: hidden;
+}
+
+.choices-list {
+  display: block;
+  position: relative;
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
+}
+.choices-list > li {
+  display: inline-block;
+  float: left;
+  width: 100%;
+}
+.choices-list > li > input {
+    display: inline;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #d5d5d5;
+    min-width: 220px;
+}
+
+.choices-list > li > .rightans {
+  display: inline;
+}
+.choices-list > li > label {
+  display: inline;
+  padding-left: 10px;
+}
+.choices-item {
+  display: inline;
+}
+.add-new-choice-items{
+  display: inline-block;
+margin-right: 11px;
+vertical-align: baseline;
+cursor: pointer;
+}
+.choices-itemx {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin: 9px 0px;
+  padding: 0px;
+  overflow: hidden;
+  list-style: none;
+}
+
+.choices-itemx > li {
+  display: inline-block;
+  position: relative;
+
+  display: inline;
+  overflow: hidden;
+}
+
+.choices-itemx > li > input {
+  width: 35%;
+  padding: 8px;
+  border: 1px solid #dfdfdf;
+  border-radius: 5px;
+}
+.image-choicess {
+  width: 37px;
+    height: 37px;
+    position: relative;
+
+    display: inline-flex;
+    vertical-align: middle;
+    margin-left: 5px;
+    margin-top: -2px;
+    border-radius: 5px;
+}
+  .choices-itemx li > span.indexer{
+  margin-right: 10px;
+  display: inline-block;
+  position: relative;
+  color: #999;
+}
+.image-choicess > span.image-iconx {
+  display: block;
+      position: relative;
+      overflow: hidden;
+      vertical-align: middle;
+      font-size: 30px;
+          margin-top: 4px;
+          cursor: pointer;
+}
+.action-option-choices {
+  display: inline;
+}
+.choices-itemx > li {
+  margin-left: 20px;
+}
+.choices-itemx > li.icontroll-choice{
+  margin-top: 10px;
+display: inline-block;
+}
+.choices-itemx > li > .action-option-choices{
+  margin-top: 10px;
+  display: inline-block;
+}
+.choices-itemx > li > .action-option-choices > a {
+  color: #999;
+  margin-left: 5px;
+}
+.choices-itemx > li:last-child {
+  float: right;
+      height: 100%;
+      position: absolute;
+      right: 5px;
+      width: 20px;
+      cursor: pointer;
+      border: 1px dotted grey;
+      cursor: move; /* fallback if grab cursor is unsupported */
+      cursor: grab;
+      cursor: -moz-grab;
+      cursor: -webkit-grab;
+}
+.progress-bar {
+  display: inline;
+  position: relative;
+  overflow: hidden;
+  background: red;
+  height: 10px;
+  width: 60px;
+}
+.action-option-choices > a {
+  margin-left: 10px !important;
+}
+.all-choices {
+  display: block;
+  position: relative;
+  overflow: hidden;margin: 0px;
+  padding: 0px;
+}
+.all-choices > li {
+  display: block;
+  position: relative;
+  padding: 5px;
+}
+
+.all-choices > li:hover {
+  background: #FDE3A7;
 }

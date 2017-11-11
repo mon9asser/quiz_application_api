@@ -64,14 +64,12 @@
 	<div class="mobile-menu-left-overlay"></div>
 	<nav class="side-menu">
 	    <ul class="side-menu-list">
-
 	        <li class="red">
 	            <a href="mail.html">
 	                <i class="font-icon glyphicon glyphicon-book"></i>
 	                <span class="lbl">Create Quiz</span>
 	            </a>
 	        </li>
-
 	    </ul>
 
 
@@ -83,23 +81,58 @@
 
 
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- <div class="modal-dialog" role="document">
-	 <div class="modal-content">
-		 <div class="modal-header">
-			 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			 <h4 class="modal-title" id="myModalLabel">Choices</h4>
-		 </div>
-		 <div class="modal-body">
-			 ...
-		 </div>
-		 <div class="modal-footer">
-			 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			 <button type="button" class="btn btn-primary">Save changes</button>
-		 </div>
-	 </div>
- </div>
-</div>
+	<div id="myModal" class="modal fade " tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"> Choices Setting </h4>
+      </div>
+      <div class="modal-body">
+					<ul class="choices-itemx">
+						<li>
+							<span class="indexer">A</span>
+						</li>
+						<li>
+							<input placeholder="Add Choice" type="text" name="" value="">
+						</li>
+
+						<li>
+							 <div class="image-choicess">
+								 	<span class="fa fa-image image-iconx"></span>
+							 </div>
+						</li>
+
+						<li>
+							<div class="actions action-option-choices">
+								<a href="#">
+										<span class="fa fa-circle"></span>
+								</a>
+									<a href="#">
+											<span class="fa fa-arrows"></span>
+									</a>
+									<a href="#" class="edit-question-tag">
+											<span class="font-icon font-icon-pencil"></span>
+									</a>
+									<a href="#">
+											<span class="fa fa-trash"></span>
+									</a>
+									<a href="#">
+											<span class="fa fa-plus"></span>
+									</a>
+							</div>
+						</li>
+
+					</ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 
 
@@ -168,7 +201,9 @@
 												 <div class="Qs-Setting">
 													 <div class="editor-iconx">
 														<i class="fa fa-terminal"></i>
-														<span>Texts :</span>
+														<span>Questions Settings :</span>
+														<a class="media-editor" href="#">Add Image</a>
+														<a class="media-editor" href="#">Add Video</a>
 													</div>
 
 													 <div class="edit-qs-block">
@@ -203,6 +238,11 @@
 																		Standard Choice
 																	</label>
 
+																	<label class="checkbox-inline">
+																	 	<input type="checkbox" id="inlineCheckbox4" value="option4">
+																		Super Size
+																	</label>
+
 															</div>
 
 													 </div>
@@ -213,20 +253,19 @@
 												 <div class="clearFix"></div>
 												 <!-- Media For Question -->
 												<div class="editor-iconx">
-													 <i class="fa fa-file-image-o edit-media"></i>
+													 <!-- <i class="fa fa-file-image-o edit-media"></i>
 													 <span>Media :</span>
 													  <a class="media-editor" href="#">Add Image</a>
-														<a class="media-editor" href="#">Add Video</a>
+														<a class="media-editor" href="#">Add Video</a> -->
 
-														<span class="checkbox-inline supersize-image" data-toggle="tooltip" data-placement="top" title="Upload image or video first">
+														<!-- <span class="checkbox-inline supersize-image" data-toggle="tooltip" data-placement="top" title="Upload image or video first">
 															<input type="checkbox"  value="option4" disabled>
 															 Super Size media
-														</span>
-
+														</span> -->
 
 
 														<!-- Image Case  -->
-														<div class="media-action image-case">
+														<!-- <div class="media-action image-case">
 																<div class="inprogress-uploader">
 																	<div class="completed"></div>
 																	<div style="background-image:url('icons/2741270-3d-nature-wallpapers.jpg')" class="target-image"></div>
@@ -235,7 +274,7 @@
 																		<span class="uploaded-txt">Upladed</span>
 																	</span>
 																</div>
-														</div>
+														</div> -->
 
 
 														<!-- Video Case  -->
@@ -247,6 +286,73 @@
 														</div> -->
 
 												 	</div>
+
+													<!-- Add Choices -->
+												 <div class="editor-iconx divider-choices">
+														<div class="">
+																<i class="fa fa-check-square-o edit-media"></i>
+																<span>Choices Settings:</span>
+																 <!-- <a data-toggle="modal" data-target="#myModal" class="media-editor" href="#">Add Choices</a> -->
+														</div>
+
+														<ul class="all-choices">
+															<li>
+																<ul class="choices-itemx">
+																	<li>
+																		<span class="indexer">A</span>
+																	</li>
+																	<li>
+																		<input placeholder="Add Choice" type="text" name="" value="">
+																	</li>
+
+																	<li>
+																		<div class="image-choicess">
+																			 <span class="fa fa-image image-iconx"></span>
+																		</div>
+
+																		<div class="image-choicess">
+																			 <span class="fa fa-file-video-o image-iconx"></span>
+																		</div>
+																	</li>
+
+																	<li>
+																		<div class="actions action-option-choices">
+
+
+																				<a href="#">
+																						<span class="fa fa-trash"></span>
+																				</a>
+																				<a href="#">
+																						<span class="fa fa-plus"></span>
+																				</a>
+																		</div>
+																	</li>
+																	<li>
+																		<img src="icons/right-answer.png" alt="">
+																	</li>
+																	<li>
+ 																		<!-- Right Answer ! -->
+																	</li>
+																</ul>
+															</li>
+
+
+
+														</ul>
+
+														<!-- <div class="div-choices">
+																<ul class="choices-list">
+																		<li>
+																			<span class="fa fa-plus add-new-choice-items"></span>
+																			<input class="choices-item" type="text" placeholder="Add Choice here"  name="" value="">
+																			<label for="rightans" class="">
+																				<input id="rightans" type="checkbox" name="" value="">
+																				Right answer
+																			</label>
+																		</li>
+																</ul>
+														</div> -->
+												</div>
 
 
 
