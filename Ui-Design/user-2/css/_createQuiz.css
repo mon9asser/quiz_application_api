@@ -225,17 +225,17 @@ margin-bottom: 13px;
   /*border-top: 1px solid #eee ;*/
 
   /*first action*/
-  height: auto;
+  /*height: auto;
   margin-top: 10px;
   padding: 10px;
-  background: #fff;
+  background: #fff;*/
 
   /*second action*/
-  /*background: yellow;
+  background: yellow;
   padding: 0px;
   height: 0px;
   border-width: 0px;
-  margin-top: 0px;*/
+  margin-top: 0px;
 }
 .close-iconix {
   display: block;
