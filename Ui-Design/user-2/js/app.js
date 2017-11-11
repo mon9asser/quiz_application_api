@@ -1,7 +1,5 @@
 $(document).ready(function(){
 
-	// Tooltip
-
 
 	// Collapse the navigation of question option
 	$('.edit-question-tag').on('click',function(){
@@ -9,7 +7,7 @@ $(document).ready(function(){
 			 var targetCollapse = $(this).parent('.actions').parent('.collapse-option')
 			 				.parent('.drop-zone-caption').next('.question-edit');
  				//alert(targetCollapse.prop('tagName') );
-			 targetCollapse.css({
+			 targetCollapse.addClass('transition').css({
 					 'height': 'auto',
 				   'margin-top': '10px',
 				   'border-top': '1px solid #eee' ,
@@ -20,7 +18,7 @@ $(document).ready(function(){
 	// Closing the editor !
 	$('.close-iconix').on('click' , function(){
 		var targetCollapse = $(this).parent('.question-edit');
-		targetCollapse.css({
+		targetCollapse.removeClass('transition').css({
 			'background': 'yellow' ,
 			'padding': '0px',
 			'height': '0px',

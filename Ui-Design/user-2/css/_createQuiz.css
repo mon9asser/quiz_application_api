@@ -35,6 +35,45 @@
   font-family: 'NumbansRegular';
   src:url('../fonts/Numans/Numans-Regular.ttf') ;
 }
+/** Petit_Formal_Script */
+@font-face {
+  font-family: 'PetitFormalScript';
+  src:url('../fonts/Petit_Formal_Script/PetitFormalScript-Regular.ttf') ;
+}
+
+.width0title {
+  display: block;
+  width: 100%;
+  position: relative;
+}
+.qu-title{
+  display: block;
+  position: relative;
+  overflow: hidden;
+  margin: 0px;
+  padding: 0px;
+
+  padding: 30px 20px;
+
+  width: 100%;
+  text-align: center;
+}
+.qu-title > span {
+    font-family: 'OpenSansSemiBold';
+   font-size: 25px;
+}
+.qu-title > i {
+  font-size: 15px;
+vertical-align: middle;
+color: #999;
+dis
+}
+.qu-title {
+  cursor: pointer;
+}
+.qu-title:hover >  i  {
+  display: inline-block;
+}
 .question-types{
   background: #fff;
   padding: 25px;
@@ -169,14 +208,17 @@ margin-bottom: 13px;
   font-size: 16px;
 }
 
+.transition {
+  transition: background 5s linear ;
+  -webkit-transition: background 5s linear ;
+  -moz-transition: background 5s linear ;
+}
 .question-edit {
   display: block;
   width: 100%;
 
   /*background: yellow;*/
-  transition: background 2s linear ;
-  -webkit-transition: background 2s linear ;
-  -moz-transition: background 2s linear ;
+
   overflow: hidden;
   position: relative;
 
@@ -528,19 +570,23 @@ cursor: pointer;
   border: 1px solid #dfdfdf;
   border-radius: 5px;
 }
+.choices-itemx > li.ttar-li {
+  margin-left: 8px;
+    vertical-align: middle;
+}
 .image-choicess {
   width: 37px;
     height: 37px;
     position: relative;
 
-    display: inline-flex;
+    display: none;
     vertical-align: middle;
     margin-left: 5px;
     margin-top: -2px;
     border-radius: 5px;
 }
   .choices-itemx li > span.indexer{
-  margin-right: 10px;
+  margin-right: 0px;
   display: inline-block;
   position: relative;
   color: #999;
@@ -560,6 +606,12 @@ cursor: pointer;
 .choices-itemx > li {
   margin-left: 20px;
 }
+.choices-itemx > li.isCorrection{
+  margin: 0px;
+}
+.choices-itemx > li.inputContainer {
+  margin-left: 0px;
+}
 .choices-itemx > li.icontroll-choice{
   margin-top: 10px;
 display: inline-block;
@@ -572,7 +624,7 @@ display: inline-block;
   color: #999;
   margin-left: 5px;
 }
-.choices-itemx > li:last-child {
+/*.choices-itemx > li:last-child {
   float: right;
       height: 100%;
       position: absolute;
@@ -580,11 +632,12 @@ display: inline-block;
       width: 20px;
       cursor: pointer;
       border: 1px dotted grey;
-      cursor: move; /* fallback if grab cursor is unsupported */
+      cursor: move;
       cursor: grab;
       cursor: -moz-grab;
       cursor: -webkit-grab;
-}
+      background: rgba(253, 227, 167 , 0.8);
+}*/
 .progress-bar {
   display: inline;
   position: relative;
@@ -605,9 +658,108 @@ display: inline-block;
 .all-choices > li {
   display: block;
   position: relative;
-  padding: 5px;
+  /**/
+
+
+
+
+
 }
 
+/* = ) Correct Answer !=*/
+.all-choices > li:first-child{
+  padding: 5px;
+  background: #C8F7C5;
+}
+.all-choices > li:first-child > .choices-itemx > li:last-child{
+  float: right;
+  height: 100%;
+  display: inline-block;
+  position: relative;
+  margin-top: 10px;
+  margin-right: 36px;
+  color: #000;
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-family: 'OpenSansRegular';
+}
 .all-choices > li:hover {
-  background: #FDE3A7;
+  /*background: #FDE3A7;*/
+}
+.isCorrectAnswer{
+
+
+  color: #999;
+  cursor: pointer;
+  /* margin-top: 10px; */
+  display: inline-block;
+  padding: 8px;
+}
+.image-iconx {
+    color: #999;
+}
+.x-gridupdatechecklist {
+  display: inline-block;
+margin-left: 0px;
+vertical-align: baseline;
+    color: #999;
+}
+
+.x-gridupdatechecklist > label {
+  display: inline;
+}
+.checkbox-bird input+label{
+  line-height: 23px;
+  font-family: 'PetitFormalScript' !important;
+}
+
+.editor-area {
+  display: block;
+}
+.questionTag {
+  display: block;
+  overflow: hidden;
+  width: 100%:
+}
+.optionsTags{
+  display: block;
+  width: 100%;
+  overflow: hidden;
+
+}
+.optionsTags{
+  display: block;
+  width: 100%;
+}
+.choices {
+  list-style: none;
+  position: relative;
+}
+.choices > li {
+  width: 80%;
+  margin: 10px auto;
+  display: block;
+  border: 1px solid #eee;
+  padding: 9px;
+}
+.choices > li > span {
+  width: 100%;
+  display: block;
+}
+.choices > li > span > i {
+  font-style: normal;
+  background: #4d35ff;
+  padding: 3px 5px;
+  margin-right: 10px;
+  border: 1px solid #2306fc;
+  border-radius: 5px;
+  color: #fff;
+}
+.choices > li > span > span {
+  display: inlin-block;
+  position: relative;
+  font-family: "OpenSansRegular";
+}
+.cor-action{
+      background: #C8F7C5;
 }
