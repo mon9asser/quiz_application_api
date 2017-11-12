@@ -1,4 +1,4 @@
-	<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head lang="en">
 	<meta charset="UTF-8">
@@ -67,7 +67,7 @@
 	        <li class="red">
 	            <a href="mail.html">
 	                <i class="font-icon glyphicon glyphicon-book"></i>
-	                <span class="lbl">Create Quiz</span>
+	                <span class="lbl">Create Survey</span>
 	            </a>
 	        </li>
 	    </ul>
@@ -83,8 +83,7 @@
 					<div class="col-md-12">
 							<div class="area-qs-ch quiz-titles">
 									<span onClick="this.contentEditable='true';">The Complete C# Quiz</span>
-
-									<a class="choices-right-add btn-primary btn rm-margin" href="#">Preview Quiz</a>
+ 									<a class="choices-right-add btn-primary btn rm-margin" href="#">Preview Survey</a>
 							</div>
 					</div>
 				</div>
@@ -93,6 +92,7 @@
 								<div class="left-part sides-container area-qs-ch">
 
 									<div class="question-data">
+
 										<ul class="question-x">
 											<li>
 												 <span class="qs-type" title="Multiple Choices">
@@ -113,6 +113,28 @@
 														<i class="icon-check-circle"></i>
 												</span>
 												<span class="titles">Boolean</span>
+	 										</li>
+
+
+
+											<li>
+	 											<span class="qs-type" title="Ture/False">
+														<i class="fa fa-text-width"></i>
+												</span>
+												<span class="titles">Free Texts</span>
+	 										</li>
+
+											<li>
+	 											<span class="qs-type" title="Ture/False">
+														<i class="fa fa-sort-numeric-asc"></i>
+												</span>
+												<span class="titles">Scale</span>
+	 										</li>
+											<li>
+	 											<span class="qs-type" title="Ture/False">
+														<i class="fa fa-star-half-o"></i>
+												</span>
+												<span class="titles">Ratings</span>
 	 										</li>
 										</ul>
 									</div>
@@ -232,12 +254,12 @@
 										<label class="titles-question"> Question Settings : </label>
 										<div class="question-settings">
 												<ul class="listSettings-qs">
-													<li>
+													<!-- <li>
 														<div class="checkbox-bird orange checkeditems">
 															 <input type="checkbox" id="check-bird-114">
 															 <label class="checkedboxes" for="check-bird-114">Required</label>
 														</div>
-													</li>
+													</li> -->
 
 													<li>
 														<div class="checkbox-bird orange checkeditems">
@@ -246,19 +268,19 @@
 														</div>
 													</li>
 
-													<li>
+													<!-- <li>
 														<div class="checkbox-bird orange checkeditems">
 															 <input type="checkbox" id="check-bird-24s">
 															 <label class="checkedboxes" for="check-bird-24s">Multi Choice Answers</label>
 														</div>
-													</li>
+													</li> -->
 
-													<li>
+													<!-- <li>
 														<div class="checkbox-bird orange checkeditems">
 															 <input type="checkbox" id="check-bird-24sd">
 															 <label class="checkedboxes" for="check-bird-24sd">Standard Choices</label>
 														</div>
-													</li>
+													</li> -->
 
 													<li>
 														<div class="checkbox-bird orange checkeditems">
@@ -296,61 +318,11 @@
 						</div>
 						<div class="control-item-content">
 								<div class="control-item-content-text">
-									<span>Quiz Name</span>
-									<input class="quiz-titlex " type="text" name="" value="" placeholder="Quiz Title">
+									<span>Survey Name</span>
+									<input class="quiz-titlex " type="text" name="" value="" placeholder="Survey Title">
 								</div>
 
-
 								<div class="control-item-content-text">
-									<div class="passing-grad-block">
-											<div class="checkbox-toggle">
-				 								<input type="checkbox" id="check-toggle-2" checked="">
-				 								<label for="check-toggle-2">Passing Grade</label>
-				 							</div>
-									</div>
-									<div class="form-group">
-										<div class="input-group bootstrap-touchspin">
-										<span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-										<input id="demo1" type="text" value="55" name="demo1" class="form-control" style="display: block;">
-											<span class="input-group-addon bootstrap-touchspin-postfix">%</span>
-										</div>
-									</div>
-								</div>
-								<div class="control-item-content-text">
-									<div class="passing-grad-block">
-											<div class="checkbox-toggle">
-				 								<input type="checkbox" id="show-qs-pr" checked="">
-				 								<label for="show-qs-pr" class="show-qs-pr">Show result on each question</label>
-				 							</div>
-									</div>
-									<div class="passing-grad-block">
-											<div class="checkbox-toggle">
-															<input type="checkbox" id="navigation-buttons">
-															<label for="navigation-buttons" class="show-qs-pr">
-																Hide quiz navigation buttons
-															</label>
-											</div>
-									</div>
-									<div class="passing-grad-block">
-											<div class="checkbox-toggle">
-															<input type="checkbox" id="enable-button-retak">
-															<label for="enable-button-retak" class="show-qs-pr">
-																Enable Retake
-														</label>
-										</div>
-									</div>
-
-
-									<div class="passing-grad-block">
-											<div class="checkbox-toggle">
-													<input type="checkbox" id="enable-button-Review">
-													<label for="enable-button-Review" class="show-qs-pr">
-															Enable Review
-													</label>
-										</div>
-									</div>
-
-
 
 									<div class="passing-grad-block">
 											<div class="checkbox-toggle">
@@ -363,50 +335,21 @@
 
 									<div class="passing-grad-block">
 											<div class="checkbox-toggle">
-													<input type="checkbox" id="Randomize-Progress">
-													<label for="Randomize-Progress" class="show-qs-pr">
-															Use Progress bar
+													<input type="checkbox" id="Numeric-Questions">
+													<label for="Numeric-Questions" class="show-qs-pr">
+															Numeric Steps
 													</label>
 										</div>
 									</div>
 
-								</div>
-								<button type="button" name="button" class="btn btn-primary saveChanges">
-									Save Changes
-								</button>
-						</div>
-
-
-				</li>
-
-				<li class="tasks">
-						<div class="control-item-header">
-								<a href="#" class="icon-toggle">
-										<span class="caret-down fa fa-caret-down"></span>
-										<span class="icon fa fa-clock-o"></span>
-								</a>
-								<span class="text">Timeframe</span>
-
-						</div>
-						<div class="control-item-content">
-								<div class="control-item-content-text">
 									<div class="passing-grad-block">
 											<div class="checkbox-toggle">
-				 								<input type="checkbox" id="check-Timer-2" checked="">
-				 								<label for="check-Timer-2">Require Timeframe</label>
-				 							</div>
-									</div>
-									<div class="form-group input-group"> 
-											<input id="time-mask-input" type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="00:00">
-									</div>
-										<div class="time-fram-slidest">
-											Time Type :
-											<div class="checkbox-slide xheckbox-timframe">
-												<label for="time-type-slide">Mins</label>
-													<input type="checkbox" id="time-type-slide">
-												<label for="time-type-slide">hrs</label>
-											</div>
+													<input type="checkbox" id="Progress-Questions">
+													<label for="Progress-Questions" class="show-qs-pr">
+															Progress bar
+													</label>
 										</div>
+									</div>
 								</div>
 								<button type="button" name="button" class="btn btn-primary saveChanges">
 									Save Changes
@@ -415,6 +358,7 @@
 
 
 				</li>
+
 				<li class="sticky-note">
 						<div class="control-item-header">
 								<a href="#" class="icon-toggle">
@@ -432,45 +376,13 @@
 								<span>Quiz End text</span>
 								<input class="quiz-titlex " type="text" name="" value="" placeholder=" You have successfully  completed the this quizs">
 							</div>
-							<div class="control-item-content-text">
-								<span>Quiz Pass text:</span>
-								<input class="quiz-titlex " type="text" name="" value="" placeholder="You have passed this quiz">
-							</div>
-							<div class="control-item-content-text">
-								<span>Quiz Fail text:</span>
-								<input class="quiz-titlex " type="text" name="" value="" placeholder="You have failed this quiz">
-							</div>
+
 							<button type="button" name="button" class="btn btn-primary saveChanges">
 								Save Changes
 							</button>
 						</div>
 
 
-				</li>
-				<li class="emails">
-					<div class="control-item-header">
-						 <a href="#" class="icon-toggle">
-								 <span class="caret-down fa fa-caret-down"></span>
-								 <span class="icon fa fa-tag"></span>
-						 </a>
-						 <span class="text">Labels</span>
-				 </div>
-				 <div class="control-item-content">
-					 <div class="control-item-content-text">
-						 <span>Quiz Start Button:</span>
-						 <input class="quiz-titlex " type="text" name="" value="" placeholder=" Start Quiz">
-					 </div>
-					 <div class="control-item-content-text">
-						 <span>Restart Button</span>
-						 <input class="quiz-titlex " type="text" name="" value="" placeholder="Retake Quiz">
-					 </div>
-					 <div class="control-item-content-text">
-						 <span>Continue Button</span>
-						 <input class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
-					 </div>
-
-					 <a class="choices-right-add btn-primary btn rm-margin saveChanges" href="#">Save Changes</a>
-				 </div>
 				</li>
 
 
@@ -484,7 +396,7 @@
 				 </div>
 				 <div class="control-item-content">
 					 <a type="button" class="btn btn-success btn-uptodate" name="button">
-						  Go to theme editor
+						 Go to theme editor
 					 </a>
 					 <a type="button" class="btn btn-danger btn-uptodate" name="button">
 						 Use default styles

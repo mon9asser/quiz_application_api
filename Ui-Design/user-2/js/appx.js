@@ -4,7 +4,16 @@ $(document).ready(function(){
 	/* ==========================================================================
 		Side Bar Right
 		========================================================================== */
-
+		// $('.iconix-editable').on('click' , function(){
+		//
+		// 	if ($('.control-panel-toggle').hasClass('open')) {
+		// 		$('.control-panel-toggle').removeClass('open');
+		// 		$('.control-panel').removeClass('open');
+		// 	} else {
+		// 		$('.control-panel-toggle').addClass('open');
+		// 		$('.control-panel').addClass('open');
+		// 	}
+		// });
 		$('.control-panel-toggle').on('click', function() {
 			var self = $(this);
 
@@ -28,7 +37,7 @@ $(document).ready(function(){
 			}
 		});
 
-		
+
 
 
 

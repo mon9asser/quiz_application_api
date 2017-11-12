@@ -843,7 +843,8 @@ vertical-align: baseline;
 
 .question-x {
   display: block;
-  width: 100%:auto;margin: 0px;
+  width: 100%;
+  margin: 0px;
   padding: 0px;
   list-style: none;
   text-align: center;
@@ -1144,4 +1145,13 @@ font-family: RobotoRegular;
     float: right !important;
     padding: 6px 15px !important;
     font-size: 14px !important;
+}
+.widContainer {
+  width: 95%;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  margin: 10px auto 10px auto;
+  font-family: "OpenSansRegular";
+  color: #999;
 }
