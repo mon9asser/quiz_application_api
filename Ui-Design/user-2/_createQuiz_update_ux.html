@@ -82,7 +82,9 @@
 				<div class="row">
 					<div class="col-md-12">
 							<div class="area-qs-ch quiz-titles">
-									The Complete C# Quiz
+									<span>The Complete C# Quiz</span>
+									<i class="font-icon font-icon-pencil iconix-editable"></i>
+									<a class="choices-right-add btn-primary btn rm-margin" href="#">Preview Quiz</a>
 							</div>
 					</div>
 				</div>
@@ -153,8 +155,9 @@
 						<div class="col-md-7 col-sm-6 col-xs-12">
 							<div class="right-part sides-container area-qs-ch editquestion-part">
 								<div class="row-cols">
+
 										<div class="row-cols-x">
-												<label class="titles-question"> Question : </label>
+												<label class="titles-question"> Question : 	</label>
 												<textarea placeholder="Question Title ? " class="form-control quest-title-edit" rows="3"></textarea>
 										</div>
 										<div class="row-cols-xx">
@@ -265,10 +268,8 @@
 										</div>
  								</div>
 
-
-
-
-							</div>
+								<a class="choices-right-add btn-primary btn rm-margin saveChanges" href="#">Save Changes</a>
+ 							</div>
 
 						</div>
  				  </div>
@@ -278,114 +279,216 @@
 
 
 	<div class="control-panel-container">
+		<a class="control-panel-toggle ev-slider-top">
+				<span class="fa fa-angle-double-left"></span>
+		</a>
 	    <ul>
-	        <li class="tasks">
-	            <div class="control-item-header">
-	                <a href="#" class="icon-toggle">
-	                    <span class="caret-down fa fa-caret-down"></span>
-	                    <span class="icon fa fa-tasks"></span>
-	                </a>
-	                <span class="text">Multiple Choice</span>
+				<li class="tasks">
+						<div class="control-item-header">
+								<a href="#" class="icon-toggle">
+										<span class="caret-down fa fa-caret-down"></span>
+										<span class="icon fa fa-cog"></span>
+								</a>
+								<span class="text">General Setings</span>
 
-	            </div>
-	            <div class="control-item-content">
-	                <div class="control-item-content-text">You don't have multiplechoice.</div>
-	            </div>
-	        </li>
-	        <li class="sticky-note">
-	            <div class="control-item-header">
-	                <a href="#" class="icon-toggle">
-	                    <span class="caret-down fa fa-caret-down"></span>
-	                    <span class="icon fa fa-file"></span>
-	                </a>
-	                <span class="text">Media Choices</span>
-	                <div class="actions">
-	                    <a href="#">
-	                        <span class="fa fa-refresh"></span>
-	                    </a>
-	                    <a href="#">
-	                        <span class="fa fa-cog"></span>
-	                    </a>
-	                    <a href="#">
-	                        <span class="fa fa-trash"></span>
-	                    </a>
-	                </div>
-	            </div>
-	            <div class="control-item-content">
-	                <div class="control-item-content-text">
-	                    StartUI – a full featured, premium web application admin dashboard built with Twitter Bootstrap 4, JQuery and CSS
-	                </div>
-	            </div>
-	        </li>
-	        <li class="emails">
-	            <div class="control-item-header">
-	                <a href="#" class="icon-toggle">
-	                    <span class="caret-down fa fa-caret-down"></span>
-	                    <span class="icon fa fa-envelope"></span>
-	                </a>
-	                <span class="text">True or False Choices</span>
-	                <div class="actions">
-	                    <a href="#">
-	                        <span class="fa fa-refresh"></span>
-	                    </a>
-	                    <a href="#">
-	                        <span class="fa fa-cog"></span>
-	                    </a>
-	                    <a href="#">
-	                        <span class="fa fa-trash"></span>
-	                    </a>
-	                </div>
-	            </div>
-	            <div class="control-item-content">
-	                <section class="control-item-actions">
-	                    <a href="#" class="link">My e-mails</a>
-	                    <a href="#" class="mark">Mark visible as read</a>
-	                </section>
-	                <ul class="control-item-lists">
-	                    <li>
-	                        <a href="#">
-	                            <h6>Welcome to the Community!</h6>
-	                            <div>Hi, welcome to the my app...</div>
-	                            <div>
-	                                Message text
-	                            </div>
-	                        </a>
-	                        <a href="#" class="reply-all">Reply all</a>
-	                    </li>
-	                    <li>
-	                        <a href="#">
-	                            <h6>Welcome to the Community!</h6>
-	                            <div>Hi, welcome to the my app...</div>
-	                            <div>
-	                                Message text
-	                            </div>
-	                        </a>
-	                        <a href="#" class="reply-all">Reply all</a>
-	                    </li>
-	                    <li>
-	                        <a href="#">
-	                            <h6>Welcome to the Community!</h6>
-	                            <div>Hi, welcome to the my app...</div>
-	                            <div>
-	                                Message text
-	                            </div>
-	                        </a>
-	                        <a href="#" class="reply-all">Reply all</a>
-	                    </li>
-	                </ul>
-	            </div>
-	        </li>
-	        <li class="add">
-	            <div class="control-item-header">
-	                <a href="#" class="icon-toggle no-caret">
-	                    <span class="icon fa fa-plus"></span>
-	                </a>
-	            </div>
-	        </li>
+						</div>
+						<div class="control-item-content">
+								<div class="control-item-content-text">
+									<span>Quiz Name</span>
+									<input class="quiz-titlex " type="text" name="" value="" placeholder="Quiz Title">
+								</div>
+
+
+								<div class="control-item-content-text">
+									<div class="passing-grad-block">
+											<div class="checkbox-toggle">
+				 								<input type="checkbox" id="check-toggle-2" checked="">
+				 								<label for="check-toggle-2">Passing Grade</label>
+				 							</div>
+									</div>
+									<div class="form-group">
+										<div class="input-group bootstrap-touchspin">
+										<span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+										<input id="demo1" type="text" value="55" name="demo1" class="form-control" style="display: block;">
+											<span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+										</div>
+									</div>
+								</div>
+								<div class="control-item-content-text">
+									<div class="passing-grad-block">
+											<div class="checkbox-toggle">
+				 								<input type="checkbox" id="show-qs-pr" checked="">
+				 								<label for="show-qs-pr" class="show-qs-pr">Show result on each question</label>
+				 							</div>
+									</div>
+									<div class="passing-grad-block">
+											<div class="checkbox-toggle">
+															<input type="checkbox" id="navigation-buttons">
+															<label for="navigation-buttons" class="show-qs-pr">
+																Hide quiz navigation buttons
+															</label>
+											</div>
+									</div>
+									<div class="passing-grad-block">
+											<div class="checkbox-toggle">
+															<input type="checkbox" id="enable-button-retak">
+															<label for="enable-button-retak" class="show-qs-pr">
+																Enable Retake
+														</label>
+										</div>
+									</div>
+
+									<div class="passing-grad-block">
+											<div class="checkbox-toggle">
+													<input type="checkbox" id="enable-button-Review">
+													<label for="enable-button-Review" class="show-qs-pr">
+															Enable Review
+													</label>
+										</div>
+									</div>
+
+									<div class="passing-grad-block">
+											<div class="checkbox-toggle">
+													<input type="checkbox" id="Randomize-Questions">
+													<label for="Randomize-Questions" class="show-qs-pr">
+															Randomize Questions
+													</label>
+										</div>
+									</div>
+								</div>
+								<button type="button" name="button" class="btn btn-primary saveChanges">
+									Save Changes
+								</button>
+						</div>
+
+
+				</li>
+
+				<li class="tasks">
+						<div class="control-item-header">
+								<a href="#" class="icon-toggle">
+										<span class="caret-down fa fa-caret-down"></span>
+										<span class="icon fa fa-clock-o"></span>
+								</a>
+								<span class="text">Timeframe</span>
+
+						</div>
+						<div class="control-item-content">
+								<div class="control-item-content-text">
+									<div class="passing-grad-block">
+											<div class="checkbox-toggle">
+				 								<input type="checkbox" id="check-Timer-2" checked="">
+				 								<label for="check-Timer-2">Require Timeframe</label>
+				 							</div>
+									</div>
+									<div class="form-group input-group">
+											<input id="time-mask-input" type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="00:00">
+
+											<!-- <div class="input-group-btn">
+												<button type="button" class="btn btn-default-outline dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+													mins / hr
+												</button>
+												<div class="dropdown-menu dropdown-menu-right">
+													<a class="dropdown-item" href="#">Minutes</a>
+													<a class="dropdown-item" href="#">Hours</a>
+												</div>
+											</div> -->
+										</div>
+										<div class="time-fram-slidest">
+											Time Type :
+											<div class="checkbox-slide xheckbox-timframe">
+												<label for="time-type-slide">Mins</label>
+													<input type="checkbox" id="time-type-slide">
+												<label for="time-type-slide">hrs</label>
+											</div>
+										</div>
+								</div>
+								<button type="button" name="button" class="btn btn-primary saveChanges">
+									Save Changes
+								</button>
+						</div>
+
+
+				</li>
+				<li class="sticky-note">
+						<div class="control-item-header">
+								<a href="#" class="icon-toggle">
+										<span class="caret-down fa fa-caret-down"></span>
+										<span class="icon fa fa-file-text-o"></span>
+								</a>
+								<span class="text">Message and Texts</span>
+						</div>
+						<div class="control-item-content">
+							<div class="control-item-content-text">
+								<span>Quiz Start text</span>
+								<input class="quiz-titlex " type="text" name="" value="" placeholder=" Lest start Quiz">
+							</div>
+							<div class="control-item-content-text">
+								<span>Quiz End text</span>
+								<input class="quiz-titlex " type="text" name="" value="" placeholder=" You have successfully  completed the this quizs">
+							</div>
+							<div class="control-item-content-text">
+								<span>Quiz Pass text:</span>
+								<input class="quiz-titlex " type="text" name="" value="" placeholder="You have passed this quiz">
+							</div>
+							<div class="control-item-content-text">
+								<span>Quiz Fail text:</span>
+								<input class="quiz-titlex " type="text" name="" value="" placeholder="You have failed this quiz">
+							</div>
+							<button type="button" name="button" class="btn btn-primary saveChanges">
+								Save Changes
+							</button>
+						</div>
+
+
+				</li>
+				<li class="emails">
+					<div class="control-item-header">
+						 <a href="#" class="icon-toggle">
+								 <span class="caret-down fa fa-caret-down"></span>
+								 <span class="icon fa fa-tag"></span>
+						 </a>
+						 <span class="text">Labels</span>
+				 </div>
+				 <div class="control-item-content">
+					 <div class="control-item-content-text">
+						 <span>Quiz Start Button:</span>
+						 <input class="quiz-titlex " type="text" name="" value="" placeholder=" Start Quiz">
+					 </div>
+					 <div class="control-item-content-text">
+						 <span>Restart Button</span>
+						 <input class="quiz-titlex " type="text" name="" value="" placeholder="Retake Quiz">
+					 </div>
+					 <div class="control-item-content-text">
+						 <span>Continue Button</span>
+						 <input class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
+					 </div>
+
+					 <a class="choices-right-add btn-primary btn rm-margin saveChanges" href="#">Save Changes</a>
+				 </div>
+				</li>
+
+
+				<li class="emails">
+					<div class="control-item-header">
+						 <a href="#" class="icon-toggle">
+								 <span class="caret-down fa fa-caret-down"></span>
+								 <span class="icon fa fa-file-code-o"></span>
+						 </a>
+						 <span class="text">Theme Styles</span>
+				 </div>
+				 <div class="control-item-content">
+					 <a type="button" class="btn btn-success btn-uptodate" name="button">
+						 Go to editor
+					 </a>
+					 <a type="button" class="btn btn-danger btn-uptodate" name="button">
+						 Use default styles
+					 </a>
+				 </div>
+				</li>
+
+
 	    </ul>
-	    <a class="control-panel-toggle">
-	        <span class="fa fa-angle-double-left"></span>
-	    </a>
 	</div>
 
 	<script src="js/lib/jquery/jquery.min.js"></script>
@@ -399,7 +502,7 @@
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<!-- <script src="js/icomoons.js"></script> -->
 
-	<script src="js/app.js"></script>
+	<script src="js/appx.js"></script>
 	<script src="js/appUpdateUx.js"></script>
 </body>
 </html>
