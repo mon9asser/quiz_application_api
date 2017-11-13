@@ -85,3 +85,13 @@
   .questionnair-report > li {
     display: inline;
   }
+
+
+
+  .question-x > li:hover {
+    border: 1px dashed #eee;
+    margin-top: 10px;
+    border-color: darkgrey;
+    background: teal;
+    color: #fff;
+}

@@ -840,7 +840,6 @@ vertical-align: baseline;
   min-height: 100px;
   overflow: hidden;
 }
-
 .question-x {
   display: block;
   width: 100%;
@@ -861,27 +860,31 @@ vertical-align: baseline;
     padding-top: 20px;
     padding-bottom: 20px;
     border-bottom: 1px solid #eee;
+    transition:all 0.5s linear;
+    -o-transition:all 0.5s linear;
+    -webkit-transition:all 0.5s linear;
+    -moz-transition:all 0.5s linear;
 }
  .question-x > li {
    cursor: move; /* fallback if grab cursor is unsupported */
    cursor: grab;
    cursor: -moz-grab;
    cursor: -webkit-grab;
+   border: 1px dashed #eee;
+   margin-top: 10px;
+   color: #999;
  }
-  .question-x > li {
-    border: 1px dashed #eee;
-    margin-top: 10px;
-  }
+
  .question-x > li  > span > i {
    font-size: 30px;
-   color: #999
+
  }
  .titles {
    width: 100%;
    display: block;
    position: relative;
    text-align: center;
-   color: #999
+
  }
  .question-data {
    display: block;
@@ -967,12 +970,12 @@ font-family: OpenSansRegular;
   display: inline-block;
   position: relative;
   overflow: hidden;
-  width: 68%;
+  width: 60%;
   float: left;
 }
 .row-cols-xx{
-  display: inline-block;
-      width: 29%;
+    display: inline-block;
+      width: 35%;
       float: left;
       height: 76px;
       border: 1px dashed #dfdfdf;
@@ -982,6 +985,7 @@ font-family: OpenSansRegular;
       line-height: 54px;
       text-align: center;
       cursor: pointer;
+      position: relative;
 }
 .row-cols-xx > i {
   color: #999;
@@ -1153,5 +1157,94 @@ font-family: RobotoRegular;
   overflow: hidden;
   margin: 10px auto 10px auto;
   font-family: "OpenSansRegular";
+   color: #999 !important;
+
+
+}
+.question-x > li:hover {
+  border: 1px dashed #eee;
+  margin-top: 10px;
+  border-color: darkgrey;
+  background: teal;
+  color: #fff;
+}
+.row-cols-xx > a {
+  font-size: 12px;
+
+}
+.row-cols-xx > a   {
+  display: inline;
+  position: relative;
+  overflow: hidden;
   color: #999;
+  vertical-align: middle;
+  font-weight: bold;
+  margin-left: 4px;
+  font-family: 'OpenSansRegular';
+
+}
+.row-cols-xx > i{
+  display: inline;
+  position: relative;
+  overflow: hidden;
+  color: #999;
+  vertical-align: middle;
+  font-weight: bold;
+  margin: 0px 5px;
+}
+.row-cols-xx >  .dropurvide {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  background: teal;
+  display: block;
+  position: absolute;
+  top: -25px;
+  /* left: 0px; */
+  right: -13px;
+  height: auto;
+  padding: 4px;
+  margin: 0px;
+  display: block;
+  line-height: 1.8;
+  border-radius: 5px;
+}
+.row-cols-xx >  .dropurvide > input
+{
+  width: 80%;
+left: 0px;
+float: left;
+padding: 3px;
+font-size: 14px;
+color: #999;
+border: 1px solid #eee;
+border-radius: 5px;
+}
+.check-right {
+  display: inline;
+  position: relative;
+  color: #fff !important;
+}
+.row-cols-xx >  .dropurvide > .arrowafter{
+  width: 0;
+height: 0;
+border-left: 10px solid transparent;
+border-right: 10px solid transparent;
+border-top: 13px solid teal;
+position: absolute;
+left: 38px;
+bottom: -10px;
+}
+.row-cols-xx > a > i {
+  font-size: 17px;
+    vertical-align: baseline;
+    margin-left: 1px;
+    margin-right: 5px;
+}
+.text-attributes {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  padding: 0px;
+  
 }
