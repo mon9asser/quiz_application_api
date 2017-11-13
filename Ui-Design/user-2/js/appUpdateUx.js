@@ -34,10 +34,10 @@ $(document).ready(function(){
     //---> Tab Slider
     // ---------------------------------------------------------------
     /*  Init The Hiden and display for tabs */
-    // $(".tab-slider--body").hide();
-    // $(".tab-slider--body:first").show();
-    $(".tab-slider--body").show();
-    $(".tab-slider--body:first").hide();
+    $(".tab-slider--body").hide();
+    $(".tab-slider--body:first").show();
+    // $(".tab-slider--body").show();
+    // $(".tab-slider--body:first").hide();
     // Do an action for tab ( 1 => editor ) and tab ( 2=> Settings )
     $(".tab-slider--nav li").click(function() {
         $(".tab-slider--body").hide();
