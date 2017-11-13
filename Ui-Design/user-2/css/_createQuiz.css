@@ -1290,3 +1290,121 @@ right: 3px;
 #youtubeurl{
   display: none;
 }
+
+.tab-slider--nav {
+  width: auto;
+ /* float: left; */
+  /* margin-bottom: 20px; */
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 30px;
+  margin-top: 0px;
+  float: right;
+}
+
+.tab-slider--tabs {
+  display: inline-block;
+      float: left;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      position: relative;
+      border-radius: 35px;
+      overflow: hidden;
+      background: #fff;
+      height: auto;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+}
+.tab-slider--tabs:after {
+content: "";
+width: 50%;
+background-color: #00a8ff;
+    border-color: #00a8ff;
+height: 100%;
+position: absolute;
+top: 0;
+left: 0;
+-webkit-transition: all 250ms ease-in-out;
+transition: all 250ms ease-in-out;
+border-radius: 35px;
+}
+.tab-slider--tabs.slide:after {
+left: 50%;
+}
+
+.tab-slider--trigger {
+  font-size: 15px;
+      line-height: 1;
+      font-weight: bold;
+      color: #345F90;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 11px 20px;
+      position: relative;
+      z-index: 2;
+      cursor: pointer;
+      display: inline-block;
+      -webkit-transition: color 250ms ease-in-out;
+      transition: color 250ms ease-in-out;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      margin: 0px;
+      padding: 6px 25px;
+      font-family: RobotoRegular;
+      text-transform: capitalize;
+      font-weight: 100;
+}
+.tab-slider--trigger.active {
+color: #fff;
+}
+
+.tab-slider--body {
+margin-bottom: 20px;
+}
+
+.editor-xxx {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+@media (max-width:650px){
+  .tab-slider--nav{
+    width: 100%;
+      display: block;
+      position: relative;
+      margin-top: 15px;
+      margin-bottom: 5px;
+  }
+  .tab-slider--trigger{
+      padding: 6px 15px;
+  }
+}
+.all-settings-of-quiz{
+  display: block;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 0px;
+  background: #fff;
+}
+.all-settings-of-quiz > li {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  background: #fff;
+}
+.control-item-content-text {
+  margin-top: 25px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
