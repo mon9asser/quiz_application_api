@@ -23,6 +23,7 @@
 <link rel="stylesheet" href="css/lib/jqueryui/jquery-ui.min.css">
 <link rel="stylesheet" href="css/separate/pages/widgets.min.css">
     <link rel="stylesheet" href="css/lib/font-awesome/font-awesome.min.css">
+
     <link rel="stylesheet" href="css/lib/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="css/main.css">
 
@@ -89,7 +90,7 @@
 					</div>
 				</div>
  				  <div class="row">
-						<div class="col-md-5 col-sm-6 col-xs-12">
+						<div class="col-md-5 col-sm-6 col-sm-6-update-x  col-xs-12">
 								<div class="left-part sides-container area-qs-ch">
 
 									<div class="question-data">
@@ -154,7 +155,7 @@
 
 								</div>
 						</div>
-						<div class="col-md-7 col-sm-6 col-xs-12">
+						<div class="col-md-7 col-sm-6 col-sm-6-update col-xs-12">
 							<div class="right-part sides-container area-qs-ch editquestion-part">
 								<div class="row-cols">
 
@@ -162,12 +163,20 @@
 												<label class="titles-question"> Question : 	</label>
 												<div class="clearFix"></div>
 												<ul class="text-attributes">
+													<li>
+														<a class="fa fa-italic" href="#">
 
+														</a>
+													</li>
+													<li>
+														<a class="fa fa-bold" href="#">
+														</a>
+													</li>
 												</ul>
 												<div class="clearFix"></div>
-												<textarea placeholder="Question Title ? " class="form-control quest-title-edit" rows="3"></textarea>
+												<textarea placeholder="Question Title ? " class="form-control quest-title-edit" rows="4"></textarea>
 										</div>
-										<div class="row-cols-xx">
+										<!-- <div class="row-cols-xx">
 											<div id="youtubeurl" class="dropurvide">
 													<input type="text" name="" value="" placeholder="Youtube url">
 													<a class="check-right">
@@ -185,7 +194,7 @@
 												<i class="fa fa-image"></i>
 												<span>Image</span>
 											</a>
-										</div>
+										</div> -->
 								</div>
 								<div class="clearFix"></div>
 								<div class="row-cols margin-top">
@@ -195,7 +204,39 @@
 													<label for="isCorrectAnswer">Enable</label>
 											 </div>
 										</label>
-										<input type="text" class="form-control descriptions description-field description-field-x" placeholder="Description ...">
+										<textarea name="name" class="form-control descriptions description-field description-field-x" placeholder="Description ..." rows="2" cols="80"></textarea>
+ 								</div>
+
+
+
+
+
+
+
+
+
+								<!-- Media Uploader -->
+								<div class="media-choser">
+									<span>Question Media (optional) </span>
+									<div class="row-cols-xx">
+										<div id="youtubeurl" class="dropurvide">
+												<input type="text" name="" value="" placeholder="Youtube url">
+												<a class="check-right">
+													<i class="fa fa-check"></i>
+												</a>
+												<span class="arrowafter"></span>
+										</div>
+
+										<a data-target-to="#youtubeurl" class="youtubeurl-handler" href="#">
+											<i class="fa fa-file-video-o"></i>
+											<span>Video</span>
+										</a>
+										<i>|</i>
+										<a href="#">
+											<i class="fa fa-image"></i>
+											<span>Image</span>
+										</a>
+									</div>
 								</div>
 
 								<div class="clearFix"></div>

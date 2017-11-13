@@ -3,6 +3,9 @@
 /* ------------------ */
 /*IcoMoon Font Icon !*/
 /* ------------------ */
+
+
+
 @font-face {
   font-family: 'icomoon';
   src:  url('../fonts/icomoon/icomoon.eot?xgs8s');
@@ -391,8 +394,7 @@ margin-bottom: 13px;
   margin-top: 15px;
   padding: 5px;
   text-align: center;
-}    margin: 30px 0px;
-    display: inline-block;
+}
 .option-field {
   display: block;
   position: relative;
@@ -959,6 +961,7 @@ font-family: OpenSansRegular;
   overflow: hidden;
   color: #999;
   margin-bottom: 8px;
+      margin-top: 10px;
 }
 .row-cols{
   display: block;
@@ -970,23 +973,26 @@ font-family: OpenSansRegular;
   display: inline-block;
   position: relative;
   overflow: hidden;
-  width: 60%;
+  width: 99%;
   float: left;
+  margin-top: 10px;
 }
 .row-cols-xx{
-    display: inline-block;
-      width: 35%;
-      float: left;
-      height: 76px;
-      border: 1px dashed #dfdfdf;
-      margin-top: 30px;
-      margin-left: 5px;
-      padding: 10px;
-      line-height: 54px;
-      text-align: center;
-      cursor: pointer;
-      position: relative;
+  display: inline-block;
+width: 99%;
+float: left;
+height: 115px;
+border: 1px dashed #dfdfdf;
+margin-top: 0px;
+margin-left: 5px;
+padding: 10px;
+line-height: 91px;
+text-align: center;
+cursor: pointer;
+position: relative;
+float: right;
 }
+
 .row-cols-xx > i {
   color: #999;
   cursor: pointer;
@@ -1194,20 +1200,20 @@ font-family: RobotoRegular;
 }
 .row-cols-xx >  .dropurvide {
   display: inline-block;
-  position: relative;
-  width: 100%;
-  background: teal;
-  display: block;
-  position: absolute;
-  top: -25px;
-  /* left: 0px; */
-  right: -13px;
-  height: auto;
-  padding: 4px;
-  margin: 0px;
-  display: block;
-  line-height: 1.8;
-  border-radius: 5px;
+position: relative;
+width: 49%;
+background: teal;
+display: block;
+position: absolute;
+top: -10px;
+/* left: 0px; */
+right: 88px;
+height: auto;
+padding: 4px;
+margin: 0px;
+display: block;
+line-height: 1.8;
+border-radius: 5px;
 }
 .row-cols-xx >  .dropurvide > input
 {
@@ -1246,5 +1252,41 @@ bottom: -10px;
   position: relative;
   overflow: hidden;
   padding: 0px;
-  
+  margin: 0px;
+  padding: 0px;
+  float: right;
+  list-style: none;
+
+position: absolute;
+
+top: 0px;
+right: 3px;
+}
+.text-attributes > li {
+  display: inline;
+  position: relative;
+}
+
+.text-attributes > li > a {
+  font-size: 12px;
+    color: #999;
+    padding: 6px;
+    border: 1px dashed #999;
+    cursor: pointer;
+    border-radius: 7px;
+}
+
+.media-choser {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  margin: 30px 0px 10px 0px;
+}
+.media-choser > span{
+  color: #999;
+  margin-bottom: 10px;
+  display: block;
+}
+#youtubeurl{
+  display: none;
 }
