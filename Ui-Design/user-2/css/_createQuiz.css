@@ -1561,7 +1561,58 @@ question-x > li:hover{
   position: relative;
   overflow: hidden;
   width: 100%;
-  background: #fff;
-  padding: 10px 20px;
-  border-left: 1px solid #222: 
+  /*background: #fff;*/
+  /*padding: 10px 20px;*/
+  border-left: 1px solid #222:
 }
+.control-item-content {
+  overflow: hidden;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.control-item-header {
+  cursor: pointer;
+}
+.set-panel-container >ul >li {
+  display: inline-block;
+  width: 100%;
+  position: relative;
+  background: transparent;
+}
+.right-menu-settings{
+  background: #fff;
+}
+.set-panel-container >ul >li > .control-item-content {
+  height: 0px;
+  padding: 0px 25px;
+  background: aliceblue;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.control-item-header {
+    cursor: pointer;
+    border-bottom: 1px dashed #eee;
+    padding: 5px 5px;
+}
+.set-panel-container >ul > li > .control-item-header   {
+padding: 10px 20px;
+}
+
+.right-menu-settings {
+    background: #fff;
+    border-left: 5px solid #eee;
+}
+
+.set-panel-container > ul > li > .control-item-header {
+    padding: 10px 20px;
+    color: #999;
+    font-family: RobotoRegular;
+    font-size: 15px;
+
+  }
+  .control-item-header > a > span {
+    color: #999 !important
+  }
+.right-menu-settings { right:-340px;}

@@ -25,29 +25,65 @@ $(document).ready(function(){
        }
      });
 
-     
+
+     //----------------------------------------------
+     // Collapse Right menu settings
+     //----------------------------------------------
+     $('.control-item-header').on('click' , function(){
+        var targetCollapse = $(this);
+        var targetIndex = targetCollapse.parent('li').index() ;
+        $('.set-panel-container li').each(function(i){
+            if(targetIndex != i )
+            {
+                $('.set-panel-container li').children('.control-item-content').css('height' , '0px');
+            }
+        });
+        if(targetCollapse.next('.control-item-content').css('height') == '0px')
+          {
+              // Open This COllapse !
+              targetCollapse.next('.control-item-content').css('height' , 'auto');
+          }else {
+              // Close This COllapse
+              targetCollapse.next('.control-item-content').css('height' , '0px')
+          }
+
+     });
 
 
+     $('.iconx-settings').on('click',function(){
 
-     //-------------------------------------------------------
-     // Enable description Handler // Comment this func once working with angularjs
-     //-------------------------------------------------------
-    //  $('.description-enable-handler').on('click' , function (){
-    //    var $targetTextarea = $(this).next('textarea');
-    //    var $targetCheckbox = $(this).children('div').children('input');
-    //    if($targetCheckbox.hasClass('enabled'))
-    //    {
-    //      $targetTextarea.removeAttr('disabled');
-    //      $targetCheckbox.removeClass('enabled');
-    //    }else{
-    //      $targetTextarea.attr('disabled');
-    //      $targetCheckbox.addClass('enabled');
-    //    }
-    //    console.log($targetTextarea.attr('class'));
-     //
-    //  });
+       //
+       //.right-menu-settings => right: -340px;
+       //.with-side-menu .page-content =>  padding-left : 255px ,  'margin-right': '0px' , 'margin-left': '0px'
 
 
+       if( $('.right-menu-settings').css('right') =='-340px' )
+       {
+          $('.right-menu-settings').css({
+            right:'0px'
+          });
+          $('.with-side-menu .page-content').css({
+            'padding-left':'0px' ,
+            'margin-right': '294px',
+            'margin-left': '-150px'
+          });
+        } else {
+          $('.right-menu-settings').css({
+            right:'-340px'
+          });
+          $('.with-side-menu .page-content').css({
+            'padding-left':'255px' ,
+            'margin-right': '0px',
+            'margin-left': '0px'
+          });
+        }
 
+
+     });
+
+
+// .with-side-menu .page-content ==> padding-left:255px
+//.right-menu-settings => right:-340px;
+// .right-menu-settings ==> width 350px;
 
 });
