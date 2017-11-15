@@ -12,6 +12,23 @@ $(document).ready(function(){
         }
      });
 
+
+     //----------------------------------------------
+     // Label Check box with other colors and icon
+     //----------------------------------------------
+     $("label[target='label']").on('click' , function (){
+       var targetCheckbox = $(this) ;
+       if(targetCheckbox.hasClass('check_boxx'))
+       targetCheckbox.removeClass('check_boxx')
+       else {
+          targetCheckbox.addClass('check_boxx')
+       }
+     });
+
+     
+
+
+
      //-------------------------------------------------------
      // Enable description Handler // Comment this func once working with angularjs
      //-------------------------------------------------------
@@ -30,27 +47,7 @@ $(document).ready(function(){
      //
     //  });
 
-    // ----------------------------------------------------------------
-    //---> Tab Slider
-    // ---------------------------------------------------------------
-    /*  Init The Hiden and display for tabs */
-    $(".tab-slider--body").hide();
-    $(".tab-slider--body:first").show();
-    // $(".tab-slider--body").show();
-    // $(".tab-slider--body:first").hide();
-    // Do an action for tab ( 1 => editor ) and tab ( 2=> Settings )
-    $(".tab-slider--nav li").click(function() {
-        $(".tab-slider--body").hide();
-        var activeTab = $(this).attr("rel");
-        $("#"+activeTab).fadeIn();
-        if($(this).attr("rel") == "tab2"){
-        $('.tab-slider--tabs').addClass('slide');
-        }else{
-        $('.tab-slider--tabs').removeClass('slide');
-        }
-        $(".tab-slider--nav li").removeClass("active");
-        $(this).addClass("active");
-    });
+
 
 
 });

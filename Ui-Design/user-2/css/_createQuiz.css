@@ -934,6 +934,9 @@ font-family: OpenSansRegular;
    cursor: grab;
    cursor: -moz-grab;
    cursor: -webkit-grab;
+   float: right;
+   vertical-align: middle;
+   margin-top: 3px;
  }
 
 .iconx-trashable {
@@ -1050,6 +1053,7 @@ float: right;
     float: right;
     margin-top: -6px;
     margin-right: 11px;
+    color: #999;
  }
  .checkedboxes{
    float: left;
@@ -1065,7 +1069,7 @@ float: right;
   .listSettings-qs > li {
     display: inline-block;
     margin: 10px;
-    overflow: hidden;
+    /*overflow: hidden;*/
     width: 44%;
     float: left;
   }
@@ -1074,7 +1078,7 @@ float: right;
   margin-right: 0px !important;
 }
 .quiz-titles > span {
-  margin-top: 7px;
+  margin-top: 0px;
 display: inline-block;
 }
 .iconix-editable {
@@ -1171,7 +1175,7 @@ font-family: RobotoRegular;
   border: 1px dashed #eee;
   margin-top: 10px;
   border-color: darkgrey;
-  background: teal;
+  background: #00a8ff;
   color: #fff;
 }
 .row-cols-xx > a {
@@ -1407,4 +1411,89 @@ margin-bottom: 20px;
   margin-top: 25px;
   border-bottom: 1px solid #eee;
   padding-bottom: 10px;
+}
+
+
+.checkbox-bird.orange input:checked + label::before {
+    color: #00a8ff;
+}
+.checkbox-bird input + label{
+  padding: 0 0 0 25px;
+}
+.checkbox-bird input + label::before {
+    top: 2px;
+    color: #00a8ff;
+}
+.checkbox-bird input + label{
+  color: #999;
+}
+question-x > li {
+    cursor: move;
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+    border: 1px dashed #eee;
+    margin-top: 10px;
+    color: #999;
+}
+question-x > li:hover{
+  background-color: #00a8ff !important;
+
+}
+.check_boxx::before{
+  color: transparent !important;
+  border: 2px solid #dfdfdf  !important;
+  border-radius: 50%  !important;
+  top: 2px  !important;
+}
+.quesiontlist_iconx {
+  margin-right: 5px;
+  margin-left: 7px;
+}
+
+.text-attributes > li > a {
+    font-size: 12px;
+    color: #999;
+    padding: 6px;
+    border: 1px solid #dfdfdf;
+    cursor: pointer;
+    border-radius: 7px;
+    padding: 6px 10px;
+    margin-top: -5px;
+    display: inline-block;
+}
+
+.text-attributes > li {
+    display: inline;
+    position: relative;
+    margin-top: 10px;
+    display: inline-block;
+    margin-left: 2px;
+}
+.control-panel .control-panel-container{
+  width: 0px  ;
+}
+
+
+.control-panel.open .control-panel-container .icon-toggle {
+    border: none;
+    display: inline-block;
+    float: left;
+    height: auto !important;
+    width: 19px;
+    text-align: left;
+    position: relative;
+    margin-top: -7px;
+}
+.menu-table {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    width: 34px;
+    height: 35px;
+    background: red;
+    position: fixed;
+    right: 0px;
+    top: 108px;
+    z-index: 200;
 }
