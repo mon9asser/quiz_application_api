@@ -1462,7 +1462,7 @@ question-x > li:hover{
     margin-top: -5px;
     display: inline-block;
 }
-
+  
 .text-attributes > li {
     display: inline;
     position: relative;
@@ -1496,4 +1496,27 @@ question-x > li:hover{
     right: 0px;
     top: 108px;
     z-index: 200;
+}
+
+
+.right-menu-settings {
+  display: block;
+  position: fixed;
+  overflow: hidden;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  width: 49%;
+  background: #dfdfdf;
+  z-index: 79;
+  height: 100%;
+}
+
+.collapse-menu{
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  background: red;
+  height: 200px;
 }
