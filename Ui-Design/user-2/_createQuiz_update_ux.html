@@ -61,42 +61,41 @@
 		</div><!--.container-fluid-->
 </header><!--.site-header-->
 
-<div class="mobile-menu-left-overlay"></div>
-<nav class="side-menu">
-		<ul class="side-menu-list">
-				<li class="red">
-						<a href="mail.html">
-								<i class="font-icon glyphicon glyphicon-book"></i>
-								<span class="lbl">Create Quiz</span>
-						</a>
-				</li>
-		</ul>
-</nav><!--.side-menu-->
+
 
 <!-- ++++++++++++++++++++++  ++++++++++++++++++++++++++++++++ -->
 <!-- ++++++++++++++++++++++ Questions ++++++++++++++++++++++ -->
 <!-- ++++++++++++++++++++++  ++++++++++++++++++++++++++++++++ -->
 
-<div class="page-content">
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-12">
-					<div class="area-qs-ch quiz-titles">
-							<span onClick="this.contentEditable='true';">The Complete C# Quiz</span>
 
-							<!-- <a class="choices-right-add btn-primary btn rm-margin" href="#">Preview Quiz</a> -->
+		<div class="container-fluid tab-slider--container remove-padding">
+
+			<div class="page-content">
+
+				<div class="mobile-menu-left-overlay"></div>
+				<nav class="side-menu">
+						<ul class="side-menu-list">
+								<li class="red">
+										<a href="mail.html">
+												<i class="font-icon glyphicon glyphicon-book"></i>
+												<span class="lbl">Create Quiz</span>
+										</a>
+								</li>
+						</ul>
+				</nav>
+
+
+
+				<div class="container-fluid remove-padding">
+					<div class="row">
+						<div class="col-md-12">
+								<div class="area-qs-ch quiz-titles">
+										<span onClick="this.contentEditable='true';">The Complete C# Quiz</span>
+ 										 <!-- <a class="choices-right-add btn-primary btn rm-margin" href="#">Preview Quiz</a> -->
+								</div>
+						</div>
 					</div>
-			</div>
-		</div>
-	</div>
-
-
-
-
-
-
-
-		<div class="container-fluid tab-slider--container">
+				</div>
 
 				<!-- Tab 1 The Quiz qs Editor -->
 				<div id="tab1" class="editor-xxx tab-slider--body">
@@ -381,8 +380,232 @@
 
 <div class="right-menu-settings">
 	<div class="collapse-menu">
-
+			<span class="tab-menu">
+				<span class="iconx-settings">
+					<i class="fa fa-close"></i>
+				</span>
+ 				<span class="general-settings">
+						<i class="fa fa-cog"></i>
+						<span>Settings</span>
+				</span>
+			</span>
 	</div>
+	<div class="clearFix"></div>
+
+
+	<div class="set-panel-container">
+		<ul>
+			<li class="tasks">
+					<div class="control-item-header">
+							<a href="#" class="icon-toggle">
+									<span class="caret-down fa fa-caret-down"></span>
+
+							</a>
+							<span class="text">General</span>
+
+					</div>
+					<div class="control-item-content">
+							<div class="control-item-content-text">
+								<span>Quiz Name</span>
+								<input class="quiz-titlex " type="text" name="" value="" placeholder="Quiz Title">
+							</div>
+
+
+							<div class="control-item-content-text">
+								<div class="passing-grad-block">
+										<div class="checkbox-toggle">
+											<input type="checkbox" id="check-toggle-2" checked="">
+											<label for="check-toggle-2">Passing Grade</label>
+										</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group bootstrap-touchspin">
+									<span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+									<input id="demo1" type="text" value="55" name="demo1" class="form-control" style="display: block;">
+										<span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+									</div>
+								</div>
+							</div>
+							<div class="control-item-content-text">
+								<div class="passing-grad-block">
+										<div class="checkbox-toggle">
+											<input type="checkbox" id="show-qs-pr" checked="">
+											<label for="show-qs-pr" class="show-qs-pr">Show result on each question</label>
+										</div>
+								</div>
+								<div class="passing-grad-block">
+										<div class="checkbox-toggle">
+														<input type="checkbox" id="navigation-buttons">
+														<label for="navigation-buttons" class="show-qs-pr">
+															Hide quiz navigation buttons
+														</label>
+										</div>
+								</div>
+								<div class="passing-grad-block">
+										<div class="checkbox-toggle">
+														<input type="checkbox" id="enable-button-retak">
+														<label for="enable-button-retak" class="show-qs-pr">
+															Enable Retake
+													</label>
+									</div>
+								</div>
+
+
+								<div class="passing-grad-block">
+										<div class="checkbox-toggle">
+												<input type="checkbox" id="enable-button-Review">
+												<label for="enable-button-Review" class="show-qs-pr">
+														Enable Review
+												</label>
+									</div>
+								</div>
+
+
+
+								<div class="passing-grad-block">
+										<div class="checkbox-toggle">
+												<input type="checkbox" id="Randomize-Questions">
+												<label for="Randomize-Questions" class="show-qs-pr">
+														Randomize Questions
+												</label>
+									</div>
+								</div>
+
+								<div class="passing-grad-block">
+										<div class="checkbox-toggle">
+												<input type="checkbox" id="Randomize-Progress">
+												<label for="Randomize-Progress" class="show-qs-pr">
+														Use Progress bar
+												</label>
+									</div>
+								</div>
+
+							</div>
+							<button type="button" name="button" class="btn btn-primary saveChanges">
+								Save Changes
+							</button>
+					</div>
+
+			</li>
+
+			<li class="tasks">
+					<div class="control-item-header">
+							<a href="#" class="icon-toggle">
+									<span class="caret-down fa fa-caret-down"></span>
+
+							</a>
+							<span class="text">Timeframe</span>
+
+					</div>
+					<div class="control-item-content">
+							<div class="control-item-content-text">
+								<div class="passing-grad-block">
+										<div class="checkbox-toggle">
+											<input type="checkbox" id="check-Timer-2" checked="">
+											<label for="check-Timer-2">Require Timeframe</label>
+										</div>
+								</div>
+								<div class="form-group input-group">
+										<input id="time-mask-input" type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="00:00">
+								</div>
+									<div class="time-fram-slidest">
+										Time Type :
+										<div class="checkbox-slide xheckbox-timframe">
+											<label for="time-type-slide">Mins</label>
+												<input type="checkbox" id="time-type-slide">
+											<label for="time-type-slide">hrs</label>
+										</div>
+									</div>
+							</div>
+							<button type="button" name="button" class="btn btn-primary saveChanges">
+								Save Changes
+							</button>
+					</div>
+
+
+			</li>
+			<li class="sticky-note">
+					<div class="control-item-header">
+							<a href="#" class="icon-toggle">
+									<span class="caret-down fa fa-caret-down"></span>
+
+							</a>
+							<span class="text">Message and Texts</span>
+					</div>
+					<div class="control-item-content">
+						<div class="control-item-content-text">
+							<span>Quiz Start text</span>
+							<input class="quiz-titlex " type="text" name="" value="" placeholder=" Lest start Quiz">
+						</div>
+						<div class="control-item-content-text">
+							<span>Quiz End text</span>
+							<input class="quiz-titlex " type="text" name="" value="" placeholder=" You have successfully  completed the this quizs">
+						</div>
+						<div class="control-item-content-text">
+							<span>Quiz Pass text:</span>
+							<input class="quiz-titlex " type="text" name="" value="" placeholder="You have passed this quiz">
+						</div>
+						<div class="control-item-content-text">
+							<span>Quiz Fail text:</span>
+							<input class="quiz-titlex " type="text" name="" value="" placeholder="You have failed this quiz">
+						</div>
+						<button type="button" name="button" class="btn btn-primary saveChanges">
+							Save Changes
+						</button>
+					</div>
+
+
+			</li>
+			<li class="emails">
+				<div class="control-item-header">
+					 <a href="#" class="icon-toggle">
+							 <span class="caret-down fa fa-caret-down"></span>
+
+					 </a>
+					 <span class="text">Labels</span>
+			 </div>
+			 <div class="control-item-content">
+				 <div class="control-item-content-text">
+					 <span>Quiz Start Button:</span>
+					 <input class="quiz-titlex " type="text" name="" value="" placeholder=" Start Quiz">
+				 </div>
+				 <div class="control-item-content-text">
+					 <span>Restart Button</span>
+					 <input class="quiz-titlex " type="text" name="" value="" placeholder="Retake Quiz">
+				 </div>
+				 <div class="control-item-content-text">
+					 <span>Continue Button</span>
+					 <input class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
+				 </div>
+
+				 <a class="choices-right-add btn-primary btn rm-margin saveChanges" href="#">Save Changes</a>
+			 </div>
+			</li>
+
+
+			<li class="emails">
+				<div class="control-item-header">
+					 <a href="#" class="icon-toggle">
+							 <span class="caret-down fa fa-caret-down"></span>
+
+					 </a>
+					 <span class="text">Theme Styles</span>
+			 </div>
+			 <div class="control-item-content">
+				 <a type="button" class="btn btn-success btn-uptodate" name="button">
+						Go to theme editor
+				 </a>
+				 <a type="button" class="btn btn-danger btn-uptodate" name="button">
+					 Use default styles
+				 </a>
+			 </div>
+			</li>
+
+
+		</ul>
+	</div>
+
+
 </div>
 
 
@@ -399,219 +622,6 @@
 
 
 
-
-<!--
-<div class="right-menu-settings">
-	<ul>
-		<li class="tasks">
-				<div class="control-item-header">
-						<a href="#" class="icon-toggle">
-								<span class="caret-down fa fa-caret-down"></span>
-
-						</a>
-						<span class="text">General</span>
-
-				</div>
-				<div class="control-item-content">
-						<div class="control-item-content-text">
-							<span>Quiz Name</span>
-							<input class="quiz-titlex " type="text" name="" value="" placeholder="Quiz Title">
-						</div>
-
-
-						<div class="control-item-content-text">
-							<div class="passing-grad-block">
-									<div class="checkbox-toggle">
-										<input type="checkbox" id="check-toggle-2" checked="">
-										<label for="check-toggle-2">Passing Grade</label>
-									</div>
-							</div>
-							<div class="form-group">
-								<div class="input-group bootstrap-touchspin">
-								<span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-								<input id="demo1" type="text" value="55" name="demo1" class="form-control" style="display: block;">
-									<span class="input-group-addon bootstrap-touchspin-postfix">%</span>
-								</div>
-							</div>
-						</div>
-						<div class="control-item-content-text">
-							<div class="passing-grad-block">
-									<div class="checkbox-toggle">
-										<input type="checkbox" id="show-qs-pr" checked="">
-										<label for="show-qs-pr" class="show-qs-pr">Show result on each question</label>
-									</div>
-							</div>
-							<div class="passing-grad-block">
-									<div class="checkbox-toggle">
-													<input type="checkbox" id="navigation-buttons">
-													<label for="navigation-buttons" class="show-qs-pr">
-														Hide quiz navigation buttons
-													</label>
-									</div>
-							</div>
-							<div class="passing-grad-block">
-									<div class="checkbox-toggle">
-													<input type="checkbox" id="enable-button-retak">
-													<label for="enable-button-retak" class="show-qs-pr">
-														Enable Retake
-												</label>
-								</div>
-							</div>
-
-
-							<div class="passing-grad-block">
-									<div class="checkbox-toggle">
-											<input type="checkbox" id="enable-button-Review">
-											<label for="enable-button-Review" class="show-qs-pr">
-													Enable Review
-											</label>
-								</div>
-							</div>
-
-
-
-							<div class="passing-grad-block">
-									<div class="checkbox-toggle">
-											<input type="checkbox" id="Randomize-Questions">
-											<label for="Randomize-Questions" class="show-qs-pr">
-													Randomize Questions
-											</label>
-								</div>
-							</div>
-
-							<div class="passing-grad-block">
-									<div class="checkbox-toggle">
-											<input type="checkbox" id="Randomize-Progress">
-											<label for="Randomize-Progress" class="show-qs-pr">
-													Use Progress bar
-											</label>
-								</div>
-							</div>
-
-						</div>
-						<button type="button" name="button" class="btn btn-primary saveChanges">
-							Save Changes
-						</button>
-				</div>
-
-		</li>
-
-		<li class="tasks">
-				<div class="control-item-header">
-						<a href="#" class="icon-toggle">
-								<span class="caret-down fa fa-caret-down"></span>
-
-						</a>
-						<span class="text">Timeframe</span>
-
-				</div>
-				<div class="control-item-content">
-						<div class="control-item-content-text">
-							<div class="passing-grad-block">
-									<div class="checkbox-toggle">
-										<input type="checkbox" id="check-Timer-2" checked="">
-										<label for="check-Timer-2">Require Timeframe</label>
-									</div>
-							</div>
-							<div class="form-group input-group">
-									<input id="time-mask-input" type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="00:00">
-							</div>
-								<div class="time-fram-slidest">
-									Time Type :
-									<div class="checkbox-slide xheckbox-timframe">
-										<label for="time-type-slide">Mins</label>
-											<input type="checkbox" id="time-type-slide">
-										<label for="time-type-slide">hrs</label>
-									</div>
-								</div>
-						</div>
-						<button type="button" name="button" class="btn btn-primary saveChanges">
-							Save Changes
-						</button>
-				</div>
-
-
-		</li>
-		<li class="sticky-note">
-				<div class="control-item-header">
-						<a href="#" class="icon-toggle">
-								<span class="caret-down fa fa-caret-down"></span>
-
-						</a>
-						<span class="text">Message and Texts</span>
-				</div>
-				<div class="control-item-content">
-					<div class="control-item-content-text">
-						<span>Quiz Start text</span>
-						<input class="quiz-titlex " type="text" name="" value="" placeholder=" Lest start Quiz">
-					</div>
-					<div class="control-item-content-text">
-						<span>Quiz End text</span>
-						<input class="quiz-titlex " type="text" name="" value="" placeholder=" You have successfully  completed the this quizs">
-					</div>
-					<div class="control-item-content-text">
-						<span>Quiz Pass text:</span>
-						<input class="quiz-titlex " type="text" name="" value="" placeholder="You have passed this quiz">
-					</div>
-					<div class="control-item-content-text">
-						<span>Quiz Fail text:</span>
-						<input class="quiz-titlex " type="text" name="" value="" placeholder="You have failed this quiz">
-					</div>
-					<button type="button" name="button" class="btn btn-primary saveChanges">
-						Save Changes
-					</button>
-				</div>
-
-
-		</li>
-		<li class="emails">
-			<div class="control-item-header">
-				 <a href="#" class="icon-toggle">
-						 <span class="caret-down fa fa-caret-down"></span>
-
-				 </a>
-				 <span class="text">Labels</span>
-		 </div>
-		 <div class="control-item-content">
-			 <div class="control-item-content-text">
-				 <span>Quiz Start Button:</span>
-				 <input class="quiz-titlex " type="text" name="" value="" placeholder=" Start Quiz">
-			 </div>
-			 <div class="control-item-content-text">
-				 <span>Restart Button</span>
-				 <input class="quiz-titlex " type="text" name="" value="" placeholder="Retake Quiz">
-			 </div>
-			 <div class="control-item-content-text">
-				 <span>Continue Button</span>
-				 <input class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
-			 </div>
-
-			 <a class="choices-right-add btn-primary btn rm-margin saveChanges" href="#">Save Changes</a>
-		 </div>
-		</li>
-
-
-		<li class="emails">
-			<div class="control-item-header">
-				 <a href="#" class="icon-toggle">
-						 <span class="caret-down fa fa-caret-down"></span>
-
-				 </a>
-				 <span class="text">Theme Styles</span>
-		 </div>
-		 <div class="control-item-content">
-			 <a type="button" class="btn btn-success btn-uptodate" name="button">
-					Go to theme editor
-			 </a>
-			 <a type="button" class="btn btn-danger btn-uptodate" name="button">
-				 Use default styles
-			 </a>
-		 </div>
-		</li>
-
-
-	</ul>
-</div> -->
 
 
 

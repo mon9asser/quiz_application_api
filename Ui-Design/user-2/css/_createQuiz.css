@@ -1462,7 +1462,7 @@ question-x > li:hover{
     margin-top: -5px;
     display: inline-block;
 }
-  
+
 .text-attributes > li {
     display: inline;
     position: relative;
@@ -1472,6 +1472,10 @@ question-x > li:hover{
 }
 .control-panel .control-panel-container{
   width: 0px  ;
+}
+.remove-padding{
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 
@@ -1502,21 +1506,62 @@ question-x > li:hover{
 .right-menu-settings {
   display: block;
   position: fixed;
-  overflow: hidden;
+  /*overflow: hidden;*/
   top: 0px;
   bottom: 0px;
   right: 0px;
-  width: 49%;
+  width: 350px;
   background: #dfdfdf;
   z-index: 79;
   height: 100%;
 }
 
 .collapse-menu{
+  display: inline-block;
+  position: relative;
+  /*overflow: hidden;*/
+  width: 100%;
+  background: #222;
+  height: 140px;
+  cursor: pointer;
+  color: #000;
+}
+
+.general-settings {
+  width: 310px;
+  float: right;
+  font-size: 20px;
+  padding-left: 20px;
+  font-family: RobotoBold;
+  margin-top: -5px;
+  color: #fff;
+}
+
+.tab-menu{
+  text-align: left;
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 100px;
+  margin-left: -30px;
+}
+.iconx-settings{
+  padding: 5px 9px;
+  background: #222;
+  display: inline-block;
+  margin-left: -1px;
+  margin-top: -10px;
+  color: #fff;
+  font-size: 18px;
+  border-radius: 10px 0px 0px 10px;
+}
+
+.set-panel-container{
   display: block;
   position: relative;
   overflow: hidden;
   width: 100%;
-  background: red;
-  height: 200px;
+  background: #fff;
+  padding: 10px 20px;
+  border-left: 1px solid #222: 
 }
