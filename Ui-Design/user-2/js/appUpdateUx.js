@@ -56,26 +56,16 @@ $(document).ready(function(){
        //.right-menu-settings => right: -340px;
        //.with-side-menu .page-content =>  padding-left : 255px ,  'margin-right': '0px' , 'margin-left': '0px'
 
-
-       if( $('.right-menu-settings').css('right') =='-340px' )
+       
+       if( $('.right-menu-settings').css('right') =='-589px' )
        {
-          $('.right-menu-settings').css({
-            right:'0px'
-          });
-          $('.with-side-menu .page-content').css({
-            'padding-left':'0px' ,
-            'margin-right': '294px',
-            'margin-left': '-150px'
-          });
+            $('.right-menu-settings').addClass('menu-right');
+            $('.with-side-menu .page-content').addClass('page-content-xx');
         } else {
-          $('.right-menu-settings').css({
-            right:'-340px'
-          });
-          $('.with-side-menu .page-content').css({
-            'padding-left':'255px' ,
-            'margin-right': '0px',
-            'margin-left': '0px'
-          });
+
+          $('.right-menu-settings').removeClass('menu-right');
+            $('.with-side-menu .page-content').removeClass('page-content-xx');
+
         }
 
 

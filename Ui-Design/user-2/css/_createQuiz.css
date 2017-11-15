@@ -1062,16 +1062,17 @@ float: right;
 .listSettings-qs
   {
     display: block;
-    margin: 0px;
+    margin: 0px auto;
     padding: 0px;
     width: 100%;
+    text-align: center;
   }
   .listSettings-qs > li {
     display: inline-block;
     margin: 10px;
     /*overflow: hidden;*/
-    width: 44%;
-    float: left;
+    width: 90%;
+    float: none;
   }
 
 .rm-margin{
@@ -1510,7 +1511,7 @@ question-x > li:hover{
   top: 0px;
   bottom: 0px;
   right: 0px;
-  width: 350px;
+  width: 589px;
   background: #dfdfdf;
   z-index: 79;
   height: 100%;
@@ -1526,9 +1527,11 @@ question-x > li:hover{
   cursor: pointer;
   color: #000;
 }
-
+.page-content {
+  padding: 98px 15px 10px;
+}
 .general-settings {
-  width: 310px;
+  width: 305px;
   float: right;
   font-size: 20px;
   padding-left: 20px;
@@ -1552,7 +1555,7 @@ question-x > li:hover{
   margin-left: -1px;
   margin-top: -10px;
   color: #fff;
-  font-size: 18px;
+  font-size: 30px !important;
   border-radius: 10px 0px 0px 10px;
 }
 
@@ -1615,4 +1618,104 @@ padding: 10px 20px;
   .control-item-header > a > span {
     color: #999 !important
   }
-.right-menu-settings { right:-340px;}
+.right-menu-settings { right:-589px;}
+
+.iconx-settings {
+    background: #222;
+  display: inline-block;
+  margin-left: -12px;
+  margin-top: -14px;
+  color: #fff;
+  font-size: 30px !important;
+  border-radius: 10px 0px 0px 10px;
+  padding: 2px 13px 2px 10px;
+}
+
+/* Menu right Collapsed !*/
+.page-content-xx{
+  padding-left:0px !important;
+  margin-right: 294px !important;
+  margin-left: -150px !important;
+
+  transition: all 0.5s linear;
+  -o-transition: all 0.5s linear;
+  -webkit-transition: all 0.5s linear;
+  -moz-transition: all 0.5s linear;
+}
+.right-menu-settings {
+  transition: all 0.5s linear;
+  -o-transition: all 0.5s linear;
+  -webkit-transition: all 0.5s linear;
+  -moz-transition: all 0.5s linear;
+}
+.menu-right{
+  right:0px;
+}
+
+.slideThree {
+width: 80px;
+height: 26px;
+background: #00a8ff;
+margin: 20px auto;
+position: relative;
+border-radius: 50px;
+/*box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.2);*/
+}
+.slideThree:after {
+content: 'OFF';
+color: grey;
+position: absolute;
+right: 10px;
+z-index: 0;
+font: 12px/26px Arial, sans-serif;
+font-weight: bold;
+text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.15);
+}
+.slideThree:before {
+content: 'ON';
+color: floralwhite;
+position: absolute;
+left: 10px;
+z-index: 0;
+font: 12px/26px Arial, sans-serif;
+font-weight: bold;
+}
+.slideThree label {
+display: block;
+width: 34px;
+height: 20px;
+cursor: pointer;
+position: absolute;
+top: 3px;
+left: 3px;
+z-index: 1;
+background: #fcfff4;
+/*background: -webkit-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);*/
+border-radius: 50px;
+-webkit-transition: all 0.4s ease;
+transition: all 0.4s ease;
+/*box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);*/
+}
+.slideThree input[type=checkbox] {
+visibility: hidden;
+}
+.slideThree input[type=checkbox]:checked + label {
+left: 43px;
+}
+
+.title-checkbox {
+  float: left;
+  color: #999;
+  font-family: OpenSansRegular;
+  margin-left: 13px;
+}
+
+.on-off-checkbox-settings {
+  padding: 0px;
+  margin: -1px auto !important;
+  display: inline-block;
+  margin-top: -4px;
+  float: right  ;
+  top: -1px;
+}
