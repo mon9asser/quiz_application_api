@@ -49,15 +49,11 @@ $(document).ready(function(){
 
      });
 
-
+     //----------------------------------------------
+     // Open Close ( Slide Effects ) Right menu settings
+     //----------------------------------------------
      $('.iconx-settings').on('click',function(){
-
-       //
-       //.right-menu-settings => right: -340px;
-       //.with-side-menu .page-content =>  padding-left : 255px ,  'margin-right': '0px' , 'margin-left': '0px'
-
-       
-       if( $('.right-menu-settings').css('right') =='-589px' )
+        if( $('.right-menu-settings').css('right') =='-589px' )
        {
             $('.right-menu-settings').addClass('menu-right');
             $('.with-side-menu .page-content').addClass('page-content-xx');
@@ -68,12 +64,10 @@ $(document).ready(function(){
 
         }
 
+      });
 
-     });
 
-
-// .with-side-menu .page-content ==> padding-left:255px
-//.right-menu-settings => right:-340px;
-// .right-menu-settings ==> width 350px;
+       
+     // ul.media-option-uplodest
 
 });
