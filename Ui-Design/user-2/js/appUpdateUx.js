@@ -53,21 +53,31 @@ $(document).ready(function(){
      // Open Close ( Slide Effects ) Right menu settings
      //----------------------------------------------
      $('.iconx-settings').on('click',function(){
-        if( $('.right-menu-settings').css('right') =='-589px' )
+        if( $('.right-menu-settings').css('right') == '-589px'  )
        {
+          //  $(this).children('i').addClass('fa-spin');
             $('.right-menu-settings').addClass('menu-right');
-            $('.with-side-menu .page-content').addClass('page-content-xx');
-        } else {
-
+            $('.data-page-laout-2').addClass('page-content-xx');
+        }   {
+          //$(this).children('i').removeClass('fa-spin');
           $('.right-menu-settings').removeClass('menu-right');
-            $('.with-side-menu .page-content').removeClass('page-content-xx');
-
-        }
-
-      });
+            $('.data-page-laout-2').removeClass('page-content-xx');
+         }
+       });
 
 
-       
-     // ul.media-option-uplodest
 
+       //----------------------------------------------
+       // Slide The Questions
+       //----------------------------------------------
+       var swiper = new Swiper('.ques-slider', {
+         pagination: {
+           el: '.swiper-pagination',
+           type: 'progressbar',
+         },
+         navigation: {
+           nextEl: '.swiper-button-next',
+           prevEl: '.swiper-button-prev',
+         },
+       });
 });
