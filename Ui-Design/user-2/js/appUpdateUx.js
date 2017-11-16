@@ -70,33 +70,65 @@ $(document).ready(function(){
        //----------------------------------------------
        // Slide The Questions
        //----------------------------------------------
-       var swiper = new Swiper('.ques-slider', {
-         pagination: {
-           el: '.swiper-pagination',
-           type: 'progressbar',
-         },
-         navigation: {
-           nextEl: '.next-questions',
-           prevEl: '.previouse-questions',
-         },
+      //  var swiper = new Swiper('.ques-slider', {
+      //     navigation: {
+      //      nextEl: '.next-questions',
+      //      prevEl: '.previouse-questions',
+      //    },
+      //  });
+
+       new Swiper('.slide-mode-w-preview' , {allowTouchMove:false ,
+           navigation: {
+            nextEl: '.next-hidden-btn-x',
+            prevEl: '.prev-hidden-btn-x',
+          }
        });
-
-
+       /*
+       <span class="prev-hidden-btn-x"></span>
+       <span class="next-hidden-btn-x"></span>
+       */
        // ================================================
        // => Switch mode from view to editor and so else
        //=================================================
        $('#mode-chox-option').on('change' , function(){
          //live-preview-questions question-editor
 
+
+
+
            if ($(this).val() == 'on')  // Editor Mode Here !! visibility: visible;
-          {
-              $('.question-editor').addClass('slideInLeft animated');
-             $(this).val('off');
-          }else {    // Preview Mode Here !!
-            $('.live-preview-questions').addClass('slideOutLeft animated');
-            $(this).val('on');
-          }
+            {
+              $('.next-hidden-btn-x').trigger('click');
+               $(this).val('off');
+            }else {    // Preview Mode Here !!
+              $('.prev-hidden-btn-x').trigger('click');
+              $(this).val('on');
+            }
+
+
+
        });
 
+
+
+       //====================================================
+       // => Collapse more or less options
+       //====================================================
+       $('.button-view-more').on('click' , function(){
+         var buttonContents = $(this);
+         var bodyContents = $(".body-view-more");
+         if(bodyContents.css("display") =='none')
+         {
+           bodyContents.css("display" , 'block');
+           $("bod,html").animate({
+             scrollTop:'1500px'
+           } , 1000);
+           buttonContents.html("Less options");
+
+         }else {
+           bodyContents.css("display" , 'none');
+           buttonContents.html("View more options");
+         }
+       });
       // $('.slidest-slick').slick();
 });
