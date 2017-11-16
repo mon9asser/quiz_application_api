@@ -76,8 +76,27 @@ $(document).ready(function(){
            type: 'progressbar',
          },
          navigation: {
-           nextEl: '.swiper-button-next',
-           prevEl: '.swiper-button-prev',
+           nextEl: '.next-questions',
+           prevEl: '.previouse-questions',
          },
        });
+
+
+       // ================================================
+       // => Switch mode from view to editor and so else
+       //=================================================
+       $('#mode-chox-option').on('change' , function(){
+         //live-preview-questions question-editor
+
+           if ($(this).val() == 'on')  // Editor Mode Here !! visibility: visible;
+          {
+              $('.question-editor').addClass('slideInLeft animated');
+             $(this).val('off');
+          }else {    // Preview Mode Here !!
+            $('.live-preview-questions').addClass('slideOutLeft animated');
+            $(this).val('on');
+          }
+       });
+
+      // $('.slidest-slick').slick();
 });
