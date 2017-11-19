@@ -131,4 +131,28 @@ $(document).ready(function(){
          }
        });
       // $('.slidest-slick').slick();
+
+      // ============================================================
+      //  ==>         ON|OFF the vide or image media
+      // ============================================================
+      $("#zrequired-option").on("change" , function (){
+          $('.row-cols-xx').slideToggle();
+      })
+
+
+      // ============================================================
+      //  ==>         Animate Icon of menu setting for only 5 secs
+      // ============================================================
+      $(window).on('load' , function (){
+        var setting_time_for_5scs = function (){
+          setTimeout(function(){
+           $('.iconx-settings i').removeClass('fa-spin');
+         } , 5000 );
+        };
+        setting_time_for_5scs();
+      });
+
+
+
+
 });

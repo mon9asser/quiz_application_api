@@ -1,0 +1,37 @@
+/* ==> Fonts :  */
+
+/*Roboto Family*/
+@font-face {
+  font-family: 'RobotoBold';
+  src:url('../fonts/roboto/Roboto-Bold.ttf') ;
+}
+
+@font-face {
+  font-family: 'RobotoMedium';
+  src:url('../fonts/roboto/Roboto-Medium.ttf') ;
+}
+
+@font-face {
+  font-family: 'RobotoRegular';
+  src:url('../fonts/roboto/Roboto-Regular.ttf') ;
+}
+
+/*Open Sans*/
+@font-face {
+  font-family: 'OpenSansBold';
+  src:url('../fonts/Open_Sans/OpenSans-Bold.ttf') ;
+}
+@font-face {
+  font-family: 'OpenSansSemiBold';
+  src:url('../fonts/Open_Sans/OpenSans-SemiBold.ttf') ;
+}
+@font-face {
+  font-family: 'OpenSansRegular';
+  src:url('../fonts/Open_Sans/OpenSans-Regular.ttf') ;
+}
+
+/*Numans*/
+@font-face {
+  font-family: 'NumbansRegular';
+  src:url('../fonts/Numans/Numans-Regular.ttf') ;
+}
