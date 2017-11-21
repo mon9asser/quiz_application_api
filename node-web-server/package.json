@@ -23,6 +23,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
+    "express-hbs": "^1.0.4",
     "express-router": "0.0.1",
     "jsonwebtoken": "^8.1.0",
     "lodash": "^4.17.4",

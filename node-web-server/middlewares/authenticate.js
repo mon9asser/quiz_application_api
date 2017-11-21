@@ -1,4 +1,5 @@
 const {usr} = require("../models/users");
+const {qtnr} = require("../models/questionnaires");
 const {apis} = require("../database/config");
 
 
@@ -23,4 +24,19 @@ const authByToken = function ( req , res , next ) {
 		});
 };
 
-module.exports = {authByToken}
+// const authAppType = function (req , res , next){
+// 	// Detect about application type
+// var application = req.originalUrl.split('/')[2].toString() ;
+// var app_type ;
+// 		if(application == 'quiz')
+// 			app_type = true ;
+// 		else
+// 			app_type = false  ;
+//
+// 	req.app_type = app_type ;
+// 	qtnr.findOne({_id:req.params.app_id,app_type:app_type}).then((qusu)=>{
+// 			req.que = qusu ;
+// 	}).catch();
+// 	next();
+// };
+module.exports = {authByToken} ;

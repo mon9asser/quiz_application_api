@@ -1,7 +1,7 @@
 
 const { mongoose  } = require("../database/connx");
 const { MongoClient , ObjectID } = require("mongodb");
-const { userDataTypes } = require("../database/schema");
+const { questionnaireDataTypes } = require("../database/schema");
 const { config , apis } = require("../database/config");
 
 const _ = require("lodash");
@@ -10,6 +10,15 @@ const bcrypt = require ("bcryptjs");
 
 var questionnaireSchema = mongoose.Schema(questionnaireDataTypes );
 
-var questionnaire = mongoose.model("questionnaire" , questionnaireSchema );
+// --------------------------
+// Update Basics
+// --------------------------
+questionnaireSchema.statics.questionnaire_basics = function(app_id , body){
+   var qusu = this ;
+   qusu.findByIdAndUpdate(app_id , {$set:body} ,{new:true}).then((result)=>{
 
-module.exports = {questionnaire};
+   });
+};
+var qtnr = mongoose.model("questionnaire" , questionnaireSchema );
+
+module.exports = {qtnr};

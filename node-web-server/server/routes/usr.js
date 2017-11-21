@@ -59,7 +59,7 @@ usrRouters.use(bodyParser.urlencoded({ extended: false}));
 
     req.body.updatedAt = new Date();
     req.body.createdAt = new Date();
-    var body = _.pick( req.body , ['name','email','password']);
+    var body = _.pick( req.body , ['name','email','password' , 'updatedAt' , 'createdAt']);
 
     var user = new usr(body);
 
@@ -86,7 +86,6 @@ usrRouters.patch ("/users/:uid/edit" , ( req , res ) => {
     var userId = req.params.uid ;
     req.body.updatedAt =   new Date();
     var body = _.pick(req.body , 'name','password','email','updatedAt');
-
 
     if(!ObjectID.isValid(userId))
       res.status(404).send();
@@ -119,14 +118,6 @@ usrRouters.delete("/users/:uid/delete" , (req, res)=>{
     });
 
 });
- /* +++++++++++++++++++++++++++++++++++++++++++ */
-  // => Questionnaires
- /* +++++++++++++++++++++++++++++++++++++++++++ */
-
- /* +++++++++++++++++++++++++++++++++++++++++++ */
-  // => Reports
- /* +++++++++++++++++++++++++++++++++++++++++++ */
-
 
 
 

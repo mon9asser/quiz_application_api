@@ -1,4 +1,4 @@
- 
+
 const { mongoose  } = require("../database/connx");
 const { MongoClient , ObjectID } = require("mongodb");
 const { userDataTypes } = require("../database/schema");
@@ -34,7 +34,6 @@ userSchema.statics.verifyTokens = function(token){
   var verified ;
   try {
       verified = jwt.verify(token , config.secretCode );
-
   } catch (e) {
     return Promise.reject(apis.unauth);
   }
