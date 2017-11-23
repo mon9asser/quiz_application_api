@@ -3,28 +3,32 @@ const hbs = require("hbs");
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const _ = require('lodash');
-
+const session = require("express-session");
+const simplePassword = require('simple-password');
 
 const {ObjectID} = require("mongodb");
 const {usr} = require("../../models/users");
-const {apis} = require("../../database/config");
-
+const {apis , config} = require("../../database/config");
 const {authByToken} = require("../../middlewares/authenticate") ;
 
 var usrRouters = express.Router();
 
 usrRouters.use(bodyParser.json());
 usrRouters.use(bodyParser.urlencoded({ extended: false}));
-
+usrRouters.use(session({
+  secret : config.apiSecret ,
+  resave : true ,
+  saveUninitialized : true
+}));
  /*
-/POST         api/create
-/PUT          api/<quiz/survey id>/edit?uid=<>&token=<>
-/GET          api/<quiz/survey id>/preview
-/GET          api/<quiz/survey id>/attent?uid=<>&token=<>
-/GET          api/<quiz/survey id>/getresult?uid=
+  /POST         api/create
+  /PUT          api/<quiz/survey id>/edit?uid=<>&token=<>
+  /GET          api/<quiz/survey id>/preview
+  /GET          api/<quiz/survey id>/attent?uid=<>&token=<>
+  /GET          api/<quiz/survey id>/getresult?uid=
 
-/DELETE       api/<quiz/survey id>/delete
-/DELETE       api/<quiz/survey id>/clear
+  /DELETE       api/<quiz/survey id>/delete
+  /DELETE       api/<quiz/survey id>/clear
  */
 
  /* +++++++++++++++++++++++++++++++++++++++++++ */
@@ -35,7 +39,6 @@ usrRouters.use(bodyParser.urlencoded({ extended: false}));
   // => Users
  /* +++++++++++++++++++++++++++++++++++++++++++ */
 
-  /* GET */
   usrRouters.get('/users' , authByToken , (req,res)=>{
 
     usr.find().then((users)=>{
@@ -54,22 +57,69 @@ usrRouters.use(bodyParser.urlencoded({ extended: false}));
 
   });
 
+  usrRouters.post("/users/authenticate" , (req,res)=>{
+
+        usr.findOne({email:req.body.email}).then((user)=>{
+          if(!user){
+            return res.status(404).send({
+              "errorMSG" : "This account does not exists !"
+            });
+          }
+
+         // verify password => This Part not completed !
+         if( user.password.toString() != req.body.password.toString()){
+           return res.status(400).send({
+             "errorMSG" : "Something went error !"
+           });
+           return false ;
+         }
+
+         // make authenticate token
+         user.generateAuthentication();
+         // Save session
+         req.session.userInfo = {
+           id : user._id,
+           name : user.name,
+           email :user.email
+         };
+         if(! req.session.userInfo)
+          {
+            res.status(400).send({
+              "errorMSG" : "You Couldn't able to login now , try later!"
+            });
+             return false ;
+          }
+          res.send({
+            redirectTo : "/home" ,
+            user :  user
+          });
+       }).catch((err)=>{
+         res.status(404).send(err);
+       });
+  });
   /* POST */
-  usrRouters.post("/users/create" , (req,res)=>{
+   usrRouters.post("/users/create" , (req,res)=>{
+     var body = _.pick( req.body , ['name','email','password' , 'is_creator' ]);
+      // console.log(body);
+       var user = new usr(body);
+       user.save().then(()=>{
+         return user.generateAuthentication();
+      }).then((token)=>{
+        // Storing Session !!
+        req.session.userInfo = {
+          id : user._id ,
+          name : user.name ,
+          email : user.email
+        };
+         // Request header !
+        res.header("x-auth" , token).send({
+          user : user ,
+          redirectTo : '/home'
+        });
+      }).catch((error)=>{
+         res.status(400).send(error);
+      });
 
-    req.body.updatedAt = new Date();
-    req.body.createdAt = new Date();
-    var body = _.pick( req.body , ['name','email','password' , 'updatedAt' , 'createdAt']);
-
-    var user = new usr(body);
-
-    user.save().then(()=>{
-      return user.generateAuthentication();
-    }).then((token)=>{
-      res.header("x-auth" , token).send(user);
-    }).catch((error)=>{
-      res.status(400).send(error);
-    });
   });
  //
 usrRouters.get("/users/test" , authByToken , (req,res)=>{

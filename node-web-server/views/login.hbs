@@ -1,40 +1,18 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Attendee Page</title>
-
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/font-awesome.css" rel="stylesheet">
-    <link href="css/login.css" rel="stylesheet">
-    <!--  AngularJs -->
-    <script src="js/angular.min.js" charset="utf-8"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="js/html5shiv.min.js"></script>
-    <script src="js/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-
-
+{{> head }}
     <div class="container">
+
       <form class="form-horizontal">
+        <p class="error-msg-response"></p>
       <div class="form-group">
         <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
         <div class="col-sm-10">
-          <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+          <input type="email" name="email" class="form-control login" id="inputEmail3" placeholder="Email">
         </div>
       </div>
       <div class="form-group">
         <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
         <div class="col-sm-10">
-          <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+          <input type="password" name="password" class="form-control login" id="inputPassword3" placeholder="Password">
         </div>
       </div>
 
@@ -42,16 +20,9 @@
         <div class="col-sm-12 text-right">
 
           <a class="signInV" href="/register">Create New Account </a>
-          <button type="submit" class="btn btn-primary btn-signup">Sign In</button>
+          <button id="login_user" type="button" class="btn btn-primary btn-signup">Sign In</button>
         </div>
       </div>
     </form>
     </div>
-
-
-
-    <script src="js/jquery.min.js" charset="utf-8"></script>
-    <script src="js/bootstrap.js" charset="utf-8"></script>
-
-  </body>
-</html>
+  {{> footer }}

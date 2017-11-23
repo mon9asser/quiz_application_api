@@ -4,7 +4,8 @@ var config = {
     host_name:              'mongodb://localhost' ,
     options :                { useMongoClient:true } ,
     server_port :            process.env.port || 3000 ,
-    secretCode :             "@5rU5d@!tsd&$90f*&#5$~1100sdk$oprFRTgkjfddY1%js"
+    secretCode :             "@5rU5d@!tsd&$90f*&#5$~1100sdk$oprFRTgkjfddY1%js",
+    apiSecret :              "DRdsd542sder@sds&%4sd854sd=+sds54sderSSfdf##$%@sd"
 };
 
 var apis = {

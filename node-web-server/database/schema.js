@@ -15,35 +15,37 @@ var userDataTypes = {
     name : {
       type : String ,
       trim: true ,
-        required:[true , "Full name required"]
+      required:[true , "Required !"]
     } ,
     email : {
       type:String ,
       trim:true ,
-      unique : [true , "This email already exists"] ,
-      required:[true , "Email required"] ,
+      required:[true , "Required !"] ,
+      //  unique : [true , "This email already exists"] ,
       validate : {
-        validator : validator.isEmail ,
-        message : '{VALUE} is not valid email'
+            validator:function validateEmail(email) {
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email);
+        },   message: `Invalid Email !`
       }
-    } ,
+    } , 
     password: {
       type: String ,
-      required:[true , "Password required"]
+      trim : true ,
+      required:[true , "Required !"]
     } ,
-    access_type : {
-      type : {
-        is_creator:{
-          type : Boolean
-        } ,
-        createdAt:{
-          type:  Date
-        } ,
-        updatedAt: {
-          type:  Date
-        }
-      }
-    } ,
+    createdOn :{
+      type:String ,
+      trim:true
+    },
+    updatedOn :{
+      type:String ,
+      trim:true
+    },
+    is_creator:{
+      type:Number ,
+      trim:true
+    },
     tokens : {
           type : [
             {

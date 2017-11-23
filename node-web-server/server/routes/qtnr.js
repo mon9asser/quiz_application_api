@@ -81,7 +81,7 @@ qtnrRouters.post( ["/create"] , (req , res)=>{
       var des_ription = ( req.body.app_type ) ? 'Quiz' : 'Survey' ;
        req.body.description =  `Descripe your ${des_ription}`   ;
     }
-
+ 
     var bodyRequests = _.pick(req.body , [
         'creator_id'          ,
         'app_type'            ,

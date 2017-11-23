@@ -6,7 +6,7 @@ const { config , apis } = require("../database/config");
 
 const _ = require("lodash");
 const jwt = require("jsonwebtoken");
-const bcrypt = require ("bcryptjs");
+ 
 
 var questionnaireSchema = mongoose.Schema(questionnaireDataTypes );
 
