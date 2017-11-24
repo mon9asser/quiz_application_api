@@ -4,7 +4,7 @@ const {mongodb , ObjectID} = require('mongodb');
 
 const mongoose = require("mongoose");
 
-mongoose.promise = global.promise;
+
 // Connect to mongodb
 mongoose.connect(
   config.host_name        +
@@ -12,5 +12,5 @@ mongoose.connect(
   config.database_name    ,
   config.options
 );
-
+mongoose.Promise = global.Promise;
 module.exports = {mongoose};

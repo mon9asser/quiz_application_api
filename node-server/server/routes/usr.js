@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const _ = require('lodash');
 const session = require("express-session");
-const simplePassword = require('simple-password');
+//const simplePassword = require('simple-password');
 
 const {ObjectID} = require("mongodb");
 const {usr} = require("../../models/users");

@@ -1,0 +1,1 @@
+validator simple-password nodemon mongoose lodash mongodb jsonwebtoken express-session express-router bcryptjs bluebird body-parser express express-hb

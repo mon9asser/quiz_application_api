@@ -10,15 +10,6 @@ const jwt = require("jsonwebtoken");
 
 var questionnaireSchema = mongoose.Schema(questionnaireDataTypes );
 
-// --------------------------
-// Update Basics
-// --------------------------
-questionnaireSchema.statics.questionnaire_basics = function(app_id , body){
-   var qusu = this ;
-   qusu.findByIdAndUpdate(app_id , {$set:body} ,{new:true}).then((result)=>{
-
-   });
-};
 var qtnr = mongoose.model("questionnaire" , questionnaireSchema );
 
 module.exports = {qtnr};

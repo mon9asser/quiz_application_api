@@ -1,8 +1,8 @@
 {
-  "name": "quizapp",
+  "name": "quizapplication",
   "version": "1.0.0",
-  "description": "Quiz application rest api",
-  "main": "server/server.js",
+  "description": "quiz rest api",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,28 +10,21 @@
     "type": "git",
     "url": "../.git"
   },
-  "keywords": [
-    "quiz",
-    "suvey",
-    "application",
-    "user",
-    "questionnaire"
-  ],
   "author": "Montasser Mossallem",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "express-hbs": "^1.0.4",
     "express-router": "0.0.1",
     "express-session": "^1.15.6",
+    "hbs": "^4.0.1",
     "jsonwebtoken": "^8.1.0",
     "lodash": "^4.17.4",
     "mongodb": "^2.2.33",
     "mongoose": "^4.13.4",
-    "nodemon": "^1.12.1",
-    "simple-password": "^1.0.1",
-    "validator": "^9.1.1"
+    "validator": "^9.1.2"
   }
 }

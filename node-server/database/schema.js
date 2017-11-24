@@ -28,7 +28,7 @@ var userDataTypes = {
             return re.test(email);
         },   message: `Invalid Email !`
       }
-    } , 
+    } ,
     password: {
       type: String ,
       trim : true ,
@@ -415,7 +415,7 @@ var questionnaireDataTypes = {
      trim : true
     } ,
    app_type : {
-     type : Boolean ,
+     type : String ,
      required : true
    } ,
    description : {

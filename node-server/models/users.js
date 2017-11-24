@@ -3,7 +3,7 @@ const { mongoose } = require("../database/connx");
 const { MongoClient , ObjectID } = require("mongodb");
 const { userDataTypes } = require("../database/schema");
 const { config , apis } = require("../database/config");
-const simplePassword = require('simple-password');
+//const simplePassword = require('simple-password');
 const bcrypt = require("bcryptjs")
 const _ = require("lodash");
 const jwt = require("jsonwebtoken");
@@ -12,12 +12,12 @@ const jwt = require("jsonwebtoken");
 var userSchema = mongoose.Schema(userDataTypes );
 
 
-userSchema.statics.comparePassword = function(candidatePassword, cb) {
-  bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-      if (err) return cb(err);
-      cb(null, isMatch);
-  });
-};
+// userSchema.statics.comparePassword = function(candidatePassword, cb) {
+//   bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+//       if (err) return cb(err);
+//       cb(null, isMatch);
+//   });
+// };
 
  // userSchema.pre('save', function(next) {
  //   var user = this;
@@ -60,7 +60,6 @@ userSchema.statics.verifyTokens = function(token){
      'tokens.token':   token
  });
 };
-
 
 userSchema.methods.generateAuthentication = function(){
   var usr = this;
