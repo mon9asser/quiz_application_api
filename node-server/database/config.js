@@ -14,9 +14,11 @@ var apis = {
   _dir_   : '/api' ,
   _auth_  : 'auth-200' ,
   unauth :  "Unauthorized message !"  ,  // Access token not right
-  notfound_message :  "Unfound Page !" ,
-  user_unauthorized : "You Can't Authorize This Api" ,
-  permission_denied : "You Can't Authorize This Api "
+  notfound_message :  "Page Not Found !" ,
+  user_unauthorized : "Authorization is required" ,
+  permission_denied : "You dont have any permission to use This Api " ,
+  general_error : "Something wen wrong , please try later !" ,
+  authorize_success : "Your permission is successed to use this api .."
 };
 
 // => Default Settings to init the app when user create !!

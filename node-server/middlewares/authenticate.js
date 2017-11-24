@@ -80,7 +80,7 @@ var verify_token_user_type = function(req,res,next){
       if(!user)
         {
           return new Promise((resolve, reject) => {
-            res.status(404).send(apis.premission_denid);
+            res.status(401).send(apis.premission_denid);
           });
         }
 
