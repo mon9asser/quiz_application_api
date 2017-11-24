@@ -43,4 +43,15 @@ viewRouters.get('/logout' , verify_session , ( req , res )=>{
 });
 
 
+
+/*
+=================================================================
+Testing Only */
+viewRouters.get("/testing" , ( req , res )=>{
+  res.render("testing");
+});
+/*
+=================================================================
+*/
+
 module.exports = {viewRouters};

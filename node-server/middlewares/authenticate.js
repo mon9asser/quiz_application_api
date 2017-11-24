@@ -34,10 +34,12 @@ var build_session = session({
 
 var verify_session = function (req,res,next){
     if(!req.session.userInfo)
-      res.redirect("/login");
-
-
-     next();
+      {
+        return new Promise((resolve, reject) => {
+            res.redirect("/login")   ;
+         });
+      }
+      next();
 }
 
 // const authAppType = function (req , res , next){
@@ -55,28 +57,48 @@ var verify_session = function (req,res,next){
 // 	}).catch();
 // 	next();
 // };
-var build_header = function (req , res , next ){
-	// Dedect session Firstly
-	 if(!req.session.userInfo)
-	 	res.status(401).send();
+
+var verify_token_user_type = function(req,res,next){
+
+  if(!req.session.userInfo)
+  {
+    return new Promise((resolve, reject) => {
+      return res.redirect("/logout")   ;
+     });
+  }
 
 
-    var token , tokenx , usrId;
-
-    try {
-      usrId = req.session.userInfo.id
-    } catch (e) {
-      console.log(e);
+  if(!req.header("x-auth")){
+      return new Promise((resolve, reject) => {
+        res.status(401).send(apis.premission_denid)  ;
+     });
     }
 
-	// Find this user
-	return usr.findById(usrId).then((user)=>{
-      tokenx = user.tokens[_.findLastIndex(user.tokens)].token;
-       req.token = req.session.header =  tokenx ;
+    var token = req.header("x-auth");
+    usr.verifyTokens(token).then((user)=>{
+
+      if(!user)
+        {
+          return new Promise((resolve, reject) => {
+            res.status(404).send(apis.premission_denid);
+          });
+        }
+
+      //  console.log(  req.session.userInfo.id);
+      if(user.id.toString() != req.session.userInfo.id.toString())
+        {
+          return new Promise((resolve, reject) => {
+            return res.redirect("/logout");
+           });
+        }
+
+      req.verified_user = user ;
+      req.verified_token = token ;
+      req.verified_user_type = user.is_creator ;
       next();
-	}).catch((er)=>{
-      res.status(400).send(er);
-  });
-	next();
+      }).catch((error)=>{
+        res.status(401).send(error);
+      });
 };
-module.exports = {authByToken , build_header , build_session , verify_session } ;
+
+module.exports = {authByToken  , build_session , verify_session , verify_token_user_type } ;

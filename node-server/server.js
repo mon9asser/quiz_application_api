@@ -6,7 +6,7 @@ const {usrRouters} = require("./server/routes/usr");
 const {qtnrRouters} = require("./server/routes/qtnr");
 const {viewRouters} = require("./server/routes/views");
 const {usr} = require("./models/users");
-const {build_header} = require("./middlewares/authenticate");
+
 
 const app = express();
 // Use `.hbs` for extensions and find partials in `views/partials`.
@@ -39,17 +39,14 @@ app.use( apis._dir_ ,  usrRouters );
 //------------------------------------------------
  app.use( apis._dir_ ,  qtnrRouters );
 
-// -----------------------------------------------
-// ----------> Build Api Headers
-//------------------------------------------------
-app.use( apis._dir_  ,  build_header );
+
 
 
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // testing only -------------------------------------------
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  
+
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // -------------------------------------------> End Testing
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++

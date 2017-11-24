@@ -16,7 +16,7 @@ var apis = {
   unauth :  "Unauthorized message !"  ,  // Access token not right
   notfound_message :  "Unfound Page !" ,
   user_unauthorized : "You Can't Authorize This Api" ,
-  permission_denied : "You Can't Authorize This Api"
+  permission_denied : "You Can't Authorize This Api "
 };
 
 // => Default Settings to init the app when user create !!

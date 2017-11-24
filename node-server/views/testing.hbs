@@ -1,0 +1,20 @@
+{{> head }}
+    <div class="container">
+        <button id="testheader" type="button" name="button">Creat Quiz</button>
+    </div>
+
+    {{> footer }}
+    <script type="text/javascript">
+        $("#testheader").on('click',function(){
+           $.ajax({
+             headers : {
+               "x-authentication" : "This_is_header_is_that_sent?"
+             } ,
+             type : "GET" ,
+             url : "/api/testing" ,
+             success : function (respons){
+               console.log(respons);
+             }
+           });
+        });
+    </script>
