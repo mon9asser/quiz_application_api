@@ -6,6 +6,7 @@ var config = {
     host_name:              'mongodb://localhost' ,
     options :                { useMongoClient:true } ,
     server_port :            process.env.port || 3000 ,
+    session_access : false ,
     secretCode :             "@5rU5d@!tsd&$90f*&#5$~1100sdk$oprFRTgkjfddY1%js",
     apiSecret :              "DRdsd542sder@sds&%4sd854sd=+sds54sderSSfdf##$%@sd"
 };
@@ -30,12 +31,16 @@ var application = {
      description : null ,
      description : "Write description for this app !" ,
      settings : {
-         titles : { start_with : "Write Starting Text"  , end_with: "Write Ending Text" , success_with : " Success quiz Text" , faild_with : "Quiz Faild Text"} ,
-         label_btns : {start_with:"Start" , continue_with : "Continue" , retake_with : "Retake" , review_with : "Review"} ,
-         grade_settings : { is_graded : false , value : 90 } ,
+         titles : { title_start_with : "Write Starting Text"  , title_end_with: "Write Ending Text" , title_success_with : " Success quiz Text" , title_faild_with : "Quiz Faild Text"} ,
+         label_btns : {lbl_start_with:"Start" , lbl_continue_with : "Continue" , lbl_retake_with : "Retake" , lbl_review_with : "Review"} ,
+         grade_settings : { is_graded : false , quiz_graded_value : 90 } ,
          time_settings : { is_with_time:false , value : "15" , timer_type : "mins" , timer_layout : 0 },
          progression_bar : {is_available:true , progression_bar_layout:0} ,
-         quiz_theme_style : [ { id:mongoose.Types.ObjectId() ,  style_file_dir : 'theme_'+mongoose.Types.ObjectId()+'.css' , stylesheet: [ /*under update*/ ] } ] ,
+         quiz_theme_style : [ { id:mongoose.Types.ObjectId() ,  stylesheet_name : 'theme_'+mongoose.Types.ObjectId()+'.css' , is_active : true  , source_code : [
+           {  class_name : "body,html" , source_code : {
+             background :":Green;" , color : ":red;"
+           }}
+         ] } ] ,
          randomize_settings : false ,
          step_type : true ,
          retake_setting : false ,

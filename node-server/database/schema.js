@@ -69,19 +69,19 @@ var Questionnaire_settings = {
     type : {
       titles : {
         type : {
-                  start_with : {  /* Both ( Survey/quiz )  */
+                  title_start_with : {  /* Both ( Survey/quiz )  */
                     type : String ,
                     trim : true
                   } ,
-                  end_with :{     /* Both ( Survey/quiz )  */
+                  title_end_with :{     /* Both ( Survey/quiz )  */
                     type : String ,
                     trim : true
                   },
-                  success_with:{
+                  title_success_with:{
                     type : String ,
                     trim : true
                   },
-                  faild_with : {
+                  title_faild_with : {
                     type : String ,
                     trim : true
                   }
@@ -95,7 +95,7 @@ var Questionnaire_settings = {
                     is_graded : {
                       type:Boolean
                     } ,
-                    value : {
+                    quiz_graded_value : {
                       type:Number
                     }
                 }
@@ -133,19 +133,19 @@ var Questionnaire_settings = {
       } ,
       label_btns : {
         type : {
-                start_with : {
+                lbl_start_with : {
                   type : String ,
                   trim:true
                 } ,
-                continue_with :{
+                lbl_continue_with :{
                   type : String ,
                   trim:true
                 } ,
-                retake_with :{
+                lbl_retake_with :{
                   type : String ,
                   trim:true
                 },
-                review_with:{
+                lbl_review_with:{
                   type : String ,
                   trim:true
                 }
@@ -183,37 +183,31 @@ var Questionnaire_settings = {
              }
       } ,
       quiz_theme_style : {
-        type : {
+        type : [{
               _id : { // Name of stylesheet file
                   type : mongoose.Schema.ObjectId
               } ,
-              style_file_dir : {
+              stylesheet_name : {
                 type : String ,
                 trim : true
               } ,
-              stylesheet : {
+              is_active : {
+                type : Boolean
+              } ,
+              source_code : {
                 type : [
                   {
-                     element_class : {
-                      type : String
-                     } ,
-                     css_attributes : [
-                       {
-                         background : {
-                         type : String
-                       } ,
-                         color : {
-                         type : String
-                       } ,
-                         fonts : {
-                         type : String
-                       }
-                       }
-                     ]
+                    class_name : { //ex: .class {}
+                      type: String ,
+                      trim:true
+                    } ,
+                    source_code : { //ex: background : red
+                      type : {}
+                    }
                   }
                 ]
               }
-            }
+            }]
       } ,
       createdAt : {
         type : Date

@@ -57,7 +57,7 @@ usrRouters.use(session({
 
   });
 
-  usrRouters.post("/users/authenticate" , (req,res)=>{
+  usrRouters.post("/users/login" , (req,res)=>{
 
         usr.findOne({email:req.body.email}).then((user)=>{
           if(!user){

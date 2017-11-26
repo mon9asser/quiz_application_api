@@ -106,7 +106,7 @@ $(document).ready(function(){
     $.ajax({
         type : 'post',
         data : {email:application.reg_usr.email , password:application.reg_usr.password} ,
-        url : "/api/users/authenticate",
+        url : "/api/users/login",
         success : function(res){
           console.log(res);
            window.location.href = res.redirectTo ;
