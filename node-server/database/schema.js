@@ -183,31 +183,29 @@ var Questionnaire_settings = {
              }
       } ,
       quiz_theme_style : {
-        type : [{
-              _id : { // Name of stylesheet file
-                  type : mongoose.Schema.ObjectId
-              } ,
-              stylesheet_name : {
-                type : String ,
-                trim : true
-              } ,
-              is_active : {
-                type : Boolean
-              } ,
-              source_code : {
-                type : [
-                  {
-                    class_name : { //ex: .class {}
-                      type: String ,
-                      trim:true
-                    } ,
-                    source_code : { //ex: background : red
-                      type : {}
-                    }
-                  }
-                ]
-              }
-            }]
+        type :  {
+                      stylesheet_name : {
+                        type : String ,
+                        trim : true
+                      } ,
+                      is_active : {
+                        type : Boolean
+                      } , updatedAt :{type : Date} , createdAt :{type : Date},
+                      source_code : {
+                        type : [
+                          {
+                            _id :  mongoose.Schema.ObjectId ,
+                            class_name : { //ex: .class {}
+                              type: String ,
+                              trim:true
+                            } ,
+                            attributes : { //ex: background : red
+                              type : {}
+                            }
+                          }
+                        ]
+                      }
+            }
       } ,
       createdAt : {
         type : Date

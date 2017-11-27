@@ -9,24 +9,24 @@ const jwt = require("jsonwebtoken");
 
 
 
+var Schema = mongoose.Schema;
+var questionnaireSchema = new Schema(questionnaireDataTypes);
 
-var questionnaireSchema = mongoose.Schema(questionnaireDataTypes );
+
 
 /******************************************/
 // Update Changes according the requests !
 /******************************************/
-questionnaireSchema.methods.update_changes = function (app_id , changes){
-  
-
-  // Settings
-  // General Updates
-  // questions
-  // answers
-  // attendee answers
-  // report casess
-
+questionnaireSchema.methods.update_theme_stylsheet = function (theme_id ,data){
+ 
+ console.log(this.settings.titles);
 };
-
+// Settings
+// General Updates
+// questions
+// answers
+// attendee answers
+// report casess
 var qtnr = mongoose.model("questionnaire" , questionnaireSchema );
 
 module.exports = {qtnr};

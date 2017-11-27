@@ -18,7 +18,7 @@ var apis = {
   notfound_message :  "Page Not Found !" ,
   user_unauthorized : "Authorization is required" ,
   permission_denied : "You dont have any permission to use This Api " ,
-  general_error : "Something wen wrong , please try later !" ,
+  general_error : "Something went wrong , please try later !" ,
   authorize_success : "Your permission is successed to use this api .."
 };
 
@@ -36,11 +36,20 @@ var application = {
          grade_settings : { is_graded : false , quiz_graded_value : 90 } ,
          time_settings : { is_with_time:false , value : "15" , timer_type : "mins" , timer_layout : 0 },
          progression_bar : {is_available:true , progression_bar_layout:0} ,
-         quiz_theme_style : [ { id:mongoose.Types.ObjectId() ,  stylesheet_name : 'theme_'+mongoose.Types.ObjectId()+'.css' , is_active : true  , source_code : [
-           {  class_name : "body,html" , source_code : {
-             background :":Green;" , color : ":red;"
-           }}
-         ] } ] ,
+         quiz_theme_style :  {   stylesheet_name : 'theme_'+mongoose.Types.ObjectId()+'.css' , is_active : true , updatedAt:new Date() , createdAt :new Date() , source_code : [
+           {
+              _id :  mongoose.Types.ObjectId() ,
+              class_name : "body,html"  ,
+              attributes : {
+                background: "red" ,
+                backgroundPoisition : "50% 50%" ,
+                backgroundAttachment : "fixed" ,
+                color : "green" ,
+                border : "none" ,
+                fontsType : 1
+              }
+           }
+         ] }   ,
          randomize_settings : false ,
          step_type : true ,
          retake_setting : false ,

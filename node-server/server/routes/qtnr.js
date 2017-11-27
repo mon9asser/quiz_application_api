@@ -52,7 +52,7 @@ qtnrRouters.use(build_session);
 //  /api/init
 //========================================
 // Detect Get Request
-qtnrRouters.get(["/init", "/create", "/:app_id/settings/create" , "/:app_id/settings/themestyle"], verify_token_user_type, (req, res) => {
+qtnrRouters.get(["/init", "/create", "/:app_id/settings/create", "/:app_id/settings/themestyle"], verify_token_user_type, (req, res) => {
     var user = req.verified_user;
     var userType = req.verified_user_type;
     var token = req.verified_token;
@@ -129,7 +129,7 @@ qtnrRouters.post("/create", verify_token_user_type, (req, res) => {
     // Builde And Init Default !
     req.body.createdAt = new Date();
     req.body.updatedAt = new Date();
-    req.body.settings = null;
+    req.body.settings = {};
     req.body.questions = [];
     req.body.creator_id = user.id;
     var body = _.pick(req.body, ['creator_id', 'app_type', 'questionnaire_title', 'description', 'createdAt', 'updatedAt', 'settings', 'questions']);
@@ -156,7 +156,7 @@ qtnrRouters.post("/create", verify_token_user_type, (req, res) => {
     });
 
 });
-// Create settings for quiz or survey ( remember this part => surv/quiz )
+// Create settings for quiz or survey ( remember this part => surv/quiz for used with /init route)
 qtnrRouters.patch("/:app_id/settings/create", verify_token_user_type, (req, res) => {
     var user = req.verified_user;
     var userType = req.verified_user_type;
@@ -165,7 +165,7 @@ qtnrRouters.patch("/:app_id/settings/create", verify_token_user_type, (req, res)
     var update_type = req.body.updateType;
     // this user should be a creator user !
     if (userType != 1) {
-        console.log("ERROR 1");
+
         return new Promise((resolve, reject) => {
             res.status(401).send({
                 "error": apis.permission_denied
@@ -199,17 +199,17 @@ qtnrRouters.patch("/:app_id/settings/create", verify_token_user_type, (req, res)
 
         if (req.body.titles) {
 
-            if (req.body.titles.start_with)
-                $settings["settings.titles.start_with"] = req.body.titles.start_with;
+            if (req.body.titles.title_start_with)
+                $settings["settings.titles.title_start_with"] = req.body.titles.title_start_with;
 
-            if (req.body.titles.end_with)
-                $settings["settings.titles.end_with"] = req.body.titles.end_with;
+            if (req.body.titles.title_end_with)
+                $settings["settings.titles.title_end_with"] = req.body.titles.title_end_with;
 
-            if (req.body.titles.success_with)
-                $settings["settings.titles.success_with"] = req.body.titles.success_with;
+            if (req.body.titles.title_success_with)
+                $settings["settings.titles.title_success_with"] = req.body.titles.title_success_with;
 
-            if (req.body.titles.faild_with)
-                $settings["settings.titles.faild_with"] = req.body.titles.faild_with;
+            if (req.body.titles.title_faild_with)
+                $settings["settings.titles.title_faild_with"] = req.body.titles.title_faild_with;
 
         }
 
@@ -254,17 +254,17 @@ qtnrRouters.patch("/:app_id/settings/create", verify_token_user_type, (req, res)
             $settings["settings.navigation_btns"] = req.body.navigation_btns;
 
         if (req.body.label_btns) {
-            if (req.body.label_btns.start_with)
-                $settings["settings.label_btns.start_with"] = req.body.label_btns.start_with;
-            if (req.body.label_btns.continue_with)
-                $settings["settings.label_btns.continue_with"] = req.body.label_btns.continue_with;
-            if (req.body.label_btns.retake_with)
-                $settings["settings.label_btns.retake_with"] = req.body.label_btns.retake_with;
-            if (req.body.label_btns.review_with)
-                $settings["settings.label_btns.review_with"] = req.body.label_btns.review_with;
+            if (req.body.label_btns.lbl_start_with)
+                $settings["settings.label_btns.start_with"] = req.body.label_btns.lbl_start_with;
+            if (req.body.label_btns.lbl_continue_with)
+                $settings["settings.label_btns.continue_with"] = req.body.label_btns.lbl_continue_with;
+            if (req.body.label_btns.lbl_retake_with)
+                $settings["settings.label_btns.retake_with"] = req.body.label_btns.lbl_retake_with;
+            if (req.body.label_btns.lbl_review_with)
+                $settings["settings.label_btns.review_with"] = req.body.label_btns.lbl_review_with;
         }
-        if (req.body.randomize_setting) {
-            $settings["settings.randomize_setting"] = req.body.randomize_setting;
+        if (req.body.randomize_settings) {
+            $settings["settings.randomize_settings"] = req.body.randomize_settings;
         }
         if (req.body.time_settings) {
             if (req.body.time_settings.is_with_time)
@@ -283,99 +283,43 @@ qtnrRouters.patch("/:app_id/settings/create", verify_token_user_type, (req, res)
                 $settings["settings.progression_bar.progression_bar_layout"] = req.body.progression_bar.progression_bar_layout;
         }
 
+
         qtnr.findByIdAndUpdate(app_id, $settings, {
             new: true
         }).then((results) => {
             res.send(results);
         }).catch((err) => {
+
             return new Promise((resolve, reject) => {
                 res.status(401).send({
-                    "error": apis.permission_denied
+                    "error": apis.general_error
                 });
             });
         });
 
     }).catch((err) => {
+
         return new Promise((resolve, reject) => {
+
             res.status(401).send({
-                "error": apis.permission_denied
+                "error": apis.general_error
             });
         });
     });
 
 });
-// Create or Update Themestyle
-qtnrRouters.patch(["/:app_id/settings/themestyle" , "/:app_id/settings/themestyle/:theme_id"], verify_token_user_type, (req, res) => {
-  var user = req.verified_user;
-  var userType = req.verified_user_type;
-  var token = req.verified_token;
-  var app_id = req.params.app_id;
-  var update_type = req.body.updateType;
-  // this user should be a creator user !
-  if (userType != 1) {
+// Stylesheet Settings ( process => edit / push) this mesthod required id of class name via req
+qtnrRouters.patch("/:app_id/settings/style/:process", verify_token_user_type, (req, res) => {
+    // Stylesheet
 
-      return new Promise((resolve, reject) => {
-          res.status(401).send({
-              "error": apis.permission_denied
-          });
-      });
-  }
-
-  qtnr.findById(app_id).then((qtnr_results) => {
-      if (!qtnr_results) {
-
-          return new Promise((resolve, reject) => {
-              res.status(401).send({
-                  "error": apis.notfound_message
-              });
-          });
-      }
-
-      // Detection about the current user if he not the creator of this app
-      if (qtnr_results.creator_id.toString() != user.id) {
-
-          return new Promise((resolve, reject) => {
-              res.status(401).send({
-                  "error": apis.permission_denied
-              });
-          });
-      }
-
-
-
-      req.body.updatedAt = new Date();
-      var pushed_objects = new Object();
-
-      pushed_objects["id"] =  mongoose.Types.ObjectId() ;
-      pushed_objects["stylesheet_name"] =  "theme_"+mongoose.Types.ObjectId() +".css" ;
-      pushed_objects["is_active"] = true ;
-      pushed_objects["class_name"] = "body,html" ;
-      pushed_objects["source_code"] = [
-        { background: ":red;" , color : ":green;"}
-      ];
-      var $themestyles ;
-
-     // updated object with id in this array
-      if(req.params.theme_id){
-         if(req.body.quiz_theme_style.is_active) {
-
-          }
-      }
-
-      console.log(pushed_objects);
-
-
-    });
-});
-
-qtnrRouters.patch("/:app_id/edit", verify_token_user_type, (req, res) => {
     var user = req.verified_user;
     var userType = req.verified_user_type;
     var token = req.verified_token;
-    var app_id = req.params.app_id;
-    var update_type = req.body.updateType;
+
+
     // this user should be a creator user !
     if (userType != 1) {
+
         return new Promise((resolve, reject) => {
             res.status(401).send({
                 "error": apis.permission_denied
@@ -385,7 +329,116 @@ qtnrRouters.patch("/:app_id/edit", verify_token_user_type, (req, res) => {
 
 
 
+
+    var $settings = new Object();
+
+
+
+    if (req.params.process == "push") {
+
+        // here we dont need any id ( use it for pushing an object to array )
+        if (req.body.quiz_theme_style.source_code) {
+            var $settings;
+            // pushing New field into array
+            req.body.quiz_theme_style.source_code._id = mongoose.Types.ObjectId();
+
+            $settings = {
+                $push: {
+                    "settings.quiz_theme_style.source_code": req.body.quiz_theme_style.source_code
+                }
+            }
+        }
+
+        qtnr.findByIdAndUpdate(req.params.app_id, $settings, {
+            new: true
+        }).then((data) => {
+            res.send(data);
+        });
+    }
+
+
+    if (req.params.process == 'edit') {
+        if (req.body.quiz_theme_style && req.body.attr_id) {
+            qtnr.findById(req.params.app_id).then((qtnr_results) => {
+
+                if (!qtnr_results) {
+
+                    return new Promise((resolve, reject) => {
+                        res.status(401).send({
+                            "error": apis.notfound_message
+                        });
+                    });
+                }
+
+                //  req.body.quiz_theme_style.updatedAt = new Date();
+                if (req.body.attr_id) { // this id is required
+                    if (req.body.quiz_theme_style.source_code) {
+                        var sourceCode = qtnr_results.settings.quiz_theme_style.source_code;
+                        for (var i = 0; i < sourceCode.length; i++) {
+                            if (sourceCode[i]._id.toString() == req.body.attr_id.toString()) {
+
+                                if (req.body.quiz_theme_style.source_code.class_name)
+                                    $settings["settings.quiz_theme_style.source_code." + [i] + ".class_name"] = req.body.quiz_theme_style.source_code.class_name;
+                                // ===> All Attributes Here ( stylesheet colors )
+
+                                if (req.body.quiz_theme_style.source_code.attributes.border)
+                                    $settings["settings.quiz_theme_style.source_code." + [i] + ".attributes.border"] = req.body.quiz_theme_style.source_code.attributes.border;
+
+                                if (req.body.quiz_theme_style.source_code.attributes.background)
+                                    $settings["settings.quiz_theme_style.source_code." + [i] + ".attributes.background"] = req.body.quiz_theme_style.source_code.attributes.background;
+                                if (req.body.quiz_theme_style.source_code.attributes.backgroundPoisition)
+                                    $settings["settings.quiz_theme_style.source_code." + [i] + ".attributes.backgroundPoisition"] = req.body.quiz_theme_style.source_code.attributes.backgroundPoisition;
+                                if (req.body.quiz_theme_style.source_code.attributes.backgroundAttachment)
+                                    $settings["settings.quiz_theme_style.source_code." + [i] + ".attributes.backgroundAttachment"] = req.body.quiz_theme_style.source_code.attributes.backgroundAttachment;
+                                if (req.body.quiz_theme_style.source_code.attributes.color)
+                                    $settings["settings.quiz_theme_style.source_code." + [i] + ".attributes.color"] = req.body.quiz_theme_style.source_code.attributes.color;
+                                if (req.body.quiz_theme_style.source_code.attributes.border)
+                                    $settings["settings.quiz_theme_style.source_code." + [i] + ".attributes.border"] = req.body.quiz_theme_style.source_code.attributes.border;
+                                if (req.body.quiz_theme_style.source_code.attributes.fontsType)
+                                    $settings["settings.quiz_theme_style.source_code." + [i] + ".attributes.fontsType"] = req.body.quiz_theme_style.source_code.attributes.fontsType;
+                            }
+                        }
+
+
+                    }
+
+                }
+
+
+                qtnr.findByIdAndUpdate(req.params.app_id, $settings, {
+                    new: true
+                }).then((data) => {
+                    res.send(data);
+                }).catch((err) => {
+                    return new Promise((resolve, reject) => {
+                        res.status(401).send({
+                            "error": apis.notfound_message
+                        });
+                    });
+                });
+            }).catch((err) => {
+                return new Promise((resolve, reject) => {
+                    res.status(401).send({
+                        "error": apis.notfound_message
+                    });
+                });
+            });
+
+
+        } else {
+            res.send({
+                "warning": "please Set the parent of object beside id of class element ex: { attr_id:{...} , quiz_theme_style:{....} }"
+            });
+        }
+
+    }
+
+
+
+
 });
+
+
 
 
 module.exports = {
