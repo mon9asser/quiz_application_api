@@ -345,61 +345,63 @@ var quiz_answer_types = {
   }
 };
 
-var Questionnaire_questions = {
-  type : [
-           {
-            _id : {
-               type :  mongoose.Schema.ObjectId
-            } ,
-            question_options : {
-              type : {
-                is_required :{
-                  type : Boolean
-                } ,
-                answer_types : quiz_answer_types
-              }
-            } ,
-            question_body : {
-               type : String ,
-                trim : true
-            } ,
-            attendee_answers : {
-              type : [
-                {
-                  _id : {
-                    type : mongoose.Schema.ObjectId
-                  } ,
-                  attendee_id : {
-                    type:String
-                  } ,
-                  answers : {
-                    type : {
-                      answer_id :{
-                        type : String
-                      },
-                      answer_value : {
-                        type : String
-                      } ,
-                      answer_type : {
-                        type : Number
-                      }
-                    }
-                  } ,
-                  done_it : {
-                    type :Boolean
+
+
+
+
+// var attendee_ans_bo =  {
+//   type :
+//       [
+//         {
+//           _id :                { type : mongoose.Schema.ObjectId },
+//           attendee_id :        { type : String },
+//           answer_id :          { type : String } ,
+//           answer_value :       { type : String } ,
+//           answer_type :        { type : String }
+//         }
+//       ]
+// };
+var answer_bo = {
+  type : {
+     answer_process :     {
+      type : [
+                  {
+                    choices : {} ,
+                    media_choices : {} ,
+                    boolean_choices : {} ,
+                    rating_scales : {}
                   }
-                }
-              ]
-            } ,
-            created_at : {
-              type :   Date
-            } ,
-            updatedAt : {
-              type :   Date
-            }
-          }
-        ]
-} ;
+             ]
+     }
+  }
+
+
+};
+var answer_setting_bo = {
+  type : {
+    is_randomized :           { type : Boolean }  ,
+    super_size:               { type : Boolean }  ,
+    single_choice:            { type : Boolean }  ,
+    choice_style:            { type : Boolean }  , //Inline or full block
+    answer_char_max :         { type : String , trim :true }
+  }
+};
+var Questionnaire_questions = {
+    type : [
+      {
+        _id :                     { type : mongoose.Schema.ObjectId } ,
+        created_at :              { type : Date     } ,
+        updated_at:               { type : Date     } ,
+        question_body:            { type : String   } ,
+        answers_body :            answer_bo , // Under Updateing
+        media_question :          { type : { media_type :{ type : Number } , media_name : { type : String } , media_field:{ type : String } /* url of video */ } } ,
+        // attendee_answers :        attendee_ans_bo , => Moving it for report
+        question_is_required :    { type : Boolean } ,
+        answer_settings :         answer_setting_bo ,
+        question_type :            { type : Number } ,
+      }
+    ]
+};
 var questionnaireDataTypes = {
    creator_id : {
      type : String ,

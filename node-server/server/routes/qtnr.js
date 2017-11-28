@@ -308,7 +308,7 @@ qtnrRouters.patch("/:app_id/settings/create", verify_token_user_type, (req, res)
     });
 
 });
-// Stylesheet Settings ( process => edit / push) this mesthod required id of class name via req
+// Stylesheet Settings ( process => edit / create) this mesthod required id of class name via req
 qtnrRouters.patch("/:app_id/settings/style/:process", verify_token_user_type, (req, res) => {
     // Stylesheet
 
@@ -334,7 +334,7 @@ qtnrRouters.patch("/:app_id/settings/style/:process", verify_token_user_type, (r
 
 
 
-    if (req.params.process == "push") {
+    if (req.params.process == "create") {
 
         // here we dont need any id ( use it for pushing an object to array )
         if (req.body.quiz_theme_style.source_code) {
@@ -437,7 +437,98 @@ qtnrRouters.patch("/:app_id/settings/style/:process", verify_token_user_type, (r
 
 
 });
+// question ( process => edit question / create => add new qs to array )
+qtnrRouters.patch("/:app_id/question/:process", verify_token_user_type, (req, res) =>{
+  var app_id = req.params.app_id ;
+  var processType= req.params.process ;
+  var user = req.verified_user;
+  var userType = req.verified_user_type;
+  var token = req.verified_token;
 
+  // this user should be a creator user !
+  if (userType != 1) {
+       return new Promise((resolve, reject) => {
+          res.status(401).send({
+              "error": apis.permission_denied
+          });
+      });
+  }
+  qtnr.findById(app_id).then((qtner)=>{
+    if(!qtner){
+      return new Promise ((resolve , reject)=>{
+        res.status(404).send(apis.notfound_message);
+      });
+    }
+    var $question_tag = new Object();
+
+    if(processType == 'edit'){  // Updating question in array
+        console.log("This is update !. ");
+    } else if (processType == 'create'){
+
+      if(!req.body.question_body)
+        {
+          return new Promise((resolve, reject)=>{
+            res.status(404).send("Question body not found ! , please insert question body !");
+          });
+        }
+
+        $question_tag["_id"] =  mongoose.Types.ObjectId();
+        $question_tag["created_at"] = new Date();
+        $question_tag["updated_at"] = new Date();
+        $question_tag["question_body"] = req.body.question_body ;
+        $question_tag["answers_body"] = [] ;
+
+
+      if(req.body.question_type )
+        $question_tag ["question_type"] = req.body.question_type;
+      if(req.body.media_question){
+        if(req.body.media_question.media_type)
+        $question_tag["media_question.media_type"] = req.body.media_question.media_type;
+        if(req.body.media_question.media_name)
+          $question_tag["media_question.media_name"] = req.body.media_question.media_name;
+        if(req.body.media_question.media_field)
+          $question_tag["media_question.media_field"] = req.body.media_question.media_field;
+      }
+      if(req.body.question_is_required)
+        $question_tag["question_is_required"] = req.body.question_is_required;
+
+      if(req.body.answer_settings){
+        if(req.body.answer_settings.is_randomized)
+          $question_tag["answer_settings.is_randomized"] = req.body.answer_settings.is_randomized;
+        if(req.body.answer_settings.super_size)
+          $question_tag["answer_settings.super_size"] = req.body.answer_settings.super_size;
+        if(req.body.answer_settings.single_choice)
+          $question_tag["answer_settings.single_choice"] = req.body.answer_settings.single_choice;
+        if(req.body.answer_settings.choice_style)
+          $question_tag["answer_settings.choice_style"] = req.body.answer_settings.choice_style;
+        if(req.body.answer_settings.answer_char_max)
+          $question_tag["answer_settings.answer_char_max"] = req.body.answer_settings.answer_char_max;
+      }
+      $question_tag = { $push : { questions: $question_tag } }
+    }
+
+
+    // editing or pushing (Add) new field in array
+    qtnr.findByIdAndUpdate( app_id , $question_tag , {new : true }).then((questions)=>{
+      if (!questions){
+        return new Promise((resolve , reject)=>{
+          res.status(404).send(apis.notfound_message);
+        });
+      }
+      res.send(questions);
+    }).catch((err)=>{
+      return new Promise ((resolve , reject)=>{
+        res.status(401).send(err);
+      });
+    });
+  }).catch((err)=>{
+    return new Promise ((resolve , reject)=>{
+      res.status(400).send(err);
+    });
+  });
+
+
+});
 
 
 
