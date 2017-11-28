@@ -382,7 +382,7 @@ var answer_setting_bo = {
     is_randomized :           { type : Boolean }  ,
     super_size:               { type : Boolean }  ,
     single_choice:            { type : Boolean }  ,
-    choice_style:            { type : Boolean }  , //Inline or full block
+    choice_style :            { type : Boolean }  , //Inline or full block
     answer_char_max :         { type : String , trim :true }
   }
 };

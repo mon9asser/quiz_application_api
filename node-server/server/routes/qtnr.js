@@ -453,79 +453,110 @@ qtnrRouters.patch("/:app_id/question/:process", verify_token_user_type, (req, re
           });
       });
   }
-  qtnr.findById(app_id).then((qtner)=>{
-    if(!qtner){
-      return new Promise ((resolve , reject)=>{
-        res.status(404).send(apis.notfound_message);
-      });
-    }
-    var $question_tag = new Object();
+   
 
-    if(processType == 'edit'){  // Updating question in array
-        console.log("This is update !. ");
-    } else if (processType == 'create'){
 
-      if(!req.body.question_body)
-        {
-          return new Promise((resolve, reject)=>{
-            res.status(404).send("Question body not found ! , please insert question body !");
-          });
+
+
+
+   qtnr.findOne({ _id:app_id }, function (err, document){
+
+        if(err){
+         return new Promise ((resolve , reject)=>{
+             res.status(404).send(apis.notfound_message);
+           });
+         }
+
+
+        if(processType == 'edit'){
+            if(! req.body.question_id){
+                   return new Promise((resolve, reject)=>{
+                     res.status(404).send("Please insert question_id field with existing id");
+                   });
+            }
+            var questions = document.questions;
+            for(var i=0; i<questions.length;i++){ 
+                if( questions[i]._id == req.body.question_id ){ 
+                    if(req.body.question_body)
+                        document.questions[i].question_body = req.body.question_body ;
+                    if(req.body.question_is_required)
+                         document.questions[i].question_is_required = req.body.question_is_required;
+                    if(req.body.question_type)
+                        document.questions[i].question_type = req.body.question_type ;
+                    if(req.body.answer_settings){
+                          if(!questions[i].answer_settings)
+                                questions[i].answer_settings = {} ;
+
+                        if(req.body.answer_settings.super_size )
+                            document.questions[i].answer_settings.super_size = req.body.answer_settings.super_size ;
+                        if(req.body.answer_settings.single_choice)
+                            document.questions[i].answer_settings.single_choice = req.body.answer_settings.single_choice ;
+                        if(req.body.answer_settings.choice_style)
+                            document.questions[i].answer_settings.choice_style = req.body.answer_settings.choice_style ;
+                        if(req.body.answer_settings.answer_char_max)
+                            document.questions[i].answer_settings.answer_char_max = req.body.answer_settings.answer_char_max ;
+                     }
+                     
+
+                    if(req.body.media_question) {
+                        console.log("Media Choices part");
+                    }
+                }
+            }
+        }else if(processType == 'create'){
+            //=============================> push 
+            if(!req.body.question_body)
+                {
+                  return new Promise((resolve, reject)=>{
+                    res.status(404).send("Question body not found ! , please insert question body !");
+                  });
+                }
+                $question_tag = new Object();
+                $question_tag["_id"] =  mongoose.Types.ObjectId();
+                $question_tag["created_at"] = new Date();
+                $question_tag["question_body"] = req.body.question_body ;
+                $question_tag["answers_body"] = [] ;  
+                if(req.body.question_type )
+                $question_tag ["question_type"] = req.body.question_type;
+                if(req.body.media_question){
+                if(req.body.media_question.media_type)
+                $question_tag["media_question.media_type"] = req.body.media_question.media_type;
+                if(req.body.media_question.media_name)
+                  $question_tag["media_question.media_name"] = req.body.media_question.media_name;
+                if(req.body.media_question.media_field)
+                  $question_tag["media_question.media_field"] = req.body.media_question.media_field;
+                }
+               if(req.body.question_is_required)
+                $question_tag["question_is_required"] = req.body.question_is_required;
+
+                if(req.body.answer_settings){
+                    if(req.body.answer_settings.is_randomized)
+                      $question_tag["answer_settings.is_randomized"] = req.body.answer_settings.is_randomized;
+                    if(req.body.answer_settings.super_size)
+                      $question_tag["answer_settings.super_size"] = req.body.answer_settings.super_size;
+                    if(req.body.answer_settings.single_choice)
+                      $question_tag["answer_settings.single_choice"] = req.body.answer_settings.single_choice;
+                    if(req.body.answer_settings.choice_style)
+                      $question_tag["answer_settings.choice_style"] = req.body.answer_settings.choice_style;
+                    if(req.body.answer_settings.answer_char_max)
+                      $question_tag["answer_settings.answer_char_max"] = req.body.answer_settings.answer_char_max;
+                }  
+
+                document.questions.push($question_tag);
         }
+      
+         try{
+            document.save().then((results)=>{
+               res.send(results);
+             });
+         }catch(err){
+            return new Promise( ( resolve , reject ) => {
+                res.status(404).send(err);
+            });
+         }
 
-        $question_tag["_id"] =  mongoose.Types.ObjectId();
-        $question_tag["created_at"] = new Date();
-        $question_tag["updated_at"] = new Date();
-        $question_tag["question_body"] = req.body.question_body ;
-        $question_tag["answers_body"] = [] ;
-
-
-      if(req.body.question_type )
-        $question_tag ["question_type"] = req.body.question_type;
-      if(req.body.media_question){
-        if(req.body.media_question.media_type)
-        $question_tag["media_question.media_type"] = req.body.media_question.media_type;
-        if(req.body.media_question.media_name)
-          $question_tag["media_question.media_name"] = req.body.media_question.media_name;
-        if(req.body.media_question.media_field)
-          $question_tag["media_question.media_field"] = req.body.media_question.media_field;
-      }
-      if(req.body.question_is_required)
-        $question_tag["question_is_required"] = req.body.question_is_required;
-
-      if(req.body.answer_settings){
-        if(req.body.answer_settings.is_randomized)
-          $question_tag["answer_settings.is_randomized"] = req.body.answer_settings.is_randomized;
-        if(req.body.answer_settings.super_size)
-          $question_tag["answer_settings.super_size"] = req.body.answer_settings.super_size;
-        if(req.body.answer_settings.single_choice)
-          $question_tag["answer_settings.single_choice"] = req.body.answer_settings.single_choice;
-        if(req.body.answer_settings.choice_style)
-          $question_tag["answer_settings.choice_style"] = req.body.answer_settings.choice_style;
-        if(req.body.answer_settings.answer_char_max)
-          $question_tag["answer_settings.answer_char_max"] = req.body.answer_settings.answer_char_max;
-      }
-      $question_tag = { $push : { questions: $question_tag } }
-    }
-
-
-    // editing or pushing (Add) new field in array
-    qtnr.findByIdAndUpdate( app_id , $question_tag , {new : true }).then((questions)=>{
-      if (!questions){
-        return new Promise((resolve , reject)=>{
-          res.status(404).send(apis.notfound_message);
-        });
-      }
-      res.send(questions);
-    }).catch((err)=>{
-      return new Promise ((resolve , reject)=>{
-        res.status(401).send(err);
-      });
     });
-  }).catch((err)=>{
-    return new Promise ((resolve , reject)=>{
-      res.status(400).send(err);
-    });
-  });
+
 
 
 });
