@@ -154,7 +154,7 @@ rptRouters.post(
                 return reporting.create_survey_quiz_answers(helper , survey_and_answers);
               }).then((attendee_user)=>{
                 // Calculation
-                  return reporting.quiz_calculation(attendee_user);
+                  return reporting.quiz_calculation(attendee_user , qtnrDocument );
               }).then((returned)=>{
                   res.send(returned);
               })
@@ -173,9 +173,9 @@ rptRouters.post(
                  // Questions and answers
                   return rptDocument.create_survey_quiz_answers(helper , survey_and_answers);
               }).then((attendee_user)=>{
-                 
+
                 // Calculation
-                  return rptDocument.quiz_calculation(attendee_user);
+                  return rptDocument.quiz_calculation(attendee_user , qtnrDocument );
               }).then((returned)=>{
                   res.send(returned);
               });

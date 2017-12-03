@@ -85,7 +85,7 @@ reportSchema.methods.create_survey_quiz_answers = function (helper , survey_quiz
       }
 };
 
-reportSchema.methods.quiz_calculation = function (attendee_user){
+reportSchema.methods.quiz_calculation = function (attendee_user , questionnaire){
   var thisReport = this ;
   /*
   results:
@@ -99,12 +99,29 @@ reportSchema.methods.quiz_calculation = function (attendee_user){
 
   if(attendee_user.index != -1){
       var qsItem = attendee_user.body.survey_quiz_answers ;
+      // ====> Results
       for (var i=0; i < qsItem.length ; i++){
-        thisReport.attendees[attendee_user.index].results.wrong_answers = (qsItem[i].is_correct == false ) ? ( + 1 ) : ( + 0 ) ;
-        thisReport.attendees[attendee_user.index].results.correct_answers = (qsItem[i].is_correct == true ) ? ( + 1 ) : ( + 0 ) ;
+
+        thisReport.attendees[attendee_user.index].results.wrong_answers =   (qsItem[i].is_correct != true ) ?  +1 : thisReport.attendees[attendee_user.index].results.wrong_answers ;
+        thisReport.attendees[attendee_user.index].results.correct_answers = (qsItem[i].is_correct == true ) ?  +1 : thisReport.attendees[attendee_user.index].results.wrong_answers ; 
       }
-      thisReport.attendees[attendee_user.index].results.count_of_questions = attendee_user.body.survey_quiz_answers.length ;
-      console.log(thisReport.attendees[attendee_user.index].results.count_of_questions);
+      thisReport.attendees[attendee_user.index].results.count_of_questions = thisReport.attendees[attendee_user.index].survey_quiz_answers.length ;
+
+      // ===> Is completed status
+      if(questionnaire.questions.length == thisReport.attendees[attendee_user.index].survey_quiz_answers.length )
+        thisReport.attendees[attendee_user.index].is_completed = true ;
+      // ===> Grade Calculation
+      var correct_answers = thisReport.attendees[attendee_user.index].results.correct_answers ;
+      var total_question = thisReport.attendees[attendee_user.index].results.count_of_questions;
+      var graded_settings = questionnaire.settings.grade_settings.value ;
+      var graded_calc = (correct_answers * 100) / total_question ;
+      if(graded_calc >= graded_settings)
+        hisReport.attendees[attendee_user.index].passed_the_grade = true ;
+      // =====> Results
+      thisReport.attendees[attendee_user.index].results.result.row_value = correct_answers ;
+      thisReport.attendees[attendee_user.index].results.result.percentage_value = graded_calc ;
+
+      // =====> Save
       thisReport.markModified('attendees');
       thisReport.save();
   }
