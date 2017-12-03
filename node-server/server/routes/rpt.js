@@ -157,6 +157,8 @@ rptRouters.post(
                   return reporting.quiz_calculation(attendee_user , qtnrDocument );
               }).then((returned)=>{
                   res.send(returned);
+              }).then(()=>{
+                res.send(reports)
               })
               .catch((err)=>{
                 return new Promise((resolve , reject)=>{
@@ -177,7 +179,12 @@ rptRouters.post(
                 // Calculation
                   return rptDocument.quiz_calculation(attendee_user , qtnrDocument );
               }).then((returned)=>{
-                  res.send(returned);
+                  res.send(rptDocument);
+              })
+              .catch((err)=>{
+                return new Promise((resolve , reject)=>{
+                    res.send(err);
+                });
               });
 
             }
