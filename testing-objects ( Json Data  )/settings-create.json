@@ -1,0 +1,36 @@
+API :- /:app_id/settings/create [patch]
+
+{
+	"titles" : {
+		"title_start_with":"Message Starting Quiz here" ,
+		"title_end_with":"Message ending Quiz here", 
+		"title_success_with":"Message Success Quiz here" ,
+		"title_faild_with":"Message Failed Quiz here" 
+	} ,
+	"label_btns":{
+		"lbl_start_with":"Start",
+		"lbl_continue_with":"Continue",
+		"lbl_retake_with":"Retake",
+		"lbl_review_with":"Review"
+	},
+	"step_type":true ,
+	"grade_settings":{
+		"is_graded":true ,
+		"value":90
+	},
+	"review_settings":false ,
+	"retake_setting":true ,
+	"navigation_btns":false ,
+	"randomize_settings":true ,
+	"time_settings":{
+		"is_with_time":true,
+		"value":15,
+		"timer_type":"mins",
+		"timer_layout":1
+	},
+	"progression_bar":{
+		"is_available":true ,
+		"progression_bar_layout":1
+	}
+	
+}

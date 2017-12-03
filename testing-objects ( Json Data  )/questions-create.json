@@ -1,0 +1,43 @@
+
+/:app_id/question/:process  => create
+{
+	"question_body":"What old are you ?",
+	"media_question":{
+		"media_type":0,
+		"media_name":"Natural Image",
+		"media_field":"localhost/images/natural.jpeg"
+	},
+	"question_is_required":true,
+	"answer_settings":{
+		"is_randomized":false,
+		"super_size":true,
+		"single_choice":false,
+		"choice_style":"inline",
+		"answer_char_max":170
+	},
+	"question_type":0
+}
+
+/:app_id/question/:process  => edit
+{
+	"question_id":"5a214162559e5c116161ef25",
+	"question_body":"What old are you ?",
+	"media_question":{
+		"media_type":0,
+		"media_name":"Natural Image",
+		"media_field":"localhost/images/natural.jpeg"
+	},
+	"question_is_required":true,
+	"answer_settings":{
+		"is_randomized":false,
+		"super_size":true,
+		"single_choice":false,
+		"choice_style":"inline",
+		"answer_char_max":170
+	},
+	"question_type":0
+}
+/:app_id/question/:process  => delete
+{
+	"question_id":"5a214362dd14db1380cb3c03"
+}

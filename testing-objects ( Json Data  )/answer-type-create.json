@@ -1,0 +1,35 @@
+/:app_id/question/:question_id/answer/:process
+
+
+// => Case 0 => choices text
+{
+	"indexer":0,
+	"value":"question 2 answer 4",
+	"media_optional":{
+		"media_type":"Media Type question 2 answer 4",
+		"media_name":"Media question 2 answer 4",
+		"media_src":"localhost/images/natural.png"
+	},
+	"is_correct": false
+}
+//=> Case 1 => Media Choices
+	{
+		"indexer":0,
+		"media_name":"Video",
+		"media_dir":"Images/local/mediaoptions.mp4",
+		"is_correct" : false
+	}
+
+//=> Case 2 => Boolean Choices
+{
+	"boolean_type" : "true/false" ,
+    	"is_correct":false
+}
+//=> Case 3 => RateScale
+{
+ "ratscal_type":0,
+ "step_number":5,
+ "started_at":null,
+ "centered_at":null,
+ "ended_at":null
+}

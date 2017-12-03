@@ -103,20 +103,25 @@ $(document).ready(function(){
     if(application.reg_usr.password == null && application.reg_usr.email == null){
       return false ;
     }
+
     $.ajax({
         type : 'post',
         data : {email:application.reg_usr.email , password:application.reg_usr.password} ,
         url : "/api/users/login",
         success : function(res){
-          console.log(res);
-           window.location.href = res.redirectTo ;
-        }  ,
+            window.location.href = res.redirectTo ;
+         }  ,
         error : function (err) {
-           if(err){
-           if(err.responseJSON.errorMSG){
-           $('.error-msg-response').html(err.responseJSON.errorMSG);
+
+           try {
+             if(err){
+             if(err.responseJSON.errorMSG){
+             $('.error-msg-response').html(err.responseJSON.errorMSG);
+             }
            }
-         }
+           } catch (err) {
+             console.log(err);
+           }
       }
 
    });

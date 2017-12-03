@@ -95,33 +95,33 @@ var Questionnaire_settings = {
                     is_graded : {
                       type:Boolean
                     } ,
-                    quiz_graded_value : {
+                    value : {
                       type:Number
                     }
                 }
       } ,
-      quiz_status : {
-        type : [
-                {
-                  attendee_id:{
-                    type : String ,
-                    trim : true
-                  } ,
-                  report_id : {
-                    type : String ,
-                    trim : true
-                  } ,
-                  stopped_at_time : {
-                    type : String ,
-                    trim : true
-                  } ,
-                  at_question_id : {
-                    type : String ,
-                    trim : true
-                  }
-                }
-              ]
-      } ,
+      // quiz_status : {
+      //   type : [
+      //           {
+      //             attendee_id:{
+      //               type : String ,
+      //               trim : true
+      //             } ,
+      //             report_id : {
+      //               type : String ,
+      //               trim : true
+      //             } ,
+      //             stopped_at_time : {
+      //               type : String ,
+      //               trim : true
+      //             } ,
+      //             at_question_id : {
+      //               type : String ,
+      //               trim : true
+      //             }
+      //           }
+      //         ]
+      // } ,
       review_setting : {
         type : Boolean
       } ,
@@ -151,7 +151,7 @@ var Questionnaire_settings = {
                 }
               }
       } ,
-      randomize_setting : {
+      randomize_settings : {
            type : Boolean
       } ,
       time_settings : {
@@ -190,8 +190,11 @@ var Questionnaire_settings = {
                       } ,
                       is_active : {
                         type : Boolean
-                      } , updatedAt :{type : Date} , createdAt :{type : Date},
-                      source_code : {
+                      } ,
+                      updatedAt :{type : Date}
+                       ,
+                       createdAt :{type : Date},
+                        source_code : {
                         type : [
                           {
                             _id :  mongoose.Schema.ObjectId ,
@@ -346,36 +349,48 @@ var quiz_answer_types = {
 };
 
 
+var choices_object = {
 
+    _id :                 { type : mongoose.Schema.ObjectId } ,
+    indexer :             { type : Number } ,
+    value :               { type : String } ,
+    media_optional :      { type : { media_type: { type : Number } , media_name : { type : String } , media_src : { type : String } } } ,
+    is_correct :   { type : Boolean }
 
+};
+var media_choices_object = {
 
-// var attendee_ans_bo =  {
-//   type :
-//       [
-//         {
-//           _id :                { type : mongoose.Schema.ObjectId },
-//           attendee_id :        { type : String },
-//           answer_id :          { type : String } ,
-//           answer_value :       { type : String } ,
-//           answer_type :        { type : String }
-//         }
-//       ]
-// };
+    _id :                  { type : mongoose.Schema.ObjectId } ,
+    indexer  :             { type : Number  } ,
+    media_name :           { type : String  } ,
+    media_dir   :          { type : String  } ,
+    is_correct   :         { type : Boolean }
+
+};
+var boolean_choices_object = {
+
+    boolean_type :        { type : String } , //=> yes/no OR true/false
+    is_correct :          { type : Boolean} // => true (Yes) or false (No)
+
+};
+var rating_scales_object = {
+
+    ratscal_type :        { type : Number } , // Scale or ratings
+    step_number :        { type : Number } ,
+    started_at :          { type : String } ,
+    centered_at :         { type : String } ,
+    ended_at :            { type : String }
+
+};
 var answer_bo = {
-  type : {
-     answer_process :     {
-      type : [
-                  {
-                    choices : {} ,
-                    media_choices : {} ,
-                    boolean_choices : {} ,
-                    rating_scales : {}
-                  }
-             ]
-     }
-  }
+  type : [
 
+               //choices_object //, // 0 => choices
+               //media_choices_object , // 1 => media_choices
+               //boolean_choices_object , // 2 => boolean_choices
+               //rating_scales_object // 3 => rating_scales
 
+       ]
 };
 var answer_setting_bo = {
   type : {
@@ -393,7 +408,7 @@ var Questionnaire_questions = {
         created_at :              { type : Date     } ,
         updated_at:               { type : Date     } ,
         question_body:            { type : String   } ,
-        answers_body :            answer_bo , // Under Updateing
+        answers_format :            answer_bo , // Under Updateing
         media_question :          { type : { media_type :{ type : Number } , media_name : { type : String } , media_field:{ type : String } /* url of video */ } } ,
         // attendee_answers :        attendee_ans_bo , => Moving it for report
         question_is_required :    { type : Boolean } ,
@@ -403,30 +418,12 @@ var Questionnaire_questions = {
     ]
 };
 var questionnaireDataTypes = {
-   creator_id : {
-     type : String ,
-     required : true ,
-     trim : true
-    } ,
-   app_type : {
-     type : String ,
-     required : true
-   } ,
-   description : {
-     type : String ,
-     trim : true ,
-   },
-   questionnaire_title : {
-     type : String ,
-     required :true ,
-     trim : true
-   },
-   createdAt : {
-    type : Date
-   } ,
-   updatedAt : {
-     type : Date
-    },
+   creator_id : { type : String , required : true ,  trim : true , ref : "users" } ,
+   app_type : {  type : String ,  required : true  } ,
+   description : { type : String ,  trim : true ,  },
+   questionnaire_title : {  type : String ,  required :true ,  trim : true },
+   createdAt : { type : Date } ,
+   updatedAt : {  type : Date   },
    settings :  Questionnaire_settings  ,
    questions : Questionnaire_questions
 };
@@ -436,67 +433,29 @@ var questionnaireDataTypes = {
     For Report Collection
   ++++++++++++++++++++++++++++++++++++++++++++++++
 */
-var reportDataTypes = {
-  attendee_id : {
-        type : ObjectId
-      } ,
-  questionnaire_id : {
-        type : ObjectId
-      } ,
-  results : {
-        type : {
-          total : {
-            type : Number
-          } ,
-          wrong_answers : {
-            type : Number
-          } ,
-          correct_answers : {
-            type : Number
-          } ,
-          results : {
-            type : Number
-          }
-        }
-      } ,
-  answers : [{
-            question_report: {
-                      type : {
-                        question_type : {
-                          type : Number
-                        } ,
-                        question_id : {
-                          type : ObjectId
-                        } ,
-                        question_body : {
-                          type : String
-                        } ,
-                      }
-                    } ,
-            answer_report : {
-                      type : {
-                        answer_type : {
-                          type : Number
-                        } ,
-                        answer_id : {
-                          type : ObjectId
-                        } ,
-                        answer_body : {
-                          type : String
-                        }
-                      }
-                    } ,
-            is_correct : {
-                      type : Boolean
-                    } ,
-            createdAt : {
-                      type : Date
-                    } ,
-            updatedAt : {
-                      type : Date
-                    }
-      }]
+
+var builde_survey_quiz_answers = {
+  question_id : { type:mongoose.Schema.ObjectId , unique : true} ,
+  questions :   { type : { question_type : {type : Number } ,question_id : {type : String , ref : "questionnaire"} , question_body : {type : String} } } ,
+  answers :     { type : { answer_id : {type : String} , answer_body : {type : String}   } } ,
+  is_correct :  { type : Boolean }
 };
+
+var build_attendees = {
+  _id                         : { type:mongoose.Schema.ObjectId }  ,
+  attendee_id                 : { type:String , ref : "users" , unique : true}  ,
+  is_completed                : { type:Boolean }  ,
+  passed_the_grade            : { type:Boolean }  ,
+  results                     : { type : { wrong_answers:{ type:Number } , correct_answers : { type:Number }  , count_of_questions : { type:Number } , result:{ type:{ percentage_value :{type:Number} , row_value:{type:Number} } } } }  ,
+  survey_quiz_answers         : { type : [ builde_survey_quiz_answers ] }
+} ;
+var reportDataTypes = {
+   questionnaire_id   : { type:String  , ref : "questionnaire" , unique : true } ,
+   creator_id         : { type:String , ref : "users" } ,
+   attendees          : { type : [ build_attendees ] } ,
+   created_at         : { type : Date } ,
+   updated_at         : { type : Date }
+ }
 module.exports = {
       userDataTypes , questionnaireDataTypes , reportDataTypes
 }

@@ -1,0 +1,56 @@
+
+Sinarios
+=============
+questionnaire_id
+creator_id
+created_at
+updated_at
+attendees ==> []
+		_id
+		attendee_id
+		is_completed
+		passed_the_grade
+		results => {} wrong_answers - correct_answers - count_of_questions - result { percentage_value:  , row_value}
+		survey_quiz_answers => []
+				questions => question_type - question_id - question_body
+				answers => answer_id - answer_body
+				is_correct
+
+
+/:app_id/:attendee_id/:question_id/:answer_id/report/:proccess
+
+
+Sinarios
+----------
+1) questionnaire and creator id are exists
+	=> case = true  => found them 
+		A - user attendee ids are exists =>
+			true  => 
+				Updating 
+				----------
+				- is_completed ( 
+				 	 ALL QUESTIONS OF QUESTIONNAIRE == REPORTING.ATTENDEE.SURVEY_QUIZ_ANSWER.LENGTH  
+					)  
+				- passed_the_grade ( 
+					{ CLACULATE ALL QUESTIONS THAT RESOLVED AS RIGHT ANSWER * 100 )
+					/ ALL QUESTIONS OF QUESTIONNAIRE } >= questionnaire.SETTINGS.GRADDING.VALUE
+				- results 
+					wrong_answer => survey_quiz_answers.QUESTIONS.IS_CORRECT= FALSE
+				- correct_answers 
+					wrong_answer => survey_quiz_answers.QUESTIONS.IS_CORRECT= TRUE
+				- result => percentage_val (  survey_quiz_answers.QUESTIONS.IS_CORRECT= TRUE *  100 / total ) - 
+				-count_of_questions => survey_quiz_answers.length
+				-survey_quiz_answers
+						 
+
+			false =>
+				creating - pushing objects 
+	=> case = false => 
+		Create New Report 
+2) 
+
+
+50 question 
+35 question as a correction answers 
+15 question as a wrong answers 
+total 

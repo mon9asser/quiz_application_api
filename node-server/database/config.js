@@ -33,7 +33,7 @@ var application = {
      settings : {
          titles : { title_start_with : "Write Starting Text"  , title_end_with: "Write Ending Text" , title_success_with : " Success quiz Text" , title_faild_with : "Quiz Faild Text"} ,
          label_btns : {lbl_start_with:"Start" , lbl_continue_with : "Continue" , lbl_retake_with : "Retake" , lbl_review_with : "Review"} ,
-         grade_settings : { is_graded : false , quiz_graded_value : 90 } ,
+         grade_settings : { is_graded : false , value : 90 } ,
          time_settings : { is_with_time:false , value : "15" , timer_type : "mins" , timer_layout : 0 },
          progression_bar : {is_available:true , progression_bar_layout:0} ,
          quiz_theme_style :  {   stylesheet_name : 'theme_'+mongoose.Types.ObjectId()+'.css' , is_active : true , updatedAt:new Date() , createdAt :new Date() , source_code : [

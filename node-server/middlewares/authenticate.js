@@ -85,4 +85,9 @@ var verify_token_user_type = function(req,res,next){
       });
 };
 
+
+
+
+
+
 module.exports = {authByToken  , build_session , verify_session , verify_token_user_type } ;
