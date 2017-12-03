@@ -83,124 +83,107 @@ rptRouters.post(
         var updatedAt = new Date ();
         // get current reattendees
          rpt.findOne( {"questionnaire_id" :qtnrDocument._id , "creator_id":qtnrDocument.creator_id} , (error , rptDocument)=>{
+
+           var attendee_object = new Object();
+           attendee_object['_id'] = mongoose.Types.ObjectId();
+           attendee_object['attendee_id'] = attendee_id;
+           attendee_object['is_completed'] = false ;
+           attendee_object['passed_the_grade'] = false ;
+           attendee_object['results'] = {
+             wrong_answers : 0,
+             correct_answers : 0,
+             count_of_questions : 0,
+             result : { percentage_value : 0 , row_value : 0}
+           };
+           attendee_object['survey_quiz_answers'] = [] ;
+
+           // Detect if question is exists or not
+           var target_questionIndex = _.findIndex(qtnrDocument.questions , { "id" :question_id });
+           if(target_questionIndex == -1){
+             return new Promise((resolve , reject)=>{
+                 res.send("This Question id doesn't exists");
+             });
+           }
+           // Detect if Answer is exists or not
+           var target_question =_.find(qtnrDocument.questions , { "id" : question_id });
+           var all_answer_body = function  (object) {
+                 return object._id == answer_id;
+             }
+           var target_answer = target_question.answers_format.find(all_answer_body);
+             if(!target_answer)
+             {
+               return new Promise((resolve , reject)=>{
+                   res.send("This Answer id doesn't exists");
+               });
+             }
+
+             var reportObject = {
+                    "questionnaire_id" : qtnrDocument._id,
+                    "creator_id" : qtnrDocument.creator_id,
+                    "created_at": new Date (),
+                    "updated_at": new Date () ,
+                    "attendees": []
+                  };
+
+            var survey_and_answers = new Object()
+            survey_and_answers["_id"] = mongoose.Types.ObjectId();
+            survey_and_answers["question_id"] = target_question._id;
+            survey_and_answers["questions"] = new Object();
+              survey_and_answers["questions"]["question_type"] = target_question.question_type;
+              survey_and_answers["questions"]["question_id"] = target_question._id;
+              survey_and_answers["questions"]["question_body"] = target_question ;
+            survey_and_answers["answers"] = new Object();
+              survey_and_answers["answers"]["answer_id"] = target_answer._id;
+              survey_and_answers["answers"]["answer_body"] = target_answer ;
+            survey_and_answers["is_correct"] = target_answer.is_correct;
+
+            var helper = new Object();
+            helper["attendee_id"] = attendee_id ;
+
            if(!rptDocument){
              // +++++++++++++++++++++++++++++++++++++++++++++++ Add New
                  // Basics
-                 var reportObject = {
-                   "questionnaire_id" : qtnrDocument._id,
-                   "creator_id" : qtnrDocument.creator_id,
-                   "created_at": new Date (),
-                   "updated_at": new Date () ,
-                   "attendees": []
-                 };
-                 var attendees = new Object();
-                 var attendeed_survey_quiz_answers = new Object();
-
-                 attendees["_id"] =  mongoose.Types.ObjectId();
-
-                 attendees["attendee_id"] = attendee_id ;
-                 attendees["is_completed"] =  false  ;
-                 attendees["passed_the_grade"] = false ;
-                 attendees["results"] = new Object();
-                 attendees["survey_quiz_answers"] = new Array();
-                 //var wrong_ans =
-                 // specify question with id and answer
-
-                 var question_tags = qtnrDocument.questions ;
-                 for(var i =0 ; i < question_tags.length; i++){
-                  if(question_tags[i]._id == question_id){
-                    var answer_format = question_tags[i].answers_format ;
-                      for(var x = 0 ; x < answer_format.length; x++){
-                        if(answer_format[x]._id == answer_id ){
-                            var answer_object = answer_format[x] ;
-
-                            attendees["results"]["correct_answers"] = ( answer_object.is_correct == true) ? 1 : 0 ;
-                            attendees["results"]["wrong_answers"] = ( answer_object.is_correct == false ) ? 1 : 0 ;
-                            attendees["results"]["count_of_questions"] = 1
-                            attendees["results"]["result"] = new Object();
-                            attendees["results"]["result"]['percentage_value'] = (attendees["results"]["correct_answers"] * 100 / attendees["results"]["count_of_questions"] )
-                            attendees["results"]["result"]['row_value'] = ( answer_object.is_correct ) ? 1 : 0  ;
-
-                            attendeed_survey_quiz_answers["questions"] = new Object();
-                            attendeed_survey_quiz_answers["question_id"] = question_tags[i]._id ;
-                            attendeed_survey_quiz_answers["questions"]['question_type'] = question_tags[i].question_type;
-                            attendeed_survey_quiz_answers["questions"]['question_id'] = question_id ;
-                            attendeed_survey_quiz_answers["questions"]['question_body'] = question_tags[i].question_body;
-                            attendeed_survey_quiz_answers["answers"] = new Object();
-                            attendeed_survey_quiz_answers["answers"]["answer_id"] = answer_id ;
-                            attendeed_survey_quiz_answers["answers"]["answer_body"] = answer_format[x] ;
-                            attendeed_survey_quiz_answers["is_correct"] = answer_format[x].is_correct  ;
-                        }
-                      }
-                   }
-                 }
-
-                 // Build an attendee array list after promise returned
-                 var reporting = new rpt(reportObject);
-                  reporting.save().then(()=>{
-                     return reporting.create_attendees( null , attendees , null);
-                  }).then((attendee_arguments)=>{
-                      reporting.create_survey_quiz_answers(attendeed_survey_quiz_answers , attendee_arguments);
-                   }).then(()=>{
-                      res.send(reporting);
-                  }).catch((err)=>{
+              var reporting = new rpt (reportObject);
+              reporting.save()
+              .then((reports)=>{
+                // Saving the attendees
+                return reporting.create_attendees(attendee_object);
+              })
+              .then((attendee_arguments)=>{
+                // Saving the answers and question
+                return reporting.create_survey_quiz_answers(helper , survey_and_answers);
+              }).then((attendee_user)=>{
+                // Calculation
+                  return reporting.quiz_calculation(attendee_user);
+              }).then((returned)=>{
+                  res.send(returned);
+              })
+              .catch((err)=>{
+                return new Promise((resolve , reject)=>{
                     res.send(err);
-                  });
-
-
+                });
+              });
            }else {
               // +++++++++++++++++++++++++++++++++++++++++++++++ Update
-              var question_tags = qtnrDocument.questions ;
-              for(var i =0 ; i < question_tags.length; i++){
-               if(question_tags[i]._id == question_id){
-                 var answer_format = question_tags[i].answers_format ;
-                   for(var x = 0 ; x < answer_format.length; x++){
-                     if(answer_format[x]._id == answer_id ){
-                        rptDocument.updated_at = new Date();
-                      //  console.log(answer_format[x]._id +"-----"+ answer_id +"-----" + x);
-                        var xvalue = x ;
-                        var ivalue = i ;
-                        rptDocument.save().then(()=>{
+               rptDocument.updated_at = new Date();
+               rptDocument.save().then(()=>{
+                 // create attendee
+                 return rptDocument.create_attendees(attendee_object) ;
+               }).then((attendee_arguments)=>{
+                 // Questions and answers
+                  return rptDocument.create_survey_quiz_answers(helper , survey_and_answers);
+              }).then((attendee_user)=>{
+                 
+                // Calculation
+                  return rptDocument.quiz_calculation(attendee_user);
+              }).then((returned)=>{
+                  res.send(returned);
+              });
 
-                          var send_first_time = {
-                              attendee_id : attendee_id ,
-                              is_completed : false ,
-                              passed_the_grade : false ,
-                              survey_quiz_answers : [] ,
-                              results : {
-                                wrong_answers : 0 ,
-                                correct_answers : 0 ,
-                                count_of_questions : 1 ,
-                                result : {percentage_value : 50 , row_value : 50 }
-                              }
-                          };
+            }
 
-                        return rptDocument.create_attendees( {
-                            count_of_question :  qtnrDocument.questions.length ,
-                            is_passed_the_grade : qtnrDocument.settings.grade_settings.value ,
-                            is_correct_answer : answer_format[xvalue].is_correct
-                          } , {
-                              attendee_id : attendee_id
-                          } ,
-                          send_first_time
-                        )
-                      }).then((attendee_arguments)=>{
-                           var answer_atten = {
-                            question_id: question_id ,
-                            questions :{ question_type :question_tags[ivalue].question_type , question_id: question_id ,question_body : question_tags[ivalue].question_body } ,
-                            answers : { answer_id : answer_format[xvalue]._id , answer_body : answer_format[xvalue]  } ,
-                            is_correct : answer_format[xvalue].is_correct
-                          }
-                            return rptDocument.create_survey_quiz_answers(answer_atten , {_id : attendee_arguments._id});
-                        }).then((report_data)=>{
 
-                          res.send(rptDocument);
-                        });
-                     }
-                   }
-                 }
-               }
-           }
+
 
          })
 

@@ -35,84 +35,80 @@ var reportSchema = mongoose.Schema(reportDataTypes );
 //         }
 //     ]
 // }
-reportSchema.methods.create_attendees = function (helper ,  attendee_args , send_first_time ){
-  var thisReport = this ;
-  if(thisReport.attendees.length == 0){
-    console.log(attendee_args);
-    thisReport.attendees.push(attendee_args);
 
-    return thisReport.save().then((attendee_arguments)=>{
-      console.log("Firs time saving the attendee and questionnire !! ");
-       return attendee_arguments.attendees[0];
-    });
-  }else {
-    var detect_insearted_value = false ;
-      var attendeeId ;
-    for (var i = 0; i < thisReport.attendees.length; i++) {
+reportSchema.methods.create_attendees = function ( attendee_args  ){
+    var thisReport = this ;
+    var attendee_arguments = this ;
+     var attendee = _.findIndex(thisReport.attendees, { 'attendee_id': attendee_args.attendee_id  });
+    //  var attendee_arguments = _.find(thisReport.attendees, { 'attendee_id': attendee_args.attendee_id  });
+     if(attendee == -1 ){
 
-      if(thisReport.attendees[i].attendee_id == attendee_args.attendee_id){
-        attendeeId = attendee_args.attendee_id ;
-        console.log( thisReport.attendees[i].attendee_id +"{----}"+ attendee_args.attendee_id );
-          //if(_.isMatch(thisReport.attendees[i] , { attendee_id : attendee_args.attendee_id })){
-        detect_insearted_value = true ;
-         console.log("Add to old user ");
-        console.log(detect_insearted_value + " ------------------ ");
-        thisReport.attendees[i].results =  new Object ();
-            thisReport.attendees[i].results.count_of_questions = thisReport.attendees[i].results.count_of_questions+1;
-            thisReport.attendees[i].results.wrong_answers = (helper.is_correct_answer == false ) ? thisReport.attendees[i].results.wrong_answers+1 : thisReport.attendees[i].results.wrong_answers+0 ;
-            thisReport.attendees[i].results.correct_answers = (helper.is_correct_answer == true ) ? thisReport.attendees[i].results.wrong_answers+1 : thisReport.attendees[i].results.wrong_answers+0 ;;
+         thisReport.attendees.push(attendee_args);
+         return thisReport.save().then((attendee_arguments)=>{
 
-            thisReport.attendees[i].results.result = {
-              row_value  : thisReport.attendees[i].results.correct_answers ,
-              percentage_value : thisReport.attendees[i].results.correct_answers * 100 / thisReport.attendees[i].results.count_of_questions
-            }
+             var attendeeIndex = _.findIndex(attendee_arguments.attendees, { 'attendee_id': attendee_args.attendee_id  });
 
-        // Need updates here after done the update records for report
-        thisReport.attendees[i].is_completed =
-          (helper.count_of_question == thisReport.attendees[i].survey_quiz_answers.length );
-        thisReport.attendees[i].passed_the_grade =
-         ( helper.is_passed_the_grade >= ( thisReport.attendees[i].results.correct_answers * 100 / thisReport.attendees[i].results.count_of_questions ) )
-         console.log("(***************************<<<<<<<1>>>>>>>" + i);
-        return thisReport.save().then((attendee_arguments)=>{
-           return attendee_arguments.attendees[i];
-        });
+             return attendee_arguments.attendees[attendeeIndex];
+         });
+     }else {
 
-      }else if( i == (thisReport.attendees.length - 1) && thisReport.attendees[i].attendee_id != attendee_args.attendee_id) {
-          var atteddd = thisReport.attendees ;
-          console.log(send_first_time);
-          //thisReport.update({_id: thisReport._id}, {$addToSet: {atteddd: send_first_time}});
-
-      }
-    }
-
-
-
-  }
-
-
+       return attendee_arguments.attendees[attendee];
+     }
 
  };
 
-reportSchema.methods.create_survey_quiz_answers = function ( survey_quiz_answers_args , attendee_arguments){
- var thisReport = this ;
+reportSchema.methods.create_survey_quiz_answers = function (helper , survey_quiz_answers_args ){
+     var thisReport = this ;
+     var attendee_user = new Object();
+     var attendeeIndex = _.findIndex(thisReport.attendees , {'attendee_id':helper.attendee_id} );
 
+     if(attendeeIndex != -1){
+       var attendeeApp = _.find(thisReport.attendees , {'attendee_id':helper.attendee_id} );
 
-
-  for(var i=0; i < thisReport.attendees.length ; i ++ ){
-      if(thisReport.attendees[i]._id == attendee_arguments._id){
-
-          thisReport.attendees[i].survey_quiz_answers.push(survey_quiz_answers_args);
-         thisReport.save();
-       }
-   }
-
-
-   // console.log(survey_quiz_answers_args);
-  // console.log("================================");
-  // console.log(attendee_arguments);
-  // console.log("================================");
+          var question_exists = _.findIndex(thisReport.attendees[attendeeIndex].survey_quiz_answers , { "question_id": survey_quiz_answers_args.question_id})
+         if(question_exists == -1 ){
+           thisReport.attendees[attendeeIndex].survey_quiz_answers.push(survey_quiz_answers_args);
+           return thisReport.save().then(()=>{
+               attendee_user =  {
+                 body   : thisReport.attendees[attendeeIndex] ,
+                 index : attendeeIndex
+              };
+             return attendee_user ;
+           });
+         }else {
+           attendee_user = {
+             body   : "This Question is already exists",
+             index : -1
+           };
+           return attendee_user ;
+         }
+      }
 };
 
+reportSchema.methods.quiz_calculation = function (attendee_user){
+  var thisReport = this ;
+  /*
+  results:
+      { wrong_answers: 0,
+        correct_answers: 0,
+        count_of_questions: 0,
+        result: [Object] },
+     passed_the_grade: false,
+     is_completed: false,
+   */
+
+  if(attendee_user.index != -1){
+      var qsItem = attendee_user.body.survey_quiz_answers ;
+      for (var i=0; i < qsItem.length ; i++){
+        thisReport.attendees[attendee_user.index].results.wrong_answers = (qsItem[i].is_correct == false ) ? ( + 1 ) : ( + 0 ) ;
+        thisReport.attendees[attendee_user.index].results.correct_answers = (qsItem[i].is_correct == true ) ? ( + 1 ) : ( + 0 ) ;
+      }
+      thisReport.attendees[attendee_user.index].results.count_of_questions = attendee_user.body.survey_quiz_answers.length ;
+      console.log(thisReport.attendees[attendee_user.index].results.count_of_questions);
+      thisReport.markModified('attendees');
+      thisReport.save();
+  }
+};
 // --------------------------
 // Add Default Settings
 // --------------------------
