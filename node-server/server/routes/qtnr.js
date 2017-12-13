@@ -52,28 +52,28 @@ qtnrRouters.use(build_session);
 //  /api/init
 //========================================
 // Detect Get Request
-qtnrRouters.get([
-  "/init",
-  "/create",
-  "/:app_id/settings/create",
-  "/:app_id/settings/style/:process",
-  "/:app_id/question/:question_id/answer/:process",
-  "/:app_id/question/:process"
-  ], verify_token_user_type, (req, res) => {
-    var user = req.verified_user;
-    var userType = req.verified_user_type;
-    var token = req.verified_token;
-
-    // this user should be a creator user !
-    if (userType != 1) {
-        return new Promise((resolve, reject) => {
-            res.status(401).send({
-                "error": apis.permission_denied
-            });
-        });
-    }
-    res.send(apis.authorize_success);
-});
+// qtnrRouters.get([
+//   "/init",
+//   "/create",
+//   "/:app_id/settings/create",
+//   "/:app_id/settings/style/:process",
+//   "/:app_id/question/:question_id/answer/:process",
+//   "/:app_id/question/:process"
+//   ], verify_token_user_type, (req, res) => {
+//     var user = req.verified_user;
+//     var userType = req.verified_user_type;
+//     var token = req.verified_token;
+//
+//     // this user should be a creator user !
+//     if (userType != 1) {
+//         return new Promise((resolve, reject) => {
+//             res.status(401).send({
+//                 "error": apis.permission_denied
+//             });
+//         });
+//     }
+//     res.send(apis.authorize_success);
+// });
 // Initialization
 qtnrRouters.post("/init", verify_token_user_type, (req, res) => {
 
@@ -92,7 +92,7 @@ qtnrRouters.post("/init", verify_token_user_type, (req, res) => {
 
     // => Fill Default data for title and description
     application.questionnaire.creator_id = user.id
-    application.questionnaire.app_type = userType;
+    application.questionnaire.app_type = req.body.app_type;
     application.questionnaire.questionnaire_title = (req.body.app_type === 1) ? 'Quiz 1' : 'Survey 1';
     application.questionnaire.description = "Write description for this " + (req.body.app_type == 1) ? 'Quiz 1' : 'Survey 1';
     application.questionnaire.createdAt = new Date();
@@ -119,13 +119,14 @@ qtnrRouters.post("/init", verify_token_user_type, (req, res) => {
     });
 
 });
-// creating from a to z
+// creating
 qtnrRouters.post("/create", verify_token_user_type, (req, res) => {
 
     var user = req.verified_user;
     var userType = req.verified_user_type;
     var token = req.verified_token;
     // this user should be a creator user !
+
     if (userType != 1) {
         return new Promise((resolve, reject) => {
             res.status(401).send({
@@ -141,10 +142,9 @@ qtnrRouters.post("/create", verify_token_user_type, (req, res) => {
     req.body.creator_id = user.id;
     var body = _.pick(req.body, ['creator_id', 'app_type', 'questionnaire_title', 'description', 'createdAt', 'updatedAt', 'settings', 'questions']);
 
-
-
     var qtnrs = new qtnr(body);
     qtnrs.save().then((qtner) => {
+
         if (!qtner) {
             return new Promise((resolve, reject) => {
                 res.status(404).send({
@@ -155,10 +155,9 @@ qtnrRouters.post("/create", verify_token_user_type, (req, res) => {
 
         res.send(qtner);
     }).catch((e) => {
+
         return new Promise((resolve, reject) => {
-            res.status(401).send({
-                error: apis.permission_denied
-            });
+            res.status(401).send(  e );
         });
     });
 
@@ -172,8 +171,7 @@ qtnrRouters.patch("/:app_id/settings/create", verify_token_user_type, (req, res)
     var update_type = req.body.updateType;
     // this user should be a creator user !
     if (userType != 1) {
-
-        return new Promise((resolve, reject) => {
+         return new Promise((resolve, reject) => {
             res.status(401).send({
                 "error": apis.permission_denied
             });
@@ -217,8 +215,7 @@ qtnrRouters.patch("/:app_id/settings/create", verify_token_user_type, (req, res)
 
             if (req.body.titles.title_faild_with)
                 $settings["settings.titles.title_faild_with"] = req.body.titles.title_faild_with;
-
-        }
+         }
 
 
         if (req.body.step_type)
@@ -444,12 +441,13 @@ qtnrRouters.patch("/:app_id/settings/style/:process", verify_token_user_type, (r
 
 });
 // question ( process => edit question / create => add new qs to array / delete => unset array of question)
-qtnrRouters.patch("/:app_id/question/:process", verify_token_user_type, (req, res) =>{
+  qtnrRouters.patch("/:app_id/question/:process", verify_token_user_type, (req, res) =>{
   var app_id = req.params.app_id ;
   var processType= req.params.process ;
   var user = req.verified_user;
   var userType = req.verified_user_type;
   var token = req.verified_token;
+
 
   // this user should be a creator user !
   if (userType != 1) {
@@ -460,6 +458,8 @@ qtnrRouters.patch("/:app_id/question/:process", verify_token_user_type, (req, re
       });
   }
    qtnr.findOne({ _id:app_id }, function (err, document){
+
+
          if(err){
            return new Promise ((resolve , reject)=>{
              res.status(404).send(apis.notfound_message);
@@ -528,19 +528,18 @@ qtnrRouters.patch("/:app_id/question/:process", verify_token_user_type, (req, re
                 if(req.body.question_type  != null )
                 $question_tag ["question_type"] = req.body.question_type;
                 if(req.body.media_question){
-                if(req.body.media_question.media_type)
-                $question_tag["media_question.media_type"] = req.body.media_question.media_type;
-                if(req.body.media_question.media_name)
-                  $question_tag["media_question.media_name"] = req.body.media_question.media_name;
-                if(req.body.media_question.media_field)
-                  $question_tag["media_question.media_field"] = req.body.media_question.media_field;
+                    if(req.body.media_question.media_type)
+                    $question_tag["media_question.media_type"] = req.body.media_question.media_type;
+                    if(req.body.media_question.media_name)
+                      $question_tag["media_question.media_name"] = req.body.media_question.media_name;
+                    if(req.body.media_question.media_field)
+                      $question_tag["media_question.media_field"] = req.body.media_question.media_field;
                 }
                if(req.body.question_is_required)
                 $question_tag["question_is_required"] = req.body.question_is_required;
 
                 if(req.body.answer_settings != null ){
-
-                    if(req.body.answer_settings.is_randomized)
+                     if(req.body.answer_settings.is_randomized)
                       $question_tag["answer_settings.is_randomized"] = req.body.answer_settings.is_randomized;
                     if(req.body.answer_settings.super_size != null)
                       $question_tag["answer_settings.super_size"] = req.body.answer_settings.super_size;
@@ -614,7 +613,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , verify_toke
 
          var questions = document.questions;
          for(var i=0; i<questions.length;i++){
-
+           // document.app_type
              if( questions[i]._id == question_id ){
                // Detect api process type
                // Set answers type
@@ -624,24 +623,32 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , verify_toke
                 1 =>  media_choices
                 2 =>  boolean_choices
                 3 =>  rating_scales
+                4 => free texts
                */
                var question_answers = new Object ();
                switch (question_type) {
                    case 0:
+
                      question_answers["_id"] = mongoose.Types.ObjectId();
                      question_answers["indexer"] = null ;
+                     if(req.body.choices_value != null )
+                     question_answers["value"] = req.body.choices_value ;
+                     else
                      question_answers["value"] = "Write answer here !" ;
-                     console.log(req.body.media_optional);
+
                     if(req.body.media_optional != null ){
                       question_answers["media_optional"] = {
                         "media_type" : (req.body.media_optional.media_type != null ) ? req.body.media_optional.media_type : null ,
                         "media_name" : (req.body.media_optional.media_name != null ) ? req.body.media_optional.media_name : null ,
                         "media_src" : (req.body.media_optional.media_src != null ) ? req.body.media_optional.media_src : null ,
                       } ;
-
                     }
-                    if(req.body.is_correct != null )
-                     question_answers["is_correct"] = req.body.is_correct ;
+
+                    if(document.app_type == 1 ){
+                      if(req.body.is_correct != null )
+                        question_answers["is_correct"] = req.body.is_correct ;
+                    }
+
                    break;
 
                    case 1:
@@ -654,38 +661,84 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , verify_toke
                      question_answers["media_name"] = "Write answer here !" ;
                      if(req.body.media_dir != null )
                      question_answers["media_dir"] =  req.body.media_dir ;
-                     if(req.body.is_correct != null )
-                     question_answers["is_correct"] = req.body.is_correct ;
 
+                     if(document.app_type == 1 ){
+                       if(req.body.is_correct != null )
+                        question_answers["is_correct"] = req.body.is_correct ;
+                     }
 
                    break;
+
                    case 2:
 
                      question_answers["_id"] = mongoose.Types.ObjectId();
                      if (req.body.boolean_type != null )
                      question_answers["boolean_type"] = req.body.boolean_type ;
-                     if(req.body.is_correct != null )
-                     question_answers["is_correct"] = req.body.is_correct ;
+                             if(document.app_type != 0 ){
+                                     if(req.body.boolean_value != null ){
+
+                                       if(req.body.boolean_type == "true/false")
+                                       {
+                                         if(req.body.boolean_value == true)
+                                         question_answers["boolean_value"] = "True";
+                                          else
+                                         question_answers["boolean_value"] = "False";
+                                        }
+
+                                        if(req.body.boolean_type == "yes/no")
+                                        {
+                                          if(req.body.boolean_value == true)
+                                            question_answers["boolean_value"] =  "Yes";
+                                          else
+                                            question_answers["boolean_value"] =  "No";
+                                        }
+
+                                     }
+                             }
+
+                       if(document.app_type == 1 ){
+                         if(req.body.is_correct != null )
+                          question_answers["is_correct"] = req.body.is_correct ;
+                       }
 
 
-                   break;
+                    break;
+
                    case 3:
+
+                   if(document.app_type != 0 ){
+                     return new Promise((resolve , reject)=>{
+                       res.send({"Message":"That's not Survey !"});
+                     });
+                   }
+
                     question_answers["_id"] = mongoose.Types.ObjectId();
                       if(req.body.ratscal_type != null )
                           question_answers["ratscal_type"] = req.body.ratscal_type;
                       if(req.body.step_numbers != null )
                           question_answers["step_numbers"] = req.body.step_numbers ;
-                      if(req.body.started_at != null )
-                          question_answers["started_at"] = req.body.started_at ;
-                      if(req.body.centered_at != null )
-                         question_answers["centered_at"] = req.body.centered_at
-                      if(req.body.ended_at != null )
-                        question_answers["ended_at"] = req.body.ended_at;
+                      if(req.body.ratscal_type != null && req.body.ratscal_type == 0) // => means that is scale type
+                        {
+                          if(req.body.started_at != null )
+                              question_answers["started_at"] = req.body.started_at ;
+                          if(req.body.centered_at != null )
+                             question_answers["centered_at"] = req.body.centered_at
+                          if(req.body.ended_at != null )
+                            question_answers["ended_at"] = req.body.ended_at;
+                        }
+                    break;
 
+                    case 4 : // Free Texts
+                        if(document.app_type != 0 ){
+                          return new Promise((resolve , reject)=>{
+                            res.send({"Message":"That's not Survey !"});
+                          });
+                        }
 
-                   break;
+                        question_answers["_id"] = mongoose.Types.ObjectId();
+                     break ;
                  }
-                 console.log(question_answers);
+
                if(processType == "create") // Push
                   questions[i].answers_format.push(question_answers);
                 else if (processType == "edit") // Update
@@ -759,6 +812,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , verify_toke
 
     });
 });
+
 
 
 

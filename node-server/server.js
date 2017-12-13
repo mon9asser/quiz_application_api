@@ -1,11 +1,12 @@
 const express = require("express");
 const hbs = require('express-hbs');
+const http = require('http');
 
 const {apis , config } = require("./database/config");
 const {usrRouters} = require("./server/routes/usr");
 const {qtnrRouters} = require("./server/routes/qtnr");
 const {viewRouters} = require("./server/routes/views");
-const {rptRouters} = require("./server/routes/rpt"); 
+const {rptRouters} = require("./server/routes/rpt");
 
 const {usr} = require("./models/users");
 
@@ -65,7 +66,9 @@ app.use( apis._dir_ ,  usrRouters );
 // ---------->  User Authenticate
 //------------------------------------------------
 
-
+// http.createServer((req,res)=>{
+//   console.log(`Started up at port ${config.server_port}`);
+// }).listen(config.server_port);
 app.listen(config.server_port , ()=>{
   console.log(`Started up at port ${config.server_port}`);
 });

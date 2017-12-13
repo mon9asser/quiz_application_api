@@ -49,16 +49,20 @@ userSchema.statics.verifyTokens = function(token){
 
   var usr = this ;
   var verified ;
+
+
   try {
-      verified = jwt.verify(token , config.secretCode );
+      verified = jwt.verify( token  , config.secretCode );
   } catch (e) {
-    return Promise.reject(apis.unauth);
-  }
+      return Promise.reject({"Message":"unverified token !"});
+  } 
+
+
   return usr.findOne({
      _id :             verified._id      ,
      'tokens.access':  verified.access.toString()   ,
      'tokens.token':   token
- });
+ })
 };
 
 userSchema.methods.generateAuthentication = function(){

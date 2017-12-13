@@ -375,7 +375,7 @@ var boolean_choices_object = {
 };
 var rating_scales_object = {
 
-    ratscal_type :        { type : Number } , // Scale or ratings
+    ratscal_type :        { type : Number } , // 0=> Scale or 1=> ratings
     step_number :        { type : Number } ,
     started_at :          { type : String } ,
     centered_at :         { type : String } ,
@@ -418,7 +418,7 @@ var Questionnaire_questions = {
     ]
 };
 var questionnaireDataTypes = {
-   creator_id : { type : String , required : true ,  trim : true , ref : "users" } ,
+   creator_id : { type : String , required : true ,  trim : true  } ,
    app_type : {  type : String ,  required : true  } ,
    description : { type : String ,  trim : true ,  },
    questionnaire_title : {  type : String ,  required :true ,  trim : true },
@@ -436,23 +436,41 @@ var questionnaireDataTypes = {
 
 var builde_survey_quiz_answers = {
   question_id : { type:mongoose.Schema.ObjectId , unique : true} ,
-  questions :   { type : { question_type : {type : Number } ,question_id : {type : String , ref : "questionnaire"} , question_body : {type : String} } } ,
+  questions :   { type : { question_type : {type : Number } ,question_id : {type : String  } , question_body : {type : String} } } ,
   answers :     { type : { answer_id : {type : String} , answer_body : {type : String}   } } ,
-  is_correct :  { type : Boolean }
+  is_correct :  { type : Boolean },
+  created_at  : { type : Date }
 };
 
 var build_attendees = {
   _id                         : { type:mongoose.Schema.ObjectId }  ,
-  attendee_id                 : { type:String , ref : "users" , unique : true}  ,
+  attendee_id                 : { type:String ,   unique : false }  ,
   is_completed                : { type:Boolean }  ,
   passed_the_grade            : { type:Boolean }  ,
-  results                     : { type : { wrong_answers:{ type:Number } , correct_answers : { type:Number }  , count_of_questions : { type:Number } , result:{ type:{ percentage_value :{type:Number} , row_value:{type:Number} } } } }  ,
-  survey_quiz_answers         : { type : [ builde_survey_quiz_answers ] }
+  results                     : { type : { wrong_answers:{ type:Number } , correct_answers : { type:Number }  , count_of_questions : { type:Number } , result:{ type:{ percentage_value :{type:Number} , raw_value:{type:Number} } } } }  ,
+  survey_quiz_answers         : { type : [ builde_survey_quiz_answers ] } ,
+  created_at                  : { type : Date } ,
+  updated_at                  : { type : Date } ,
+  user_information            : { type:String ,   unique : false , ref : "users"}
 } ;
 var reportDataTypes = {
    questionnaire_id   : { type:String  , ref : "questionnaire" , unique : true } ,
+   app_type           : { type: Number  } ,
    creator_id         : { type:String , ref : "users" } ,
    attendees          : { type : [ build_attendees ] } ,
+   history            : { type : [ { date_made : Date  , attendee_counts : Number } ] } ,
+
+   // Case survey
+    statistics : { type : {
+        question_id :{ type : String } ,
+        question_body : { type : String } ,
+        count  : { type : Number } ,
+        question_answers : { type : [
+          // repeating case if string value not exists ( answer_body )
+          { answer_body : { type : String } , attendees : { type : Number} }
+        ]}
+    }}
+    ,
    created_at         : { type : Date } ,
    updated_at         : { type : Date }
  }

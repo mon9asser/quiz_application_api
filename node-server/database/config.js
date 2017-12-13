@@ -5,7 +5,7 @@ var config = {
     database_name :         '/quiz-application' ,
     host_name:              'mongodb://localhost' ,
     options :                { useMongoClient:true } ,
-    server_port :            process.env.port || 3000 ,
+    server_port :            process.env.port || 9000 ,
     session_access : false ,
     secretCode :             "@5rU5d@!tsd&$90f*&#5$~1100sdk$oprFRTgkjfddY1%js",
     apiSecret :              "DRdsd542sder@sds&%4sd854sd=+sds54sderSSfdf##$%@sd"
