@@ -181,35 +181,7 @@ var Questionnaire_settings = {
                  type : Number
                }
              }
-      } ,
-      quiz_theme_style : {
-        type :  {
-                      stylesheet_name : {
-                        type : String ,
-                        trim : true
-                      } ,
-                      is_active : {
-                        type : Boolean
-                      } ,
-                      updatedAt :{type : Date}
-                       ,
-                       createdAt :{type : Date},
-                        source_code : {
-                        type : [
-                          {
-                            _id :  mongoose.Schema.ObjectId ,
-                            class_name : { //ex: .class {}
-                              type: String ,
-                              trim:true
-                            } ,
-                            attributes : { //ex: background : red
-                              type : {}
-                            }
-                          }
-                        ]
-                      }
-            }
-      } ,
+      }  ,
       createdAt : {
         type : Date
       },
@@ -409,7 +381,7 @@ var Questionnaire_questions = {
         updated_at:               { type : Date     } ,
         question_body:            { type : String   } ,
         answers_format :            answer_bo , // Under Updateing
-        media_question :          { type : { media_type :{ type : Number } , media_name : { type : String } , media_field:{ type : String } /* url of video */ } } ,
+        media_question :          { type : { media_type :{ type : Number } , media_name : { type : String } , media_field:{ type : String } } } ,  //  /* url of video */ } } ,
         // attendee_answers :        attendee_ans_bo , => Moving it for report
         question_is_required :    { type : Boolean } ,
         answer_settings :         answer_setting_bo ,
@@ -420,6 +392,7 @@ var Questionnaire_questions = {
 var questionnaireDataTypes = {
    creator_id : { type : String , required : true ,  trim : true  } ,
    app_type : {  type : String ,  required : true  } ,
+   theme_style : { type:[] } ,
    description : { type : String ,  trim : true ,  },
    questionnaire_title : {  type : String ,  required :true ,  trim : true },
    createdAt : { type : Date } ,

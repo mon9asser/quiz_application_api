@@ -55,9 +55,8 @@ userSchema.statics.verifyTokens = function(token){
       verified = jwt.verify( token  , config.secretCode );
   } catch (e) {
       return Promise.reject({"Message":"unverified token !"});
-  } 
-
-
+  }
+ 
   return usr.findOne({
      _id :             verified._id      ,
      'tokens.access':  verified.access.toString()   ,

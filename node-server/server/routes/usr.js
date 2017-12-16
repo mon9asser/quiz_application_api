@@ -2,6 +2,8 @@ const express = require("express");
 const hbs = require("hbs");
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const bcrypt = require('bcryptjs');
+
 const _ = require('lodash');
 const session = require("express-session");
 //const simplePassword = require('simple-password');
@@ -39,23 +41,23 @@ usrRouters.use(session({
   // => Users
  /* +++++++++++++++++++++++++++++++++++++++++++ */
 
-  usrRouters.get('/users' , authByToken , (req,res)=>{
-
-    usr.find().then((users)=>{
-      // Send to 401 http status
-      if(!users)
-      {
-        res.status(404).send();
-      }
-
-       // success request , send to 200 http status
-      res.send(users);
-
-    }).catch((error)=>{
-      res.status(400).send(error);
-    });
-
-  });
+  // usrRouters.get('/users' , authByToken , (req,res)=>{
+  //
+  //   usr.find().then((users)=>{
+  //     // Send to 401 http status
+  //     if(!users)
+  //     {
+  //       res.status(404).send();
+  //     }
+  //
+  //      // success request , send to 200 http status
+  //     res.send(users);
+  //
+  //   }).catch((error)=>{
+  //     res.status(400).send(error);
+  //   });
+  //
+  // });
 
   usrRouters.post("/users/login" , (req,res)=>{
 
@@ -67,13 +69,12 @@ usrRouters.use(session({
           }
 
          // verify password => This Part not completed !
-         if( user.password.toString() != req.body.password.toString()){
-           return res.status(400).send({
-             "errorMSG" : "Something went error !"
-           });
-           return false ;
-         }
-
+          var comparePassword =  bcrypt.compareSync(req.body.password.toString(), user.password ); // true
+          if(comparePassword != true ){
+            return new Promise((reject , resolve)=>{
+              res.send({"Message":"Rejected Authentication"});
+            });
+          }
          // make authenticate token
          user.generateAuthentication();
          // Save session
@@ -101,30 +102,53 @@ usrRouters.use(session({
    usrRouters.post("/users/create" , (req,res)=>{
      var body = _.pick( req.body , ['name','email','password' , 'is_creator' ]);
       // console.log(body);
-       var user = new usr(body);
-       user.save().then(()=>{
-         return user.generateAuthentication();
-      }).then((token)=>{
-        // Storing Session !!
-        req.session.userInfo = {
-          id : user._id ,
-          name : user.name ,
-          email : user.email
-        };
-         // Request header !
-        res.header("x-auth" , token).send({
-          user : user ,
-          redirectTo : '/home'
+
+      if(req.body.password)
+      {
+        var salt = bcrypt.genSaltSync(10);
+        var hash  = bcrypt.hashSync(body.password.toString() , salt);
+        body.password = hash ;
+      }
+      //var compare = bcrypt.compareSync("666666", hash);
+
+      usr.find({email:body.email}).then((user)=>{
+
+        if(user.length != 0)
+        {
+            return new Promise((resolve , reject)=>{
+                res.send({"Message":"This user already exists !"});
+            });
+        }
+
+
+          var user = new usr(body);
+          user.save().then(()=>{
+            return user.generateAuthentication();
+         }).then((token)=>{
+           // Storing Session !!
+           req.session.userInfo = {
+             id : user._id ,
+             name : user.name ,
+             email : user.email
+           };
+            // Request header !
+           res.header("x-auth" , token).send({
+             user : user ,
+             redirectTo : '/home'
+           });
+         }).catch((error)=>{
+            res.status(403).send(error);
+         });
+      }).catch((resolve , reject)=>{
+        return new Promise((resolve , reject)=>{
+            res.status(403).send({"Message":"Something went error ! please try later"});
         });
-      }).catch((error)=>{
-         res.status(400).send(error);
       });
 
+
+
   });
- //
-usrRouters.get("/users/test" , authByToken , (req,res)=>{
-    res.send(req.user);
-});
+
 
  /* patch */
 usrRouters.patch ("/users/:uid/edit" , ( req , res ) => {
@@ -135,6 +159,9 @@ usrRouters.patch ("/users/:uid/edit" , ( req , res ) => {
 
     var userId = req.params.uid ;
     req.body.updatedAt =   new Date();
+
+
+
     var body = _.pick(req.body , 'name','password','email','updatedAt');
 
     if(!ObjectID.isValid(userId))
