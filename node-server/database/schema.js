@@ -245,10 +245,14 @@ var quiz_answer_types = {
                     type: String ,
                     trim : true
                   } ,
-                  media_dir : {
+                  media_type : {
+                    type: Number
+                  } ,
+                  media_src : {
                     type : String ,
                     trim : true
                   } ,
+
                   is_correct : {
                     type : Boolean
                   }
@@ -342,6 +346,7 @@ var media_choices_object = {
 var boolean_choices_object = {
 
     boolean_type :        { type : String } , //=> yes/no OR true/false
+    boolean_valuex :       {type : String } ,
     is_correct :          { type : Boolean} // => true (Yes) or false (No)
 
 };
@@ -427,22 +432,22 @@ var build_attendees = {
   user_information            : { type:String ,   unique : false , ref : "users"}
 } ;
 var reportDataTypes = {
-   questionnaire_id   : { type:String  , ref : "questionnaire" , unique : true } ,
+   questionnaire_id   : { type:String , unique : true } ,
+   questionnaire_info : { type:String , ref : "questionnaire"  } ,
    app_type           : { type: Number  } ,
    creator_id         : { type:String , ref : "users" } ,
-   attendees          : { type : [ build_attendees ] } ,
-   history            : { type : [ { date_made : Date  , attendee_counts : Number } ] } ,
-
+   attendees          : { type : [ build_attendees ] } , // => second promise
+   history            : { type : [ { date_made : String  , attendee_counts : Number } ] } ,
    // Case survey
-    statistics : { type : {
-        question_id :{ type : String } ,
-        question_body : { type : String } ,
-        count  : { type : Number } ,
-        question_answers : { type : [
-          // repeating case if string value not exists ( answer_body )
-          { answer_body : { type : String } , attendees : { type : Number} }
-        ]}
-    }}
+    statistics : { type : []
+        // question_id :{ type : String } ,
+        // question_body : { type : String } ,
+        // count  : { type : Number } ,
+        // question_answers : { type : [
+        //   // repeating case if string value not exists ( answer_body )
+        //   { answer_body : { type : String } , attendees : { type : Number} }
+        // ]}
+     }
     ,
    created_at         : { type : Date } ,
    updated_at         : { type : Date }

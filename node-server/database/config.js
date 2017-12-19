@@ -30,6 +30,13 @@ var notes = {
                    Error_Doesnt_exists : function (data) {
                      return `This '${data}' does not exists`;
                    },
+                   duplication : function (dup){
+                     return `This answer id : ${dup} already exists ! , duplication is rejected`
+                   },
+                   Not_Available : function (message){
+                     return `The '${message}' Not Available !`;
+                   }
+                   ,
                    Error_not_found : { error : "Not Found !" }  ,
                    Error_Header_found : { error : "Header is required" } ,
                    Error_User_found :   { error : `This User does not exists`} ,
@@ -37,7 +44,7 @@ var notes = {
                    Unverified_Tokens :  { error : "Unverified Token !"} ,
                    Error_file_extension : {error : "File should be an 'image' or video format ended with '.png' , 'jpg' or 'jpeg' or  youtube video url , vimeo video url"}
                  },
-  "Messages"   : { 
+  "Messages"   : {
                    Required_Message : function (field){
                       var manyFields = '';
                       if(_.isArray(field)){

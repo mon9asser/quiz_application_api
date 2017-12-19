@@ -1008,6 +1008,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , verify_toke
           case 0:
                question_answers["_id"] = mongoose.Types.ObjectId();
                  question_answers["indexer"] = null ;
+                 console.log("QUESION");
                 if(req.body.choices_value != null )
                      question_answers["value"] = req.body.choices_value ;
                 else
@@ -1052,7 +1053,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , verify_toke
                                 res.send(notes.Errors.Error_file_extension);
                             });
                         }
-                       var new_filename = "answer_"+question_answers["_id"]+targetExtension.image.toLowerCase();
+                       var new_filename = "answer_text_"+question_answers["_id"]+targetExtension.image.toLowerCase();
                        var targetPath =__dirname + "/../../public/themeimages/"+new_filename ;
 
                        question_answers["media_optional"]["media_type"] = req.body.media_optional.media_type
@@ -1077,49 +1078,132 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , verify_toke
           // --------------------------------------------------------------
           case 1:
 
-              question_answers["_id"] = mongoose.Types.ObjectId();
-              question_answers["indexer"] = null ;
-              if(req.body.media_name != null)
-               question_answers["media_name"] = req.body.media_name
-               else
-               question_answers["media_name"] = "Write answer here !" ;
-              if(req.body.media_dir != null )
-               question_answers["media_dir"] =  req.body.media_dir ;
+
+              // question_answers["indexer"] = null ;
+              // if(req.body.media_name != null)
+              //  question_answers["media_name"] = req.body.media_name
+              //  else
+              //  question_answers["media_name"] = "Write answer here !" ;
+              // if(req.body.media_dir != null )
+              //  question_answers["media_src"] =  req.body.media_dir ;
+
+               var exists_array = new Array();
+               if(req.body.media_type == null) {
+                 exists_array[exists_array.length] = "media_type";
+               }
+
+               if(req.body.media_name == null) {
+                 exists_array[exists_array.length] = "media_name";
+               }
+                
+               if(req.body.media_src == null) {
+                 exists_array[exists_array.length] = "media_src";
+               }
+
+               if(exists_array.length != 0 ){
+                   return new Promise((resolve , reject) => {
+                     res.send(notes.Messages.Required_Message(exists_array));
+                   });
+               }
+
+               if( ! _.isInteger(req.body.media_type)  || req.body.media_type  > 1 ){
+                  return new Promise((resolve , reject)=>{
+                    res.send({"Message" : "This Value should be integer (0 or 1) 0 => for image type , 1 => for video type"});
+                  });
+               }
+                 question_answers["_id"] = mongoose.Types.ObjectId();
+
+               if(  req.body.media_type != 1  ){
+
+                 var imagePath =  req.body.media_src ;
+                 var fileExtension = path.extname(imagePath);
+                 var isExists =  _.findIndex([{image : ".JPG"},{image :".PNG"},{image :".JPEG"} , {image :".jpg"},{image :".jpeg"},{image :".png"}] , {image:fileExtension} );
+                 var targetExtension =  _.find ([{image : ".JPG"},{image :".PNG"},{image :".JPEG"} , {image :".jpg"},{image :".jpeg"},{image :".png"}] , {image:fileExtension} );
+                 if(isExists == -1 )
+                   {
+                       return new Promise((resolve , reject)=>{
+                           res.send(notes.Errors.Error_file_extension);
+                       });
+                   }
+
+                  var new_filename = "answer_media_"+question_answers["_id"]+targetExtension.image.toLowerCase();
+                  var targetPath =__dirname + "/../../public/themeimages/"+new_filename ;
+
+
+                  question_answers["media_src"] = new_filename
+
+                  if( fs.existsSync(imagePath)){
+                    fs.rename( imagePath , targetPath , function (err) {
+                        console.log(err);
+                    });
+                  }
+
+               }else {
+                  question_answers["media_src"] = req.body.media_src;
+                  question_answers["media_type"] = req.body.media_type;
+                  question_answers["media_name"] = req.body.media_name   ;
+               }
+
 
               if(qtnairsDocument.app_type == 1 ){
                   if(req.body.is_correct != null )
                   question_answers["is_correct"] = req.body.is_correct ;
               }
-           break;
+          break;
           // --------------------------------------------------------------
           case 2:
+
+          // ===> first time
 
             question_answers["_id"] = mongoose.Types.ObjectId();
             if (req.body.boolean_type != null )
              question_answers["boolean_type"] = req.body.boolean_type ;
-             if(qtnairsDocument.app_type != 0 ){
+
+             //if(qtnairsDocument.app_type != 0 ){
+
                    if(req.body.boolean_value != null ){
+
                            if(req.body.boolean_type == "true/false")
                                  {
                                      if(req.body.boolean_value == true)
-                                       question_answers["boolean_value"] = "True";
-                                        else
-                                       question_answers["boolean_value"] = "False";
+                                       {
+                                        question_answers["boolean_value"] = "True";
+
+
+                                       }else {
+                                          question_answers["boolean_value"] = "False";
+
+                                       }
+
+
                                   }
                             if(req.body.boolean_type == "yes/no")
                                   {
                                       if(req.body.boolean_value == true)
-                                        question_answers["boolean_value"] =  "Yes";
+                                        {
+                                          question_answers["boolean_value"] =  "Yes";
+
+                                        }
                                         else
-                                        question_answers["boolean_value"] =  "No";
+                                        {
+                                          question_answers["boolean_value"] =  "No";
+
+                                        }
                                   }
+                              }else {
+                                return new Promise((resolve , reject )=>{
+                                    res.send(notes.Messages.Required_Message("boolean_value"));
+                                });
                               }
-                    }
+                    //}
+                    console.log(question_answers);
 
                      if(qtnairsDocument.app_type == 1 ){
                        if(req.body.is_correct != null )
                         question_answers["is_correct"] = req.body.is_correct ;
                      }
+
+
           break;
           // --------------------------------------------------------------
           case 3:
@@ -1129,12 +1213,23 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , verify_toke
                        res.send({"Message":"That's not Survey !"});
                      });
                    }
+                   var required_scale = new Array();
 
-                    question_answers["_id"] = mongoose.Types.ObjectId();
-                      if(req.body.ratscal_type != null )
-                          question_answers["ratscal_type"] = req.body.ratscal_type;
-                      if(req.body.step_numbers != null )
-                          question_answers["step_numbers"] = req.body.step_numbers ;
+                    if(req.body.step_numbers == null )
+                        required_scale[required_scale.length] = "step_numbers";
+                    if(req.body.ratscal_type == null )
+                         required_scale[required_scale.length] = "ratscal_type";
+
+                    if(required_scale.length != 0 )
+                    {
+                        return new Promise((resolve , reject)=>{
+                            res.send(notes.Messages.Required_Message(required_scale));
+                        })
+                    }
+                        question_answers["_id"] = mongoose.Types.ObjectId();
+                        question_answers["ratscal_type"] = req.body.ratscal_type;
+                        question_answers["step_numbers"] = req.body.step_numbers ;
+
                       if(req.body.ratscal_type != null && req.body.ratscal_type == 0) // => means that is scale type
                         {
                           if(req.body.started_at != null )
@@ -1212,8 +1307,8 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , verify_toke
 
               // => choices text
               if(question_type == 0) {
-                if(req.body.value != null || !answerArgs[answerIndex].value)
-                      answerArgs[answerIndex].value = req.body.value;
+                if(req.body.choices_value != null || !answerArgs[answerIndex].value)
+                      answerArgs[answerIndex].value = req.body.choices_value;
 
                 if(req.body.media_optional)
                   {
@@ -1300,22 +1395,20 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , verify_toke
         res.send(questionnaire_results);
       }).catch((err)=>{
         return new Promise((resolve , reject )=>{
-          res.send(notes.Errors.General_Error);
+          res.status(404).send({"error" :notes.Errors.General_Error.error , "details":err.message});
         });
       });
 
    }).catch((err)=>{
      return new Promise((resolve, reject)=>{
-        res.status(404).send(notes.Errors.General_Error);
+        res.status(404).send({"error" :notes.Errors.General_Error.error , "details":err.message});
      });
    });
 
 });
 
-
-
 // ==> retrieve data from questions
-// objects => styles | questions | answers | settings |
+// objects => styles | questions | retrieve | settings |
 qtnrRouters.post("/:app_id/application/:objects" , verify_token_user_type , (req ,res )=>{
       var objects= req.params.objects ;
       var user = req.verified_user;
@@ -1364,6 +1457,17 @@ qtnrRouters.post("/:app_id/application/:objects" , verify_token_user_type , (req
             apps = qtnairsDocument.questions ;
         }
         if( objects == 'stylesheets'){
+          if(req.body.target_id != null ){
+            var isexists = _.findIndex(qtnairsDocument.theme_style , { "file_name":  "styletheme_"+req.body.target_id+".css" });
+            console.log(isexists);
+            if(isexists == -1 )
+              {
+                return new Promise((resolve , reject)=>{
+                  res.send(notes.Errors.Error_Doesnt_exists("Stylesheet"));
+                });
+              }
+            apps =  _.find(qtnairsDocument.theme_style , {"file_name":  "styletheme_"+req.body.target_id+".css"});
+          } else
              apps = qtnairsDocument.theme_style ;
         }
 
@@ -1371,9 +1475,8 @@ qtnrRouters.post("/:app_id/application/:objects" , verify_token_user_type , (req
         }).catch((er)=>{
           return new Promise((resolve, reject)=>{
             res.status(404).send(notes.Errors.General_Error);
-         });
-
-     });
+          });
+       });
 });
 
 

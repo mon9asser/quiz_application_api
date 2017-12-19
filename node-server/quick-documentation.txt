@@ -1,0 +1,427 @@
+===================================================
+{ Users }
+===================================================
+
+-----------------------------------------------------
+
+( 1 )[POST] /api/users/create => Create New User  
+
+-----------------------------------------------------
+
+   {A} Fields required  ( Requests )
+		name
+		email
+		password
+		is_creator
+
+   {B} api Response 	( Response )
+   		_id
+   		name
+   		email
+   			=> Storing Session in browser with user information 
+   		redirectTo
+   			=> redirect page "/home"
+
+-----------------------------------------------------
+
+( 2 )[POST] /api/users/login => Login New user
+
+-----------------------------------------------------
+	
+	{A} Fields Required ( Requests )
+		email
+		password
+
+	{B} api Response	( Response )
+		_id
+		name
+		email
+			=> Storing Session in browser with user information 
+		redirectTo
+   			=> redirect page "/home"
+
+-----------------------------------------------------
+
+( 3 )[PATCH] /api/users/:uid/edit => Edit User 
+
+-----------------------------------------------------
+	
+	{ A } Fields Required ( Requests )
+		name
+		password
+		email
+
+	{ B } Response	( Response )
+		name
+		 _id
+		email
+
+-----------------------------------------------------
+
+( 4 )[DELETE] /api/users/:uid/delete => Delete user 
+
+-----------------------------------------------------
+	{ -- } Response	( Response )
+		name
+		 _id
+		email
+
+ 
+
+
+
+
+===================================================
+{ Questionnaires }
+===================================================
+
+-----------------------------------------------------
+
+( 1 )[POST] /api/init
+for  => Create Questionnaire ( Details of application  with default Settings)  => initialization
+
+-----------------------------------------------------	
+	{ A } Fields Required ( Requests )
+		1- Body Request
+			+ app_type => ( 0 => survey or 1 => quiz )
+		2- header
+			+ x-auth => ( only any Admin user can do that)
+
+	{ B } api Response	( Response )
+		1- application details with default value 
+		2- All default settings
+		3- default empty array for questions 
+
+-----------------------------------------------------
+
+( 2 )[POST] /api/create 
+for => Create Questionnaire ( From Zero ) + empty Object|Array for settings and questions
+-----------------------------------------------------
+
+	{ A } Fields Required ( Requests ) 
+		1- Body Requests 
+			+ app_type => ( 0 => survey or 1 => quiz )
+			+ questionnaire_title
+			+ description
+		2- header
+			+ x-auth => ( only any Admin user can do that)
+
+	{ B } api Response	( Response )
+		+ creator_id
+		+ app_type
+		+ questionnaire_title
+		+ description
+		+ _id
+		+ updatedAt
+		+ createdAt
+		+ questions :[]
+
+-----------------------------------------------------
+
+( 3 )[PATCH] /api/:app_id/settings/create => Create OR Update Settings for specified app id 
+
+-----------------------------------------------------
+	{ A } Fields Required ( Requests ) 
+		1- Body Requests
+			+ titles 
+				-title_start_with
+				-title_end_with
+				-title_success_with
+				-title_faild_with
+			+ step_type
+			+ grade_settings
+				-is_graded
+				-value
+			+ review_setting
+			+ retake_setting
+			+ navigation_btns
+			+ label_btns
+				-lbl_start_with
+				-lbl_continue_with
+				-lbl_retake_with
+				-lbl_review_with
+			+ randomize_settings
+			+ time_settings
+				-is_with_time
+				-value
+				-timer_type
+				-timer_layout
+			+ progression_bar	
+				-is_available
+				-progression_bar_layout
+		2- header
+			+ x-auth => ( Only Admin user that created this app can do that)
+
+    { B } api Response	( Response )
+    	+ Only Response with application id , and Settings object
+
+-----------------------------------------------------
+
+( 4 )[PATCH] /:app_id/settings/style/:process => For Creating stylesheet page for this app ( Themes )
+
+-----------------------------------------------------
+	(I) => Params
+		"process" refer to ( create or edit or delete ) example : /:app_id/settings/style/create
+	
+	(II)============> Case "create"
+			(A) => Fields Required ( Requests )  
+				1- Body Requests
+					+ source_codes ( optional ) => [] its an array 
+						-class_name
+						-class_attributes
+							-background
+							-border
+							-color
+							-boxShadow
+							-fontFamily
+				Notes :- it is saving only 10 attributes as a maximum for each time
+				2- header
+					+ x-auth => ( Only Admin user that created this app can do that)
+			{ B } api Response	( Response )
+    			+ Only Response with File direcotry of this stylesheet , and empty array of "source_code" ( case  "source_codes" is not availabel in request) 
+    			+ Only Response with File direcotry of this stylesheet , and Fill array of "source_code" ( case  "source_codes" is availabel in request) 
+    			+ create file of stylesheet in server with styleshseet code ( in two both prevouse cases )
+    (III)============> Case "edit"
+    		(A) => Fields Required ( Requests )  
+    			1- Body Request
+    				+ theme_style_id (Required)
+    				+ is_active (Optional)
+    				+ source_codes ( optional ) => [] its an array  (Optional)
+						-class_name
+						-class_attributes
+							-background
+							-border
+							-color
+							-boxShadow
+							-fontFamily
+				Notes :- it is saving only 10 attributes as a maximum for each time
+				2- header
+					+ x-auth => ( Only Admin user that created this app can do that)
+			{ B } api Response	( Response )
+    			+ Only Response with File direcotry of this stylesheet 
+    			+ Append the new class object to the existing file 
+    (IIV)============> Case "delete"
+    		(A) => Fields Required ( Requests ) 
+    			1- Body Request
+    				+ theme_style_id (Required)
+    			2- header
+    				+ x-auth => ( Only Admin user that created this app can do that)
+    		 { B } api Response	( Response )
+    		 	+ response with success message including the stylesheet directory that deleted	
+
+-----------------------------------------------------
+
+( 5 )[PATCH] /:app_id/question/:process => for questions 
+
+-----------------------------------------------------
+
+(I) "process" parameters ( create edit delete ) => example /:app_id/question/create
+	============> {1} create
+	{ A } Fields Required ( Requests ) 
+		1- Body Requests
+			+ question_type (Required)
+			+ question_body (Required)
+			+ question_is_required (optional)
+			+ media_question (optional)
+				- media_type  (Required) => 0 or 1
+				- media_name (Required)
+				- media_field (Required)
+			+ answer_settings
+				- is_randomized
+				- super_size
+				- single_choice
+				- choice_style
+				- answer_char_max
+		2- header
+			+ x-auth => ( Only Admin user that created this app can do that)
+
+	{ B }- API response 
+		+ response with this question object including all details added ( qs details , settings of this qs )
+		+ if (media_question) exists will save it in server and return direcory of this media with details of current question   
+
+	============> {2} edit
+	{ A } Fields Required ( Requests ) 
+		1- Body Requests
+			+ question_id (Required)
+			+ question_body (optional)
+			+ question_is_required (optional) 
+			+ media_question (optional)
+				- media_type  (optional) => 0 or 1
+				- media_name (optional)
+				- media_field (optional) if it under update the media_type will be require
+			+ answer_settings
+				- is_randomized optional)
+				- super_size optional)
+				- single_choice optional)
+				- choice_style optional)
+				- answer_char_max optional)
+		2- header
+			+ x-auth => ( Only Admin user that created this app can do that)
+
+	{ B }- API response 
+		+ response with this question object including all details added ( qs details , settings of this qs )
+		+ if (media_question) with (media_field) will update and return direcory of this media with details of current question   
+
+	============> {3} delete
+	{ A } Fields Required ( Requests ) 
+		1- Body Requests
+			+ question_id (Required)
+		2- header
+			+ x-auth => ( Only Admin user that created this app can do that)
+	{ B } Response with id of deleted question 
+
+
+
+
+-----------------------------------------------------
+
+( 6 )[PATCH] /:app_id/question/:question_id/answer/:process => for Question Answers 
+
+-----------------------------------------------------
+(I) "process" parameters ( create edit delete ) => example /:app_id/question/create
+(II) Resquests
+	============> {1} create
+	{ A } Fields Required ( Requests ) 
+		1- Body Requests  
+			==================================
+			0 => choices text (or) with media
+			================================== report status => { choosing }
+			+ choices_value (optional)
+			+ media_optional (optional)
+				- media_type
+				- media_name
+				- media_src
+			+ is_correct
+			==================================
+			1 => Media choices  		
+			================================== report status => { choosing } 
+			+ media_type
+			+ media_name
+			+ media_src 
+			+ is_correct
+			==================================
+			2 => Boolean Choices  		
+			================================== report status => { required } => true_false_value
+			+ boolean_type
+			+ is_correct
+			==================================
+			3 => rating or scales  		
+			================================== report status => { required } => rating_scale_value
+			+ is_correct
+			+ step_numbers
+			+ ratscal_type ==> ( 0 => scale | 1=> rating )
+				+ started_at 		{ if it scale }
+				+ centered_at		{ if it scale }
+				+ ended_at			{ if it scale }
+
+			==================================
+			4 => Free texts		
+			================================== report status => { required } => free_text_value
+			nothing to update we will use id only in report
+		2- header
+			+ x-auth => ( Only Admin user that created this app can do that)
+	{ B } API response
+		+ response with object of this answer 
+
+	============> {2} edit
+	{ A } Fields Required ( Requests )  
+		1- Body Requests  
+			+ answer_id (Required)
+			==================================
+			0 => choices text (or) with media
+			================================== report status => { choosing }
+			+ choices_value (optional)
+			+ media_optional (optional)
+				- media_type
+				- media_name
+				- media_src
+			+ is_correct
+			==================================
+			1 => Media choices  		
+			================================== report status => { choosing }
+			+ media_type
+			+ media_name
+			+ media_src 
+			+ is_correct
+			==================================
+			2 => Boolean Choices  		
+			================================== report status => { required } => true_false_value
+			+ boolean_type
+			+ boolean_value ( true and false )
+			+ is_correct
+			==================================
+			3 => rating or scales  		
+			================================== report status => { required } => rating_scale_value
+			+ is_correct
+			+ step_numbers
+			+ ratscal_type ==> ( 0 => scale | 1=> rating )
+				+ started_at 		{ if it scale }
+				+ centered_at		{ if it scale }
+				+ ended_at			{ if it scale }
+
+			==================================
+			4 => Free texts		
+			================================== report status => { required } => free_text_value
+			nothing to update we will use id only in report
+		2- header
+			+ x-auth => ( Only Admin user that created this app can do that)
+	{ B } API response
+		+ response with object of this answer 
+
+	============> {3} delete
+	{ A } Fields Required ( Requests ) 
+		1- Body Requests  
+			+ answer_id (Required)
+		2- header
+			+ x-auth => ( Only Admin user that created this app can do that)
+	{ B } API response
+		+ response with successful message 			
+
+-----------------------------------------------------
+
+( 7 )[GET] /:app_id/application/:objects
+
+-----------------------------------------------------
+(I)  => :app_id ( The-application id ) whatever 
+(II) => :objects ( retrieve , settings , questions , stylesheets )
+				   retrieve { return full application data } 
+				   settings { return settings of this application  } 
+				   questions { return questions of this application  } 
+				   stylesheets { return stylesheets of this application  }
+(IIV) => option 
+		A - Questions
+		in this case we need to pass 'target_id' to return spesific "question" from application 
+		"target_id" refer to question id but in this case we need to be on "questions" :objects
+		B -	Stylesheet
+		in this case we need to pass 'target_id' to return spesific "stylesheet" from application 
+		"target_id" refer to stylesheet id but in this case we need to be on "stylesheets" :objects
+
+
+
+===================================================
+{ Reports }
+===================================================
+
+-----------------------------------------------------
+
+( 1 )[POST] /:app_id/report/add
+
+-----------------------------------------------------
+	{ A } Fields Required ( Requests ) 
+		1- Body Requests  
+			+ attendee_id
+			+ question_id
+			+ answer_ids => array 
+			+ ===> required according to type of question 
+				   - true_false_value ( Case question type = 2 ) => true false optional 
+				   - rating_scale_value ( Case question type = 3 ) => rating or scale value 
+				   - free_text_value ( Case question type = 4 ) => rating or scale value
+		2- header
+			+ x-auth => ( Only Admin user that created this app can do that)	
+
+-----------------------------------------------------
+
+( 2 )[DELETE] /:app_id/report/clear
+
+-----------------------------------------------------
+ 
