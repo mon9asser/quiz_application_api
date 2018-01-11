@@ -1,0 +1,9 @@
+[0;1;32m●[0m mongodb.service
+   Loaded: loaded (/etc/systemd/system/mongodb.service; bad; vendor preset: enabled)
+   Active: [0;1;32mactive (running)[0m since Sun 2017-12-24 11:48:45 +03; 4s ago
+ Main PID: 12997 (mongod)
+    Tasks: 20 (limit: 4915)
+   CGroup: /system.slice/mongodb.service
+           └─12997 /usr/bin/mongod --quiet --config /etc/mongod.conf
+
+Dec 24 11:48:45 LinuxMan systemd[1]: Started mongodb.service.
