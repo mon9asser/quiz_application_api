@@ -12,6 +12,7 @@
         type="text/css">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/prettify.css">
+
 </head>
 <body>
 <div class="wrapper">
@@ -52,10 +53,10 @@
     <div class="docs-content">
       <h2> Getting Started</h2>
       <h3 id="welcome"> Welcome</h3>
-      <p>In this documentation I am gonna to show you how to use apis from A to Z</p>
+      <p>In this documentation I'll show you how to use apis from {A} to {Z}</p>
 
       <p>
-        Application Programmign Interfaces (api's) are made to be a flexibility with any platform , We will use postman as a client side part in this section
+        Application Programming Interfaces (apis) are made to be a flexibility with any platform , We will use postman as a client side part in this section
         <!-- before start you need to go to my server , <a href="http://targettheme.com/questionnaire-apis/index.html">Questionnaire Client Server</a> -->
 
 
@@ -88,7 +89,7 @@
       </ul>
       <h3 id="features"> Features</h3>
       <ul>
-        <li>You can get you data and server it with any client server , api's accept that by access controller !</li>
+        <li>You can get and serve your data with any client server , api's accept that by access controller !</li>
         <li>You can use it with any programming language just use json files as a data provider in request or response </li>
       </ul>
       <h3 id="license"> License</h3>
@@ -101,12 +102,12 @@
         To use those apis you need to consider some requirements in passing
       </p>
       <ul>
-        <li>Data Type : formData or Json/Application</li>
+        <li>Data Type : formData case it using file uploader or Json/Application case it pass text data</li>
         <li>http Request : only use POST , GET , PATCH or DELETE </li>
         <li>API url with this server ip : http://34.215.133.182 </li>
         <li>Headers and some required fields in calling  </li>
       </ul>
-      <p> The following customization options are available in Opineo:</p>
+      <p> Let's get started !</p>
       <h3 id="view_type"> API KEYS </h3>
       <p>
         Before start using any api you should create <a href="http://34.215.133.182/create_app">api keys</a> when you open this url you should create and get keys via json file
@@ -123,7 +124,7 @@
         <span class="highlighted-tomato">X-api-app-name</span> Header : with field name <span class="highlighetd-black">APP_NAME</span> in json file
 
       </p>
-      <hr>
+
       <b>Example</b>
       <pre class="prettyprint code_json" style="padding: 6px 11px;">
         $.ajax({
@@ -149,13 +150,38 @@
       <p>
         so you have to verify your application keys before use any api
       </p>
-      <h3 id="Users"> USERS</h3>
-      <ul>
-        <li><b>User Creation Api</b></li>
-      </ul>
 
-        <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/users/create</pre>
-        To create new user , we have to send a <span class="highlighetd-black">POST</span> in http request with <span class="highlighetd-black">JSON data</span> format in our request with these fields
+
+
+
+
+      <hr />
+
+      <div id="Users">
+        <h3> USERS</h3>
+        <ul>
+          <li><b class="api-title">User Creation api</b></li>
+        </ul>
+
+          <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/users/create</pre>
+          To create new user , we have to send a <span class="highlighetd-black">POST</span> in http request with <span class="highlighetd-black">JSON data</span> format in our request with these fields
+          <pre class="prettyprint code_json" style="padding: 6px 11px;">
+            {
+              "name":"user name",
+              "email":"user email",
+              "password":"user Password",
+              "is_creator" : 1 // 0 => for 'Attendee' user type and 1 => for 'Admin' user type
+            }
+          </pre>
+
+        <ul>
+          <li> <b class="api-title"> Edit User api</b></li>
+        </ul>
+        <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/users/<span class="pass-highlighted">{:uid}</span>/edit</pre>
+        <p>
+          We need to pass user id instead of <span class="pass-highlighted-shortcut"> {:uid} </span> with existing user id and send request with <span class="highlighetd-black">PATCH</span> and this <span class="highlighetd-black">JSON data</span>
+        </p>
+
         <pre class="prettyprint code_json" style="padding: 6px 11px;">
           {
             "name":"user name",
@@ -165,92 +191,108 @@
           }
         </pre>
 
-      <ul>
-        <li> <b> Edit User</b></li>
-      </ul>
-      <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/users/<span class="pass-highlighted">{:uid}</span>/edit</pre>
-      <p>
-        We need to pass user id instead of <span class="pass-highlighted-shortcut"> {:uid} </span> with existing user id and send request with <span class="highlighetd-black">PATCH</span> and this <span class="highlighetd-black">JSON data</span>
-      </p>
+        <ul>
+          <li> <b class="api-title"> Delete User api</b></li>
+        </ul>
+        <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/users/<span class="pass-highlighted">{:uid}</span>/delete</pre>
+        <p>
+          We need to pass user id instead of <span class="pass-highlighted-shortcut"> {:uid} </span> with existing user id and send request with <span class="highlighetd-black">DELETE</span>
+        </p>
 
-      <pre class="prettyprint code_json" style="padding: 6px 11px;">
-        {
-          "name":"user name",
-          "email":"user email",
-          "password":"user Password",
-          "is_creator" : 1 // 0 => for 'Attendee' user type and 1 => for 'Admin' user type
-        }
-      </pre>
+        <ul>
+          <li> <b class="api-title"> Login and store user info with sessions api</b></li>
+        </ul>
+        <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/users/login</pre>
+        <p>
+          We need to use http request : <span class="highlighetd-black">POST</span> and send a request with existing email and password via <span class="highlighetd-black">JSON data</span>
+          <pre class="prettyprint code_json" style="padding: 6px 11px;">
+             {
+                  "email":"existing email value",
+                  "password":"Password Value",
+             }
+          </pre>
+        </p>
 
-      <ul>
-        <li> <b> Delete User</b></li>
-      </ul>
-      <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/users/<span class="pass-highlighted">{:uid}</span>/delete</pre>
-      <p>
-        We need to pass user id instead of <span class="pass-highlighted-shortcut"> {:uid} </span> with existing user id and send request with <span class="highlighetd-black">DELETE</span>
-      </p>
+        <ul>
+          <li> <b class="api-title">Generate Token - (Auth) api</b></li>
+        </ul>
+        we're using this api to generate new token case old token is expired , without generate this token you couldn't able to edit questionnaire app
+        the default time for token expiration is 5 hours after that you need to generate new one
+        <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/auth/<span class="pass-highlighted">{:uid}</span></pre>
+        <p>
+          We need to pass user id instead of <span class="pass-highlighted-shortcut"> {:uid} </span> with existing user id and send request with <span class="highlighetd-black">POST</span> http request
+        </p>
+        it will generate new token for this user id
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+            {
+               "user_id": "5a5845df5ddebb0785087cd8",
+               "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTU4NDVkZjVkZGViYjA3ODUwODdjZDgiLCJkYXRlX21hZGUiOiIyMDE4LTAxLTEyVDA5OjM1OjIwLjgyMVoiLCJpYXQiOjE1MTU3NDk3MjB9.J633IVBGhaIe4purYxKf0KNQTp1Nj7j4q7tbrn7Oc_g"
+            }
+        </pre>
+        <p>
+          You need to pass this token case edit questionnaire
+        </p>
+        <span class="highlighted-tomato">X-app-token</span> : this header to verify user token with expiration date
+        <p>
+          Case this token is expired you'll get this Warning
+        </p>
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+            {
+                "Warning": "Token is expired !!"
+            }
+        </pre>
+      </div>
 
 
-      <ul>
-        <li>Hide</li>
-      </ul>
-      <pre class="prettyprint">&lt;script&gt;
-    $(document).ready(function (){
-    $('#opineo').opineo('results.php', {curvalue:0, view: 'mini', votes_label:false});
-    })
-&lt;/script&gt;</pre>
-      <h3 id="rating_icons"> Rating Icons</h3>
-      <ul>
-        <li>Colored</li>
-        <li>Grey</li>
-      </ul>
-      <h3 id="rating_titles"> Rating Titles</h3>
-      <ul>
-        <li>Text For First Star</li>
-      </ul>
-      <pre class="prettyprint">&lt;script&gt;
-    $(document).ready(function (){
-    $('#opineo').opineo('results.php', {curvalue:0, view: 'mini', star_1_text:'Hate It'});
-    })
-&lt;/script&gt;</pre>
-      <ul>
-        <li>Text For Second Star</li>
-      </ul>
-      <pre class="prettyprint">&lt;script&gt;
-    $(document).ready(function (){
-    $('#opineo').opineo('results.php', {curvalue:0, view: 'mini', star_2_text:'Don't Like It'});
-    })
-&lt;/script&gt; </pre>
-      <ul>
-        <li>Text For Third Star</li>
-      </ul>
-      <pre class="prettyprint">&lt;script&gt;
-    $(document).ready(function (){
-    $('#opineo').opineo('results.php', {curvalue:0, view: 'mini', star_1_text:'Its OK'});
-    })
-&lt;/script&gt;</pre>
-      <ul>
-        <li>Text For Fourth Star</li>
-      </ul>
-      <pre class="prettyprint">&lt;script&gt;
-    $(document).ready(function (){
-    $('#opineo').opineo('results.php', {curvalue:0, view: 'mini', star_1_text:'Like It'});
-    })
-&lt;/script&gt;</pre>
-      <ul>
-        <li>Text For Fifth Star</li>
-      </ul>
-      <pre class="prettyprint">&lt;script&gt;
-    $(document).ready(function (){
-    $('#opineo').opineo('results.php', {curvalue:0, view: 'mini', star_1_text:'Love It'});
-    })
-&lt;/script&gt;</pre>
-      <h3 id="bar_colors"> Bar Colors</h3>
-      <ul>
-        <li>Colors of Red Bar</li>
-        <li>Colors of Yellow Bar</li>
-        <li>Colors of Green Bar</li>
-      </ul>
+
+      <hr />
+      <div id="Users">
+        <h3> Questionnaires</h3>
+        <p>
+          Questionnaire is our main application ! , we have two types for questionnaire Survey or Quiz
+        </p>
+          We've two differences api to create questionnaire
+          <div class="clearFix"></div>
+          <i class="highlighetd-black">init</i>   :- for init new Application with default settings
+          <div class="clearFix"></div>
+          <i class="highlighetd-black">create</i> :- to create an application with reqired fields
+        <ul>
+          <li><b class="api-title">Questionnaire Creation api</b></li>
+        </ul>
+        <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/create</pre>
+        <p>
+          This api will create new application with required fields in json , we need to use <span class="highlighetd-black">POST</span> http with these fields in <span class="highlighetd-black">JSON</span> format
+        </p>
+        1- Required Headers
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          $.ajax({
+              headers : { // headers
+                  "X-api-app-name" :'Your Application Name', // app name
+                  "X-api-keys":'You Api Keys (Long generated code)' , // keys
+                  "Content-Type": "application/json"  // json format
+              } ,
+              .....
+          });
+        </pre>
+        <div class="clearFix"></div>
+        2- Rquired Json data type
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+            {
+            	"creator_id":"creator ID", // refer to user id
+            	"app_type":1, // refer to app type , 0 => for survey type and 1 => for quiz type
+            	"questionnaire_title":"Quiz 1", // refer to appliction name
+            	"description":"Lorem Ipsume .... " // refer to description of this app
+            }
+        </pre>
+
+        <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/init</pre>
+      </div>
+
+
+
+
+
+
     </div>
   </div>
 </section>

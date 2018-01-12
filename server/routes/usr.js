@@ -183,7 +183,7 @@ usrRouters.patch ("/users/:uid/edit" , verify_api_keys_user_apis , ( req , res )
 usrRouters.delete("/users/:uid/delete" ,verify_api_keys_user_apis , (req, res)=>{
     var userId = req.params.uid ;
     if(!req.params.uid)
-      res.status(404).send();
+      res.status(404).send({"Error":notes.Errors.Error_Doesnt_exists("User")});
 
     if(!ObjectID.isValid(userId))
       res.status(404).send();
