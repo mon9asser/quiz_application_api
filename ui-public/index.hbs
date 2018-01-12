@@ -286,6 +286,65 @@
         </pre>
 
         <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/init</pre>
+
+
+        <p>
+          This api will init and create new application with Default settings , name , description , we need to pass only two fields with <span class="highlighetd-black">POST</span> http and <span class="highlighetd-black">JSON</span> format
+        </p>
+        1- Required Headers
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          $.ajax({
+              headers : { // headers
+                  "X-api-app-name" :'Your Application Name', // app name
+                  "X-api-keys":'You Api Keys (Long generated code)' , // keys
+                  "Content-Type": "application/json"  // json format
+              } ,
+              .....
+          });
+        </pre>
+        <div class="clearFix"></div>
+        2- Rquired Json data type
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+            {
+            	"creator_id":"creator ID", // refer to user id
+            	"app_type":1  // refer to app type , 0 => for survey type and 1 => for quiz type
+            }
+        </pre>
+
+
+
+
+        <ul>
+          <li><b class="api-title">Questionnaire Edit api</b></li>
+        </ul>
+        <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/app/edit</pre>
+        <p>
+          In totaly this api used to build new settings for application or editing main applicatin information
+          -- <span class="pass-highlighted-shortcut"> {:app_id} </span>  refer to questionnaire ( application ) id , but before doing that you have to set 4 headers to success in this calling
+        </p>
+        1- Required Headers
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          $.ajax({
+              headers : { // headers
+                  "X-api-app-name" :'Your Application Name', // app name
+                  "X-api-keys":'You Api Keys (Long generated code)' , // keys
+                  "X-app-token":'your valid token', // token
+                  "Content-Type": "application/json"  // json format
+              } ,
+              .....
+          });
+        </pre>
+        <div class="clearFix"></div>
+        2- Rquired Json data type
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+            {
+            	"creator_id":"creator ID", // refer to user id
+            	"app_type":1  // refer to app type , 0 => for survey type and 1 => for quiz type
+            }
+        </pre>
+
+
+
       </div>
 
 
