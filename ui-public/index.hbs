@@ -1,26 +1,273 @@
-{{>head}}
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="description" content="">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Questionnaire api's</title>
+<link rel="alternate" type="application/rss+xml" title="Quiz App" href="#">
+<link href="http://fonts.googleapis.com/css?family=Raleway:700,300" rel="stylesheet"
+        type="text/css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/prettify.css">
+</head>
+<body>
+<div class="wrapper">
+<nav>
 
-  <h1>
-    List Of Apis
-   </h1>
-   <p>
-     <ul>
-       <li>
-         <a href="/api/create">/api/create</a>
-       </li>
-       <li>
-         <a href="/api/{:app_id}/edit">/api/:app_id/edit</a>
-       </li>
-     </ul>
-   </p>
+  	<div class="pull-left">
+    	<h1><a href="javascript:"><img src="img/icon.png" alt="Api Documentation" /> <span>Api Docs</span></a></h1>
+    </div>
 
-  <h1>
-    {{user.name}}
+    <div class="pull-right">
+    	<a href="http://34.215.133.182" target="_blank" class="btn btn-download"><img src="img/download.png" width="25" alt="Questionnaire Applications" /> Download Now</a>
+    </div>
 
-    <br />
-    {{user.email}}
-    <br />
-    {{user.id}}
-  </h1>
+</nav>
+<header>
+  <div class="container">
+    <h2 class="lone-header">Questionnaire api's</h2>
+  </div>
+</header>
+<section>
+  <div class="container">
+    <ul class="docs-nav">
+      <li><strong>Getting Started</strong></li>
+      <li><a href="#welcome" class="cc-active">Welcome</a></li>
+      <li><a href="#benefits" class="cc-active">Dependencies</a></li>
+      <li><a href="#features" class="cc-active">Features</a></li>
+      <li><a href="#license" class="cc-active">License</a></li>
+      <li class="separator"></li>
+      <li><strong>Collections</strong></li>
+      <li><a href="#view_type" class="cc-active">Api Keys</a></li>
+      <li><a href="#users" class="cc-active">Users</a></li>
+      <li><a href="#bars_text" class="cc-active">Questionnaires</a></li>
+      <li><a href="#vote_counter" class="cc-active">Reports</a></li>
+      <li><a href="#rating_icons" class="cc-active"></a></li>
+      <li><a href="#rating_titles" class="cc-active"></a></li>
+      <li><a href="#bar_colors" class="cc-active"></a></li>
+    </ul>
+    <div class="docs-content">
+      <h2> Getting Started</h2>
+      <h3 id="welcome"> Welcome</h3>
+      <p>In this documentation I am gonna to show you how to use apis from A to Z</p>
 
-{{>footer}}
+      <p>
+        Application Programmign Interfaces (api's) are made to be a flexibility with any platform , We will use postman as a client side part in this section
+        <!-- before start you need to go to my server , <a href="http://targettheme.com/questionnaire-apis/index.html">Questionnaire Client Server</a> -->
+
+
+      </p>
+        Frameworks :
+      <ul>
+        <li>NodeJs</li>
+        <li>Mongo Database</li>
+        <li>Front End with : Angularjs</li>
+      </ul>
+
+      <h3 id="benefits"> Dependencies : </h3>
+      <ul>
+        <li>bcryptjs</li>
+        <li>body-parser</li>
+        <li>express</li>
+        <li>express-fileupload</li>
+        <li>express-hbs</li>
+        <li>express-router</li>
+        <li>express-session</li>
+        <li>formidable</li>
+        <li>hbs</li>
+        <li>jsonwebtoken</li>
+        <li>lodash</li>
+        <li>mongodb</li>
+        <li>mongoose</li>
+        <li>multer</li>
+        <li>node-zip</li>
+        <li>validator</li>
+      </ul>
+      <h3 id="features"> Features</h3>
+      <ul>
+        <li>You can get you data and server it with any client server , api's accept that by access controller !</li>
+        <li>You can use it with any programming language just use json files as a data provider in request or response </li>
+      </ul>
+      <h3 id="license"> License</h3>
+      <p>
+        Only permission to use this app for Rackal Vallil to do what he needs
+      </p>
+      <hr>
+      <h2> Technical Requirements</h2>
+      <p>
+        To use those apis you need to consider some requirements in passing
+      </p>
+      <ul>
+        <li>Data Type : formData or Json/Application</li>
+        <li>http Request : only use POST , GET , PATCH or DELETE </li>
+        <li>API url with this server ip : http://34.215.133.182 </li>
+        <li>Headers and some required fields in calling  </li>
+      </ul>
+      <p> The following customization options are available in Opineo:</p>
+      <h3 id="view_type"> API KEYS </h3>
+      <p>
+        Before start using any api you should create <a href="http://34.215.133.182/create_app">api keys</a> when you open this url you should create and get keys via json file
+      </p>
+      Create Api key url
+      <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/create_app</pre>
+      This url only open from any browser
+      <p>
+        After create app keys we should create 2 headers before any request to verify keys of your application
+        <div class="clearFix"></div>
+        <span class="highlighted-tomato">X-api-keys</span> Header : with field name <span class="highlighetd-black">API_KEY</span> in json file
+
+        <div class="clearFix"></div>
+        <span class="highlighted-tomato">X-api-app-name</span> Header : with field name <span class="highlighetd-black">APP_NAME</span> in json file
+
+      </p>
+      <hr>
+      <b>Example</b>
+      <pre class="prettyprint code_json" style="padding: 6px 11px;">
+        $.ajax({
+            headers : {
+                "X-api-app-name" :'Your Application Name',
+                "X-api-keys":'You Api Keys (Long generated code)'
+            } ,
+            ......
+        });
+      </pre>
+      <p>
+        In case you lost your api keys you have to login with your email and password then copy values of this json file into your application files
+      </p>
+      <p>
+        If you used any api without keys you will get this message
+      </p>
+
+      <pre class="prettyprint code_json" style="padding: 6px 11px;">
+        {
+          "Authentication_Failed": "Your Application keys not verified ! to use our API please create 'api keys'"
+        }
+      </pre>
+      <p>
+        so you have to verify your application keys before use any api
+      </p>
+      <h3 id="Users"> USERS</h3>
+      <ul>
+        <li><b>User Creation Api</b></li>
+      </ul>
+
+        <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/users/create</pre>
+        To create new user , we have to send a <span class="highlighetd-black">POST</span> in http request with <span class="highlighetd-black">JSON data</span> format in our request with these fields
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+            "name":"user name",
+            "email":"user email",
+            "password":"user Password",
+            "is_creator" : 1 // 0 => for 'Attendee' user type and 1 => for 'Admin' user type
+          }
+        </pre>
+
+      <ul>
+        <li> <b> Edit User</b></li>
+      </ul>
+      <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/users/<span class="pass-highlighted">{:uid}</span>/edit</pre>
+      <p>
+        We need to pass user id instead of <span class="pass-highlighted-shortcut"> {:uid} </span> with existing user id and send request with <span class="highlighetd-black">PATCH</span> and this <span class="highlighetd-black">JSON data</span>
+      </p>
+
+      <pre class="prettyprint code_json" style="padding: 6px 11px;">
+        {
+          "name":"user name",
+          "email":"user email",
+          "password":"user Password",
+          "is_creator" : 1 // 0 => for 'Attendee' user type and 1 => for 'Admin' user type
+        }
+      </pre>
+
+      <ul>
+        <li> <b> Delete User</b></li>
+      </ul>
+      <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/users/<span class="pass-highlighted">{:uid}</span>/delete</pre>
+      <p>
+        We need to pass user id instead of <span class="pass-highlighted-shortcut"> {:uid} </span> with existing user id and send request with <span class="highlighetd-black">DELETE</span>
+      </p>
+
+
+      <ul>
+        <li>Hide</li>
+      </ul>
+      <pre class="prettyprint">&lt;script&gt;
+    $(document).ready(function (){
+    $('#opineo').opineo('results.php', {curvalue:0, view: 'mini', votes_label:false});
+    })
+&lt;/script&gt;</pre>
+      <h3 id="rating_icons"> Rating Icons</h3>
+      <ul>
+        <li>Colored</li>
+        <li>Grey</li>
+      </ul>
+      <h3 id="rating_titles"> Rating Titles</h3>
+      <ul>
+        <li>Text For First Star</li>
+      </ul>
+      <pre class="prettyprint">&lt;script&gt;
+    $(document).ready(function (){
+    $('#opineo').opineo('results.php', {curvalue:0, view: 'mini', star_1_text:'Hate It'});
+    })
+&lt;/script&gt;</pre>
+      <ul>
+        <li>Text For Second Star</li>
+      </ul>
+      <pre class="prettyprint">&lt;script&gt;
+    $(document).ready(function (){
+    $('#opineo').opineo('results.php', {curvalue:0, view: 'mini', star_2_text:'Don't Like It'});
+    })
+&lt;/script&gt; </pre>
+      <ul>
+        <li>Text For Third Star</li>
+      </ul>
+      <pre class="prettyprint">&lt;script&gt;
+    $(document).ready(function (){
+    $('#opineo').opineo('results.php', {curvalue:0, view: 'mini', star_1_text:'Its OK'});
+    })
+&lt;/script&gt;</pre>
+      <ul>
+        <li>Text For Fourth Star</li>
+      </ul>
+      <pre class="prettyprint">&lt;script&gt;
+    $(document).ready(function (){
+    $('#opineo').opineo('results.php', {curvalue:0, view: 'mini', star_1_text:'Like It'});
+    })
+&lt;/script&gt;</pre>
+      <ul>
+        <li>Text For Fifth Star</li>
+      </ul>
+      <pre class="prettyprint">&lt;script&gt;
+    $(document).ready(function (){
+    $('#opineo').opineo('results.php', {curvalue:0, view: 'mini', star_1_text:'Love It'});
+    })
+&lt;/script&gt;</pre>
+      <h3 id="bar_colors"> Bar Colors</h3>
+      <ul>
+        <li>Colors of Red Bar</li>
+        <li>Colors of Yellow Bar</li>
+        <li>Colors of Green Bar</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<section class="vibrant centered">
+  <div class="">
+    <h4> This documentation template is provided by <a href="http://www.frittt.com" target="_blank">Frittt Templates</a>. You can download and use this template for free. If you have used this template, please pay the developer's effort by Tweeting, sharing on Facebook, social mention or with a linkback. Enjoy! :)</h4>
+  </div>
+</section>
+<footer>
+  <div class="">
+    <p> &copy; Copyright Frittt Templates. All Rights Reserved.</p>
+  </div>
+</footer>
+</div>
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/prettify/prettify.js"></script>
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?lang=css&skin=sunburst"></script>
+<script src="js/layout.js"></script>
+</body>
+</html>

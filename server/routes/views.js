@@ -39,7 +39,7 @@ viewRouters.get("/application/login" , ( req , res )=>{
 });
 
 viewRouters.get("/" , ( req , res )=>{
-  res.render("index-page");
+  res.render("index");
 });
 
 

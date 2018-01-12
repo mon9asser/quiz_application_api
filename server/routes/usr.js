@@ -190,7 +190,7 @@ usrRouters.delete("/users/:uid/delete" ,verify_api_keys_user_apis , (req, res)=>
 
     usr.findByIdAndRemove(userId).then((user)=>{
       if(!user)
-        res.status(404).send();
+        res.status(404).send({"Error":notes.Errors.Error_Doesnt_exists("User")});
          res.send(user);
     }).catch((error)=>{
       res.status(400).send();
