@@ -11,7 +11,7 @@ const {ObjectId} = mongoose.Schema.ObjectId;
     For Users Collection
   ++++++++++++++++++++++++++++++++++++++++++++++++
 */
-var userDataTypes = { 
+var userDataTypes = {
     name : {
       type : String ,
       trim: true ,
