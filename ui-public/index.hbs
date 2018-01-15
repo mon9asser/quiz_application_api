@@ -39,16 +39,15 @@
       <li><a href="#welcome" class="cc-active">Welcome</a></li>
       <li><a href="#benefits" class="cc-active">Dependencies</a></li>
       <li><a href="#features" class="cc-active">Features</a></li>
+      <li><a href="#structure" class="cc-active">Folder Structure</a></li>
       <li><a href="#license" class="cc-active">License</a></li>
       <li class="separator"></li>
       <li><strong>Collections</strong></li>
       <li><a href="#view_type" class="cc-active">Api Keys</a></li>
       <li><a href="#users" class="cc-active">Users</a></li>
-      <li><a href="#bars_text" class="cc-active">Questionnaires</a></li>
-      <li><a href="#vote_counter" class="cc-active">Reports</a></li>
-      <li><a href="#rating_icons" class="cc-active"></a></li>
-      <li><a href="#rating_titles" class="cc-active"></a></li>
-      <li><a href="#bar_colors" class="cc-active"></a></li>
+      <li><a href="#questionnaires" class="cc-active">Questionnaires</a></li>
+      <li><a href="#reports" class="cc-active">Reports</a></li>
+
     </ul>
     <div class="docs-content">
       <h2> Getting Started</h2>
@@ -92,6 +91,51 @@
         <li>You can get and serve your data with any client server , api's accept that by access controller !</li>
         <li>You can use it with any programming language just use json files as a data provider in request or response </li>
       </ul>
+
+
+
+
+      <h3 id="structure">structure</h3>
+      <p>
+         <i>/database/</i>
+         <div class="clearFix"></div>
+         #### =>  config.js => all Server settings
+         <div class="clearFix"></div>
+         #### =>  connx.js  => Responsible about database connection
+         <div class="clearFix"></div>
+         #### =>  schema.js => define all fields related each collection
+      </p>
+
+
+      <p>
+         <i>/middlewares/</i>
+         <div class="clearFix"></div>
+         #### =>  Responsible about all authorizations and authentications
+      </p>
+
+
+      <p>
+         <i>/models/</i>
+         <div class="clearFix"></div>
+         #### =>  All models related all collections
+      </p>
+
+
+      <p>
+         <i>/server/</i>
+         <div class="clearFix"></div>
+         #### =>  files that serve all models related each collection
+      </p>
+
+      <p>
+         <i>server.js</i>
+         <div class="clearFix"></div>
+         #### =>  collect all files together in one point end to end and doing play for main server
+      </p>
+
+
+
+
       <h3 id="license"> License</h3>
       <p>
         Only permission to use this app for Rackal Vallil to do what he needs
@@ -157,13 +201,13 @@
 
       <hr />
 
-      <div id="Users">
+      <div id="users">
         <h3> USERS</h3>
         <ul>
           <li><b class="api-title">User Creation api</b></li>
         </ul>
 
-          <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/users/create</pre>
+          <pre class="prettyprint" style="padding: 6px 11px;">['POST'] => http://34.215.133.182/api/users/create</pre>
           To create new user , we have to send a <span class="highlighetd-black">POST</span> in http request with <span class="highlighetd-black">JSON data</span> format in our request with these fields
           <pre class="prettyprint code_json" style="padding: 6px 11px;">
             {
@@ -177,7 +221,7 @@
         <ul>
           <li> <b class="api-title"> Edit User api</b></li>
         </ul>
-        <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/users/<span class="pass-highlighted">{:uid}</span>/edit</pre>
+        <pre class="prettyprint" style="padding: 6px 11px;">['PATCH'] => http://34.215.133.182/api/users/<span class="pass-highlighted">{:uid}</span>/edit</pre>
         <p>
           We need to pass user id instead of <span class="pass-highlighted-shortcut"> {:uid} </span> with existing user id and send request with <span class="highlighetd-black">PATCH</span> and this <span class="highlighetd-black">JSON data</span>
         </p>
@@ -194,7 +238,7 @@
         <ul>
           <li> <b class="api-title"> Delete User api</b></li>
         </ul>
-        <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/users/<span class="pass-highlighted">{:uid}</span>/delete</pre>
+        <pre class="prettyprint" style="padding: 6px 11px;">['DELETE'] => http://34.215.133.182/api/users/<span class="pass-highlighted">{:uid}</span>/delete</pre>
         <p>
           We need to pass user id instead of <span class="pass-highlighted-shortcut"> {:uid} </span> with existing user id and send request with <span class="highlighetd-black">DELETE</span>
         </p>
@@ -202,7 +246,7 @@
         <ul>
           <li> <b class="api-title"> Login and store user info with sessions api</b></li>
         </ul>
-        <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/users/login</pre>
+        <pre class="prettyprint" style="padding: 6px 11px;">['POST'] => http://34.215.133.182/api/users/login</pre>
         <p>
           We need to use http request : <span class="highlighetd-black">POST</span> and send a request with existing email and password via <span class="highlighetd-black">JSON data</span>
           <pre class="prettyprint code_json" style="padding: 6px 11px;">
@@ -218,7 +262,7 @@
         </ul>
         we're using this api to generate new token case old token is expired , without generate this token you couldn't able to edit questionnaire app
         the default time for token expiration is 5 hours after that you need to generate new one
-        <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/auth/<span class="pass-highlighted">{:uid}</span></pre>
+        <pre class="prettyprint" style="padding: 6px 11px;">['POST'] => http://34.215.133.182/api/auth/<span class="pass-highlighted">{:uid}</span></pre>
         <p>
           We need to pass user id instead of <span class="pass-highlighted-shortcut"> {:uid} </span> with existing user id and send request with <span class="highlighetd-black">POST</span> http request
         </p>
@@ -246,7 +290,7 @@
 
 
       <hr />
-      <div id="Users">
+      <div id="questionnaires">
         <h3> Questionnaires</h3>
         <p>
           Questionnaire is our main application ! , we have two types for questionnaire Survey or Quiz
@@ -259,7 +303,7 @@
         <ul>
           <li><b class="api-title">Questionnaire Creation api</b></li>
         </ul>
-        <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/create</pre>
+        <pre class="prettyprint" style="padding: 6px 11px;">['POST'] => http://34.215.133.182/api/create</pre>
         <p>
           This api will create new application with required fields in json , we need to use <span class="highlighetd-black">POST</span> http with these fields in <span class="highlighetd-black">JSON</span> format
         </p>
@@ -275,7 +319,7 @@
           });
         </pre>
         <div class="clearFix"></div>
-        2- Rquired Json data type
+        2- Required Json data type
         <pre class="prettyprint code_json" style="padding: 6px 11px;">
             {
             	"creator_id":"creator ID", // refer to user id
@@ -285,7 +329,7 @@
             }
         </pre>
 
-        <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/init</pre>
+        <pre class="prettyprint" style="padding: 6px 11px;">['POST'] => http://34.215.133.182/api/init</pre>
 
 
         <p>
@@ -303,7 +347,7 @@
           });
         </pre>
         <div class="clearFix"></div>
-        2- Rquired Json data type
+        2- Required Json data type
         <pre class="prettyprint code_json" style="padding: 6px 11px;">
             {
             	"creator_id":"creator ID", // refer to user id
@@ -317,10 +361,10 @@
         <ul>
           <li><b class="api-title">Questionnaire Edit api</b></li>
         </ul>
-        <pre class="prettyprint" style="padding: 6px 11px;">http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/app/edit</pre>
+        <pre class="prettyprint" style="padding: 6px 11px;">['PATCH'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/app/edit</pre>
         <p>
-          In totaly this api used to build new settings for application or editing main applicatin information
-          -- <span class="pass-highlighted-shortcut"> {:app_id} </span>  refer to questionnaire ( application ) id , but before doing that you have to set 4 headers to success in this calling
+          In general this api used to build new settings for application or editing main applicatin information
+          -- <span class="pass-highlighted-shortcut"> {:app_id} </span>  refer to questionnaire ( application ) id , but before that , you've to set 4 headers to success in this calling
         </p>
         1- Required Headers
         <pre class="prettyprint code_json" style="padding: 6px 11px;">
@@ -335,34 +379,670 @@
           });
         </pre>
         <div class="clearFix"></div>
-        2- Rquired Json data type
+        <p>
+          if your token is expired you need to generate new one by using this api
+          <div class="clearFix"></div>
+          <span class="highlighted_apis">['POST'] => http://34.215.133.182/api/auth/{:uid}</span>
+          <div class="clearFix"></div>
+          In Case your token is expired and you sent a request without generate new one you'll get this message'
+          <pre class="prettyprint code_json" style="padding: 6px 11px;">
+              {
+                  "Warning": "Token is expired !!"
+              }
+          </pre>
+        </p>
+        <div class="clearFix"></div>
+
+        2- Required Json data type
         <pre class="prettyprint code_json" style="padding: 6px 11px;">
-            {
-            	"creator_id":"creator ID", // refer to user id
-            	"app_type":1  // refer to app type , 0 => for survey type and 1 => for quiz type
-            }
+          {
+            "creator_id":"Admin user type (id)"	// should be the creator of this app
+          }
+        </pre>
+
+        3- Optional Json data type
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+
+                /* Application Data  !! =======================  */
+              "questionnaire_title":"Updated Title",
+              "description":"New Value Here !!"
+
+                /* Application Settings !! ======================= */
+              "titles":{
+                "title_start_with":"Started text for quiz or survey" ,
+                "title_failed_with":"Failed Message will be here !" ,
+                "title_success_with":"value here",
+                "title_end_with":"value here"
+              } ,
+              "step_type":"value in boolean" , // => true => for Numerical and false => for Precentage Steps
+              "grade_settings":{
+                "is_graded":"value in boolean" , // true
+                "value":"value in Number" // 85
+              },
+              "review_setting":"value in boolean" , // false
+              "retake_setting":"value in boolean" , // false
+              "navigation_btns":"value in boolean" , // false
+              "label_btns":{
+                "lbl_start_with":"Label text",
+                "lbl_continue_with":"Label text",
+                "lbl_retake_with":"Label text",
+                "lbl_review_with":"Label text"
+              },
+              "randomize_settings":"value in boolean" , // true
+              "time_settings":{
+                "is_with_time":"value in boolean" , // true
+                "value":"value here", // 15
+                "timer_type":"value here", // [mins] { or } [hrs]
+                "timer_layout":"latout number" // 0 => number of layout in front end
+              },
+              "progression_bar":{
+                "is_available":"value in boolean" ,
+                "progression_bar_layout":"Progress bar layout number"
+              }
+          }
+        </pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <ul>
+          <li><b class="api-title">Questionnaire stylesheet api's</b></li>
+        </ul>
+        In three next api's you need to change <span class="highlighted-tomato">{:app_id}</span> with application id (questionnaire_id)
+        <div class="clearFix"></div>
+        Be not that stylesheet files are storing in this path <span class="path-data">/ui-public/themes/</span> and named with "styletheme_"+id.css also api response with direct file path in our server
+        <pre class="prettyprint" style="padding: 6px 11px;">['PATCH'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/settings/style/create</pre>
+        <p>
+          For Stylesheet "File" creation
+        </p>
+        1- Required Headers
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          $.ajax({
+              headers : { // headers
+                  "X-api-app-name" :'Your Application Name', // app name
+                  "X-api-keys":'You Api Keys (Long generated code)' , // keys
+                  "Content-Type": "application/json"  // json format
+              } ,
+              .....
+          });
+        </pre>
+        2- Required Json data type
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+            "creator_id":"Admin user type (id)"	// should be the creator of this app
+          }
+        </pre>
+
+        3- Json data
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+             "source_codes":[
+                {
+                  "class_name"        : "class name here" ,
+                  "class_attributes"  : {
+                      "background" : "value here" ,
+                      "color" : "value here" ,
+                      "border" : "value here" ,
+                      "box-shadow" : "value here" ,
+                      "font-family" : "value here" ,
+                  }
+                }, // => you can add more 9 objects as a maximum => 10 records per each time
+                .......
+             ]
+          }
+        </pre>
+        In case you didn't add json data in step number 3 the stylesheet will created automatic with empty data and it will be ready to edit it in next api
+
+        <pre class="prettyprint" style="padding: 6px 11px;">['PATCH'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/settings/style/edit</pre>
+        <p>
+          For Editing Stylesheet "File"
+        </p>
+        1- Required Headers
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          $.ajax({
+              headers : { // headers
+                  "X-api-app-name" :'Your Application Name', // app name
+                  "X-api-keys":'You Api Keys (Long generated code)' , // keys
+                  "Content-Type": "application/json"  // json format
+              } ,
+              .....
+          });
+        </pre>
+        2- Required Json data type
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+              "theme_style_id":"stylesheet id",   // the-existing stylesheet id
+              "creator_id":"Admin user type (id)"	// should be the creator of this app
+          }
+        </pre>
+        3- Json data
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+             "source_codes":[
+                {
+                  "class_name"        : "class name here" ,
+                  "class_attributes"  : {
+                      "background" : "value here" ,
+                      "color" : "value here" ,
+                      "border" : "value here" ,
+                      "box-shadow" : "value here" ,
+                      "font-family" : "value here" ,
+                  }
+                }, // => you can add more 9 objects as a maximum => 10 records per each time
+                .......
+             ]
+          }
+        </pre>
+
+
+
+
+
+
+
+
+
+
+
+        <pre class="prettyprint" style="padding: 6px 11px;">['PATCH'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/settings/style/delete</pre>
+        <p>
+          For Delete Stylesheet "File"
+        </p>
+        1- Required Headers
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          $.ajax({
+              headers : { // headers
+                  "X-api-app-name" :'Your Application Name', // app name
+                  "X-api-keys":'You Api Keys (Long generated code)' , // keys
+                  "Content-Type": "application/json"  // json format
+              } ,
+              .....
+          });
+        </pre>
+        2- Required Json data type
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+              "theme_style_id":"stylesheet id",   // the-existing stylesheet id
+              "creator_id":"Admin user type (id)"	// should be the creator of this app
+          }
+        </pre>
+
+
+
+
+
+
+
+
+
+
+
+        <ul>
+          <li><b class="api-title">Questionnaire Question api's</b></li>
+        </ul>
+
+        <pre class="prettyprint" style="padding: 6px 11px;">['PATCH'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/question/create</pre>
+        <p>
+          For Create New Question
+        </p>
+        1- Required Headers
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          $.ajax({
+              headers : { // headers
+                  "X-api-app-name" :'Your Application Name', // app name
+                  "X-api-keys":'You Api Keys (Long generated code)' , // keys
+                  "Content-Type": "application/json"  // json format
+              } ,
+              .....
+          });
+        </pre>
+        2- Required Json data type
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+              "creator_id":"Admin user type (id)",	// should be the creator of this app
+              "question_type":0 , //
+              "question_body":"Value",
+          }
+        </pre>
+
+        3- Json And Form Data
+        <p> ===> A- Video Attached with question [JSON]</p>
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+              "answer_settings":{
+                "is_randomized":"Boolean Value",
+                "super_size":"Boolean Value",
+                "single_choice":"Boolean Value",
+                "choice_style":"String Value", // =>accept only "inline" or "block"
+                "answer_char_max":"Integer value"
+              },
+              "media_field":"Video Url"
+          }
+        </pre>
+        <p> ===> B- Image Attached with question [formData]</p>
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          var formData = new FormData();
+          formData.append("media_field", file);
+          /*
+            Post all fields with this form data
+            we jsut need to upload image with form data
+          */
+
+        </pre>
+
+
+
+
+
+
+
+
+
+        <pre class="prettyprint" style="padding: 6px 11px;">['PATCH'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/question/edit</pre>
+        <p>
+          For Edit The Existing Question
+        </p>
+        1- Required Headers
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          $.ajax({
+              headers : { // headers
+                  "X-api-app-name" :'Your Application Name', // app name
+                  "X-api-keys":'You Api Keys (Long generated code)' , // keys
+                  "Content-Type": "application/json"  // json format
+              } ,
+              .....
+          });
+        </pre>
+        2- Required Json data type
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+          	"creator_id":"The Creator Id"  ,
+          	"question_id":"The Question Id"
+          }
+        </pre>
+
+        3- Json Or Form data
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+            /*
+             Use Form Data or json to update you existing question
+             */
+             { // => Example for Json Data
+                 "creator_id":"Admin user type (id)",	// should be the creator of this app
+                 "question_type":0 , //
+                 "question_body":"Value",
+                 "answer_settings":{
+                     "is_randomized":"Boolean Value",
+                     "super_size":"Boolean Value",
+                     "single_choice":"Boolean Value",
+                     "choice_style":"String Value", // =>accept only "inline" or "block"
+                     "answer_char_max":"Integer value"
+                  }
+                 "media_field":"Video Url"
+             }
+
+             /*
+               Post all fields with this form data
+               we jsut need to upload image with form data
+             */
+             var formData = new FormData();
+             formData.append("media_field", file);
+
+        </pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <pre class="prettyprint" style="padding: 6px 11px;">['PATCH'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/question/delete</pre>
+        <p>
+          For Delete The Existing Question
+        </p>
+        1- Required Headers
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          $.ajax({
+              headers : { // headers
+                  "X-api-app-name" :'Your Application Name', // app name
+                  "X-api-keys":'You Api Keys (Long generated code)' , // keys
+                  "Content-Type": "application/json"  // json format
+              } ,
+              .....
+          });
+        </pre>
+        2- Required Json data type
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+          	"creator_id":"The Creator Id"  ,
+          	"question_id":"The Question Id"
+          }
+        </pre>
+
+
+
+
+
+
+
+
+
+
+
+        <ul>
+          <li><b class="api-title">Questionnaire Answer api's</b></li>
+        </ul>
+        <pre class="prettyprint" style="padding: 6px 11px;">['PATCH'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/question/<span class="pass-highlighted">{:question_id}</span>/answer/create</pre>
+        <p>
+          For Answer Creation
+        </p>
+
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          /* Case question type is 0 => text choices {Or} with media */
+          {
+            "creator_id":"Creator ID", // (Required Value)
+            "is_correct":false , // Boolean (Required Value)
+
+            "choices_value":"Text of answer Value", // => Optional first time
+            /* case it video (json) case it image (formData) */
+            "media_src":"Video (Youtube or vimeo url)" // => Optional
+          }
+
+          /* Case question type is 1 => Media choices */
+          # A => case it media
+          {
+            "creator_id":"Creator ID", // (Required Value)
+            "is_correct":false , // Boolean (Required Value)
+            "media_src":"Video urls" // Youtube or vimeo
+          }
+          # B => case it image ( need to set one field only )
+          var formData = new FormData();
+          formData.append("media_src", file);
+
+          /* Case question type is 2 => True and False */
+          # A => Case it yes/no type
+          {
+          	"creator_id":"",
+          	"is_correct":true, // => { Required }
+          	"boolean_type":"yes/no", // => answer type { Required }
+                /* right answer ( true means Yes and false means No ) { Required } */
+          	"boolean_value":false // => { Required }
+          }
+          # B => Case it true/false type
+          {
+          	"creator_id":"",
+          	"is_correct":true, // => { Required }
+          	"boolean_type":"true/false", // => answer type { Required }
+                /* right answer ( true means True and false means False ) { Required } */
+          	"boolean_value":false // => { Required }
+          }
+
+          /* Case question type is 3 => Rating or scale value */
+          # A => Case it 0 => means scale
+          {
+            "creator_id":"",
+          	"ratscal_type":0, // Scale Value
+          	"step_numbers":"Integer Value",
+          	"started_at":"String Value",
+          	"centered_at":"String Value",
+          	"ended_at":"String Value"
+          }
+          # B => Case it 1 => means rating
+          {
+            "creator_id":"",
+          	"ratscal_type":1, // Rating Value
+          	"step_numbers":10 // Integer Value
+          }
+
+          /* Case question type is 4 => means free text */
+          {
+          	"creator_id":"" // Required
+          }
+
+        </pre>
+        <pre class="prettyprint" style="padding: 6px 11px;">['PATCH'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/question/<span class="pass-highlighted">{:question_id}</span>/answer/edit</pre>
+        <p>
+          For Edit Answer
+        </p>
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+              "creator_id":"",
+              "answer_id" :"" // Required
+              // you need to use each answer type in prev api
+              // with the 'answer_id'
+          }
+        </pre>
+        <pre class="prettyprint" style="padding: 6px 11px;">['PATCH'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/question/<span class="pass-highlighted">{:question_id}</span>/answer/delete</pre>
+        <p>
+          For Delete Answer
+        </p>
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+              "creator_id":"",
+              "answer_id" :"" // Required
+          }
+        </pre>
+
+
+
+
+
+
+
+        <ul>
+          <li><b class="api-title">Retrieve Questionnaire details apis </b></li>
+        </ul>
+        <pre class="prettyprint" style="padding: 6px 11px;">['POST'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/application/retrieve</pre>
+        <p>
+          To Retrieve all details of current questinnaire
+        </p>
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+              "creator_id":"",
+          }
+        </pre>
+
+        <pre class="prettyprint" style="padding: 6px 11px;">['POST'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/application/styles</pre>
+        <p>
+          To Retrieve all stylesheets of the existing questionnaire
+        </p>
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+              "creator_id":"",
+              /*
+                To retrieve only the existing stylesheet that has this id
+              */
+              "target_id" :"" # => optional
+          }
+        </pre>
+        <pre class="prettyprint" style="padding: 6px 11px;">['POST'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/application/questions</pre>
+        <p>
+          To Retrieve all questions of the existing questionnaire
+        </p>
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+              "creator_id":"",
+              /*
+                To retrieve only the existing question that has this id
+              */
+              "target_id" :"" # => optional
+          }
+        </pre>
+        <pre class="prettyprint" style="padding: 6px 11px;">['POST'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/application/settings</pre>
+        <p>
+          To Retrieve all settings of the existing questionnaire
+        </p>
+        <pre class="prettyprint code_json" style="padding: 6px 11px;">
+          {
+              "creator_id":""
+          }
         </pre>
 
 
 
       </div>
 
+      <hr />
 
 
 
 
 
+
+
+
+
+
+
+
+
+      <h3 id="reports"> Reports</h3>
+      <ul>
+        <li><b class="api-title">Attend Quiz or Survey api</b></li>
+      </ul>
+      <pre class="prettyprint" style="padding: 6px 11px;">['POST'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/report/add</pre>
+      <p>
+        To attend the existing quiz or survey
+      </p>
+      <pre class="prettyprint code_json" style="padding: 6px 11px;">
+        {
+            "attendee_id":"", // user that take this quiz
+            "question_id":"", // the current question id
+            "answer_ids":[
+              "" // => ids of questions
+            ] // case it multiple choice you should select all correct answers
+
+
+
+        # => Some cases ------------------
+          #--  @if question type was 2
+          "true_false_value":""
+          #--  @if question type was 3
+          "rating_false_value":"",
+          #--  @if question type was 4
+          "free_text_value":""
+        }
+      </pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <ul>
+        <li><b class="api-title">Retake api</b></li>
+      </ul>
+      <pre class="prettyprint" style="padding: 6px 11px;">['DELETE'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/report/clear</pre>
+      <p>
+        To delete the existing user results
+      </p>
+      <pre class="prettyprint code_json" style="padding: 6px 11px;">
+        {
+          "attendee_id":""
+        }
+      </pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <ul>
+        <li><b class="api-title">Retrieve api's</b></li>
+      </ul>
+      <p> 1- Statistics Report </p>
+      <pre class="prettyprint" style="padding: 6px 11px;">['POST'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/statistics/report</pre>
+      <p>
+        To retrieve all details about each question for the existing Survey ( Survey Only )
+      </p>
+      <p> 2- Detailed Report </p>
+      <pre class="prettyprint" style="padding: 6px 11px;">['POST'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/detailed/report</pre>
+      <p>
+        To display all details for each app according to followings :
+        <div class="clearFix"></div>
+        # ==> Case it only one attendee
+      </p>
+      <pre class="prettyprint code_json" style="padding: 6px 11px;">
+        {
+          "attendee_id":""
+        }
+      </pre>
+      <p>
+        # ==> Case this search by date and pagination
+      </p>
+      <pre class="prettyprint code_json" style="padding: 6px 11px;">
+        {
+          "date":{
+            "date_from": ---,
+            "date_to": ---
+          } ,
+          "pagination":{
+            "page_number" : --- , "records_per_page" : ---
+          }
+        }
+      </pre>
+      <p> 3- Brief Reports </p>
+      <pre class="prettyprint" style="padding: 6px 11px;">['POST'] => http://34.215.133.182/api/<span class="pass-highlighted">{:creator_id}</span>/brief/report</pre>
+      To retrieve all quiz or survey ( Details ) created by this creator
+      <pre class="prettyprint" style="padding: 6px 11px;">['POST'] => http://34.215.133.182/api/<span class="pass-highlighted">{:creator_id}</span>/brief/<span class="pass-highlighted">{:app_type}</span>/report</pre>
+      To retrieve all quiz or survey ( Details ) created by this creator according to application type "quiz"/"survey"
+      <pre class="prettyprint code_json" style="padding: 6px 11px;">
+        {
+          "date":{
+            "date_from": ---,
+            "date_to": ---
+          } ,
+          "pagination":{
+            "page_number" : --- , "records_per_page" : ---
+          }
+        }
+      </pre>
     </div>
   </div>
 </section>
 <section class="vibrant centered">
   <div class="">
-    <h4> This documentation template is provided by <a href="http://www.frittt.com" target="_blank">Frittt Templates</a>. You can download and use this template for free. If you have used this template, please pay the developer's effort by Tweeting, sharing on Facebook, social mention or with a linkback. Enjoy! :)</h4>
+    <h4>Thank you for reading this documentation :) </h4>
   </div>
 </section>
 <footer>
   <div class="">
-    <p> &copy; Copyright Frittt Templates. All Rights Reserved.</p>
+    <p> All Rights Reserved.</p>
   </div>
 </footer>
 </div>
