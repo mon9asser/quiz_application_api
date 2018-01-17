@@ -1,0 +1,33 @@
+html , body {
+   background: #e6f5f0;
+}
+.form-horizontal {
+  background: #fff;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 30%;
+  width: 45%;
+  margin: 0px auto;
+  padding: 35px 35px 20px 35px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+}
+@media (max-width:600px){
+  .form-horizontal {
+  background: #fff;
+position: absolute;
+left: 0px;
+right: 0px;
+top: 20%;
+width: 95%;
+margin: 0px auto;
+padding: 35px 35px 20px 35px;
+border: 1px solid #ddd;
+border-radius: 20px;
+}
+}
+
+.signInV {
+    margin-right: 15px;
+}

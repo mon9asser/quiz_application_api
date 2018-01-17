@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html ng:app="application">
+<head>
+	<script type="text/javascript" src="js/angular.min.js"></script>
+	<script type="text/javascript" src="js/angular-route.js"></script>
+	<link ng:href="css/bootstrap.min.css" rel="stylesheet">
+	<link ng:href="css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- Login Stylesheets -->
+	<link rel="stylesheet" ng:if="page_name == 'login_page'" ng:href="css/login.css">
+	<!-- Register Stylesheets -->
+	<link rel="stylesheet" ng:if="page_name == 'register_page'" ng:href="css/register.css">
+	<!-- Quiz Stylesheets -->
+	<link rel="stylesheet" ng:if="page_name == 'quiz_page'"  ng:href="css/application-creation.css">
+	<!-- Title of pages -->
+	<title>{{title}}</title>
+</head>
+<body>
+
+
+	<!-- Recieving all routes here -->
+	<ng-view></ng-view>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/application.js"></script>
+
+	<!-- Quiz or survey -->
+	<script type="text/javascript" src="js/apps.js" ng:if="page_name == 'quiz_page'"></script>
+</body>
+</html>

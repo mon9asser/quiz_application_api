@@ -1,0 +1,165 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        QuizApp
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a>Link</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            Username
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="side-left-bar">
+
+  <div class="question-data">
+     <ul class="question-x">
+          <li>
+              <span class="qs-type" title="Multiple Choices">
+                 <i class="icon-insert-template"></i>
+              </span>
+              <span class="titles">Choices</span>
+          </li>
+
+          <li>
+              <span class="qs-type" title="Media Choices">
+                 <i class="icon-image"></i>
+              </span>
+              <span class="titles">Media</span>
+          </li>
+
+          <li>
+              <span class="qs-type" title="Ture/False">
+                 <i class="icon-check-circle"></i>
+              </span>
+              <span class="titles">Boolean</span>
+          </li>
+     </ul>
+  </div>
+</div>
+<div class="container-fluid update-rows">
+  <!-- Title of application -->
+  <div class="container-fluid">
+			<div class="row">
+					<div class="col-md-12">
+						 <div class="area-qs-ch quiz-titles">
+							  <span onClick="this.contentEditable='true';">The Complete C# Quiz</span>
+ 							  <a class="choices-right-add btn-primary btn rm-margin" href="#">Preview Quiz</a>
+  					 </div>
+					</div>
+	    </div>
+	</div>
+  <div class="container-fluid">
+    <div class="row">
+       <!-- Question (Editor) menu -->
+      <div class="left_part col-md-5 col-sm-6 col-xs-12">
+          <div class="question-data qsdragged-list qs-dropped">
+						<div class="widContainer">
+								Questions
+						</div>
+						<ul>
+								<li>
+											1-
+											<span class="qs-type quesiontlist_iconx" title="Multiple Choices">
+											 <i class="icon-insert-template "></i>
+										 </span>
+											<span>Multiple Choice</span>
+											<i class="fa fa-bars iconex-movable"></i>
+											<i class="fa fa-trash iconx-trashable"></i>
+								</li>
+								<li>
+											2-
+											<span class="qs-type quesiontlist_iconx" title="Ture/False">
+													<i class="icon-check-circle"></i>
+											</span>
+											<span>True Or False</span>
+
+											<i class="fa fa-bars iconex-movable"></i>
+											<i class="fa fa-trash iconx-trashable"></i>
+								</li>
+								<li>
+											3-
+											<span class="qs-type quesiontlist_iconx" title="Media Choices">
+												<i class="icon-image"></i>
+											</span>
+											<span>Media Choices</span>
+											<i class="fa fa-bars iconex-movable"></i>
+											<i class="fa fa-trash iconx-trashable"></i>
+								</li>
+								<li class="dragelement-here">
+									<span>Drag Question Here</span>
+								</li>
+						</ul>
+				</div>
+      </div>
+       <!-- List of questions -->
+      <div class="right_part col-md-7 col-sm-6 col-xs-12">
+        <!-- Switch to view or editor [Handler]-->
+        <div class="switched-button switch-mode">
+           <span class="swMode">
+             <!-- Handel this by js -->
+             On <span class="action-case">Preview</span>
+           </span>
+           <div class="mode-chs-x">
+               <input type="checkbox" id="mode-chox-option" name="check" checked />
+               <label for="mode-chox-option"></label>
+               <span class="image-on mode-option-x"></span>
+           </div>
+        </div>
+
+        <!-- Editor for Questions -->
+        <div class="question-editor">
+          <div class="col-md-9">
+            <textarea placeholder="Question Title ? " class="form-control quest-title-edit" rows="4"></textarea>
+          </div>
+          <div class="col-md-3">
+             <ul class="media-files">
+               <li>
+                 <span>
+                   <i class="font-icon-editor-img"></i>
+                 </span>
+               </li>
+               <li>
+                 <span>
+                   <i class="font-icon-editor-video"></i>
+                 </span>
+               </li>
+             </ul>
+          </div>
+
+        </div>
+
+      </div>
+       <!-- Setttings -->
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        Settings !!
+      </div>
+    </div>
+  </div>
+
+
+</div>
