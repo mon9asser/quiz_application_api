@@ -1036,7 +1036,9 @@
       </p>
       <pre class="prettyprint code_json" style="padding: 6px 11px;">
         {
-          "attendee_id":""
+          "attendee_id":"" ,
+          // => Case display questions for this attendee
+          "questions":true  // if it false will not display it
         }
       </pre>
       <p>
@@ -1050,7 +1052,9 @@
           } ,
           "pagination":{
             "page_number" : --- , "records_per_page" : ---
-          }
+          },
+          // => Case display questions for each attendee
+          "questions":true // if it false will not display it
         }
       </pre>
       <p> 3- Brief Reports </p>
