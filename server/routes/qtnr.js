@@ -113,8 +113,8 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
         res.status(201).send(notes.Messages.Required_Message(required));
       });
     }
-    
-    if(req.body.app_type >= 3 ||  !_.isInteger(req.body.app_type)){ 
+
+    if(req.body.app_type >= 2  || req.body.app_type < 0 ||  !_.isInteger(req.body.app_type)){
        return new Promise((resolve , reject)=>{
         // console.log(required);
         res.status(404).send(notes.Errors.Error_Doesnt_exists("Application Type"));
@@ -166,7 +166,7 @@ qtnrRouters.post("/init", auth_verify_api_keys_tokens  , (req, res) => {
          res.status(201).send( `${notes.Messages.Required_Message('app_type')}`  );
       });
     }
-    if(req.body.app_type >= 3 ||  !_.isInteger(req.body.app_type)){ 
+    if(req.body.app_type >= 2  || req.body.app_type < 0  ||  !_.isInteger(req.body.app_type )){
        return new Promise( ( resolve , reject ) => {
         // console.log(required);
         res.status(404).send(notes.Errors.Error_Doesnt_exists("Application Type"));

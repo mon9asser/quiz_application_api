@@ -488,18 +488,40 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
     if(req.body.attendee_id != null){
       var attendee_id = req.body.attendee_id;
       var attendeeIndex = _.findIndex(rptDocs.attendee_details , {attendee_id:attendee_id} );
-      if(attendeeIndex == -1 ){
+      var attendeeIndexObj = _.findIndex(rptDocs.attendees , {attendee_id:attendee_id} );
+      var attendeeQs = _.find (rptDocs.attendees , {attendee_id:attendee_id} );
+      if(attendeeIndex == -1 || attendeeIndexObj == -1 ){
         return new Promise((resolve , reject)=>{
           res.send(notes.Errors.Error_Doesnt_exists("Attendee"));
         });
       }
       var attendee_reportDetails = _.find (rptDocs.attendee_details , {attendee_id:attendee_id} );
+      var attendee_igi = _.pick( attendee_reportDetails , ["attendee_information.id","attendee_information.name","attendee_information.email","total_questions","pass_mark","correct_answers","wrong_answers","status","score","completed_status","created_at","completed_date" , "questions"]) ;
 
-      var attend = { application_info:{
+      var attend = new Object();
+      attend['application_info'] = {
         "app_name":rptDocs.questionnaire_info.questionnaire_title,
         "app_id":rptDocs.questionnaire_info._id ,
         "question_counts":rptDocs.questionnaire_info.questions.length + " Questions"
-      } , attendee : _.pick( attendee_reportDetails , ["attendee_information.id","attendee_information.name","attendee_information.email","total_questions","pass_mark","correct_answers","wrong_answers","status","score","completed_status","created_at","completed_date"]) };
+      };
+      attend['application_info'] = attendee_igi ;
+      if(req.body.questions != null ){
+        var question_flag = attendeeQs.survey_quiz_answers;
+        if(req.body.questions == true ){
+          attendee_igi['questions'] = new Array();
+          for(var iqs = 0; iqs < question_flag.length ; iqs++){
+            var qsObject = {
+              quesion_id : question_flag[iqs].question_id ,
+              question : question_flag[iqs].questions.question_body ,
+              question_type : question_flag[iqs].questions.question_type,
+              answer : question_flag[iqs].answers
+            }
+            attendee_igi['questions'].push(qsObject);
+          }
+        }
+      }
+
+
 
 
       res.send(attend );
@@ -528,11 +550,34 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
         for (var i = 0; i < attendee_objects.length; i++) {
           var date_passed = new Date(attendee_objects[i].completed_date);
           if (date_passed >= from && date_passed <= to) {
-            var picked = _.pick(attendee_objects[i] , ["attendee_information.id","attendee_information.name","attendee_information.email","total_questions","pass_mark","correct_answers","wrong_answers","status","score","completed_status","created_at","completed_date"]);
+            var picked = _.pick(attendee_objects[i] , ["attendee_information.id","attendee_information.name","attendee_information.email","total_questions","pass_mark","correct_answers","wrong_answers","status","score","completed_status","created_at","completed_date" , "questions"]);
+            if(req.body.questions != null ){
+                if(req.body.questions == true ){
+                   picked['questions'] = new Array();
+                   var indeAtten = _.findIndex(rptDocs.attendees , {attendee_id:picked.attendee_information.id});
+                   if(indeAtten == -1 )
+                   break ;
+
+                   var attenFinder = _.find(rptDocs.attendees , {attendee_id:picked.attendee_information.id});
+                   var qsAllObj = attenFinder.survey_quiz_answers;
+                   for ( var isd = 0; isd < qsAllObj.length; isd++ ) {
+                      qsw_obj = {
+                          question_id : qsAllObj[isd].question_id ,
+                          question : qsAllObj[isd].questions.question_body ,
+                          question_type : qsAllObj[isd].questions.question_type,
+                          answer : qsAllObj[isd].answers
+                      };
+                      picked['questions'].push(qsw_obj);
+                   }
+                }
+            }
             attendee_datax.push(picked);
           }
         }
-      }else attendee_datax = attendee_objects ;
+      }else{
+         attendee_datax = attendee_objects ;  
+      }
+
 
         // attendee_datax = _.pick(attendee_objects , ["attendee_information.id","attendee_information.name","attendee_information.email","total_questions","pass_mark","correct_answers","wrong_answers","status","score","completed_status","created_at","completed_date"]);
 
