@@ -1,35 +1,37 @@
 <!DOCTYPE html>
 <html ng:app="application">
-<head>
-	<script type="text/javascript" src="js/angular.min.js"></script>
-	<script type="text/javascript" src="js/angular-route.js"></script>
-	<link ng:href="css/bootstrap.min.css" rel="stylesheet">
-	<link ng:href="css/font-awesome.min.css" rel="stylesheet">
+	<head>
+			<title>{{title}}</title>
 
-	<!-- owl Carsoul-->
-	<link ng:if="page_name == 'quiz_page'" rel="stylesheet" href="libs/owl/assets/owl.carousel.min.css" />
+			<script type="text/javascript" src="js/angular.min.js"></script>
+			<script type="text/javascript" src="js/angular-route.js"></script>
+			<link ng:href="css/bootstrap.min.css" rel="stylesheet">
+			<link ng:href="css/font-awesome.min.css" rel="stylesheet">
+
+			<!-- Login Page -->
+			<link rel="stylesheet" ng:if="page_name == 'login_page'" ng:href="css/login.css">
+			<!-- Register -->
+			<link rel="stylesheet" ng:if="page_name == 'register_page'" ng:href="css/register.css">
+			<!-- Application Creation -->
+			<link rel="stylesheet" ng:if="page_name == 'quiz_page'"  ng:href="css/application-creation.css">
+
+			<!-- Quiz Page -->
+			<link ng:if="page_name == 'quiz_page'" rel="stylesheet" href="libs/owl/assets/owl.carousel.min.css" />
+
+ 
+
+	</head>
+	<body>
+
+		<ng-view></ng-view>
 
 
-	<!-- Login Stylesheets -->
-	<link rel="stylesheet" ng:if="page_name == 'login_page'" ng:href="css/login.css">
-	<!-- Register Stylesheets -->
-	<link rel="stylesheet" ng:if="page_name == 'register_page'" ng:href="css/register.css">
-	<!-- Quiz Stylesheets -->
-	<link rel="stylesheet" ng:if="page_name == 'quiz_page'"  ng:href="css/application-creation.css">
-	<!-- Title of pages -->
-	<title>{{title}}</title>
-</head>
-<body>
+			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
+			<script ng:if="page_name == 'quiz_page'" type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+			<script type="text/javascript" src="js/bootstrap.min.js"></script>
+			<script ng:if="page_name == 'quiz_page'" src="libs/owl/owl.carousel.min.js" charset="utf-8"></script>
+			<script ng:if="page_name == 'quiz_page'" type="text/javascript" src="js/apps.js" ></script>
+	 		<script type="text/javascript" src="js/application.js"></script>
 
-
-	<!-- Recieving all routes here -->
-	<ng-view></ng-view>
-	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
-	<script ng:if="page_name == 'quiz_page'" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.js"></script>
-	<script ng:if="page_name == 'quiz_page'" src="libs/owl/owl.carousel.min.js" charset="utf-8"></script>
- 	<script type="text/javascript" src="js/application.js"></script>
-	<!-- Quiz or survey -->
-	<script type="text/javascript" src="js/apps.js" ng:if="page_name == 'quiz_page'"></script>
-</body>
+	</body>
 </html>

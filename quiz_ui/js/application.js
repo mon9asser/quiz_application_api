@@ -4,7 +4,7 @@ var $config = {
     api_application_name : ""
 };
 
-var application = angular.module("application", ["ngRoute" , "as.sortable"]);
+var application = angular.module("application", ["ngRoute"]);
 application.config(["$routeProvider" , "$locationProvider" , function($routeProvider , $locationProvider) {
     $routeProvider
     .when("/", {
@@ -62,7 +62,7 @@ application.controller("registerController" ,['$rootScope' , function($rootScope
     $rootScope.title = "Create New Account";
 }]);
 // ==> Application Creation Controller
-application.controller("quizCreationController" , ["$rootScope" , function ($rootScope){
+application.controller("quizCreationController" , ["$rootScope","$http" , function ($rootScope,$http){
 
   var app = this;
 
@@ -86,9 +86,61 @@ application.controller("quizCreationController" , ["$rootScope" , function ($roo
   };
 
 
+  // ==============================================================
+  // ================>>>> Sorting !! <<<<<<<<<<<===================
+  // ==============================================================
+  app.qs_sortable = $("#qs-sortable") ;
+  app.qs_dropped = $(".dropped-qs");
+  var dropped = false;
+  var draggable_sibling;
+  app.qs_dropped.sortable();
+  app.qs_sortable.sortable({
+      start: function(event, ui) {
+           draggable_sibling = $(ui.item).prev();
+           $('.dragelement-here').addClass('dragged-items');
+   },
+      // helper: function(event , ui) {
+      //   return $('<span>Data...</span>');
+      // } ,
+      stop: function(event, ui) {
+           if (dropped) {
+             if (draggable_sibling.length == 0)
+                $('#qs-sortable').prepend(ui.item);
+                $('.dragelement-here').removeClass('dragged-items');
+               draggable_sibling.after(ui.item);
+               dropped = false;
+           }
+       }
+  });
 
 
- 
+  app.qs_dropped.droppable({
+    activeClass: 'active',
+        hoverClass:'hovered',
+        drop:function(event,ui){
+          $('.dragelement-here').removeClass('dragged-items');
+
+            // Question type page [QS]
+            var $questionType = ui.helper[0].getAttribute('question-data');
+            console.log("----------------------------------");
+            console.log(ui);
+            console.log("----------------------------------");
+
+            $http({
+                  method: 'GET',
+                  url: 'templates/question-types/'+$questionType
+                }).then(function successCallback(response) {
+                   $(".dropped-qs").prepend(response.data);
+                   $(".dragelement-here").remove();
+                }, function errorCallback(response) {
+                  // called asynchronously if an error occurs
+                  // or server returns response with an error status.
+              });
+            // console.log(event.target);
+            // $(event.target).addClass('dropped');
+            dropped = true;
+      }
+  });
 }]);
 
 /*

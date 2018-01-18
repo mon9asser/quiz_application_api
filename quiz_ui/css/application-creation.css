@@ -906,9 +906,7 @@ vertical-align: baseline;
  .question-data {
    display: block;
    position: relative;
-   overflow: hidden;
    width: 100%;
-
  }
  .qs-dropped {
    background: #fff;
@@ -974,6 +972,9 @@ vertical-align: baseline;
 .qsdragged-list > ul > li.dragelement-here{
   border: 1px dashed #999 !important;
   text-align: center;
+
+  -webkit-transition: all 250ms ease-in-out;
+  transition: all 250ms ease-in-out;
 }
 .editquestion-part{
   display: block;
@@ -1209,6 +1210,7 @@ label[for='time-type-slide'] {
   margin-top: 10px;
   border-color: darkgrey;
   background: #eee;
+  background: ghostwhite;
 }
 .row-cols-xx > a {
   font-size: 12px;
@@ -2999,7 +3001,7 @@ position: relative;
   display: block;
   position: relative;
   overflow: hidden;
-  width: 100%; 
+  width: 100%;
   margin: 0px;
   padding: 0px;
 }
@@ -3008,4 +3010,20 @@ position: relative;
   margin: 0px;
   position: block;
   width: 100%;
+}
+.row-x-body {
+  z-index: 1;
+  position: relative;
+}
+.side-left-bar {
+  z-index: 200;
+}
+
+.dragged-items {
+  border: 1px dashed #adb7be !important;
+  color: #d3cfcf;
+  box-shadow: 0px 0px 5px 0px #adb7be;
+  margin-top: 10px;
+  background: ghostwhite;
+  font-weight: bold;
 }

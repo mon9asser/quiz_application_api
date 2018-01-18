@@ -1,3 +1,4 @@
+
 <nav class="navbar navbar-default navbar-fixed-top">
 
   <div class="container-fluid">
@@ -35,24 +36,23 @@
 </nav>
 
 <div class="side-left-bar">
-
   <div class="question-data">
-     <ul class="question-x">
-          <li>
+     <ul id="qs-sortable" class="question-x">
+          <li question-data="multi-choices.html">
               <span class="qs-type" title="Multiple Choices">
                  <i class="icon-insert-template"></i>
               </span>
               <span class="titles">Choices</span>
           </li>
 
-          <li>
+          <li question-data="media-choices.html">
               <span class="qs-type" title="Media Choices">
                  <i class="icon-image"></i>
               </span>
               <span class="titles">Media</span>
           </li>
 
-          <li>
+          <li question-data="true-false.html">
               <span class="qs-type" title="Ture/False">
                  <i class="icon-check-circle"></i>
               </span>
@@ -73,12 +73,7 @@
 					</div>
 	    </div>
 	</div>
-  <div class="container-fluid">
-    <ul data-as-sortable="board.dragControlListeners" data-ng-model="items">
-   <li data-ng-repeat="item in items" data-as-sortable-item>
-      <div data-as-sortable-item-handle></div>
-   </li>
-</ul>
+  <div class="container-fluid row-x-body">
 
     <div class="row">
        <!-- Question (Editor) menu -->
@@ -87,18 +82,33 @@
 						<div class="widContainer">
 								Questions
 						</div>
-						<ul>
+            <!-- list of question type -->
+						<ul class="dropped-qs">
+              <li class="dragelement-here">
+                <span>Drag Question Here</span>
+              </li>
+                <!--
 								<li>
 											1-
 											<span class="qs-type quesiontlist_iconx" title="Multiple Choices">
-											 <i class="icon-insert-template "></i>
+											 <i class="icon-insert-template"></i>
 										 </span>
 											<span>Multiple Choice</span>
 											<i class="fa fa-bars iconex-movable"></i>
 											<i class="fa fa-trash iconx-trashable"></i>
 								</li>
+
 								<li>
 											2-
+											<span class="qs-type quesiontlist_iconx" title="Media Choices">
+												<i class="icon-image"></i>
+											</span>
+											<span>Media Choices</span>
+											<i class="fa fa-bars iconex-movable"></i>
+											<i class="fa fa-trash iconx-trashable"></i>
+								</li>
+                <li>
+											3-
 											<span class="qs-type quesiontlist_iconx" title="Ture/False">
 													<i class="icon-check-circle"></i>
 											</span>
@@ -107,18 +117,7 @@
 											<i class="fa fa-bars iconex-movable"></i>
 											<i class="fa fa-trash iconx-trashable"></i>
 								</li>
-								<li>
-											3-
-											<span class="qs-type quesiontlist_iconx" title="Media Choices">
-												<i class="icon-image"></i>
-											</span>
-											<span>Media Choices</span>
-											<i class="fa fa-bars iconex-movable"></i>
-											<i class="fa fa-trash iconx-trashable"></i>
-								</li>
-								<li class="dragelement-here">
-									<span>Drag Question Here</span>
-								</li>
+              -->
 						</ul>
 				</div>
       </div>
