@@ -1,4 +1,4 @@
-var config = {
+var $config = {
     server_ip : "http://34.215.133.182" ,
     api_key_code : "",
     api_application_name : ""
@@ -17,7 +17,7 @@ application.config(["$routeProvider" , "$locationProvider" , function($routeProv
     })
     .when("/login", {
         templateUrl : "login.html",
-        controller : "loginController as login" 
+        controller : "loginController as login"
     })
     .when("/app_creation", {
         templateUrl : "app-creation.html",
@@ -61,13 +61,30 @@ application.controller("registerController" ,['$rootScope' , function($rootScope
     $rootScope.page_name = "register_page";
     $rootScope.title = "Create New Account";
 }]);
-
-
 // ==> Application Creation Controller
 application.controller("quizCreationController" , ["$rootScope" , function ($rootScope){
+
   var app = this;
+
   $rootScope.page_name = "quiz_page";
   $rootScope.title = "Create New Quiz";
+
+  app.templates = 'templates/preview.html';
+  app.on_mode = "Preview";
+  app.template_mode = false ;
+  app.move_mode = function (){
+    if ( app.template_mode == false ){
+        app.template_mode = false ;
+        app.templates= 'templates/preview.html';
+        app.on_mode = "Preview";
+    } else
+    {
+      app.template_mode = true ;
+      app.templates= 'templates/editor.html';
+      app.on_mode = "Editor";
+    }
+  };
+
 }]);
 
 /*

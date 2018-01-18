@@ -122,36 +122,17 @@
         <div class="switched-button switch-mode">
            <span class="swMode">
              <!-- Handel this by js -->
-             On <span class="action-case">Preview</span>
+             On <span class="action-case">{{create_quiz.on_mode}}</span>
            </span>
-           <div class="mode-chs-x">
-               <input type="checkbox" id="mode-chox-option" name="check" checked />
+           <div ng:click="create_quiz.move_mode()" class="mode-chs-x">
+               <input type="checkbox" class="slide-mode" ng:model="create_quiz.template_mode" id="mode-chox-option" name="check" /> <!--  checked -->
                <label for="mode-chox-option"></label>
                <span class="image-on mode-option-x"></span>
            </div>
         </div>
 
-        <!-- Editor for Questions -->
-        <div class="question-editor">
-          <div class="col-md-9">
-            <textarea placeholder="Question Title ? " class="form-control quest-title-edit" rows="4"></textarea>
-          </div>
-          <div class="col-md-3">
-             <ul class="media-files">
-               <li>
-                 <span>
-                   <i class="font-icon-editor-img"></i>
-                 </span>
-               </li>
-               <li>
-                 <span>
-                   <i class="font-icon-editor-video"></i>
-                 </span>
-               </li>
-             </ul>
-          </div>
-
-        </div>
+        <!-- Edit Template && Preview Template  -->
+        <div ng:include="create_quiz.templates" class="question-editor"></div>
 
       </div>
        <!-- Setttings -->
