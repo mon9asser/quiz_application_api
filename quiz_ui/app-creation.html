@@ -67,13 +67,19 @@
 			<div class="row">
 					<div class="col-md-12">
 						 <div class="area-qs-ch quiz-titles">
-							  <span onClick="this.contentEditable='true';">The Complete C# Quiz</span>
+							  <span ng:click="this.contentEditable='true';">The Complete C# Quiz</span>
  							  <a class="choices-right-add btn-primary btn rm-margin" href="#">Preview Quiz</a>
   					 </div>
 					</div>
 	    </div>
 	</div>
   <div class="container-fluid">
+    <ul data-as-sortable="board.dragControlListeners" data-ng-model="items">
+   <li data-ng-repeat="item in items" data-as-sortable-item>
+      <div data-as-sortable-item-handle></div>
+   </li>
+</ul>
+
     <div class="row">
        <!-- Question (Editor) menu -->
       <div class="left_part col-md-5 col-sm-6 col-xs-12">

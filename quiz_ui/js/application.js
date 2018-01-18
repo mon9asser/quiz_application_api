@@ -4,7 +4,7 @@ var $config = {
     api_application_name : ""
 };
 
-var application = angular.module("application", ["ngRoute"]);
+var application = angular.module("application", ["ngRoute" , "as.sortable"]);
 application.config(["$routeProvider" , "$locationProvider" , function($routeProvider , $locationProvider) {
     $routeProvider
     .when("/", {
@@ -85,6 +85,10 @@ application.controller("quizCreationController" , ["$rootScope" , function ($roo
     }
   };
 
+
+
+
+ 
 }]);
 
 /*

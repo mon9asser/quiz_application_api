@@ -9,6 +9,7 @@
 	<!-- owl Carsoul-->
 	<link ng:if="page_name == 'quiz_page'" rel="stylesheet" href="libs/owl/assets/owl.carousel.min.css" />
 
+
 	<!-- Login Stylesheets -->
 	<link rel="stylesheet" ng:if="page_name == 'login_page'" ng:href="css/login.css">
 	<!-- Register Stylesheets -->
@@ -25,9 +26,9 @@
 	<ng-view></ng-view>
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script ng:if="page_name == 'quiz_page'" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.js"></script>
 	<script ng:if="page_name == 'quiz_page'" src="libs/owl/owl.carousel.min.js" charset="utf-8"></script>
-	<script type="text/javascript" src="js/application.js"></script>
-
+ 	<script type="text/javascript" src="js/application.js"></script>
 	<!-- Quiz or survey -->
 	<script type="text/javascript" src="js/apps.js" ng:if="page_name == 'quiz_page'"></script>
 </body>
