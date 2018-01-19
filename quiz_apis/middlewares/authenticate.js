@@ -152,7 +152,9 @@ var auth_verify_api_keys_tokens  =   function (req , res , next )   {
       // ==> Verify current user status ( 0 1) => user type
       if( req.body.creator_id == null  ){
         return new Promise((resolve , reject)=>{
-          res.send(notes.Messages.Required_Message("creator_id"));
+          res.send({
+            "Required" : notes.Messages.Required_Message("creator_id")
+          });
         });
       }
 
@@ -229,7 +231,7 @@ var auth_verify_generated_tokens  =   function (req , res , next )   {
       // ==> Verify current user status ( 0 1) => user type
       if( req.body.creator_id == null  ){
         return new Promise((resolve , reject)=>{
-          res.send(notes.Messages.Required_Message("creator_id"));
+          res.send({"Required" : notes.Messages.Required_Message("creator_id")});
         });
       }
 
@@ -309,7 +311,7 @@ var auth_verify_api_keys  =   function (req , res , next )   {
       // ==> Verify current user status ( 0 1) => user type
       if( req.body.creator_id == null  ){
         return new Promise((resolve , reject)=>{
-          res.send(notes.Messages.Required_Message("creator_id"));
+          res.send({"Required" :notes.Messages.Required_Message("creator_id")});
         });
       }
 

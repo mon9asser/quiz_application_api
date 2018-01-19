@@ -105,10 +105,15 @@
 
 
 
-<div class="quiz-qs-preview">
+<div class="quiz-qs-preview ">
     <p>
         Which Binary search algorithm can not be applied to ?
     </p>
+
+
+
+    <!-- Set up your HTML -->
+ 
     <span class="qs-description">
         This is a description of question !
     </span>
@@ -142,6 +147,10 @@
        </li>
     </ul>
 </div>
+
+
+
+
     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     <!-- -++++++++++++++++++++++- Buttons -++++++++++++++++++++++ -->
     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
@@ -158,3 +167,11 @@
 
   </div>
 </div>
+<link ng:if="page_name == 'quiz_page'" rel="stylesheet" href="libs/owl/assets/owl.carousel.min.css" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
+<script ng:if="page_name == 'quiz_page'" src="libs/owl/owl.carousel.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+      $(".owl-carousel").owlCarousel();
+    });
+</script>

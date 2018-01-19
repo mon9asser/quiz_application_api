@@ -862,7 +862,7 @@ vertical-align: baseline;
 .question-x {
   display: block;
   width: 100%;
-  margin: 60px 0px 0px 0px;
+  margin: 77px 0px 0px 0px;
   padding: 0px;
   list-style: none;
   text-align: center;
@@ -933,6 +933,7 @@ vertical-align: baseline;
   /* font-weight: bold; */
   font-size: 14px;
   font-family: OpenSansRegular;
+  cursor: pointer;
 }
 .qsdragged-list {
   background: #fff;
@@ -2900,7 +2901,7 @@ h1 {
     margin: 30px auto;
     display: block;
  }
-body{margin-top: 70px;}
+body{ margin-top: 85px; }
 .controller-btns {
   display: block;
   position: relative;
@@ -3018,7 +3019,6 @@ position: relative;
 .side-left-bar {
   z-index: 200;
 }
-
 .dragged-items {
   border: 1px dashed #adb7be !important;
   color: #d3cfcf;
@@ -3026,4 +3026,12 @@ position: relative;
   margin-top: 10px;
   background: ghostwhite;
   font-weight: bold;
+}
+
+.line_editor{
+    line-height: 0.9em;
+    cursor: pointer;
+}
+.selected_qs {
+  background: azure;
 }

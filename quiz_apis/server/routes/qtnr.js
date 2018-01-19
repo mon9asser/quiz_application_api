@@ -199,8 +199,6 @@ qtnrRouters.post("/init", auth_verify_api_keys_tokens  , (req, res) => {
 });
 
 
-
-
 // Create settings for quiz or survey ( remember this part => surv/quiz for used with /init route)
 qtnrRouters.patch("/:app_id/app/edit", auth_verify_generated_tokens ,  (req, res) => {
     var user = req.verified_user;

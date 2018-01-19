@@ -1,36 +1,57 @@
-var $config = {
-    server_ip : "http://34.215.133.182" ,
-    api_key_code : "",
-    api_application_name : ""
+var server = "http://34.215.133.182" ;
+
+var config = {
+    api_application_name : "jApps",
+    api_key_code : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTVjNmI2NWJhMmY3MDA2OThjOWQzYzMiLCJlbWFpbCI6Im1vdW4yMDMwQGdtYWlsLmNvbSIsImFwcGxpY2F0aW9uX25hbWUiOiJqQXBwcyIsIm5hbWUiOiJNb250YXNzZXIiLCJpYXQiOjE1MTYwMDYyNDV9.Y7LeoBr3s7lA_Jbvuk-3cZzotmPi17USB0zjW5YvubE" ,
+    init_application :   server + "/api/init",
+    create_application : server + "/api/create"
 };
+
 
 var application = angular.module("application", ["ngRoute"]);
 application.config(["$routeProvider" , "$locationProvider" , function($routeProvider , $locationProvider) {
     $routeProvider
-    .when("/", {
+    .when("/", {                       // ==> Redirect to default page
         templateUrl : "login.html",
         controller : "loginController as login"
     })
     .when("/register", {
-        templateUrl : "register.html",
+        templateUrl : "register.html", // ==> For Register New user
         controller : "registerController as register"
     })
     .when("/login", {
-        templateUrl : "login.html",
+        templateUrl : "login.html", // ==> For Login The Existing user
         controller : "loginController as login"
     })
-    .when("/app_creation", {
-        templateUrl : "app-creation.html",
+    .when("/quiz/:app_id", { // ==> For Retrieve The Created Application {Quiz Type}
+        templateUrl : "quiz-creation.html",
         controller : "quizCreationController as create_quiz"
     })
-    // .otherwise("/" , {
-    //   templateUrl : "login.html",
-    //   controller : "loginController as login"
-    // })
+    .when("/survey/:app_id", { // ==> For Retrieve The Created Application {Survey Type}
+        templateUrl : "survey-creation.html",
+        controller : "surveyCreationController as create_survey"
+    })
+    .when("/applications/:creator_id", { // ==> For Retrieve All Application of this creator
+        templateUrl : "my-applications.html",
+        controller : "applicationsController as apps"
+    })
+    .when("/home" , {              // ==> Redirect to default page
+      templateUrl : "home.html",
+      controller : "homeController as create_quiz"
+    })
+    .otherwise("/" , {             // ==> Redirect to default page
+      templateUrl : "login.html",
+      controller : "loginController as login"
+    })
 }]);
 
-// ==> Login Controller
-application.controller("loginController" ,['$rootScope' , '$http' , function( $rootScope , $http){
+
+/*
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+============================>>>>> Login Controller
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+application.controller("loginController" , ['$rootScope' , '$http' , function( $rootScope , $http){
     var login = this ;
     $rootScope.page_name = "login_page";
     $rootScope.title = "User Login";
@@ -55,16 +76,25 @@ application.controller("loginController" ,['$rootScope' , '$http' , function( $r
         // config.server+"/api/users/login"
     }
 }] );
-// ==> Register Controller
+/*
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+============================>>>>> Register Controller
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
 application.controller("registerController" ,['$rootScope' , function($rootScope){
     var register = this ;
     $rootScope.page_name = "register_page";
     $rootScope.title = "Create New Account";
 }]);
-// ==> Application Creation Controller
+/*
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+============================>>>>> Quiz Creation Controller
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
 application.controller("quizCreationController" , ["$rootScope","$http" , function ($rootScope,$http){
 
   var app = this;
+
 
   $rootScope.page_name = "quiz_page";
   $rootScope.title = "Create New Quiz";
@@ -113,7 +143,6 @@ application.controller("quizCreationController" , ["$rootScope","$http" , functi
        }
   });
 
-
   app.qs_dropped.droppable({
     activeClass: 'active',
         hoverClass:'hovered',
@@ -122,9 +151,7 @@ application.controller("quizCreationController" , ["$rootScope","$http" , functi
 
             // Question type page [QS]
             var $questionType = ui.helper[0].getAttribute('question-data');
-            console.log("----------------------------------");
-            console.log(ui);
-            console.log("----------------------------------");
+
 
             $http({
                   method: 'GET',
@@ -141,7 +168,138 @@ application.controller("quizCreationController" , ["$rootScope","$http" , functi
             dropped = true;
       }
   });
+
+  // ==============================================================
+  // ================>>>> Create App <<<<<<<<<<<===================
+  // ==============================================================
+  app.app_type = 1 // => Quiz  Type
+  app.error_container = $(".error-container");
+  app.create_new_app = function (app_type){
+
+      // ==> Check about application type
+      if (app.app_type != 1 ){
+        app.error_container.css({display:'bock'});
+         app.error_container.html("This Application Type does not exists !");
+        return false ;
+      }
+      app.error_container.css({display:'none'});
+
+      // ==> Create This Application
+      // $http({
+      //         method: 'POST',
+      //         url: config.init_application ,
+      //         data : {
+      //           creator_id : "s5d4s5d4s54d5s15sdsd"
+      //         } ,
+      //         headers: {
+      //            'Content-Type': undefined ,
+      //            'X-api-keys':config.api_key_code,
+      //            'X-api-app-name':config.api_application_name
+      //         }
+      //     }).then(function successCallback(response) {
+      //       console.log(response.data);
+      //     }, function errorCallback(response) {
+      //       app.error_container.css({display:'block'});
+      //       /*
+      //       --------------------------------------------------
+      //       CASE  -------------====>>> Api key not verified
+      //       --------------------------------------------------
+      //       */
+      //       if(response.data.Authentication_Failed != null ){
+      //         console.log(response);
+      //       }
+      //
+      //
+      //
+      //    });
+      $.ajax({
+        type : 'POST',
+        url: config.init_application ,
+        data : {
+          creator_ids : "s5d4s5d4s54d5s15sdsd"
+        } ,
+        headers: {
+           'Content-Type': undefined ,
+           'X-api-keys':config.api_key_code,
+           'X-api-app-name':config.api_application_name
+        } ,
+        success : function (res){
+          console.log(res);
+        } ,
+        error  : function (response){
+               /*--------------------------------------------------
+               CASE  -------------====>>> Api key not verified
+               --------------------------------------------------
+               */
+               if(response.data.Authentication_Failed != null ){
+                 console.log(response);
+               }
+        }
+      });
+      // ==> Display and Edit the existing application
+  }
 }]);
+/*
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+============================>>>>> Survey Creation Controller
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+application.controller("surveyCreationController",["$rootScope","$http" , function ( $rootScope , $http ){
+  var app = this;
+  $rootScope.page_name = "survey_page";
+  $rootScope.title = "Create New Survey";
+
+  // ==============================================================
+  // ================>>>> Create App <<<<<<<<<<<===================
+  // ==============================================================
+  app.app_type = 0 // => Quiz  Type
+  app.create_new_app = function (app_type){
+
+  }
+
+}]);
+/*
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+============================>>>>> My Applications Controller
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+application.controller("applicationsController",["$rootScope","$http" , function ( $rootScope , $http ){
+  var apps = this;
+
+
+  $rootScope.page_name = "applications_page";
+  $rootScope.title = "My Applications";
+}]);
+/*
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+============================>>>>> HomePage Controller
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+application.controller("homeController",["$rootScope","$http" , function ( $rootScope , $http ){
+  var home = this;
+
+
+  $rootScope.page_name = "home_page";
+  $rootScope.title = "Welcome To Quiz Application !";
+}]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 // Add headers
