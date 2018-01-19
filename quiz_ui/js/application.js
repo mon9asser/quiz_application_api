@@ -4,7 +4,14 @@ var config = {
     api_application_name : "jApps",
     api_key_code : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTVjNmI2NWJhMmY3MDA2OThjOWQzYzMiLCJlbWFpbCI6Im1vdW4yMDMwQGdtYWlsLmNvbSIsImFwcGxpY2F0aW9uX25hbWUiOiJqQXBwcyIsIm5hbWUiOiJNb250YXNzZXIiLCJpYXQiOjE1MTYwMDYyNDV9.Y7LeoBr3s7lA_Jbvuk-3cZzotmPi17USB0zjW5YvubE" ,
     init_application :   server + "/api/init",
-    create_application : server + "/api/create"
+    create_application : server + "/api/create" ,
+    create_user : server  +"/api/users/create" ,
+    require : {
+      creator_id : "This Field 'creator_id' is required"
+    } ,
+    errors : {
+      creator :"This 'Creator' does not exists"
+    }
 };
 
 
@@ -85,6 +92,87 @@ application.controller("registerController" ,['$rootScope' , function($rootScope
     var register = this ;
     $rootScope.page_name = "register_page";
     $rootScope.title = "Create New Account";
+
+    register.required_object = {
+                                    name        : null ,
+                                    password    : null ,
+                                    email       : null ,
+                                    is_creator  : '0'
+                                };
+    register.register_fields = $('input.signup , input.login , select.signup');
+    register.send_values = $(".btn-signup");
+    register.fields = {
+        email     :   $('input.signup[type="email"]')  ,
+        name      :   $('input.signup[type="text"]')  ,
+        password  :   $('input.signup[type="password"]')
+    }
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // ----------====> Reset Values
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    register.register_fields.on('change , keyup',function(){
+      $(this).css({
+         "border-color" : "#ccc"
+      });
+      $(this).prev('.error-message').html('');
+      $(this).parent().parent().prev('.error_mesage').html('');
+    });
+
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // ----------====> Send Values to ec2
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    register.send_values.on(  "click" , function(){
+      var fields = new Array()
+      // Check about NULL
+      if(register.required_object.name      == '' )
+        fields[fields.length] = register.fields.name ;
+      if(register.required_object.email     == '' )
+        fields[fields.length] = register.fields.email ;
+      if(register.required_object.password  == '' )
+        fields[fields.length] = register.fields.password ;
+
+        var email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(register.required_object.email);
+
+
+       if(fields.length != 0 ){
+         for (var i = 0; i < fields.length; i++) {
+           fields[i].css({
+             border:'1px solid red'
+           });
+           fields[i].prev('.error-message').html("Required !");
+         }
+
+         return false ;
+       }
+       if((email == false ) )
+         {
+           register.fields.email.prev('.error-message').html("Invalid Email !");
+           return false;
+         }
+
+
+        // ==================>>>>>>>>>>>>>>>
+        $.ajax({
+            type : 'POST',
+            url: config.create_user ,
+            data :register.required_object  ,
+            headers: {
+               'Content-Type': undefined ,
+               'X-api-keys':config.api_key_code,
+               'X-api-app-name':config.api_application_name
+            } ,
+            success : function (response){
+              console.log("++++SUCCESS MESSAGE");
+              console.log(response);
+            } ,
+            error  : function (response){
+              console.log("++++ERROR MESSAGE");
+              console.log(response);
+            }
+        });
+
+    });
+
+
 }]);
 /*
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -216,24 +304,43 @@ application.controller("quizCreationController" , ["$rootScope","$http" , functi
         type : 'POST',
         url: config.init_application ,
         data : {
-          creator_ids : "s5d4s5d4s54d5s15sdsd"
+          creator_id : "s5d4s5d4s54d5s15sdsd"
         } ,
         headers: {
            'Content-Type': undefined ,
            'X-api-keys':config.api_key_code,
            'X-api-app-name':config.api_application_name
         } ,
-        success : function (res){
-          console.log(res);
+        success : function (response){
+          /*
+            --------------------------------------------------
+            CASE  -------------====>>> Required Creator ID
+            --------------------------------------------------
+          */
+          if(response == config.require.creator_id){
+
+          }
+          /*
+            --------------------------------------------------
+            CASE  -------------====>>> Creator doesn't exists
+            --------------------------------------------------
+          */
+          else if (response.Error == config.errors.creator ){
+
+          }
+
+
         } ,
         error  : function (response){
-               /*--------------------------------------------------
-               CASE  -------------====>>> Api key not verified
-               --------------------------------------------------
-               */
-               if(response.data.Authentication_Failed != null ){
-                 console.log(response);
-               }
+          /*
+            --------------------------------------------------
+            CASE  -------------====>>> Api key not verified
+            --------------------------------------------------
+          */
+          if(response.data.Authentication_Failed != null ){
+
+          }
+
         }
       });
       // ==> Display and Edit the existing application

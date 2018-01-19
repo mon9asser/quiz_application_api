@@ -1,12 +1,15 @@
 html , body {
    background: #e6f5f0;
 }
+.error_mesage > ul {
+  list-style: none;
+}
 .form-horizontal {
   background: #fff;
   position: absolute;
   left: 0px;
   right: 0px;
-  top: 22%;   
+  top: 22%;
   width: 45%;
   margin: 0px auto;
   padding: 35px 35px 20px 35px;
@@ -36,4 +39,7 @@ html , body {
 .signInV {
   margin-right: 15px;
   display: inline-block;
+}
+.error-message {
+  color: tomato;
 }

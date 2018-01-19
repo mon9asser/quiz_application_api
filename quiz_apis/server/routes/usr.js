@@ -132,11 +132,11 @@ usrRouters.use(session({
           var user = new usr(body);
           user.save().then((user)=>{
            // Storing Session !!
-           req.session.userInfo = {
+            req.session.userInfo = {
              id : user._id ,
              name : user.name ,
              email : user.email
-           };
+           }; 
             // Request header !
            res.send({
              user : user ,
@@ -145,12 +145,17 @@ usrRouters.use(session({
          }).catch((error)=>{
             res.status(404).send(error);
          });
-      }).catch((resolve , reject)=>{
+      }).catch((error)=>{
         return new Promise((resolve , reject)=>{
-            res.status(403).send({"Message":"Something went error ! please try later"});
+            res.status(403).send({"Message":"Something went error ! please try later" , details : error});
         });
       });
   });
+
+
+
+
+
 
  /* patch */
 usrRouters.patch ("/users/:uid/edit" , verify_api_keys_user_apis , ( req , res ) => {
