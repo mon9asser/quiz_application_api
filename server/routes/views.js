@@ -38,7 +38,17 @@ viewRouters.get('/home' , verify_session , ( req , res )=>{
       user : req.session.userInfo
   });
 });
-
+// ======================================================
+// ===========>>>>>>>>> API key Creation
+// ======================================================
+viewRouters.get('/create_app' , ( req , res )=>{
+    res.render("api-creation" , {
+      helpers : {
+        api_secrets :   config.restricted_api_header ,
+        server_ip   :   config.server_ip
+      }
+    });
+});
 
 
 module.exports = {viewRouters};
