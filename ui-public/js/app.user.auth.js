@@ -19,6 +19,7 @@ $(document).ready(function() {
 		$(this).css({
 			"border-color": "#ccc"
 		});
+		$(".error_mesage").css({display:'none'});
 		$(this).prev('.error-message').html(
 			'');
 		$(this).parent().parent().prev(
@@ -50,6 +51,32 @@ $(document).ready(function() {
 	// == -----------------------------------------------------------------
 	$('#signup_user').on('click',
 		function(e) {
+
+			var user = application.reg_usr ;
+			var userArgs = new Array();
+
+
+			if(user.email == null)
+			userArgs[userArgs.length] = 'email' ;
+			if(user.name == null)
+			userArgs[userArgs.length] = 'name';
+			if(user.password == null)
+			userArgs[userArgs.length] = 'password';
+
+
+			if(userArgs.length != 0 ){
+				for (var i = 0; i < userArgs.length; i++) {
+					var field = userArgs[i] ;
+					$('input[name="' + field + '"]'
+				).prev('.error-message').html("Required !");
+					$('input[name="' + field + '"]'
+					).css({
+						border: '1px solid red'
+					});
+				}
+				return false;
+			}
+
 			$.getJSON("js/json.app.keys.json", function(api_key_data) {
 				$.ajax({
 					type: 'post',
@@ -60,10 +87,16 @@ $(document).ready(function() {
 						"X-api-app-name": api_key_data.APP_NAME
 					},
 					success: function(res) {
-						window.location.href = res.redirectTo;
+						if(res.Message){
+							$(".error_mesage > ul > li").html(res.Message);
+							$(".error_mesage").css({display:'block'});
+							return false ;
+						}
+						if(res.redirectTo == true )
+						window.location.href = "/home" ;
 					},
 					error: function(err) {
-						console.log(err);
+
 						if (err.responseJSON.errors.email) {
 							$('input[name="' + err.responseJSON
 								.errors.email.path + '"]'
@@ -109,8 +142,8 @@ $(document).ready(function() {
 						}
 					}
 				});
+				return false;
 			});
-			e.preventDefault();
 		});
 	// == -----------------------------------------------------------------
 	// == --------------------------> Login part

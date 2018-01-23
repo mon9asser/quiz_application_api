@@ -456,5 +456,46 @@ var api_key_report_auth = function (req ,res ,next){
 };
 
 
+var verify_access_tokens_admin_user = function (req  , res  , next ){
+  // ================> Params
+  var token = req.params.token;
+  var app_id = req.params.app_id ;
+  var decoded ;
 
-module.exports = {api_key_report_auth , auth_verify_generated_tokens, auth_verify_api_keys_tokens , generate_tokens, auth_verify_api_keys ,  verify_api_keys_user_apis , authByToken  , build_session , verify_session , verify_token_user_type } ;
+  try {
+     decoded = jwt.verify( token , config.secretCode );
+  } catch (e) {
+     return new Promise((resolve, reject) => {
+       res.status(401).send({"Error":"Undefined Token !! , Please generate a token"});
+    });
+  }
+
+  // {"_id":"5a673feae1880844360b350b","date_made":"2018-01-23T14:14:31.102Z","iat":1516716871}
+  return usr.findOne({
+    'id' : decoded.id
+  } , (error , user )=>{
+      if(error || !user ){
+          return new Promise((resolve, reject) => {
+              res.status(401).send({"Error":"User does not exists"});
+          });
+      }
+
+      // => detect the token value ( expiration date )
+      var tokenDate = new Date(decoded.date_made);
+      var currDate = new Date();
+      var timeDiff =  currDate.getTime() - tokenDate.getTime() ;
+      var hours = _.ceil(timeDiff / (1000 * 3600));
+
+      if(hours > config.default_records_per_page){
+        return new Promise((resolve , reject)=>{
+          res.status(401).send({"Error": "Token is expired !! , Please generate a new token"})
+        });
+      }
+
+      req.user = user ;
+      next();
+  });
+
+};
+
+module.exports = {verify_access_tokens_admin_user , api_key_report_auth , auth_verify_generated_tokens, auth_verify_api_keys_tokens , generate_tokens, auth_verify_api_keys ,  verify_api_keys_user_apis , authByToken  , build_session , verify_session , verify_token_user_type } ;

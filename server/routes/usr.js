@@ -117,7 +117,14 @@ usrRouters.use(session({
       }
       //var compare = bcrypt.compareSync("666666", hash);
 
-      usr.find({email:body.email}).then((user)=>{
+      usr.find({email:body.email} , (error , resData)=>{
+        if (!resData || error )
+        {
+          return new Promise((resolve, reject) => {
+               res.send(notes.Errors.General_Error);
+          });
+        }
+      }).then((user)=>{
 
         if(user.length != 0)
         {
@@ -140,7 +147,7 @@ usrRouters.use(session({
             // Request header !
            res.send({
              user : user ,
-             redirectTo : '/home'
+             redirectTo : true
            });
          }).catch((error)=>{
             res.status(404).send(error);

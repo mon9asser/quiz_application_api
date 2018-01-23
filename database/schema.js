@@ -1,7 +1,7 @@
 const validator = require('validator');
 const mongoose = require('mongoose');
 const {ObjectId} = mongoose.Schema.ObjectId;
-// +++++++++++++++++++++++++++++++++++++++++++++++ 
+// +++++++++++++++++++++++++++++++++++++++++++++++
 // =============> Users !
 // +++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -20,14 +20,14 @@ var userDataTypes = {
     email : {
       type:String ,
       trim:true ,
-      required:[true , "Required !"] ,
-      //  unique : [true , "This email already exists"] ,
-      validate : {
-            validator:function validateEmail(email) {
-            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return re.test(email);
-        },   message: `Invalid Email !`
-      }
+      required:[true , "Required !"]
+      // //  unique : [true , "This email already exists"] ,
+      // validate : {
+      //       validator:function validateEmail(email) {
+      //       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      //       return re.test(email);
+      //   },   message: `Invalid Email !`
+      // }
     } ,
     password: {
       type: String ,

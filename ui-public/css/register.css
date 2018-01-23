@@ -61,7 +61,7 @@ html , body {
     list-style: none;
   }
   .error_mesage > ul > li {
-    padding: 8px 0px 0px 0px;
+    padding: 8px 0px 8px 0px;
     width: 90%;
     margin: 0px auto;
     display: block;
@@ -69,7 +69,7 @@ html , body {
   }
   .error_mesage > ul > li:last-child{
     padding-bottom: 8px;
-  }
+  }  
  .container-form {
    position: relative;
  }

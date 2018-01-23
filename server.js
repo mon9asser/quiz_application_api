@@ -10,7 +10,6 @@ const {rptRouters} = require("./server/routes/rpt");
 const {apkRouter } = require("./server/routes/apk");
 const {infceRouter} = require("./server/routes/infce");
 const {usr} = require("./models/users");
-const {interfaceRouters} = require("./server/routes/interfaceRouters")
 const app = express();
 
 
@@ -68,10 +67,7 @@ app.use( apis._dir_ ,  apkRouter );
 //------------------------------------------------
 app.use( apis._dir_ , infceRouter );
 
-// -----------------------------------------------
-// ---------->  Login Register Pages
-//------------------------------------------------
-app.use( interfaceRouters );
+
 
 // http.createServer((req,res)=>{
 //   console.log(`Started up at port ${config.server_port}`);

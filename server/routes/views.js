@@ -25,11 +25,15 @@ viewRouters.get('/' , ( req , res )=>{
     res.render("docs");
 });
 // ======================================================
-// ===========>>>>>>>>> Login
+// ===========>>>>>>>>> Login && Register
 // ======================================================
 viewRouters.get('/login'  , ( req , res )=>{
   res.render("login");
 });
+viewRouters.get('/register'  , ( req , res )=>{
+  res.render("register");
+});
+
 // ======================================================
 // ===========>>>>>>>>> HOME PAGE
 // ======================================================
@@ -49,6 +53,23 @@ viewRouters.get('/create_app' , ( req , res )=>{
       }
     });
 });
+// ======================================================
+// ===========>>>>>>>>> Logout & Destroy sessions
+// ======================================================
+viewRouters.get('/logout' , verify_session , ( req , res )=>{
+  // Destroy the authentication token
+  usr.findByIdAndUpdate(req.session.userInfo.id.toString() , {tokens:[]} , {new : false}).then((Usrs)=>{
+    // Destroy Session
+    req.session.destroy(function(err) {
+       // redirect
+      res.redirect("/login");
+    });
+  }).catch((err)=>{
+    res.send(400).send();
+  });
+});
+
+
 
 
 module.exports = {viewRouters};
