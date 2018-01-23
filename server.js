@@ -14,29 +14,17 @@ const app = express();
 
 
 // Use `.hbs` for extensions and find partials in `views/partials`.
-// app.engine('hbs', hbs.express4({
-//   partialsDir: __dirname + '/views/partials'
-// }));
-
-// app.use(  express.static(__dirname +'/public')  );
-// app.set('view engine', 'hbs');
-// app.set('views',  __dirname +'/views');
-
 app.engine('hbs', hbs.express4({
-  partialsDir: __dirname + '/ui-public/templates'
+  partialsDir: path.join(__dirname, 'ui-public/templates' )
 }));
 
+app.use(express.static(path.join(__dirname, 'ui-public')));
+// app.use( express.static(__dirname +'/ui-public') );
 app.set('view engine', 'hbs');
-app.use( express.static(__dirname +'/ui-public') );
 app.set('views',  __dirname +'/ui-public');
 
-app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE'); // => OPTIONS, PUT,
-  res.header('Access-Control-Allow-Headers', 'Content-Type , X-api-keys , X-api-app-name , X-app-token'); // X-Requested-With
-  res.header('Access-Control-Allow-Credentials', true);
-  next();
-});
+
+
 // -----------------------------------------------
 // ----------> Routers  Views
 //------------------------------------------------
@@ -66,6 +54,17 @@ app.use( apis._dir_ ,  apkRouter );
 // ----------> Interface ( Api's ) =>  For usgin in Iframes ( Client Server)
 //------------------------------------------------
 app.use( apis._dir_ , infceRouter );
+
+
+
+
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE'); // => OPTIONS, PUT,
+  res.header('Access-Control-Allow-Headers', 'Content-Type , X-api-keys , X-api-app-name , X-app-token'); // X-Requested-With
+  res.header('Access-Control-Allow-Credentials', true);
+  next();
+});
 
 
 
