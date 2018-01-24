@@ -11,7 +11,7 @@ const {build_session , verify_session , build_header } = require("../../middlewa
 const {usr} = require("../../models/users");
 const {insertIntoApiKey} = require("./qtnr");
 
-var viewRouters = express.Router(); 
+var viewRouters = express.Router();
 viewRouters.use(build_session);
 
 viewRouters.use(  bodyParser.json() );
@@ -30,11 +30,9 @@ viewRouters.get('/' , ( req , res )=>{
 viewRouters.get('/login'  , ( req , res )=>{
   res.render("login");
 });
-
 viewRouters.get('/register'  , ( req , res )=>{
   res.render("register");
 });
-
 // ======================================================
 // ===========>>>>>>>>> HOME PAGE
 // ======================================================
