@@ -21,13 +21,20 @@ infceRouter.use(build_session);
 infceRouter.use(  bodyParser.json() );
 infceRouter.use(  bodyParser.urlencoded({ extended: false}) );
 
-infceRouter.get("/:app_id/edit/:token" , verify_access_tokens_admin_user , ( req , res )=>{
+
+var redner_page =  (res) => {
+  res.render("test")
+};
+
+infceRouter.get("/:app_id/edit/:token"  , ( req , res )=>{
   // ================> Params
   var app_id = req.params.app_id ;
   // ================> Verified Items
   var Verified_user = req.user ;
 
 
+  redner_page(res);
+  return false ;
   //res.status(404).send({"Error":notes.Errors.Error_Doesnt_exists('Application')});
   qtnr.findOne({_id:app_id} , (error , qtnrObject)=>{
 

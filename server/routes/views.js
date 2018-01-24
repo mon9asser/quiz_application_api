@@ -21,7 +21,7 @@ viewRouters.use(  bodyParser.urlencoded({ extended: false}) );
 // ======================================================
 // ===========>>>>>>>>> DOC FILE
 // ======================================================
-viewRouters.get('/' , ( req , res )=>{
+viewRouters.get('/docs', verify_session , ( req , res )=>{
     res.render("docs");
 });
 // ======================================================
@@ -32,11 +32,11 @@ viewRouters.get('/login'  , ( req , res )=>{
 });
 viewRouters.get('/register'  , ( req , res )=>{
   res.render("register");
-});
+}); 
 // ======================================================
 // ===========>>>>>>>>> HOME PAGE
 // ======================================================
-viewRouters.get('/home' , verify_session , ( req , res )=>{
+viewRouters.get('/' , verify_session , ( req , res )=>{
   res.render("index" , {
       user : req.session.userInfo
   });
