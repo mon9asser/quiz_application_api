@@ -1,0 +1,656 @@
+.update-rows {
+  margin-left: 130px;
+  margin-right: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+
+/*Roboto Family*/
+@font-face {
+  font-family: 'RobotoBold';
+  src:url('../fonts/roboto/Roboto-Bold.ttf') ;
+}
+
+@font-face {
+  font-family: 'RobotoMedium';
+  src:url('../fonts/roboto/Roboto-Medium.ttf') ;
+}
+
+@font-face {
+  font-family: 'RobotoRegular';
+  src:url('../fonts/roboto/Roboto-Regular.ttf') ;
+}
+
+/*Open Sans*/
+@font-face {
+  font-family: 'OpenSansBold';
+  src:url('../fonts/Open_Sans/OpenSans-Bold.ttf') ;
+}
+@font-face {
+  font-family: 'OpenSansSemiBold';
+  src:url('../fonts/Open_Sans/OpenSans-SemiBold.ttf') ;
+}
+@font-face {
+  font-family: 'OpenSansRegular';
+  src:url('../fonts/Open_Sans/OpenSans-Regular.ttf') ;
+}
+
+/*Numans*/
+@font-face {
+  font-family: 'NumbansRegular';
+  src:url('../fonts/Numans/Numans-Regular.ttf') ;
+}
+/** Petit_Formal_Script */
+@font-face {
+  font-family: 'PetitFormalScript';
+  src:url('../fonts/Petit_Formal_Script/PetitFormalScript-Regular.ttf') ;
+}
+
+.width0title {
+  display: block;
+  width: 100%;
+  position: relative;
+}
+.qu-title{
+  display: block;
+  position: relative;
+  overflow: hidden;
+  margin: 0px;
+  padding: 0px;
+
+  padding: 30px 20px;
+
+  width: 100%;
+  text-align: center;
+}
+.qu-title > span {
+    font-family: 'OpenSansSemiBold';
+   font-size: 25px;
+}
+.qu-title > i {
+  font-size: 15px;
+vertical-align: middle;
+color: #999;
+dis
+}
+.qu-title {
+  cursor: pointer;
+}
+.qu-title:hover >  i  {
+  display: inline-block;
+}
+.question-types{
+  background: #fff;
+  padding: 25px;
+  margin: 0px;
+  list-style: none;
+  overflow: hidden;
+  text-align: center;
+}
+.question-types > li {
+    display: inline;
+    position: relative;
+    overflow: hidden;
+  display: inline-block;
+    margin-left: 20px;
+    margin-bottom: 13px;
+    margin-top: 15px;
+    color: #888;
+    font-family: arial , sans-serif;
+
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+
+.question-types > li > img {
+  width: 35px;
+display: block;
+margin: 0px auto;
+/* border: 1px solid #eee; */
+/* box-shadow: 0px 0px 0px; */
+/* border-radius: 50%; */
+margin-bottom: 13px;
+}
+
+.question-types > li > span {
+  padding: 20px;
+}
+.workspace-drop {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  background: #fff;
+  height: auto;
+}
+.dropped-area{
+  width: 94%;
+  height: 80px;
+  border: 2px dashed #eee;
+  text-align: center;
+  padding: 25px 0 0;
+  margin: 0px auto;
+  margin-bottom: 10px;
+  vertical-align: middle;
+  color: #eee !important;
+}
+.area-qs-ch {
+  background: #fff;
+}
+.qses-area{
+  border: 1px solid solid;
+  background: #eee;
+  width: 100%;
+  background: #fff;
+  width: 94%;
+  margin: 0px auto;
+  border: 1px solid #dfdfdf;
+  padding: 10px;
+  overflow: hidden;
+}
+.qses-area:last-child {
+  margin-bottom: 40px;
+}
+.drop-zone-caption {
+  overflow: hidden;
+}
+.drop-zone-caption > span
+{
+  vertical-align: middle;
+}
+
+.drop-zone-caption > div.collapse-option {
+  padding: 5px;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 16px;
+  color: #999;
+  vertical-align: middle;
+  margin-right: 10px;
+  float: right;
+  margin-top: -3px;
+}
+.drop-zone-caption > div.collapse-option > .actions {
+  vertical-align: middle;
+  display: inline-block;
+}
+.drop-zone-caption > div.collapse-option > .actions > a {
+  color: #999;
+  padding: 0px 5px;
+}
+.drop-zone-caption > div.collapse-option > .actions > a:last-child {
+  padding-right: 0px;
+}
+.drop-zone-caption > div  {
+  display: inline-block;
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+  margin-top: 5px;
+}
+.drop-zone-caption > div > span.indexer {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  color: #999;
+  font-weight: bold;
+  display: inline-block;
+  font-family: 'NumbansRegular';
+  text-align: center;
+  vertical-align: middle;
+  padding: 2px 2px;
+  border-radius: 5px;
+  margin-right: 0px;
+  color: #999;
+}
+.drop-zone-caption > div > span.qsTitle {
+  display: inline-block;
+  color: #888;
+  font-family: 'OpenSansRegular';
+  font-size: 16px;
+}
+
+.transition {
+  transition: background 5s linear ;
+  -webkit-transition: background 5s linear ;
+  -moz-transition: background 5s linear ;
+}
+.question-edit {
+  display: block;
+  width: 100%;
+
+  /*background: yellow;*/
+
+  overflow: hidden;
+  position: relative;
+
+  /*border-top: 1px solid #eee ;*/
+
+  /*first action*/
+  /*height: auto;
+  margin-top: 10px;
+  padding: 10px;
+  background: #fff;*/
+
+  /*second action*/
+  background: yellow;
+  padding: 0px;
+  height: 0px;
+  border-width: 0px;
+  margin-top: 0px;
+}
+.close-iconix {
+  display: block;
+  position: absolute;
+  overflow: hidden;
+  right: 0px;
+  top: 0px;
+  cursor: pointer;
+  color: #999;
+  margin: 5px;
+  z-index: 51;
+}
+.close-iconix:hover{
+  color: #222;
+}
+
+.edit-qs-block  {
+  display: inline-block;
+  width: 75%;
+  margin-top: 10px;
+  float: left;
+}
+.edit-choices-block {
+  display: inline-block;
+  width: 23%;
+  margin-top: 10px;
+  float: left;
+  margin-left: 0px;
+}
+@media (min-width:700px) {
+  .edit-choices-block {
+    margin-left: 10px;
+  }
+}
+@media (max-width:700px){
+  .edit-qs-block {width: 100%;display: block;}
+  .edit-choices-block {width: 100%;display: block;}
+}
+.editor-iconx {
+  display: block;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    color: tomato;
+    /* font-weight: bold; */
+    font-family: RobotoRegular;
+        z-index: 1;
+}
+.editor-iconx > span {
+  margin: 10px ;
+}
+.descriptions {
+  display: block;
+  margin-top: 12px;
+}
+.edit-choices-block > span {
+  font-family: "OpenSansRegular";
+  border-bottom: 1px solid #dfdfdf;
+  width: 100%;
+  display: block;
+  padding: 5px;
+
+}
+.Qs-Setting {
+  display: block;
+  position: relative;
+  width: 100%;
+}
+.add-choices  , .add-options {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  text-align: center;
+}
+.add-options {
+  text-align: left;
+  padding: 0px;
+}
+.add-options  > label {
+  cursor: pointer;
+  padding: 3px;
+}
+.description-field , .media-uploader{
+  display: inline;
+  position: relative;
+  overflow: hidden;
+  width: 70%;
+  float: left;
+}
+.media-uploader{
+
+}
+.choice-adder{
+  width: 29%;
+  display: inline-block;
+  margin-top: 15px;
+  padding: 5px;
+  text-align: center;
+}
+.option-field {
+  display: block;
+  position: relative;
+  overflow: hidden;
+      width: 100%;
+      margin: 0px;
+      padding: 0px;
+      list-style: none;
+}
+.option-field > li {
+  width: 60%;
+  float: left;
+  display: inline;
+      text-align: center;
+}
+.option-field > li:last-child{
+  width: 38%;
+}
+.option-field > li > label {
+    margin: 0;
+  display: block;
+  padding: 10px 0px;
+  color: #999;
+  vertical-align: middle;
+  display: block;
+  cursor: pointer;
+}
+.drop-zone-2{
+width: 100%;
+height: 182px;
+border: 2px dashed #adb7be;
+text-align: center;
+padding: 25px 0 0;
+}
+.edit-media{
+  margin: 30px 0px 10px 0px;
+  display: inline-block;
+}
+.media-editor {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 12px;
+  font-family: RobotoRegular;
+}
+.media-editor:last-child{
+  /*border-left: 1px solid #eee;*/
+  padding-left: 6px;
+}
+.media-action {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: auto;
+  margin-top: 6px;
+}
+.inprogress-uploader  {
+  display: block;
+  position: relative;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+}
+.completed {
+  display: block;
+  position: absolute;
+  overflow: hidden;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+
+}
+ .media-action{
+   width: 50%;
+ }
+@media (max-width:700px) {
+      .inprogress-uploader ,.media-action{
+        width: 100%;
+       }
+
+}
+.target-image {
+  width: 70px;
+    height: 70px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* border-radius: 50%; */
+    opacity: 0.5;
+}
+.progress{
+  background-color: #ecf2f5;
+  height: 10px;
+  position: relative;
+  top: 41%;
+  width: 75%;
+  margin: 0px auto;
+  border-radius: 5px;
+}
+
+.precentage-upl-val{
+  display: inline-block;
+  position: absolute;
+  top: 26%;
+  font-size: 25px;
+  font-family: 'NumbansRegular'
+}
+.completed{
+  display: block;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  width: 50%;
+  background:blanchedalmond ;
+  width: 100%;
+  border-radius: 5px;
+
+  transition: width 0.3s linear;
+  -webkit-transition: width 0.3s linear;
+  -moz-transition: width 0.3s linear;
+
+}
+.uploaded-txt {
+  font-size: 12px;
+    display: block;
+    margin-top: -5px;
+    color: #999;
+}
+
+.checkbox-inlinex{
+  display: inline-block;
+  overflow: hidden;
+}
+.enable-description{
+  cursor: pointer;
+}
+
+.supersize-image {
+  display: inline-block;
+  position: relative;
+  float: right;
+  margin-top: 20px !important;
+  color: #999;
+}
+.divider-choices {
+  display: block;
+  position: relative;
+  /*border-top: 1px solid #eee;*/
+}
+.divider-choices {
+  margin-top: 15px;
+  width: 100%;
+  float: right;
+  color: tomato;
+  display: block;
+}
+.divider-choices > div {
+  margin-bottom: 13px;
+}
+.divider-choices > div > .edit-media{
+  padding-top: 15px;
+  margin: 0px;
+}
+.div-choices{
+  display: block;
+  position: relative;
+  width: 90%;
+  float: right;
+  margin: 10px 0px;
+  overflow: hidden;
+}
+
+.choices-list {
+  display: block;
+  position: relative;
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
+}
+.choices-list > li {
+  display: inline-block;
+  float: left;
+  width: 100%;
+}
+.choices-list > li > input {
+    display: inline;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #d5d5d5;
+    min-width: 220px;
+}
+
+.choices-list > li > .rightans {
+  display: inline;
+}
+.choices-list > li > label {
+  display: inline;
+  padding-left: 10px;
+}
+.choices-item {
+  display: inline;
+}
+.add-new-choice-items{
+  display: inline-block;
+margin-right: 11px;
+vertical-align: baseline;
+cursor: pointer;
+}
+.choices-itemx {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin: 9px 0px;
+  padding: 0px;
+  overflow: hidden;
+  list-style: none;
+}
+
+.choices-itemx > li {
+  display: inline-block;
+  position: relative;
+
+  display: inline;
+  overflow: hidden;
+}
+
+.choices-itemx > li > input {
+  width: 35%;
+  padding: 8px;
+  border: 1px solid #dfdfdf;
+  border-radius: 5px;
+}
+.choices-itemx > li.ttar-li {
+  margin-left: 8px;
+    vertical-align: middle;
+}
+.image-choicess {
+  width: 37px;
+    height: 37px;
+    position: relative;
+
+    display: none;
+    vertical-align: middle;
+    margin-left: 5px;
+    margin-top: -2px;
+    border-radius: 5px;
+}
+  .choices-itemx li > span.indexer{
+  margin-right: 0px;
+  display: inline-block;
+  position: relative;
+  color: #999;
+}
+.image-choicess > span.image-iconx {
+  display: block;
+      position: relative;
+      overflow: hidden;
+      vertical-align: middle;
+      font-size: 30px;
+          margin-top: 4px;
+          cursor: pointer;
+}
+.action-option-choices {
+  display: inline;
+}
+.choices-itemx > li {
+  margin-left: 20px;
+}
+.choices-itemx > li.isCorrection{
+  margin: 0px;
+}
+.choices-itemx > li.inputContainer {
+  margin-left: 0px;
+}
+.choices-itemx > li.icontroll-choice{
+  margin-top: 10px;
+display: inline-block;
+}
+.choices-itemx > li > .action-option-choices{
+  margin-top: 10px;
+  display: inline-block;
+}
+.choices-itemx > li > .action-option-choices > a {
+  color: #999;
+  margin-left: 5px;
+}
+/*.choices-itemx > li:last-child {
+  float: right;
+      height: 100%;
+      position: absolute;
+      right: 5px;
+      width: 20px;
+      cursor: pointer;
+      border: 1px dotted grey;
+      cursor: move;
+      cursor: grab;
+      cursor: -moz-grab;
+      cursor: -webkit-grab;
+      background: rgba(253, 227, 167 , 0.8);
+}*/
+.progress-bar {
+  display: inline;
+  position: relative;
+  overflow: hidden;
+  background: red;
+  height: 10px;
+  width: 60px;
+}
+.action-option-choices > a {
+  margin-left: 10px !important;
+}

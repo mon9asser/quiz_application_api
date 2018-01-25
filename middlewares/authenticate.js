@@ -460,13 +460,16 @@ var verify_access_tokens_admin_user = function (req  , res  , next ){
   // ================> Params
   var token = req.params.token;
   var app_id = req.params.app_id ;
-  var decoded ;
 
+  var decoded ;
   try {
      decoded = jwt.verify( token , config.secretCode );
   } catch (e) {
      return new Promise((resolve, reject) => {
-       res.status(401).send({"Error":"Undefined Token !! , Please generate a token"});
+       res.status(401).render(
+         "page-401" ,
+         {"data_401":"Undefined Token !! , Please generate a token" }
+       );
     });
   }
 
@@ -476,7 +479,10 @@ var verify_access_tokens_admin_user = function (req  , res  , next ){
   } , (error , user )=>{
       if(error || !user ){
           return new Promise((resolve, reject) => {
-              res.status(401).send({"Error":"User does not exists"});
+              res.status(404).render(
+                "page-404" ,
+                  {"data_404":"User does not exists" }
+                );
           });
       }
 
@@ -488,11 +494,19 @@ var verify_access_tokens_admin_user = function (req  , res  , next ){
 
       if(hours > config.default_records_per_page){
         return new Promise((resolve , reject)=>{
-          res.status(401).send({"Error": "Token is expired !! , Please generate a new token"})
+          res.status(403).render(
+              "page-403" ,
+              {"data_403":"Token is expired !! , Please generate a new token" , user : req.user}
+            )
         });
       }
 
-      req.user = user ;
+      req.user = {
+        name  :  user.name ,
+        email :  user.email ,
+        userType : user.is_creator ,
+        id : user.id
+      };
       next();
   });
 

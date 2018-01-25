@@ -11,17 +11,21 @@ const {apkRouter } = require("./server/routes/apk");
 const {infceRouter} = require("./server/routes/infce");
 const {usr} = require("./models/users");
 const app = express();
+// const exphbs  = require('express-handlebars'); // => Deprecated !!
 
 
 // Use `.hbs` for extensions and find partials in `views/partials`.
 app.engine('hbs', hbs.express4({
-  partialsDir: path.join(__dirname, 'ui-public/templates' )
+  partialsDir: path.join(__dirname, 'ui-public/partials' )
 }));
 
 app.use(express.static(path.join(__dirname, 'ui-public')));
 // app.use( express.static(__dirname +'/ui-public') );
 app.set('view engine', 'hbs');
 app.set('views',  __dirname +'/ui-public');
+
+hbs.registerHelper('server_ip', config.server_ip );
+
 
 
 // -----------------------------------------------

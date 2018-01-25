@@ -21,18 +21,25 @@ viewRouters.use(  bodyParser.urlencoded({ extended: false}) );
 // ======================================================
 // ===========>>>>>>>>> DOC FILE
 // ======================================================
-viewRouters.get('/docs', verify_session , ( req , res )=>{
+viewRouters.get('/docs' , ( req , res )=>{
     res.render("docs");
 });
+
+
+
 // ======================================================
 // ===========>>>>>>>>> Login && Register
 // ======================================================
 viewRouters.get('/login'  , ( req , res )=>{
   res.render("login");
 });
+
 viewRouters.get('/register'  , ( req , res )=>{
   res.render("register");
-}); 
+});
+
+
+
 // ======================================================
 // ===========>>>>>>>>> HOME PAGE
 // ======================================================
@@ -41,6 +48,47 @@ viewRouters.get('/' , verify_session , ( req , res )=>{
       user : req.session.userInfo
   });
 });
+
+
+
+// ======================================================
+// ===========>>>>>>>>> Attendees
+// ======================================================
+viewRouters.get('/attendees' , verify_session , ( req , res )=>{
+  if(req.session.userInfo.userType == 1 ) {
+    res.render("attendees" , {
+        user : req.session.userInfo
+    });
+  }else {
+    res.render("page-401" , {
+        user : req.session.userInfo ,
+        data_401 : "Permission Denied !! , You don't have any permission to use this page !"
+    });
+  }
+});
+
+
+
+
+// ======================================================
+// ===========>>>>>>>>> Applications
+// ======================================================
+viewRouters.get('/questionnaires' , verify_session , ( req , res )=>{
+  if(req.session.userInfo.userType == 1 ) {
+    res.render("questionnaires" , {
+        user : req.session.userInfo
+    });
+  }else {
+    res.render("page-401" , {
+        user : req.session.userInfo ,
+        data_401 : "Permission Denied !! , You don't have any permission to use this page !" 
+    });
+  }
+});
+
+
+
+
 // ======================================================
 // ===========>>>>>>>>> API key Creation
 // ======================================================
@@ -52,6 +100,9 @@ viewRouters.get('/create_app' , ( req , res )=>{
       }
     });
 });
+
+
+
 // ======================================================
 // ===========>>>>>>>>> Logout & Destroy sessions
 // ======================================================
@@ -67,8 +118,6 @@ viewRouters.get('/logout' , verify_session , ( req , res )=>{
     res.send(400).send();
   });
 });
-
-
 
 
 module.exports = {viewRouters};

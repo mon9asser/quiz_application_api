@@ -20,7 +20,7 @@ var helper =  (req , res , next) => {
       res.send(notes.Messages.Required_Message("attendee_id"));
     });
   }
-  
+
   var attendee_id = req.body.attendee_id;
   usr.findOne({_id:attendee_id}).then((user)=>{
     // => Check if this user is already exists

@@ -80,9 +80,10 @@ usrRouters.use(session({
          //  user.generateAuthentication();
          // Save session
          req.session.userInfo = {
-           id : user._id,
-           name : user.name,
-           email :user.email
+           id : user._id      ,
+           name : user.name   ,
+           email :user.email  ,
+           userType : user.is_creator
          };
          if(! req.session.userInfo)
           {
@@ -142,7 +143,8 @@ usrRouters.use(session({
             req.session.userInfo = {
              id : user._id ,
              name : user.name ,
-             email : user.email
+             email : user.email ,
+             userType : user.is_creator
            };
             // Request header !
            res.send({
