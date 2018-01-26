@@ -370,6 +370,7 @@ var Questionnaire_questions = {
         created_at :              { type : Date     } ,
         updated_at:               { type : Date     } ,
         question_body:            { type : String   } ,
+        question_description :    { type : String },
         answers_format :            answer_bo , // Under Updateing
         media_question :          { type : { media_type :{ type : Number } , media_name : { type : String } , media_field:{ type : String } } } ,  //  /* url of video */ } } ,
         // attendee_answers :        attendee_ans_bo , => Moving it for report

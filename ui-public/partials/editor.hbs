@@ -2,7 +2,7 @@
   <!-- ============================================== -->
   <!--========= Question With Media ================= -->
   <!-- ============================================== -->
-  <label class="titles-question"> Question : 	</label>
+  <!-- <label class="titles-question"> Question : 	</label> -->
   <div class="text-formats">
     <ul>
       <li>
@@ -19,20 +19,67 @@
       </li>
     </ul>
   </div>
-  <textarea placeholder="Question Title ? " class="form-control quest-title-edit textarea-qs" rows="3"></textarea>
+  <textarea id="editor-question-body" placeholder="Question Title ? " class="form-control quest-title-edit textarea-qs" rows="3"></textarea>
 </div>
 <div class="col-sm-3 media-uploads">
    <ul class="media-files">
-     <li>
+
+
+
+     <!-- Change element case it has media else -->
+     <!-- <li class="medi-optional-selected">
        <span>
          <i class="font-icon-editor-img"></i>
        </span>
      </li>
-     <li>
+     <li class="medi-optional-selected">
        <span>
          <i class="font-icon-editor-video"></i>
        </span>
+     </li> -->
+
+
+
+
+
+
+
+
+
+
+
+     <li class="vide-case">
+       <iframe width="100%" height="auto" src="https://www.youtube.com/embed/1V6PAFHOJis" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+       <ul class="media-optional-list">
+         <li>
+           <span class="fa fa-pencil editor-media-controller"></span>
+         </li>
+         <li>
+           <span class="fa fa-trash editor-media-controller"></span>
+         </li>
+         <li>
+           <span class="fa fa-arrows-alt editor-media-controller"></span>
+         </li>
+       </ul>
      </li>
+     <!-- <li class="image-case">
+       <img class="img-responsive" src="http://localhost:9000/themeimages/question_5a6aece8e3902c29bbf44413.png" alt="">
+       <ul class="media-optional-list">
+         <li>
+           <span class="fa fa-pencil editor-media-controller"></span>
+         </li>
+         <li>
+           <span class="fa fa-trash editor-media-controller"></span>
+         </li>
+         <li>
+           <span class="fa fa-arrows-alt editor-media-controller"></span>
+         </li>
+       </ul>
+     </li> -->
+
+
+
+
    </ul>
 </div>
 <!-- ============================================== -->
@@ -42,12 +89,12 @@
   <div class="row-cols margin-top">
      <label class="titles-question description-enable-handler">
         Description :
-        <div class="checkbox-bird x-gridupdatechecklist">
-           <input id="isCorrectAnswer" type="checkbox"> <!-- checked -->
-     <label class="check_boxx" target="label" for="isCorrectAnswer">Enable</label>
-     </div>
+        <div class="checkbox-bird x-gridupdatechecklist" ng:click="check_box()">
+          <input id="editor-desc-enable" type="checkbox" checked> <!-- checked -->
+          <label class="~>>class_checked<<~" for="editor-desc-enable">Enable</label>
+        </div>
      </label>
-     <textarea disabled="" name="name" class="form-control descriptions description-field description-field-x" placeholder="Description ..." rows="2" cols="80"></textarea>
+     <textarea id="editor-question-desc" disabled="" name="name" class="form-control descriptions description-field description-field-x" placeholder="Description ..." rows="2" cols="80"></textarea>
   </div>
 </div>
 <!-- ============================================== -->
@@ -58,6 +105,12 @@
       <label class="titles-question"> Choices : <a class="choices-right-add" href="#">Add Choices</a></label>
       <div class="ListallChoices">
          <ul>
+           <!--
+           ++++++++++++++++++++++++++++++++++++++++
+            Answer Part
+           ++++++++++++++++++++++++++++++++++++++++
+          -->
+          <!--
             <li>
                <div class="choices-stylish">
                   <div class="checkbox-bird orange checkeditems">
@@ -68,26 +121,8 @@
                   </div>
                </div>
             </li>
-            <li>
-               <div class="choices-stylish">
-                  <div class="checkbox-bird orange checkeditems">
-                     <input type="checkbox" id="check-bird-1q">
-                     <label target="label" class="checkedboxes check_boxx" for="check-bird-1q" onclick="this.contentEditable='true';" contenteditable="true">Orange</label>
-                     <i class="fa fa-trash ficonix-bar"></i>
-                     <i class="fa fa-bars iconex-movable ficonix-bar"></i>
-                  </div>
-               </div>
-            </li>
-            <li>
-               <div class="choices-stylish">
-                  <div class="checkbox-bird orange checkeditems">
-                     <input type="checkbox" id="check-bird-1s">
-                     <label target="label" class="checkedboxes  check_boxx" for="check-bird-1s" onclick="this.contentEditable='true';">Orange</label>
-                     <i class="fa fa-trash ficonix-bar"></i>
-                     <i class="fa fa-bars iconex-movable ficonix-bar"></i>
-                  </div>
-               </div>
-            </li>
+          -->
+
          </ul>
       </div>
    </div>
@@ -101,7 +136,6 @@
     <div class="question-settings">
        <ul class="listSettings-qs">
           <li>
-
              <span class="title-checkbox">Required</span>
              <div class="slideThree on-off-checkbox-settings">
                 <input type="checkbox" value="None" id="required-option" name="check" checked="">

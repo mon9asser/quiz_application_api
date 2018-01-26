@@ -49,8 +49,6 @@ viewRouters.get('/' , verify_session , ( req , res )=>{
   });
 });
 
-
-
 // ======================================================
 // ===========>>>>>>>>> Attendees
 // ======================================================
@@ -75,13 +73,13 @@ viewRouters.get('/attendees' , verify_session , ( req , res )=>{
 // ======================================================
 viewRouters.get('/questionnaires' , verify_session , ( req , res )=>{
   if(req.session.userInfo.userType == 1 ) {
-    res.render("questionnaires" , {
+    res.render("questionnaires" , { 
         user : req.session.userInfo
     });
   }else {
     res.render("page-401" , {
         user : req.session.userInfo ,
-        data_401 : "Permission Denied !! , You don't have any permission to use this page !" 
+        data_401 : "Permission Denied !! , You don't have any permission to use this page !"
     });
   }
 });

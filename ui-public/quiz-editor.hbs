@@ -10,6 +10,9 @@
 <!-- ******************** -->
 <!-- Rquired Items --> <!--  server ip-->
 <i id="serverId_app" serverIp="{{server_ip}}"></i>
+<i id="appId" applicationId="{{app.id}}"></i>
+<i id="creatorId" creatorId="{{app.creator_id}}"></i>
+
 
 
 <div class="side-left-bar">
@@ -63,10 +66,50 @@
 								Questions
 						</div>
             <!-- list of question type -->
-						<ul class="dropped-qs">
+						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
               <li class="dragelement-here">
                 <span>Drag Question Here</span>
               </li>
+                  {{# each app.questions}}
+                    <li
+                      class ="question-object qs-{{ id }}"
+                      data-question-id          = "{{ id }}"
+                      data-question-body        = "{{ question_body }}"
+                      data-question-desc        = "{{ question_description }}"
+                      data-question-type        = "{{ question_type }}"
+                      data-question-created-at  = "{{ created_at }}"
+                      data-answer-settings      = "{{ answer_settings }}"
+                      data-answers              = "{{ answers_format }}"
+                      data-media-src            = "{{ media_question.media_field }}"
+                      data-media-type           = "{{ media_question.media_type }}"
+                    >
+                      <span class="qs-type quesiontlist_iconx" title="Multiple Choices">
+                       <i ng:if="{{ question_type }} == 0" class="icon-insert-template"></i>
+                       <i ng:if="{{ question_type }} == 1" class="icon-image"></i>
+                       <i ng:if="{{ question_type }} == 2" class="icon-check-circle"></i>
+                       <i ng:if="{{ question_type }} == 3" class=".......3"></i>
+                       <i ng:if="{{ question_type }} == 4" class=".......4"></i>
+                     </span>
+                     <span ng:if="{{ question_type }} == 0">
+                        Multiple Choices
+                     </span>
+                     <span ng:if="{{ question_type }} == 1">
+                        Media Choices
+                     </span>
+                     <span ng:if="{{ question_type }} == 2">
+                       True Or False
+                     </span>
+
+                     <span ng:if="{{ question_type }} == 3">
+                       ...... 3
+                     </span>
+                     <span ng:if="{{ question_type }} == 4">
+                       ...... 4
+                     </span>
+                      <i ng:click="edit_this_question( '{{ id }}' )" style="cursor:pointer;" class="fa fa-pencil iconex-movable"></i>
+                      <i ng:click="delete_this_question( '{{ id }}' )" style="cursor:pointer;" class="fa fa-trash iconx-trashable qs-delete-{{ id }}"></i>
+                    </li>
+                  {{/each}}
                 <!--
 								<li>
 											1-
@@ -122,7 +165,7 @@
       </div>
        <!-- Setttings -->
       <div class="col-md-4 col-sm-6 col-xs-12">
-        Settings !! ~>> sMessage <<~
+        Settings !
       </div>
     </div>
   </div>

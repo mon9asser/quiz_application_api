@@ -878,10 +878,11 @@ vertical-align: baseline;
     text-align: center;
     padding-top: 20px;
     padding-bottom: 20px;
-    transition:all 0.5s linear;
+
+    /*transition:all 0.5s linear;
     -o-transition:all 0.5s linear;
     -webkit-transition:all 0.5s linear;
-    -moz-transition:all 0.5s linear;
+    -moz-transition:all 0.5s linear;*/
 }
  .question-x > li {
    cursor: move; /* fallback if grab cursor is unsupported */
@@ -974,8 +975,8 @@ vertical-align: baseline;
   border: 1px dashed #999 !important;
   text-align: center;
 
-  -webkit-transition: all 250ms ease-in-out;
-  transition: all 250ms ease-in-out;
+  /*-webkit-transition: all 250ms ease-in-out;
+  transition: all 250ms ease-in-out;*/
 }
 .editquestion-part{
   display: block;
@@ -2924,22 +2925,32 @@ body{ margin-top: 72px; }
   border-radius: 0px !important;
 }
 .media-files {
-  display: block;
-    width: 100%;
-    margin: 0px;
-    padding: 0px;
-    list-style: none;
-    margin-top: 40px;
-    text-align: center;
-    position: absolute;
-    bottom: 25%;
-    left: -20px;
-    right: 0px;
+display: block;
+width: 100%;
+margin: 0px;
+padding: 0px;
+list-style: none;
+text-align: center;
+bottom: 0px;
+left: 0px;
+right: 0px;
+min-height: 95px;
 }
 .media-files > li {
   list-style: none;
   display: inline;
   text-align: center;
+}
+.media-files > li.medi-optional-selected {
+  list-style: none;
+display: inline;
+text-align: center;
+text-shadow: 0 0 black;
+margin-top: 35%;
+display: inline-block;
+}
+.vide-case {
+   cursor: pointer;
 }
 .media-files > li > span {
   font-size: 19px;
@@ -2947,14 +2958,15 @@ body{ margin-top: 72px; }
   margin: 0px auto;
   cursor: pointer;
   color: tomato;
-
 }
 .media-files > li:first-child > span {
   color: teal;
-
 }
 .media-files > li:last-child{
-    margin-left: 10px;
+    /*margin-left: 10px;*/
+}
+.fonted {
+  font-size: 90px;
 }
 .text-formats {
   display: block;
@@ -2989,8 +3001,8 @@ body{ margin-top: 72px; }
     box-shadow: none;
 }
 .media-uploads {
-  min-height: 155px;
-position: relative;
+    position: relative;
+    /*padding: 0px;*/
 }
 
 .dash_sep
@@ -3030,8 +3042,7 @@ position: relative;
   background: ghostwhite;
   font-weight: bold;
 }
-
-.line_editor{
+.line_editor {
     line-height: 0.9em;
     cursor: pointer;
 }
@@ -3045,4 +3056,23 @@ position: relative;
 .choices-right-add {
   margin-top: 8px;
   margin-right: 8px !important;
+}
+
+.tomato-font {
+  color: tomato ;
+}
+.editor-media-controller {
+  font-size: 13px;
+  border: 1px dashed #999;
+  padding: 5px;
+  border-radius: 11px;
+  color: #999;
+}
+
+.media-optional-list >li {
+  display: inline-block;
+  cursor: pointer;
+}
+.media-optional-list {
+  margin-top: 10px;
 }

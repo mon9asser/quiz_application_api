@@ -473,10 +473,10 @@ var verify_access_tokens_admin_user = function (req  , res  , next ){
     });
   }
 
-  // {"_id":"5a673feae1880844360b350b","date_made":"2018-01-23T14:14:31.102Z","iat":1516716871}
   return usr.findOne({
-    'id' : decoded.id
+    '_id' : decoded._id
   } , (error , user )=>{
+   
       if(error || !user ){
           return new Promise((resolve, reject) => {
               res.status(404).render(

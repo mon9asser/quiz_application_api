@@ -122,24 +122,95 @@ application.controller("mainController" , [
 
 application.controller("qsCreationCtr" , [
   "$rootScope" ,
-  function ($rootScope){
+  "$http",
+  function ($rootScope , $http){
     $rootScope.templates = $("#serverId_app").attr("serverIp")+'partials/preview.hbs';
     $rootScope.editor_mode = "Preview";
     $rootScope.template_mode = false ;
     $rootScope.change_mode = function (){
         var server = $("#serverId_app").attr("serverIp") ;
       if ( $rootScope.template_mode == true ){
- 
-        $rootScope.template_mode = false ;
-        $rootScope.templates= server + 'partials/preview.hbs';
-        $rootScope.editor_mode = "Preview";
+          $rootScope.template_mode = false ;
+          $rootScope.templates= server + 'partials/preview.hbs';
+          $rootScope.editor_mode = "Preview";
         } else
         {
-
           $rootScope.template_mode = true ;
           $rootScope.templates=  server +'partials/editor.hbs';
           $rootScope.editor_mode = "Editor";
         }
     };
+
+
+
+    //----------------------------------------------
+    // Label Check box with other colors and icon
+    //----------------------------------------------
+    $rootScope.class_checked = "check_boxx";
+    $rootScope.check_box = function (){
+      if($rootScope.class_checked == "check_boxx")
+        $rootScope.class_checked = 'none'
+      else
+        $rootScope.class_checked  = "check_boxx" ;
+        alert($rootScope.class_checked);
+    }
+
+
+    $rootScope.serverIp = $("#serverId_app").attr("serverIp");
+    $rootScope.defined_qs = $(".question-object");
+    // ---------------------------------------
+    // ----->>>>> Delete Quextion Api
+    // ---------------------------------------
+    $rootScope.delete_this_question = function (qs_id){
+      var jsonFile =  $rootScope.serverIp + "ext/js/json.app.keys.json";
+      $.getJSON(jsonFile, function(api_key_data) {
+        if(qs_id == '' || qs_id == null )
+          return false ;
+          var url = $rootScope.serverIp + "api/"+$("#appId").attr("applicationId")+"/question/delete";
+
+            var da = {
+                "creator_id" : $("#creatorId").attr("creatorId") , //$("creatorId").attr("creatorId") ,
+                "question_id":qs_id
+            };
+
+            $(".qs-delete-"+qs_id).removeClass("fa-trash");
+            $(".qs-delete-"+qs_id).addClass("fa-refresh fa-spin tomato-font");
+            setTimeout(function (){
+              $.ajax({
+                url : url ,
+                type : "patch" ,
+                data : da ,
+                headers : {
+                  "X-api-app-name": api_key_data.APP_NAME ,
+                  "X-api-keys": api_key_data.API_KEY ,
+                  "Content-Type" : undefined
+                } ,
+                success : function (qsData){
+
+                  var element = $(".qs-"+qs_id);
+                  element.remove();
+                } ,
+                error : function (error){
+                  console.log(error);
+                }
+              });
+            } , 2500);
+
+      });
+
+    }; // ==> End Delete QS api
+
+
+
+
+    // ---------------------------------------
+    // ----->>>>> Edit Question Part
+    // ---------------------------------------
+    $rootScope.edit_this_question = function (qs_id){
+      alert();
+    }// ==> End Editable QS api
+
+
+
   }
 ]);

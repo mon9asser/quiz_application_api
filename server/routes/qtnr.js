@@ -745,6 +745,8 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
           if(req.body.question_body == null){
               required[required.length] = 'question_body';
           }
+
+          // question_description
           if(required.length != 0 ){
               return new Promise((resolve, reject)=>{
                  res.status(404).send(notes.Messages.Required_Message(required));
@@ -787,7 +789,8 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
           question_tag ["question_type"] = req.body.question_type;
           if(req.body.question_is_required != null )
           question_tag ["question_is_required"] = req.body.question_is_required ;
-
+          if(req.body.question_description != null )
+            question_tag ["question_description"] = req.body.question_description
           if(req.body.answer_settings == null) {
             question_tag ["answer_settings"] = new Object();
             question_tag ["answer_settings"]['is_randomized'] = false ;
@@ -968,6 +971,11 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
             if(req.body.question_type != null)
               qtnairsDocument.questions[findIndex_this_qs].question_type = req.body.question_type ;
 
+              if(req.body.question_description != null )
+              {
+                qtnairsDocument.questions[findIndex_this_qs].question_description = req.body.question_description
+
+              }
             if(req.body.answer_settings != null ){
                 if(qtnairsDocument.questions[findIndex_this_qs].answer_settings == null)
                   qtnairsDocument.questions[findIndex_this_qs].answer_settings = new Object();

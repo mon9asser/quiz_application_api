@@ -17,7 +17,7 @@ const {insertIntoApiKey} = require("./qtnr");
 var infceRouter = express.Router();
 infceRouter.use(build_session);
 infceRouter.use(  bodyParser.json() );
-infceRouter.use(  bodyParser.urlencoded({ extended: false}) );
+infceRouter.use(  bodyParser.urlencoded({ extended: false }) );
 
 // ################################################################
 // ==========>>> Application Interface Api  ( Quiz VS Survey ) ====
@@ -39,6 +39,7 @@ infceRouter.get("/:app_id/editor/:token" , verify_access_tokens_admin_user , (re
       });
     }
 
+ 
     if(qtnrObject.creator_id != Verified_user.id){
       return new Promise((resolve, reject) => {
         res.render("page-401" , {
@@ -52,7 +53,7 @@ infceRouter.get("/:app_id/editor/:token" , verify_access_tokens_admin_user , (re
     var application_type ;
     if ( app_type == 0 ) application_type = "survey-editor";
     else application_type = "quiz-editor";
-     
+
     res.render( application_type , {
       app : qtnrObject ,
       user : req.user

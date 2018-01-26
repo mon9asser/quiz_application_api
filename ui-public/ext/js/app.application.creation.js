@@ -1,7 +1,8 @@
 $(document).ready(function(){
 
 
-   
+
+
   // ================> Application Sorting
   var server_ip = $("#serverId_app").attr("serverIp");
   var jsonFile =  server_ip + "ext/js/json.app.keys.json";
@@ -11,9 +12,11 @@ $(document).ready(function(){
         // ==============================================================
         var qs_sortable = $("#qs-sortable");
         var qs_dropped = $(".dropped-qs");
+        var qs_dropped_2 = $(".dropped-qs-2");
+
         var dropped = false;
         var draggable_sibling;
-        qs_dropped.sortable();
+        qs_dropped_2.sortable();
         qs_sortable.sortable({
             start: function(event, ui) {
                  draggable_sibling = $(ui.item).prev();
@@ -37,19 +40,20 @@ $(document).ready(function(){
 
                     // Question type page [QS]
                     var $questionType = ui.helper[0].getAttribute('question-data');
-
-                    $.ajax({
-                      url : server_ip + $questionType ,
-                      type :"GET" ,
-                      success : function (response){
-                          console.log(response);
-                        $(".dropped-qs").prepend(response);
-                        $(".dragelement-here").remove();
-                      },
-                      error : function (err){
-                        console.log(err);
+                      if($questionType != null ){
+                      $.ajax({
+                        url : server_ip + $questionType ,
+                        type :"GET" ,
+                        success : function (response){
+                            console.log(response);
+                          $(".dropped-qs").prepend(response);
+                          $(".dragelement-here").remove();
+                        },
+                        error : function (err){
+                          console.log(err);
+                        }
+                      });
                       }
-                    });
                     // $http({
                     //       method: 'GET',
                     //       url: 'templates/question-types/'+$questionType
