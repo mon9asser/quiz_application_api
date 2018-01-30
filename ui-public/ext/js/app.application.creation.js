@@ -18,11 +18,11 @@ $(document).ready(function(){
         var draggable_sibling;
         qs_dropped_2.sortable();
         qs_sortable.sortable({
-            start: function(event, ui) {
+          start: function(event, ui) {
                  draggable_sibling = $(ui.item).prev();
                  $('.dragelement-here').addClass('dragged-items');
-         },
-            stop: function(event, ui) {
+               },
+          stop: function(event, ui) {
                 if (dropped) {
                   if (draggable_sibling.length == 0)
                      $('#qs-sortable').prepend(ui.item);
@@ -30,8 +30,8 @@ $(document).ready(function(){
                     draggable_sibling.after(ui.item);
                     dropped = false;
                 }
-            }
-          });
+          }
+        });
           qs_dropped.droppable({
             activeClass: 'active',
                 hoverClass:'hovered',

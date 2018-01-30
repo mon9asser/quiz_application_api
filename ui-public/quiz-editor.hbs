@@ -12,6 +12,7 @@
 <i id="serverId_app" serverIp="{{server_ip}}"></i>
 <i id="appId" applicationId="{{app.id}}"></i>
 <i id="creatorId" creatorId="{{app.creator_id}}"></i>
+<!-- <pre id="appOpject">{{ app.questions }}</pre> -->
 
 
 
@@ -159,8 +160,18 @@
            </div>
         </div>
 
+
         <!-- Edit Template && Preview Template  -->
-        <div ng:include="templates" class="question-editor"></div>
+        <div class="question-editor">
+          <!-- Slide -->
+          <div>
+              {{> preview app = app }}
+          </div>
+          <div style="display:none;">
+              {{> editor app = app }}
+          </div>
+
+        </div>
 
       </div>
        <!-- Setttings -->

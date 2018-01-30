@@ -207,7 +207,7 @@ application.controller("qsCreationCtr" , [
     // ----->>>>> Edit Question Part
     // ---------------------------------------
     $rootScope.edit_this_question = function (qs_id){
-      alert();
+     alert();
     }// ==> End Editable QS api
 
 

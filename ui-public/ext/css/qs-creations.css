@@ -1989,14 +1989,14 @@ left: 65px;
   padding: 8px 20px;
   /*border: 2px dashed antiquewhite;;*/
 }
-.question-preview > .question-options > .quiz-qs-preview > p{
+  .quiz-qs-preview > p {  
   font-family: OpenSansSemiBold;
   font-size: 16px;
   padding: 0px;
   color: #888;
   padding: 10px 0px 0px 0px;
 }
-.question-preview > .question-options > .quiz-qs-preview  > ul {
+  .quiz-qs-preview  > ul {
   display: block;
   position: relative;
   width: 100%;
@@ -2005,7 +2005,7 @@ left: 65px;
   list-style: none;
   text-align: center;
 }
-.question-preview > .question-options > .quiz-qs-preview  > ul > li {
+ .quiz-qs-preview  > ul > li {
   display: block;
   overflow: hidden;
   color: #999;
@@ -2016,10 +2016,10 @@ left: 65px;
   text-align: left;
   cursor: pointer;
 }
-.question-preview > .question-options > .quiz-qs-preview  > ul > li:first-child{
+  .quiz-qs-preview  > ul > li:first-child{
   margin-top: 40px;
 }
-.question-preview > .question-options > .quiz-qs-preview  > ul > li > span > .labels {
+ .quiz-qs-preview  > ul > li > span > .labels {
   border: 1px dashed #dfdfdf;
   font-style: normal;
   padding: 5px 6px;
@@ -2047,10 +2047,10 @@ left: 65px;
   background: rgba(207, 0, 15 , 0.2);
   border-radius: 5px;
 }
-.question-preview > .question-options > .quiz-qs-preview  > ul > li.default-wrong > span > .labels {
+  .quiz-qs-preview  > ul > li.default-wrong > span > .labels {
   border: 1px solid red;
 }
-.question-preview > .question-options > .quiz-qs-preview  > ul > li.default-wrong > span > .false{
+ .quiz-qs-preview  > ul > li.default-wrong > span > .false{
   color: red ;
   float: right;
   vertical-align: middle;
@@ -2069,10 +2069,10 @@ left: 65px;
   background: rgba(46, 204, 113 , 0.2);
   border-radius: 5px;
 }
-.question-preview > .question-options > .quiz-qs-preview  > ul > li.default-success > span > .labels {
+  .quiz-qs-preview  > ul > li.default-success > span > .labels {
   border: 1px solid rgb(46, 204, 113);
 }
-.question-preview > .question-options > .quiz-qs-preview  > ul > li.default-success > span > .false{
+  .quiz-qs-preview  > ul > li.default-success > span > .false{
   color: rgb(46, 204, 113) ;
   float: right;
   vertical-align: middle;
