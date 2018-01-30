@@ -11,7 +11,12 @@
 
     <!-- Angular Pages -->
     <script src="{{ server_ip }}ext/js/app.ang.js"></script>
-
+    <script src="{{ server_ip }}ext/js/owl.carousel.min.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $(".owl-carousel").owlCarousel();
+      });
+    </script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{{ server_ip }}ext/js/bootstrap.min.js"></script>
     <!-- Login and Regsiter new user -->
@@ -19,6 +24,6 @@
     <!-- Api Key Creation -->
     <script src="{{ server_ip }}ext/js/app.api.key.js" charset="utf-8"></script>
     <!-- Quiz Survey Applicarion -->
-     <script src="{{ server_ip }}ext/js/app.application.creation.js"></script>  
+    <script src="{{ server_ip }}ext/js/app.application.creation.js"></script>
   </body>
 </html>

@@ -108,7 +108,7 @@
                 <!-- +++++++++++++++++++++++++++++++++++ -->
                 <!-- ++++++++++++++++ Answers ++++++++++ -->
                 <!-- +++++++++++++++++++++++++++++++++++ -->
-                <ul>
+                <ul class="owl-carousel">
 
                   {{#each  answers_format }}
 
@@ -124,11 +124,18 @@
 
                     <!-- Case it Media Choices -->
                     <li ng:if="{{../question_type}} == 1">
-                      <span>
+                      <!-- CASE IT IMAGE -->
+                      <span ng:if="{{media_type}} == 0">
                         <i class="labels">C</i>
                         <span>
-                          <iframe width="560" height="315" src="https://www.youtube.com/embed/WBJQa7PZNsw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                          <iframe width="560" height="315" src="{{ media_src }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                           {{ media_src }}
+                        </span>
+                      </span>
+                      <!-- CASE IT VIDEO -->
+                      <span ng:if="{{media_type}} == 1">
+                        <i class="labels">C</i>
+                        <span>
+                           {{ media_src }}
                         </span>
                       </span>
                     </li>
