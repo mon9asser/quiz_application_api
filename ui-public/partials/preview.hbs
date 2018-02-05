@@ -98,9 +98,27 @@
          {{# each app.questions }}
             <div class="question-tags">
               <div class="quiz-qs-preview">
-                <p>
-                  {{ question_body }}
-                </p>
+                <div class="question-head">
+                    <!-- Question Text -->
+                    <p>
+                      {{ question_body }}
+                    </p>
+                    <div class="clearFix"></div>
+                    <!-- Question media -->
+                    <div class="qs-media-data">
+                      <!-- Case it Image -->
+                      <div ng:if="{{ media_question/media_type }} == 0" style="background-image:url({{server_ip}}/{{media_question/media_field }})" class="media-optional-src">
+                          <ul class="media-image-editor">
+                            <li>
+                              <span class="fal fa-pencil"></span>
+                            </li>
+                          </ul>
+                      </div>
+
+                    </div>
+                    <div class="clearFix"></div>
+                </div>
+                <!-- Question Description -->
                 <span class="qs-description">
                   {{ question_description }}
                 </span>
