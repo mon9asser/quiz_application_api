@@ -106,14 +106,13 @@
                     <div class="clearFix"></div>
                     <!-- Question media -->
                     <div class="qs-media-data">
-                      <!-- Case it Image -->
-                      <div ng:if="{{ media_question/media_type }} == 0" style="background-image:url({{server_ip}}/{{media_question/media_field }})" class="media-optional-src">
-                          <ul class="media-image-editor">
-                            <li>
-                              <span class="fal fa-pencil"></span>
-                            </li>
-                          </ul>
+                      <!-- +++++++++++++++++++++++++++++++++++++ -->
+                      <!--++++++++++++ Case it Image ++++++++++++-->
+                      <!-- +++++++++++++++++++++++++++++++++++++ -->
+                      <div class="image-cogs" ng:if="{{ media_question/media_type }} == 0">
+                        image
                       </div>
+                      <div ng:if="{{ media_question/media_type }} == 0" style="background-image:url({{server_ip}}/{{media_question/media_field }})" class="media-optional-src"></div>
 
                     </div>
                     <div class="clearFix"></div>

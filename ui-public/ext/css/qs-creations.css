@@ -3091,17 +3091,29 @@ display: inline-block;
   background-position: center center;
   background-repeat: no-repeat;
 }
-ul.media-image-editor > li > span
-{
-  color: #fff;
-  border: 1px solid;
-  padding: 5px;
+ul.media-image-editor {
+  margin: 0px ;
+  padding: 0px;
+  list-style: none;
+  position: relative;
   position: absolute;
   bottom: 0px;
   right: 0px;
-  margin: 5px;
 }
-
+ul.media-image-editor li {
+  display: inline;
+}
+ul.media-image-editor > li > span
+{
+  color: #fff;
+  padding: 5px;
+  margin: 5px;
+  cursor: pointer;
+}
+.image-cogs {
+  width: 100%;
+  background: red;
+}
 
 /*.question-head {
   display: block;
