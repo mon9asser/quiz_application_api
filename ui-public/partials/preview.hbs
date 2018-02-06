@@ -109,10 +109,17 @@
                       <!-- +++++++++++++++++++++++++++++++++++++ -->
                       <!--++++++++++++ Case it Image ++++++++++++-->
                       <!-- +++++++++++++++++++++++++++++++++++++ -->
-                      <div class="image-cogs" ng:if="{{ media_question/media_type }} == 0">
-                        image
-                      </div>
                       <div ng:if="{{ media_question/media_type }} == 0" style="background-image:url({{server_ip}}/{{media_question/media_field }})" class="media-optional-src"></div>
+
+                      <!-- +++++++++++++++++++++++++++++++++++++ -->
+                      <!--++++++++++++ Case it video ++++++++++++-->
+                      <!-- +++++++++++++++++++++++++++++++++++++ -->
+                      <div ng:if="{{ media_question/media_type }} == 1" class="media-optional-src">
+                        <!-- Case it youtube -->
+                        <!-- Case it vimeo -->
+                        <!-- Case it mp4 -->
+                        
+                      </div>
 
                     </div>
                     <div class="clearFix"></div>

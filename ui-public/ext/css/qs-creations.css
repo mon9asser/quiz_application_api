@@ -3090,6 +3090,7 @@ display: inline-block;
   height: 300px;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: cover;
 }
 ul.media-image-editor {
   margin: 0px ;
@@ -3112,9 +3113,42 @@ ul.media-image-editor > li > span
 }
 .image-cogs {
   width: 100%;
-  background: red;
+  background: #eee;
+  border: 1px solid #ddd;
+  /* margin: 5px 0px; */
+  position: absolute;
+  bottom: 0px;;
 }
-
+.image-cogs > ul {
+  display: block;
+  position: relative;
+  /*overflow: hidden;*/
+}
+.drop-p-menu {
+  display: inline;
+  cursor: pointer;
+}
+.image-setting {
+  display: block;
+  position: relative;
+  /*text-align: center;*/
+  padding-left: 10px;
+}
+.image-setting > li {
+  display: inline;
+  position: relative;
+}
+.image-setting > li > span {
+  position: relative;
+  overflow: hidden;
+  padding: 5px;
+  vertical-align: middle;
+  display: inline-block;
+  cursor: pointer;
+}
+.dropup .dropdown-menu {
+      margin-bottom: 12px;
+}
 /*.question-head {
   display: block;
   background: red;

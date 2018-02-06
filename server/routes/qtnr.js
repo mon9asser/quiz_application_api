@@ -847,10 +847,38 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
                 question_tag ["media_question"]["media_type"] = 1;
                 question_tag ["media_question"]["media_name"] = req.body.media_field;
                 question_tag ["media_question"]["media_field"] = req.body.media_field;
+                // detect video type
+                var video = req.body.media_field.toLowerCase();
+                var videoType = null ;
+                var videoId = null ;
+                if( video.includes("youtube")    == true   ) {
+                  videoType = "youtube" ;
+                  var idWithLastSplit = video.lastIndexOf('v');
+
+
+                  var videos = video.substring(idWithLastSplit + 1);
+                  var lastId = videos.substr(0, videos.indexOf('&'));
+                  if(lastId != '' || lastId )
+                    videoId = lastId ;
+                  else
+                    videoId = videos ;
+                }
+                else if( video.includes("vimeo") == true   ) {
+                  videoType = "vimeo" ;
+                  var n = video.lastIndexOf('/');
+                  videoId = video.substring(n + 1);
+                }
+                else if( video.includes(".mp4")  == true   ) {
+                  videoType = "mp4" ;
+                  videoId = null;
+                }
+                question_tag ["media_question"]["video_type"] = videoType;
+                question_tag ["media_question"]["video_id"] = videoId;
               }
 
           }
 
+           
            // Save data after saving image in server directory
             qtnairsDocument.questions.push(question_tag);
             qtnairsDocument.markModified("questions");

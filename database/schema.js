@@ -315,7 +315,7 @@ var choices_object = {
     _id :                 { type : mongoose.Schema.ObjectId } ,
     indexer :             { type : Number } ,
     value :               { type : String } ,
-    media_optional :      { type : { media_type: { type : Number } , media_name : { type : String } , media_src : { type : String } } } ,
+    media_optional :      { type : { media_type: { type : Number } , media_name : { type : String } , media_src : { type : String } , video_type : {type : String} } } ,
     is_correct :   { type : Boolean }
 
 };
@@ -372,7 +372,7 @@ var Questionnaire_questions = {
         question_body:            { type : String   } ,
         question_description :    { type : String },
         answers_format :            answer_bo , // Under Updateing
-        media_question :          { type : { media_type :{ type : Number } , media_name : { type : String } , media_field:{ type : String } } } ,  //  /* url of video */ } } ,
+        media_question :          { type : { media_type :{ type : Number } , media_name : { type : String } , media_field:{ type : String } , video_type : {type : String} } } ,  //  /* url of video */ } } ,
         // attendee_answers :        attendee_ans_bo , => Moving it for report
         question_is_required :    { type : Boolean } ,
         answer_settings :         answer_setting_bo ,
