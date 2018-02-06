@@ -93,97 +93,65 @@
             <!-- for Append attributes -->
          </div>
 
-
-
          {{# each app.questions }}
             <div class="question-tags">
+
               <div class="quiz-qs-preview">
-                <div class="question-head">
-                    <!-- Question Text -->
+                  <!-- +++++++++++++++++++++++++++++++++++ -->
+                  <!-- ++++++++++++  Question Tag ++++++++ -->
+                  <!-- +++++++++++++++++++++++++++++++++++ -->
+                  <div class="question-head">
+                    <!-- Question Tag {Text} -->
                     <p>
                       {{ question_body }}
                     </p>
                     <div class="clearFix"></div>
-                    <!-- Question media -->
                     <div class="qs-media-data">
                       <!-- +++++++++++++++++++++++++++++++++++++ -->
                       <!--++++++++++++ Case it Image ++++++++++++-->
                       <!-- +++++++++++++++++++++++++++++++++++++ -->
-                      <div ng:if="{{ media_question/media_type }} == 0" style="background-image:url({{server_ip}}/{{media_question/media_field }})" class="media-optional-src"></div>
+                      <div ng:if="{{ media_question/media_type }} == 0" style="width:100%; height:250px;">
+                         <img ng:src="{{server_ip}}{{media_question/media_field}}" alt="{{question_body}}" class="img-responsive-md">
+                      </div>
 
                       <!-- +++++++++++++++++++++++++++++++++++++ -->
                       <!--++++++++++++ Case it video ++++++++++++-->
                       <!-- +++++++++++++++++++++++++++++++++++++ -->
                       <div ng:if="{{ media_question/media_type }} == 1" class="media-optional-src">
                         <!-- Case it youtube -->
+                        http://edge.flowplayer.org/functional.mp4
+                        {{media_question/media_field}}.mp4
                         <!-- Case it vimeo -->
                         <!-- Case it mp4 -->
-                        
+                        <video ng:if="{{ media_question/video_type }} == 2" controls style="width:100%; height:auto;">
+                           <source type="video/mp4" src="{{media_question/media_field}}.mp4">
+
+                           <!-- <source type="video/mp4" src="{{ media_question/media_field }}.ogg"> -->
+                        </video>
                       </div>
-
                     </div>
-                    <div class="clearFix"></div>
-                </div>
-                <!-- Question Description -->
-                <span class="qs-description">
-                  {{ question_description }}
-                </span>
-                <div class="clearFix"></div>
-                <!-- +++++++++++++++++++++++++++++++++++ -->
-                <!-- ++++++++++++++++ Answers ++++++++++ -->
-                <!-- +++++++++++++++++++++++++++++++++++ -->
-                <ul class="owl-carousel">
-
-                  {{#each  answers_format }}
-
-                    <!-- Case it text only -->
-                    <li ng:if="{{../question_type}} == 0">
-                      <span>
-                        <i class="labels">C</i>
-                        <span>
-                          {{ value }}
-                        </span>
-                      </span>
-                    </li>
-
-                    <!-- Case it Media Choices -->
-                    <li ng:if="{{../question_type}} == 1">
-                      <!-- CASE IT IMAGE -->
-                      <span ng:if="{{media_type}} == 0">
-                        <i class="labels">C</i>
-                        <span>
-                           {{ media_src }}
-                        </span>
-                      </span>
-                      <!-- CASE IT VIDEO -->
-                      <span ng:if="{{media_type}} == 1">
-                        <i class="labels">C</i>
-                        <span>
-                           {{ media_src }}
-                        </span>
-                      </span>
-                    </li>
-
-                    <!-- Case it rating scales -->
-                    <li ng:if="{{../question_type}} == 2">
-                      <span>
-                        <i class="labels">C</i>
-                        <span></span>
-                      </span>
-                    </li>
-
-                  {{/each }}
-                </ul>
+                  </div>
+                  <!-- Question Description -->
+                  <span class="qs-description">
+                    {{ question_description }}
+                  </span>
+                  <div class="clearFix"></div>
+                  <!-- +++++++++++++++++++++++++++++++++++ -->
+                  <!-- ++++++++++++++++ Answers ++++++++++ -->
+                  <!-- +++++++++++++++++++++++++++++++++++ -->
               </div>
-
-               <div class="controller-btns">
+              <!-- ++++++++++++++++++++++++++++++-->
+              <!--+++++++++++ Buttons +++++++++++-->
+              <!-- ++++++++++++++++++++++++++++++-->
+              <div class="controller-btns">
                  <button class="btn btn-danger-outline" type="button" name="button">
                     Back
                  </button>
                  <button class="btn btn-primary-outline" type="button" name="button">
                     Continue
                  </button>
-               </div>
+              </div>
+
             </div>
          {{/each }}
 

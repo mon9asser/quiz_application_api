@@ -3149,6 +3149,10 @@ ul.media-image-editor > li > span
 .dropup .dropdown-menu {
       margin-bottom: 12px;
 }
+.img-responsive-md {
+  display: block;
+  width: 100%;  
+}
 /*.question-head {
   display: block;
   background: red;
