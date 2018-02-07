@@ -3151,8 +3151,31 @@ ul.media-image-editor > li > span
 }
 .img-responsive-md {
   display: block;
-  width: 100%;  
+  width: 100%;
 }
+.youtube-container {
+  width: 100%;
+  display: block;
+  height: auto;
+  position: relative;
+}
+
+.embed-container {
+   position: relative;
+   padding-bottom: 56.25%;
+   height: 0;
+   overflow: hidden;
+   width: 100%;
+   height: auto;
+  }
+  .embed-container iframe, .embed-container object, .embed-container embed
+  {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
 /*.question-head {
   display: block;
   background: red;
