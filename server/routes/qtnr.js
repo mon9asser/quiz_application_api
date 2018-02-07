@@ -1348,7 +1348,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                    question_answers["media_type"] = 1 ;
                    question_answers["media_name"] = req.body.media_src   ;
                    question_answers["Media_directory"] =  req.body.media_src ;
-                    
+
                    // detect video type
                    var video = req.body.media_src.toLowerCase();
                    var videoType = null ;
@@ -1821,7 +1821,23 @@ qtnrRouters.post("/:app_id/application/:objects" , auth_verify_api_keys , (req ,
        });
 });
 
+qtnrRouters.get("/:uid/applications" ,  (req,res) => {
 
+  var userId= req.params.uid ;
+  // var user = req.verified_user;
+  // var userType = req.is_creator;
+
+  qtnr.find({  "creator_id": userId }).then((doc)=>{
+    if(!doc ){
+      return new Promise((resolve, reject) => {
+         res.status(404).send("There are no any applications");
+     });
+    }
+    res.send(doc);
+  });
+
+
+});
 
 
 

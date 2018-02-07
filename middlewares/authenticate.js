@@ -476,7 +476,7 @@ var verify_access_tokens_admin_user = function (req  , res  , next ){
   return usr.findOne({
     '_id' : decoded._id
   } , (error , user )=>{
-   
+
       if(error || !user ){
           return new Promise((resolve, reject) => {
               res.status(404).render(
