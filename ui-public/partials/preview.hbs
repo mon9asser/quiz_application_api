@@ -123,8 +123,8 @@
                         <!-- +++++++++++++++++++++++++++++++ -->
                         <div class="youtube-container" ng:if="{{ media_question/video_type }} == 0">
                           <div style="width:100%;height:250px" id="player_{{_id}}" class="youtube">
-                            <iframe id="player" type="text/html" style="width:100%;height:250px;"
-                             src="http://www.youtube.com/embed/{{video_id}}"
+                            <iframe  type="text/html" style="width:100%;height:250px;"
+                             src="https://www.youtube.com/embed/{{video_id}}"
                              frameborder="0">
                            </iframe>
                           </div>
@@ -140,7 +140,6 @@
                         <!-- +++++++++++++++++++++++++++++++ -->
                         <!-- Case it mp4 -->
                         <!-- +++++++++++++++++++++++++++++++ -->
-
                         <video ng:if="{{ media_question/video_type }} == 2" controls style="width:100%; height:auto;">
                            <source type="video/mp4" src="{{media_question/media_field}}.mp4">
                            <!-- <source type="video/mp4" src="{{ media_question/media_field }}.ogg"> -->
@@ -153,11 +152,18 @@
                     {{ question_description }}
                   </span>
                   <div class="clearFix"></div>
-
                   <!-- +++++++++++++++++++++++++++++++++++ -->
                   <!-- ++++++++++++++++ Answers ++++++++++ -->
                   <!-- +++++++++++++++++++++++++++++++++++ -->
-                  
+                  <ul class="answer-of-questions">
+                    <li>
+                      Data
+                    </li>
+                    <li>
+                      Data
+                    </li>
+                  </ul>
+
               </div>
               <!-- ++++++++++++++++++++++++++++++-->
               <!--+++++++++++ Buttons +++++++++++-->

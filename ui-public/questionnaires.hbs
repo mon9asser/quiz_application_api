@@ -1,8 +1,74 @@
 {{>top}}
 {{> navbar }}
+<style media="screen">
+  .all-apps {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .headli {
+    margin-bottom: 10px;
+    vertical-align: middle;
+  }
+  .headli > b {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+  .crtnew {
+    float: right;
+    display: inline;
+    margin-left: 10px;
+  }
+  .bootstrap-table .table td, .fixed-table-body .table td, .table td {
+    height: auto;
+  }
+  .table>tbody>tr>td {
+    padding: 0px;
+  }
+</style>
+ <div class="container">
 
-<h1>
-  My Applications
-</h1>
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1 headli">
+        <b>
+          My Applications
+        </b>
+
+
+          <div class="btn-group crtnew" role="group" aria-label="...">
+
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <b>(+)</b> Create New Application
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href="#">Create Quiz</a></li>
+                <li><a href="#">Create Survey</a></li>
+              </ul>
+            </div>
+          </div>
+      </div>
+      <div class="col-md-10 col-md-offset-1 all-apps">
+        <table class="table table-striped">
+            <tr>
+              <td><b>Application Name</b></td>
+              <td><b>Access</b></td>
+            </tr>
+
+            <tr>
+              <td>Application Name</td>
+              <td>Edit Delete</td>
+            </tr>
+
+        </table>
+      </div>
+    </div>
+ </div>
 
 {{> bottom}}
