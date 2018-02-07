@@ -1225,6 +1225,55 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                           question_answers["media_optional"]["media_type"] = 1;
                           question_answers["media_optional"]["media_name"] = req.body.media_src ;
                           question_answers["media_optional"]["media_src"] = req.body.media_src ;
+
+
+
+
+
+                          /////////////////////>>>>
+                          // detect video type
+                          var video = req.body.media_src.toLowerCase();
+                          var videoType = null ;
+                          var videoId = null ;
+                          if( video.includes("youtube")    == true   ) {
+                            videoType = 0 ; // => youtube
+                            var idWithLastSplit = video.lastIndexOf('?');
+                            var videos = video.substr(idWithLastSplit + 1);
+                            var lastId = videos.substr(0, videos.indexOf('&'));
+
+                            if(lastId != '' || lastId )
+                              videoId = lastId ;
+                            else
+                              videoId = videos ;
+
+
+                            var afterEqualChar = videoId.lastIndexOf('=');
+                            videoId = videoId.substring(afterEqualChar + 1);
+
+                          }
+                          else if( video.includes("vimeo") == true   ) {
+                            videoType = 1 ; // => vimeo
+                            var n = video.lastIndexOf('/');
+                            videoId = video.substring(n + 1);
+                          }
+                          else if( video.includes(".mp4")  == true   ) {
+                            videoType = 2 ;
+                            videoId = null;
+
+                            var media_mp4 = req.body.media_src.substring(0, req.body.media_src.lastIndexOf('.'));
+                            question_answers ["media_optional"]["media_src"] = media_mp4 ;
+
+                          }
+                          question_answers ["media_optional"]["video_type"] = videoType;
+                          question_answers ["media_optional"]["video_id"] = videoId;
+
+
+
+
+
+
+
+
                       }
                      }
                     /*--------------------------------------------------------- */
@@ -1287,6 +1336,8 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                      question_answers["media_type"] = 0 ;
                      question_answers["media_name"] = new_filename   ;
                      question_answers["Media_directory"] = config.server_ip + "themeimages/"+new_filename  ;
+
+
                      if( fs.existsSync(imagePath)){
                         fs.rename( imagePath , targetPath , function (err) {
                                console.log(err);
@@ -1297,6 +1348,44 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                    question_answers["media_type"] = 1 ;
                    question_answers["media_name"] = req.body.media_src   ;
                    question_answers["Media_directory"] =  req.body.media_src ;
+                    
+                   // detect video type
+                   var video = req.body.media_src.toLowerCase();
+                   var videoType = null ;
+                   var videoId = null ;
+                   if( video.includes("youtube")    == true   ) {
+                     videoType = 0 ; // => youtube
+                     var idWithLastSplit = video.lastIndexOf('?');
+                     var videos = video.substr(idWithLastSplit + 1);
+                     var lastId = videos.substr(0, videos.indexOf('&'));
+
+                     if(lastId != '' || lastId )
+                       videoId = lastId ;
+                     else
+                       videoId = videos ;
+
+
+                     var afterEqualChar = videoId.lastIndexOf('=');
+                     videoId = videoId.substring(afterEqualChar + 1);
+
+                   }
+                   else if( video.includes("vimeo") == true   ) {
+                     videoType = 1 ; // => vimeo
+                     var n = video.lastIndexOf('/');
+                     videoId = video.substring(n + 1);
+                   }
+                   else if( video.includes(".mp4")  == true   ) {
+                     videoType = 2 ;
+                     videoId = null;
+
+                     var media_mp4 = req.body.media_src.substring(0, req.body.media_src.lastIndexOf('.'));
+                     question_answers["media_src"] = media_mp4 ;
+
+                   }
+                   question_answers["video_type"] = videoType;
+                   question_answers["video_id"] = videoId;
+
+
                  }
                }
               /*---------------------------------------------- medi type upload */
