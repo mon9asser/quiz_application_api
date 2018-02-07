@@ -27,7 +27,8 @@ const {
     build_session ,
     auth_verify_api_keys,
     auth_verify_api_keys_tokens,
-    auth_verify_generated_tokens
+    auth_verify_generated_tokens ,
+    authenticate_keys_with_curr_status
 } = require("../../middlewares/authenticate");
 const {
     authByTokenWCreatorType ,
@@ -1821,7 +1822,7 @@ qtnrRouters.post("/:app_id/application/:objects" , auth_verify_api_keys , (req ,
        });
 });
 
-qtnrRouters.get("/:uid/applications" ,  (req,res) => {
+qtnrRouters.get("/:uid/applications" , authenticate_keys_with_curr_status ,  (req,res) => {
 
   var userId= req.params.uid ;
   // var user = req.verified_user;
