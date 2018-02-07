@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
 const {apis , config} = require("../../database/config");
 const {build_session , verify_session , build_header } = require("../../middlewares/authenticate");
 const {usr} = require("../../models/users");
+const {qtnr} = require("../../models/questionnaires");
 const {insertIntoApiKey} = require("./qtnr");
 
 var viewRouters = express.Router();
@@ -73,9 +74,23 @@ viewRouters.get('/attendees' , verify_session , ( req , res )=>{
 // ======================================================
 viewRouters.get('/questionnaires' , verify_session , ( req , res )=>{
   if(req.session.userInfo.userType == 1 ) {
-    res.render("questionnaires" , { 
-        user : req.session.userInfo
+
+
+    qtnr.find({  "creator_id": req.session.userInfo.id }).then((doc)=>{
+      if(!doc ){
+        return new Promise((resolve, reject) => {
+           res.status(404).send("There are no any applications");
+       });
+      }
+
+      res.render("questionnaires" , {
+          user : req.session.userInfo ,
+          myApps : doc
+      });
+
     });
+
+
   }else {
     res.render("page-401" , {
         user : req.session.userInfo ,
