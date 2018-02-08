@@ -121,7 +121,7 @@ application.controller("mainController" , [
     }
 ]);
 
-application.controller("myApplicationPage" , ["$rootScope" , function ($rootScope){
+application.controller("myApplicationPage" , ["$rootScope","$timeout" , function ($rootScope,$timeout){
   $rootScope.server_ip = $("#serverIp").attr("server");
   $rootScope.applicationType = 0 ;
 
@@ -172,27 +172,37 @@ application.controller("myApplicationPage" , ["$rootScope" , function ($rootScop
          return false ;
        }
 
-       $.ajax({
-         url : $rootScope.server_ip + "api/create",
-         type :"POST",
-         headers : {
-           "X-api-app-name":api_keys.APP_NAME,
-           "X-api-keys":api_keys.API_KEY
-         },
-         data : {
-           creator_id : $("#userId").attr("user"),
-           app_type : $rootScope.applicationType ,
-           questionnaire_title : app_title.val() ,
-           description : app_details.val()
-         }, // {{server_ip}}api/{{_id}}/editor/{{../user.token}}
-         success : function (data){
-           window.location.href =
-              $rootScope.server_ip +"api/"+data._id+"/editor/"+$("#userToken").attr("token");
-         } ,
-         error : function (er){
-           console.log(er);
-         }
-       });
+
+       $(".modal-content-overlay").fadeIn();
+
+
+
+       setTimeout(()=>{    //<<<---    using ()=> syntax
+         $.ajax({
+           url : $rootScope.server_ip + "api/create",
+           type :"POST",
+           headers : {
+             "X-api-app-name":api_keys.APP_NAME,
+             "X-api-keys":api_keys.API_KEY
+           },
+           data : {
+             creator_id : $("#userId").attr("user"),
+             app_type : $rootScope.applicationType ,
+             questionnaire_title : app_title.val() ,
+             description : app_details.val()
+           }, // {{server_ip}}api/{{_id}}/editor/{{../user.token}}
+           success : function (data){
+             window.location.href =
+             $rootScope.server_ip +"api/"+data._id+"/editor/"+$("#userToken").attr("token");
+           } ,
+           error : function (er){
+             console.log(er);
+           }
+         });
+       },5000);
+
+
+
 
      }); // => End json loader reader
   }
