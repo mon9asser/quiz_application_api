@@ -407,15 +407,12 @@ top: 56%;
             There are no any records !
           </li>
           {{#each myApps }}
-          <li>
+          <li class="listed-app-{{_id}}">
             <ul class="item-listed">
               <li><span>{{questionnaire_title}}</span></li>
-              <li>  >>>>  </li>
-              <li>
-                {{questions.length}} <span class="statistics-part">Questions</span>
-              </li>
 
-              <li class="menli"><a style="color:tomato;" href="#">Delete</a></li>
+
+              <li class="menli"><a class="delete-handler-{{_id}}" style="color:tomato;" ng:click="delete_existing_app('{{_id}}')">Delete</a></li>
               <li class="menli"><a style="color:teal;" href="{{server_ip}}api/{{_id}}/editor/{{../user.token}}">Edit</a></li>
               <li class="menli"><a style="color:green;" href="#">Preview <span ng:if="{{app_type}} == 1">Quiz</span><span ng:if="{{app_type}} == 0">Survey</span></a></li>
             </ul>

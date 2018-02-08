@@ -206,6 +206,42 @@ application.controller("myApplicationPage" , ["$rootScope","$timeout" , function
 
      }); // => End json loader reader
   }
+  $rootScope.delete_existing_app = function (app_id ){
+    var app_id = app_id ;
+    var parent = $(".listed-app-"+app_id);
+    var target_handler =   $(".delete-handler-"+app_id);
+    target_handler.html("<i class='fa fa-refresh fa-spin'></i>");
+
+
+
+    setTimeout(()=>{
+      var file = $rootScope.server_ip + "ext/js/json.app.keys.json";
+
+      $.getJSON(file , function (api_keys){
+        $.ajax({
+          url : $rootScope.server_ip + "api/"+app_id+"/delete",
+          type :"DELETE",
+          headers : {
+            "X-api-app-name":api_keys.APP_NAME,
+            "X-api-keys":api_keys.API_KEY
+          },
+          data : {
+            creator_id : $("#userId").attr("user")
+          }, // {{server_ip}}api/{{_id}}/editor/{{../user.token}}
+          success : function (data){
+
+          } ,
+          error : function (er){
+            console.log(er);
+          }
+        });
+         parent.remove();
+      });
+    } , 3000 );
+
+  };
+
+
 }]);
 
 application.controller("qsCreationCtr" , [

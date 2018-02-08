@@ -150,6 +150,24 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
 
 });
 
+
+qtnrRouters.delete("/:app_id/delete", auth_verify_api_keys_tokens , (req, res)=>{
+  var app_id = req.params.app_id;
+  qtnr.findByIdAndRemove(app_id).then((appDoc)=>{
+    if(!appDoc) {
+      return new Promise((resolve , reject )=>{
+        res.status(404).send(notes.Errors.Error_Doesnt_exists("Application"));
+      });
+    }
+  });
+
+
+
+
+
+
+});
+
 qtnrRouters.post("/init", auth_verify_api_keys_tokens  , (req, res) => {
 
     var user = req.verified_user;
