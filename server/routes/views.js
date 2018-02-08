@@ -85,7 +85,8 @@ viewRouters.get('/questionnaires' , verify_session , ( req , res )=>{
 
       res.render("questionnaires" , {
           user : req.session.userInfo ,
-          myApps : doc
+          myApps : doc ,
+          server_ip : config.server_ip
       });
 
     });

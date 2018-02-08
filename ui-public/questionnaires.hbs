@@ -1,65 +1,94 @@
 {{>top}}
 {{> navbar }}
-<style media="screen">
-  .all-apps {
-    display: block;
-    position: relative;
-    overflow: hidden;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 20px;
-  }
-  .headli {
-    margin-bottom: 20px;
-    margin-top: 30px;
-    vertical-align: middle;
-  }
-  .headli > b {
-    margin-top: 5px;
-    margin-bottom: 10px;
-    display: inline-block;
-  }
-  .crtnew {
-    float: right;
-    display: inline;
-    margin-left: 10px;
-  }
-  .bootstrap-table .table td, .fixed-table-body .table td, .table td {
-    height: auto;
-  }
-  .my-apps{
-    display: block;
-    position: relative;
-    overflow: hidden;
-  }
+<div ng:controller="myApplicationPage">
 
-  .my-apps > li  {
-    display: block;
-    font-family: tahoma ,sans-serif;
-    font-weight: bold;
-    color: #999;
-    margin-top: 10px;
+<!-- Main Information -->
+<i id="userId" user="{{user.id}}"></i>
+<i id="userEmail" user="{{user.email}}"></i>
+<i id="userName" user="{{user.name}}"></i>
+<i id="userToken" token="{{user.token}}"></i>
+<i id="serverIp" server="{{server_ip}}"></i>
+
+
+<style media="screen">
+  .modal-dialog {
+      width: 35%;
+      top: 20%;
   }
-  .my-apps > li:first-child {
-    margin: 0px !important;
+  .form-group {
+      margin-bottom: 15px;
+      margin-top: 15px;
   }
-  .item-listed > li {
-    display: inline-block;
-    position: relative;
-    list-style: square;
-    margin-left: 30px;
+  .modal-sm {
+    margin:0px auto;
   }
-  .item-listed > li:first-child {
-    margin-left: 0px;
+  @media only screen and (max-width:600px) {
+    .modal-dialog {
+        width: 70%;
+       }
   }
-  .statistics-part {
-    font-weight: normal;
-    color: teal;
+  .modal-content {
+    overflow: hidden;
+    padding: 10px;
   }
-  ul li.menli {
-    float: right;
-  }
+    .all-apps {
+      display: block;
+      position: relative;
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .headli {
+      margin-bottom: 20px;
+      margin-top: 30px;
+      vertical-align: middle;
+    }
+    .headli > b {
+      margin-top: 5px;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+    .crtnew {
+      float: right;
+      display: inline;
+      margin-left: 10px;
+    }
+    .bootstrap-table .table td, .fixed-table-body .table td, .table td {
+      height: auto;
+    }
+    .my-apps{
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+    .my-apps > li  {
+      display: block;
+      font-family: tahoma ,sans-serif;
+      font-weight: bold;
+      color: #999;
+      margin-top: 10px;
+    }
+    .my-apps > li:first-child {
+      margin: 0px !important;
+    }
+    .item-listed > li {
+      display: inline-block;
+      position: relative;
+      list-style: square;
+      margin-left: 30px;
+    }
+    .item-listed > li:first-child {
+      margin-left: 0px;
+    }
+    .statistics-part {
+      font-weight: normal;
+      color: teal;
+    }
+    ul li.menli {
+      float: right;
+    }
 </style>
  <div class="container">
 
@@ -77,8 +106,8 @@
                 <b>(+)</b> Create New Application
               </button>
               <ul class="dropdown-menu">
-                <li><a href="#">Create Quiz</a></li>
-                <li><a href="#">Create Survey</a></li>
+                <li><a ng:click="create_application('Quiz')" href="#" data-toggle="modal" data-target=".bs-example-modal-sm">Create Quiz</a></li>
+                <li><a ng:click="create_application('Survey')" href="#" data-toggle="modal" data-target=".bs-example-modal-sm">Create Survey</a></li>
               </ul>
 
           </div>
@@ -111,7 +140,32 @@
       </div>
     </div>
  </div>
- 
 
 
+
+ <!-- Create new Application -->
+ <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+ <div class="modal-dialog modal-sm" role="document">
+   <div class="modal-content">
+     <div class="col-md-12">
+       <div class="form-group">
+         <input type="text" class="form-control application-title"  placeholder="Application Title">
+       </div>
+
+       <div class="form-group">
+         <textarea class="form-control application-description"  placeholder="Description"></textarea>
+       </div>
+
+       <div class="form-group text-right">
+          <button ng:click="cancel_app_creation()" class="btn btn-danger" type="button" name="button">Cancel</button>
+          <button ng:click="start_app_creation()" class="btn btn-primary" type="button" name="button">Create New Quiz</button>
+       </div>
+
+
+     </div>
+   </div>
+ </div>
+</div>
+
+</div>
 {{> bottom}}

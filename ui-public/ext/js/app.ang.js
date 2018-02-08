@@ -16,6 +16,8 @@ application.config([
 application.controller("mainController" , [
     "$rootScope" , "$location" ,
     function ( $rootScope , $location ){
+
+
       $rootScope.urls = window.location.pathname.split( '/' );;
       $rootScope.page_name = $rootScope.urls[$rootScope.urls.length-1];
       // ##########################################################
@@ -119,6 +121,82 @@ application.controller("mainController" , [
     }
 ]);
 
+application.controller("myApplicationPage" , ["$rootScope" , function ($rootScope){
+  $rootScope.server_ip = $("#serverIp").attr("server");
+  $rootScope.applicationType = 0 ;
+
+  $rootScope.create_application = function (quizType){
+     $("input").val(quizType+" 1");
+     $("textarea").val("This description for " + quizType+" 1")
+     $rootScope.applicationType = (quizType == "Quiz") ? 1 : 0 ;
+
+  };
+  $rootScope.cancel_app_creation = function (){
+    $(".bs-example-modal-sm").trigger("click");
+  }
+  // Editing fields
+  $(".application-description").on("change keydown", function (){
+    $(".application-description").css({
+      border:"1px solid #ddd"
+    })
+  });
+  $(".application-title").on("change keydown", function (){
+    $(".application-title").css({
+      border:"1px solid #ddd"
+    })
+  });
+  // Init New Application
+  $rootScope.start_app_creation = function (){
+    var file = $rootScope.server_ip + "ext/js/json.app.keys.json";
+     $.getJSON(file , function (api_keys){
+       var app_title = $(".application-title");   //application-title
+       var app_details = $(".application-description"); // application-description
+       var user = $("#userId").attr("user");
+       var application_fields = [] ;
+       if(app_title.val() == '' )
+       {
+         application_fields[application_fields.length]
+           = app_title;
+       }
+       if(app_details.val() == '' )
+       {
+         application_fields[application_fields.length]
+           = app_details;
+       }
+       if(application_fields.length != 0 ){
+         for (var i = 0; i < application_fields.length; i++) {
+           application_fields[i].css({
+             border : "1px solid tomato"
+           });
+         }
+         return false ;
+       }
+
+       $.ajax({
+         url : $rootScope.server_ip + "api/create",
+         type :"POST",
+         headers : {
+           "X-api-app-name":api_keys.APP_NAME,
+           "X-api-keys":api_keys.API_KEY
+         },
+         data : {
+           creator_id : $("#userId").attr("user"),
+           app_type : $rootScope.applicationType ,
+           questionnaire_title : app_title.val() ,
+           description : app_details.val()
+         }, // {{server_ip}}api/{{_id}}/editor/{{../user.token}}
+         success : function (data){
+           window.location.href =
+              $rootScope.server_ip +"api/"+data._id+"/editor/"+$("#userToken").attr("token");
+         } ,
+         error : function (er){
+           console.log(er);
+         }
+       });
+
+     }); // => End json loader reader
+  }
+}]);
 
 application.controller("qsCreationCtr" , [
   "$rootScope" ,

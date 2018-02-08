@@ -114,8 +114,8 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
         res.status(201).send(notes.Messages.Required_Message(required));
       });
     }
-
-    if(req.body.app_type >= 2  || req.body.app_type < 0 ||  !_.isInteger(req.body.app_type)){
+    var appt  = parseInt(req.body.app_type)
+    if( appt >= 2  || appt < 0 ||  !_.isInteger(appt)){
        return new Promise((resolve , reject)=>{
         // console.log(required);
         res.status(404).send(notes.Errors.Error_Doesnt_exists("Application Type"));
