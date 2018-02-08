@@ -76,14 +76,31 @@ usrRouters.use(session({
               res.send({"Message":"Rejected Authentication"});
             });
           }
+
+
          // make authenticate token
          //  user.generateAuthentication();
+
+
+         var date_now = new Date();
+         // Generate an expire tokens
+         var generated_token   ;
+         try {
+           generated_token = jwt.sign({ _id: user._id.toHexString() ,  date_made :date_now } ,config.secretCode)
+         } catch (e) {
+           return Promise.reject(e);
+         }
+         // Generate New Tokens
+         user.tokens = generated_token;
+         user.save();
+
          // Save session
          req.session.userInfo = {
            id : user._id      ,
            name : user.name   ,
            email :user.email  ,
-           userType : user.is_creator
+           userType : user.is_creator ,
+           token : user.tokens
          };
          if(! req.session.userInfo)
           {
@@ -93,6 +110,7 @@ usrRouters.use(session({
              return false ;
           }
           value_redirect = true;
+
           res.send({
             isRedirect: value_redirect , // => option for you in ui client side
             // user :  user ,
@@ -134,17 +152,27 @@ usrRouters.use(session({
             });
         }
 
-        /*.then(()=>{
-          return user.generateAuthentication();
-       })*/
+
           var user = new usr(body);
+          var date_now = new Date();
+          // Generate an expire tokens
+          var generated_token   ;
+          try {
+            generated_token = jwt.sign({ _id: user._id.toHexString() ,  date_made :date_now } ,config.secretCode)
+          } catch (e) {
+            return Promise.reject(e);
+          }
+          // Generate New Tokens
+          user.tokens = generated_token;
+
           user.save().then((user)=>{
            // Storing Session !!
             req.session.userInfo = {
              id : user._id ,
              name : user.name ,
              email : user.email ,
-             userType : user.is_creator
+             userType : user.is_creator,
+             token : user.tokens
            };
             // Request header !
            res.send({

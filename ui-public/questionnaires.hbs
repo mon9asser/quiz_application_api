@@ -33,11 +33,16 @@
     position: relative;
     overflow: hidden;
   }
-  .my-apps > li {
+
+  .my-apps > li  {
     display: block;
     font-family: tahoma ,sans-serif;
     font-weight: bold;
     color: #999;
+    margin-top: 10px;
+  }
+  .my-apps > li:first-child {
+    margin: 0px !important;
   }
   .item-listed > li {
     display: inline-block;
@@ -67,20 +72,22 @@
 
           <div class="btn-group crtnew" role="group" aria-label="...">
 
-            <div class="btn-group" role="group">
+
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <b>(+)</b> Create New Application
-                <span class="caret"></span>
               </button>
               <ul class="dropdown-menu">
                 <li><a href="#">Create Quiz</a></li>
                 <li><a href="#">Create Survey</a></li>
               </ul>
-            </div>
+
           </div>
       </div>
       <div class="col-md-10 col-md-offset-1 all-apps">
         <ul class="my-apps">
+          <li class="text-center" ng:if="{{myApps.length}} == 0 ">
+            There are no any records !
+          </li>
           {{#each myApps }}
           <li>
             <ul class="item-listed">
@@ -90,31 +97,21 @@
                 {{questions.length}} <span class="statistics-part">Questions</span>
               </li>
 
-              <li class="menli"><a href="#">Delete</a></li>
-              <li class="menli"><a href="#">Edit</a></li>
-              <li class="menli"><a href="#">Preview <span ng:if="{{app_type}} == 1">Quiz</span><span ng:if="{{app_type}} == 0">Survey</span></a></li>
+              <li class="menli"><a style="color:tomato;" href="#">Delete</a></li>
+              <li class="menli"><a style="color:teal;" href="{{server_ip}}api/{{_id}}/editor/{{../user.token}}">Edit</a></li>
+              <li class="menli"><a style="color:green;" href="#">Preview <span ng:if="{{app_type}} == 1">Quiz</span><span ng:if="{{app_type}} == 0">Survey</span></a></li>
             </ul>
           </li>
 
 
-          <li>
-            <ul class="item-listed">
-              <li><span>{{questionnaire_title}}</span></li>
-              <li>  >>>>  </li>
-              <li>
-                {{questions.length}} <span class="statistics-part">Questions</span>
-              </li>
 
-              <li class="menli"><a href="#">Delete</a></li>
-              <li class="menli"><a href="#">Edit</a></li>
-              <li class="menli"><a href="#">Preview <span ng:if="{{app_type}} == 1">Quiz</span><span ng:if="{{app_type}} == 0">Survey</span></a></li>
-            </ul>
-          </li>
           {{/each }}
         </ul>
 
       </div>
     </div>
  </div>
+ 
+
 
 {{> bottom}}
