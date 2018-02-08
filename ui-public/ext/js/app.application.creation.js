@@ -1,76 +1,40 @@
 $(document).ready(function(){
+  // ==> Resorting items inside list
+  var sortable_items = document.getElementById("docQuestions")
+  Sortable.create(sortable_items, {
+     ghostClass: 'shadow_element' ,
+     group: "question-list"
+   });
 
+ // ==> geting sortable items from another list
+ var qs_types = document.getElementById("qs-sortable");
+ Sortable.create(qs_types, {
+  ghostClass: 'shadow_element' ,
+  sort : false ,
+    group: {
+      name: "question-list",
+      pull: "clone",
+      revertClone: true,
+    } ,
+    onEnd: function (evt) {
+    		var itemEl = evt.item;  // dragged HTMLElement
+        var parentElement = $("#docQuestions") ;
+        var server_ip = $("#serverId_app").attr("serverIp");
+        var target_qsType = $( itemEl ).attr("question-data");
 
+          $.ajax({
+            url : server_ip + target_qsType,
+            type : "GET",
+            success : function (questionTypeElement){
 
-
-  // ================> Application Sorting
-  var server_ip = $("#serverId_app").attr("serverIp");
-  var jsonFile =  server_ip + "ext/js/json.app.keys.json";
-  $.getJSON(jsonFile, function(api_key_data) {
-        // ==============================================================
-        // ================>>>> Sorting !! <<<<<<<<<<<===================
-        // ==============================================================
-        var qs_sortable = $("#qs-sortable");
-        var qs_dropped = $(".dropped-qs");
-        var qs_dropped_2 = $(".dropped-qs-2");
-
-        var dropped = false;
-        var draggable_sibling;
-        qs_dropped_2.sortable();
-        qs_sortable.sortable({
-          start: function(event, ui) {
-                 draggable_sibling = $(ui.item).prev();
-                 $('.dragelement-here').addClass('dragged-items');
-               },
-          stop: function(event, ui) {
-                if (dropped) {
-                  if (draggable_sibling.length == 0)
-                     $('#qs-sortable').prepend(ui.item);
-                     $('.dragelement-here').removeClass('dragged-items');
-                    draggable_sibling.after(ui.item);
-                    dropped = false;
-                }
-          }
-        });
-          qs_dropped.droppable({
-            activeClass: 'active',
-                hoverClass:'hovered',
-                drop:function(event,ui){
-                  $('.dragelement-here').removeClass('dragged-items');
-
-                    // Question type page [QS]
-                    var $questionType = ui.helper[0].getAttribute('question-data');
-                      if($questionType != null ){
-                      $.ajax({
-                        url : server_ip + $questionType ,
-                        type :"GET" ,
-                        success : function (response){
-                            console.log(response);
-                          $(".dropped-qs").prepend(response);
-                          $(".dragelement-here").remove();
-                        },
-                        error : function (err){
-                          console.log(err);
-                        }
-                      });
-                      }
-                    // $http({
-                    //       method: 'GET',
-                    //       url: 'templates/question-types/'+$questionType
-                    //     }).then(function successCallback(response) {
-                    //        $(".dropped-qs").prepend(response.data);
-                    //        $(".dragelement-here").remove();
-                    //     }, function errorCallback(response) {
-                    //       // called asynchronously if an error occurs
-                    //       // or server returns response with an error status.
-                    //   });
-                    // console.log(event.target);
-                    // $(event.target).addClass('dropped');
-                    dropped = true;
-              }
+              // Append Question Type !
+              $(questionTypeElement).insertBefore( parentElement.children("li").eq(evt.newIndex));
+            }
           });
+          itemEl.remove();
 
-    });
 
+    }
 
+  });
 });

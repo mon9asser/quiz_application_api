@@ -3177,6 +3177,13 @@ ul.media-image-editor > li > span
     width: 100%;
     height: 100%;
   }
+  .shadow_element {
+      opacity: .3;
+      background: tomato !important;
+      color: transparent !important;
+      height: 25px;
+      overflow: hidden;
+  }
   .video-mp4 {
     margin-bottom: 10px;
   }

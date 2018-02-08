@@ -1,6 +1,10 @@
 {{> top }}
   {{> navbar }}
+<style media="screen">
+/* ghostClass */
 
+
+</style>
 
 <div ng:controller="qsCreationCtr">
 
@@ -68,9 +72,9 @@
 						</div>
             <!-- list of question type -->
 						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
-              <li class="dragelement-here">
+              <!-- <li class="dragelement-here">
                 <span>Drag Question Here</span>
-              </li>
+              </li> -->
                   {{# each app.questions}}
                     <li
                       class ="question-object qs-{{ id }}"

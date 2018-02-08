@@ -63,8 +63,14 @@
     }
     .crtnew {
       float: right;
-      display: inline;
-      margin-left: 10px;
+    display: inline;
+    
+    /* padding: 0px; */
+    }
+
+    .crtnew > button
+    {
+          padding: 3px 15px;
     }
     .bootstrap-table .table td, .fixed-table-body .table td, .table td {
       height: auto;
@@ -79,7 +85,12 @@
       font-family: tahoma ,sans-serif;
       font-weight: bold;
       color: #999;
-      margin-top: 10px;
+
+      border-bottom: 1px solid #eee;
+      padding: 8px 0px;
+    }
+    .my-apps > li:last-child{
+      border-bottom: 0px solid #eee;
     }
     .my-apps > li:first-child {
       margin: 0px !important;
@@ -101,7 +112,10 @@
       float: right;
     }
 
-
+.btn-default {
+  background-color: lightcoral !important;
+border-color: lightcoral !important;
+}
 
 /*+++++++++++++++++++++++++*/
 
@@ -392,9 +406,10 @@ top: 56%;
 
 
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <b>(+)</b> Create New Application
+                <i class="fa fa-plus"></i>
+                Add New
               </button>
-              <ul class="dropdown-menu">
+              <ul class="dropdown-menu medi-arr">
                 <li><a ng:click="create_application('Quiz')" href="#" data-toggle="modal" data-target=".bs-example-modal-sm">Create Quiz</a></li>
                 <li><a ng:click="create_application('Survey')" href="#" data-toggle="modal" data-target=".bs-example-modal-sm">Create Survey</a></li>
               </ul>
