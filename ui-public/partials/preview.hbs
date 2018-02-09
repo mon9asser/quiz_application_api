@@ -105,18 +105,20 @@
                       {{ question_body }}
                     </p>
                     <div class="clearFix"></div>
-                    <div class="qs-media-data">
-                      <!-- +++++++++++++++++++++++++++++++++++++ -->
-                      <!--++++++++++++ Case it Image ++++++++++++-->
-                      <!-- +++++++++++++++++++++++++++++++++++++ -->
-                      <div ng:if="{{ media_question/media_type }} == 0" style="width:100%; height:250px;">
-                         <img ng:src="{{server_ip}}{{media_question/media_field}}" alt="{{question_body}}" class="img-responsive-md">
-                      </div>
 
-                      <!-- +++++++++++++++++++++++++++++++++++++ -->
-                      <!--++++++++++++ Case it video ++++++++++++-->
-                      <!-- +++++++++++++++++++++++++++++++++++++ -->
-                      <div ng:if="{{ media_question/media_type }} == 1" class="media-optional-src">
+                      {{#if media_question}}
+                      <div class="qs-media-data">
+                          <!-- +++++++++++++++++++++++++++++++++++++ -->
+                          <!--++++++++++++ Case it Image ++++++++++++-->
+                          <!-- +++++++++++++++++++++++++++++++++++++ -->
+                          <div ng:if="{{ media_question/media_type }} == 0" style="width:100%; height:250px;">
+                             <img ng:src="{{server_ip}}{{media_question/media_field}}" alt="{{question_body}}" class="img-responsive-md">
+                          </div>
+
+                          <!-- +++++++++++++++++++++++++++++++++++++ -->
+                          <!--++++++++++++ Case it video ++++++++++++-->
+                          <!-- +++++++++++++++++++++++++++++++++++++ -->
+                          <div ng:if="{{ media_question/media_type }} == 1" class="media-optional-src">
                         <!-- +++++++++++++++++++++++++++++++ -->
                         <!-- Case it youtube -->
                         <!-- +++++++++++++++++++++++++++++++ -->
@@ -145,6 +147,8 @@
                         </video>
                       </div>
                     </div>
+                    {{/if}}
+
                   </div>
                   <!-- Question Description -->
                   <span class="qs-description">

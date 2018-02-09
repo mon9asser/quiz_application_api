@@ -2,12 +2,12 @@ $(document).ready(function(){
   //---------------------------------------------------
  // ==> Sliding Items Via Slick
  //--------------------------------------------------
-    $('.question-lists').slick({
-      draggable : true ,
-      slidesToShow : 1 ,
-      infinite: false ,
-      swipe: true ,
-      autoplay: false
+   $('.question-lists').slick({
+        draggable : true ,
+        slidesToShow : 1 ,
+        infinite: false ,
+        swipe: true ,
+        autoplay: false
     });
 
 
@@ -25,6 +25,10 @@ $(document).ready(function(){
      disabled: obj.disabled ,
      onStart : function (evt){
       var targetEl = $(evt.item).hasClass("draggable-x");
+     } ,
+     onEnd : function (evt){
+       // Sorting it into mongoDb
+
      }
    });
  //---------------------------------------------------
@@ -85,7 +89,26 @@ $(document).ready(function(){
                 "question_body":question_text
               },
               success : function (responseData){
-                console.log(responseData);
+                var newSlide =
+                 '<li class="question-tags slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" tabindex="0" style="width: 70px;">'
+                    +'<div class="quiz-qs-preview">'
+                    +'<div class="question-head">'
+                    +'<p>'
+                    +'Write your media choices question text here !!'
+                    +'</p>'
+                    +'<div class="clearFix"></div>'
+                    +'</div>'
+                    +'</div>'
+                    +'<div class="controller-btns">'
+                    +'<button class="btn btn-danger-outline" type="button" name="button" tabindex="0">'
+                    +'Back'
+                    +'</button>'
+                    +'<button class="btn btn-primary-outline" type="button" name="button" tabindex="0">'
+                    +'Continue'
+                    +'</button>'
+                    +'</div>'
+                    +'</li>' ;
+                    $('.question-lists').slick('slickAdd' ,  newSlide );
               }
           });
         });
