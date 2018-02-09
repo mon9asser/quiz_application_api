@@ -6,7 +6,6 @@
 }
 
 
-
 /* ==> Fonts :  */
 
 /* ------------------ */
@@ -968,7 +967,7 @@ vertical-align: baseline;
     position: relative;
     float: right;
     margin: 2px 9px 0px 0px;
-    color: #999;
+    /*color: #999;*/
     cursor: pointer;
 }
 .qsdragged-list > ul > li.dragelement-here{
@@ -3184,9 +3183,18 @@ ul.media-image-editor > li > span
       height: 25px;
       overflow: hidden;
   }
+  ul.question-lists {
+    display: block;
+    list-style: none;
+  }
+  ul.question-lists li {
+    margin-left: 10px;
+  }
+
   .video-mp4 {
     margin-bottom: 10px;
   }
-  .video-youtube {
-
+  .selected_question {
+    background: slategrey !important;
+    color: rgb(255, 255, 255) !important;
   }

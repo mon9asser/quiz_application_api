@@ -23,21 +23,21 @@
 <div class="side-left-bar">
   <div class="question-data">
      <ul id="qs-sortable" class="question-x">
-          <li question-data="partials/multi-choices.hbs">
+          <li data-question-type="0" question-data="partials/multi-choices.hbs">
               <span class="qs-type" title="Multiple Choices">
                  <i class="icon-insert-template"></i>
               </span>
               <span class="titles">Choices</span>
           </li>
 
-          <li question-data="partials/media-choices.hbs">
+          <li data-question-type="1" question-data="partials/media-choices.hbs">
               <span class="qs-type" title="Media Choices">
                  <i class="icon-image"></i>
               </span>
               <span class="titles">Media</span>
           </li>
 
-          <li question-data="partials/true-false.hbs">
+          <li data-question-type="2" question-data="partials/true-false.hbs">
               <span class="qs-type" title="Ture/False">
                  <i class="icon-check-circle"></i>
               </span>
@@ -72,9 +72,10 @@
 						</div>
             <!-- list of question type -->
 						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
-              <!-- <li class="dragelement-here">
-                <span>Drag Question Here</span>
-              </li> -->
+              <li  class="dragelement-here draggable-x">
+                  List your question here !
+              </li>
+
                   {{# each app.questions}}
                     <li
                       class ="question-object qs-{{ id }}"
