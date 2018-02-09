@@ -82,7 +82,22 @@ qtnrRouters.use(bodyParser.urlencoded({
 // qtnrRouters.use(bodyParser.urlencoded());
 // qtnrRouters.use(bodyParser.json());
 qtnrRouters.use(build_session);
-
+//---------------------------------------------
+var RateLimit = require('express-rate-limit');
+qtnrRouters.enable('trust proxy');
+var apiLimiter = new RateLimit({
+  windowMs: 15*60*1000, // 15 minutes
+  max: 100,
+  delayMs: 0 // disabled
+});
+qtnrRouters.use('/api/', apiLimiter);
+var createAccountLimiter = new RateLimit({
+  windowMs: 60*60*1000, // 1 hour window
+  delayAfter: 1, // begin slowing down responses after the first request
+  delayMs: 3*1000, // slow down subsequent responses by 3 seconds per request
+  max: 5, // start blocking after 5 requests
+  message: "Too many requests created from this IP, please try again after an hour"
+});
 
 //========================================
 // =========> /api/init => post|get ( Quiz or Survey App )
@@ -91,7 +106,7 @@ qtnrRouters.use(build_session);
 /*
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
-qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
+qtnrRouters.post("/create", auth_verify_api_keys_tokens , createAccountLimiter ,    (req, res) => {
   var user = req.verified_user;
   var userType = req.is_creator;
     if (userType != 1) {
@@ -151,7 +166,7 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
 });
 
 
-qtnrRouters.delete("/:app_id/delete", auth_verify_api_keys_tokens , (req, res)=>{
+qtnrRouters.delete("/:app_id/delete", auth_verify_api_keys_tokens , createAccountLimiter, (req, res)=>{
   var app_id = req.params.app_id;
   qtnr.findByIdAndRemove(app_id).then((appDoc)=>{
     if(!appDoc) {
@@ -168,7 +183,7 @@ qtnrRouters.delete("/:app_id/delete", auth_verify_api_keys_tokens , (req, res)=>
 
 });
 
-qtnrRouters.post("/init", auth_verify_api_keys_tokens  , (req, res) => {
+qtnrRouters.post("/init", createAccountLimiter ,auth_verify_api_keys_tokens  , (req, res) => {
 
     var user = req.verified_user;
     var userType = req.is_creator;
@@ -219,7 +234,7 @@ qtnrRouters.post("/init", auth_verify_api_keys_tokens  , (req, res) => {
 
 
 // Create settings for quiz or survey ( remember this part => surv/quiz for used with /init route)
-qtnrRouters.patch("/:app_id/app/edit", auth_verify_generated_tokens ,  (req, res) => {
+qtnrRouters.patch("/:app_id/app/edit",createAccountLimiter , auth_verify_generated_tokens ,  (req, res) => {
     var user = req.verified_user;
 
     var userType = req.is_creator;
@@ -365,7 +380,7 @@ qtnrRouters.patch("/:app_id/app/edit", auth_verify_generated_tokens ,  (req, res
 
 });
 // Stylesheet Settings ( process => edit / create) this mesthod required id of class name via req
-qtnrRouters.patch("/:app_id/settings/style/:process", auth_verify_api_keys , (req, res) => {
+qtnrRouters.patch("/:app_id/settings/style/:process", auth_verify_api_keys , createAccountLimiter , (req, res) => {
     // Stylesheet
     var user = req.verified_user;
     var userType = req.is_creator;
@@ -724,7 +739,7 @@ qtnrRouters.patch("/:app_id/settings/style/:process", auth_verify_api_keys , (re
 
 });
 // Question => proccess ( create - edit or delete )
-qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("media_field") , auth_verify_api_keys , (req, res) =>{
+qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("media_field") , auth_verify_api_keys , createAccountLimiter, (req, res) =>{
   var app_id = req.params.app_id ;
   var processType= req.params.process ;
   var user = req.verified_user;
@@ -1132,7 +1147,7 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
 
 });
 // Answers
-qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_answer_images.single("media_src") ,  auth_verify_api_keys , (req , res)=>{
+qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" ,createAccountLimiter, question_answer_images.single("media_src") ,  auth_verify_api_keys , (req , res)=>{
   ///localhost:3000/api/5a1efcc61826bd398ecd4dee/question/5a1f0c5c0b6a6843735020b2/answer/create
   var processType= req.params.process ;
   var question_id = req.params.question_id;
@@ -1770,7 +1785,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
 });
 // ==> retrieve data from questions
 // objects => styles | questions | retrieve | settings |
-qtnrRouters.post("/:app_id/application/:objects" , auth_verify_api_keys , (req ,res )=>{
+qtnrRouters.post("/:app_id/application/:objects", createAccountLimiter , auth_verify_api_keys , (req ,res )=>{
       var objects= req.params.objects ;
       var user = req.verified_user;
       var userType = req.is_creator;
@@ -1840,7 +1855,7 @@ qtnrRouters.post("/:app_id/application/:objects" , auth_verify_api_keys , (req ,
        });
 });
 
-qtnrRouters.get("/:uid/applications" , authenticate_keys_with_curr_status ,  (req,res) => {
+qtnrRouters.get("/:uid/applications" , authenticate_keys_with_curr_status , createAccountLimiter ,  (req,res) => {
 
   var userId= req.params.uid ;
   // var user = req.verified_user;

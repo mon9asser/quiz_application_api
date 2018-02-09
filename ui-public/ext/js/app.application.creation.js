@@ -94,7 +94,7 @@ $(document).ready(function(){
                     +'<div class="quiz-qs-preview">'
                     +'<div class="question-head">'
                     +'<p>'
-                    +'Write your media choices question text here !!'
+                    + responseData.Question_details.question_body
                     +'</p>'
                     +'<div class="clearFix"></div>'
                     +'</div>'
@@ -108,6 +108,7 @@ $(document).ready(function(){
                     +'</button>'
                     +'</div>'
                     +'</li>' ;
+
                     $('.question-lists').slick('slickAdd' ,  newSlide );
               }
           });

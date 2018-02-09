@@ -34,6 +34,28 @@ usrRouters.use(session({
   // Authenticate ( Generate new tokens ) => edit quiz - edit quiz taken ( case retak )
 
 
+
+  //---------------------------------------------
+  var RateLimit = require('express-rate-limit');
+  usrRouters.enable('trust proxy');
+  var apiLimiter = new RateLimit({
+    windowMs: 15*60*1000, // 15 minutes
+    max: 100,
+    delayMs: 0 // disabled
+  });
+  usrRouters.use('/api/', apiLimiter);
+  var createAccountLimiter = new RateLimit({
+    windowMs: 60*60*1000, // 1 hour window
+    delayAfter: 1, // begin slowing down responses after the first request
+    delayMs: 3*1000, // slow down subsequent responses by 3 seconds per request
+    max: 5, // start blocking after 5 requests
+    message: "Too many requests created from this IP, please try again after an hour"
+  });
+
+  usrRouters.use(usrRouters);
+
+
+
   usrRouters.post("/auth/:uid" , verify_api_keys_user_apis , (req,res)=>{
      var user_id = req.params.uid; // creator_id OR attendee_id
      // detect if this user is exists or not

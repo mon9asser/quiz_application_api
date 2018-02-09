@@ -25,6 +25,7 @@
     "express": "^4.16.2",
     "express-fileupload": "^0.3.0",
     "express-hbs": "^1.0.4",
+    "express-rate-limit": "^2.11.0",
     "express-router": "0.0.1",
     "express-session": "^1.15.6",
     "hbs": "^4.0.1",
