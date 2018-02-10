@@ -1,5 +1,5 @@
-66<!-- live Preview for Questions -->
-<div class="question-preview qsdragged-list">
+<!-- live Preview for Questions -->
+<div  class="question-preview qsdragged-list">
    <!-- Screen Options -->
    <!-- <span class="screen-option">
       <i class="fa fa-code"></i> <!-- fa-compress -->
@@ -158,14 +158,13 @@
                   <!-- +++++++++++++++++++++++++++++++++++ -->
                   <!-- ++++++++++++++++ Answers ++++++++++ -->
                   <!-- +++++++++++++++++++++++++++++++++++ -->
-                  <ul class="answer-of-questions">
-                    <li>
-                      Data
-                    </li>
-                    <li>
-                      Data
-                    </li>
-                  </ul>
+                  {{#if answers_format }}
+                    <ul class="answer-of-questions">
+
+                    </ul>
+                  {{else}}
+                    <b>There are no answers here !</b> <a href="#">Add new answer</a>
+                  {{/if}}
 
               </div>
               <!-- ++++++++++++++++++++++++++++++-->
@@ -185,4 +184,16 @@
          </ul>
       </div>
 
+</div>
+
+<!-- ---------------------------------------------- -->
+<!-- +++++++++++++++ editor overlay +++++++++++++++ -->
+<!-- ---------------------------------------------- -->
+<div class="editor-overlay">
+  <div class="card">
+  	<div class="loader">
+  		<div class="spin"></div>
+  		<div class="bounce"></div>
+  	</div>
+  </div>
 </div>
