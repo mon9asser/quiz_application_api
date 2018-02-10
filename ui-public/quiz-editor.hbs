@@ -170,10 +170,10 @@
 
         <!-- Edit Template && Preview Template  -->
         <div class="question-editor swiper-container">
-            <div ng:hide="template_mode">
+            <div ng:hide="true">
               {{> preview app = app }}
             </div>
-            <div ng:show="template_mode">
+            <div ng:show="true"><!-- template_mode -->
                {{> editor app = app }}
             </div>
         </div>
