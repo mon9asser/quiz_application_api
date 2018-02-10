@@ -2,18 +2,26 @@ $(document).ready(function(){
   //---------------------------------------------------
  // ==> Sliding Items Via Slick
  //--------------------------------------------------
-   $('.question-lists').slick({
-        draggable : true ,
-        slidesToShow : 1 ,
-        infinite: false ,
-        swipe: true ,
-        autoplay: false
-    });
+ $('.question-lists').slick({
+      draggable : true ,
+      slidesToShow : 1 ,
+      infinite: false ,
+      swipe: true ,
+      autoplay: false
+  });
+  
 
+  //---------------------------------------------------
+  // ==> Remove question from list and slack slider
+  //--------------------------------------------------
+  $(".question-deletion").on("click",function(){
+      // =====> Delete Question From Slider slick
+       $('.question-lists').slick('slickRemove', 1);
+  });
 
-    //---------------------------------------------------
-    // ==> Resorting items inside list
-    //---------------------------------------------------
+  //---------------------------------------------------
+  // ==> Resorting items inside list
+  //---------------------------------------------------
 
   var obj = {
       disabled : false
@@ -24,7 +32,7 @@ $(document).ready(function(){
      group: "question-list" ,
      disabled: obj.disabled ,
      onStart : function (evt){
-      var targetEl = $(evt.item).hasClass("draggable-x");
+      // var targetEl = $(evt.item).hasClass("draggable-x");
      } ,
      onEnd : function (evt){
        // Sorting it into mongoDb
@@ -47,7 +55,7 @@ $(document).ready(function(){
     onEnd: function (evt) {
         // ======> Loader Page
         $(".editor-overlay").fadeIn();
-        setTimeout(function(){
+
           var itemEl = evt.item;  // dragged HTMLElement
           var parentElement = $("#docQuestions") ;
           var server_ip = $("#serverId_app").attr("serverIp");
@@ -61,7 +69,7 @@ $(document).ready(function(){
                 $(questionTypeElement).insertBefore( parentElement.children("li").eq(evt.newIndex));
               }
             });
-
+            itemEl.remove();
 
 
           // ==> Storing data into mongodb
@@ -77,6 +85,7 @@ $(document).ready(function(){
           question_text = "Write your media choices question text here !!";
           else if (qsType == 2)
           question_text = "Write your boolean question text here !!";
+          setTimeout(function(){
 
           $.getJSON(file , function (api_keys){
               $.ajax({
@@ -108,7 +117,7 @@ $(document).ready(function(){
                       +'<button class="btn btn-danger-outline" type="button" name="button" tabindex="0">'
                       +'Back'
                       +'</button>'
-                      +'<button class="btn btn-primary-outline" type="button" name="button" tabindex="0">'
+                      +'<button style="margin-left:5px;" class="btn btn-primary-outline" type="button" name="button" tabindex="0">'
                       +'Continue'
                       +'</button>'
                       +'</div>'
@@ -119,9 +128,10 @@ $(document).ready(function(){
                 }
             });
           });
-          itemEl.remove();
+
+
           $(".editor-overlay").fadeOut();
-        } , 2000 );
+          } , 2000 );
 
     }
 

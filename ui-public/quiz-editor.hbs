@@ -72,9 +72,9 @@
 						</div>
             <!-- list of question type -->
 						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
-              <li  class="dragelement-here draggable-x">
-                  List your question here !
-              </li>
+                <!-- <li  class="dragelement-here draggable-x"> -->
+                    <!-- List your question here ! -->
+                <!-- </li> -->
 
                   {{# each app.questions}}
                   <li
@@ -111,8 +111,11 @@
                    <span ng:if="{{ question_type }} == 4">
                      ...... 4
                    </span>
+                   <i ng:click="delete_this_question( '{{ id }}' )" style="cursor:pointer;" class="fa fa-trash iconx-trashable qs-delete-{{ id }} question-deletion"></i>
+
+                   <i ng:click="delete_this_question( '{{ id }}' )" style="cursor:pointer;" class="fa fa-eye iconx-trashable"></i>
+
                     <i ng:click="edit_this_question( '{{ id }}' )" style="cursor:pointer;" class="fa fa-pencil iconex-movable"></i>
-                    <i ng:click="delete_this_question( '{{ id }}' )" style="cursor:pointer;" class="fa fa-trash iconx-trashable qs-delete-{{ id }}"></i>
                   </li>
                   {{/each}}
                 <!--
@@ -166,15 +169,13 @@
 
 
         <!-- Edit Template && Preview Template  -->
-        <div class="question-editor">
-          <!-- Slide -->
-          <div>
+        <div class="question-editor swiper-container">
+            <div ng:hide="template_mode">
               {{> preview app = app }}
-          </div>
-          <div style="display:none;">
-              {{> editor app = app }}
-          </div>
-
+            </div>
+            <div ng:show="template_mode">
+               {{> editor app = app }}
+            </div>
         </div>
 
       </div>

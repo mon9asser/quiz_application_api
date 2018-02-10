@@ -242,6 +242,24 @@ application.controller("myApplicationPage" , ["$rootScope","$timeout" , function
   };
 
 
+
+
+  $rootScope.on_mode = "Preview";
+  $rootScope.template_mode = false ;
+  $rootScope.move_mode = function (){
+    alert();
+    if ( $rootScope.template_mode == false ){
+        $rootScope.template_mode = false ;
+        $rootScope.templates= 'templates/preview.html';
+        $rootScope.on_mode = "Preview";
+    } else
+    {
+      $rootScope.template_mode = true ;
+      $rootScope.templates= 'templates/editor.html';
+      $rootScope.on_mode = "Editor";
+    }
+  };
+
 }]);
 
 application.controller("qsCreationCtr" , [
@@ -252,6 +270,7 @@ application.controller("qsCreationCtr" , [
     $rootScope.editor_mode = "Preview";
     $rootScope.template_mode = false ;
     $rootScope.change_mode = function (){
+
         var server = $("#serverId_app").attr("serverIp") ;
       if ( $rootScope.template_mode == true ){
           $rootScope.template_mode = false ;
@@ -263,6 +282,7 @@ application.controller("qsCreationCtr" , [
           $rootScope.templates=  server +'partials/editor.hbs';
           $rootScope.editor_mode = "Editor";
         }
+
     };
 
 

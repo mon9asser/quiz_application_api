@@ -3446,6 +3446,25 @@ border-color: #00a8ff;
 margin-left: 5px;
 border-radius: 0px;
 }
-.controller-btns button:last-child{
+.controller-btns > button:last-child{
   margin: 0px;
 }
+.main-page {
+  display: none;
+}
+.main-page:first-child {
+  display: block;
+}
+.main-page {
+  position: relative;
+  /*width: 2058px;*/
+ }
+
+ /*.x-editor-page-x {
+   right: -100%;
+ 
+ }
+ .x-preview-page-x {
+   left : -0% ;
+	 display:block;
+ }*/
