@@ -813,15 +813,18 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
           if(req.body.answer_settings == null) {
             question_tag ["answer_settings"] = new Object();
             question_tag ["answer_settings"]['is_randomized'] = false ;
+            question_tag ["answer_settings"]['is_required'] = false ;
             question_tag ["answer_settings"]['super_size'] = false ;
             question_tag ["answer_settings"]['single_choice'] = true ;
+            question_tag ["answer_settings"]['is_required'] = false ;
             question_tag ["answer_settings"]['choice_style'] = "inline";
             question_tag ["answer_settings"]['answer_char_max'] = 200;
           }else if(req.body.answer_settings != null){
               question_tag ["answer_settings"] = new Object();
               if(req.body.answer_settings.is_randomized != null )
               question_tag ["answer_settings"]['is_randomized'] = req.body.answer_settings.is_randomized ;
-
+              if( req.body.answer_settings.is_required != null)
+              question_tag ["answer_settings"]['is_required'] = req.body.answer_settings.is_required ;
               if(req.body.answer_settings.super_size != null )
               question_tag ["answer_settings"]['super_size'] = req.body.answer_settings.super_size ;
 
@@ -1036,6 +1039,9 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
 
                   if(req.body.answer_settings.is_randomized != null  ){
                       qtnairsDocument.questions[findIndex_this_qs].answer_settings.is_randomized = req.body.answer_settings.is_randomized ;
+                  }
+                  if(req.body.answer_settings.is_required != null  ){
+                      qtnairsDocument.questions[findIndex_this_qs].answer_settings.is_required = req.body.answer_settings.is_required ;
                   }
 
                   if(req.body.answer_settings.super_size != null  ){

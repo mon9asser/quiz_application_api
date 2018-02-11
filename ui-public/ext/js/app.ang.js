@@ -345,13 +345,130 @@ application.controller("qsCreationCtr" , [
     }; // ==> End Delete QS api
 
 
-
-
     // ---------------------------------------
     // ----->>>>> Edit Question Part
     // ---------------------------------------
-    $rootScope.edit_this_question = function (qs_id){
-     alert();
+    $rootScope.edit_this_question = function (qs_id , app_id){
+      var jsonFile =  $rootScope.serverIp + "ext/js/json.app.keys.json";
+      var url = $rootScope.serverIp + "api/"+app_id+"/application/retrieve";
+      var creatorId = $("#creatorId").attr("creatorId");
+      $.getJSON( jsonFile , function (api_key_data){
+        $.ajax({
+          url : url ,
+          type : "POST" ,
+          data : {
+            "target_id"   : qs_id.toString() ,
+            "creator_id"  : creatorId
+          } ,
+          headers : {
+            "X-api-app-name": api_key_data.APP_NAME ,
+            "X-api-keys"    : api_key_data.API_KEY ,
+            "Content-Type"  : undefined
+          } ,
+          success : function (qsData){
+            var questions = qsData.questions ;
+            for (var i = 0; i < questions.length; i++) {
+              if(questions[i]._id == qs_id.toString()){
+                console.log(questions[i]);
+                // ---------------------------------------
+                // ----->>>>> Question Settings
+                // ---------------------------------------
+                $rootScope.requiredOption = questions[i].answer_settings.is_required;
+                $rootScope.multipleResponseOption = questions[i].answer_settings.single_choice;
+                $rootScope.randomizeOption = questions[i].answer_settings.is_randomized;
+                $rootScope.superSizeOption  = questions[i].answer_settings.super_size;
+                // ---------------------------------------
+                // ----->>>>> Answers
+                // ---------------------------------------
+                
+                // => question id
+
+                $("#x-question-id-x").val(questions[i]._id);
+                $('#x-app-id-x').val(qsData._id);
+                $("#x-creator-id-x").val(qsData.creator_id);
+                 // ==> Question tag
+                $("#editor-question-body").html(questions[i].question_body)
+                // ==> media part
+                $(".media-changeable-img-case").css( 'background-image','url()' );
+                if(questions[i].media_question != null ){
+                  // Get media type
+                  if(questions[i].media_question.media_type == 0 ){ // image
+                    var image_media = $rootScope.serverIp + questions[i].media_question.media_field  ;
+                    $(".media-changeable-img-case").css( 'background-image','url('+image_media+')' );
+                    $(".media-changeable-img-case").html("<p class='edit-pencil-media' onClick='edit_media_part()'><span class='fa fa'></span><p>");
+                  }else { // Video type
+                    var video_media ;
+                    // ==> mp4
+                    if(questions[i].media_question.video_type == 2 )
+                    video_media = $rootScope.serverIp +  "img/vid-mp4.jpg" ;
+                    // ==> youtube
+                    if(questions[i].media_question.video_type == 0 )
+                    video_media = $rootScope.serverIp +  "img/vid-youtube.jpg" ;
+                    // ==> vimeo
+                    if(questions[i].media_question.video_type == 1 )
+                    video_media = $rootScope.serverIp +  "img/vid-vimeo.jpg" ;
+
+                    $(".media-changeable-img-case").css( 'background-image','url('+video_media+')' );
+                    $(".media-changeable-img-case").html("<p class='edit-pencil-media' onClick='edit_media_part()'><span class='fa'></span><p>");
+                  }
+                }else {
+                  $(".media-changeable-img-case").html("<p class='edit-pencil-media' onClick='edit_media_part()'><span class='fa fa-pencil'></span> Add New Media<p>");
+                }
+                $(".description-field-x").val('');
+                // question_description
+                if ( questions[i].question_description != null ){
+                  $(".description-field-x").val(questions[i].question_description);
+                }else { // disable it
+
+                }
+                // init defalt ui
+                $('.media-x-preview').css({ // ==> For image
+                  "background-image" : "url('')"
+                });
+                $('input.media-inputs').val('');
+                $('.media-x-preview').html("<span class='video-not-found'>Extracted Media for view</span>"); // Video Part
+                // ============> Loading media part
+                $('.media-inputs').css("display","block");
+                if(questions[i].media_question != null ){
+                if(questions[i].media_question.media_type == 0 ){ // image
+                  var image_paa = '<div style="height:250px;background-image:url('+image_media+')" class="img-resp-exrtacted"></div>';
+                  $('.media-x-preview').html(image_paa);
+                  $('input.media-inputs').val(image_media);
+                }else if (questions[i].media_question.media_type == 1 ){
+                  var video_part ;
+                  if(questions[i].media_question.video_type == 2 ){// mp4
+                    video_part =
+                      '<video controls style="width:100%; height:auto;">'
+                         +'<source type="video/mp4" src="'+questions[i].media_question.media_field+'.mp4">'
+                      +'</video>';
+                      $('.media-inputs').val( questions[i].media_question.media_field+'.mp4');
+                  }
+                  if(questions[i].media_question.video_type == 1 ){// Vimeo
+                    video_part =
+                    '<iframe src="https://player.vimeo.com/video/'+questions[i].media_question.video_id+'" width="100%" height="250" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
+                    $('.media-inputs').val("https://player.vimeo.com/video/"+questions[i].media_question.video_id );
+                  }
+                  if(questions[i].media_question.video_type == 0 ){// youtube
+                    video_part =
+                    '<iframe width="100%" height="250" src="https://www.youtube.com/embed/'+questions[i].media_question.video_id+'?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+                      $('.media-inputs').val("https://www.youtube.com/embed/"+questions[i].media_question.video_id );
+                  }
+
+                  $('.media-x-preview').html(video_part);
+                }
+                }
+
+                // ==========================> Settings
+                // $rootScope.singleResponseOption = questions[i].answer_settings.single_choice;
+
+              }
+            }
+          } ,
+          error : function (error){
+            console.log(error);
+          }
+        });
+      });
     }// ==> End Editable QS api
 
 

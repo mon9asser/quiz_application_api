@@ -293,6 +293,9 @@ var quiz_answer_types = {
         is_randomized : {
           type : Boolean
         } ,
+        is_randomized: {
+          type : Boolean
+        } , 
         super_size : {
           type : Boolean
         },

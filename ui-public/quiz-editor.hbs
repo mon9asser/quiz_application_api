@@ -60,7 +60,7 @@
   					 </div>
 					</div>
 	    </div>
-	</div>
+	</div> 
   <div class="container-fluid row-x-body">
 
     <div class="row">
@@ -113,9 +113,9 @@
                    </span>
                    <i ng:click="delete_this_question( '{{ id }}' )" style="cursor:pointer;" class="fa fa-trash iconx-trashable qs-delete-{{ id }} question-deletion"></i>
 
-                   <i ng:click="delete_this_question( '{{ id }}' )" style="cursor:pointer;" class="fa fa-eye iconx-trashable"></i>
+                   <!-- <i ng:click="delete_this_question( '{{ id }}' )" style="cursor:pointer;" class="fa fa-eye iconx-trashable"></i> -->
 
-                    <i ng:click="edit_this_question( '{{ id }}' )" style="cursor:pointer;" class="fa fa-pencil iconex-movable"></i>
+                    <i ng:click="edit_this_question( '{{ id }}' , '{{../app.id}}' )" style="cursor:pointer;" class="fa fa-pencil iconex-movable"></i>
                   </li>
                   {{/each}}
                 <!--
@@ -170,7 +170,7 @@
 
         <!-- Edit Template && Preview Template  -->
         <div class="question-editor swiper-container">
-            <div ng:hide="true">
+            <div  ng:hide="true" style="position:relative;">
               {{> preview app = app }}
             </div>
             <div ng:show="true"><!-- template_mode -->

@@ -1,8 +1,93 @@
 $(document).ready(function(){
 
-$("#add-media-image-video").on("click" , function (){
-  $(".box-overlay , .box-data").fadeIn();
+//-----------------------------------------
+// ------->>>>>> tab orders
+//-------------------------------------------
+$(".x-editor-x-title").on('click', function (){
+
+  var targetId = $(this).attr('data-toggle');
+  var targetAll = $(".x-editor-x-body").height() ;
+  var targetH = $(targetId).height() ;
+  // $('.x-editor-x-body').each(function(i){
+  //
+  // });
+
+  $(targetId).slideToggle();
+  // $(this).css({'margin-top':'10px' , display:'block'})
 });
+
+
+$('.video-handler').on('click' , function (){
+  $(".media-inputs").css("display",'block');
+});
+$('.image-handler').on('click' , function (){
+  // ---------------------------------------
+  // ----->>>>> Image Uploader
+  // ---------------------------------------
+  $('.image-uploader-x').trigger("click");
+});
+
+
+$('.image-uploader-x').on("change", function (){
+
+
+    var fileImage = $('.image-uploader-x')[0].files[0] ;
+    console.log(fileImage.type);
+    if(fileImage.type != "image/jpeg" && fileImage.type != "image/jpg" && fileImage.type != "image/png" && fileImage.type != "image/jpg")
+    {
+      $(".media-x-preview").html("<b style='color:red;color: red;padding-top: 20px;display: block;'>Image should end with png or gif or jpg</b>")
+      return false ;
+    }
+
+    var questionId = $('#x-question-id-x').val()  ;
+    var appId = $("#x-app-id-x").val();
+    var creatorIdx = $("#x-creator-id-x").val();
+
+    var formObject = new FormData();
+    formObject.append("media_field", fileImage  );
+    formObject.append("question_id", questionId );
+    formObject.append("creator_id",  creatorIdx );
+    $('.media-inputs').fadeOut();
+    var server_ip = $("#serverId_app").attr("serverIp");
+    var url = server_ip +'api/'+ appId +"/question/edit";
+    var jsonFile = server_ip + "ext/js/json.app.keys.json";
+
+    $.getJSON(jsonFile , function (api_key_data){
+      $.ajax({
+        url : url ,
+        type : "PATCH" ,
+        data : formObject ,
+        processData: false,
+        contentType: false ,
+        headers : {
+          "X-api-app-name": api_key_data.APP_NAME ,
+          "X-api-keys"    : api_key_data.API_KEY ,
+          "Content-Type"  : undefined
+        } ,
+        success : function (qsData){
+          var imageMedia = '<div style="height:250px;background-image:url('+qsData.Media_directory+')" class="img-resp-exrtacted"></div>';
+          $('.media-x-preview').html(imageMedia);
+          $('.media-inputs').val(qsData.Media_directory);
+          $('.btn-close-media').trigger("click");
+        }
+      });
+
+    });
+
+});
+
+
+
+
+
+
+$('input.media-inputs').on('change keydown' , function (){
+   alert("Extract media here!!")
+});
+// =================> Meia Uploader
+ window.edit_media_part = function (){
+  $(".box-overlay , .box-data").fadeIn();
+ };
 $(".box-overlay , .btn-close-media").on("click" , function (){
     $(".box-overlay , .box-data").fadeOut();
 });

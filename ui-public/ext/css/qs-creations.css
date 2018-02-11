@@ -717,7 +717,7 @@ display: inline-block;
   display: inline;
   position: relative;
   overflow: hidden;
-  background: red;
+  /*background: red;*/
   height: 10px;
   width: 60px;
 }
@@ -1543,7 +1543,7 @@ question-x > li:hover{
     overflow: hidden;
     width: 34px;
     height: 35px;
-    background: red;
+    /*background: red;*/
     position: fixed;
     right: 0px;
     top: 108px;
@@ -2922,7 +2922,7 @@ body{ margin-top: 72px; }
 .question-editor {
   display: block;
   background: #fff;
-  padding: 25px 10px;
+  padding: 3px 10px;
   border-radius: 0px !important;
 }
 .media-files {
@@ -3008,10 +3008,11 @@ display: inline-block;
 
 .dash_sep
 {
-    padding: 30px 20px 10px 20px;
-    display: block;
-    border-top: 1px dashed rgb(13, 205, 249);
-    margin-top: 25px;
+  padding: 5px 20px 0px 20px;
+  display: block;
+  /*border-top: 1px dashed #ddd;*/
+  margin-top: 25px;
+  margin-bottom: 20px;
 }
 
 
@@ -3022,6 +3023,7 @@ display: inline-block;
   width: 100%;
   margin: 0px;
   padding: 0px;
+
 }
 .question-editor > ul > li {
   padding: 0px;
@@ -3221,7 +3223,7 @@ ul.media-image-editor > li > span
     min-height: 196px;
 }
 .question-editor {
-  min-height: 196px;
+ min-height: 170px;
 }
 
 
@@ -3236,7 +3238,7 @@ ul.media-image-editor > li > span
    /* padding: 24px 32px; */
    position: relative;
    text-align: center;
-   top: 50%;
+   top: 40%;
    -webkit-transform: translateY(-50%) translateX(-50%);
    transform: translateY(-50%) translateX(-50%);
    width: auto;
@@ -3537,10 +3539,10 @@ border-radius: 0px;
     z-index: 300;
     margin: 0px auto;
     border: 1px dashed #ddd;
-    box-shadow: 0px 0px 5px 0px #eee;
+    box-shadow: 0px 0px 5px 0px #ece7e3;
     color: #999;
     top: 10%;
-        padding-bottom: 15px;
+    padding-bottom: 15px;
     /*display: none;*/
 }
 
@@ -3551,6 +3553,8 @@ border-radius: 0px;
   width: 100%;
   border-bottom: 1px dashed #eee;
   padding: 10px 15px;
+  background: #eee;
+  color: #999;
 }
 @media only screen and (max-width:840px){
   .box-data   {
@@ -3567,7 +3571,7 @@ border-radius: 0px;
   width: 95%;
   margin: 12px auto 3px auto;
   border-radius: 0px;
-
+  color: #999 !important;
   display: none;
 }
 
@@ -3612,5 +3616,110 @@ border-radius: 0px;
   text-align: right;
 }
 .media-im-vid {
+  display: block;
+}
+.media-changeable {
+  min-height: 120px;
+  background: #eee;
+  max-height: 200px;
+  border: 10px;
+}
+.media-changeable-img-case {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.media-changeable-vid-case {
+
+}
+.edit-pencil-media {
+  vertical-align: baseline;
+position: relative;
+height: 100%;
+display: block;
+text-align: center;
+ padding: 53px 0px 50px 0px;
+cursor: pointer;
+}
+
+textarea:focus , textarea:active , textarea , .form-control:focus{
+  box-shadow: none !important;
+  border: 1px dashed #eee !important;
+  text-decoration: none !important;
+}
+
+
+.tab-editor {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  line-height: normal;
+  list-style: none;
+  /*background: red;*/
+}
+.tab-editor > li {
+  display: block;
+  position: relative;
+  overflow:  hidden;
+
+  width: 100%;
+  display: block;
+  height: auto;
+}
+.x-editor-x {
+  display: block;
+  position: relative;
+  overflow: hidden;.tab-editor > li
+  width: 100%;
+  /*background: red;*/
+}
+.x-editor-x-body {
   display: none;
+}
+.x-editor-x-title {
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+.tab-editor > li > .x-editor-x-title {
+  background: #fff;
+    padding: 5px 5px 10px 5px;
+    border-bottom: 1px dashed #eee;
+    cursor: pointer;
+    color: #999;
+    margin-bottom: 3px;
+    /* margin-bottom: 15px; */
+    color: tan;
+    font-weight: bold;
+}
+.top-margins {
+  margin-top: 15px;
+}
+
+.media-x-preview , .img-resp-exrtacted {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  height: auto;
+  background: #eee;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  text-align: center;
+  min-height: 60px;
+}
+.video-not-found {
+  padding: 20px 0px 0px 0px;
+      display: block;
+}
+.image-uploader-x {
+  display: none !important;
+}
+
+.answers-qs {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  list-style: none;
 }

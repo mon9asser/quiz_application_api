@@ -1,213 +1,162 @@
-<div class="col-sm-9">
-  <!-- ============================================== -->
-  <!--========= Question With Media ================= -->
-  <!-- ============================================== -->
-  <!-- <label class="titles-question"> Question : 	</label> -->
-  <div class="text-formats">
-    <ul>
-      <li>
-        <span class="fa fa-bold"></span>
-      </li>
-      <li>
-        <span class="fa fa-italic"></span>
-      </li>
-      <li>
-        <span class="fa fa-underline"></span>
-      </li>
-      <li>
-        <span class="fa fa-link"></span>
-      </li>
-    </ul>
-  </div>
-  <textarea id="editor-question-body" placeholder="Question Title ? " class="form-control quest-title-edit textarea-qs" rows="3"></textarea>
-</div>
-<div class="col-sm-3 media-uploads">
-  <a href="#" id="add-media-image-video">Add media</a>
-   <!-- <ul class="media-files"> -->
+<!-- target values -->
+<input id="x-question-id-x" type="hidden" name="" value="">
+<input id="x-app-id-x" type="hidden" name="" value="">
+<input id="x-creator-id-x" type="hidden" name="" value="">
 
-     <!-- Change element case it has media else -->
-     <!-- <li class="medi-optional-selected">
-       <span>
-         <i class="font-icon-editor-img"></i>
-       </span>
-     </li>
-     <li class="medi-optional-selected">
-       <span>
-         <i class="font-icon-editor-video"></i>
-       </span>
-     </li> -->
-
-     <!-- <li class="vide-case">
-       <iframe width="100%" height="auto" src="https://www.youtube.com/embed/1V6PAFHOJis" frameborder="0" allow="autoplay; encrypted-media"></iframe>
-       <ul class="media-optional-list">
-         <li>
-           <span class="fa fa-pencil editor-media-controller"></span>
-         </li>
-         <li>
-           <span class="fa fa-trash editor-media-controller"></span>
-         </li>
-         <li>
-           <span class="fa fa-arrows-alt editor-media-controller"></span>
-         </li>
-       </ul>
-     </li> -->
-     <!-- <li class="image-case">
-       <img class="img-responsive" src="http://localhost:9000/themeimages/question_5a6aece8e3902c29bbf44413.png" alt="">
-       <ul class="media-optional-list">
-         <li>
-           <span class="fa fa-pencil editor-media-controller"></span>
-         </li>
-         <li>
-           <span class="fa fa-trash editor-media-controller"></span>
-         </li>
-         <li>
-           <span class="fa fa-arrows-alt editor-media-controller"></span>
-         </li>
-       </ul>
-     </li> -->
-
-
-
-
-   <!-- </ul> -->
-</div>
-<!-- ============================================== -->
-<!--========= Description ================= -->
-<!-- ============================================== -->
-<div class="col-xs-12 col-sm-11">
-  <div class="row-cols margin-top">
-     <label class="titles-question description-enable-handler">
-        Description : <input class="enbl-desc" id="enable_dex" type="checkbox" name="" value="">
-     </label>
-
-     <textarea id="editor-question-desc" disabled="" name="name" class="form-control descriptions description-field description-field-x" placeholder="Description ..." rows="2" cols="80"></textarea>
-  </div>
-</div>
-<!-- ============================================== -->
-<!--========= Description ================= -->
-<!-- ============================================== -->
-<div class="col-sm-12">
-  <div class="row-cols margin-top">
-      <label class="titles-question"> Choices : <a class="choices-right-add" href="#">Add Choices</a></label>
-      <div class="ListallChoices">
-         <ul>
-           <!--
-           ++++++++++++++++++++++++++++++++++++++++
-            Answer Part
-           ++++++++++++++++++++++++++++++++++++++++
-          -->
-          <!--
-            <li>
-               <div class="choices-stylish">
-                  <div class="checkbox-bird orange checkeditems">
-                     <input type="checkbox" id="check-bird-13">
-                     <label target="label" class="checkedboxes check_boxx" for="check-bird-13" onclick="this.contentEditable='true';" contenteditable="true">Orange</label>
-                     <i class="fa fa-trash ficonix-bar"></i>
-                     <i class="fa fa-bars iconex-movable ficonix-bar"></i>
-                  </div>
-               </div>
-            </li>
-          -->
-         </ul>
+<!-- Tabs -->
+<ul class="tab-editor">
+  <li>
+    <div class="x-editor-x-title" data-toggle="#question-pt">
+      Question Tag
+    </div>
+    <div class="x-editor-x-body" id="question-pt">
+      <div class="col-sm-8 top-margins">
+          <!-- ============================================== -->
+          <!--========= Question With Media ================= -->
+          <!-- ============================================== -->
+          <!-- <label class="titles-question"> Question :   </label> -->
+          <div class="text-formats">
+            <ul>
+              <li>
+                <span class="fa fa-bold"></span>
+              </li>
+              <li>
+                <span class="fa fa-italic"></span>
+              </li>
+              <li>
+                <span class="fa fa-underline"></span>
+              </li>
+              <li>
+                <span class="fa fa-link"></span>
+              </li>
+            </ul>
+          </div>
+          <textarea id="editor-question-body" placeholder="Question Title ? " class="form-control quest-title-edit textarea-qs" rows="3"></textarea>
+        </div>
+      <div class="col-sm-4 media-uploads top-margins">
+          <!-- Image Case -->
+        <div class="media-changeable media-changeable-img-case"></div>
       </div>
-   </div>
-</div>
+      <div class="col-xs-12">
+        <div class="row-cols margin-top">
+           <label class="titles-question description-enable-handler">
+              Description : <!-- <input class="enbl-desc" id="enable_dex" type="checkbox" name="" value=""> -->
+           </label>
+           <textarea id="editor-question-desc" name="name" class="form-control descriptions description-field description-field-x" placeholder="Description ..." rows="3" cols="80"></textarea>
+        </div>
+      </div>
+    </div>
+  </li>
+  <li>
+    <div class="x-editor-x-title" data-toggle="#Settings-pt">
+      Question Settings
+    </div>
+    <div class="x-editor-x-body" id="Settings-pt">
+      <div class="col-sm-12">
+        <div class="row-cols margin-top">
+          <!-- <label class="titles-question"> Question Settings : </label> -->
+          <div class="question-settings">
+             <ul class="listSettings-qs">
+                <li>
+                   <span class="title-checkbox">Required</span>
+                   <div class="slideThree on-off-checkbox-settings">
+                      <input ng:model="requiredOption" type="checkbox" value="None" id="required-option" name="check" checked="">
+                      <label for="required-option"></label>
+                      <span class="off-value"></span>
+                   </div>
+                </li>
+                <li>
+
+                   <span class="title-checkbox">Multiple Response</span>
+                   <div class="slideThree on-off-checkbox-settings">
+                      <input ng:model="multipleResponseOption" type="checkbox" value="None" id="MultipleResponse-option" name="check" checked="">
+                      <label for="MultipleResponse-option"></label>
+                      <span class="off-value"></span>
+                   </div>
+                </li>
+                <li>
+
+                   <span class="title-checkbox">Randomize</span>
+                   <div class="slideThree on-off-checkbox-settings">
+                      <input ng:model="randomizeOption" type="checkbox" value="None" id="Randomize-option" name="check" checked="">
+                      <label for="Randomize-option"></label>
+                      <span class="off-value"></span>
+                   </div>
+                </li>
+                <li>
+
+                   <span class="title-checkbox">Super Size Media</span>
+                   <div class="slideThree on-off-checkbox-settings">
+                      <input ng:model="superSizeOption" type="checkbox" value="None" id="SuperSize-option" name="check" checked="">
+                      <label for="SuperSize-option"></label>
+                      <span class="off-value"></span>
+                   </div>
+                </li>
+                <!-- <li>
+
+                   <span class="title-checkbox">Single Response</span>
+                   <div class="slideThree on-off-checkbox-settings">
+                      <input ng:model="singleResponseOption" type="checkbox" value="None" id="SingleResponse-option" name="check" checked="">
+                      <label for="SingleResponse-option"></label>
+                      <span class="off-value"></span>
+                   </div>
+                </li> -->
+
+             </ul>
+          </div>
+        </div>
+          </div>
+    </div>
+  </li>
+  <li>
+    <div class="x-editor-x-title" data-toggle="#answers-pt">
+      Answers
+    </div>
+    <div class="x-editor-x-body" id="answers-pt">
+       <ul class="answers-qs">
+         <li class="">
+
+         </li>
+       </ul>
+    </div>
+  </li>
+
+</ul>
+
+
+<div class="clearFix top-border"></div>
 <!-- ============================================== -->
 <!--========= Question Settings  ================== -->
 <!-- ============================================== -->
-<div class="col-sm-12">
-  <div class="row-cols margin-top">
-    <label class="titles-question"> Question Settings : </label>
-    <div class="question-settings">
-       <ul class="listSettings-qs">
-          <li>
-             <span class="title-checkbox">Required</span>
-             <div class="slideThree on-off-checkbox-settings">
-                <input type="checkbox" value="None" id="required-option" name="check" checked="">
-                <label for="required-option"></label>
-                <span class="off-value"></span>
-             </div>
-          </li>
-          <li>
-
-             <span class="title-checkbox">Multiple Response</span>
-             <div class="slideThree on-off-checkbox-settings">
-                <input type="checkbox" value="None" id="MultipleResponse-option" name="check" checked="">
-                <label for="MultipleResponse-option"></label>
-                <span class="off-value"></span>
-             </div>
-          </li>
-          <li>
-
-             <span class="title-checkbox">Randomize</span>
-             <div class="slideThree on-off-checkbox-settings">
-                <input type="checkbox" value="None" id="Randomize-option" name="check" checked="">
-                <label for="Randomize-option"></label>
-                <span class="off-value"></span>
-             </div>
-          </li>
-          <li>
-
-             <span class="title-checkbox">Super Size Media</span>
-             <div class="slideThree on-off-checkbox-settings">
-                <input type="checkbox" value="None" id="SuperSize-option" name="check" checked="">
-                <label for="SuperSize-option"></label>
-                <span class="off-value"></span>
-             </div>
-          </li>
-          <li>
-
-             <span class="title-checkbox">Single Response</span>
-             <div class="slideThree on-off-checkbox-settings">
-                <input type="checkbox" value="None" id="SingleResponse-option" name="check" checked="">
-                <label for="SingleResponse-option"></label>
-                <span class="off-value"></span>
-             </div>
-          </li>
-
-       </ul>
-    </div>
- </div>
-    </div>
+<div class="col-sm-12 text-right dash_sep">
+  <button class="btn btn-danger-outline" type="button" name="button">
+        Delete
+  </button>
+  <button class="btn btn-primary-outline" type="button" name="button">
+        Save Changes
+  </button>
+</div>
 
 
 
 
-
-
-
-
-
-              <div class="clearFix top-border"></div>
-              <!-- ============================================== -->
-              <!--========= Question Settings  ================== -->
-              <!-- ============================================== -->
-
-
-            <div class="col-sm-12 text-right dash_sep">
-              <button class="btn btn-primary-outline" type="button" name="button">
-                Save Changes
-              </button>
-            </div>
-
-
-
-
+<!-- Overlay box -- w -- edit media -->
 <div class="box-overlay"></div>
 <div class="box-data">
   <div class="box-data-title">
-    <b>Media</b>
+    <b>Media Uploader</b>
   </div>
   <div class="media-part-controller">
     <input type="text" class="form-control media-inputs " id="exampleInputEmail1" placeholder="Media Link">
     <ul class="media-links">
       <li>
-        <a href="#">
+        <a class="video-handler" href="#">
           Add Video
         </a>
       </li>
       <li>
-        <a href="#">
+        <input class="image-uploader-x" type="file" name="" value="">
+        <a class="image-handler" href="#">
           Add Image
         </a>
       </li>
@@ -218,13 +167,13 @@
       <span>Preview</span>
     </div>
     <div class="preview-media-part media-im-vid">
-      <img class="img-responsive" src="https://www.w3schools.com/css/img_fjords.jpg" alt="">
+      <div class="media-x-preview"></div>
     </div>
     <div class="preview-media-part butns-part">
       <button  class="btn btn-danger btn-close-media" type="button" name="button">
         Close
       </button>
-      <button disabled class="btn btn-primary" type="button" name="button">
+      <button class="btn btn-primary" type="button" name="button">
         Save
       </button>
 
