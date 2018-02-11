@@ -1,5 +1,12 @@
 $(document).ready(function(){
-  //---------------------------------------------------
+
+$("#add-media-image-video").on("click" , function (){
+  $(".box-overlay , .box-data").fadeIn();
+});
+$(".box-overlay , .btn-close-media").on("click" , function (){
+    $(".box-overlay , .box-data").fadeOut();
+});
+ //---------------------------------------------------
  // ==> Sliding Items Via Slick
  //--------------------------------------------------
  $('.question-lists').slick({
@@ -9,7 +16,7 @@ $(document).ready(function(){
       swipe: true ,
       autoplay: false
   });
-  
+
 
   //---------------------------------------------------
   // ==> Remove question from list and slack slider

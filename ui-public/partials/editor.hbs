@@ -22,7 +22,7 @@
   <textarea id="editor-question-body" placeholder="Question Title ? " class="form-control quest-title-edit textarea-qs" rows="3"></textarea>
 </div>
 <div class="col-sm-3 media-uploads">
-  <a href="#">Add media</a>
+  <a href="#" id="add-media-image-video">Add media</a>
    <!-- <ul class="media-files"> -->
 
      <!-- Change element case it has media else -->
@@ -189,3 +189,45 @@
                 Save Changes
               </button>
             </div>
+
+
+
+
+<div class="box-overlay"></div>
+<div class="box-data">
+  <div class="box-data-title">
+    <b>Media</b>
+  </div>
+  <div class="media-part-controller">
+    <input type="text" class="form-control media-inputs " id="exampleInputEmail1" placeholder="Media Link">
+    <ul class="media-links">
+      <li>
+        <a href="#">
+          Add Video
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          Add Image
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="preview-media">
+    <div class="pre-title media-im-vid">
+      <span>Preview</span>
+    </div>
+    <div class="preview-media-part media-im-vid">
+      <img class="img-responsive" src="https://www.w3schools.com/css/img_fjords.jpg" alt="">
+    </div>
+    <div class="preview-media-part butns-part">
+      <button  class="btn btn-danger btn-close-media" type="button" name="button">
+        Close
+      </button>
+      <button disabled class="btn btn-primary" type="button" name="button">
+        Save
+      </button>
+
+    </div>
+  </div>
+</div>
