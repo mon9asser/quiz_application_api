@@ -60,7 +60,7 @@
   					 </div>
 					</div>
 	    </div>
-	</div> 
+	</div>
   <div class="container-fluid row-x-body">
 
     <div class="row">
@@ -170,10 +170,10 @@
 
         <!-- Edit Template && Preview Template  -->
         <div class="question-editor swiper-container">
-            <div  ng:hide="true" style="position:relative;">
+            <div  ng:hide="template_mode" style="position:relative;">
               {{> preview app = app }}
             </div>
-            <div ng:show="true"><!-- template_mode -->
+            <div ng:show="template_mode"><!-- template_mode -->
                {{> editor app = app }}
             </div>
         </div>

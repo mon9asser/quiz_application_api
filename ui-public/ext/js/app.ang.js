@@ -380,7 +380,18 @@ application.controller("qsCreationCtr" , [
                 // ---------------------------------------
                 // ----->>>>> Answers
                 // ---------------------------------------
-                
+
+                var ansList = questions[i].answers_format
+                // for (var i = 0; i < ansList.length; i++) {
+                //   var answerVal = ansList[i].value ;
+                //   var answer =
+                //    '<li class="">'
+                //     +'<div class="answer-text-block">'
+                //       +'<input type="text" name="" value="'+answerVal+'">'
+                //     +'</div>'
+                //   +'</li>';
+                //   $('.answers-qs').append(answer);
+                // }
                 // => question id
 
                 $("#x-question-id-x").val(questions[i]._id);
