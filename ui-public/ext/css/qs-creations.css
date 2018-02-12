@@ -3526,7 +3526,7 @@ border-radius: 0px;
   left:0px;
   z-index: 300;
 
-  /*display: none;*/
+  display: none;
 }
 .box-data {
   display: block;
@@ -3543,7 +3543,7 @@ border-radius: 0px;
     color: #999;
     top: 10%;
     padding-bottom: 15px;
-    /*display: none;*/
+    display: none;
 }
 
 .box-data-title {
@@ -3717,9 +3717,49 @@ textarea:focus , textarea:active , textarea , .form-control:focus{
   display: none !important;
 }
 
-.answers-qs {
+.answers-qs , .answer-row{
   display: block;
   position: relative;
   overflow: hidden;
   list-style: none;
+  margin-top: 15px;
+  text-align: center;
+}
+.answers-qs li {
+  position: relative;
+ width: 40%;
+ margin: 0px auto;
+ /* background: red; */
+ height: auto;
+ overflow: hidden;
+ display: inline-block;
+ overflow: hidden;
+ text-align: left;
+ margin-left: 5px;
+}
+.answer-media-block , .answer-text-block{
+  display: block;
+  width: 100%;
+  padding: 5px;
+  background: #eee;
+  min-height: 80px;
+  position: relative;
+
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.answer-text-block {
+  min-height: answer-text-blockinherit !important;
+  background: transparent !important;
+  font-size: 16px;
+  padding: 0px;
+}
+
+.answer-text-block > input {
+  display: block;
+  width: 100%;
+  padding: 5px;
+  border: 0px;
+  background: transparent ;
 }
