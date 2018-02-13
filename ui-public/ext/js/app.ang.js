@@ -370,6 +370,27 @@ application.controller("qsCreationCtr" , [
             for (var i = 0; i < questions.length; i++) {
               if(questions[i]._id == qs_id.toString()){
                 console.log(questions[i]);
+                if(questions[i].question_type == 0){
+                  $(".add-new-answer-pt").css("display","block");
+                  $(".true-fals-yes-no-type").css("display","none");
+                }
+                if(questions[i].question_type == 1){
+                  $(".add-new-answer-pt").css("display","block");
+                  $(".true-fals-yes-no-type").css("display","none");
+                }
+                if(questions[i].question_type == 2){
+                  $(".add-new-answer-pt").css("display","none");
+                  $(".true-fals-yes-no-type").css("display","block");
+                }
+                if(questions[i].question_type == 3){
+
+                }
+                if(questions[i].question_type == 4){
+
+                }
+
+
+
                 // ---------------------------------------
                 // ----->>>>> Question Settings
                 // ---------------------------------------

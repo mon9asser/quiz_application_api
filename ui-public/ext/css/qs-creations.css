@@ -3902,7 +3902,13 @@ li div.selected-right-answer {
   position: relative;
   padding: 5px;
   width: 95%;
-  margin: 10px auto;
+  margin: 10px auto;    width: 95%;
+    margin: 20px auto;
+    background: transparent;
+    padding: 6px;
+    display: block;
+    border: 1px dashed #eee;
+    color: #999;
   border: 1px solid #eee;
   color: #ddd;
 }
@@ -3914,5 +3920,19 @@ li div.selected-right-answer {
   border: 1px dashed #eee;
   margin: 10px auto;
 
+  display: none;
+}
+.true-fals-yes-no-type
+{
+  width: 95%;
+  margin: 20px auto;
+  background: transparent;
+  padding: 6px;
+  display: block;
+  border: 1px dashed #eee;
+  color: #999;
+}
+
+.hidden-allx {
   display: none;
 }
