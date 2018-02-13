@@ -399,6 +399,7 @@ application.controller("qsCreationCtr" , [
                 // => question id
 
                 $("#x-question-id-x").val(questions[i]._id);
+
                 $('#x-app-id-x').val(qsData._id);
                 $("#x-creator-id-x").val(qsData.creator_id);
                  // ==> Question tag

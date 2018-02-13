@@ -1,14 +1,5 @@
-$(document).ready(function(){
-  window.edit_text = function (){
+  $(document).ready(function(){
 
-    var questionId = $("#x-question-id-x").val();
-    var creatorIdx = $("#x-creator-id-x").val() ;
-    var formObject = new FormData();
-
-    var server_ip = $("#serverId_app").attr("serverIp");
-
-    alert(server_ip);
-  };
 
 
   $("span.edit-options-answer").on("click",function (){
@@ -16,9 +7,9 @@ $(document).ready(function(){
   });
 
   $("a.answer-video-handler").on("click",function (){
-   $(".media-inp-answer").css({
+   $(".media-iserver_ipnp-answer").css({
      display:'block'
-   })
+   });
   });
 
  $(".trigger-upload-answer-media").on("click", function (){
@@ -321,7 +312,7 @@ $(".box-overlay , .btn-close-media").on("click" , function (){
        answer_part += '</li>';
        answer_part += '</ul>';
        answer_part += '<div class="text-answers">';
-       answer_part += '<input onKeydown="edit_text()" type="text" name="" value="'+answer_val+'" placeholder="Write new answer here !!">';
+       answer_part += '<input onKeydown="edit_text(this)" onKeyup="edit_text(this)" onChange="edit_text(this)" type="text" name="" value="'+answer_val+'" placeholder="Write new answer here !!">';
        answer_part += '</div>';
        answer_part += '</li>';
        // Append to element
@@ -342,7 +333,8 @@ $(".box-overlay , .btn-close-media").on("click" , function (){
      } else if (question_type == 4 ){ // free texts
 
      }
-     console.log("-----------------------??");
+    //  console.log(1);
+
 
      // ==> Append it to Mongo db
      $.getJSON(jsonFile , function (api_key_data){
@@ -362,9 +354,51 @@ $(".box-overlay , .btn-close-media").on("click" , function (){
        });
      });
 
-
-
-
   });
+
+
+
+
+// ======================================
+// ========>>> Edit new text value
+// ======================================
+  window.edit_text = function (thisInput){
+    var val = $(thisInput).val();
+
+    var questionId = $("#x-question-id-x").val();
+    var creatorIdx = $("#x-creator-id-x").val() ;
+    var targetAnswerX =  $("#x-curr-answer-id-x").val() ;
+    var app_id = $("#x-app-id-x").val();
+
+    var formObject = new FormData();
+
+    var server_ip = $("#serverId_app").attr("serverIp");
+    var apiUrl = server_ip+"api/"+app_id+"/question/"+questionId+"/answer/edit"
+
+    var server_ip = $("#serverId_app").attr("serverIp");
+    var jsonFile = server_ip + "ext/js/json.app.keys.json";
+
+    $.getJSON(jsonFile , function (api_key_data){
+      // alert(creatorIdx);
+      $.ajax({
+        url : apiUrl ,
+        type:"PATCH",
+        data : {
+          "creator_id":creatorIdx,
+          "answer_id" :targetAnswerX ,
+          "choices_value": val
+        },
+        headers : {
+          "X-api-app-name": api_key_data.APP_NAME ,
+          "X-api-keys"    : api_key_data.API_KEY ,
+          "Content-Type"  : undefined
+        },
+        success : function (responsedItems){
+          // console.log(responsedItems);
+        }
+      });
+    });
+  }; // End Edit text Value
+
 
 });
