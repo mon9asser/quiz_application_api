@@ -1,11 +1,7 @@
 const validator = require('validator');
 const mongoose = require('mongoose');
 const {ObjectId} = mongoose.Schema.ObjectId;
-// +++++++++++++++++++++++++++++++++++++++++++++++
-// =============> Users !
-// +++++++++++++++++++++++++++++++++++++++++++++++
-
-
+ 
 /*
   ++++++++++++++++++++++++++++++++++++++++++++++++
     For Users Collection
@@ -295,7 +291,7 @@ var quiz_answer_types = {
         } ,
         is_randomized: {
           type : Boolean
-        } , 
+        } ,
         super_size : {
           type : Boolean
         },

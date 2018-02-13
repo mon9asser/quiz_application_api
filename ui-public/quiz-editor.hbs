@@ -16,6 +16,7 @@
 <i id="serverId_app" serverIp="{{server_ip}}"></i>
 <i id="appId" applicationId="{{app.id}}"></i>
 <i id="creatorId" creatorId="{{app.creator_id}}"></i>
+
 <!-- <pre id="appOpject">{{ app.questions }}</pre> -->
 
 
@@ -170,10 +171,10 @@
 
         <!-- Edit Template && Preview Template  -->
         <div class="question-editor swiper-container">
-            <div  ng:hide="template_mode" style="position:relative;">
+            <div  ng:hide="true" style="position:relative;">
               {{> preview app = app }}
             </div>
-            <div ng:show="template_mode"><!-- template_mode -->
+            <div ng:show="true"><!-- template_mode -->
                {{> editor app = app }}
             </div>
         </div>

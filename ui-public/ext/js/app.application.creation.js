@@ -1,4 +1,60 @@
 $(document).ready(function(){
+  window.edit_text = function (){
+
+    var questionId = $("#x-question-id-x").val();
+    var creatorIdx = $("#x-creator-id-x").val() ;
+    var formObject = new FormData();
+
+    var server_ip = $("#serverId_app").attr("serverIp");
+
+    alert(server_ip);
+  };
+
+
+  $("span.edit-options-answer").on("click",function (){
+     $(".overlay-answer-section").fadeIn();
+  });
+
+  $("a.answer-video-handler").on("click",function (){
+   $(".media-inp-answer").css({
+     display:'block'
+   })
+  });
+
+ $(".trigger-upload-answer-media").on("click", function (){
+   $(".media-answer-up").trigger("click");
+ });
+ $(".media-answer-up").on("change", function (){
+   var fileImage = $('.media-answer-up')[0].files[0] ;
+   if(fileImage.type != "image/jpeg" && fileImage.type != "image/jpg" && fileImage.type != "image/png" && fileImage.type != "image/jpg")
+   {
+     alert("Image should end with png or gif or jpg</b>");
+     return false ;
+   }
+   var appId = $("#x-app-id-x").val();
+   if(appId == '')
+   {
+     alert("There is no any question selected !")
+     return false ;
+   }
+   var questionId = $("#x-question-id-x").val();
+   var creatorIdx = $("#x-creator-id-x").val() ;
+   var formObject = new FormData();
+   formObject.append("media_src", fileImage  );
+   formObject.append("question_id", questionId );
+   formObject.append("creator_id",  creatorIdx );
+
+  //  var apiUrl =
+  var server_ip = $("#serverId_app").attr("serverIp");
+   var apiUrl = server_ip +"api/" + appId +"/question/"+questionId+"/answer/create"
+       alert(apiUrl);
+  //  media_src
+  //  choices_value
+  //  is_correct
+ });
+
+// ===> tooltip related answer options
+$('[data-toggle="asnwers-options"]').tooltip();
 
 //-----------------------------------------
 // ------->>>>>> tab orders
@@ -89,7 +145,7 @@ $('input.media-inputs').on('change keydown' , function (){
   $(".box-overlay , .box-data").fadeIn();
  };
 $(".box-overlay , .btn-close-media").on("click" , function (){
-    $(".box-overlay , .box-data").fadeOut();
+    $(".box-overlay , .box-data , .overlay-answer-section").fadeOut();
 });
  //---------------------------------------------------
  // ==> Sliding Items Via Slick
@@ -228,4 +284,87 @@ $(".box-overlay , .btn-close-media").on("click" , function (){
     }
 
   });
+
+
+  // ==> Add New Answer !!
+  $(".add-new-answer-pt").on("click" , function (){
+     var question_type = $("#x-question-type-x").val();
+     if(question_type == ''){
+       alert("You couldn't able add answer right now !");
+       return false ;
+     }
+     // ==> Fill with default answers
+     var dataString ;
+     var answer_part = '';
+     var answer_val ;
+     var server_ip = $("#serverId_app").attr("serverIp");
+     var jsonFile = server_ip + "ext/js/json.app.keys.json";
+
+     var appId = $("#x-app-id-x").val();
+     var questionId = $("#x-question-id-x").val();
+     var creatorIdx = $("#x-creator-id-x").val() ;
+     var server_ip = $("#serverId_app").attr("serverIp");
+     var apiUrl = server_ip +"api/" + appId +"/question/"+questionId+"/answer/create";
+
+     if(question_type == 0){// Image
+       answer_val = "Write option answer here !"
+       answer_part += '<li>';
+       answer_part += '<ul class="answer-pt-controller ">';
+       answer_part += '<li data-toggle="asnwers-options" title="Make it Correct Answer">';
+       answer_part += '<span class="fa fa-check"></span>';
+       answer_part += '</li>';
+       answer_part += '<li data-toggle="asnwers-options" title="Edit it with media">';
+       answer_part += '<span class="fa fa-pencil edit-options-answer"></span>';
+       answer_part += '</li>';
+       answer_part += '<li data-toggle="asnwers-options" title="Delete this answer">';
+       answer_part += '<span class="fa fa-trash"></span>';
+       answer_part += '</li>';
+       answer_part += '</ul>';
+       answer_part += '<div class="text-answers">';
+       answer_part += '<input onKeydown="edit_text()" type="text" name="" value="'+answer_val+'" placeholder="Write new answer here !!">';
+       answer_part += '</div>';
+       answer_part += '</li>';
+       // Append to element
+       $(".choices-part").append(answer_part);
+       // append to mongodb ( default creation api )
+       dataString = {
+         creator_id : creatorIdx ,
+         is_correct : false,
+         choices_value : answer_val ,
+       };
+
+     } else if (question_type == 1 ){ // Media
+
+     } else if (question_type == 2 ){ // true false
+
+     } else if (question_type == 3 ){ // rating scale
+
+     } else if (question_type == 4 ){ // free texts
+
+     }
+     console.log("-----------------------??");
+
+     // ==> Append it to Mongo db
+     $.getJSON(jsonFile , function (api_key_data){
+
+       $.ajax({
+          url : apiUrl ,
+          type : "PATCH" ,
+          data : dataString ,
+          headers : {
+            "X-api-app-name": api_key_data.APP_NAME ,
+            "X-api-keys"    : api_key_data.API_KEY ,
+            "Content-Type"  : undefined
+          } ,
+          success : function (dataResponsed){
+            $("#x-curr-answer-id-x").val(dataResponsed._id);
+          }
+       });
+     });
+
+
+
+
+  });
+
 });

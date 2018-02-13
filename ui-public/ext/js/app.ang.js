@@ -377,9 +377,13 @@ application.controller("qsCreationCtr" , [
                 $rootScope.multipleResponseOption = questions[i].answer_settings.single_choice;
                 $rootScope.randomizeOption = questions[i].answer_settings.is_randomized;
                 $rootScope.superSizeOption  = questions[i].answer_settings.super_size;
+                // => Question type
+                $("#x-question-type-x").val(questions[i].question_type);
                 // ---------------------------------------
                 // ----->>>>> Answers
                 // ---------------------------------------
+                var appendedAnswer = '' ;
+
 
                 var ansList = questions[i].answers_format
                 // for (var i = 0; i < ansList.length; i++) {

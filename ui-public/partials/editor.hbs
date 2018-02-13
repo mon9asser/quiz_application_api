@@ -2,6 +2,9 @@
 <input id="x-question-id-x" type="hidden" name="" value="">
 <input id="x-app-id-x" type="hidden" name="" value="">
 <input id="x-creator-id-x" type="hidden" name="" value="">
+<input id="x-question-type-x" type="hidden" name="" value="">
+<input id="x-curr-answer-id-x" type="hidden" name="" value="">
+
 
 <!-- Tabs -->
 <ul class="tab-editor">
@@ -112,10 +115,57 @@
     <div class="x-editor-x-title" data-toggle="#answers-pt">
       Answers
     </div>
-    <div class="x-editor-x-body" id="answers-pt">
-       <ul class="answers-qs">
+    <div style="display:block !important;" class="x-editor-x-body" id="answers-pt">
+        <div class="multi-answers-part">
+          <ul class="choices-part">
 
-       </ul>
+            <!-- Answer Start From Here !! -->
+            <!-- <li>
+              <ul class="answer-pt-controller ">
+                <li data-toggle="asnwers-options" title="Make it Correct Answer">
+                  <span class="fa fa-check"></span>
+                </li>
+                <li data-toggle="asnwers-options" title="Edit it with media">
+                  <span class="fa fa-pencil edit-options-answer"></span>
+                </li>
+                <li data-toggle="asnwers-options" title="Delete this answer">
+                  <span class="fa fa-trash"></span>
+                </li>
+              </ul>
+              <div class="text-answers">
+                <input class="text-field-inpu" type="text" name="" value="" placeholder="Write new answer here !!">
+                <div style="background:url('https://www.w3schools.com/css/img_fjords.jpg')" class="media-answers">
+
+                </div>
+              </div>
+            </li> -->
+
+
+
+            <!-- <li>
+              <ul class="answer-pt-controller ">
+                <li>
+                  <span class="fa fa-check selected-right-box"></span>
+                </li>
+                <li>
+                  <span class="fa fa-pencil"></span>
+                </li>
+                <li>
+                  <span class="fa fa-trash"></span>
+                </li>
+              </ul>
+              <div class="text-answers selected-right-answer">
+                <input type="text" name="" value="Video Part">
+                <div style="background:url('https://www.w3schools.com/css/img_fjords.jpg')" class="media-answers">
+                  Delete
+                </div>
+              </div>
+            </li> -->
+          </ul>
+          <div class="add-new-answer-pt">
+            Add new options
+          </div>
+        </div>
     </div>
   </li>
 
@@ -137,6 +187,56 @@
 
 
 
+
+
+
+
+<!-- overlay answer -->
+<div class="overlay-answer-section">
+  <div class="box-answer-edit text-right">
+    <div class="box-data-title">
+      <b>Media Uploader</b>
+    </div>
+    <input placeholder="Media Url" class="media-inp-answer" type="text" name="" value="">
+    <ul class="media-links">
+      <li>
+        <a class="answer-video-handler" href="#">
+          Add Video
+        </a>
+      </li>
+      <li>
+        <input class="media-answer-up" style="display :none;" type="file" name="" value="">
+        <a class="trigger-upload-answer-media" href="#">
+          Add Image
+        </a>
+      </li>
+    </ul>
+    <button  class="btn btn-danger btn-close-media" type="button" name="button">
+      Close
+    </button>
+    <button style="margin-right: 10px;" class="btn btn-primary" type="button" name="button">
+      Save
+    </button>
+  </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<!--
+==================================================
+==================================================
+          Question Option
+==================================================
+==================================================
+-->
 
 <!-- Overlay box -- w -- edit media -->
 <div class="box-overlay"></div>
