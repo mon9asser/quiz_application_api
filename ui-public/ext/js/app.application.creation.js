@@ -1,5 +1,14 @@
-  $(document).ready(function(){
+$(document).ready(function(){
+  window.edit_text = function (){
 
+    var questionId = $("#x-question-id-x").val();
+    var creatorIdx = $("#x-creator-id-x").val() ;
+    var formObject = new FormData();
+
+    var server_ip = $("#serverId_app").attr("serverIp");
+
+    alert(server_ip);
+  };
 
 
   $("span.edit-options-answer").on("click",function (){
@@ -7,9 +16,9 @@
   });
 
   $("a.answer-video-handler").on("click",function (){
-   $(".media-iserver_ipnp-answer").css({
+   $(".media-inp-answer").css({
      display:'block'
-   });
+   })
   });
 
  $(".trigger-upload-answer-media").on("click", function (){
@@ -162,14 +171,12 @@ $(".box-overlay , .btn-close-media").on("click" , function (){
   // ==> Resorting items inside list
   //---------------------------------------------------
 
-  var obj = {
-      disabled : false
-  }
-  var sortable_items = document.getElementById("docQuestions")
+
+  var sortable_items = document.getElementById("docQuestions");
   var sorted = Sortable.create(sortable_items, {
      ghostClass: 'shadow_element' ,
      group: "question-list" ,
-     disabled: obj.disabled ,
+     disabled: false ,
      onStart : function (evt){
       // var targetEl = $(evt.item).hasClass("draggable-x");
      } ,
@@ -277,136 +284,15 @@ $(".box-overlay , .btn-close-media").on("click" , function (){
   });
 
 
-  $(".true-fals-yes-no-type").on("change", function (){
-    var currVal = $(this).val(); // 0 => true-false  1 => yes-no
-    // build the answer body according to
-    // check if this question has an answer or not
-    // edit the existing answer
-    var appId = $("#x-app-id-x").val();
-    var questionId = $("#x-question-id-x").val();
-    var creatorIdx = $("#x-creator-id-x").val() ;
-    var server_ip = $("#serverId_app").attr("serverIp");
-    var apiUrl = server_ip +"api/" + appId +"/question/"+questionId+"/answer/create";
-
-    var server_ip = $("#serverId_app").attr("serverIp");
-    var jsonFile = server_ip + "ext/js/json.app.keys.json";
-    $.getJSON(jsonFile , function (api_key_data){
-      // ===> Get question from mongoDb
-      var questionUrl =  server_ip+"api/"+appId+"/application/questions";
-      $.ajax({
-          url : questionUrl ,
-          type : "POST" ,
-          data : {
-            "target_id": questionId ,
-            "creator_id" : creatorIdx
-          } ,
-          headers : {
-            "X-api-app-name": api_key_data.APP_NAME ,
-            "X-api-keys"    : api_key_data.API_KEY ,
-            "Content-Type"  : undefined
-           } ,
-           success :  function (questionResp) {
-             var answer_delete = server_ip+"api/"+appId+"/question/"+questionId+"/answer/delete";
-              if(  questionResp.answers_format.length > 0) {// create new
-                $.ajax({
-                   url : answer_delete ,
-                   type : "PATCH" ,
-                   data : {
-                      "creator_id":creatorIdx,
-                      "answer_id" : questionResp.answers_format[0]._id
-                   } ,
-                   headers : {
-                     "X-api-app-name": api_key_data.APP_NAME ,
-                     "X-api-keys"    : api_key_data.API_KEY ,
-                     "Content-Type"  : undefined
-                   } ,
-                   success : function (deletedAnswer) {
-                     console.log(deletedAnswer);
-                   }
-                 });
-               }
-
-
-               var answer_creation =  server_ip+"api/"+appId+"/question/"+questionId+"/answer/create";
-               setTimeout(function(){
-                 $.ajax({
-                    url : answer_creation ,
-                    type : "PATCH" ,
-                    data : {
-                      "boolean_type": ( currVal == 0 ) ? "true/false" : "yes/no",
-                      "creator_id":creatorIdx,
-                      "is_correct":false ,
-                      "boolean_value":false
-                    } ,
-                    headers : {
-                      "X-api-app-name": api_key_data.APP_NAME ,
-                      "X-api-keys"    : api_key_data.API_KEY ,
-                      "Content-Type"  : undefined
-                    } ,
-                    success : function (newAnswer) {
-                      // Element Creation
-                      var parentAnswers = $(".choices-part");
-                      if (parentAnswers.children("li").length > 0) { // update
-                        if( currVal == 0 )  { //"true/false"
-                            parentAnswers.children("li").eq(0).children("div.text-answers").children("span").html("True");
-                            parentAnswers.children("li").eq(1).children("div.text-answers").children("span").html("False");
-                          } else { //"yes/no"
-                          parentAnswers.children("li").eq(0).children("div.text-answers").children("span").html("Yes");
-                          parentAnswers.children("li").eq(1).children("div.text-answers").children("span").html("No");
-                        }
-                      }else { // create
-                        var   trueVal = "Yes" ;
-                        var falseVal = "No" ;
-                        if( currVal == 0 )  { //"true/false"
-                              trueVal = "True" ;
-                              falseVal = "False" ;
-                        }
-
-                        var booleanVals =
-                        '<li>'
-                           +'<ul class="answer-pt-controller ">'
-                             +'<li data-toggle="asnwers-options" title="" data-original-title="Make it Correct Answer">'
-                               +'<span class="fa fa-check"></span>'
-                             +'</li>'
-                           +'</ul>'
-                           +'<div class="text-answers">'
-                               +'<span class="text-field-inpu">'+trueVal+'</span>'
-                           +'</div>'
-                         +'</li>'
-
-                         + '<li>'
-                            +'<ul class="answer-pt-controller ">'
-                              +'<li data-toggle="asnwers-options" title="" data-original-title="Make it Correct Answer">'
-                                +'<span class="fa fa-check"></span>'
-                              +'</li>'
-                            +'</ul>'
-                            +'<div class="text-answers">'
-                                +'<span class="text-field-inpu">'+falseVal+'</span>'
-                            +'</div>'
-                          +'</li>';
-
-                          parentAnswers.html(booleanVals);
-
-                          }
-                    }
-                  });
-               } , 50);
-           }
-        });
-      }) ;
-
-
-  });
-  // ======================================
-  // ========>>> Create New Answer
-  // ======================================
+  // ==> Add New Answer !!
   $(".add-new-answer-pt").on("click" , function (){
      var question_type = $("#x-question-type-x").val();
      if(question_type == ''){
        alert("You couldn't able add answer right now !");
        return false ;
      }
-
+     // ==> Fill with default answers
+     var dataString ;
      var answer_part = '';
      var answer_val ;
      var server_ip = $("#serverId_app").attr("serverIp");
@@ -417,11 +303,6 @@ $(".box-overlay , .btn-close-media").on("click" , function (){
      var creatorIdx = $("#x-creator-id-x").val() ;
      var server_ip = $("#serverId_app").attr("serverIp");
      var apiUrl = server_ip +"api/" + appId +"/question/"+questionId+"/answer/create";
-     // ==> Fill with default answers
-     var dataString = new Object () ;
-     dataString['creator_id'] = creatorIdx
-     dataString['is_correct'] = false
-
 
      if(question_type == 0){// Image
        answer_val = "Write option answer here !"
@@ -438,36 +319,19 @@ $(".box-overlay , .btn-close-media").on("click" , function (){
        answer_part += '</li>';
        answer_part += '</ul>';
        answer_part += '<div class="text-answers">';
-       answer_part += '<input onKeydown="edit_text(this)" onKeyup="edit_text(this)" onChange="edit_text(this)" type="text" name="" value="'+answer_val+'" placeholder="Write new answer here !!">';
+       answer_part += '<input onKeydown="edit_text()" type="text" name="" value="'+answer_val+'" placeholder="Write new answer here !!">';
        answer_part += '</div>';
        answer_part += '</li>';
-
        // Append to element
-     $(".choices-part").append(answer_part);
+       $(".choices-part").append(answer_part);
        // append to mongodb ( default creation api )
-       dataString['choices_value'] = answer_val ;
+       dataString = {
+         creator_id : creatorIdx ,
+         is_correct : false,
+         choices_value : answer_val ,
+       };
 
      } else if (question_type == 1 ){ // Media
-        answer_val = server_ip + "img/media-choices.jpg";
-        answer_part += '<li>';
-        answer_part += '<ul class="answer-pt-controller ">';
-        answer_part += '<li data-toggle="asnwers-options" title="Make it Correct Answer">';
-        answer_part += '<span class="fa fa-check"></span>';
-        answer_part += '</li>';
-        answer_part += '<li data-toggle="asnwers-options" title="Edit it with media">';
-        answer_part += '<span class="fa fa-pencil edit-options-answer"></span>';
-        answer_part += '</li>';
-        answer_part += '<li data-toggle="asnwers-options" title="Delete this answer">';
-        answer_part += '<span class="fa fa-trash"></span>';
-        answer_part += '</li>';
-        answer_part += '</ul>';
-        answer_part += '<div class="text-answers">';
-        answer_part += '<div style="    background-position: 50% 40% !important;background:url('+answer_val+')" class="media-answers"></div>';
-        answer_part += '</div>';
-        answer_part += '</li>';
-        dataString['media_src'] = answer_val ;
-        // Append to element
-      $(".choices-part").append(answer_part);
 
      } else if (question_type == 2 ){ // true false
 
@@ -476,10 +340,7 @@ $(".box-overlay , .btn-close-media").on("click" , function (){
      } else if (question_type == 4 ){ // free texts
 
      }
-     console.log("------------------");
-     console.log(question_type);
-      console.log(dataString);
-
+     console.log("-----------------------??");
 
      // ==> Append it to Mongo db
      $.getJSON(jsonFile , function (api_key_data){
@@ -494,57 +355,14 @@ $(".box-overlay , .btn-close-media").on("click" , function (){
             "Content-Type"  : undefined
           } ,
           success : function (dataResponsed){
-            console.log(dataResponsed);
             $("#x-curr-answer-id-x").val(dataResponsed._id);
           }
        });
      });
 
-  }); // End Create new Answer
 
 
 
-
-// ======================================
-// ========>>> Edit new text value
-// ======================================
-  window.edit_text = function (thisInput){
-
-    var val = $(thisInput).val();
-    var questionId = $("#x-question-id-x").val();
-    var creatorIdx = $("#x-creator-id-x").val() ;
-    var targetAnswerX =  $("#x-curr-answer-id-x").val() ;
-    var app_id = $("#x-app-id-x").val();
-
-    var formObject = new FormData();
-
-    var server_ip = $("#serverId_app").attr("serverIp");
-    var apiUrl = server_ip+"api/"+app_id+"/question/"+questionId+"/answer/edit"
-
-    var server_ip = $("#serverId_app").attr("serverIp");
-    var jsonFile = server_ip + "ext/js/json.app.keys.json";
-
-    $.getJSON(jsonFile , function (api_key_data){
-      // alert(creatorIdx);
-      $.ajax({
-        url : apiUrl ,
-        type:"PATCH",
-        data : {
-          "creator_id":creatorIdx,
-          "answer_id" :targetAnswerX ,
-          "choices_value": val
-        },
-        headers : {
-          "X-api-app-name": api_key_data.APP_NAME ,
-          "X-api-keys"    : api_key_data.API_KEY ,
-          "Content-Type"  : undefined
-        },
-        success : function (responsedItems){
-          // console.log(responsedItems);
-        }
-      });
-    });
-  }; // End Edit text Value
-
+  });
 
 });
