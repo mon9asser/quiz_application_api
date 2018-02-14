@@ -1,70 +1,39 @@
 <!DOCTYPE html>
-<html ng:app="application" ng:controller="mainController">
+<html ng:app="applications" ng:controller="page-controller">
   <head>
     <meta charset="utf-8">
-    <title> ~>>meta_tag.page_title<<~ </title>
+    <title></title>
 
     <!--
-    ###########################################################
-     >>>>>>>>>>>>>>>>>>>> Meta tags <<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ###########################################################
+      ++++++++++++++++++++++++++++++++
+       ++ Basics js frameworks
+      ++++++++++++++++++++++++++++++++
     -->
-    <meta name='keywords' content='~>>meta_tag.page_title<<~'>
-		<meta name='description' content='~>>meta_tag.page_description<<~'>
-		<meta name='author' content='~>>meta_tag.page_author<<~'>
-		<meta name='developer' content='~>>meta_tag.page_designer<<~'>
-
-    <!--
-    ###########################################################
-     >>>>>>>>>>>>>>>>>>>> Scripts <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ###########################################################
-    -->
-    <script src="{{ server_ip }}ext/js/jquery.min.js" charset="utf-8"></script>
-    <script src="{{ server_ip }}ext/js/angular.min.js" charset="utf-8"></script>
-
-    <!--
-    ###########################################################
-     >>>>>>>>>>>>>>>>>>>> Styles <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    ###########################################################
-    -->
-    <!-- Frameworks -->
-    <link href="{{ server_ip }}ext/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ server_ip }}ext/css/font-awesome.css" rel="stylesheet">
-    <!-- Submenu bootstrap -->
-    <link href="{{ server_ip }}ext/css/bootstrap-submenu.css" rel="stylesheet">
-    <!-- Swiper -->
-    <link href="{{ server_ip }}ext/css/swiper.js" rel="stylesheet">
-
-    <!-- Slick Plugin -->
-    <link   href="{{ server_ip }}ext/libs/slick/slick.css" rel="stylesheet">
-    <link   href="{{ server_ip }}ext/libs/slick/slick-theme.css" rel="stylesheet">
-
-
-    <!-- page-error css -->
-    <!-- <link href="{{ server_ip }}ext/css/page-errors.css" rel="stylesheet"> -->
-    <!-- Login -->
-    <link ng:if="page_name=='login'" href="{{ server_ip }}ext/css/login.css" rel="stylesheet">
-    <!-- Register -->
-    <link ng:if="page_name=='register'" href="{{ server_ip }}ext/css/register.css" rel="stylesheet">
-    <!-- Api Key Creation -->
-    <link ng:if="page_name=='create_app'" href="{{ server_ip }}ext/css/api-key.css" rel="stylesheet">
-    <!-- App -->
-    <link href="{{ server_ip }}ext/css/app-creation.css" rel="stylesheet">
-    <!-- quiz survey creation -->
-    <link href="{{ server_ip }}ext/css/qs-creations.css" rel="stylesheet">
+    <!-- JS -->
+    <script src="{{ server_ip }}ext/frameworks/js/jquery.min.js" charset="utf-8"></script>
+    <script src="{{ server_ip }}ext/frameworks/js/angular.min.js" charset="utf-8"></script>
+    <!-- Css -->
+    <link href="{{ server_ip }}ext/frameworks/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ server_ip }}ext/frameworks/css/font-awesome.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-      <script src="{{ server_ip }}ext/js/html5shiv.min.js"></script>
-      <script src="{{ server_ip }}ext/js/respond.min.js"></script>
+      <script src="{{ server_ip }}ext/frameworks/js/html5shiv.min.js"></script>
+      <script src="{{ server_ip }}ext/frameworks/js/respond.min.js"></script>
     <![endif]-->
 
-    <style>
-        #bs-example-navbar-collapse-1 {
-            margin-top: 0px !important;
-            font-size: 15px !important;
-        }
-    </style>
+    <!--
+      ++++++++++++++++++++++++++++++++
+       ++ Styles
+      +++++++++ng:app="applications" ng:controller="page-controller"+++++++++page_name++++++++++++++
+    -->
+    <!-- Login css -->
+    <link ng:if="page_name=='login'" href="{{ server_ip }}ext/css/login.css" rel="stylesheet">
+
+
   </head>
-  <body>
+  <body >
+  <!-- Configration Part -->
+    <!-- server ip -->
+    <input id="server_ip" type="hidden" name="" value="{{ server_ip }}">
