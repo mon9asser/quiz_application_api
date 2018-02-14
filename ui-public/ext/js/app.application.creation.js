@@ -172,8 +172,8 @@ $(".box-overlay , .btn-close-media").on("click" , function (){
   //---------------------------------------------------
 
 
-  var sortable_items = document.getElementById("docQuestions");
-  var sorted = Sortable.create(sortable_items, {
+
+  var sorted = Sortable.create(document.getElementById("docQuestions"), {
      ghostClass: 'shadow_element' ,
      group: "question-list" ,
      disabled: false ,
@@ -189,10 +189,10 @@ $(".box-overlay , .btn-close-media").on("click" , function (){
  // ==> geting sortable items from another list
  //---------------------------------------------------
 
- var qs_types = document.getElementById("qs-sortable");
- Sortable.create(qs_types, {
+
+ Sortable.create(document.getElementById("qs-sortable"), {
   ghostClass: 'shadow_element' ,
-  sort : false ,
+  sort : true ,
     group: {
       name: "question-list",
       pull: "clone",

@@ -37,17 +37,17 @@
               </span>
               <span class="titles">Media</span>
           </li>
-
+ 
           <li data-question-type="2" question-data="partials/true-false.hbs">
               <span class="qs-type" title="Ture/False">
                  <i class="icon-check-circle"></i>
-              </span>
+               </span>
               <span class="titles">Boolean</span>
           </li>
      </ul>
   </div>
 </div>
-<div class="container-fluid update-rows">
+<div class="Quizontainer-fluid update-rows">
   <!-- Title of application -->
   <div class="container-fluid">
 			<div class="row">
@@ -171,10 +171,10 @@
 
         <!-- Edit Template && Preview Template  -->
         <div class="question-editor swiper-container">
-            <div  ng:hide="true" style="position:relative;">
+            <div  ng:hide="template_mode" style="position:relative;">
               {{> preview app = app }}
             </div>
-            <div ng:show="true"><!-- template_mode -->
+            <div ng:show="template_mode"><!-- template_mode -->
                {{> editor app = app }}
             </div>
         </div>
