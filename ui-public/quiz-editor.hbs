@@ -1,0 +1,182 @@
+{{> top }}
+  {{> navbar }}
+<style media="screen">
+/* ghostClass */
+
+
+</style>
+
+<div ng:controller="apps-controller">
+
+
+
+<div class="side-left-bar">
+  <div class="question-data">
+     <ul id="qs-sortable" class="question-x">
+          <li data-question-type="0" question-data="partials/multi-choices.hbs">
+              <span class="qs-type" title="Multiple Choices">
+                 <i class="icon-insert-template"></i>
+              </span>
+              <span class="titles">Choices</span>
+          </li>
+
+          <li data-question-type="1" question-data="partials/media-choices.hbs">
+              <span class="qs-type" title="Media Choices">
+                 <i class="icon-image"></i>
+              </span>
+              <span class="titles">Media</span>
+          </li>
+
+          <li data-question-type="2" question-data="partials/true-false.hbs">
+              <span class="qs-type" title="Ture/False">
+                 <i class="icon-check-circle"></i>
+               </span>
+              <span class="titles">Boolean</span>
+          </li>
+     </ul>
+  </div>
+</div>
+<div class="Quizontainer-fluid update-rows">
+  <!-- Title of application -->
+  <div class="container-fluid">
+			<div class="row">
+					<div class="col-md-12">
+						 <div class="area-qs-ch quiz-titles">
+							  <span class="questionnaire-title">
+                  <!-- Quiz Name -->
+                   <span>{{ app.questionnaire_title }}</span>
+                </span>
+ 							  <a class="choices-right-add btn-primary btn rm-margin" href="#">Preview Quiz</a>
+  					 </div>
+					</div>
+	    </div>
+	</div>
+  <div class="container-fluid row-x-body">
+
+    <div class="row">
+       <!-- Question (Editor) menu -->
+      <div class="left_part col-md-5 col-sm-6 col-xs-12">
+          <div class="question-data qsdragged-list qs-dropped">
+						<div ng:click="create_quiz.create_new_app(1)" class="widContainer">
+								Questions
+						</div>
+            <!-- list of question type -->
+						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
+                <!-- <li  class="dragelement-here draggable-x"> -->
+                    <!-- List your question here ! -->
+                <!-- </li> -->
+
+                  {{# each app.questions}}
+                  <li
+                    class ="question-object qs-{{ id }}"
+                    data-question-id          = "{{ id }}"
+                    data-question-body        = "{{ question_body }}"
+                    data-question-desc        = "{{ question_description }}"
+                    data-question-type        = "{{ question_type }}"
+                    data-question-created-at  = "{{ created_at }}"
+                    data-answer-settings      = "{{ answer_settings }}"
+                    data-answers              = "{{ answers_format }}"
+                    data-media-src            = "{{ media_question.media_field }}"
+                    data-media-type           = "{{ media_question.media_type }}"
+                  >
+                    <span class="qs-type quesiontlist_iconx" title="Multiple Choices">
+                     <i ng:if="{{ question_type }} == 0" class="icon-insert-template"></i>
+                     <i ng:if="{{ question_type }} == 1" class="icon-image"></i>
+                     <i ng:if="{{ question_type }} == 2" class="icon-check-circle"></i>
+                     <i ng:if="{{ question_type }} == 3" class=".......3"></i>
+                     <i ng:if="{{ question_type }} == 4" class=".......4"></i>
+                   </span>
+                   <span ng:if="{{ question_type }} == 0">
+                      Multiple Choices
+                   </span>
+                   <span ng:if="{{ question_type }} == 1">
+                      Media Choices
+                   </span>
+                   <span ng:if="{{ question_type }} == 2">
+                     True Or False
+                   </span>
+                   <span ng:if="{{ question_type }} == 3">
+                     ...... 3
+                   </span>
+                   <span ng:if="{{ question_type }} == 4">
+                     ...... 4
+                   </span>
+                   <i ng:click="delete_this_question( '{{ id }}' )" style="cursor:pointer;" class="fa fa-trash iconx-trashable qs-delete-{{ id }} question-deletion"></i>
+
+                   <!-- <i ng:click="delete_this_question( '{{ id }}' )" style="cursor:pointer;" class="fa fa-eye iconx-trashable"></i> -->
+
+                    <i ng:click="edit_this_question( '{{ id }}' , '{{../app.id}}' )" style="cursor:pointer;" class="fa fa-pencil iconex-movable"></i>
+                  </li>
+                  {{/each}}
+                <!--
+								<li>
+											1-
+											<span class="qs-type quesiontlist_iconx" title="Multiple Choices">
+											 <i class="icon-insert-template"></i>
+										 </span>
+											<span>Multiple Choice</span>
+											<i class="fa fa-bars iconex-movable"></i>
+											<i class="fa fa-trash iconx-trashable"></i>
+								</li>
+
+								<li>
+											2-
+											<span class="qs-type quesiontlist_iconx" title="Media Choices">
+												<i class="icon-image"></i>
+											</span>
+											<span>Media Choices</span>
+											<i class="fa fa-bars iconex-movable"></i>
+											<i class="fa fa-trash iconx-trashable"></i>
+								</li>
+                <li>
+											3-
+											<span class="qs-type quesiontlist_iconx" title="Ture/False">
+													<i class="icon-check-circle"></i>
+											</span>
+											<span>True Or False</span>
+
+											<i class="fa fa-bars iconex-movable"></i>
+											<i class="fa fa-trash iconx-trashable"></i>
+								</li>
+              -->
+						</ul>
+				</div>
+      </div>
+       <!-- List of questions -->
+      <div class="right_part col-md-7 col-sm-6 col-xs-12">
+        <!-- Switch to view or editor [Handler]-->
+        <div class="switched-button switch-mode">
+           <span class="swMode">
+             <!-- Handel this by js -->
+             On <span class="action-case"> ~>> editor_mode <<~ </span>
+           </span>
+           <div class="mode-chs-x">
+               <input type="checkbox" class="slide-mode" ng:model="create_quiz.template_mode" id="mode-chox-option" name="check" /> <!--  checked -->
+               <label  ng:click="change_mode()" for="mode-chox-option"></label>
+               <span class="image-on mode-option-x"></span>
+           </div>
+        </div>
+
+
+        <!-- Edit Template && Preview Template  -->
+        <div class="question-editor swiper-container">
+            <div  ng:hide="true" style="position:relative;">
+              {{> preview app = app }}
+            </div>
+            <div ng:show="true"><!-- template_mode -->
+               {{> editor app = app }}
+            </div>
+        </div>
+
+      </div>
+       <!-- Setttings -->
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        Settings !
+      </div>
+    </div>
+  </div>
+
+
+</div>
+</div>
+{{> bottom }}

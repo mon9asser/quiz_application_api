@@ -1,4 +1,4 @@
-
+  ~>>page_name<<~
     <!-- frameworks -->
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/bootstrap.min.js"></script>
     <!-- Main Applications { Angular Part } -->
@@ -9,6 +9,8 @@
     <script ng:if="page_name=='register'" type="text/javascript" src="{{ server_ip }}ext/js/app-register.js"></script>
     <!-- My application Page -->
     <script ng:if="page_name=='questionnaires'" type="text/javascript" src="{{ server_ip }}ext/js/app-myapps.js"></script>
-
+    <!-- App editor page -->
+    <script ng:if="page_name=='api'" type="text/javascript" src="{{ server_ip }}ext/js/app-apps.js"></script>
+    
   </body>
 </html>

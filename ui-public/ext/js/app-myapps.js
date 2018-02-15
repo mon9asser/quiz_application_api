@@ -75,15 +75,17 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
        }); // End Json Apps
 
   }; // End App creation
-
-
+  // ==> Cancel new application
+  $rootScope.cancel_app_creation = function (){
+    $(".bs-example-modal-sm").trigger("click");
+  }
+  // ==> Delete existing application
   $scope.delete_existing_app = function (appId) {
     var app_id = appId;
     var parent = $(".listed-app-"+app_id);
     var target_handler =   $(".delete-handler-"+app_id);
     // target_handler.html("<i class='fa fa-refresh fa-spin'></i>");
     $scope.api_url_delete =  $scope.server_ip + "api/"+app_id+"/delete" ;
-
 
     $.getJSON($scope.json_apk_file , function (api_keys){
       $.ajax({
