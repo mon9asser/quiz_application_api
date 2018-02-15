@@ -2,7 +2,7 @@
 // == --------------------------> Login part
 // == -----------------------------------------------------------------
 apps.controller("register-app" , ["$rootScope" , "$http" , "$scope" , function ($rootScope , $http , $scope){
-  $scope.server_ip = $("#server_ip").val() ;
+  $scope.server_ip = $("#serverIp").val() ;
   $scope.json_apk_file = $scope.server_ip + "ext/json/json-keys.json";
   $scope.api_url = $scope.server_ip + "api/users/create";
   $scope.register_access = $('#signup_user');
