@@ -1,6 +1,8 @@
-  ~>>page_name<<~
+
     <!-- frameworks -->
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/bootstrap.min.js"></script>
+    <script ng:if="page_name=='api'" type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sortable.min.js"></script>
+
     <!-- Main Applications { Angular Part } -->
     <script type="text/javascript" src="{{ server_ip }}ext/js/applications.js"></script>
     <!-- Login Page -->
@@ -11,6 +13,6 @@
     <script ng:if="page_name=='questionnaires'" type="text/javascript" src="{{ server_ip }}ext/js/app-myapps.js"></script>
     <!-- App editor page -->
     <script ng:if="page_name=='api'" type="text/javascript" src="{{ server_ip }}ext/js/app-apps.js"></script>
-    
+
   </body>
 </html>

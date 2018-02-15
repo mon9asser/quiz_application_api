@@ -10,7 +10,6 @@ body {
     margin: 10px auto 10px auto;
     font-family: "OpenSansRegular";
     color: #999 !important;
-    padding-bottom: 10px;
 }
 .side-left-bar {
     z-index: 200;
@@ -122,8 +121,9 @@ body {
     padding-left: 15px;
 }
 .btn.btn-primary {
-    background-color: #00a8ff;
-    border-color: #00a8ff;
+  background-color: #00a8ff;
+  border-color: #00a8ff;
+  margin-right: 8px !important;
 }
 .choices-right-add {
     margin-top: 8px;
@@ -542,11 +542,11 @@ display: none;
 }
 
 .dash_sep {
-    padding: 5px 20px 0px 20px;
+    padding: 29px 20px;
     display: block;
     /* border-top: 1px dashed #ddd; */
-    margin-top: 25px;
-    margin-bottom: 20px;
+    /*margin-top: 25px;
+    margin-bottom: 20px;*/
 }
 
 .btn.btn-danger-outline {
@@ -577,4 +577,8 @@ display: none;
 .btn .font-icon-left{margin:0 5px 0 0;position:relative;top:1px}a.btn:focus,a.btn:hover{color:#fff}.btn-square-icon{min-width:80px;height:60px;border:1px solid #d8e2e7;background:#f6f8fa;padding:4px 10px 0;color:#6c7a86;position:relative;margin:0 6px 10px 0;vertical-align:middle}.btn-square-icon .fa{display:block;margin:0 0 2px}.btn-square-icon .label{padding-left:.5em;padding-right:.5em;position:absolute;right:-5px;top:-5px}.btn-square-icon:hover{background-color:#ecf2f5}.btn-square-icon.btn-square-icon-rounded{-webkit-border-radius:.25rem;border-radius:.25rem}a.btn-square-icon{display:inline-block;color:#6c7a86;padding-top:11px}
 .btn.btn-danger-outline:hover , .btn.btn-primary-outline:focus:hover, .btn.btn-primary-outline:hover{
   color: #fff;
+}
+li.wc-screens{
+  padding-bottom: 10px !important;
+  padding-top: 10px !important;
 }
