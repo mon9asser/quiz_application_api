@@ -69,87 +69,24 @@
 						</div>
             <!-- list of question type -->
 						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
-                <!-- <li  class="dragelement-here draggable-x"> -->
-                    <!-- List your question here ! -->
-                <!-- </li> -->
-                   
-                  {{# each app.questions}}
-                  <li
-                    class ="question-object qs-{{ id }}"
-                    data-question-id          = "{{ id }}"
-                    data-question-body        = "{{ question_body }}"
-                    data-question-desc        = "{{ question_description }}"
-                    data-question-type        = "{{ question_type }}"
-                    data-question-created-at  = "{{ created_at }}"
-                    data-answer-settings      = "{{ answer_settings }}"
-                    data-answers              = "{{ answers_format }}"
-                    data-media-src            = "{{ media_question.media_field }}"
-                    data-media-type           = "{{ media_question.media_type }}"
-                  >
-
-
-
-                   <div class="question-part">
-                     <div class="qs-type quesiontlist_iconx" title="Multiple Choices">
-
-
-
-
-                      <!-- ng:if="{{ question_type }} == 2" -->
-                     <span>
-                          {{ question_body }}
-                     </span>
-                     <ul class="question-option">
-                      <!-- <li class="left"><i class="icon-check-circle"></i></li>
-                      <li class="left">Boolean choices</li> -->
-                      <li class="right">
-                        <i ng:click="delete_this_question( '{{ id }}' )" style="cursor:pointer;" class="fa fa-trash iconx-trashable qs-delete-{{ id }} question-deletion"></i>
-                      </li>
-                      <li class="right">
-                        <i ng:click="edit_this_question( '{{ id }}' , '{{../app.id}}' )" style="cursor:pointer;" class="fa fa-pencil iconex-movable"></i>
-                      </li>
-                    </ul>
-                        <!-- <i ng:if="{{ question_type }} == 3" class=".......3"></i>
-                        <i ng:if="{{ question_type }} == 4" class=".......4"></i> -->
+                <li ng:class="'question-li-x qs-'+qs_value._id" ng:repeat="(qs_key , qs_value) in questions_list">
+                     <div class="question-part">
+                       <div class="qs-type quesiontlist_iconx">
+                         <span class="qs-type" title="Multiple Choices">
+                       	   <i class="icon-insert-template"></i>
+                         </span>
+                         <span ng:bind="qs_value.question_body" class="qs-body"></span>
+                         <ul class="question-option">
+                           <li class="right">
+                              <i ng:click="delete_this_question(qs_value._id)" style="cursor:pointer;" ng:class="'fa fa-trash iconx-trashable question-deletion qs-delete-'+qs_value._id"></i>
+                           </li>
+                           <li class="right">
+                              <i style="cursor:pointer;" ng:class="'fa fa-pencil iconex-movable'"></i>
+                           </li>
+                         </ul>
+                       </div>
                      </div>
-
-
-                   </div>
-
-
-                  </li>
-                  {{/each}}
-                <!--
-								<li>
-											1-
-											<span class="qs-type quesiontlist_iconx" title="Multiple Choices">
-											 <i class="icon-insert-template"></i>
-										 </span>
-											<span>Multiple Choice</span>
-											<i class="fa fa-bars iconex-movable"></i>
-											<i class="fa fa-trash iconx-trashable"></i>
-								</li>
-
-								<li>
-											2-
-											<span class="qs-type quesiontlist_iconx" title="Media Choices">
-												<i class="icon-image"></i>
-											</span>
-											<span>Media Choices</span>
-											<i class="fa fa-bars iconex-movable"></i>
-											<i class="fa fa-trash iconx-trashable"></i>
-								</li>
-                <li>
-											3-
-											<span class="qs-type quesiontlist_iconx" title="Ture/False">
-													<i class="icon-check-circle"></i>
-											</span>
-											<span>True Or False</span>
-
-											<i class="fa fa-bars iconex-movable"></i>
-											<i class="fa fa-trash iconx-trashable"></i>
-								</li>
-              -->
+                </li>
 						</ul>
 				</div>
       </div>

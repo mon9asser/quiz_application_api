@@ -39,7 +39,7 @@ infceRouter.get("/:app_id/editor/:token" , verify_access_tokens_admin_user , (re
       });
     }
 
- 
+
     if(qtnrObject.creator_id != Verified_user.id){
       return new Promise((resolve, reject) => {
         res.render("page-401" , {
@@ -65,6 +65,16 @@ infceRouter.get("/:app_id/editor/:token" , verify_access_tokens_admin_user , (re
 // ################################################################
 // ==========>>> Application Interface Api  ( Attendee ) ==========
 // ################################################################
+//mongoose
 
+// ====> Generate New Id
+infceRouter.get("/generate/new/data" , (req,res)=>{
+  var id = mongoose.Types.ObjectId();
+  var date_made = new Date();
+  res.send({
+    id : id ,
+    date : date_made
+  });
+});
 
 module.exports = {infceRouter};

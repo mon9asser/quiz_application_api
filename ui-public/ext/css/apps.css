@@ -99,6 +99,14 @@ body {
 .qs-dropped {
     background: #fff;
     padding: 20px 20px;
+
+
+
+}.question-li-x{
+  -webkit-transition: background 2s linear , color 2s linear;
+  transition: background 2s linear, color 2s linear;
+  -moz-transition: background 2s linear , color 2s linear;
+
 }
 .area-qs-ch {
   background: #fff;
@@ -648,4 +656,14 @@ color: rgba(54 ,88 ,152 , 0.4);
 vertical-align: middle;
 text-align: center;
 margin-left: 5px;
+}
+.dropped-qs > li > span.qs-type {
+vertical-align: middle;
+}
+.dropped-qs > li > span.titles {
+  display: inline;
+    margin-left: 8px;
+}
+.qs-body {
+  margin-left: 8px;
 }

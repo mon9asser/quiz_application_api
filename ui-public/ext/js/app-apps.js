@@ -1,13 +1,38 @@
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
 
+  //--------------------------------------------------------
+  // ==>  Callback Finder
+  //--------------------------------------------------------
+  $scope.question_id = null ;
+  $scope.callback_index = function (object){
+    return object._id == $scope.question_id ;
+  };
 
-   //--------------------------------------------------------
-   // ==>  Default Values
-   //--------------------------------------------------------
+
+  //--------------------------------------------------------
+  // ==>  Default Values
+  //--------------------------------------------------------
    $scope.server_ip = $("#serverIp").val();
    $scope.user_id = $("#userId").val();
    $scope.app_id = $("#applicationId").val();
 
+   $scope.mongoose_id = null;
+   $scope.mongoose_date = null;
+
+   // -------------------------------------------------------
+   // ==>  Question Action ( Trash - Edit )
+   // -------------------------------------------------------
+   $scope.quesion_actions = "<ul class='question-option'>"+
+    "<li class='right' style='opacity: 0;'>"+
+      "<i style='cursor:pointer;' class='fa fa-trash iconx-trashable question-deletion'></i>" // for trash
+      +
+    "</li>"
+      +
+    "<li class='right' style='opacity: 0;'>"
+      +
+      "<i style='cursor:pointer;' class='fa fa-pencil iconex-movable'></i>" // for edit
+    +"</li>"
+   +"</ul>";
 
    //--------------------------------------------------------
    // ==>  api urls
@@ -20,6 +45,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
    $scope.api_url_create_answer   = null;
    $scope.api_url_delete_answer   = null;
    $scope.api_url_edit_answer     = null;
+   $scope.api_url_init_id_date    = $scope.server_ip + "api/generate/new/data";
+
 
    // -------------------------------------------------------
    // ----> Init current App
@@ -50,9 +77,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
        });
    }); // End Json Data
 
-    $timeout(function(){
-        console.log($scope.questions_list);
-    } , 210);
+      // ==> to find question by id
+      //  $timeout(function (){
+      //    $scope.question_id = "5a87024f41355238299396ae";
+      //    console.log($scope.questions_list.find($scope.callback_index));
+      //  } , 300 );
 
    //--------------------------------------------------------
    // ==> Sliding editor elements to show question details
@@ -69,10 +98,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
    // ==> Delete Question
    //--------------------------------------------------------
    $scope.delete_this_question = function(questionId){
+
      $(".qs-delete-"+questionId).removeClass("fa-trash");
      $(".qs-delete-"+questionId).addClass("fa-refresh fa-spin tomato-font");
       var element = $(".qs-"+questionId);
-      element.css({background:"snow"})
+      element.css({background:"rgba(255, 99, 71, 0.4)" , color:"rgba(255, 99, 71, 0.4)"})
       $(".fa-spin").css("color","tomato");
 
      $.getJSON($scope.json_apk_file , function(api_key_data){
@@ -89,8 +119,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 question_id : questionId
               }
           }).then(function(resp){
-
-             element.addClass("animated rotateOutUpLeft");
+             element.addClass("animated rotateOutUpLeft");//rollOut
              $timeout(function(){
                 element.remove();
              },1000);
@@ -111,10 +140,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
      disabled: false ,
 
      onStart : function (evt){
+       console.log(evt.item);
       // var targetEl = $(evt.item).hasClass("draggable-x");
      } ,
      onEnd : function (evt){
-       // Sorting it into mongoDb
+
      }
    }); // end sortable
 
@@ -127,8 +157,85 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         pull: "clone",
         revertClone: false,
      },
-     onEnd : function (){
-       alert();
+     onStart : function (evt){
+
+      var qsLength = $("#docQuestions").children("li").length ;
+      if(qsLength == 0 ){
+        $("#docQuestions").css({
+          minHeight:"20px" ,
+          background:"#eee"
+        });
+      }
+
+      // ---------------------------------------------------
+      // ------->> Get Id from mongoDB
+      // ---------------------------------------------------
+      $http({
+          url : $scope.api_url_init_id_date ,
+          method : "GET"
+        }).then(function(resp){
+          $scope.mongoose_id = resp.data.id;
+          $scope.mongoose_date = resp.data.date;;
+        },function(err){
+          console.log(err);
+      });
+
+     } ,
+     onEnd : function (evt){
+        var htmlVal = $("#docQuestions ").find(evt.item);
+        $("#docQuestions").css({
+          background :"#fff"
+        });
+
+
+          // ---------------------------------------------------
+          // ------->> push and update indexes in array
+          // ---------------------------------------------------
+          var itemType = $(evt.item).attr('data-type');
+          var questionType = $(evt.item).attr('data-question-type');
+          var new_question = {
+            _id:$scope.mongoose_id,
+            question_type :questionType,
+            question_body :"Edit Model",
+            created_at :$scope.mongoose_date,
+            answer_settings : {
+                answer_char_max : 200 ,
+                choice_style : "inline" ,
+                is_randomized : false,
+                is_required : false,
+                single_choice : true,
+                super_size : false
+            },
+            answers_format : []
+          };
+          // Push to array w index
+          var index_in_array = evt.newIndex;
+          $scope.questions_list.splice(index_in_array,0, new_question );
+
+
+
+          // ---------------------------------------------------
+          // ------->>>>> Mongo Database
+          // ---------------------------------------------------
+          if(itemType == 'qst'){ //=> Question
+
+          }
+          if(itemType == 'text'){ //=> Welcome / close message
+
+          }
+          // ---------------------------------------------------
+          // ------->>>>> Ui Design
+          // ---------------------------------------------------
+
+          // build current element
+          htmlVal.find("span.titles").html("Edit Model");
+          // build action handler
+          htmlVal.append($scope.quesion_actions);
+          // Add animation for this question
+          htmlVal.find("ul.question-option").find("li.right").addClass("animated bounceIn");
+
+      //  } , 300);
+
      },
    }); // end sortable draggable
 
