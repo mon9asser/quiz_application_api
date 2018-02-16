@@ -17,21 +17,21 @@
            <span class="titles">Welcome screen</span>
        </li>
 
-       <li data-question-type="0" question-data="partials/multi-choices.hbs">
+       <li data-type="qst" data-question-type="0" question-data="partials/multi-choices.hbs">
            <span class="qs-type" title="Multiple Choices">
               <i class="icon-insert-template"></i>
            </span>
            <span class="titles">Choices</span>
        </li>
 
-       <li data-question-type="1" question-data="partials/media-choices.hbs">
+       <li data-type="qst" data-question-type="1" question-data="partials/media-choices.hbs">
         <span class="qs-type" title="Media Choices">
            <i class="icon-image"></i>
         </span>
         <span class="titles">Media</span>
       </li>
 
-      <li data-question-type="2" question-data="partials/true-false.hbs">
+      <li data-type="qst" data-question-type="2" question-data="partials/true-false.hbs">
               <span class="qs-type" title="Ture/False">
                  <i class="icon-check-circle"></i>
                </span>
@@ -72,7 +72,7 @@
                 <!-- <li  class="dragelement-here draggable-x"> -->
                     <!-- List your question here ! -->
                 <!-- </li> -->
-
+                   
                   {{# each app.questions}}
                   <li
                     class ="question-object qs-{{ id }}"
@@ -86,33 +86,37 @@
                     data-media-src            = "{{ media_question.media_field }}"
                     data-media-type           = "{{ media_question.media_type }}"
                   >
-                    <span class="qs-type quesiontlist_iconx" title="Multiple Choices">
-                     <i ng:if="{{ question_type }} == 0" class="icon-insert-template"></i>
-                     <i ng:if="{{ question_type }} == 1" class="icon-image"></i>
-                     <i ng:if="{{ question_type }} == 2" class="icon-check-circle"></i>
-                     <i ng:if="{{ question_type }} == 3" class=".......3"></i>
-                     <i ng:if="{{ question_type }} == 4" class=".......4"></i>
-                   </span>
-                   <span ng:if="{{ question_type }} == 0">
-                      Multiple Choices
-                   </span>
-                   <span ng:if="{{ question_type }} == 1">
-                      Media Choices
-                   </span>
-                   <span ng:if="{{ question_type }} == 2">
-                     True Or False
-                   </span>
-                   <span ng:if="{{ question_type }} == 3">
-                     ...... 3
-                   </span>
-                   <span ng:if="{{ question_type }} == 4">
-                     ...... 4
-                   </span>
-                   <i ng:click="delete_this_question( '{{ id }}' )" style="cursor:pointer;" class="fa fa-trash iconx-trashable qs-delete-{{ id }} question-deletion"></i>
 
-                   <!-- <i ng:click="delete_this_question( '{{ id }}' )" style="cursor:pointer;" class="fa fa-eye iconx-trashable"></i> -->
 
-                    <i ng:click="edit_this_question( '{{ id }}' , '{{../app.id}}' )" style="cursor:pointer;" class="fa fa-pencil iconex-movable"></i>
+
+                   <div class="question-part">
+                     <div class="qs-type quesiontlist_iconx" title="Multiple Choices">
+
+
+
+
+                      <!-- ng:if="{{ question_type }} == 2" -->
+                     <span>
+                          {{ question_body }}
+                     </span>
+                     <ul class="question-option">
+                      <!-- <li class="left"><i class="icon-check-circle"></i></li>
+                      <li class="left">Boolean choices</li> -->
+                      <li class="right">
+                        <i ng:click="delete_this_question( '{{ id }}' )" style="cursor:pointer;" class="fa fa-trash iconx-trashable qs-delete-{{ id }} question-deletion"></i>
+                      </li>
+                      <li class="right">
+                        <i ng:click="edit_this_question( '{{ id }}' , '{{../app.id}}' )" style="cursor:pointer;" class="fa fa-pencil iconex-movable"></i>
+                      </li>
+                    </ul>
+                        <!-- <i ng:if="{{ question_type }} == 3" class=".......3"></i>
+                        <i ng:if="{{ question_type }} == 4" class=".......4"></i> -->
+                     </div>
+
+
+                   </div>
+
+
                   </li>
                   {{/each}}
                 <!--

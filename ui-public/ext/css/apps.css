@@ -6,7 +6,7 @@ body {
     width: 95%;
     display: block;
     position: relative;
-    overflow: hidden;
+    /*overflow: hidden;*/
     margin: 10px auto 10px auto;
     font-family: "OpenSansRegular";
     color: #999 !important;
@@ -156,7 +156,7 @@ body {
     width: 100%;
     position: relative;
     list-style: none;
-    overflow: hidden;
+    /*overflow: hidden;*/
     padding: 0px;
     margin: 0px;
 }
@@ -166,34 +166,37 @@ body {
     width: 95%;
     color: rgb(153, 153, 153);
     font-size: 14px;
+    background: #fff;
     font-family: OpenSansRegular;
     cursor: pointer;
-    overflow: hidden;
+    /*overflow: hidden;*/
     border-width: 1px;
     border-style: dashed;
-    border-color: rgb(238, 238, 238);
+    border-color: #eee;;
     border-image: initial;
     padding: 10px;
     margin: 0px auto 10px;
+    margin-top: 15px;
 }
 .quesiontlist_iconx {
-    margin-right: 5px;
-    margin-left: 7px;
+    overflow: hidden;
 }
 .iconex-movable {
     display: inline-block;
     position: relative;
     cursor: -webkit-grab;
-    float: right;
+    /*float: right;*/
     vertical-align: middle;
-    margin: 3px 10px 0px 2px;
+    margin:0px;
+    margin-top:  1px ;
 }
 .iconx-trashable {
     display: inline-block;
     position: relative;
-    float: right;
+    /*float: right;*/
     cursor: pointer;
-    margin: 2px 9px 0px 0px;
+    margin:0px;
+    margin-top:  2px ;
 }
 .switch-mode {
     background: ghostwhite;
@@ -581,4 +584,68 @@ display: none;
 li.wc-screens{
   padding-bottom: 10px !important;
   padding-top: 10px !important;
+}
+.question-option {
+  display: block;
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
+  overflow: hidden;
+  /*border-top: 1px dashed #eee;*/
+  padding-top: 11px;
+  margin-top: 10px;
+  font-size: 12px !important;
+
+  display: block;
+    position: absolute;
+    top: -30px;
+    right: 10px;
+}
+.question-option li {
+  display: inline-block;
+position: relative;
+width: 20px;
+height: 20px;
+background: #fcfcfc;
+vertical-align: middle;
+text-align: center;
+line-height: 25px;
+border-radius: 13px;
+border: 1px dashed tan;
+line-height: 16px !important;
+}
+.question-option li i {
+    line-height: 1.2;
+    color: tan;
+    }
+.question-option li.left {
+  float: left;
+}
+.question-option li.right {
+  float: right;
+}
+.question-part {
+  display: block;
+  padding: 0px;
+  width: 100%;
+  overflow: hidden;
+}
+.question-option li.left{
+  margin-left: 5px;
+  line-height: 1;
+
+  color:  rgba(54 ,88 ,152 , 0.4);
+}
+.question-option li.left:first-child{
+  margin: 0px;
+}
+
+.question-option li.right{
+  margin-right: 0px;
+line-height: 1;
+color: rgba(54 ,88 ,152 , 0.4);
+vertical-align: middle;
+text-align: center;
+margin-left: 5px;
 }
