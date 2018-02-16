@@ -723,6 +723,39 @@ qtnrRouters.patch("/:app_id/settings/style/:process", auth_verify_api_keys , (re
 
 
 });
+// Save many questions with indexes in one time
+qtnrRouters.patch("/:app_id/question/creation"  , auth_verify_api_keys , (req,res)=>{
+  var app_id = req.params.app_id ;
+  var user = req.verified_user;
+  var userType = req.is_creator;
+
+  // this user should be a creator user !
+  if (userType != 1) {
+       return new Promise((resolve, reject) => {
+          res.status(401).send(notes.Warnings.Permission_Warning);
+      });
+  }
+  qtnr.findOne({ _id:app_id }, function (err, qtnairsDocument){
+    if (!qtnairsDocument){
+      return new Promise((resolve, reject)=>{
+         res.status(404).send(notes.Errors.Error_Doesnt_exists("Application"));
+      });
+    }
+
+    if(qtnairsDocument.creator_id != user.id){
+      return new Promise((resolve , reject)=>{
+        res.send(notes.Warnings.Permission_Warning);
+      });
+    }
+
+    qtnairsDocument.questions = req.body.sorted_question ;
+    qtnairsDocument.markModified("questions");
+    qtnairsDocument.save().then(function(sorted_qs){
+      res.send (sorted_qs) ;
+    });
+  });
+});
+
 // Question => proccess ( create - edit or delete )
 qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("media_field") , auth_verify_api_keys , (req, res) =>{
   var app_id = req.params.app_id ;
@@ -1860,7 +1893,6 @@ qtnrRouters.get("/:uid/applications" , authenticate_keys_with_curr_status ,  (re
     }
     res.send(doc);
   });
-
 
 });
 
