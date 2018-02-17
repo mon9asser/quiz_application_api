@@ -130,6 +130,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
              $scope.question_id = questionId ;
 
              $timeout(function(){
+                element.addClass("animated rotateOutUpLeft");//rollOut
                 element.remove();
                 var found_qs = $scope.questions_list.find($scope.callback_index);
                 var targetIndex = $scope.questions_list.indexOf(found_qs);
