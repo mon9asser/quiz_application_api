@@ -120,11 +120,16 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 question_id : questionId
               }
           }).then(function(resp){
-             element.addClass("animated rotateOutUpLeft");//rollOut
+            //  element.addClass("animated rotateOutUpLeft");//rollOut
+              console.log("-----------------------------");
+              console.log(element.prop("className"));
+              console.log("-----------------------------");
+
+             // Delete From angular array
+             $scope.question_id = questionId ;
+
              $timeout(function(){
                 element.remove();
-                // Delete From angular array
-                $scope.question_id = questionId ;
                 var found_qs = $scope.questions_list.find($scope.callback_index);
                 var targetIndex = $scope.questions_list.indexOf(found_qs);
                 if(targetIndex != -1 ){
