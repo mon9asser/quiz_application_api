@@ -146,7 +146,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
      ghostClass: 'shadow_element' ,
      group: "question-list" ,
      disabled: false ,
-
      onStart : function (evt){
        console.log(evt.item);
       // var targetEl = $(evt.item).hasClass("draggable-x");
@@ -205,18 +204,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         });
       }
 
-      // ---------------------------------------------------
-      // ------->> Get Id from mongoDB
-      // ---------------------------------------------------
-      $http({
-          url : $scope.api_url_init_id_date ,
-          method : "GET"
-        }).then(function(resp){
-          $scope.mongoose_id = resp.data.id;
-          $scope.mongoose_date = resp.data.date;;
-        },function(err){
-          console.log(err);
-      });
 
      } ,
      onEnd : function (evt){
@@ -246,38 +233,62 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             },
             answers_format : []
           };
-          // Push to array w index
-          var index_in_array = evt.newIndex;
-          $scope.questions_list.splice(index_in_array,0, new_question );
 
-          htmlVal.find("ul.question-option").find("li.right").addClass("animated bounceIn");
-          htmlVal.remove();
+          if($scope.mongoose_id == null ){
+
+
+
+            // ---------------------------------------------------
+            // ------->> Get Id from mongoDB
+            // ---------------------------------------------------
+            $http({
+                url : $scope.api_url_init_id_date ,
+                method : "GET"
+              }).then(function(resp){
+                new_question['_id'] = resp.data.id;
+                new_question['created_at'] = resp.data.date;;
+              },function(err){
+                console.log(err);
+            });
+
+          }
+
           // ---------------------------------------------------
           // ------->>>>> Mongo Database
           // ---------------------------------------------------
-          if(itemType == 'qst'){ //=> Question
-            $.getJSON($scope.json_apk_file , function(api_key_data){
-              $http({
-                    url   : $scope.api_url_question_creation ,
-                    method : "PATCH",
-                    data  : {
-                      "sorted_question": $scope.questions_list ,
-                      "creator_id":$scope.user_id
-                    } ,
-                    headers: {
-            					"X-api-keys": api_key_data.API_KEY,
-            					"X-api-app-name": api_key_data.APP_NAME
-          				  }
-                  }).then(function(resp){
+          $timeout(function (){
+            // Push to array w index
+            var index_in_array = evt.newIndex;
+            $scope.questions_list.splice(index_in_array,0, new_question );
 
-                  },function(err){
-                    console.log(err);
-                  });
-            });
-          }
-          if(itemType == 'text'){ //=> Welcome / close message
+            htmlVal.find("ul.question-option").find("li.right").addClass("animated bounceIn");
+            htmlVal.remove();
 
-          }
+            if(itemType == 'qst'){ //=> Question
+              $.getJSON($scope.json_apk_file , function(api_key_data){
+                $http({
+                      url   : $scope.api_url_question_creation ,
+                      method : "PATCH",
+                      data  : {
+                        "sorted_question": $scope.questions_list ,
+                        "creator_id":$scope.user_id
+                      } ,
+                      headers: {
+              					"X-api-keys": api_key_data.API_KEY,
+              					"X-api-app-name": api_key_data.APP_NAME
+            				  }
+                    }).then(function(resp){
+
+                    },function(err){
+                      console.log(err);
+                    });
+              });
+            }
+            if(itemType == 'text'){ //=> Welcome / close message
+
+            }
+          } , 300 );
+
           // ---------------------------------------------------
           // ------->>>>> Ui Design
           // ---------------------------------------------------

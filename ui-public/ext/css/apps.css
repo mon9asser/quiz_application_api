@@ -667,3 +667,6 @@ vertical-align: middle;
 .qs-body {
   margin-left: 8px;
 }
+.left_part , .right_part {
+  position: relative;
+}

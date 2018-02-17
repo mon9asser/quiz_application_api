@@ -20,7 +20,9 @@ app.engine('hbs', hbs.express4({
   partialsDir: path.join(__dirname, 'ui-public/partials' )
 }));
 
+// app.use(express.static(path.join(__dirname, 'ui-public')));
 app.use(express.static(path.join(__dirname, 'ui-public')));
+
 // app.use( express.static(__dirname +'/ui-public') );
 app.set('view engine', 'hbs');
 app.set('views',  __dirname +'/ui-public');
