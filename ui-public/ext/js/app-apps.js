@@ -7,7 +7,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   $scope.callback_index = function (object){
     return object._id == $scope.question_id ;
   };
-
+  $scope.question_tag = "Data Editor";
 
   //--------------------------------------------------------
   // ==>  Default Values
@@ -37,16 +37,16 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
    //--------------------------------------------------------
    // ==>  api urls
    //--------------------------------------------------------
-   $scope.api_url_current_app     = $scope.server_ip + "api/"+$scope.app_id+"/application/retrieve"
-   $scope.json_apk_file           = $scope.server_ip + "ext/json/json-keys.json";
-   $scope.api_url_create_question = null;
-   $scope.api_url_delete_question = $scope.server_ip + "api/"+$scope.app_id+"/question/delete";
-   $scope.api_url_edit_question   = null;
-   $scope.api_url_create_answer   = null;
-   $scope.api_url_delete_answer   = null;
-   $scope.api_url_edit_answer     = null;
-   $scope.api_url_init_id_date    = $scope.server_ip + "api/generate/new/data";
-
+   $scope.api_url_current_app         = $scope.server_ip + "api/"+$scope.app_id+"/application/retrieve"
+   $scope.json_apk_file               = $scope.server_ip + "ext/json/json-keys.json";
+   $scope.api_url_create_question     = null;
+   $scope.api_url_delete_question     = $scope.server_ip + "api/"+$scope.app_id+"/question/delete";
+   $scope.api_url_edit_question       = null;
+   $scope.api_url_create_answer       = null;
+   $scope.api_url_delete_answer       = null;
+   $scope.api_url_edit_answer         = null;
+   $scope.api_url_init_id_date        = $scope.server_ip + "api/generate/new/data";
+   $scope.api_url_question_creation   = $scope.server_ip + "api/" + $scope.app_id + "/question/creation"
 
    // -------------------------------------------------------
    // ----> Init current App
@@ -102,8 +102,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
      $(".qs-delete-"+questionId).removeClass("fa-trash");
      $(".qs-delete-"+questionId).addClass("fa-refresh fa-spin tomato-font");
       var element = $(".qs-"+questionId);
-      element.css({background:"rgba(255, 99, 71, 0.4)" , color:"rgba(255, 99, 71, 0.4)"})
+      element.css({background:"rgba(255, 99, 71, 0.4)" , color:"rgba(255, 99, 71, 0.4)" , border:"1px solid rgba(255, 99, 71, 0.7)"});
       $(".fa-spin").css("color","tomato");
+      $(".fa-spin").parent("li").css({border:"1px solid rgba(255, 99, 71, 0.7)"});
 
      $.getJSON($scope.json_apk_file , function(api_key_data){
        $timeout(function (){
@@ -122,6 +123,13 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
              element.addClass("animated rotateOutUpLeft");//rollOut
              $timeout(function(){
                 element.remove();
+                // Delete From angular array
+                $scope.question_id = questionId ;
+                var found_qs = $scope.questions_list.find($scope.callback_index);
+                var targetIndex = $scope.questions_list.indexOf(found_qs);
+                if(targetIndex != -1 ){
+                  $scope.questions_list.splice(targetIndex, 1);
+                }
              },1000);
           },function(err){
             console.log(err);
@@ -144,7 +152,37 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       // var targetEl = $(evt.item).hasClass("draggable-x");
      } ,
      onEnd : function (evt){
+       var itemEl = evt.item;  // dragged HTMLElement
+       var newIndex = evt.newIndex ;
+       var oldIndex = evt.oldIndex ;
+       $scope.question_id = $(itemEl).attr("data-question-id");
+       var question_sor = $scope.questions_list.find($scope.callback_index);
 
+       // store values
+       var newPosition = question_sor;
+       // remove old index
+       $scope.questions_list.splice(oldIndex, 1);
+       // relocate new position
+       $scope.questions_list.splice(newIndex ,0,  newPosition );
+       // Save change in db
+       $.getJSON($scope.json_apk_file , function(api_key_data){
+         $http({
+               url   : $scope.api_url_question_creation ,
+               method : "PATCH",
+               data  : {
+                 "sorted_question": $scope.questions_list ,
+                 "creator_id":$scope.user_id
+               } ,
+               headers: {
+                 "X-api-keys": api_key_data.API_KEY,
+                 "X-api-app-name": api_key_data.APP_NAME
+               }
+             }).then(function(resp){
+
+             },function(err){
+               console.log(err);
+             });
+       });
      }
    }); // end sortable
 
@@ -212,13 +250,30 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           var index_in_array = evt.newIndex;
           $scope.questions_list.splice(index_in_array,0, new_question );
 
-
-
+          htmlVal.find("ul.question-option").find("li.right").addClass("animated bounceIn");
+          htmlVal.remove();
           // ---------------------------------------------------
           // ------->>>>> Mongo Database
           // ---------------------------------------------------
           if(itemType == 'qst'){ //=> Question
+            $.getJSON($scope.json_apk_file , function(api_key_data){
+              $http({
+                    url   : $scope.api_url_question_creation ,
+                    method : "PATCH",
+                    data  : {
+                      "sorted_question": $scope.questions_list ,
+                      "creator_id":$scope.user_id
+                    } ,
+                    headers: {
+            					"X-api-keys": api_key_data.API_KEY,
+            					"X-api-app-name": api_key_data.APP_NAME
+          				  }
+                  }).then(function(resp){
 
+                  },function(err){
+                    console.log(err);
+                  });
+            });
           }
           if(itemType == 'text'){ //=> Welcome / close message
 
@@ -228,11 +283,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           // ---------------------------------------------------
 
           // build current element
-          htmlVal.find("span.titles").html("Edit Model");
-          // build action handler
-          htmlVal.append($scope.quesion_actions);
-          // Add animation for this question
-          htmlVal.find("ul.question-option").find("li.right").addClass("animated bounceIn");
+          // htmlVal.find("span.titles").html("Edit Model");
+          // // build action handler
+          // htmlVal.append($scope.quesion_actions);
+          // // Add animation for this question
+          // htmlVal.find("ul.question-option").find("li.right").addClass("animated bounceIn");
 
       //  } , 300);
 

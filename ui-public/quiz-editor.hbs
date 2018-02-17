@@ -13,9 +13,9 @@
      <ul id="qs-sortable" class="question-x">
 
 
-       <li data-type="text" class="wc-screens">
+       <!-- <li data-type="text" class="wc-screens">
            <span class="titles">Welcome screen</span>
-       </li>
+       </li> -->
 
        <li data-type="qst" data-question-type="0" question-data="partials/multi-choices.hbs">
            <span class="qs-type" title="Multiple Choices">
@@ -37,9 +37,9 @@
                </span>
               <span class="titles">Boolean</span>
       </li>
-      <li data-type="text" class="wc-screens">
+      <!-- <li data-type="text" class="wc-screens">
           <span class="titles">Thank you screen</span>
-      </li>
+      </li> -->
      </ul>
   </div>
 </div>
@@ -64,16 +64,18 @@
        <!-- Question (Editor) menu -->
       <div class="left_part col-md-5 col-sm-6 col-xs-12">
           <div class="question-data qsdragged-list qs-dropped">
-						<div ng:click="create_quiz.create_new_app(1)" class="widContainer">
+						<div class="widContainer">
 								Questions
 						</div>
             <!-- list of question type -->
 						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
-                <li ng:class="'question-li-x qs-'+qs_value._id" ng:repeat="(qs_key , qs_value) in questions_list">
+                <li data-question-id="~>>qs_value._id<<~" ng:class="'question-li-x qs-'+qs_value._id" ng:repeat="(qs_key , qs_value) in questions_list">
                      <div class="question-part">
                        <div class="qs-type quesiontlist_iconx">
                          <span class="qs-type" title="Multiple Choices">
-                       	   <i class="icon-insert-template"></i>
+                       	   <i ng:if="qs_value.question_type == 0" class="icon-insert-template"></i>
+                           <i ng:if="qs_value.question_type == 1" class="icon-image"></i>
+                           <i ng:if="qs_value.question_type == 2" class="icon-check-circle"></i>
                          </span>
                          <span ng:bind="qs_value.question_body" class="qs-body"></span>
                          <ul class="question-option">
