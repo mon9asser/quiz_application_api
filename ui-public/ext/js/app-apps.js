@@ -120,10 +120,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 question_id : questionId
               }
           }).then(function(resp){
+            console.log("-----------------------------");
+            console.log(element.prop("className"));
+            console.log("-----------------------------");
             //  element.addClass("animated rotateOutUpLeft");//rollOut
-              console.log("-----------------------------");
-              console.log(element.prop("className"));
-              console.log("-----------------------------");
+
 
              // Delete From angular array
              $scope.question_id = questionId ;
