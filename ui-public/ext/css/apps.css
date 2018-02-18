@@ -667,6 +667,13 @@ vertical-align: middle;
 .qs-body {
   margin-left: 8px;
 }
+.choices-part
+{
+  margin-bottom: 0;
+  margin: 0px auto;
+  padding: 0px;
+  text-align: center;
+}
 .choices-part > li {
     display: inline-block;
     width: 45%;
@@ -675,6 +682,7 @@ vertical-align: middle;
     color: #999;
     text-align: left;
     margin: 13px 11px;
+
 }
 .answer-pt-controller {
     display: block;
@@ -738,6 +746,19 @@ vertical-align: middle;
 }
 .highlighted-right-answers > div > ul.answer-pt-controller  li:first-child
  {
-  color: tan;
+   color: tan;
    border: 1px solid tan;
+   border-radius: 50%;
+   background: antiquewhite;
+}
+.add-new-option {
+    width: 93%;
+    margin: 0px auto;
+    text-align: center;
+    color: #c0bdbd;
+    font-weight: bold;
+    background: whitesmoke;
+    padding: 8px;
+    border-radius: 18px;
+    cursor: pointer;
 }

@@ -8,8 +8,44 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   $scope.callback_index = function (object){
     return object._id == $scope.question_id ;
   };
-  $scope.question_tag = "Data Editor";
 
+  $scope.answer_id = null ;
+  $scope.callback_answer_index = function (object){
+    return object._id == $scope.answer_id ;
+  };
+
+
+
+  $scope.question_tag = "Data Editor";
+  $scope.indexes = 1 ;
+  $scope.labels = [
+    'a',
+    'b',
+    'c',
+    'd',
+    'e',
+    'f',
+    'g',
+    'h',
+    'i',
+    'j',
+    'k',
+    'm',
+    'l',
+    'n',
+    'o',
+    'p',
+    'q',
+    'r',
+    's',
+    't',
+    'u',
+    'v',
+    'w',
+    'x',
+    'y',
+    'z'
+  ];
   //--------------------------------------------------------
   // ==>  Default Values
   //--------------------------------------------------------
@@ -49,6 +85,17 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
    $scope.api_url_edit_answer         = null;
    $scope.api_url_init_id_date        = $scope.server_ip + "api/generate/new/data";
    $scope.api_url_question_creation   = $scope.server_ip + "api/" + $scope.app_id + "/question/creation"
+
+   //--------------------------------------------------------
+   // ==>  Default Settings
+   //--------------------------------------------------------
+    $scope.unique_ids = null ;
+    $scope.question_settings = {
+     is_required           : false ,
+     single_choice  : false ,
+     is_randomized          : false ,
+     super_size         : false
+    }
 
    // -------------------------------------------------------
    // ----> Init current App
@@ -122,9 +169,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 question_id : questionId
               }
           }).then(function(resp){
-            console.log("-----------------------------");
-            console.log(element.prop("className"));
-            console.log("-----------------------------");
+            // console.log("-----------------------------");
+            // console.log(element.prop("className"));
+            // console.log("-----------------------------");
             //  element.addClass("animated rotateOutUpLeft");//rollOut
 
              // Delete From angular array
@@ -155,7 +202,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
      group: "question-list" ,
      disabled: false ,
      onStart : function (evt){
-       console.log(evt.item);
+      //  console.log(evt.item);
       // var targetEl = $(evt.item).hasClass("draggable-x");
      } ,
      onEnd : function (evt){
@@ -214,6 +261,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
            $scope.mongoose_id = resp.data.id;
            $scope.mongoose_answer_id = resp.data.id_1;
            $scope.mongoose_date = resp.data.date;;
+           $scope.unique_ids = resp.data.list_of_ids ;
+
          },function(err){
            console.log(err);
        });
@@ -229,6 +278,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
      } ,
      onEnd : function (evt){
+
         var htmlVal = $("#docQuestions ").find(evt.item);
         $("#docQuestions").css({
           background :"#fff"
@@ -291,7 +341,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
               }).then(function(resp){
                 new_question['_id'] = resp.data.id;
                 new_question['created_at'] = resp.data.date;;
-
+                $scope.unique_ids = resp.data.list_of_ids ;
                 new_question.answers_format[0]['_id'] = resp.data.id_1;
                 if(questionType == 2 ){
                   new_question.answers_format[1]['_id'] = resp.data.id_1+'12fd';
@@ -306,12 +356,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           // ------->>>>> Mongo Database
           // ---------------------------------------------------
           $timeout(function (){
+
             // Push to array w index
             var index_in_array = evt.newIndex;
             $scope.questions_list.splice(index_in_array,0, new_question );
 
             htmlVal.find("ul.question-option").find("li.right").addClass("animated bounceIn");
             htmlVal.remove();
+            $scope.edit_this_question(new_question._id);
 
             if(itemType == 'qst'){ //=> Question
               $.getJSON($scope.json_apk_file , function(api_key_data){
@@ -327,6 +379,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
               					"X-api-app-name": api_key_data.APP_NAME
             				  }
                     }).then(function(resp){
+
+                      // $scope.questions_list = resp.questions;
+
                       console.log(resp);
                     },function(err){
                       console.log(err);
@@ -360,6 +415,23 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   //--------------------------------------------------------
   $scope.edit_this_question = function ( qs_id ){
      $scope.question_id = qs_id ;
+     $scope.indexes = 1 ;
+     // ---------------------------------------------------
+     // ------->> Get Id from mongoDB
+     // ---------------------------------------------------
+     $http({
+         url : $scope.api_url_init_id_date ,
+         method : "GET"
+       }).then(function(resp){
+         $scope.mongoose_id = resp.data.id;
+         $scope.mongoose_answer_id = resp.data.id_1;
+         $scope.mongoose_date = resp.data.date;;
+         $scope.unique_ids = resp.data.list_of_ids ;
+
+       },function(err){
+         console.log(err);
+     });
+
     // qs-edit-'+qs_id
     $(".qs-edit-"+$scope.question_id).removeClass("fa-pencil");
     $(".iconex-movable").each(function(){
@@ -379,8 +451,13 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
     // =====================================> Edit in array
     var taget_question = $scope.questions_list.find($scope.callback_index);
-    console.log("This Question For Edit !!");
-    console.log(taget_question);
+    // console.log("This Question For Edit !!");
+    if(taget_question.answers_format.length > 1){
+      $scope.indexes = taget_question.answers_format.length ;
+    }
+
+
+
     //---------------------------------------
     // setup data of question into ui design
     //---------------------------------------
@@ -391,7 +468,203 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.question_type = taget_question.question_type;
     // 2- answers
     $scope.asnwers = taget_question.answers_format
-    // 3 settings
+    // 3 Question settings
+    $scope.question_settings = {
+      is_required           : taget_question.answer_settings.is_required ,
+      single_choice   : taget_question.answer_settings.single_choice ,
+      is_randomized          : taget_question.answer_settings.is_randomized ,
+      super_size         : taget_question.answer_settings.super_size
+    }
+
   }; // edit curr question
 
+
+  // =====================================
+  // ===> Question Settings
+  // =====================================
+  $("#MultipleResponse-option , #Randomize-option , #SuperSize-option , #required-option").on("change",function(){
+     // sotre settings in array => $scope.question_id
+     var question_selected = $scope.questions_list.find($scope.callback_index);
+     question_selected.answer_settings = $scope.question_settings ;
+    //  question_selected.answer_settings =
+     // Remove the current list from array
+     var targetIndex = $scope.questions_list.indexOf(question_selected);
+     if(targetIndex != -1 ){
+       $scope.questions_list.splice(targetIndex, 1);
+     }
+     // ==============================
+    //  alert(question_selected.answer_settings.single_choice);
+     if(question_selected.answer_settings.single_choice == true ) {
+       var all_answers = question_selected.answers_format;
+       for (var i = 0; i < all_answers.length; i++) {
+           all_answers[i].is_correct = false;
+       }
+     }
+     console.log(question_selected);
+
+
+     // Push to array with index
+     $scope.questions_list.splice(targetIndex, 0, question_selected);
+
+    //  console.log($scope.questions_list);
+  });
+  // =====================================
+  // ===> Answer Creation
+  // =====================================
+  $scope.create_new_answer = function (){
+
+    if($scope.question_id == null ){
+      alert("Please select question from question list");
+    }
+
+    var question_selected = $scope.questions_list.find($scope.callback_index);
+    var answer_length = question_selected.answers_format.length ;
+
+    $scope.indexes = answer_length+1;
+    if($scope.unique_ids[$scope.indexes] == undefined)
+    {
+      $(".add-new-option").css({
+        background : "rgba(221,34,34,0.24)" ,
+        color : '#ff5252'
+      });
+      $(".add-new-option").html("You couldn't able create more answers !!");
+      return false ;
+    }
+    var new_answer = {
+         is_correct: false,
+         _id : $scope.unique_ids[$scope.indexes]
+       };
+
+       if($scope.question_type == 0 )
+          new_answer['value'] = "Answer " + $scope.indexes;
+
+       if( $scope.question_type == 1 )
+        new_answer['media_src'] = $scope.server_ip + "img/media-icon.png" ;
+
+         question_selected.answers_format.push(new_answer);
+         console.log($scope.questions_list);
+
+  };
+
+  // ============================================
+  // =====>> Delete Answers from array
+  // ============================================
+  $scope.question_answer_deletion = function (answer_id){
+    // ==> This Answer
+    $scope.answer_id = answer_id ;
+    var question_selected = $scope.questions_list.find($scope.callback_index);
+    var answer_selected = question_selected.answers_format.find($scope.callback_answer_index);
+
+    // let's excute our func here
+    var targetIndex = question_selected.answers_format.indexOf(answer_selected);
+    if(targetIndex != -1 ){
+      question_selected.answers_format.splice(targetIndex, 1);
+    }
+  };
+
+
+
+  // ============================================
+  // =====>> Mark this answer as a right
+  // ============================================
+  $scope.question_answer_mark_it_correct = function (answer_id){
+    // ==> This Answer
+    $scope.answer_id = answer_id ;
+    var question_selected = $scope.questions_list.find($scope.callback_index);
+    var answer_selected = question_selected.answers_format.find($scope.callback_answer_index);
+
+    if( question_selected.question_type == 2 ){
+      var all_answers = question_selected.answers_format;
+      for (var i = 0; i < all_answers.length; i++) {
+        all_answers[i].is_correct = false;
+      }
+      answer_selected.is_correct = !answer_selected.is_correct ;
+
+      return false ;
+    }
+    // let's excute our func here
+    if(question_selected.answer_settings.single_choice == true ) { // only one response
+      var all_answers = question_selected.answers_format;
+      for (var i = 0; i < all_answers.length; i++) {
+        all_answers[i].is_correct = false;
+      }
+      answer_selected.is_correct = !answer_selected.is_correct ;
+    }else { // multiple response
+      answer_selected.is_correct = !answer_selected.is_correct ;
+    }
+
+
+  };
+  // ============================================
+  // =====>> Edit Question Text
+  // ============================================
+  $("#editor-question-body").on('keydown change keypress keyup' , function (){
+    var question_value = $(this).val();
+    if($scope.question_id == null )
+      {
+        alert("please select question to edit it first !");
+        return false ;
+      }
+
+    // Select Question From Array
+      var question_selected = $scope.questions_list.find($scope.callback_index);
+      question_selected.question_body = question_value;
+
+  });
+
+  // ============================================
+  // =====>> Question Description
+  // ============================================
+
+  $("#editor-question-desc").on('keydown change keypress keyup' , function (){
+    var question_value = $(this).val();
+    if($scope.question_id == null )
+      {
+        alert("please select question to edit it first !");
+        return false ;
+      }
+
+    // Select Question From Array
+      var question_selected = $scope.questions_list.find($scope.callback_index);
+      question_selected.question_description = question_value;
+      console.log(question_selected);
+  });
+
+
+
+  // ==============================================================
+  // =====>> Save Changes that completed in angular backend
+  // ==============================================================
+  $scope.save_changes_in_angular_backend = function (){
+    if($scope.question_id == null ){
+      alert("You should select question from question list to allow you edit it");
+      return false ;
+    }
+    var changes_button = $(".save_changes");
+    changes_button.html("Saving Changes ....");
+
+
+
+    // Save change in db
+    $.getJSON($scope.json_apk_file , function(api_key_data){
+      $http({
+            url   : $scope.api_url_question_creation ,
+            method : "PATCH",
+            data  : {
+              "sorted_question": $scope.questions_list ,
+              "creator_id":$scope.user_id
+            } ,
+            headers: {
+              "X-api-keys": api_key_data.API_KEY,
+              "X-api-app-name": api_key_data.APP_NAME
+            }
+          }).then(function(resp){
+            changes_button.html("Save Changes");
+
+          },function(err){
+            console.log(err);
+          });
+    });
+
+  }
 }]);

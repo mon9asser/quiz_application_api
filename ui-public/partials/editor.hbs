@@ -50,8 +50,6 @@
     </div>
     <div style="display:block;" class="x-editor-x-body" id="answers-pt">
         <div class="multi-answers-part">
-
-
           <ul class="choices-part">
 
             <li ng:class="answer_value.is_correct == true ? 'highlighted-right-answers' : ''" ng:repeat="(answer_key , answer_value) in asnwers">
@@ -61,22 +59,22 @@
                  <ul class="answer-pt-controller">
                    <!-- is correct answer -->
                    <li ng:if="answer_value.is_correct == false" title="Make it Correct Answer">
-                     <span class="fa fa-check"></span>
+                     <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
                    </li>
                    <li ng:if="answer_value.is_correct == true" title="Remove Correct Answer">
-                     <span class="fa fa-check"></span>
+                     <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
                    </li>
 
 
                    <li title="Edit it with media">
                      <span class="fa fa-pencil edit-options-answer"></span>
                    </li>
-                   <li title="Delete this answer">
+                   <li ng:click="question_answer_deletion(answer_value._id)" title="Delete this answer">
                      <span class="fa fa-trash"></span>
                    </li>
                  </ul>
                  <div class="text-answers">
-                   <input class="writanswer-input" type="text" name="" value="~>>answer_value.value<<~">
+                   <input class="writanswer-input" type="text" name="" ng:model="answer_value.value">
                  </div>
                </div>
 
@@ -90,12 +88,12 @@
                 <div ng:if="question_type == 1" class="">
                   <ul class="answer-pt-controller ">
                     <li title="Make it Correct Answer">
-                      <span class="fa fa-check"></span>
+                      <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
                     </li>
                     <li title="Edit it with media">
                       <span class="fa fa-pencil edit-options-answer"></span>
                     </li>
-                    <li title="Delete this answer">
+                    <li ng:click="question_answer_deletion(answer_value._id)" title="Delete this answer">
                       <span class="fa fa-trash"></span>
                     </li>
                   </ul>
@@ -111,7 +109,7 @@
 
                     <ul class="answer-pt-controller ">
                       <li data-toggle="asnwers-options" title="Make it Correct Answer">
-                        <span class="fa fa-check"></span>
+                        <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
                       </li>
                     </ul>
                     <div class="text-answers">
@@ -123,85 +121,12 @@
 
 
             </li>
-            <!-- <li>
-              <ul class="answer-pt-controller">
-                <li data-toggle="asnwers-options" title="Make it Correct Answer">
-                  <span class="fa fa-check"></span>
-                </li>
-              </ul>
 
-                         alert(falseVal);
-              <div class="text-answers">
-                  <span class="text-field-inpu">True</span>
-              </div>
-            </li>
-
-            <li>
-              <ul class="answer-pt-controller ">
-                <li data-toggle="asnwers-options" title="Make it Correct Answer">
-                  <span class="fa fa-check"></span>
-                </li>
-              </ul>
-              <div class="text-answers">
-                  <span class="text-field-inpu">False</span>
-              </div>
-            </li> -->
-
-
-
-
-            <!-- Answer Start From Here !! -->
-            <!-- <li>
-              <ul class="answer-pt-controller ">
-                <li data-toggle="asnwers-options" title="Make it Correct Answer">
-                  <span class="fa fa-check"></span>
-                </li>
-                <li data-toggle="asnwers-options" title="Edit it with media">
-                  <span class="fa fa-pencil edit-options-answer"></span>
-                </li>
-                <li data-toggle="asnwers-options" title="Delete this answer">
-                  <span class="fa fa-trash"></span>
-                </li>
-              </ul>
-              <div class="text-answers">
-                <input class="text-field-inpu" type="text" name="" value="" placeholder="Write new answer here !!">
-                <div style="background:url('https://www.w3schools.com/css/img_fjords.jpg')" class="media-answers">
-
-                </div>
-              </div>
-            </li> -->
-
-
-
-            <!-- <li>
-              <ul class="answer-pt-controller ">
-                <li>
-                  <span class="fa fa-check selected-right-box"></span>
-                </li>
-                <li>
-                  <span class="fa fa-pencil"></span>
-                </li>
-                <li>
-                  <span class="fa fa-trash"></span>
-                </li>
-              </ul>
-              <div class="text-answers selected-right-answer">
-                <input type="text" name="" value="Video Part">
-                <div style="background:url('https://www.w3schools.com/css/img_fjords.jpg')" class="media-answers">
-                  Delete
-                </div>
-              </div>
-            </li> -->
           </ul>
-
-          <!-- <select class="true-fals-yes-no-type hidden-allx" name="">
-              <option value="0">True/false</option>
-              <option value="1">Yes/no</option>
-          </select>
-          <div class="add-new-answer-pt hidden-allx">
-            Add new options
-          </div> -->
-
+          <!--  ng:if="question_type == 0" -->
+          <div ng:click="create_new_answer()" ng:if="question_type == 0 || question_type == 1" class="add-new-option">
+              Add new option
+          </div>
         </div>
     </div>
   </li>
@@ -218,16 +143,16 @@
                 <li>
                    <span class="title-checkbox">Required</span>
                    <div class="slideThree on-off-checkbox-settings">
-                      <input ng:model="requiredOption" type="checkbox" value="None" id="required-option" name="check" checked="">
+                      <input ng:model="question_settings.is_required" type="checkbox" id="required-option" name="check" checked="">
                       <label for="required-option"></label>
                       <span class="off-value"></span>
                    </div>
                 </li>
                 <li>
 
-                   <span class="title-checkbox">Multiple Response</span>
+                   <span class="title-checkbox">Single Response</span>
                    <div class="slideThree on-off-checkbox-settings">
-                      <input ng:model="multipleResponseOption" type="checkbox" value="None" id="MultipleResponse-option" name="check" checked="">
+                      <input ng:model="question_settings.single_choice" type="checkbox" id="MultipleResponse-option" name="check" checked="">
                       <label for="MultipleResponse-option"></label>
                       <span class="off-value"></span>
                    </div>
@@ -236,7 +161,7 @@
 
                    <span class="title-checkbox">Randomize</span>
                    <div class="slideThree on-off-checkbox-settings">
-                      <input ng:model="randomizeOption" type="checkbox" value="None" id="Randomize-option" name="check" checked="">
+                      <input ng:model="question_settings.is_randomized" type="checkbox" id="Randomize-option" name="check" checked="">
                       <label for="Randomize-option"></label>
                       <span class="off-value"></span>
                    </div>
@@ -245,7 +170,7 @@
 
                    <span class="title-checkbox">Super Size Media</span>
                    <div class="slideThree on-off-checkbox-settings">
-                      <input ng:model="superSizeOption" type="checkbox" value="None" id="SuperSize-option" name="check" checked="">
+                      <input ng:model="question_settings.super_size" type="checkbox"  id="SuperSize-option" name="check" checked="">
                       <label for="SuperSize-option"></label>
                       <span class="off-value"></span>
                    </div>
@@ -277,7 +202,7 @@
   <button class="btn btn-danger-outline" type="button" name="button">
         Delete
   </button>
-  <button class="btn btn-primary-outline" type="button" name="button">
+  <button ng:click="save_changes_in_angular_backend()" class="btn btn-primary-outline save_changes" type="button" name="button">
         Save Changes
   </button>
 </div>
