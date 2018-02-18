@@ -70,9 +70,11 @@ infceRouter.get("/:app_id/editor/:token" , verify_access_tokens_admin_user , (re
 // ====> Generate New Id
 infceRouter.get("/generate/new/data" , (req,res)=>{
   var id = mongoose.Types.ObjectId();
+  var id_1 = mongoose.Types.ObjectId();
   var date_made = new Date();
   res.send({
     id : id ,
+    id_1 : id_1 ,
     date : date_made
   });
 });

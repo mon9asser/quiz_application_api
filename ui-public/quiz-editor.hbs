@@ -82,8 +82,8 @@
                            <li class="right">
                               <i ng:click="delete_this_question(qs_value._id)" style="cursor:pointer;" ng:class="'fa fa-trash iconx-trashable question-deletion qs-delete-'+qs_value._id"></i>
                            </li>
-                           <li class="right">
-                              <i style="cursor:pointer;" ng:class="'fa fa-pencil iconex-movable'"></i>
+                           <li class="right"> 
+                              <i ng:click="edit_this_question(qs_value._id)" style="cursor:pointer;" ng:class="'fa fa-pencil iconex-movable qs-edit-'+qs_value._id"></i>
                            </li>
                          </ul>
                        </div>

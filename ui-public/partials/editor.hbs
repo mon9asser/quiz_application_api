@@ -3,9 +3,9 @@
 <ul class="tab-editor">
   <li>
     <div class="x-editor-x-title" data-toggle="#question-pt">
-      Question Tag
+      Question
     </div>
-    <div class="x-editor-x-body" id="question-pt">
+    <div style="display:block;" class="x-editor-x-body" id="question-pt">
       <div class="col-sm-8 top-margins">
           <!-- ============================================== -->
           <!--========= Question With Media ================= -->
@@ -27,7 +27,7 @@
               </li>
             </ul>
           </div>
-          <textarea ng:model="question_tag" id="editor-question-body" placeholder="Question Title ? " class="form-control quest-title-edit textarea-qs" rows="3"></textarea>
+          <textarea ng:model="question_body" id="editor-question-body" placeholder="Question Title ? " class="form-control quest-title-edit textarea-qs" rows="3"></textarea>
         </div>
       <div class="col-sm-4 media-uploads top-margins">
           <!-- Image Case -->
@@ -38,85 +38,93 @@
            <label class="titles-question description-enable-handler">
               Description : <!-- <input class="enbl-desc" id="enable_dex" type="checkbox" name="" value=""> -->
            </label>
-           <textarea id="editor-question-desc" name="name" class="form-control descriptions description-field description-field-x" placeholder="Description ..." rows="3" cols="80"></textarea>
+           <textarea ng:model="question_description" id="editor-question-desc" name="name" class="form-control descriptions description-field description-field-x" placeholder="Description ..." rows="3" cols="80"></textarea>
         </div>
       </div>
     </div>
   </li>
-  <li>
-    <div class="x-editor-x-title" data-toggle="#Settings-pt">
-      Question Settings
-    </div>
-    <div class="x-editor-x-body" id="Settings-pt">
-      <div class="col-sm-12">
-        <div class="row-cols margin-top">
-          <!-- <label class="titles-question"> Question Settings : </label> -->
-          <div class="question-settings">
-             <ul class="listSettings-qs">
-                <li>
-                   <span class="title-checkbox">Required</span>
-                   <div class="slideThree on-off-checkbox-settings">
-                      <input ng:model="requiredOption" type="checkbox" value="None" id="required-option" name="check" checked="">
-                      <label for="required-option"></label>
-                      <span class="off-value"></span>
-                   </div>
-                </li>
-                <li>
 
-                   <span class="title-checkbox">Multiple Response</span>
-                   <div class="slideThree on-off-checkbox-settings">
-                      <input ng:model="multipleResponseOption" type="checkbox" value="None" id="MultipleResponse-option" name="check" checked="">
-                      <label for="MultipleResponse-option"></label>
-                      <span class="off-value"></span>
-                   </div>
-                </li>
-                <li>
-
-                   <span class="title-checkbox">Randomize</span>
-                   <div class="slideThree on-off-checkbox-settings">
-                      <input ng:model="randomizeOption" type="checkbox" value="None" id="Randomize-option" name="check" checked="">
-                      <label for="Randomize-option"></label>
-                      <span class="off-value"></span>
-                   </div>
-                </li>
-                <li>
-
-                   <span class="title-checkbox">Super Size Media</span>
-                   <div class="slideThree on-off-checkbox-settings">
-                      <input ng:model="superSizeOption" type="checkbox" value="None" id="SuperSize-option" name="check" checked="">
-                      <label for="SuperSize-option"></label>
-                      <span class="off-value"></span>
-                   </div>
-                </li>
-                <!-- <li>
-
-                   <span class="title-checkbox">Single Response</span>
-                   <div class="slideThree on-off-checkbox-settings">
-                      <input ng:model="singleResponseOption" type="checkbox" value="None" id="SingleResponse-option" name="check" checked="">
-                      <label for="SingleResponse-option"></label>
-                      <span class="off-value"></span>
-                   </div>
-                </li> -->
-
-             </ul>
-          </div>
-        </div>
-          </div>
-    </div>
-  </li>
   <li>
     <div class="x-editor-x-title" data-toggle="#answers-pt">
       Answers
     </div>
-    <div class="x-editor-x-body" id="answers-pt">
+    <div style="display:block;" class="x-editor-x-body" id="answers-pt">
         <div class="multi-answers-part">
 
 
           <ul class="choices-part">
 
+            <li ng:class="answer_value.is_correct == true ? 'highlighted-right-answers' : ''" ng:repeat="(answer_key , answer_value) in asnwers">
 
+              <!-- text options value -->
+               <div ng:if="question_type == 0" class="">
+                 <ul class="answer-pt-controller">
+                   <!-- is correct answer -->
+                   <li ng:if="answer_value.is_correct == false" title="Make it Correct Answer">
+                     <span class="fa fa-check"></span>
+                   </li>
+                   <li ng:if="answer_value.is_correct == true" title="Remove Correct Answer">
+                     <span class="fa fa-check"></span>
+                   </li>
+
+
+                   <li title="Edit it with media">
+                     <span class="fa fa-pencil edit-options-answer"></span>
+                   </li>
+                   <li title="Delete this answer">
+                     <span class="fa fa-trash"></span>
+                   </li>
+                 </ul>
+                 <div class="text-answers">
+                   <input class="writanswer-input" type="text" name="" value="~>>answer_value.value<<~">
+                 </div>
+               </div>
+
+
+
+
+
+
+
+               <!-- Media choices value -->
+                <div ng:if="question_type == 1" class="">
+                  <ul class="answer-pt-controller ">
+                    <li title="Make it Correct Answer">
+                      <span class="fa fa-check"></span>
+                    </li>
+                    <li title="Edit it with media">
+                      <span class="fa fa-pencil edit-options-answer"></span>
+                    </li>
+                    <li title="Delete this answer">
+                      <span class="fa fa-trash"></span>
+                    </li>
+                  </ul>
+                  <div class="text-answers">
+                    <div style="background:url('~>>answer_value.media_src<<~')" class="media-answers">
+                  </div>
+                  </div>
+                </div>
+
+
+                <!-- true false value -->
+                <div ng:if="question_type == 2" class="">
+
+                    <ul class="answer-pt-controller ">
+                      <li data-toggle="asnwers-options" title="Make it Correct Answer">
+                        <span class="fa fa-check"></span>
+                      </li>
+                    </ul>
+                    <div class="text-answers">
+                        <span class="text-field-inpu">
+                          ~>>answer_value.boolean_value<<~
+                        </span>
+                    </div>
+                </div>
+
+
+            </li>
             <!-- <li>
-              <ul class="answer-pt-controller ">
+              <ul class="answer-pt-controller">
                 <li data-toggle="asnwers-options" title="Make it Correct Answer">
                   <span class="fa fa-check"></span>
                 </li>
@@ -197,7 +205,67 @@
         </div>
     </div>
   </li>
+  <li>
+    <div class="x-editor-x-title" data-toggle="#Settings-pt">
+      Question Settings
+    </div>
+    <div class="x-editor-x-body" id="Settings-pt">
+      <div class="col-sm-12">
+        <div class="row-cols margin-top">
+          <!-- <label class="titles-question"> Question Settings : </label> -->
+          <div class="question-settings">
+             <ul class="listSettings-qs">
+                <li>
+                   <span class="title-checkbox">Required</span>
+                   <div class="slideThree on-off-checkbox-settings">
+                      <input ng:model="requiredOption" type="checkbox" value="None" id="required-option" name="check" checked="">
+                      <label for="required-option"></label>
+                      <span class="off-value"></span>
+                   </div>
+                </li>
+                <li>
 
+                   <span class="title-checkbox">Multiple Response</span>
+                   <div class="slideThree on-off-checkbox-settings">
+                      <input ng:model="multipleResponseOption" type="checkbox" value="None" id="MultipleResponse-option" name="check" checked="">
+                      <label for="MultipleResponse-option"></label>
+                      <span class="off-value"></span>
+                   </div>
+                </li>
+                <li>
+
+                   <span class="title-checkbox">Randomize</span>
+                   <div class="slideThree on-off-checkbox-settings">
+                      <input ng:model="randomizeOption" type="checkbox" value="None" id="Randomize-option" name="check" checked="">
+                      <label for="Randomize-option"></label>
+                      <span class="off-value"></span>
+                   </div>
+                </li>
+                <li>
+
+                   <span class="title-checkbox">Super Size Media</span>
+                   <div class="slideThree on-off-checkbox-settings">
+                      <input ng:model="superSizeOption" type="checkbox" value="None" id="SuperSize-option" name="check" checked="">
+                      <label for="SuperSize-option"></label>
+                      <span class="off-value"></span>
+                   </div>
+                </li>
+                <!-- <li>
+
+                   <span class="title-checkbox">Single Response</span>
+                   <div class="slideThree on-off-checkbox-settings">
+                      <input ng:model="singleResponseOption" type="checkbox" value="None" id="SingleResponse-option" name="check" checked="">
+                      <label for="SingleResponse-option"></label>
+                      <span class="off-value"></span>
+                   </div>
+                </li> -->
+
+             </ul>
+          </div>
+        </div>
+          </div>
+    </div>
+  </li>
 </ul>
 
 

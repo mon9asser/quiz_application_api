@@ -1,3 +1,4 @@
+
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
 
   //--------------------------------------------------------
@@ -17,6 +18,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
    $scope.app_id = $("#applicationId").val();
 
    $scope.mongoose_id = null;
+   $scope.mongoose_answer_id = null;
    $scope.mongoose_date = null;
 
    // -------------------------------------------------------
@@ -125,12 +127,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             console.log("-----------------------------");
             //  element.addClass("animated rotateOutUpLeft");//rollOut
 
-
              // Delete From angular array
              $scope.question_id = questionId ;
-
+             element.addClass("animated rotateOutUpLeft");//rollOut
              $timeout(function(){
-                element.addClass("animated rotateOutUpLeft");//rollOut
                 element.remove();
                 var found_qs = $scope.questions_list.find($scope.callback_index);
                 var targetIndex = $scope.questions_list.indexOf(found_qs);
@@ -148,6 +148,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
    //--------------------------------------------------------
    // ==> Create Question
    //--------------------------------------------------------
+   // Sorting the exisitng questions
    $scope.sort_handler = document.getElementById("docQuestions");
    Sortable.create($scope.sort_handler , {
      ghostClass: 'shadow_element' ,
@@ -158,6 +159,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       // var targetEl = $(evt.item).hasClass("draggable-x");
      } ,
      onEnd : function (evt){
+
        var itemEl = evt.item;  // dragged HTMLElement
        var newIndex = evt.newIndex ;
        var oldIndex = evt.oldIndex ;
@@ -191,7 +193,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
        });
      }
    }); // end sortable
-
+   // Add New Quiz
    $scope.sortble_draggable_handler = document.getElementById("qs-sortable");
    Sortable.create($scope.sortble_draggable_handler , {
      ghostClass: 'shadow_element' ,
@@ -202,6 +204,19 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         revertClone: false,
      },
      onStart : function (evt){
+       // ---------------------------------------------------
+       // ------->> Get Id from mongoDB
+       // ---------------------------------------------------
+       $http({
+           url : $scope.api_url_init_id_date ,
+           method : "GET"
+         }).then(function(resp){
+           $scope.mongoose_id = resp.data.id;
+           $scope.mongoose_answer_id = resp.data.id_1;
+           $scope.mongoose_date = resp.data.date;;
+         },function(err){
+           console.log(err);
+       });
 
       var qsLength = $("#docQuestions").children("li").length ;
       if(qsLength == 0 ){
@@ -240,10 +255,32 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             },
             answers_format : []
           };
+          // Push Default answer ( one answer )
+          var answer_obj = new Object() ;
+          // answer_obj['creator_id'] = $scope.user_id ;
+          answer_obj['is_correct'] = false ;
+          answer_obj['_id'] = $scope.mongoose_answer_id  ;
+          if(questionType == 0 ){
+            answer_obj['value'] = 'Answer 1';
+          }
+          if(questionType == 1 ){
+            answer_obj['media_src'] = $scope.server_ip + "img/media-icon.png";
+          }
+          if(questionType == 2 ){
+            answer_obj['boolean_type'] = "true/false";
+            answer_obj['boolean_value'] = false;
 
+            new_question.answers_format.push({
+              '_id': $scope.mongoose_answer_id.toString()+'12f',
+              'creator_id' : $scope.user_id ,
+              'is_correct' : true ,
+              'boolean_type' : "true/false" ,
+              'boolean_value': true
+            });
+          }
+          new_question.answers_format.push(answer_obj);
+          //-----------------------------
           if($scope.mongoose_id == null ){
-
-
 
             // ---------------------------------------------------
             // ------->> Get Id from mongoDB
@@ -254,6 +291,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
               }).then(function(resp){
                 new_question['_id'] = resp.data.id;
                 new_question['created_at'] = resp.data.date;;
+
+                new_question.answers_format[0]['_id'] = resp.data.id_1;
+                if(questionType == 2 ){
+                  new_question.answers_format[1]['_id'] = resp.data.id_1+'12fd';
+                }
               },function(err){
                 console.log(err);
             });
@@ -285,7 +327,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
               					"X-api-app-name": api_key_data.APP_NAME
             				  }
                     }).then(function(resp){
-
+                      console.log(resp);
                     },function(err){
                       console.log(err);
                     });
@@ -314,9 +356,42 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
 
   //--------------------------------------------------------
-  // ==> Edit Current Question
+  // ==> Edit Current Question     color: #89d7d7;
   //--------------------------------------------------------
-  $scope.edit_this_question = function (qs_id , app_id){
+  $scope.edit_this_question = function ( qs_id ){
+     $scope.question_id = qs_id ;
+    // qs-edit-'+qs_id
+    $(".qs-edit-"+$scope.question_id).removeClass("fa-pencil");
+    $(".iconex-movable").each(function(){
+      if($(this).hasClass("fa-cog")){
+        $(this).removeClass("fa-cog fa-spin");
+        $(this).addClass("fa-pencil");
+        $(this).css({color:"tan"});
+      }
+    });
+    $(".qs-edit-"+$scope.question_id).css({"color":"#89d7d7"});
+    $(".qs-edit-"+$scope.question_id).addClass("fa-cog fa-spin -font");
+    $(".question-li-x").removeClass("highlighted-question");
 
-  };
+
+    $(".qs-"+$scope.question_id).addClass("highlighted-question");
+    // highlighted-question
+
+    // =====================================> Edit in array
+    var taget_question = $scope.questions_list.find($scope.callback_index);
+    console.log("This Question For Edit !!");
+    console.log(taget_question);
+    //---------------------------------------
+    // setup data of question into ui design
+    //---------------------------------------
+    // 1- question
+    $scope.question_body = taget_question.question_body;
+    $scope.question_description = taget_question.question_description;
+    $scope.question_id = taget_question._id;
+    $scope.question_type = taget_question.question_type;
+    // 2- answers
+    $scope.asnwers = taget_question.answers_format
+    // 3 settings
+  }; // edit curr question
+
 }]);
