@@ -146,14 +146,41 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
    //--------------------------------------------------------
    // ==> Delete Question
    //--------------------------------------------------------
-   $scope.delete_this_question = function(questionId){
+   $scope.delete_this_question = function(questionId = null ){
+     if (questionId== null )
+      {
+        if($scope.question_id == null ){
+          alert("To delete this question you need to select it from question list !")
+          return false;
+        }
+        questionId = $scope.question_id ;
+
+        // This question is delted from button
+        $(".x-editor-x-body").slideUp(function(){
+          $(".save_changes").attr("disabled");
+        });
+
+
+      }
+
+
+      // 1- question
+      $scope.question_body = null ;
+      $scope.question_description = null ;
+      $scope.question_id = null ;
+      $scope.question_type = null ;
+      // 2- answers
+      $scope.asnwers = null ;
+      // 3 Question settings
+      $scope.question_settings = null ;
+      $(".x-editor-x-body").slideUp();
 
      $(".qs-delete-"+questionId).removeClass("fa-trash");
      $(".qs-delete-"+questionId).addClass("fa-refresh fa-spin tomato-font");
       var element = $(".qs-"+questionId);
       element.css({background:"rgba(255, 99, 71, 0.4)" , color:"rgba(255, 99, 71, 0.4)" , border:"1px solid rgba(255, 99, 71, 0.7)"});
       $(".fa-spin").css("color","tomato");
-      $(".fa-spin").parent("li").css({border:"1px solid rgba(255, 99, 71, 0.7)"});
+      $(".fa-spin").parent("li:first-child").css({border:"1px solid rgba(255, 99, 71, 0.7)"});
 
      $.getJSON($scope.json_apk_file , function(api_key_data){
        $timeout(function (){
@@ -177,8 +204,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
              // Delete From angular array
              $scope.question_id = questionId ;
              element.addClass("animated rotateOutUpLeft");//rollOut
+
+
              $timeout(function(){
-                element.remove();
+               element.remove();
                 var found_qs = $scope.questions_list.find($scope.callback_index);
                 var targetIndex = $scope.questions_list.indexOf(found_qs);
                 if(targetIndex != -1 ){
@@ -414,6 +443,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   // ==> Edit Current Question     color: #89d7d7;
   //--------------------------------------------------------
   $scope.edit_this_question = function ( qs_id ){
+    $(".x-editor-x-body").slideDown();
      $scope.question_id = qs_id ;
      $scope.indexes = 1 ;
      // ---------------------------------------------------
@@ -483,6 +513,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   // ===> Question Settings
   // =====================================
   $("#MultipleResponse-option , #Randomize-option , #SuperSize-option , #required-option").on("change",function(){
+    if($scope.question_id == null )
+    {
+      alert("Please select question first from question list !");
+      return false ;
+    }
      // sotre settings in array => $scope.question_id
      var question_selected = $scope.questions_list.find($scope.callback_index);
      question_selected.answer_settings = $scope.question_settings ;
@@ -608,6 +643,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
     // Select Question From Array
       var question_selected = $scope.questions_list.find($scope.callback_index);
+      if(question_selected)
       question_selected.question_body = question_value;
 
   });
@@ -626,9 +662,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
     // Select Question From Array
       var question_selected = $scope.questions_list.find($scope.callback_index);
+      if(question_selected)
       question_selected.question_description = question_value;
-      console.log(question_selected);
-  });
+   });
 
 
 
@@ -667,4 +703,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     });
 
   }
+
+  $timeout(function(){
+    $(".loader_block").fadeOut(5000);
+  } , 3000 );
 }]);
