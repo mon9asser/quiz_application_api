@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 const _ = require("lodash");
 var config = {
-    server_ip:             'http://34.215.133.182/' , // http://34.215.133.182/
+    server_ip:             'http://localhost:9000/' , // http://34.215.133.182/
     port :                  ':27017' ,
     database_name :         '/todo' ,
     host_name:              'mongodb://localhost' ,
     options :                 { useMongoClient:true }   ,
-    server_port :            process.env.port || 80 ,
+    server_port :            process.env.port || 9000 ,
     session_access : false ,
     default_records_per_page : 5 ,
     token_expiration_time : 9 , // means 9 hours  // => can be 500 hrs also
@@ -94,7 +94,6 @@ var application = {
      creator_id : null ,
      app_type : null ,
      questionnaire_title : null ,
-     description : null ,
      description : "Write description for this app !" ,
      settings : {
          titles : { title_start_with : "Write Starting Text"  , title_end_with: "Write Ending Text" , title_success_with : " Success quiz Text" , title_failed_with : "Quiz Failed Text"} ,

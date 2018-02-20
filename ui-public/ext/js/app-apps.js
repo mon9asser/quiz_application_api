@@ -1,5 +1,50 @@
 
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
+  // ==============================
+  // ================+>> Application Settings
+  // -------------------------------------
+  $scope.application_settings = {
+      questionnaire_title : null ,
+      settings : {
+        titles :
+          {
+            title_start_with : "Write Starting Text"  ,
+            title_end_with: "Write Ending Text" ,
+            title_success_with : " Success quiz Text" ,
+            title_failed_with : "Quiz Failed Text"
+          } ,
+        label_btns : {
+            lbl_start_with:"Start" ,
+            lbl_continue_with : "Continue" ,
+            lbl_retake_with : "Retake" ,
+            lbl_review_with : "Review"
+         } ,
+        grade_settings : {
+          is_graded : false ,
+          value : 90
+        } ,
+        time_settings : {
+          is_with_time:false ,
+          value : "15" ,
+          timer_type : "mins" ,
+          timer_layout : 0
+        },
+        progression_bar : {
+          is_available:false ,
+          progression_bar_layout:0
+        } ,
+       //  theme_style : [] ,
+        randomize_settings : false ,
+        step_type : true ,
+        retake_setting : false ,
+        navigation_btns : false ,
+        review_setting : true ,
+        createdAt : new Date() ,
+        updatedAt : new Date ()
+      }
+  }
+
+
 
   //--------------------------------------------------------
   // ==>  Callback Finder
@@ -101,8 +146,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
    // ----> Init current App
    // -------------------------------------------------------
    $scope.questions_list = null ; // loading questions here from mongoDB
-   $scope.application_settings = null ;
+  //  $scope.application_settings = null ;
    $scope.application_stylesheet = null ;
+   $scope.app_title = null ;
    $.getJSON( $scope.json_apk_file , function (api_key_data ){
        $http({
              method : "POST" ,
@@ -117,10 +163,164 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           }).then(function(resp){
             // Questions
             $scope.questions_list = resp.data.questions;
-            // Settings
-            $scope.application_settings =  resp.data.settings;
+
             // Stylesheets
             $scope.application_stylesheet =  resp.data.theme_style;
+            // APP Titles
+            $scope.app_title = resp.data.questionnaire_title ;
+
+            var mongo_settings = resp.data.settings;
+            var settings_obj = new Object();
+
+
+            // ===================+> Start Settings
+            if(mongo_settings != null ){
+
+              // settings_obj['settings'] = new Object();
+              if(mongo_settings.titles != null ){
+                  // settings_obj['settings']['titles'] = mongo_settings.titles
+
+                  if(mongo_settings.titles.title_start_with != null )
+                  settings_obj['settings']['titles']['title_start_with'] = mongo_settings.titles.title_start_with;
+                  else // => Default
+                  settings_obj['settings']['titles']['title_start_with'] = $scope.application_settings.settings.titles.title_start_with;
+
+                  if(mongo_settings.titles.title_end_with != null )
+                  settings_obj['settings']['titles']['title_end_with'] = mongo_settings.titles.title_end_with;
+                  else // Default
+                  settings_obj['settings']['titles']['title_end_with'] =  $scope.application_settings.settings.titles.title_end_with;
+
+
+                  if(mongo_settings.titles.title_success_with != null )
+                  settings_obj['settings']['titles']['title_success_with'] = mongo_settings.titles.title_success_with;
+                  else // Default
+                  settings_obj['settings']['titles']['title_success_with'] = $scope.application_settings.settings.titles.title_success_with;
+
+                  if(mongo_settings.titles.title_failed_with != null )
+                  settings_obj['settings']['titles']['title_failed_with'] = mongo_settings.titles.title_failed_with;
+                  else // Default
+                  settings_obj['settings']['titles']['title_failed_with'] = $scope.application_settings.settings.titles.title_failed_with;
+              } else  // end titles
+              settings_obj['settings']['titles'] =  $scope.application_settings.settings.titles;
+
+
+              if(mongo_settings.label_btns != null ){
+                // settings_obj['settings']['label_btns'] = mongo_settings.label_btns ;
+
+
+                if(mongo_settings.label_btns.lbl_start_with != null )
+                settings_obj['settings']['label_btns']['lbl_start_with'] = mongo_settings.label_btns.lbl_start_with ;
+                else // default
+                settings_obj['settings']['label_btns']['lbl_start_with'] =  $scope.application_settings.settings.label_btns.lbl_start_with;
+
+                if(mongo_settings.label_btns.lbl_continue_with != null )
+                settings_obj['settings']['label_btns']['lbl_continue_with'] = mongo_settings.label_btns.lbl_continue_with ;
+                else // default
+                settings_obj['settings']['label_btns']['lbl_continue_with'] =  $scope.application_settings.settings.label_btns.lbl_continue_with;
+
+                if(mongo_settings.label_btns.lbl_retake_with != null )
+                settings_obj['settings']['label_btns']['lbl_retake_with'] = mongo_settings.label_btns.lbl_retake_with ;
+                else // default
+                settings_obj['settings']['label_btns']['lbl_retake_with'] =  $scope.application_settings.settings.label_btns.lbl_retake_with;
+
+                if(mongo_settings.label_btns.lbl_review_with != null )
+                settings_obj['settings']['label_btns']['lbl_review_with'] = mongo_settings.label_btns.lbl_review_with ;
+                else // default
+                settings_obj['settings']['label_btns']['lbl_review_with'] =  $scope.application_settings.settings.label_btns.lbl_review_with;
+
+              }else  // end Labelds
+              settings_obj['settings']['label_btns'] = $scope.application_settings.settings.label_btns;
+
+              if(mongo_settings.grade_settings != null ){
+                // settings_obj['settings']['grade_settings'] = mongo_settings.grade_settings ;
+
+                if(mongo_settings.grade_settings.is_graded != null )
+                  settings_obj['settings']['grade_settings']['is_graded'] =mongo_settings.grade_settings.is_graded ;
+                  else // default
+                  settings_obj['settings']['grade_settings']['is_graded'] = $scope.application_settings.settings.grade_settings.is_graded;
+
+                if(mongo_settings.grade_settings.value != null )
+                  settings_obj['settings']['grade_settings']['value'] =mongo_settings.grade_settings.value ;
+                  else // default
+                  settings_obj['settings']['grade_settings']['value'] = $scope.application_settings.settings.grade_settings.value;
+              }else // end grade setting
+              settings_obj['settings']['grade_settings'] = $scope.application_settings.settings.grade_settings;
+
+              if(mongo_settings.time_settings != null ){
+                //  settings_obj['settings']['time_settings'] = mongo_settings.time_settings ;
+
+                if(mongo_settings.time_settings.is_with_time != null)
+                settings_obj['settings']['time_settings']['is_with_time'] = mongo_settings.time_settings.is_with_time ;
+                else // default
+                settings_obj['settings']['time_settings']['is_with_time'] = $scope.application_settings.settings.is_with_time;
+
+                if(mongo_settings.time_settings.value != null)
+                settings_obj['settings']['time_settings']['value'] = mongo_settings.time_settings.value;
+                else // default
+                settings_obj['settings']['time_settings']['value'] = $scope.application_settings.settings.value;
+
+                if(mongo_settings.time_settings.timer_type != null)
+                settings_obj['settings']['time_settings']['timer_type'] = mongo_settings.time_settings.timer_type ;
+                else // default
+                settings_obj['settings']['time_settings']['timer_type'] = $scope.application_settings.settings.timer_type;
+
+                if(mongo_settings.time_settings.timer_layout != null)
+                settings_obj['settings']['time_settings']['timer_layout'] = mongo_settings.time_settings.timer_layout;
+                else // default
+                settings_obj['settings']['time_settings']['timer_layout'] = $scope.application_settings.settings.timer_layout;
+
+              }else // end grade setting
+                $scope.application_settings.settings.time_settings;
+
+              if(mongo_settings.progression_bar != null ){
+                // settings_obj['settings']['progression_bar'] = mongo_settings.progression_bar ;
+                if(mongo_settings.progression_bar.is_available != null ){
+                  settings_obj['settings']['progression_bar'] = mongo_settings.progression_bar.is_available ;
+                }else  // default
+                settings_obj['settings']['progression_bar'] = $scope.application_settings.settings.progression_bar.is_available;
+
+                if(mongo_settings.progression_bar.progression_bar_layout != null ){
+                  settings_obj['settings']['progression_bar_layout'] = mongo_settings.progression_bar.progression_bar_layout;
+                } else  // default
+                settings_obj['settings']['progression_bar_layout'] = $scope.application_settings.settings.progression_bar.progression_bar_layout;
+
+              }// end grade progress bar
+              if(mongo_settings.randomize_settings!= null ){
+                settings_obj['settings']['randomize_settings'] = mongo_settings.randomize_settings ;
+              }else  // end randomize settings
+              settings_obj['settings']['randomize_settings'] = $scope.application_settings.settings.randomize_settings;
+              if(mongo_settings.step_type != null){
+                settings_obj['settings']['step_type'] = mongo_settings.step_type;
+              }else  // end step_type settings
+              settings_obj['settings']['step_type'] = $scope.application_settings.settings.step_type;
+
+              if(mongo_settings.retake_setting != null ){
+                settings_obj['settings']['retake_setting'] = mongo_settings.retake_setting;
+              }else  // end retake settings
+              settings_obj['settings']['retake_setting'] = $scope.application_settings.settings.retake_setting ;
+
+              if(mongo_settings.navigation_btns != null ){
+                settings_obj['settings']['navigation_btns'] = mongo_settings.navigation_btns;
+              }else // end navigation_btns settings
+              settings_obj['settings']['navigation_btns'] = $scope.application_settings.settings.navigation_btns ;
+
+              if(mongo_settings.review_setting != null ){
+                settings_obj['settings']['review_setting'] = mongo_settings.review_setting;
+              } else // end review settings
+              settings_obj['settings']['review_setting'] = $scope.application_settings.settings.review_setting ;
+
+            }else{
+              console.log($scope.application_settings);
+              settings_obj['settings'] = $scope.application_settings.settings;
+              // alert(settings_obj['settings']);
+            }
+
+
+            if (resp.data.questionnaire_title != null ){
+              settings_obj['questionnaire_title'] =  resp.data.questionnaire_title ;
+            }
+            //====================-> End Settings
+            $scope.application_settings = settings_obj;
 
           },function(err){
        });
@@ -707,4 +907,93 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   $timeout(function(){
     $(".loader_block").fadeOut(5000);
   } , 3000 );
+
+
+
+  // =========================
+  // ---->> Settings Menu
+  // -------------------------
+  $scope.open_settgins_menu = function (){
+
+    $(".side-left-bar").css({
+      left: '-150px' ,
+      display: 'none'
+    });
+     $(".left_part").css ({
+        left: '-80%',
+        display: 'none'
+      });
+
+      $(".setting-part").css({
+        right: '0px' ,
+        display: 'block'
+      });
+
+      $(".update-rows").css({
+        'margin-left': '0px'
+      });
+
+  };
+  $scope.close_settgins_menu = function (){
+
+    $(".side-left-bar").css({
+      left: '0px' ,
+      display: 'block'
+    });
+     $(".left_part").css ({
+        left: '0%',
+        display: 'block'
+      });
+
+      $(".setting-part").css({
+        right: '-80%' ,
+        display: 'none'
+      });
+
+      $(".update-rows").css({
+        'margin-left': '130px'
+      });
+
+  };
+  $scope.open_settgins_menu();
+  $scope.settings_menu_handler = $(".setting-menu-handler");
+  $scope.settings_menu_handler.on("click" , function (){
+
+    if($scope.settings_menu_handler.hasClass("open") == true )
+    {
+      $scope.settings_menu_handler.removeClass("open");
+      $scope.close_settgins_menu();
+    }
+    else
+    {
+      $scope.settings_menu_handler.addClass("open");
+      $scope.open_settgins_menu();
+    }
+  });
+
+  // -------------------------------------------
+  // collapsed - expanded options
+  // --------------------------------------
+  $scope.expand_collapse_handler =   $(".app-settings li .control-item-header") ;
+  $scope.expand_collapse_handler.on("click" , function (){
+    var target = $(this) ;
+
+    $scope.expand_collapse_handler.each(function(i){
+        if(target.parent("li").index() != $(this).parent("li").index() )
+        $scope.expand_collapse_handler.next(".control-item-content").slideUp();
+
+    });
+    $(this).next(".control-item-content").slideDown();
+  });
+
+
+
+  // ===================================
+  // ==== Angular Backend (data)
+  // ===================================
+
+
+
+
+
 }]);

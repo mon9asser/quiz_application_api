@@ -1,11 +1,14 @@
 {{> top }}
  {{> navbar }}
 
+
+
+<!-- Loader -->
  <div class="loader_block">
    <div class="quiver"><span class="arrows st"></span><span class="arrows nd"></span><span class="arrows rd"></span><span class="arrows th"></span><span class="arrows fth"></span><span class="loading">Loading</span></div>
  </div>
 
-
+<!-- Editor Content -->
 <div style="position:relative; z-index:100;" ng:controller="apps-controller">
 
 <div class="side-left-bar">
@@ -51,9 +54,17 @@
 						 <div class="area-qs-ch quiz-titles">
 							  <span class="questionnaire-title">
                   <!-- Quiz Name -->
-                   <span>{{ app.questionnaire_title }}</span>
+                   <span>
+                     ~>> application_settings.questionnaire_title <<~
+                   </span>
                 </span>
+                <a class="choices-right-add btn-danger btn setting-menu-handler" href="#">
+                  <i class="fa fa-cog"></i>
+                </a>
+
  							  <a class="choices-right-add btn-primary btn rm-margin" href="#">Preview Quiz</a>
+
+
   					 </div>
 					</div>
 	    </div>
@@ -118,9 +129,196 @@
             <div ng:show="true"><!-- template_mode -->
                {{> editor app = app }}
             </div>
+            <!-- ----------------- -->
             <!-- Setttings -->
+            <!-- ------------------------------ -->
            <div class="setting-part col-md-5 col-sm-6 col-xs-12">
-             Settings !
+                <div class="collapse-menu text-center">
+                  <div class="switched-button switch-mode">
+                       <span>Settings</span>
+                  </div>
+                </div>
+                <div class="right-menu-settings">
+                    <!-- ----------------------------- -->
+
+
+                          <ul class="app-settings">
+                           <li class="tasks">
+                              <div class="control-item-header">
+                                 <a href="#" class="icon-toggle">
+                                   <span class="caret-down fa fa-caret-down"></span>
+                                 </a>
+                                 <span class="text">General</span>
+                              </div>
+                              <div class="control-item-content open" style="height: auto;">
+                                 <!-- <div class="control-item-content-text">
+                                    <span>Quiz Name</span>
+                                    <input class="quiz-titlex " type="text" name="" value="" placeholder="Quiz Title">
+                                    </div> -->
+
+                                 <div class="control-item-content-text">
+                                   <div class="passing-grad-block">
+                                      <div class="checkbox-toggle">
+                                          <label class="labels-options lblxoption">Quiz Title</label>
+                                          <input class="checkbox-toggle input-app-title" type="text" placeholder="App title" name="" ng:model="application_settings.questionnaire_title">
+
+                                      </div>
+                                   </div>
+                                    <div class="passing-grad-block">
+                                       <div class="checkbox-toggle">
+                                          <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                                          <label class="labels-options" for="check-toggle-2">Passing Grade</label>
+                                       </div>
+                                    </div>
+                                    <div class="form-group">
+                                       <div class="input-group bootstrap-touchspin">
+                                          <span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                          <input id="demo1" type="text" value="55" name="demo1" class="form-control" style="display: block;">
+                                          <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="control-item-content-text">
+                                    <div class="passing-grad-block">
+                                       <div class="checkbox-toggle">
+                                          <input type="checkbox" id="show-qs-pr" checked="" class="switch_1 input-checkboxes">
+                                          <label for="show-qs-pr" class="show-qs-pr labels-options">Show result on each question</label>
+
+                                       </div>
+                                    </div>
+                                    <div class="passing-grad-block">
+                                       <div class="checkbox-toggle">
+                                          <input type="checkbox" id="navigation-buttons" class="input-checkboxes switch_1">
+                                          <label for="navigation-buttons" class="show-qs-pr labels-options">
+                                          Hide quiz navigation buttons
+                                          </label>
+                                       </div>
+                                    </div>
+                                    <div class="passing-grad-block">
+                                       <div class="checkbox-toggle">
+                                          <input class="input-checkboxes switch_1" type="checkbox" id="enable-button-retak">
+                                          <label for="enable-button-retak" class="labels-options show-qs-pr">
+                                          Enable Retake
+                                          </label>
+                                       </div>
+                                    </div>
+                                    <div class="passing-grad-block">
+                                       <div class="checkbox-toggle">
+                                          <input class="input-checkboxes switch_1" type="checkbox" id="enable-button-Review">
+                                          <label for="enable-button-Review" class="show-qs-pr labels-options">
+                                          Enable Review
+                                          </label>
+                                       </div>
+                                    </div>
+                                    <div class="passing-grad-block">
+                                       <div class="checkbox-toggle">
+                                          <input class="input-checkboxes switch_1" type="checkbox" id="Randomize-Questions">
+                                          <label for="Randomize-Questions" class="show-qs-pr labels-options">
+                                          Randomize Questions
+                                          </label>
+                                       </div>
+                                    </div>
+                                    <div class="passing-grad-block">
+                                       <div class="checkbox-toggle">
+                                          <input class="input-checkboxes switch_1" type="checkbox" id="Randomize-Progress">
+                                          <label for="Randomize-Progress" class="show-qs-pr labels-options">
+                                          Use Progress bar
+                                          </label>
+                                       </div>
+                                    </div>
+                                 </div>
+
+                              </div>
+                           </li>
+                           <li class="tasks">
+                              <div class="control-item-header">
+                                 <a href="#" class="icon-toggle">
+                                 <span class="caret-down fa fa-caret-down"></span>
+                                 </a>
+                                 <span class="text">Quiz Timer</span>
+                              </div>
+                              <div class="control-item-content" >
+                                 <div class="control-item-content-text">
+                                    <div class="passing-grad-block">
+                                       <div class="checkbox-toggle">
+                                          <input class="input-checkboxes switch_1" type="checkbox" id="check-Timer-2" checked="">
+                                          <label class="labels-options" for="check-Timer-2">Require Timeframe</label>
+                                       </div>
+                                    </div>
+                                    <div class="form-group input-group input-groupx">
+                                       <input id="time-mask-input" type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="00:00:00">
+                                    </div>
+                                    <div class="time-fram-slidest ">
+                                      <span class="labels-options">Time Type :</span>
+                                       <div class="checkbox-slide xheckbox-timframe">
+                                         <label class="labels-options" for="time-type-slide">mins</label>
+                                          <input class="input-checkboxes switch_1" type="checkbox" id="time-type-slide">
+                                          <label class="labels-options" for="time-type-slide">hrs</label>
+                                       </div>
+                                    </div>
+                                 </div>
+
+                              </div>
+                           </li>
+                           <li class="sticky-note">
+                              <div class="control-item-header">
+                                 <a href="#" class="icon-toggle">
+                                 <span class="caret-down fa fa-caret-down"></span>
+                                 </a>
+                                 <span class="text">Message and Texts</span>
+                              </div>
+                              <div class="control-item-content" >
+                                 <div class="control-item-content-text">
+                                    <span>Quiz Start text</span>
+                                    <input class="quiz-titlex " type="text" name="" value="" placeholder=" Lest start Quiz">
+                                 </div>
+                                 <div class="control-item-content-text">
+                                    <span>Quiz End text</span>
+                                    <input class="quiz-titlex " type="text" name="" value="" placeholder=" You have successfully  completed the this quizs">
+                                 </div>
+                                 <div class="control-item-content-text">
+                                    <span>Quiz Pass text:</span>
+                                    <input class="quiz-titlex " type="text" name="" value="" placeholder="You have passed this quiz">
+                                 </div>
+                                 <div class="control-item-content-text">
+                                    <span>Quiz Fail text:</span>
+                                    <input class="quiz-titlex " type="text" name="" value="" placeholder="You have failed this quiz">
+                                 </div>
+
+                              </div>
+                           </li>
+                           <li class="emails">
+                              <div class="control-item-header">
+                                 <a href="#" class="icon-toggle">
+                                 <span class="caret-down fa fa-caret-down"></span>
+                                 </a>
+                                 <span class="text">Labels</span>
+                              </div>
+                              <div class="control-item-content" >
+                                 <div class="control-item-content-text">
+                                    <span>Quiz Start Button:</span>
+                                    <input class="quiz-titlex " type="text" name="" value="" placeholder=" Start Quiz">
+                                 </div>
+                                 <div class="control-item-content-text">
+                                    <span>Restart Button</span>
+                                    <input class="quiz-titlex " type="text" name="" value="" placeholder="Retake Quiz">
+                                 </div>
+                                 <div class="control-item-content-text">
+                                    <span>Continue Button</span>
+                                    <input class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
+                                 </div>
+
+                              </div>
+                           </li>
+
+                          </ul>
+                          <div class="quiz-setting-handler">
+                            <button class="btn btn-primary" type="button" name="button">Save Changes</button>
+                          </div>
+
+
+                    <!-- +++++++++++++++++++++++ -->
+                </div>
            </div>
 
         </div>
