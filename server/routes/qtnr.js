@@ -217,7 +217,28 @@ qtnrRouters.post("/init", auth_verify_api_keys_tokens  , (req, res) => {
 
 });
 
-
+// Create settings for quiz or survey ( remember this part => surv/quiz for used with /init route)
+qtnrRouters.patch("/:app_id/app/setup_settings", auth_verify_api_keys_tokens , (req,res)=>{
+  var app_id = req.params.app_id;
+  qtnr.findById(app_id , (err,d)=>{
+    if(err || !d){
+      return new Promise((resolve, reject) => {
+         res.status(401).send(notes.Errors.Error_Doesnt_exists("Application"));
+     });
+    }
+    d.settings = req.body.settings;
+    d.questionnaire_title = req.body.questionnaire_title;
+    d.markModified("settings");
+    d.save().then((success)=>{
+      if(success)
+       {
+         res.send({
+           succ : success
+         })
+       }
+    });
+  });
+});
 // Create settings for quiz or survey ( remember this part => surv/quiz for used with /init route)
 qtnrRouters.patch("/:app_id/app/edit", auth_verify_generated_tokens ,  (req, res) => {
     var user = req.verified_user;
@@ -844,7 +865,11 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
           if(req.body.question_is_required != null )
           question_tag ["question_is_required"] = req.body.question_is_required ;
           if(req.body.question_description != null )
-            question_tag ["question_description"] = req.body.question_description
+            question_tag ["question_description"] = req.body.question_description;
+
+          if(req.body.enable_description != null )
+            question_tag ["enable_description"] = req.body.enable_description;
+
           if(req.body.answer_settings == null) {
             question_tag ["answer_settings"] = new Object();
             question_tag ["answer_settings"]['is_randomized'] = false ;
@@ -1065,9 +1090,15 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
 
               if(req.body.question_description != null )
               {
-                qtnairsDocument.questions[findIndex_this_qs].question_description = req.body.question_description
+                qtnairsDocument.questions[findIndex_this_qs].question_description = req.body.question_description;
 
               }
+              if(req.body.enable_description != null )
+              {
+                qtnairsDocument.questions[findIndex_this_qs].enable_description = req.body.enable_description;
+
+              }
+
             if(req.body.answer_settings != null ){
                 if(qtnairsDocument.questions[findIndex_this_qs].answer_settings == null)
                   qtnairsDocument.questions[findIndex_this_qs].answer_settings = new Object();

@@ -29,6 +29,7 @@ body {
     position: relative;
     width: 100%;
     margin-top: 25px;
+    /*border-radius: 10px;*/
 }
 
 .question-x {
@@ -97,10 +98,8 @@ body {
     margin: 0px !important;
 }
 .qs-dropped {
-    background: #fff;
+    /*background: #fff;*/
     padding: 20px 20px;
-
-
 
 }.question-li-x{
   /*-webkit-transition: background 2s linear , color 2s linear;
@@ -451,7 +450,7 @@ textarea.form-control {
     overflow: hidden;
     color: #999;
     margin-bottom: 8px;
-    margin-top: 10px;
+    margin-top: 40px;
 }
 textarea:focus, textarea:active, textarea, .form-control:focus {
     box-shadow: none !important;
@@ -1444,4 +1443,48 @@ ul li:last-child.emails {
 .lblxoption {
   margin-bottom: 15px;
   margin-left: 0px;
+}
+.qs-status{
+  display: block;
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+.qs-status > h2 {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  padding: 0px;
+  margin: 0px !important;
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.3);;
+  font-family: OpenSansRegular;
+  border: 1px dashed rgba(0, 0, 0, 0.3);;
+  padding: 25px;
+}
+
+
+
+
+.background_drag_drop {
+  background: linear-gradient(90deg, #eceff4, #ffffff, #eceff4);
+  background-size: 200% 200%;
+  animation: animate_bg 3s linear infinite;
+}
+
+@-webkit-keyframes animate_bg {
+  0%{
+    background-position-x: 200%;
+  }
+  100%{
+    background-position-x: 0%
+
+  }
+}
+.enable-sc {
+  float: none;
+
+    margin-left: 20px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
 }

@@ -1,5 +1,6 @@
 
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
+  $scope.drag_drop_status = true ;
   // ==============================
   // ================+>> Application Settings
   // -------------------------------------
@@ -132,7 +133,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
    $scope.api_url_edit_answer         = null;
    $scope.api_url_init_id_date        = $scope.server_ip + "api/generate/new/data";
    $scope.api_url_question_creation   = $scope.server_ip + "api/" + $scope.app_id + "/question/creation"
-
+   $scope.api_url_app_settings        = $scope.server_ip + "api/" + $scope.app_id + "/app/setup_settings"
    //--------------------------------------------------------
    // ==>  Default Settings
    //--------------------------------------------------------
@@ -177,7 +178,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
             // ===================+> Start Settings
             if(mongo_settings != null ){
-
+                settings_obj['settings'] = mongo_settings ;
               // settings_obj['settings'] = new Object();
               if(mongo_settings.titles != null ){
                   // settings_obj['settings']['titles'] = mongo_settings.titles
@@ -275,16 +276,17 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 $scope.application_settings.settings.time_settings;
 
               if(mongo_settings.progression_bar != null ){
+
                 // settings_obj['settings']['progression_bar'] = mongo_settings.progression_bar ;
                 if(mongo_settings.progression_bar.is_available != null ){
-                  settings_obj['settings']['progression_bar'] = mongo_settings.progression_bar.is_available ;
+                  settings_obj['settings']['progression_bar']['is_available'] = mongo_settings.progression_bar.is_available ;
                 }else  // default
-                settings_obj['settings']['progression_bar'] = $scope.application_settings.settings.progression_bar.is_available;
+                settings_obj['settings']['progression_bar']['is_available'] = $scope.application_settings.settings.progression_bar.is_available;
 
                 if(mongo_settings.progression_bar.progression_bar_layout != null ){
-                  settings_obj['settings']['progression_bar_layout'] = mongo_settings.progression_bar.progression_bar_layout;
+                  settings_obj['settings']['progression_bar']['progression_bar_layout'] = mongo_settings.progression_bar.progression_bar_layout;
                 } else  // default
-                settings_obj['settings']['progression_bar_layout'] = $scope.application_settings.settings.progression_bar.progression_bar_layout;
+                settings_obj['settings']['progression_bar']['progression_bar_layout'] = $scope.application_settings.settings.progression_bar.progression_bar_layout;
 
               }// end grade progress bar
               if(mongo_settings.randomize_settings!= null ){
@@ -371,9 +373,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
       }
 
-
       // 1- question
       $scope.question_body = null ;
+      // $scope.enable_description = true ;
       $scope.question_description = null ;
       $scope.question_id = null ;
       $scope.question_type = null ;
@@ -439,6 +441,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
      group: "question-list" ,
      disabled: false ,
      onStart : function (evt){
+
       //  console.log(evt.item);
       // var targetEl = $(evt.item).hasClass("draggable-x");
      } ,
@@ -515,10 +518,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
      } ,
      onEnd : function (evt){
-
+       $scope.drag_drop_status = false;
         var htmlVal = $("#docQuestions ").find(evt.item);
         $("#docQuestions").css({
-          background :"#fff"
+          background :"transparent"
         });
 
 
@@ -531,6 +534,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             _id:$scope.mongoose_id,
             question_type :questionType,
             question_body :"Edit Model",
+            enable_description : $scope.enable_description ,
             created_at :$scope.mongoose_date,
             answer_settings : {
                 answer_char_max : 200 ,
@@ -701,11 +705,13 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     //---------------------------------------
     // 1- question
     $scope.question_body = taget_question.question_body;
+    $scope.enable_description = taget_question.enable_description;
     $scope.question_description = taget_question.question_description;
     $scope.question_id = taget_question._id;
     $scope.question_type = taget_question.question_type;
     // 2- answers
     $scope.asnwers = taget_question.answers_format
+    // alert($scope.enable_description);
     // 3 Question settings
     $scope.question_settings = {
       is_required           : taget_question.answer_settings.is_required ,
@@ -721,6 +727,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   // ===> Question Settings
   // =====================================
   $("#MultipleResponse-option , #Randomize-option , #SuperSize-option , #required-option").on("change",function(){
+    console.log($scope.questions_list);
     if($scope.question_id == null )
     {
       alert("Please select question first from question list !");
@@ -743,7 +750,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
            all_answers[i].is_correct = false;
        }
      }
-     console.log(question_selected);
+
 
 
      // Push to array with index
@@ -880,6 +887,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   // =====>> Save Changes that completed in angular backend
   // ==============================================================
   $scope.save_changes_in_angular_backend = function (){
+    console.log($scope.questions_list);
     if($scope.question_id == null ){
       alert("You should select question from question list to allow you edit it");
       return false ;
@@ -943,18 +951,27 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
   };
   $scope.close_settgins_menu = function (){
+    $timeout(function (){
+      $(".side-left-bar").css({
+        left: '0px'
+      });
+      $(".left_part").css ({
+         left: '0%'
+       });
+       $(".setting-part").css({
+         right: '-80%'
+       });
+
+    } , 1000) ;
 
     $(".side-left-bar").css({
-      left: '0px' ,
       display: 'block'
     });
      $(".left_part").css ({
-        left: '0%',
-        display: 'block'
+       display: 'block'
       });
 
       $(".setting-part").css({
-        right: '-80%' ,
         display: 'none'
       });
 
@@ -963,7 +980,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       });
 
   };
-  $scope.open_settgins_menu();
+  // $scope.open_settgins_menu();
   $scope.settings_menu_handler = $(".setting-menu-handler");
   $scope.settings_menu_handler.on("click" , function (){
 
@@ -1000,10 +1017,42 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   // ==== Angular Backend into Mongo (data)
   // ===================================
   $scope.application_save_settings = function (){
-    console.log($scope.application_settings);
+
+
+    // $scope.api_url_app_settings
+    // $scope.application_settings
+    $.getJSON( $scope.json_apk_file , function (api_key_data ){
+        $http({
+          method : "PATCH" ,
+          url    : $scope.api_url_app_settings ,
+          headers: {
+              "X-api-keys": api_key_data.API_KEY,
+              "X-api-app-name": api_key_data.APP_NAME
+          },
+          data: {
+            creator_id : $scope.user_id ,
+            settings : $scope.application_settings.settings,
+            questionnaire_title : $scope.application_settings.questionnaire_title
+          }
+            }).then(function(resp){
+            console.log(resp);
+              } , function(err){
+            console.log(err);
+
+          });
+
+
+
+    });
+
+
   };
 
 
 
+
+  $("#check_xx_data").on("change",function(){
+    console.log($scope.questions_list);
+  });
 
 }]);

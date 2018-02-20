@@ -1,12 +1,13 @@
 
 
 
- 
+
 <!-- Tabs -->
 <ul class="tab-editor">
   <li>
     <div class="x-editor-x-title" data-toggle="#question-pt">
       Question
+
     </div>
     <div style="display:block;" class="x-editor-x-body" id="question-pt">
       <div class="col-sm-8 top-margins">
@@ -30,7 +31,10 @@
               </li>
             </ul>
           </div>
+
           <textarea ng:model="question_body" id="editor-question-body" placeholder="Question Title ? " class="form-control quest-title-edit textarea-qs" rows="3"></textarea>
+
+
         </div>
       <div class="col-sm-4 media-uploads top-margins">
           <!-- Image Case -->
@@ -39,7 +43,7 @@
       <div class="col-xs-12">
         <div class="row-cols margin-top">
            <label class="titles-question description-enable-handler">
-              Description : <!-- <input class="enbl-desc" id="enable_dex" type="checkbox" name="" value=""> -->
+              Description :  <input  type="checkbox" id="check_xx_data" class="switch_1 input-checkboxes enable-sc" ng:model="enable_description"> <!-- <input class="enbl-desc" id="enable_dex" type="checkbox" name="" value=""> -->
            </label>
            <textarea ng:model="question_description" id="editor-question-desc" name="name" class="form-control descriptions description-field description-field-x" placeholder="Description ..." rows="3" cols="80"></textarea>
         </div>

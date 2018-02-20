@@ -74,13 +74,11 @@
     <div class="row">
        <!-- Question (Editor) menu -->
       <div class="left_part col-md-5 col-sm-6 col-xs-12">
-          <div class="question-data qsdragged-list qs-dropped">
-						<div class="widContainer">
-								Questions
-						</div>
-            <!-- list of question type -->
+          <div class="question-data qsdragged-list qs-dropped background_drag_drop">
+
 						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
-                <li data-question-id="~>>qs_value._id<<~" ng:class="'question-li-x qs-'+qs_value._id" ng:repeat="(qs_key , qs_value) in questions_list">
+
+               <li data-question-id="~>>qs_value._id<<~" ng:class="'question-li-x qs-'+qs_value._id" ng:repeat="(qs_key , qs_value) in questions_list">
                      <div class="question-part">
                        <div class="qs-type quesiontlist_iconx">
                          <span class="qs-type" title="Multiple Choices">
@@ -102,6 +100,12 @@
                        </div>
                      </div>
                 </li>
+
+                <div ng:if="questions_list.length == 0" class="qs-status">
+                    <h2>
+                      Drag drop questions here !
+                    </h2>
+                </div>
 						</ul>
 				</div>
       </div>
@@ -183,7 +187,6 @@
                                        <div class="checkbox-toggle">
                                           <input ng:model="application_settings.settings.show_results_per_qs" type="checkbox" id="show-qs-pr" checked="" class="switch_1 input-checkboxes">
                                           <label for="show-qs-pr" class="show-qs-pr labels-options">Show result on each question</label>
-
                                        </div>
                                     </div>
                                     <div class="passing-grad-block">
