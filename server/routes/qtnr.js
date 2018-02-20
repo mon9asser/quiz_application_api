@@ -286,6 +286,8 @@ qtnrRouters.patch("/:app_id/app/edit", auth_verify_generated_tokens ,  (req, res
         if (req.body.step_type != null )
             $settings["settings.step_type"] = req.body.step_type;
 
+        if(req.body.show_results_per_qs  != null)
+        $settings["settings.show_results_per_qs"] = req.body.show_results_per_qs;
 
         if (req.body.grade_settings) {
             if (req.body.grade_settings.is_graded != null )

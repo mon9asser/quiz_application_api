@@ -166,14 +166,14 @@
                                    </div>
                                     <div class="passing-grad-block">
                                        <div class="checkbox-toggle">
-                                          <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                                          <input ng:model="application_settings.settings.grade_settings.is_graded" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
                                           <label class="labels-options" for="check-toggle-2">Passing Grade</label>
                                        </div>
                                     </div>
                                     <div class="form-group">
                                        <div class="input-group bootstrap-touchspin">
                                           <span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-                                          <input id="demo1" type="text" value="55" name="demo1" class="form-control" style="display: block;">
+                                          <input ng:model="application_settings.settings.grade_settings.value" id="demo1" type="text" value="" name="demo1" class="form-control" style="display: block;">
                                           <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
                                        </div>
                                     </div>
@@ -181,14 +181,14 @@
                                  <div class="control-item-content-text">
                                     <div class="passing-grad-block">
                                        <div class="checkbox-toggle">
-                                          <input type="checkbox" id="show-qs-pr" checked="" class="switch_1 input-checkboxes">
+                                          <input ng:model="application_settings.settings.show_results_per_qs" type="checkbox" id="show-qs-pr" checked="" class="switch_1 input-checkboxes">
                                           <label for="show-qs-pr" class="show-qs-pr labels-options">Show result on each question</label>
 
                                        </div>
                                     </div>
                                     <div class="passing-grad-block">
                                        <div class="checkbox-toggle">
-                                          <input type="checkbox" id="navigation-buttons" class="input-checkboxes switch_1">
+                                          <input ng:model="application_settings.settings.navigation_btns" type="checkbox" id="navigation-buttons" class="input-checkboxes switch_1">
                                           <label for="navigation-buttons" class="show-qs-pr labels-options">
                                           Hide quiz navigation buttons
                                           </label>
@@ -196,7 +196,7 @@
                                     </div>
                                     <div class="passing-grad-block">
                                        <div class="checkbox-toggle">
-                                          <input class="input-checkboxes switch_1" type="checkbox" id="enable-button-retak">
+                                          <input ng:model="application_settings.settings.retake_setting" class="input-checkboxes switch_1" type="checkbox" id="enable-button-retak">
                                           <label for="enable-button-retak" class="labels-options show-qs-pr">
                                           Enable Retake
                                           </label>
@@ -204,7 +204,7 @@
                                     </div>
                                     <div class="passing-grad-block">
                                        <div class="checkbox-toggle">
-                                          <input class="input-checkboxes switch_1" type="checkbox" id="enable-button-Review">
+                                          <input ng:model="application_settings.settings.review_setting" class="input-checkboxes switch_1" type="checkbox" id="enable-button-Review">
                                           <label for="enable-button-Review" class="show-qs-pr labels-options">
                                           Enable Review
                                           </label>
@@ -212,7 +212,7 @@
                                     </div>
                                     <div class="passing-grad-block">
                                        <div class="checkbox-toggle">
-                                          <input class="input-checkboxes switch_1" type="checkbox" id="Randomize-Questions">
+                                          <input ng:model="application_settings.settings.randomize_settings" class="input-checkboxes switch_1" type="checkbox" id="Randomize-Questions">
                                           <label for="Randomize-Questions" class="show-qs-pr labels-options">
                                           Randomize Questions
                                           </label>
@@ -220,7 +220,7 @@
                                     </div>
                                     <div class="passing-grad-block">
                                        <div class="checkbox-toggle">
-                                          <input class="input-checkboxes switch_1" type="checkbox" id="Randomize-Progress">
+                                          <input ng:model="application_settings.settings.progression_bar.is_available" class="input-checkboxes switch_1" type="checkbox" id="Randomize-Progress">
                                           <label for="Randomize-Progress" class="show-qs-pr labels-options">
                                           Use Progress bar
                                           </label>
@@ -241,18 +241,18 @@
                                  <div class="control-item-content-text">
                                     <div class="passing-grad-block">
                                        <div class="checkbox-toggle">
-                                          <input class="input-checkboxes switch_1" type="checkbox" id="check-Timer-2" checked="">
+                                          <input ng:model="application_settings.settings.time_settings.is_with_time" class="input-checkboxes switch_1" type="checkbox" id="check-Timer-2" checked="">
                                           <label class="labels-options" for="check-Timer-2">Require Timeframe</label>
                                        </div>
                                     </div>
                                     <div class="form-group input-group input-groupx">
-                                       <input id="time-mask-input" type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="00:00:00">
+                                       <input ng:model="application_settings.settings.time_settings.value" id="time-mask-input" type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="00:00:00">
                                     </div>
                                     <div class="time-fram-slidest ">
                                       <span class="labels-options">Time Type :</span>
                                        <div class="checkbox-slide xheckbox-timframe">
                                          <label class="labels-options" for="time-type-slide">mins</label>
-                                          <input class="input-checkboxes switch_1" type="checkbox" id="time-type-slide">
+                                          <input ng:model="application_settings.settings.time_settings.timer_type" class="input-checkboxes switch_1" type="checkbox" id="time-type-slide">
                                           <label class="labels-options" for="time-type-slide">hrs</label>
                                        </div>
                                     </div>
@@ -270,19 +270,19 @@
                               <div class="control-item-content" >
                                  <div class="control-item-content-text">
                                     <span>Quiz Start text</span>
-                                    <input class="quiz-titlex " type="text" name="" value="" placeholder=" Lest start Quiz">
+                                    <input ng:model="application_settings.settings.titles.title_start_with" class="quiz-titlex " type="text" name="" value="" placeholder=" Lest start Quiz">
                                  </div>
                                  <div class="control-item-content-text">
                                     <span>Quiz End text</span>
-                                    <input class="quiz-titlex " type="text" name="" value="" placeholder=" You have successfully  completed the this quizs">
+                                    <input ng:model="application_settings.settings.titles.title_end_with" class="quiz-titlex " type="text" name="" value="" placeholder=" You have successfully  completed the this quizs">
                                  </div>
                                  <div class="control-item-content-text">
                                     <span>Quiz Pass text:</span>
-                                    <input class="quiz-titlex " type="text" name="" value="" placeholder="You have passed this quiz">
+                                    <input ng:model="application_settings.settings.titles.title_success_with"  class="quiz-titlex " type="text" name="" value="" placeholder="You have passed this quiz">
                                  </div>
                                  <div class="control-item-content-text">
                                     <span>Quiz Fail text:</span>
-                                    <input class="quiz-titlex " type="text" name="" value="" placeholder="You have failed this quiz">
+                                    <input ng:model="application_settings.settings.titles.title_failed_with" class="quiz-titlex " type="text" name="" value="" placeholder="You have failed this quiz">
                                  </div>
 
                               </div>
@@ -297,15 +297,20 @@
                               <div class="control-item-content" >
                                  <div class="control-item-content-text">
                                     <span>Quiz Start Button:</span>
-                                    <input class="quiz-titlex " type="text" name="" value="" placeholder=" Start Quiz">
+                                    <input ng:model="application_settings.settings.label_btns.lbl_start_with" class="quiz-titlex " type="text" name="" value="" placeholder=" Start Quiz">
                                  </div>
                                  <div class="control-item-content-text">
                                     <span>Restart Button</span>
-                                    <input class="quiz-titlex " type="text" name="" value="" placeholder="Retake Quiz">
+                                    <input ng:model="application_settings.settings.label_btns.lbl_retake_with" class="quiz-titlex " type="text" name="" value="" placeholder="Retake Quiz">
                                  </div>
                                  <div class="control-item-content-text">
                                     <span>Continue Button</span>
-                                    <input class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
+                                    <input ng:model="application_settings.settings.label_btns.lbl_continue_with" class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
+                                 </div>
+
+                                 <div class="control-item-content-text">
+                                    <span>Review Button</span>
+                                    <input ng:model="application_settings.settings.label_btns.lbl_review_with" class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
                                  </div>
 
                               </div>
@@ -313,7 +318,7 @@
 
                           </ul>
                           <div class="quiz-setting-handler">
-                            <button class="btn btn-primary" type="button" name="button">Save Changes</button>
+                            <button ng:click="application_save_settings()" class="btn btn-primary" type="button" name="button">Save Changes</button>
                           </div>
 
 

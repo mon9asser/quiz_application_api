@@ -1,7 +1,7 @@
 const validator = require('validator');
 const mongoose = require('mongoose');
 const {ObjectId} = mongoose.Schema.ObjectId;
- 
+
 /*
   ++++++++++++++++++++++++++++++++++++++++++++++++
     For Users Collection
@@ -148,7 +148,7 @@ var Questionnaire_settings = {
                   trim : true
                 } ,
                 timer_type :{
-                  type : String ,
+                  type : Boolean ,
                   trim : true
                 } ,
                 timer_layout : {

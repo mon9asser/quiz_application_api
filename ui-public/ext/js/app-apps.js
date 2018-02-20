@@ -26,7 +26,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         time_settings : {
           is_with_time:false ,
           value : "15" ,
-          timer_type : "mins" ,
+          timer_type : false ,
           timer_layout : 0
         },
         progression_bar : {
@@ -36,6 +36,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
        //  theme_style : [] ,
         randomize_settings : false ,
         step_type : true ,
+
+        show_results_per_qs : false ,
         retake_setting : false ,
         navigation_btns : false ,
         review_setting : true ,
@@ -293,6 +295,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 settings_obj['settings']['step_type'] = mongo_settings.step_type;
               }else  // end step_type settings
               settings_obj['settings']['step_type'] = $scope.application_settings.settings.step_type;
+
+              if(mongo_settings.show_results_per_qs != null){
+                settings_obj['settings']['show_results_per_qs'] = mongo_settings.show_results_per_qs;
+              }else  // end step_type settings
+              settings_obj['settings']['show_results_per_qs'] = $scope.application_settings.settings.show_results_per_qs;
+
 
               if(mongo_settings.retake_setting != null ){
                 settings_obj['settings']['retake_setting'] = mongo_settings.retake_setting;
@@ -989,9 +997,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
 
   // ===================================
-  // ==== Angular Backend (data)
+  // ==== Angular Backend into Mongo (data)
   // ===================================
-
+  $scope.application_save_settings = function (){
+    console.log($scope.application_settings);
+  };
 
 
 
