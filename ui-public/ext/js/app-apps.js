@@ -19,6 +19,12 @@ apps.filter('this_chars_only' , [
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
   $scope.drag_drop_status = true ;
   $scope.questionIndex = null ;
+  $scope.file_object = {
+    "media_type" : null ,
+    "file"       : null ,
+    "link"       : null
+  }
+
   // ==============================
   // ================+>> Application Settings
   // -------------------------------------
@@ -71,6 +77,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   // ==>  Callback Finder
   //--------------------------------------------------------
   $scope.question_id = null ;
+  $scope.question_media = null ;
   $scope.callback_index = function (object){
     return object._id == $scope.question_id ;
   };
@@ -145,7 +152,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
    $scope.json_apk_file               = $scope.server_ip + "ext/json/json-keys.json";
    $scope.api_url_create_question     = null;
    $scope.api_url_delete_question     = $scope.server_ip + "api/"+$scope.app_id+"/question/delete";
-   $scope.api_url_edit_question       = null;
+   $scope.api_url_edit_question       = $scope.server_ip + "api/"+$scope.app_id+"/question/edit";
    $scope.api_url_create_answer       = null;
    $scope.api_url_delete_answer       = null;
    $scope.api_url_edit_answer         = null;
@@ -401,6 +408,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       $scope.asnwers = null ;
       // 3 Question settings
       $scope.question_settings = null ;
+      $scope.question_media = null ;
       $(".x-editor-x-body").slideUp();
 
      $(".qs-delete-"+questionId).removeClass("fa-trash");
@@ -706,7 +714,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $(".qs-edit-"+$scope.question_id).addClass("fa-cog fa-spin -font");
     $(".question-li-x").removeClass("highlighted-question");
 
-
     $(".qs-"+$scope.question_id).addClass("highlighted-question");
     // highlighted-question
 
@@ -723,12 +730,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     // setup data of question into ui design
     //---------------------------------------
     // 1- question
-
     $scope.question_body = taget_question.question_body;
     $scope.enable_description = taget_question.enable_description;
     $scope.question_description = taget_question.question_description;
     $scope.question_id = taget_question._id;
     $scope.question_type = taget_question.question_type;
+    $scope.question_media = taget_question.media_question ;
     // 2- answers
     $scope.asnwers = taget_question.answers_format
     // alert($scope.enable_description);
@@ -739,7 +746,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       is_randomized          : taget_question.answer_settings.is_randomized ,
       super_size         : taget_question.answer_settings.super_size
     }
-
+    // 4 Question Media
+    $scope.question_media ;
   }; // edit curr question
 
 
@@ -1076,8 +1084,111 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
 
 
-  $("#check_xx_data").on("change",function(){
-    console.log($scope.questions_list);
+// =========================================================
+// =====================> Media Uploader
+// =================================================
+
+/* Video Handler part */
+$scope.video_handler = $(".video-handler");
+$scope.video_handler.on("click",function(){
+  $scope.file_object['media_type'] = 1 ;
+  $(".media-inputs").css({display:'block'});
+});
+/* Image Handler part */
+$scope.image_handler = $(".image-handler");
+$scope.image_handler.on("click", function (){
+  $(".image-uploader-x").trigger("click");
+});
+$scope.upload_handler = $(".image-uploader-x");
+$scope.upload_handler.on("change" , function (){
+  $scope.file_object['media_type'] = 0 ;
+  $scope.file_object['file'] = $(this)[0].files[0];
+});
+
+// ===============================
+// => Upload & save in mongoDB
+// ===============================
+$scope.show_preview_media = function (){
+  // alert("Preview Media Box");
+}; // => beside qs Preview
+$scope.close_media_box = function (){
+  // alert("Close Media Box");
+}; // => beside qs Preview
+
+$scope.save_media_with = function (action_type) {
+
+  $scope.question_id = "5a8d55f8bf25a3308ed7ba61"; // for testing only
+
+  if($scope.question_id == null ) {
+    alert("You've to select question first from question list to allow you edit it !");
+    return false ;
+  }
+
+  var found_qs = $scope.questions_list.find($scope.callback_index);
+  var targetIndex = $scope.questions_list.indexOf(found_qs);
+  // found_qs.media_question.media_name = " this is an update to see what happened in angular backend";
+  var headers = new Object();
+
+  if($scope.file_object.media_type == 0 ) {// Image
+      data_object = new FormData();
+      data_object.append("creator_id" , $scope.user_id );
+      data_object.append("question_id" , $scope.question_id );
+      data_object.append("media_field" , $scope.file_object.file );
+      headers["Content-Type"] = undefined ;
+  }
+  if($scope.file_object.media_type == 1 ) { // Video
+    data_object = new Object();
+    data_object['creator_id']  =  $scope.user_id ;
+    data_object['question_id'] =  $scope.question_id ;
+    data_object['media_field'] =  $scope.file_object.link ;
+  }
+
+  console.log(data_object);
+
+  $.getJSON( $scope.json_apk_file , function (api_key_data ){
+    headers["X-api-keys"] = api_key_data.API_KEY ;
+    headers["X-api-app-name"] = api_key_data.APP_NAME ;
+
+      $http({
+        method : "PATCH" ,
+        url : $scope.api_url_edit_question ,
+        headers: headers ,
+        processData: false,
+        contentType: false ,
+        data: data_object
+      }).then(function(success_data){    // console.log($scope.questions_list);
+
+        console.log(success_data.data);
+        var question_data = success_data.data ;
+        var media_question_url = question_data.Media_directory;
+
+        var question_media_details = question_data.Question_details.media_question;
+
+        if(question_media_details == null ) {
+          question_media_details = new Object();
+
+          question_media_details ['media_field'] = question_data.Question_details.media_question.media_field;
+          question_media_details ['media_name']= question_data.Question_details.media_question.media_name;
+          question_media_details ['media_type']= question_data.Question_details.media_question.media_type;
+          question_media_details ['video_id']= question_data.Question_details.media_question.video_id;
+          question_media_details ['video_type']= question_data.Question_details.media_question.video_type;
+        }else {
+            question_media_details =question_data.Question_details.media_question;
+        }
+
+        console.log("========>>> Question Data <<<========");
+        console.log($scope.questions_list );
+      },function(error_data){
+        console.log(error_data);
+      });
   });
+
+    // =========> Action Proccess
+       if (action_type == "close")
+            $scope.close_media_box();
+  else if (action_type == "preview")
+            $scope.show_preview_media();
+};
+
 
 }]);

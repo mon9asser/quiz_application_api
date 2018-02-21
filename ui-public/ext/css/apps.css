@@ -87,7 +87,7 @@ body {
 
 .btn.btn-primary {
     background-color: #00a8ff;
-    border-color: #00a8ff;
+    border:1px dashed #046394;
 }
 .row-x-body {
     z-index: 1;
@@ -123,14 +123,13 @@ body {
 .quiz-titles > span {
     display: inline-block;
     font-size: 15px;
-    padding: ;
     line-height: 50px;
     padding-left: 15px;
 }
 .btn.btn-primary {
   background-color: #00a8ff;
   border-color: #00a8ff;
-  margin-right: 8px !important;
+  margin-right: 0px !important;
 }
 .choices-right-add {
     margin-top: 8px;
@@ -443,6 +442,8 @@ textarea.form-control {
     background: #eee;
     max-height: 200px;
     border: 10px;
+    position: relative;
+    overflow: hidden;
 }
 .titles-question {
     display: block;
@@ -1487,4 +1488,173 @@ ul li:last-child.emails {
     margin-left: 20px !important;
     display: inline-block !important;
     vertical-align: middle !important;
+}
+
+.has-no-media {
+  display: block;
+  position: absolute;
+  width: 100%;
+  background: rgba("0,0,0,0.2");
+  top: 0%;
+  height: 100%;
+  vertical-align: middle;
+
+  text-align: center;
+  vertical-align: baseline;
+  line-height: 8;
+  color: #999;
+  cursor: pointer;
+
+  background-repeat: none;
+  background-position: center;
+  background-size: cover;
+
+}
+
+.media-parts
+{
+  color: tomato;
+  border: 1px dashed;
+  padding: 10px;
+}
+
+.media-parts-x {
+    margin-top: 15px;
+    overflow: hidden;
+    display: block;
+    position: relative;
+    height: 115px;
+    margin: 15px auto;
+}
+
+
+
+
+ /* ------------- Media options here --------------- */
+ .box-overlay {
+    background: rgba(247, 247, 247, 0.8);
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    z-index: 300;
+    display: block;
+}
+
+
+.box-data {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    background: #fff;
+    width: 40%;
+    min-height: 100px;
+    z-index: 300;
+    margin: 0px auto;
+    border: 1px dashed #ddd;
+    box-shadow: 0px 0px 5px 0px #ece7e3;
+    color: #999;
+    top: 10%;
+    padding-bottom: 15px;
+    display: block;
+}
+.box-data-title {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    border-bottom: 1px dashed #eee;
+    padding: 10px 15px;
+    background: #eee;
+    color: #999;
+}
+.media-part-controller {
+    border-bottom: 1px dashed #eee;
+}
+.preview-media {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    width: 95%;
+    margin: 0px auto;
+}
+.box-data-title > b {
+    font-family: arial , sans-serif;
+}
+.media-inputs {
+    width: 95%;
+    margin: 12px auto 3px auto;
+    border-radius: 0px;
+    color: #999 !important;
+    display: none ;
+}
+.media-links {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    width: 95%;
+    padding: 0px;
+    margin: 0px auto;
+    text-align: right;
+    list-style: none;
+}
+.media-links li {
+    display: inline-block;
+    margin: 8px 5px 10px 5px;
+}
+.media-im-vid {
+    display: block;
+}
+.butns-part {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    margin: 5px 0px 0px 0px;
+    text-align: right;
+}
+
+.media-x-preview, .img-resp-exrtacted {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    height: auto;
+    background: #eee;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    text-align: center;
+    min-height: 60px;
+}
+.video-not-found {
+    padding: 20px 0px 0px 0px;
+    display: block;
+}
+.btn.btn-danger {
+    background-color: #fa424a;
+    border-color: #fa424a;
+}
+btn.btn-primary {
+    background-color: #00a8ff;
+    border-color: #00a8ff;
+}
+.image-uploader-x {
+  display: none !important;
+}
+.media-im-vid{
+  margin: 7px 0px;
+}
+.butns-part {
+  margin: 20px 0px;
+}
+.btn-warning-media ,
+.btn-warning-media:hover ,
+.btn-warning-media:focus ,
+.btn-warning-media:active ,
+.btn-warning-media:link {
+  background: tan ;
+  border:1px dashed #ca8324 ;
+  color: #fff; /* #046394 */
+  outline: none;
 }

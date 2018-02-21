@@ -35,10 +35,10 @@
 
 
         </div>
-      <div class="col-sm-4 media-uploads top-margins">
+      <div class="col-sm-4 media-uploads top-margins media-parts-x">
         <!-- No Media Cases -->
-        <div class="media-changeable media-changeable-img-case">
-            
+        <div ng:if="question_media == null " class="media-changeable media-changeable-img-case has-no-media">
+          <b class="media-parts">Add new media</b>
         </div>
 
         <!-- Media Cases -->
@@ -49,7 +49,8 @@
 
 
       </div>
-      <div class="col-xs-12">
+      <div class="clearFix"> </div>
+      <div class="col-xs-12 col-md-12">
         <div class="row-cols margin-top">
            <label class="titles-question description-enable-handler">
               Description :  <input  type="checkbox" id="check_xx_data" class="switch_1 input-checkboxes enable-sc" ng:model="enable_description"> <!-- <input class="enbl-desc" id="enable_dex" type="checkbox" name="" value=""> -->
@@ -277,42 +278,50 @@
 -->
 
 <!-- Overlay box -- w -- edit media -->
-<!-- <div class="box-overlay"></div>
-<div class="box-data">
-  <div class="box-data-title">
-    <b>Media Uploader</b>
-  </div>
-  <div class="media-part-controller">
-    <input type="text" class="form-control media-inputs " id="exampleInputEmail1" placeholder="Media Link">
-    <ul class="media-links">
-      <li>
-        <a class="video-handler" href="#">
-          Add Video
-        </a>
-      </li>
-      <li>
-        <input class="image-uploader-x" type="file" name="" value="">
-        <a class="image-handler" href="#">
-          Add Image
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div class="preview-media">
-    <div class="pre-title media-im-vid">
-      <span>Preview</span>
+  <div class="box-overlay media-uploader">
+    <!--
+    ++++++++++++++++++++++++++++++++++++
+    Box Overlay
+    ++++++++++++++++++++++++++++++++++++
+    -->
+    <div class="box-data">
+      <div class="box-data-title">
+        <b>Media Uploader</b>
+      </div>
+      <div class="media-part-controller">
+        <input ng:model="file_object.link" type="text" class="form-control media-inputs" placeholder="Media Link">
+        <ul class="media-links">
+          <li>
+            <a class="video-handler" href="#">
+              Add Video
+            </a>
+          </li>
+          <li>
+            <input ng:model="file_object.file" class="image-uploader-x" type="file" name="" value="">
+            <a class="image-handler" href="#">
+              Add Image
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="preview-media">
+        <div class="pre-title media-im-vid">
+          <span>Preview</span>
+        </div>
+        <div class="preview-media-part media-im-vid">
+          <div class="media-x-preview"></div>
+        </div>
+        <div class="preview-media-part butns-part">
+          <button  class="btn btn-danger btn-close-media" type="button" name="button">
+            Close
+          </button>
+          <button ng:click="save_media_with('close')" class="btn btn-warning-media" type="button" name="button">
+            Save and close
+          </button>
+          <button ng:click="save_media_with('preview')" class="btn btn-primary" type="button" name="button">
+            Save and Preview
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="preview-media-part media-im-vid">
-      <div class="media-x-preview"></div>
-    </div>
-    <div class="preview-media-part butns-part">
-      <button  class="btn btn-danger btn-close-media" type="button" name="button">
-        Close
-      </button>
-      <button class="btn btn-primary" type="button" name="button">
-        Save
-      </button>
-
-    </div>
   </div>
-</div> -->
