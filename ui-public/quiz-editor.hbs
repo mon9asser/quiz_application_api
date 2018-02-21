@@ -78,7 +78,7 @@
 
 						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
 
-               <li data-question-id="~>>qs_value._id<<~" ng:class="'question-li-x qs-'+qs_value._id" ng:repeat="(qs_key , qs_value) in questions_list">
+               <li data-question-id="~>>qs_value._id<<~" ng:class="'question-li-x qs-'+qs_value._id" ng:repeat="(qs_key , qs_value) in questions_list ">
                      <div class="question-part">
                        <div class="qs-type quesiontlist_iconx">
                          <span class="qs-type" title="Multiple Choices">
@@ -87,14 +87,14 @@
                            <i ng:if="qs_value.question_type == 2" class="icon-check-circle"></i>
                          </span>
                          <span class="qs-body">
-                           ~>>qs_value.question_body<<~
+                           ~>> qs_value.question_body | this_chars_only <<~
                          </span>
                          <ul class="question-option">
                            <li class="right">
                               <i ng:click="delete_this_question(qs_value._id)" style="cursor:pointer;" ng:class="'fa fa-trash iconx-trashable question-deletion qs-delete-'+qs_value._id"></i>
                            </li>
                            <li class="right">
-                              <i ng:click="edit_this_question(qs_value._id)" style="cursor:pointer;" ng:class="'fa fa-pencil iconex-movable qs-edit-'+qs_value._id"></i>
+                              <i ng:click="edit_this_question(qs_value._id , $index )" style="cursor:pointer;" ng:class="'fa fa-pencil iconex-movable qs-edit-'+qs_value._id"></i>
                            </li>
                          </ul>
                        </div>
@@ -165,7 +165,6 @@
                                       <div class="checkbox-toggle">
                                           <label class="labels-options lblxoption">Quiz Title</label>
                                           <input class="checkbox-toggle input-app-title" type="text" placeholder="App title" name="" ng:model="application_settings.questionnaire_title">
-
                                       </div>
                                    </div>
                                     <div class="passing-grad-block">

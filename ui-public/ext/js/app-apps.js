@@ -1,6 +1,21 @@
-
+// ==> 25 chars for each databinding
+apps.filter('this_chars_only' , [
+  function (){
+    return function (specs){
+      var spesificChars = '' ;
+      for (var i = 0; i < specs.length; i++) {
+        if(i < 26) {
+          spesificChars += specs[i];
+        }
+      }
+       return spesificChars + " ... ";
+    }
+  }
+]);
+// ==> Main Controller
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
   $scope.drag_drop_status = true ;
+  $scope.questionIndex = null ;
   // ==============================
   // ================+>> Application Settings
   // -------------------------------------
@@ -654,7 +669,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   //--------------------------------------------------------
   // ==> Edit Current Question     color: #89d7d7;
   //--------------------------------------------------------
-  $scope.edit_this_question = function ( qs_id ){
+  $scope.edit_this_question = function ( qs_id  , qsCurrIndex){
+    $scope.questionIndex = qsCurrIndex ;
     $(".x-editor-x-body").slideDown();
      $scope.question_id = qs_id ;
      $scope.indexes = 1 ;
@@ -704,6 +720,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     // setup data of question into ui design
     //---------------------------------------
     // 1- question
+
     $scope.question_body = taget_question.question_body;
     $scope.enable_description = taget_question.enable_description;
     $scope.question_description = taget_question.question_description;
@@ -848,20 +865,25 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   // ============================================
   // =====>> Edit Question Text
   // ============================================
-  $("#editor-question-body").on('keydown change keypress keyup' , function (){
-    var question_value = $(this).val();
-    if($scope.question_id == null )
-      {
-        alert("please select question to edit it first !");
-        return false ;
-      }
-
-    // Select Question From Array
-      var question_selected = $scope.questions_list.find($scope.callback_index);
-      if(question_selected)
-      question_selected.question_body = question_value;
-
-  });
+  // $("#editor-question-body").on('keydown' , function (){
+  //   var question_value = $(this).val();
+  //
+  //   if($scope.question_id == null )
+  //     {
+  //       alert("please select question to edit it first !");
+  //       return false ;
+  //     }
+  //
+  //     // Select Question From Array
+  //     var question_selected = $scope.questions_list.find($scope.callback_index);
+  //     if(question_selected){
+  //        question_selected.question_body = question_value;
+  //     }
+  //     $scope.question_chars(question_selected.question_body);
+  // });
+  // $scope.question_chars = function (chars){
+  //   alert(chars.length)
+  // };
 
   // ============================================
   // =====>> Question Description
