@@ -1,5 +1,4 @@
 // ==> 25 chars for each databinding
-// ==> Fix issue related media answers and angular framework > not working properly
 apps.filter('this_chars_only' , [
   function (){
     return function (specs){
@@ -623,7 +622,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
             htmlVal.find("ul.question-option").find("li.right").addClass("animated bounceIn");
             htmlVal.remove();
-            $scope.edit_this_question(new_question._id);
+            $scope.edit_this_question(new_question._id , index_in_array);
 
             if(itemType == 'qst'){ //=> Question
               $.getJSON($scope.json_apk_file , function(api_key_data){
