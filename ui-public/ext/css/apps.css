@@ -433,10 +433,10 @@ textarea.form-control {
     cursor: pointer;
     font-size: 12px;
 }
-.media-changeable-img-case {
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.media-changeable-img-case , .media-image-cases{
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
 }
 .media-changeable {
     min-height: 114px;

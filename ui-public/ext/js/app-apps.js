@@ -1,14 +1,18 @@
 // ==> 25 chars for each databinding
+// ==> Fix issue related media answers and angular framework > not working properly
 apps.filter('this_chars_only' , [
   function (){
     return function (specs){
       var spesificChars = '' ;
+      var char_counts = 26 ;
       for (var i = 0; i < specs.length; i++) {
-        if(i < 26) {
+        if(i < char_counts) {
           spesificChars += specs[i];
+          if(i == (char_counts - 1) )
+            spesificChars += " ... ";
         }
       }
-       return spesificChars + " ... ";
+       return spesificChars
     }
   }
 ]);
