@@ -781,6 +781,7 @@ qtnrRouters.patch("/:app_id/question/creation"  , auth_verify_api_keys , (req,re
 
 // Question => proccess ( create - edit or delete )
 qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("media_field") , auth_verify_api_keys , (req, res) =>{
+
   var app_id = req.params.app_id ;
   var processType= req.params.process ;
   var user = req.verified_user;
@@ -924,12 +925,13 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
                 question_tag ["media_question"]["media_field"] = "themeimages/"+new_filename ;
                 fs.rename( imagePath , targetPath , (err)=>{
                     if(err) throw err ;
-                })
+                }) ;
               }else { // => Video Type
                 question_tag ["media_question"]["media_type"] = 1;
                 question_tag ["media_question"]["media_name"] = req.body.media_field;
                 question_tag ["media_question"]["media_field"] = req.body.media_field;
                 // detect video type
+
                 var video = req.body.media_field.toLowerCase();
                 var videoType = null ;
                 var videoId = null ;
@@ -1070,10 +1072,38 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
                      });
                   });
 
-              }else{
-                qtnairsDocument.questions[findIndex_this_qs].media_question["media_type"] = 1;
-                qtnairsDocument.questions[findIndex_this_qs].media_question["media_name"] = req.body.media_field;
-                qtnairsDocument.questions[findIndex_this_qs].media_question["media_field"] = req.body.media_field;
+              }else{ // => Video Type
+                  qtnairsDocument.questions[findIndex_this_qs].media_question["media_type"] = 1 ;
+                  qtnairsDocument.questions[findIndex_this_qs].media_question["media_name"] = req.body.media_field;
+                  qtnairsDocument.questions[findIndex_this_qs].media_question["media_field"] = req.body.media_field;
+                  // ================> Start Edit video
+                  var video = req.body.media_field.toLowerCase();
+                  var videoType = null ;
+                  var videoId = null ;
+                  if( video.includes("youtube")    == true   ) {
+                     videoType = 0 ; // => youtube
+                     var idWithLastSplit = video.lastIndexOf('?');
+                     var videos = video.substr(idWithLastSplit + 1);
+                     var lastId = videos.substr(0, videos.indexOf('&'));
+                     if(lastId != '' || lastId )
+                    videoId = lastId ;
+                    else
+                    videoId = videos ;
+                    var afterEqualChar = videoId.lastIndexOf('=');
+                    videoId = videoId.substring(afterEqualChar + 1);
+                  }else if( video.includes("vimeo") == true   ) {
+                    videoType = 1 ; // => vimeo
+                    var n = video.lastIndexOf('/');
+                    videoId = video.substring(n + 1);
+                  } else if( video.includes(".mp4")  == true   ) {
+                    videoType = 2 ;
+                    videoId = null;
+                    var media_mp4 = req.body.media_field.substring(0, req.body.media_field.lastIndexOf('.'));
+                    qtnairsDocument.questions[findIndex_this_qs].media_question["media_field"] = media_mp4 ;
+                  }
+                  qtnairsDocument.questions[findIndex_this_qs].media_question["video_type"] = videoType ;
+                  qtnairsDocument.questions[findIndex_this_qs].media_question["video_id"] = videoId ;
+
               }
             }
             // res.send(qtnairsDocument.questions[findIndex_this_qs]);
