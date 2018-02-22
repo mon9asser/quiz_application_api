@@ -1108,8 +1108,32 @@ $scope.upload_handler.on("change" , function (){
 // ===============================
 // => Upload & save in mongoDB
 // ===============================
-$scope.show_preview_media = function (){
-  // alert("Preview Media Box");
+$scope.show_preview_media = function (media_object){
+
+  var media_field = media_object.media_field ;
+  var media_name  = media_object.media_name;
+  var media_type  = media_object.media_type;
+  var video_id    = media_object.video_id;
+  var video_type  = media_object.video_type;
+
+
+  var preview_box = $(".media-x-preview");
+  var media_iframe ;
+  switch (media_type) {
+    case 0: // Image Type
+      media_iframe = "<div style='background:url("+$scope.server_ip+media_field+")' class='emb-image-case public-media'></div>" ;
+      break;
+// ---------------------------------------->> Separated line
+    case 1: // Video Type
+        if (video_type == 0 ){
+          media_iframe = '<iframe width="100%" height="250px" src="https://www.youtube.com/embed/'+video_id+'?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
+        } // Youtube
+        if (video_type == 1 ){} // Vimeo
+        if (video_type == 2 ){} // Mp4
+      break;
+  } // end switch ---
+
+  preview_box.html(media_iframe);
 }; // => beside qs Preview
 $scope.close_media_box = function (){
   // alert("Close Media Box");
@@ -1117,7 +1141,7 @@ $scope.close_media_box = function (){
 
 $scope.save_media_with = function (action_type) {
 
-  $scope.question_id = "5a8d55f8bf25a3308ed7ba61"; // for testing only
+  $scope.question_id = "5a8d51d27dfa9e2d13105b57"; // for testing only
 
   if($scope.question_id == null ) {
     alert("You've to select question first from question list to allow you edit it !");
@@ -1143,7 +1167,7 @@ $scope.save_media_with = function (action_type) {
     data_object['media_field'] =  $scope.file_object.link ;
   }
 
-  console.log(data_object);
+
 
   $.getJSON( $scope.json_apk_file , function (api_key_data ){
     headers["X-api-keys"] = api_key_data.API_KEY ;
@@ -1157,37 +1181,28 @@ $scope.save_media_with = function (action_type) {
         contentType: false ,
         data: data_object
       }).then(function(success_data){    // console.log($scope.questions_list);
-
-        console.log(success_data.data);
         var question_data = success_data.data ;
         var media_question_url = question_data.Media_directory;
-
         var question_media_details = question_data.Question_details.media_question;
+        found_qs.media_question = question_media_details ;
 
-        if(question_media_details == null ) {
-          question_media_details = new Object();
 
-          question_media_details ['media_field'] = question_data.Question_details.media_question.media_field;
-          question_media_details ['media_name']= question_data.Question_details.media_question.media_name;
-          question_media_details ['media_type']= question_data.Question_details.media_question.media_type;
-          question_media_details ['video_id']= question_data.Question_details.media_question.video_id;
-          question_media_details ['video_type']= question_data.Question_details.media_question.video_type;
-        }else {
-            question_media_details =question_data.Question_details.media_question;
-        }
 
-        console.log("========>>> Question Data <<<========");
-        console.log($scope.questions_list );
+
+
+
+        // =========> Action Proccess
+           if (action_type == "close")
+                $scope.close_media_box();
+      else if (action_type == "preview")
+                $scope.show_preview_media(found_qs.media_question ); // media_type , video_type = null
+
       },function(error_data){
         console.log(error_data);
       });
   });
 
-    // =========> Action Proccess
-       if (action_type == "close")
-            $scope.close_media_box();
-  else if (action_type == "preview")
-            $scope.show_preview_media();
+
 };
 
 
