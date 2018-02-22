@@ -1151,7 +1151,7 @@ $scope.close_media_box = function (){
 
 $scope.save_media_with = function (action_type) {
 
-  $scope.question_id = "5a8d51d27dfa9e2d13105b57"; // for testing only
+  $scope.question_id = "5a89f7585c0cd0060e5b9490"; // for testing only
 
   if($scope.question_id == null ) {
     alert("You've to select question first from question list to allow you edit it !");
