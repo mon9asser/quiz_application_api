@@ -1126,10 +1126,20 @@ $scope.show_preview_media = function (media_object){
 // ---------------------------------------->> Separated line
     case 1: // Video Type
         if (video_type == 0 ){
-          media_iframe = '<iframe width="100%" height="250px" src="https://www.youtube.com/embed/'+video_id+'?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
+          //  media_iframe = '<iframe width="100%" height="250px" src="http://www.youtube.com/embed/'+video_id+'?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
+          media_iframe = '<iframe class="iframe" width="100%" src="http://www.youtube.com/embed/'+video_id+'"    height="250px" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
+
         } // Youtube
-        if (video_type == 1 ){} // Vimeo
-        if (video_type == 2 ){} // Mp4
+        if (video_type == 1 ){
+          media_iframe = ' <style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style> <iframe src="https://player.vimeo.com/video/'+video_id+'" width="100%" height="250px" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
+        } // Vimeo
+        if (video_type == 2 ){
+          media_iframe = '<video width="100%" height="auto" controls>'
+              + '<source src="'+media_field+'.mp4" type="video/mp4">'
+              + '<source src="'+media_field+'.ogg" type="video/ogg">'
+                + 'Your browser does not support the video tag.'
+                + '</video>'
+        } // Mp4
       break;
   } // end switch ---
 
@@ -1185,9 +1195,6 @@ $scope.save_media_with = function (action_type) {
         var media_question_url = question_data.Media_directory;
         var question_media_details = question_data.Question_details.media_question;
         found_qs.media_question = question_media_details ;
-
-
-
 
 
 
