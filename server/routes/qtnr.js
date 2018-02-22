@@ -932,10 +932,10 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
                 question_tag ["media_question"]["media_field"] = req.body.media_field;
                 // detect video type
 
-                var video = req.body.media_field.toLowerCase();
+                var video = req.body.media_field ;
                 var videoType = null ;
                 var videoId = null ;
-                if( video.includes("youtube")    == true   ) {
+                if( video.toLowerCase().includes("youtube")    == true   ) {
                   videoType = 0 ; // => youtube
                   var idWithLastSplit = video.lastIndexOf('?');
                   var videos = video.substr(idWithLastSplit + 1);
@@ -1077,10 +1077,10 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
                   qtnairsDocument.questions[findIndex_this_qs].media_question["media_name"] = req.body.media_field;
                   qtnairsDocument.questions[findIndex_this_qs].media_question["media_field"] = req.body.media_field;
                   // ================> Start Edit video
-                  var video = req.body.media_field.toLowerCase();
+                  var video = req.body.media_field;
                   var videoType = null ;
                   var videoId = null ;
-                  if( video.includes("youtube")    == true   ) {
+                  if( video.toLowerCase().includes("youtube")    == true   ) {
                      videoType = 0 ; // => youtube
                      var idWithLastSplit = video.lastIndexOf('?');
                      var videos = video.substr(idWithLastSplit + 1);
@@ -1353,10 +1353,10 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
 
                           /////////////////////>>>>
                           // detect video type
-                          var video = req.body.media_src.toLowerCase();
+                          var video = req.body.media_src ;
                           var videoType = null ;
                           var videoId = null ;
-                          if( video.includes("youtube")    == true   ) {
+                          if( video.toLowerCase().includes("youtube")    == true   ) {
                             videoType = 0 ; // => youtube
                             var idWithLastSplit = video.lastIndexOf('?');
                             var videos = video.substr(idWithLastSplit + 1);
@@ -1471,10 +1471,10 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                    question_answers["Media_directory"] =  req.body.media_src ;
 
                    // detect video type
-                   var video = req.body.media_src.toLowerCase();
+                   var video = req.body.media_src
                    var videoType = null ;
                    var videoId = null ;
-                   if( video.includes("youtube")    == true   ) {
+                   if( video.toLowerCase().includes("youtube")    == true   ) {
                      videoType = 0 ; // => youtube
                      var idWithLastSplit = video.lastIndexOf('?');
                      var videos = video.substr(idWithLastSplit + 1);

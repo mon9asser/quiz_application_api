@@ -1,4 +1,6 @@
 // ==> 25 chars for each databinding
+
+
 apps.filter('this_chars_only' , [
   function (){
     return function (specs){
@@ -17,6 +19,7 @@ apps.filter('this_chars_only' , [
 ]);
 // ==> Main Controller
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
+
   $scope.drag_drop_status = true ;
   $scope.questionIndex = null ;
   $scope.file_object = {
@@ -1108,6 +1111,9 @@ $scope.upload_handler.on("change" , function (){
 // ===============================
 // => Upload & save in mongoDB
 // ===============================
+$(".media-changeable-img-case").on("click" , function (){
+    $(".box-overlay").fadeIn();
+});
 $scope.show_preview_media = function (media_object){
 
   var media_field = media_object.media_field ;
@@ -1119,6 +1125,7 @@ $scope.show_preview_media = function (media_object){
 
   var preview_box = $(".media-x-preview");
   var media_iframe ;
+  $(".media-loader-spinner").fadeOut(2000);
   switch (media_type) {
     case 0: // Image Type
       media_iframe = "<div style='background:url("+$scope.server_ip+media_field+")' class='emb-image-case public-media'></div>" ;
@@ -1137,21 +1144,34 @@ $scope.show_preview_media = function (media_object){
           media_iframe = '<video width="100%" height="auto" controls>'
               + '<source src="'+media_field+'.mp4" type="video/mp4">'
               + '<source src="'+media_field+'.ogg" type="video/ogg">'
-                + 'Your browser does not support the video tag.'
-                + '</video>'
+              + 'Your browser does not support the video tag.'
+              + '</video>'
         } // Mp4
       break;
   } // end switch ---
 
   preview_box.html(media_iframe);
 }; // => beside qs Preview
+
 $scope.close_media_box = function (){
-  // alert("Close Media Box");
+  $(".box-overlay").fadeOut();
 }; // => beside qs Preview
 
 $scope.save_media_with = function (action_type) {
 
-  $scope.question_id = "5a89f7585c0cd0060e5b9490"; // for testing only
+  // LOADING PAGE
+  var loader = '<div class="media-loader-spinner"><div class="spinner">'+
+                  '<div class="rect1"></div>'+
+                  '<div class="rect2"></div>'+
+                  '<div class="rect3"></div>'+
+                  '<div class="rect4"></div>'+
+                  '<div class="rect5"></div>'+
+                '</div>' +
+                '<span class="title-loader">Please wait it may take a few moments</span></div>';
+  $(".media-x-preview").html(loader);
+  // ==> END LOADER HERE !!
+
+  $scope.question_id = "5a8ea78a3a4c8d3a5c9a69e8"; // for testing only
 
   if($scope.question_id == null ) {
     alert("You've to select question first from question list to allow you edit it !");
