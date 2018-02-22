@@ -935,6 +935,7 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
                 var video = req.body.media_field ;
                 var videoType = null ;
                 var videoId = null ;
+                var video_src_value = null;
                 if( video.toLowerCase().includes("youtube")    == true   ) {
                   videoType = 0 ; // => youtube
                   var idWithLastSplit = video.lastIndexOf('?');
@@ -949,12 +950,13 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
 
                   var afterEqualChar = videoId.lastIndexOf('=');
                   videoId = videoId.substring(afterEqualChar + 1);
-
+                  video_src_value = "http://youtube.com/embed/"+ videoId ;
                 }
                 else if( video.includes("vimeo") == true   ) {
                   videoType = 1 ; // => vimeo
                   var n = video.lastIndexOf('/');
                   videoId = video.substring(n + 1);
+                  video_src_value = "https://player.vimeo.com/video/"+ videoId;;
                 }
                 else if( video.includes(".mp4")  == true   ) {
                   videoType = 2 ;
@@ -965,6 +967,7 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
 
                 }
                 question_tag ["media_question"]["video_type"] = videoType;
+                question_tag ["media_question"]["video_source"] = video_src_value;
                 question_tag ["media_question"]["video_id"] = videoId;
               }
 
@@ -1080,6 +1083,7 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
                   var video = req.body.media_field;
                   var videoType = null ;
                   var videoId = null ;
+                  var video_src_value = null ;
                   if( video.toLowerCase().includes("youtube")    == true   ) {
                      videoType = 0 ; // => youtube
                      var idWithLastSplit = video.lastIndexOf('?');
@@ -1091,10 +1095,12 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
                     videoId = videos ;
                     var afterEqualChar = videoId.lastIndexOf('=');
                     videoId = videoId.substring(afterEqualChar + 1);
+                    video_src_value = "http://youtube.com/embed/"+ videoId
                   }else if( video.includes("vimeo") == true   ) {
                     videoType = 1 ; // => vimeo
                     var n = video.lastIndexOf('/');
                     videoId = video.substring(n + 1);
+                    video_src_value = "https://player.vimeo.com/video/"+ videoId;
                   } else if( video.includes(".mp4")  == true   ) {
                     videoType = 2 ;
                     videoId = null;
@@ -1103,6 +1109,7 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
                   }
                   qtnairsDocument.questions[findIndex_this_qs].media_question["video_type"] = videoType ;
                   qtnairsDocument.questions[findIndex_this_qs].media_question["video_id"] = videoId ;
+                  qtnairsDocument.questions[findIndex_this_qs].media_question["video_source"] = video_src_value  ;
 
               }
             }
@@ -1356,6 +1363,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                           var video = req.body.media_src ;
                           var videoType = null ;
                           var videoId = null ;
+                          var video_src_value = null  ;
                           if( video.toLowerCase().includes("youtube")    == true   ) {
                             videoType = 0 ; // => youtube
                             var idWithLastSplit = video.lastIndexOf('?');
@@ -1371,11 +1379,13 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                             var afterEqualChar = videoId.lastIndexOf('=');
                             videoId = videoId.substring(afterEqualChar + 1);
 
+                            video_src_value = "http://youtube.com/embed/"+ videoId ;
                           }
                           else if( video.includes("vimeo") == true   ) {
                             videoType = 1 ; // => vimeo
                             var n = video.lastIndexOf('/');
                             videoId = video.substring(n + 1);
+                            video_src_value = "https://player.vimeo.com/video/"+ videoId ;
                           }
                           else if( video.includes(".mp4")  == true   ) {
                             videoType = 2 ;
@@ -1387,7 +1397,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                           }
                           question_answers ["media_optional"]["video_type"] = videoType;
                           question_answers ["media_optional"]["video_id"] = videoId;
-
+                          question_answers ["media_optional"]["video_source"] = video_src_value ;
 
 
 
@@ -1474,6 +1484,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                    var video = req.body.media_src
                    var videoType = null ;
                    var videoId = null ;
+                   var video_src_value = null ;
                    if( video.toLowerCase().includes("youtube")    == true   ) {
                      videoType = 0 ; // => youtube
                      var idWithLastSplit = video.lastIndexOf('?');
@@ -1488,12 +1499,13 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
 
                      var afterEqualChar = videoId.lastIndexOf('=');
                      videoId = videoId.substring(afterEqualChar + 1);
-
+                     video_src_value = "http://youtube.com/embed/"+ videoId ;
                    }
                    else if( video.includes("vimeo") == true   ) {
                      videoType = 1 ; // => vimeo
                      var n = video.lastIndexOf('/');
                      videoId = video.substring(n + 1);
+                     video_src_value = "https://player.vimeo.com/video/"+ videoId;
                    }
                    else if( video.includes(".mp4")  == true   ) {
                      videoType = 2 ;
@@ -1505,7 +1517,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                    }
                    question_answers["video_type"] = videoType;
                    question_answers["video_id"] = videoId;
-
+                   question_answers["video_source"] = video_src_value;
 
                  }
                }

@@ -20,8 +20,14 @@ apps.filter('this_chars_only' , [
 // ==> Main Controller
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
 
+  $scope.show_media_uploader = function (media_for_model){
+    //media_for_model =>  media for question or answer ??
+    $(".media-imgvid-uploader").fadeIn();
+  };
+
   $scope.drag_drop_status = true ;
   $scope.questionIndex = null ;
+  $scope.current_video_id = "xdV4jPeXb4k";
   $scope.file_object = {
     "media_type" : null ,
     "file"       : null ,
@@ -750,7 +756,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       super_size         : taget_question.answer_settings.super_size
     }
     // 4 Question Media
-    $scope.question_media ;
+    $scope.loading_sources_into_iframes();
   }; // edit curr question
 
 
@@ -1171,7 +1177,7 @@ $scope.save_media_with = function (action_type) {
   $(".media-x-preview").html(loader);
   // ==> END LOADER HERE !!
 
-  $scope.question_id = "5a8ea78a3a4c8d3a5c9a69e8"; // for testing only
+  // $scope.question_id = "5a8ea78a3a4c8d3a5c9a69e8"; // for testing only
 
   if($scope.question_id == null ) {
     alert("You've to select question first from question list to allow you edit it !");
@@ -1197,9 +1203,7 @@ $scope.save_media_with = function (action_type) {
     data_object['media_field'] =  $scope.file_object.link ;
   }
 
-
-
-  $.getJSON( $scope.json_apk_file , function (api_key_data ){
+   $.getJSON( $scope.json_apk_file , function (api_key_data ){
     headers["X-api-keys"] = api_key_data.API_KEY ;
     headers["X-api-app-name"] = api_key_data.APP_NAME ;
 
@@ -1232,5 +1236,19 @@ $scope.save_media_with = function (action_type) {
 
 };
 
+// ==================================
+// ==> loading src into iframes
+// ==================================
+$scope.loading_sources_into_iframes = function (){
+  if($scope.question_media.media_type != 0 ){
+  var videoEleme = document.getElementsByClassName('video_')[0];
+  var video_box = document.getElementsByClassName("video_box")[0];
+
+  var iframeV = '<iframe src="'+$scope.question_media.video_source+'" width="100%" height="120px"></iframe>';
+  var iframec = '<iframe src="'+$scope.question_media.video_source+'" width="100%" height="250px"></iframe>';
+   videoEleme.innerHTML = iframeV;
+   video_box.innerHTML = iframec;
+   }
+};
 
 }]);

@@ -37,14 +37,20 @@
         </div>
       <div class="col-sm-4 media-uploads top-margins media-parts-x">
         <!-- No Media Cases -->
-        <div ng:if="question_media == null " class="media-changeable media-changeable-img-case has-no-media">
-          <b class="media-parts">Add new media</b>
+        <div ng:if="question_media == null" ng:click="show_media_uploader('question_media_type')"  style="background-image:url(~>>server_ip<<~img/media-icon.png)"  class="media-changeable media-changeable-img-case has-no-media">
+          Add Media
         </div>
 
         <!-- Media Cases -->
-        <!-- <div class="media-changeable media-changeable-img-case">
+        <div ng:if="question_media != null" class="media-changeable media-changeable-img-case">
+            <!-- Case it an image -->
+            <div ng:if="question_media.media_type == 0" style="background-image:url(~>>server_ip+question_media.media_field<<~)" class="image-case img_"></div>
+            <!-- Case it Video -->
+            <div ng:if="question_media.media_type == 1" class="video_"></div>
+            <!-- Add New -->
 
-        </div> -->
+            <span  ng:click="show_media_uploader('question_media_type')"  class="edit-preview-media"> <i class="fa fa-pencil"></i> Edit and Preview</span>
+        </div>
 
 
 
@@ -272,13 +278,13 @@
 <!--
 ==================================================
 ==================================================
-          Question Option
+          Question media + Answer media
 ==================================================
 ==================================================
 -->
 
 <!-- Overlay box -- w -- edit media -->
-  <div class="box-overlay media-uploader">
+  <div class="box-overlay media-uploader media-imgvid-uploader">
     <!--
     ++++++++++++++++++++++++++++++++++++
     Box Overlay
@@ -309,7 +315,22 @@
           <span>Preview</span>
         </div>
         <div class="preview-media-part media-im-vid">
-          <div class="media-x-preview"></div>
+          <div class="media-x-preview">
+            <!-- No Media Cases -->
+            <div ng:if="question_media == null" ng:click="show_media_uploader('question_media_type')"  style="background-image:url(~>>server_ip<<~img/media-icon.png)"  class="media-changeable media-changeable-img-case has-no-media">
+                There are no any media !
+            </div>
+
+            <!-- Media Cases -->
+            <div ng:if="question_media != null" class="media-changeable media-changeable-img-case">
+                <!-- Case it an image -->
+                <div ng:if="question_media.media_type == 0" style="background-image:url(~>>server_ip+question_media.media_field<<~)" class="image-case img_"></div>
+                <!-- Case it Video -->
+                <div ng:if="question_media.media_type == 1" class="video_box"></div>
+                <!-- Add New -->
+                <span  ng:click="show_media_uploader('question_media_type')"  class="edit-preview-media"> <i class="fa fa-pencil"></i> Edit and Preview</span>
+            </div>
+          </div>
         </div>
         <div class="preview-media-part butns-part">
           <button ng:click="close_media_box()" class="btn btn-danger btn-close-media" type="button" name="button">
