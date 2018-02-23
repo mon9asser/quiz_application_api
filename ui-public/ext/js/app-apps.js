@@ -729,12 +729,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     // =====================================> Edit in array
     var taget_question = $scope.questions_list.find($scope.callback_index);
     // console.log("This Question For Edit !!");
-    if(taget_question.answers_format.length > 1){
-      $scope.indexes = taget_question.answers_format.length ;
+    if(taget_question.answers_format.length > 1) {
+       $scope.indexes = taget_question.answers_format.length ;
     }
-
-
-
     //---------------------------------------
     // setup data of question into ui design
     //---------------------------------------
@@ -746,7 +743,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.question_type = taget_question.question_type;
     $scope.question_media = taget_question.media_question ;
     // 2- answers
-    $scope.asnwers = taget_question.answers_format
+    $scope.asnwers = taget_question.answers_format;
     // alert($scope.enable_description);
     // 3 Question settings
     $scope.question_settings = {
@@ -756,7 +753,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       super_size         : taget_question.answer_settings.super_size
     }
     // 4 Question Media
-    $scope.loading_sources_into_iframes();
+
   }; // edit curr question
 
 
@@ -1241,14 +1238,14 @@ $scope.save_media_with = function (action_type) {
 // ==================================
 $scope.loading_sources_into_iframes = function (){
   if($scope.question_media.media_type != 0 ){
-  var videoEleme = document.getElementsByClassName('video_')[0];
-  var video_box = document.getElementsByClassName("video_box")[0];
+    var videoEleme = document.getElementsByClassName('video_')[0];
+    var video_box = document.getElementsByClassName("video_box")[0];
 
-  var iframeV = '<iframe src="'+$scope.question_media.video_source+'" width="100%" height="120px"></iframe>';
-  var iframec = '<iframe src="'+$scope.question_media.video_source+'" width="100%" height="250px"></iframe>';
-   videoEleme.innerHTML = iframeV;
-   video_box.innerHTML = iframec;
-   }
+    var iframeV = '<iframe src="'+$scope.question_media.video_source+'" width="100%" height="120px"></iframe>';
+    var iframec = '<iframe src="'+$scope.question_media.video_source+'" width="100%" height="250px"></iframe>';
+    videoEleme.innerHTML = iframeV;
+    video_box.innerHTML = iframec;
+  }
 };
 
 }]);

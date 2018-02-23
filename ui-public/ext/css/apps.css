@@ -440,7 +440,7 @@ textarea.form-control {
 .media-changeable {
     min-height: 114px;
     background: #eee;
-    height: 250px;
+    height: 85px;
     border: 10px;
     position: relative;
     overflow: hidden;
