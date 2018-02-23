@@ -46,7 +46,14 @@
             <!-- Case it an image -->
             <div ng:if="question_media.media_type == 0" style="background-image:url(~>>server_ip+question_media.media_field<<~)" class="image-case img_"></div>
             <!-- Case it Video -->
-            <div ng:if="question_media.media_type == 1" class="video_"></div>
+            <div ng:if="question_media.media_type == 1" class="video_">
+              <!-- Case It Youtube -->
+              <div ng:if="question_media.video_type == 0" style="background-image:url('~>>server_ip<<~img/vid-youtube.jpg')" class="image-case img_"></div>
+              <!-- Case It Vimeo -->
+              <div ng:if="question_media.video_type == 1" style="background-image:url('~>>server_ip<<~img/vid-vimeo.jpg')" class="image-case img_"></div>
+              <!-- Case It mp4 -->
+              <div ng:if="question_media.video_type == 2" style="background-image:url('~>>server_ip<<~img/vid-mp4.jpg')" class="image-case img_"></div>
+            </div>
             <!-- Add New -->
 
             <span  ng:click="show_media_uploader('question_media_type')"  class="edit-preview-media"> <i class="fa fa-pencil"></i> Edit and Preview</span>
@@ -316,20 +323,7 @@
         </div>
         <div class="preview-media-part media-im-vid">
           <div class="media-x-preview">
-            <!-- No Media Cases -->
-            <div ng:if="question_media == null" ng:click="show_media_uploader('question_media_type')"  style="background-image:url(~>>server_ip<<~img/media-icon.png)"  class="media-changeable media-changeable-img-case has-no-media">
-                There are no any media !
-            </div>
-
-            <!-- Media Cases -->
-            <div ng:if="question_media != null" class="media-changeable media-changeable-img-case">
-                <!-- Case it an image -->
-                <div ng:if="question_media.media_type == 0" style="background-image:url(~>>server_ip+question_media.media_field<<~)" class="image-case img_"></div>
-                <!-- Case it Video -->
-                <div ng:if="question_media.media_type == 1" class="video_box"></div>
-                <!-- Add New -->
-                <span  ng:click="show_media_uploader('question_media_type')"  class="edit-preview-media"> <i class="fa fa-pencil"></i> Edit and Preview</span>
-            </div>
+              Thie area to retrieve media part related this question  
           </div>
         </div>
         <div class="preview-media-part butns-part">
