@@ -26,7 +26,20 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   $scope.questionIndex = null ;
   $scope.current_video_id = "xdV4jPeXb4k";
   $scope.change_media_link_by_system = true ;
-  $scope.current_answer_id = null ;
+
+  //--------------------------------------------------------
+  // ==>  Callback Finder
+  //--------------------------------------------------------
+  $scope.question_id = null ;
+  $scope.question_media = null ;
+  $scope.callback_index = function (object){
+    return object._id == $scope.question_id ;
+  };
+
+  $scope.answer_id = null ;
+  $scope.callback_answer_index = function (object){
+    return object._id == $scope.answer_id ;
+  };
   $scope.file_object = {
     "media_type" : null ,
     "file"       : null ,
@@ -37,8 +50,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       $scope.model_type = "questions";
     else
       $scope.model_type = "answers";
-
-
       // =============================================
       // ================>> Storing media uploader
       // =============================================
@@ -94,17 +105,22 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                         }
     }else if ($scope.model_type == "answers"){
       // fill current answer id
-      $scope.current_answer_id = answer_id ;
+      $scope.answer_id = answer_id ;
       // set it with empty values
       //-------------------------
       media_block.html('');
       show_media_link.val('') ;
 
-      //====>> current answer id
+      // ====>> current answer id
+      var target_question = $scope.questions_list.find($scope.callback_index);
+      var target_answer = target_question.answers_format.find($scope.callback_answer_index);
 
-      // ========> Show values related this part
-      console.log($scope.file_object);
-      alert("Answer media uploader !! " + answer_id);
+      // console.log('Answer Details');
+      // console.log(target_answer);
+      // console.log(">>>-----*************************----<<<");
+      // // ========> Show values related this part
+      // console.log($scope.file_object);
+      // alert("Answer media uploader !! " + answer_id);
     }
 
     //media_for_model =>  media for question or answer ??
@@ -156,21 +172,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       }
   }
 
-
-
-  //--------------------------------------------------------
-  // ==>  Callback Finder
-  //--------------------------------------------------------
-  $scope.question_id = null ;
-  $scope.question_media = null ;
-  $scope.callback_index = function (object){
-    return object._id == $scope.question_id ;
-  };
-
-  $scope.answer_id = null ;
-  $scope.callback_answer_index = function (object){
-    return object._id == $scope.answer_id ;
-  };
 
 
 
@@ -957,7 +958,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   $scope.question_answer_deletion = function (answer_id){
     // ==> This Answer
     $scope.answer_id = answer_id ;
-    var question_selected = $scope.questions_list.find($scope.callback_index);
+    var question_selected = $scope.questions_list.find($scope.callback_index); //heeer
     var answer_selected = question_selected.answers_format.find($scope.callback_answer_index);
 
     // let's excute our func here
@@ -1381,9 +1382,9 @@ if($scope.model_type == 'questions'){
 } else {
   /*
       $scope.question_id
-      $scope.current_answer_id
+      $scope.answer_id
   */
-  if($scope.current_answer_id != null ){
+  if($scope.answer_id != null ){
       alert("Answer Media Uploader (Saving !!) " );
   }
   // ==>>> Save and show media related answer part
