@@ -20,20 +20,96 @@ apps.filter('this_chars_only' , [
 // ==> Main Controller
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
 
-  $scope.show_media_uploader = function (media_for_model){
-    //media_for_model =>  media for question or answer ??
-    $(".media-imgvid-uploader").fadeIn();
-  };
 
+  $scope.model_type = null ;
   $scope.drag_drop_status = true ;
   $scope.questionIndex = null ;
   $scope.current_video_id = "xdV4jPeXb4k";
+  $scope.change_media_link_by_system = true ;
+  $scope.current_answer_id = null ;
   $scope.file_object = {
     "media_type" : null ,
     "file"       : null ,
     "link"       : null
   }
+  $scope.show_media_uploader = function (media_for_model , answer_id = null){
+    if(media_for_model == "question_media_type")
+      $scope.model_type = "questions";
+    else
+      $scope.model_type = "answers";
 
+
+      // =============================================
+      // ================>> Storing media uploader
+      // =============================================
+      var media_block = $(".media-x-preview"); // => preview div
+      var show_media_link = $(".show_media_link"); // => input
+
+      if($scope.model_type == "questions"){ // ==> This type is question media uploader
+                        /*Default all elements should be empty*/
+                        media_block.html('');
+                        show_media_link.val('') ;
+                        show_media_link.css("display","none");
+                        /*show media in ui*/
+
+                        if($scope.question_media == undefined || $scope.question_media == null) {
+                          var no_media = "<b class='no-media'>There is no media ! </b>"
+                          media_block.html(no_media);
+                        }else {
+                            show_media_link.css("display","block");
+                            var iframe = "<iframe width='100%' height='250px'></iframe>";
+                            var image  = "<div class ='show-image'></div>";
+                            var mp4    = '<video width="100%" height="auto" controls>' +
+                                            '<source src="'+$scope.question_media.media_field+'.mp4" type="video/mp4">'+
+                                            '<source src="'+$scope.question_media.media_field+'.ogg" type="video/ogg">'+
+                                            'Your browser does not support the video tag.' +
+                                          '</video>' ;
+
+                            // image
+                            if($scope.question_media.media_type == 0 ) {
+                              media_block.html(image);
+                              show_media_link.val($scope.server_ip + $scope.question_media.media_field);
+                                media_block.find('div').css({
+                                  "background-image":"url('"+$scope.server_ip + $scope.question_media.media_field +"')"
+                                });
+                            }
+                            if($scope.question_media.media_type == 1 ) {
+                              media_block.html(iframe);
+                              show_media_link.val($scope.question_media.media_name);
+                              // youtube or vimeo
+                              if($scope.question_media.video_type == 0 || $scope.question_media.video_type == 1)
+                                media_block.find('iframe').attr("src" , $scope.question_media.video_source);
+                              // mp4
+                              if( $scope.question_media.video_type == 2 ) {
+                                media_block.html(mp4)
+                              }
+
+                              $timeout(function(){
+                                // styling vimeo
+                                if ($scope.question_media.video_type == 1 ){
+                                  console.log(  media_block.find('iframe').html());
+                                }
+                              } , 3000 );
+                            }
+                        }
+    }else if ($scope.model_type == "answers"){
+      // fill current answer id
+      $scope.current_answer_id = answer_id ;
+      // set it with empty values
+      //-------------------------
+      media_block.html('');
+      show_media_link.val('') ;
+
+      //====>> current answer id
+
+      // ========> Show values related this part
+      console.log($scope.file_object);
+      alert("Answer media uploader !! " + answer_id);
+    }
+
+    //media_for_model =>  media for question or answer ??
+    $(".media-imgvid-uploader").fadeIn();
+  };
   // ==============================
   // ================+>> Application Settings
   // -------------------------------------
@@ -718,7 +794,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         is_randomized          : taget_question.answer_settings.is_randomized ,
         super_size         : taget_question.answer_settings.super_size
       }
-    // 5 ==> box overlay ( show media part )
+      // 5 ==> box overlay ( show media part )
       var media_block = $(".media-x-preview"); // => preview div
       var show_media_link = $(".show_media_link"); // => input
       /*Default all elements should be empty*/
@@ -726,7 +802,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       show_media_link.val('') ;
       show_media_link.css("display","none");
       /*show media in ui*/
-      console.log($scope.question_media);
+
       if($scope.question_media == undefined || $scope.question_media == null) {
         var no_media = "<b class='no-media'>There is no media ! </b>"
         media_block.html(no_media);
@@ -734,6 +810,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           show_media_link.css("display","block");
           var iframe = "<iframe width='100%' height='250px'></iframe>";
           var image  = "<div class ='show-image'></div>";
+          var mp4    = '<video width="100%" height="auto" controls>' +
+                          '<source src="'+$scope.question_media.media_field+'.mp4" type="video/mp4">'+
+                          '<source src="'+$scope.question_media.media_field+'.ogg" type="video/ogg">'+
+                          'Your browser does not support the video tag.' +
+                        '</video>' ;
 
           // image
           if($scope.question_media.media_type == 0 ) {
@@ -750,8 +831,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             // youtube or vimeo
             if($scope.question_media.video_type == 0 || $scope.question_media.video_type == 1)
               media_block.find('iframe').attr("src" , $scope.question_media.video_source);
-
             // mp4
+            if( $scope.question_media.video_type == 2 ) {
+              media_block.html(mp4)
+            }
+
+
           }
 
 
@@ -1129,7 +1214,29 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 // =========================================================
 // =====================> Media Uploader
 // =================================================
+//* Detect video type that written in input */
+$(".show_media_link").on("change keyup keydown keypress", function (){
+    var currentValue =$(this).val();
 
+    $scope.change_media_link_by_system = false;
+    if($scope.change_media_link_by_system == false ){
+      // case it image => decline this  !
+
+      // case it youtube
+      if( currentValue.toLowerCase().includes("youtube")    == true ){
+        $scope.file_object['media_type'] = 1 ;
+      }
+      // case it vimeo
+      if( currentValue.toLowerCase().includes("vimeo")    == true ){
+        $scope.file_object['media_type'] = 1 ;
+      }
+      // case it mp4
+      if( currentValue.toLowerCase().includes(".mp4")    == true ){
+        $scope.file_object['media_type'] = 1 ;
+      }
+    } // else => means this is changed by system
+
+});
 /* Video Handler part */
 $scope.video_handler = $(".video-handler");
 $scope.video_handler.on("click",function(){
@@ -1198,6 +1305,7 @@ $scope.close_media_box = function (){
 
 $scope.save_media_with = function (action_type) {
 
+if($scope.model_type == 'questions'){
   // LOADING PAGE
   var loader = '<div class="media-loader-spinner"><div class="spinner">'+
                   '<div class="rect1"></div>'+
@@ -1221,7 +1329,8 @@ $scope.save_media_with = function (action_type) {
   var targetIndex = $scope.questions_list.indexOf(found_qs);
   // found_qs.media_question.media_name = " this is an update to see what happened in angular backend";
   var headers = new Object();
-
+  var data_object ;
+  console.log("media type " + $scope.file_object.media_type);
   if($scope.file_object.media_type == 0 ) {// Image
       data_object = new FormData();
       data_object.append("creator_id" , $scope.user_id );
@@ -1235,11 +1344,13 @@ $scope.save_media_with = function (action_type) {
     data_object['question_id'] =  $scope.question_id ;
     data_object['media_field'] =  $scope.file_object.link ;
   }
-
+  console.log(data_object);
    $.getJSON( $scope.json_apk_file , function (api_key_data ){
     headers["X-api-keys"] = api_key_data.API_KEY ;
     headers["X-api-app-name"] = api_key_data.APP_NAME ;
 
+    console.log("user ids ");
+    console.log(data_object);
       $http({
         method : "PATCH" ,
         url : $scope.api_url_edit_question ,
@@ -1250,6 +1361,8 @@ $scope.save_media_with = function (action_type) {
       }).then(function(success_data){    // console.log($scope.questions_list);
         var question_data = success_data.data ;
         var media_question_url = question_data.Media_directory;
+        console.log('------------------------------------------------------');
+        console.log(question_data);
         var question_media_details = question_data.Question_details.media_question;
         found_qs.media_question = question_media_details ;
 
@@ -1265,23 +1378,18 @@ $scope.save_media_with = function (action_type) {
         console.log(error_data);
       });
   });
-
+} else {
+  /*
+      $scope.question_id
+      $scope.current_answer_id
+  */
+  if($scope.current_answer_id != null ){
+      alert("Answer Media Uploader (Saving !!) " );
+  }
+  // ==>>> Save and show media related answer part
+}
 
 };
 
-// ==================================
-// ==> loading src into iframes
-// ==================================
-// $scope.loading_sources_into_iframes = function (){
-//   if($scope.question_media.media_type != 0 ){
-//     var videoEleme = document.getElementsByClassName('video_')[0];
-//     var video_box = document.getElementsByClassName("video_box")[0];
-//
-//     var iframeV = '<iframe src="'+$scope.question_media.video_source+'" width="100%" height="120px"></iframe>';
-//     var iframec = '<iframe src="'+$scope.question_media.video_source+'" width="100%" height="250px"></iframe>';
-//     videoEleme.innerHTML = iframeV;
-//     video_box.innerHTML = iframec;
-//   }
-// };
 
 }]);
