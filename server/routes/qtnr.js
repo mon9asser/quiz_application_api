@@ -1959,7 +1959,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                 }
                 if(req.body.media_src != null || req.file != null){
 
-                      if(!answerArgs[answerIndex].media_optional)
+                      if(!answerArgs[answerIndex].media_optional || answerArgs[answerIndex].media_optional == undefined )
                         answerArgs[answerIndex].media_optional = new Object();
 
                         if(req.file != null ){ // Image
@@ -1979,6 +1979,10 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                             });
                           }
                        }else { // Video
+
+                         if( answerArgs[answerIndex].media_optional == null ||  answerArgs[answerIndex].media_optional == undefined )
+                          answerArgs[answerIndex].media_optional = new Object();
+
                            answerArgs[answerIndex].media_optional["Media_directory"] = req.body.media_src ;
                            answerArgs[answerIndex].media_optional["media_type"] = 1;
                            answerArgs[answerIndex].media_optional["media_name"] = req.body.media_src ;
@@ -2015,11 +2019,17 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                             var media_mp4 = req.body.media_src.substring(0, req.body.media_src.lastIndexOf('.'));
 
                               // question_tag ["media_question"]["media_src"] = media_mp4 ;
+                            if(answerArgs[answerIndex].media_optional == undefined || answerArgs[answerIndex].media_optional == null )
+                            answerArgs[answerIndex].media_optional = new Object();
 
                             answerArgs[answerIndex].media_optional["mp4_option"] = new Object() ;
                             answerArgs[answerIndex].media_optional["mp4_option"]["mp4_url"] = media_mp4 + '.mp4'
                             answerArgs[answerIndex].media_optional["mp4_option"]["ogg_url"] = media_mp4 + '.ogg'
                           }
+
+                          if(answerArgs[answerIndex].media_optional == undefined || answerArgs[answerIndex].media_optional == null )
+                          answerArgs[answerIndex].media_optional = new Object();
+
 
                            // store new values
                            answerArgs[answerIndex].media_optional["video_id"]   =  videoId ;
@@ -2034,6 +2044,10 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                 }
                 //-------------------------------------
               }
+              console.log("+++>>>+++>>> {-----} <<<<+++<<<++++");
+              console.log(answerArgs);
+              console.log("+++>>>+++>>> {-----} <<<<+++<<<++++");
+              
               // => media_choices
               if(question_type == 1) {
                 //-------------------------------------> Updated part
