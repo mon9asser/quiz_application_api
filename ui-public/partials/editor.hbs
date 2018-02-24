@@ -82,7 +82,7 @@
         <div class="multi-answers-part">
           <ul class="choices-part">
 
-            <li ng:class="answer_value.is_correct == true ? 'highlighted-right-answers' : ''" ng:repeat="(answer_key , answer_value) in asnwers">
+            <li class="answers_x" data-answer-id="answer_id_~>>answer_value._id<<~" data-answer-index="~>>$index<<~"  ng:class="answer_value.is_correct == true ? 'highlighted-right-answers' : ''" ng:repeat="(answer_key , answer_value) in asnwers">
 
               <!-- text options value -->
                <div ng:if="question_type == 0" class="">
@@ -105,6 +105,15 @@
                  </ul>
                  <div class="text-answers">
                    <input class="writanswer-input" type="text" name="" ng:model="answer_value.value">
+                   <div ng:if="answer_value.media_optional != null" class="media-options">
+                     <!-- Case it an image -->
+                     <div ng:if="answer_value.media_optional.media_type == 0" style="background-image:url('~>>server_ip+answer_value.media_optional.media_src<<~')"  class="image_case"></div>
+                     <!-- Case it Video -->
+                     <div ng-bind-html="answer_value.media_optional | set_iframe" ng:if="answer_value.media_optional.media_type == 1"  class="video_case answer_video_case">
+                        <!-- Append answer media here -->
+                        Loading Media
+                     </div>
+                   </div>
                  </div>
                </div>
 

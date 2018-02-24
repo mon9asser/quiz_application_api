@@ -1,5 +1,40 @@
 // ==> 25 chars for each databinding
 
+apps.filter("set_iframe" , [
+      "$timeout" ,"$sce" ,
+  function (  $timeout , $sce){
+    return function (media_object){ // media_object.embed_path
+
+      var embed_video ;
+      switch (media_object.media_type) {
+
+        case 1:
+
+          if( media_object.video_type == 0 ){
+            embed_video = "<iframe src='"+media_object.embed_path+"' width='100%' height='140px'></iframe>";
+          }
+          if( media_object.video_type == 1 ){
+            embed_video = "<iframe src='"+media_object.embed_path+"' width='100%' height='140px'></iframe>";
+          }
+          if( media_object.video_type == 2 ){
+            embed_video = '<video width="100%" height="auto" controls>' +
+                          '<source src="'+media_object.mp4_option.mp4_url+'" type="video/mp4">'+
+                          '<source src="'+media_object.mp4_option.ogg_url+'" type="video/ogg">'+
+                          'Your browser does not support the video tag.' +
+                        '</video>';
+          }
+
+        break;
+
+      }
+
+          return $sce.trustAsHtml(embed_video) ;
+
+
+    };
+  }
+]);
+
 
 apps.filter('this_chars_only' , [
   function (){
@@ -26,7 +61,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   $scope.questionIndex = null ;
   $scope.current_video_id = "xdV4jPeXb4k";
   $scope.change_media_link_by_system = true ;
-
+  $scope.answer_media = null ;
   //--------------------------------------------------------
   // ==>  Callback Finder
   //--------------------------------------------------------
@@ -788,6 +823,15 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
      $scope.question_media = taget_question.media_question ;
      // 3 ==> answer part
      $scope.asnwers = taget_question.answers_format;
+      //  $timeout(function(){
+      //    // retrieve answers w media
+      //    var answer_containers = $('.choices-part').children("li");
+      //    answer_containers.each(function(i){
+      //      var thisAns = $(this);
+      //      s
+      //    });
+      //  } , 300 );
+
      // 4 ==> question setting
      $scope.question_settings = {
         is_required           : taget_question.answer_settings.is_required ,
@@ -842,6 +886,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
 
       }
+
+
+
+
       // var cases = $scope.question_media.media_type
 
 
@@ -1305,8 +1353,6 @@ $scope.close_media_box = function (){
 }; // => beside qs Preview
 
 $scope.save_media_with = function (action_type) {
-
-if($scope.model_type == 'questions'){
   // LOADING PAGE
   var loader = '<div class="media-loader-spinner"><div class="spinner">'+
                   '<div class="rect1"></div>'+
@@ -1317,6 +1363,8 @@ if($scope.model_type == 'questions'){
                 '</div>' +
                 '<span class="title-loader">Please wait it may take a few moments</span></div>';
   $(".media-x-preview").html(loader);
+if($scope.model_type == 'questions'){
+
   // ==> END LOADER HERE !!
 
   // $scope.question_id = "5a8ea78a3a4c8d3a5c9a69e8"; // for testing only
@@ -1331,7 +1379,7 @@ if($scope.model_type == 'questions'){
   // found_qs.media_question.media_name = " this is an update to see what happened in angular backend";
   var headers = new Object();
   var data_object ;
-  console.log("media type " + $scope.file_object.media_type);
+  // console.log("media type " + $scope.file_object.media_type);
   if($scope.file_object.media_type == 0 ) {// Image
       data_object = new FormData();
       data_object.append("creator_id" , $scope.user_id );
@@ -1385,12 +1433,111 @@ if($scope.model_type == 'questions'){
       $scope.answer_id
   */
   if($scope.answer_id != null ){
-      alert("Answer Media Uploader (Saving !!) " );
+                                                  // api/{:app_id}/question/{:question_id}/answer/edit
+    $scope.api_url_edit_answer = $scope.server_ip + "api/"+$scope.app_id+"/question/"+$scope.question_id+"/answer/edit";
+    var headers = new Object();
+    var answer_object ;
+    // ====>> current answer id
+    var target_question = $scope.questions_list.find($scope.callback_index);
+    var target_answer = target_question.answers_format.find($scope.callback_answer_index);
+    $scope.question_id = target_question._id ;
+    if($scope.file_object.media_type == 0) {
+      answer_object = new FormData();
+      answer_object.append("creator_id" , $scope.user_id );
+      answer_object.append("question_id" , $scope.question_id );
+      answer_object.append("answer_id" , $scope.answer_id );
+      answer_object.append("media_src" , $scope.file_object.file );
+      headers["Content-Type"] = undefined ;
+    }else if($scope.file_object.media_type == 1) {
+      answer_object = new Object();
+      answer_object['creator_id']  =  $scope.user_id ;
+      answer_object['question_id'] =  $scope.question_id ;
+      answer_object['answer_id'] =  $scope.answer_id ;
+      answer_object['media_src'] =  $scope.file_object.link ;
+    }
+
+    $.getJSON( $scope.json_apk_file , function (api_key_data ){
+      headers["X-api-keys"] = api_key_data.API_KEY ;
+      headers["X-api-app-name"] = api_key_data.APP_NAME ;
+      // save question answers first into mongoDB
+      $scope.save_changes_in_angular_backend();
+      $timeout(function(){
+        // Sotre media
+          $http({
+            method : "PATCH" ,
+            url : $scope.api_url_edit_answer ,
+            headers: headers ,
+            processData: false,
+            contentType: false ,
+            data: answer_object
+          }).then(function(success_data){
+            var answer_data = success_data.data ;
+            var media_optional = answer_data.media_optional;
+            // Store it into question list array
+            target_answer.media_optional = answer_data.media_optional ;
+            // Store it into scope object
+            $scope.answer_media = target_answer.media_optional ;
+
+            if(action_type == "close"){
+              $scope.close_media_box();
+            }else if (action_type == "preview"){
+                $scope.extract_answer_media_from_mongodb();
+            }
+
+
+
+          }, function(error_data){
+              console.log(error_data);
+          });
+      } , 500);
+
+    });
   }
   // ==>>> Save and show media related answer part
 }
 
 };
+
+
+  $scope.extract_answer_media_from_mongodb = function (){
+    if($scope.answer_media == null ) {
+      console.log("Error : Answer Media Not Found !");
+      return false;
+    }
+     console.log($scope.answer_media);
+     var preview_box = $(".media-x-preview");
+     var media_iframe ;
+     $(".media-loader-spinner").fadeOut(2000);
+     switch ($scope.answer_media.media_type) {
+       // =====================================> Image
+       case 0 :
+       media_iframe = "<div style='background:url("+$scope.server_ip+$scope.answer_media.media_src+")' class='emb-image-case public-media'></div>" ;
+       break;
+       // =====================================> Video
+       case  1 :
+       if($scope.answer_media.video_type == 0)
+         {
+           media_iframe = '<iframe class="iframe" width="100%" src="'+$scope.answer_media.embed_path+'"    height="250px" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
+         }
+       if($scope.answer_media.video_type == 1)
+         {
+           media_iframe = '<iframe class="iframe" width="100%" src="'+$scope.answer_media.embed_path+'"    height="250px" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
+         }
+       if($scope.answer_media.video_type == 2)
+        {
+          media_iframe = '<video width="100%" height="auto" controls>'
+             + '<source src="'+$scope.answer_media.mp4_option.mp4_url+'" type="video/mp4">'
+             + '<source src="'+$scope.answer_media.mp4_option.ogg_url+'" type="video/ogg">'
+             + 'Your browser does not support the video tag.'
+             + '</video>'
+        }
+       break;
+
+
+     }
+     preview_box.html(media_iframe);
+  } ; // end extract func here !
+
 
 
 }]);
