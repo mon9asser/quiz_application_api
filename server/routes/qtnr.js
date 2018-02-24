@@ -1240,6 +1240,257 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
   });
 
 });
+// ==> Update answer
+qtnrRouters.patch("/:app_id/question/:question_id/answer/media/edit" , question_answer_images.single("media_src") ,  auth_verify_api_keys , (req , res)=>{
+  var question_id = req.params.question_id;
+   var user = req.verified_user;
+   var userType = req.is_creator;
+
+   var app_id = req.params.app_id;
+
+   // this user should be a creator user !
+   if (userType != 1) {
+       return new Promise((resolve, reject) => {
+           res.status(401).send(notes.Warnings.Permission_Warning);
+       });
+   }
+
+   qtnr.findOne({_id: app_id} , (err, docs)=>{
+     if (!docs || err) {
+        return new Promise((resolve, reject) => {
+          res.status(404).send(notes.Errors.Error_Doesnt_exists("Application"));
+        });
+      }
+   }).then((qtnairsDocument) => {
+     var questionnaire_results;
+     if (!qtnairsDocument) {
+            return new Promise((resolve, reject) => {
+                res.status(404).send(notes.Errors.Error_Doesnt_exists("Application"));
+            });
+        }
+
+        if (qtnairsDocument.creator_id != user.id) {
+            return new Promise((resolve, reject) => {
+                res.send(notes.Warnings.Permission_Warning);
+            });
+        }
+
+        var questionIndex = _.findIndex(qtnairsDocument.questions, {
+            "id": question_id
+        });
+        if (questionIndex == -1) {
+            return new Promise((resolve, reject) => {
+                res.status(404).send(notes.Errors.Error_Doesnt_exists("Question"));
+            });
+        }
+
+        var question_type = qtnairsDocument.questions[questionIndex].question_type;
+        var question_answers = new Object();
+        if (!req.body.answer_id || req.body.answer_id == null) {
+                return new Promise((resolve, reject) => {
+                    res.send(notes.Messages.Required_Message("answer_id"))
+                });
+            }
+            var answer_id = req.body.answer_id;
+            var question_answers = qtnairsDocument.questions[questionIndex].answers_format;
+            //var answerss = _.filter(question_answers ,  x => x._id == answer_id)
+            var answerArgs = qtnairsDocument.questions[questionIndex].answers_format;
+            var foundAnswer = false;
+            var answerIndex = '';
+            for (var i = 0; i < answerArgs.length; i++) {
+                if (answer_id == answerArgs[i]._id) {
+                    foundAnswer = true;
+                    answerIndex = i;
+                }
+            }
+            if (foundAnswer == false) {
+                return new Promise((resolve, reject) => {
+                    res.send(notes.Errors.Error_Doesnt_exists("Answer"));
+                });
+            }
+
+            var question_type = qtnairsDocument.questions[questionIndex].question_type;
+
+            if (req.body.is_correct != null)
+                answerArgs[answerIndex].is_correct = req.body.is_correct;
+
+
+
+      // ==============> 1 choices text
+       if (question_type == 0){
+         if (req.body.choices_value != null || !answerArgs[answerIndex].value)
+             answerArgs[answerIndex].value = req.body.choices_value;
+
+         if (req.file_status != "undefine" && req.file_status == false) {
+              return new Promise((resolve, reject) => {
+                        res.send(notes.Errors.Error_file_extension)
+              });
+         }
+
+         if (req.body.media_src != null || req.file != null) {
+            if (!answerArgs[answerIndex].media_optional)
+            answerArgs[answerIndex].media_optional = new Object();
+            // ==> Media part here
+            if (req.file != null) {
+              var imagePath = req.file.path;
+              var fileExtension = path.extname(req.file.filename);
+              var new_filename = "answer_text_" + answerArgs[answerIndex]._id + fileExtension;
+
+              var targetPath = "ui-public/themeimages/" + new_filename;
+              answerArgs[answerIndex].media_optional.media_type = 0;
+              answerArgs[answerIndex].media_optional.media_name = new_filename;
+              answerArgs[answerIndex].media_optional.media_src = "themeimages/" + new_filename;
+              answerArgs[answerIndex].media_optional.Media_directory = config.server_ip + "themeimages/" + new_filename;
+              if (fs.existsSync(imagePath)) {
+                  fs.rename(imagePath, targetPath, function(err) {
+                      console.log(err);
+                  });
+              }
+            }else {
+              var video = req.body.media_src;
+              var videoType = null;
+              var videoId = null;
+              var video_src_value = null;
+              if (video.toLowerCase().includes("youtube") == true) {
+                  videoType = 0; // => youtube
+                  var idWithLastSplit = video.lastIndexOf('?');
+                  var videos = video.substr(idWithLastSplit + 1);
+                  var lastId = videos.substr(0, videos.indexOf('&'));
+                  if (lastId != '' || lastId)
+                        videoId = lastId;
+                  else
+                        videoId = videos;
+
+                  var afterEqualChar = videoId.lastIndexOf('=');
+                  videoId = videoId.substring(afterEqualChar + 1);
+                  video_src_value = "http://youtube.com/embed/" + videoId;
+               } // end youtube
+               else if (video.includes("vimeo") == true) {
+                 videoType = 1; // => vimeo
+                 var n = video.lastIndexOf('/');
+                 videoId = video.substring(n + 1);
+                 video_src_value = "https://player.vimeo.com/video/" + videoId;
+               } // end vimeo
+               else if (video.includes(".mp4") == true){
+                 videoType = 2;
+                 videoId = null;
+                 var media_mp4 = req.body.media_src.substring(0, req.body.media_src.lastIndexOf('.'));
+                 answerArgs[answerIndex].media_optional["mp4_option"] = new Object();
+                 answerArgs[answerIndex].media_optional["mp4_option"]["mp4_url"] = media_mp4 + '.mp4';
+                 answerArgs[answerIndex].media_optional["mp4_option"]["ogg_url"] = media_mp4 + '.ogg';
+               }
+
+               answerArgs[answerIndex].media_optional.video_id = videoId;
+               answerArgs[answerIndex].media_optional.embed_path = video_src_value;
+               answerArgs[answerIndex].media_optional.video_type = videoType;
+            } // => End the video related text choices
+
+         }
+       }
+      // ==============> 2 Media Choices
+      if (question_type == 1){
+        if (req.body.choices_value != null || !answerArgs[answerIndex].value)
+                    answerArgs[answerIndex].value = req.body.choices_value;
+
+                if (req.file_status != "undefine" && req.file_status == false) {
+                    return new Promise((resolve, reject) => {
+                        res.send(notes.Errors.Error_file_extension)
+                    });
+                }
+                if (req.body.media_src != null || req.file != null) {
+                    if (req.file != null) { // Image
+                        var imagePath = req.file.path;
+                        var fileExtension = path.extname(req.file.filename);
+                        var new_filename = "answer_media_" + answerArgs[answerIndex]._id + fileExtension;
+
+                        var targetPath = "ui-public/themeimages/" + new_filename;
+                        answerArgs[answerIndex].media_type = 0;
+                        answerArgs[answerIndex].media_name = new_filename;
+                        answerArgs[answerIndex].media_src = "themeimages/" + new_filename;
+                        answerArgs[answerIndex].Media_directory = config.server_ip + "themeimages/" + new_filename;
+
+
+                        if (fs.existsSync(imagePath)) {
+                            fs.rename(imagePath, targetPath, function(err) {
+                                console.log(err);
+                            });
+                        }
+                    } else { // Video
+
+                        var video = req.body.media_src; // heeer
+                        var videoType = null;
+                        var videoId = null;
+                        var video_src_value = null;
+                        if (video.toLowerCase().includes("youtube") == true) {
+                            videoType = 0; // => youtube
+                            var idWithLastSplit = video.lastIndexOf('?');
+                            var videos = video.substr(idWithLastSplit + 1);
+                            var lastId = videos.substr(0, videos.indexOf('&'));
+
+                            if (lastId != '' || lastId)
+                                videoId = lastId;
+                            else
+                                videoId = videos;
+
+
+                            var afterEqualChar = videoId.lastIndexOf('=');
+                            videoId = videoId.substring(afterEqualChar + 1);
+                            video_src_value = "http://youtube.com/embed/" + videoId;
+
+                        } else if (video.includes("vimeo") == true) {
+                            videoType = 1; // => vimeo
+                            var n = video.lastIndexOf('/');
+                            videoId = video.substring(n + 1);
+                            video_src_value = "https://player.vimeo.com/video/" + videoId;;
+
+                        } else if (video.includes(".mp4") == true) {
+                            videoType = 2;
+                            videoId = null;
+
+                            var media_mp4 = req.body.media_src.substring(0, req.body.media_src.lastIndexOf('.'));
+
+                            // question_tag ["media_question"]["media_src"] = media_mp4 ;
+                            if(answerArgs[answerIndex]["mp4_option"]  == null || answerArgs[answerIndex]["mp4_option"]  == undefined)
+                            answerArgs[answerIndex]["mp4_option"] = new Object();
+
+                            answerArgs[answerIndex]["mp4_option"]["mp4_url"] = media_mp4 + '.mp4'
+                            answerArgs[answerIndex]["mp4_option"]["ogg_url"] = media_mp4 + '.ogg'
+                        }
+
+
+                        answerArgs[answerIndex]["Media_directory"] = req.body.media_src;
+                        answerArgs[answerIndex]["media_type"] = 1;
+                        answerArgs[answerIndex]["media_name"] = req.body.media_src;
+                        answerArgs[answerIndex]["media_src"] = req.body.media_src;
+
+                        // store new values
+                        answerArgs[answerIndex].video_id = videoId;
+
+                        answerArgs[answerIndex].embed_path = video_src_value;
+                        answerArgs[answerIndex].video_type = videoType;
+
+
+                    }
+                }
+      }
+      // ==============> 3
+      // ==============> 4
+      // ==============> 5
+
+      questionnaire_results = answerArgs[answerIndex];
+      qtnairsDocument.markModified("questions");
+        qtnairsDocument.save().then(() => {
+            res.send(questionnaire_results);
+        }).catch((err) => {
+            return new Promise((resolve, reject) => {
+                res.status(404).send({
+                    "error": notes.Errors.General_Error.error,
+                    "details": err.message
+                });
+            });
+      });
+   }); // end document here !
+});
 // Answers
 qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_answer_images.single("media_src") ,  auth_verify_api_keys , (req , res)=>{
   ///localhost:3000/api/5a1efcc61826bd398ecd4dee/question/5a1f0c5c0b6a6843735020b2/answer/create
@@ -1760,7 +2011,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                           }else if( video.includes(".mp4")  == true   ) {
                             videoType = 2 ;
                             videoId = null;
-
+                            video_src_value = null ;
                             var media_mp4 = req.body.media_src.substring(0, req.body.media_src.lastIndexOf('.'));
 
                               // question_tag ["media_question"]["media_src"] = media_mp4 ;
@@ -1775,49 +2026,8 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                            answerArgs[answerIndex].media_optional["embed_path"] =  video_src_value;
                            answerArgs[answerIndex].media_optional["video_type"] =  videoType ;
 
-                           // store video informatino
-                           var video =  req.body.media_src ; // heeer
-                           var videoType = null ;
-                           var videoId = null ;
-                           var video_src_value = null;
-
-                           if( video.toLowerCase().includes("youtube")    == true   ) {
-                            videoType = 0 ; // => youtube
-                            var idWithLastSplit = video.lastIndexOf('?');
-                            var videos = video.substr(idWithLastSplit + 1);
-                            var lastId = videos.substr(0, videos.indexOf('&'));
-
-                            if(lastId != '' || lastId )
-                              videoId = lastId ;
-                            else
-                              videoId = videos ;
 
 
-                            var afterEqualChar = videoId.lastIndexOf('=');
-                            videoId = videoId.substring(afterEqualChar + 1);
-                            video_src_value = "http://youtube.com/embed/"+ videoId ;
-                          }else if( video.includes("vimeo") == true   ) {
-
-                            videoType = 1 ; // => vimeo
-                            var n = video.lastIndexOf('/');
-                            videoId = video.substring(n + 1);
-                            video_src_value = "https://player.vimeo.com/video/"+ videoId;;
-                          }else if( video.includes(".mp4")  == true   ) {
-                            videoType = 2 ;
-                            videoId = null;
-                            console.log("MP4 ++++");
-                            var media_mp4 = req.body.media_src.substring(0, req.body.media_src.lastIndexOf('.'));
-
-                            // question_tag ["media_question"]["media_src"] = media_mp4 ;
-                            answerArgs[answerIndex].media_optional["mp4_option"] = new Object() ;
-                            answerArgs[answerIndex].media_optional["mp4_option"]["mp4_url"] = media_mp4 + '.mp4'
-                            answerArgs[answerIndex].media_optional["mp4_option"]["ogg_url"] = media_mp4 + '.ogg'
-                          }
-
-                          // store new values
-                           answerArgs[answerIndex].media_optional["video_id"]   =  videoId ;
-                           answerArgs[answerIndex].media_optional["embed_path"] =  video_src_value;
-                           answerArgs[answerIndex].media_optional["video_type"] =  videoType ;
                        }
 
 
