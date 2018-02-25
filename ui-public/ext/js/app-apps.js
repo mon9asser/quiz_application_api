@@ -162,7 +162,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       var target_answer = target_question.answers_format.find($scope.callback_answer_index);
 
 
-      if(target_answer.media_src  == "http://localhost:3000/img/media-icon.png" ){
+      if(target_answer.media_src  == $scope.server_ip + "img/media-icon.png" ){
         var no_media = "<b class='no-media'>There is no media ! </b>"
          media_block.html(no_media);
       }else {
@@ -1767,7 +1767,32 @@ if($scope.model_type == 'questions'){
 
 
 
-
+// ==============================================
+// ==============>>> Welcome | End Screens
+// ==============================================
+// $scope.sort_handlerxc = document.getElementById("appMessages");
+// Sortable.create($scope.sort_handlerxc , {
+//   ghostClass: 'shadow_element' ,
+//   group: "message-list" ,
+//   disabled: false ,
+//   onStart : function (evt){
+//
+//    //  console.log(evt.item);
+//    // var targetEl = $(evt.item).hasClass("draggable-x");
+//   }
+// });
+//
+//
+// $scope.sort_handler3 = document.getElementById("msg-list");
+// Sortable.create($scope.sort_handler3 , {
+//     ghostClass: 'shadow_element' ,
+//     sort: false,
+//     group: {
+//        name: "message-list",
+//        pull: "clone",
+//        revertClone: false,
+//     }
+// });
 
 
 
