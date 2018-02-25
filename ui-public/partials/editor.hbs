@@ -17,21 +17,26 @@
           <div class="text-formats">
             <ul>
               <li>
-                <span class="fa fa-bold"></span>
+                <span ng:click="text_bold_option(questionIndex)" class="fa fa-bold"></span>
               </li>
               <li>
-                <span class="fa fa-italic"></span>
+                <span ng:click="text_italic_option(questionIndex)" class="fa fa-italic"></span>
               </li>
               <li>
-                <span class="fa fa-underline"></span>
+                <span ng:click="text_underline_option(questionIndex)" class="fa fa-underline"></span>
               </li>
               <li>
-                <span class="fa fa-link"></span>
+                <span ng:click="text_anchor_option(questionIndex)" class="fa fa-link"></span>
+              </li>
+
+              <li class="ri">
+                <input id="text-anchor-link" type="text" name="" value="">
+                <i ng:click="save_text_anchor_option(questionIndex)"  style="margin-left:2px; cursor:pointer;" class="fa fa-check"></i>
               </li>
             </ul>
           </div>
-
-          <textarea ng:model="questions_list[questionIndex].question_body" id="editor-question-body" placeholder="Question Title ? " class="form-control quest-title-edit textarea-qs" rows="3"></textarea>
+          <!--  ng:model="questions_list[questionIndex].question_body" -->
+          <textarea  ng:model="questions_list[questionIndex].question_body"  id="editor-question-body" placeholder="Question Title ? " class="form-control quest-title-edit textarea-qs" rows="3"></textarea>
 
 
         </div>

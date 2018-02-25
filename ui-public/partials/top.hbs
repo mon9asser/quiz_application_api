@@ -9,9 +9,19 @@
        ++ Basics js frameworks
       ++++++++++++++++++++++++++++++++
     -->
-    <!-- JS -->
+    <!-- JS {Frameworks}-->
+    <!-- public -->
     <script src="{{ server_ip }}ext/frameworks/js/jquery.min.js" charset="utf-8"></script>
     <script src="{{ server_ip }}ext/frameworks/js/angular.min.js" charset="utf-8"></script>
+    <!-- Jquery pack -->
+    <script ng:if="page_name=='api'" src="{{ server_ip }}ext/frameworks/js/jquery.pack.js" charset="utf-8"></script>
+
+
+    <!-- General App -->
+    <!-- text Selection -->
+    <script ng:if="page_name=='api'" src="{{ server_ip }}ext/js/app-selection.js" charset="utf-8"></script>
+
+
     <!-- Css -->
     <link href="{{ server_ip }}ext/frameworks/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ server_ip }}ext/frameworks/css/font-awesome.css" rel="stylesheet">
@@ -40,7 +50,7 @@
     <!-- Api Key Creation -->
     <link ng:if="page_name=='create_app'" href="{{ server_ip }}ext/css/api-key.css" rel="stylesheet">
 
-
+    
 
   </head>
   <body >

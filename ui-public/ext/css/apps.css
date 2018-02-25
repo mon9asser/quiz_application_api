@@ -432,6 +432,13 @@ textarea.form-control {
     cursor: pointer;
     font-size: 12px;
 }
+.text-formats > ul > li.ri {
+  float: right;
+  display: none;
+}
+.text-formats > ul > li > span:hover {
+  color: teal;
+}
 .media-changeable-img-case , .media-image-cases{
     background-position: center center !important;
     background-repeat: no-repeat !important;

@@ -1,5 +1,11 @@
-// ==> 25 chars for each databinding
 
+apps.filter ("apply_html" , [
+  '$sce' , function ($sce){
+    return function (text_changed){
+      return $sce.trustAsHtml(text_changed);
+    }
+  }
+]);
 apps.filter("set_iframe" , [
       "$timeout" ,"$sce" ,
   function (  $timeout , $sce){
@@ -38,10 +44,11 @@ apps.filter("set_iframe" , [
 
 
 apps.filter('this_chars_only' , [
-  function (){
+  '$sce' ,
+  function ($sce){
     return function (specs){
       var spesificChars = '' ;
-      var char_counts = 26 ;
+      var char_counts = 40 ;
       for (var i = 0; i < specs.length; i++) {
         if(i < char_counts) {
           spesificChars += specs[i];
@@ -49,7 +56,8 @@ apps.filter('this_chars_only' , [
             spesificChars += " ... ";
         }
       }
-       return spesificChars
+
+       return $sce.trustAsHtml(spesificChars);
     }
   }
 ]);
@@ -63,6 +71,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   $scope.current_video_id = "xdV4jPeXb4k";
   $scope.change_media_link_by_system = true ;
   $scope.answer_media = null ;
+  $scope.selected_text = null ;
   //--------------------------------------------------------
   // ==>  Callback Finder
   //--------------------------------------------------------
@@ -1627,6 +1636,138 @@ if($scope.model_type == 'questions'){
      }
      preview_box.html(media_iframe);
   } ; // end extract func here !
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /*
+  =========================================
+  ==========>>>>>> Text Options
+  =========================================
+  */
+  // --> Selected texts
+  $scope.show_selected_text = $("#editor-question-body");
+  $scope.show_selected_text.on("keyup mousedown mousemove mouseup" , function (e){
+    var range = $(this).getSelection();
+    $scope.selected_text = range.text ;
+  });
+
+  // --> Option ==> BOLD
+  $scope.text_bold_option = function (qsIndex){
+    var questionIndex = qsIndex ;
+     if (questionIndex == -1 )
+        return false ;
+
+     if($scope.selected_text == null || $scope.selected_text.length == 0 ){
+       alert("You didn't select text !");
+       return false ;
+     }
+
+     var bold_option = "<b>" + $scope.selected_text + "</b>" ;
+     $scope.questions_list[questionIndex].question_body = $scope.questions_list[questionIndex].question_body.replace(new RegExp($scope.selected_text , 'g'), bold_option);;
+
+  }
+
+
+
+
+
+    // --> Option ==> ITALIC
+    $scope.text_italic_option = function (qsIndex){
+      var questionIndex = qsIndex ;
+       if (questionIndex == -1 )
+          return false ;
+
+       if($scope.selected_text == null || $scope.selected_text.length == 0 ){
+         alert("You didn't select text !");
+         return false ;
+       }
+
+       var bold_option = "<i>" + $scope.selected_text + "</i>" ;
+       $scope.questions_list[questionIndex].question_body = $scope.questions_list[questionIndex].question_body.replace(new RegExp($scope.selected_text , 'g'), bold_option);;
+
+    }
+
+
+
+
+
+
+
+
+
+    // --> Option ==> ITALIC
+    $scope.text_underline_option = function (qsIndex){
+      var questionIndex = qsIndex ;
+       if (questionIndex == -1 )
+          return false ;
+
+       if($scope.selected_text == null || $scope.selected_text.length == 0 ){
+         alert("You didn't select text !");
+         return false ;
+       }
+
+       var bold_option = "<u>" + $scope.selected_text + "</u>" ;
+       $scope.questions_list[questionIndex].question_body = $scope.questions_list[questionIndex].question_body.replace(new RegExp($scope.selected_text , 'g'), bold_option);;
+
+    }
+
+
+
+
+
+    // --> Option ==> ANCHOR
+    $scope.text_anchor_option = function (qsIndex){
+      var questionIndex = qsIndex ;
+       if (questionIndex == -1 )
+          return false ;
+
+       if($scope.selected_text == null || $scope.selected_text.length == 0 ){
+         alert("You didn't select text !");
+         return false ;
+       }
+
+       $(".text-formats > ul > li.ri").css({"display":"inline"});
+       //.text-formats > ul > li.ri
+      //  var bold_option = "<u>" + $scope.selected_text + "</u>" ;
+      //  $scope.questions_list[questionIndex].question_body = $scope.questions_list[questionIndex].question_body.replace(new RegExp($scope.selected_text , 'g'), bold_option);;
+
+    };
+
+
+
+    $scope.save_text_anchor_option = function (qsIndex){
+       var questionIndex = qsIndex ;
+       if (questionIndex == -1 )
+          return false ;
+
+       if($scope.selected_text == null || $scope.selected_text.length == 0 ){
+         alert("You didn't select text !");
+         return false ;
+       }
+
+       $(".text-formats > ul > li.ri").css({"display":"none"});
+       var anchorVal = $("#text-anchor-link").val();
+       var  option = "<a href='"+anchorVal+"'>" + $scope.selected_text + "</a>" ;
+       $scope.questions_list[questionIndex].question_body = $scope.questions_list[questionIndex].question_body.replace(new RegExp($scope.selected_text , 'g'), option);;
+
+
+    };
+
+
+
+
+
+
 
 
 
