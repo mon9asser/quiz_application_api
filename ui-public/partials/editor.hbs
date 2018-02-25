@@ -67,27 +67,45 @@
 
 
       </div>
-      <div class="clearFix"> </div>
+
+    </div>
+  </li>
+
+
+
+
+
+
+
+
+
+
+
+  <li>
+    <div class="x-editor-x-title" data-toggle="#Description-pt">
+      Description
+    </div>
+    <div style="display:none;" class="x-editor-x-body" id="Description-pt">
+
       <div class="col-xs-12 col-md-12">
         <div class="row-cols margin-top">
-           <label class="titles-question description-enable-handler">
-              Description :  <input  type="checkbox" id="check_xx_data" class="switch_1 input-checkboxes enable-sc" ng:model="enable_description"> <!-- <input class="enbl-desc" id="enable_dex" type="checkbox" name="" value=""> -->
-           </label>
            <textarea ng:model="question_description" id="editor-question-desc" name="name" class="form-control descriptions description-field description-field-x" placeholder="Description ..." rows="3" cols="80"></textarea>
         </div>
       </div>
     </div>
   </li>
 
+
+
   <li>
     <div class="x-editor-x-title" data-toggle="#answers-pt">
       Answers
     </div>
-    <div style="display:block;" class="x-editor-x-body" id="answers-pt">
+    <div ststyle="display:none;"class="x-editor-x-body" id="answers-pt">
         <div class="multi-answers-part">
           <ul class="choices-part">
 
-            <li class="answers_x" data-answer-id="answer_id_~>>answer_value._id<<~" data-answer-index="~>>$index<<~"  ng:class="answer_value.is_correct == true ? 'highlighted-right-answers' : ''" ng:repeat="(answer_key , answer_value) in asnwers">
+            <li class="answers_x" ng:class="(question_settings.super_size == true) ? 'super-size' :''" data-answer-id="answer_id_~>>answer_value._id<<~" data-answer-index="~>>$index<<~"  ng:class="answer_value.is_correct == true ? 'highlighted-right-answers' : ''" ng:repeat="(answer_key , answer_value) in asnwers">
 
               <!-- text options value -->
                <div ng:if="question_type == 0" class="">
@@ -196,7 +214,7 @@
     <div class="x-editor-x-title" data-toggle="#Settings-pt">
       Question Settings
     </div>
-    <div class="x-editor-x-body" id="Settings-pt">
+    <div style="display:none;" class="x-editor-x-body" id="Settings-pt">
       <div class="col-sm-12">
         <div class="row-cols margin-top">
           <!-- <label class="titles-question"> Question Settings : </label> -->
@@ -220,7 +238,6 @@
                    </div>
                 </li>
                 <li>
-
                    <span class="title-checkbox">Randomize</span>
                    <div class="slideThree on-off-checkbox-settings">
                       <input ng:model="question_settings.is_randomized" type="checkbox" id="Randomize-option" name="check" checked="">
@@ -230,7 +247,7 @@
                 </li>
                 <li>
 
-                   <span class="title-checkbox">Super Size Media</span>
+                   <span class="title-checkbox">Super Size</span>
                    <div class="slideThree on-off-checkbox-settings">
                       <input ng:model="question_settings.super_size" type="checkbox"  id="SuperSize-option" name="check" checked="">
                       <label for="SuperSize-option"></label>

@@ -18,13 +18,13 @@ apps.filter("set_iframe" , [
         case 1:
 
           if( media_object.video_type == 0 ){
-            embed_video = "<iframe src='"+media_object.embed_path+"' width='100%' height='140px'></iframe>";
+            embed_video = "<iframe src='"+media_object.embed_path+"' ></iframe>";
           }
           if( media_object.video_type == 1 ){
-            embed_video = "<iframe src='"+media_object.embed_path+"' width='100%' height='140px'></iframe>";
+            embed_video = "<iframe src='"+media_object.embed_path+"' webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>";
           }
           if( media_object.video_type == 2 ){
-            embed_video = '<video width="100%" height="auto" controls>' +
+            embed_video = '<video controls>' +
                           '<source src="'+media_object.mp4_option.mp4_url+'" type="video/mp4">'+
                           '<source src="'+media_object.mp4_option.ogg_url+'" type="video/ogg">'+
                           'Your browser does not support the video tag.' +
@@ -72,6 +72,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   $scope.change_media_link_by_system = true ;
   $scope.answer_media = null ;
   $scope.selected_text = null ;
+  $scope.answer_old_status = null ;
   //--------------------------------------------------------
   // ==>  Callback Finder
   //--------------------------------------------------------
@@ -90,6 +91,24 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     "file"       : null ,
     "link"       : null
   }
+  $scope.randomize_arries = function (array) {
+      var currentIndex = array.length, temporaryValue, randomIndex;
+
+      // While there remain elements to shuffle...
+      while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+      }
+
+      return array;
+    } // end randomization
   $scope.show_media_uploader = function (media_for_model , answer_id = null  ){
 
     if(media_for_model == "question_media_type")
@@ -544,6 +563,29 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       var targetAll = $(".x-editor-x-body").height() ;
       var targetH = $(targetId).height() ;
       $(targetId).slideToggle();
+   });
+
+
+
+
+   //--------------------------------------------------------
+   // ==> Randomize Answers
+   //--------------------------------------------------------
+   $("#Randomize-option").on("change" , function (){
+      // $scope.answer_old_status;
+      //$scope.question_id
+      var found_qs = $scope.questions_list.find($scope.callback_index)
+      var questionInex = $scope.questions_list.indexOf(found_qs);
+      if(questionInex == -1)
+        return false ;
+
+      $scope.answer_old_status = $scope.questions_list[questionInex].answers_format;
+      var all_answers = $scope.questions_list[questionInex].answers_format;
+
+
+      $scope.questions_list[questionInex].answers_format = $scope.randomize_arries(all_answers);
+      $scope.save_changes_in_angular_backend();
+
    });
 
    //--------------------------------------------------------

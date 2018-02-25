@@ -1851,3 +1851,21 @@ iframe {
 .messages {
   margin-top: 0px;
 }
+
+
+/* ==> Supersize */
+.choices-part > li.super-size {
+  width: 95%;
+  height: auto;
+
+  /*-webkit-transition: width 0.5s linear ;
+  transition: width 0.5s linear ;
+  -moz-transition: width 0.5s linear ;*/
+}
+.player.super-size .vp-player-layout.super-size {
+  width: 100%;
+  left: 0px;
+}
+iframe.super-size{
+  width: 100%
+}
