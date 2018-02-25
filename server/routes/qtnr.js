@@ -1328,8 +1328,10 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/media/edit" , question_
          }
 
          if (req.body.media_src != null || req.file != null) {
-            if (!answerArgs[answerIndex].media_optional)
-            answerArgs[answerIndex].media_optional = new Object();
+
+            if ( answerArgs[answerIndex].media_optional )
+                answerArgs[answerIndex].media_optional = new Object();
+
             // ==> Media part here
             if (req.file != null) {
               var imagePath = req.file.path;
@@ -1347,6 +1349,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/media/edit" , question_
                   });
               }
             }else {
+
               var video = req.body.media_src;
               var videoType = null;
               var videoId = null;
@@ -2047,7 +2050,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
               console.log("+++>>>+++>>> {-----} <<<<+++<<<++++");
               console.log(answerArgs);
               console.log("+++>>>+++>>> {-----} <<<<+++<<<++++");
-              
+
               // => media_choices
               if(question_type == 1) {
                 //-------------------------------------> Updated part
@@ -2078,13 +2081,61 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                             });
                           }
                        }else { // Video
-                           answerArgs[answerIndex]["Media_directory"] = req.body.media_src ;
+
+                          var video =  req.body.media_src ; // heeer
+                          var videoType = null ;
+                          var videoId = null ;
+                          var video_src_value = null;
+
+                          if( video.toLowerCase().includes("youtube")    == true   ) {
+                            videoType = 0 ; // => youtube
+                            var idWithLastSplit = video.lastIndexOf('?');
+                            var videos = video.substr(idWithLastSplit + 1);
+                            var lastId = videos.substr(0, videos.indexOf('&'));
+
+                            if(lastId != '' || lastId )
+                              videoId = lastId ;
+                            else
+                              videoId = videos ;
+
+
+                            var afterEqualChar = videoId.lastIndexOf('=');
+                            videoId = videoId.substring(afterEqualChar + 1);
+                            video_src_value = "http://youtube.com/embed/"+ videoId ;
+                          }
+                          else if( video.includes("vimeo") == true   ) {
+
+                            videoType = 1 ; // => vimeo
+                            var n = video.lastIndexOf('/');
+                            videoId = video.substring(n + 1);
+                            video_src_value = "https://player.vimeo.com/video/"+ videoId;;
+                          }
+                          else if( video.includes(".mp4")  == true   ) {
+                            videoType = 2 ;
+                            videoId = null;
+                            console.log("MP4 ++++");
+                            var media_mp4 = req.body.media_src.substring(0, req.body.media_src.lastIndexOf('.'));
+
+                            // question_tag ["media_question"]["media_src"] = media_mp4 ;
+                            answerArgs[answerIndex].mp4_option = new Object() ;
+                            answerArgs[answerIndex].mp4_option["mp4_url"] = media_mp4 + '.mp4';
+                            answerArgs[answerIndex].mp4_option["ogg_url"] = media_mp4 + '.ogg';
+
+
+                          }
+
+                          answerArgs[answerIndex]["Media_directory"] = req.body.media_src ;
                            answerArgs[answerIndex]["media_type"] = 1;
                            answerArgs[answerIndex]["media_name"] = req.body.media_src ;
                            answerArgs[answerIndex]["media_src"] = req.body.media_src ;
+                           answerArgs[answerIndex]["video_id"] = videoId ;
+                           answerArgs[answerIndex]["video_type"] = videoType ;
+                           answerArgs[answerIndex]["embed_path"] = video_src_value ;
 
 
-
+                           console.log("----------------------");
+                           console.log(answerArgs[answerIndex]);
+                           console.log("----------------------");
                        }
                 }
                 //-------------------------------------

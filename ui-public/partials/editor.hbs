@@ -96,7 +96,7 @@
                    </li>
 
 
-                   <li ng:click="show_media_uploader('answers' ,  answer_value._id)" title="Edit it with media">
+                   <li ng:click="show_media_uploader('answers' ,  answer_value._id  )" title="Edit it with media">
                      <span class="fa fa-pencil edit-options-answer"></span>
                    </li>
                    <li ng:click="question_answer_deletion(answer_value._id)" title="Delete this answer">
@@ -125,6 +125,7 @@
 
                <!-- Media choices value -->
                 <div ng:if="question_type == 1" class="">
+
                   <ul class="answer-pt-controller ">
                     <li title="Make it Correct Answer">
                       <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
@@ -136,18 +137,26 @@
                       <span class="fa fa-trash"></span>
                     </li>
                   </ul>
+
                   <div class="text-answers">
-                    <div ng:if="answer_value.media_optional == null" style="background:url('~>>answer_value.media_src<<~')" class="media-answers">
-                      <div ng:if="answer_value.media_optional != null" class="media-options">
-                        <!-- Case it an image -->
-                        <div ng:if="answer_value.media_optional.media_type == 0" style="background-image:url('~>>server_ip+answer_value.media_optional.media_src<<~')"  class="image_case"></div>
-                        <!-- Case it Video -->
-                        <div ng-bind-html="answer_value | set_iframe" ng:if="answer_value.media_optional.media_type == 1"  class="video_case answer_video_case">
-                           <!-- Append answer media here -->
-                           Loading Media
+                    <div class="media-answers">
+                      <div class="media-options">
+                        <!-- ~>>answer_value<<~ -->
+                        <!-- Case it a defaultimage -->
+                        <div ng:if="answer_value.media_type == null" style="background-image:url('~>>answer_value.media_src<<~')"  class="image_case"></div>
+
+                        <div ng:if="answer_value.media_type != null" style="background-image:url('~>>answer_value.media_src<<~')"  class="image_case">
+                          <div ng:if="answer_value.media_type == 0" style="background-image:url('~>>server_ip + answer_value.media_src<<~')"  class="image_case"></div>
+
+                          <!-- Case it Video -->
+                          <div ng-bind-html="answer_value | set_iframe" ng:if="answer_value.media_type == 1"  class="video_case answer_video_case">
+                             <!-- Append answer media here -->
+                             Loading Media
+                          </div>
                         </div>
+
                       </div>
-                  </div>
+                    </div>
                   </div>
                 </div>
 

@@ -4,8 +4,9 @@ apps.filter("set_iframe" , [
       "$timeout" ,"$sce" ,
   function (  $timeout , $sce){
     return function (media_object){ // media_object.embed_path
-
+      // alert(media_object);
       var embed_video ;
+
       switch (media_object.media_type) {
 
         case 1:
@@ -55,7 +56,7 @@ apps.filter('this_chars_only' , [
 // ==> Main Controller
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
 
-
+  $scope.current_answer_index = null ;
   $scope.model_type = null ;
   $scope.drag_drop_status = true ;
   $scope.questionIndex = null ;
@@ -80,7 +81,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     "file"       : null ,
     "link"       : null
   }
-  $scope.show_media_uploader = function (media_for_model , answer_id = null){
+  $scope.show_media_uploader = function (media_for_model , answer_id = null  ){
+
     if(media_for_model == "question_media_type")
       $scope.model_type = "questions";
     else
@@ -138,18 +140,54 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                               } , 3000 );
                             }
                         }
-    }else if ($scope.model_type == "answers"){
+    } else if ($scope.model_type == "answers"){
       // fill current answer id
       $scope.answer_id = answer_id ;
       // set it with empty values
       //-------------------------
       media_block.html('');
       show_media_link.val('') ;
-
+      show_media_link.css("display","none");
       // ====>> current answer id
       var target_question = $scope.questions_list.find($scope.callback_index);
       var target_answer = target_question.answers_format.find($scope.callback_answer_index);
 
+
+      if(target_answer.media_src  == "http://localhost:3000/img/media-icon.png" ){
+        var no_media = "<b class='no-media'>There is no media ! </b>"
+         media_block.html(no_media);
+      }else {
+        show_media_link.css("display","block");
+        var iframe = "<iframe width='100%' height='250px'></iframe>";
+        var image  = "<div class ='show-image'></div>";
+
+        if(target_answer.media_type == 0 ) {
+          media_block.html(image);
+          show_media_link.val($scope.server_ip + target_answer.media_src);
+          media_block.find('div').css({
+              "background-image":"url('"+$scope.server_ip + target_answer.media_src +"')"
+          });
+        }
+        if(target_answer.media_type == 1 ) {
+            media_block.html(iframe);
+            show_media_link.val(target_answer.embed_path);
+            // youtube + vimeo
+        if(target_answer.video_type == 0 || target_answer.video_type == 1)
+            media_block.find('iframe').attr("src" , target_answer.embed_path);
+            // mp4
+        if( target_answer.video_type == 2 ) {
+          var mp4    = '<video width="100%" height="auto" controls>' +
+                          '<source src="'+target_answer.mp4_option.mp4_url+'" type="video/mp4">'+
+                          '<source src="'+target_answer.mp4_option.ogg_url+'" type="video/ogg">'+
+                          'Your browser does not support the video tag.' +
+                        '</video>' ;
+                        show_media_link.val(target_answer.mp4_option.mp4_url);
+            media_block.html(mp4)
+            }
+
+        }
+      }
+      console.log(target_answer);
       // console.log('Answer Details');
       // console.log(target_answer);
       // console.log(">>>-----*************************----<<<");
@@ -702,6 +740,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             answer_obj['value'] = 'Answer 1';
           }
           if(questionType == 1 ){
+            answer_obj['media_type'] = 0 ;
             answer_obj['media_src'] = $scope.server_ip + "img/media-icon.png";
           }
           if(questionType == 2 ){
@@ -996,7 +1035,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         new_answer['media_src'] = $scope.server_ip + "img/media-icon.png" ;
 
          question_selected.answers_format.push(new_answer);
-         console.log($scope.questions_list);
+
 
   };
 
@@ -1410,12 +1449,33 @@ if($scope.model_type == 'questions'){
       }).then(function(success_data){    // console.log($scope.questions_list);
         var question_data = success_data.data ;
         var media_question_url = question_data.Media_directory;
-        console.log('------------------------------------------------------');
-        console.log(question_data);
+
         var question_media_details = question_data.Question_details.media_question;
         found_qs.media_question = question_media_details ;
-
-
+        var media_type_is = found_qs.media_question.media_type ;
+        if( media_type_is == 0 ){ // image
+          $(".media-changeable-img-case").css({
+            "background-image" : "url('"+$scope.server_ip+found_qs.media_question.media_field +"')"
+          });
+        }
+        if( media_type_is == 1 ){ // image
+          var video_type = found_qs.media_question.video_type ;
+          if(video_type == 0 ) {
+            $(".media-changeable-img-case").css({
+              "background-image" : "url('"+$scope.server_ip+'img/vid-youtube.jpg' +"')"
+            });
+          }
+          if(video_type == 1 ){
+            $(".media-changeable-img-case").css({
+              "background-image" : "url('"+$scope.server_ip+'img/vid-vimeo.jpg' +"')"
+            });
+          }
+          if (video_type == 2 ){
+            $(".media-changeable-img-case").css({
+              "background-image" : "url('"+$scope.server_ip+'img/vid-mp4.jpg' +"')"
+            })
+          }
+        }
 
         // =========> Action Proccess
            if (action_type == "close")
@@ -1427,11 +1487,14 @@ if($scope.model_type == 'questions'){
         console.log(error_data);
       });
   });
+
+
 } else {
   /*
       $scope.question_id
       $scope.answer_id
   */
+
   if($scope.answer_id != null ){
                                                   // api/{:app_id}/question/{:question_id}/answer/edit
     $scope.api_url_edit_answer = $scope.server_ip + "api/"+$scope.app_id+"/question/"+$scope.question_id+"/answer/edit";
@@ -1471,12 +1534,39 @@ if($scope.model_type == 'questions'){
             contentType: false ,
             data: answer_object
           }).then(function(success_data){
-            var answer_data = success_data.data ;
-            var media_optional = answer_data.media_optional;
-            // Store it into question list array
-            target_answer.media_optional = answer_data.media_optional ;
-            // Store it into scope object
-            $scope.answer_media = target_answer.media_optional ;
+            if(target_question.question_type == 1){
+                var answer_data = success_data.data ;
+
+
+                // Store it into scope object
+                $scope.answer_media = answer_data ;
+                // Store it into Array
+                target_answer = answer_data ;
+
+                // update the-array
+                var thisAnswer = $scope.questions_list.find($scope.callback_index).answers_format.find($scope.callback_answer_index);
+                var currIndex = $scope.questions_list.find($scope.callback_index).answers_format.indexOf(thisAnswer);
+                if(currIndex != -1 ){
+                  $scope.questions_list.find($scope.callback_index).answers_format[currIndex] =
+                  answer_data ;
+                }
+
+            }
+            if(target_question.question_type == 0 ){
+                var answer_data = success_data.data ;
+                var media_optional = answer_data.media_optional;
+
+                // Store it into question list array
+                target_answer.media_optional = answer_data.media_optional ;
+                // Store it into scope object
+                $scope.answer_media = target_answer.media_optional ;
+            }
+
+
+
+
+
+
 
             if(action_type == "close"){
               $scope.close_media_box();
