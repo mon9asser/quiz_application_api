@@ -147,7 +147,16 @@
               {{> preview app = app }}
             </div>
             <div ng:show="true"><!-- template_mode -->
+
                {{> editor app = app }}
+
+               <!-- Loading edditor -->
+               <div class="loader-container">
+                  <div class="loader">
+                    <span>{</span><span>}</span>
+                    <span class="loadin-editor">Loading Editor</span>
+                  </div>
+               </div>
             </div>
             <!-- ----------------- -->
             <!-- Setttings -->

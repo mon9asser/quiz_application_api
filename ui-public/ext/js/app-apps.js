@@ -666,7 +666,15 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
        }, 1200 );
      });
    };
+   $scope.hide_loader = function (){
+      $(".right_part").fadeIn( function (){
+        $(".loader-container").fadeOut(2000 , function (){
+          $(".question-opener").next().slideDown();
+        });
+      });
 
+
+   };
    //--------------------------------------------------------
    // ==> Create Question
    //--------------------------------------------------------
@@ -677,7 +685,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
      group: "question-list" ,
      disabled: false ,
      onStart : function (evt){
-
+       $scope.hide_loader ();
       //  console.log(evt.item);
       // var targetEl = $(evt.item).hasClass("draggable-x");
      } ,
@@ -727,6 +735,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         revertClone: false,
      },
      onStart : function (evt){
+       $scope.hide_loader();
        // ---------------------------------------------------
        // ------->> Get Id from mongoDB
        // ---------------------------------------------------
@@ -754,6 +763,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
      } ,
      onEnd : function (evt){
+
+
        $scope.drag_drop_status = false;
         var htmlVal = $("#docQuestions ").find(evt.item);
         $("#docQuestions").css({
@@ -888,6 +899,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
       //  } , 300);
 
+
+        // ==================> close the loading here
+
      },
    }); // end sortable draggable
 
@@ -896,6 +910,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   // ==> Edit Current Question     color: #89d7d7;
   //--------------------------------------------------------
   $scope.edit_this_question = function ( qs_id  , qsCurrIndex){
+
     // init Vars ===========>>>>
     $scope.questionIndex = qsCurrIndex ;
     $scope.question_id = qs_id ;
@@ -1113,6 +1128,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   // ============================================
   $scope.question_answer_mark_it_correct = function (answer_id){
     // ==> This Answer
+
     $scope.answer_id = answer_id ;
     var question_selected = $scope.questions_list.find($scope.callback_index);
     var answer_selected = question_selected.answers_format.find($scope.callback_answer_index);
@@ -1124,8 +1140,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       }
       answer_selected.is_correct = !answer_selected.is_correct ;
 
+
       return false ;
     }
+
+
     // let's excute our func here
     if(question_selected.answer_settings.single_choice == true ) { // only one response
       var all_answers = question_selected.answers_format;

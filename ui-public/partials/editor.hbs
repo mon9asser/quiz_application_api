@@ -5,10 +5,10 @@
 <!-- Tabs -->
 <ul class="tab-editor">
   <li>
-    <div class="x-editor-x-title" data-toggle="#question-pt">
+    <div class="x-editor-x-title question-opener" data-toggle="#question-pt">
       Question
     </div>
-    <div style="display:block;" class="x-editor-x-body" id="question-pt">
+    <div style="display:none;" class="x-editor-x-body" id="question-pt">
       <div class="col-sm-8 top-margins">
           <!-- ============================================== -->
           <!--========= Question With Media ================= -->
@@ -105,7 +105,7 @@
         <div class="multi-answers-part">
           <ul class="choices-part">
 
-            <li class="answers_x" ng:class="(question_settings.super_size == true) ? 'super-size' :''" data-answer-id="answer_id_~>>answer_value._id<<~" data-answer-index="~>>$index<<~"  ng:class="answer_value.is_correct == true ? 'highlighted-right-answers' : ''" ng:repeat="(answer_key , answer_value) in asnwers">
+            <li class="answers_x"  data-answer-id="answer_id_~>>answer_value._id<<~" data-answer-index="~>>$index<<~"  ng:class="(answer_value.is_correct == true) ? 'highlighted-right-answers' : ''" ng:repeat="(answer_key , answer_value) in asnwers">
 
               <!-- text options value -->
                <div ng:if="question_type == 0" class="">
