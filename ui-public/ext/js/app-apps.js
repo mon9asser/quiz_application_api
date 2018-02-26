@@ -672,8 +672,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           $(".question-opener").next().slideDown();
         });
       });
-
-
    };
    //--------------------------------------------------------
    // ==> Create Question
@@ -911,6 +909,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   //--------------------------------------------------------
   $scope.edit_this_question = function ( qs_id  , qsCurrIndex){
 
+    var right_part = $(".right_part").css("display");
+    if(right_part == "none")
+    {
+      $scope.hide_loader();
+    }
     // init Vars ===========>>>>
     $scope.questionIndex = qsCurrIndex ;
     $scope.question_id = qs_id ;
