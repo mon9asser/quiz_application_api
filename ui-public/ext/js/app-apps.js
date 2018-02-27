@@ -49,13 +49,18 @@ apps.filter('this_chars_only' , [
     return function (specs){
       var spesificChars = '' ;
       var char_counts = 40 ;
-      for (var i = 0; i < specs.length; i++) {
-        if(i < char_counts) {
-          spesificChars += specs[i];
-          if(i == (char_counts - 1) )
-            spesificChars += " ... ";
+
+      if(specs == undefined)
+        spesificChars = specs ;
+        else {
+            for (var i = 0; i < specs.length; i++) {
+              if(i < char_counts) {
+                spesificChars += specs[i];
+                if(i == (char_counts - 1) )
+                  spesificChars += " ... ";
+              }
+            }
         }
-      }
 
        return $sce.trustAsHtml(spesificChars);
     }
@@ -79,6 +84,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   $scope.question_id = null ;
   $scope.question_media = null ;
   $scope.callback_index = function (object){
+    if(object == null )
+      return false;
     return object._id == $scope.question_id ;
   };
 
@@ -682,6 +689,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
      ghostClass: 'shadow_element' ,
      group: "question-list" ,
      disabled: false ,
+     animation: 220 ,
+     handle: '.drag-handler',
      onStart : function (evt){
        $scope.hide_loader ();
       //  console.log(evt.item);
@@ -725,15 +734,18 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
    // Add New Quiz
    $scope.sortble_draggable_handler = document.getElementById("qs-sortable");
    Sortable.create($scope.sortble_draggable_handler , {
-     ghostClass: 'shadow_element' ,
      sort: false,
+     animation: 150 ,
      group: {
         name: "question-list",
         pull: "clone",
         revertClone: false,
      },
+
      onStart : function (evt){
        $scope.hide_loader();
+
+
        // ---------------------------------------------------
        // ------->> Get Id from mongoDB
        // ---------------------------------------------------
@@ -761,19 +773,13 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
      } ,
      onEnd : function (evt){
-
-
-       $scope.drag_drop_status = false;
+        $scope.drag_drop_status = false;
         var htmlVal = $("#docQuestions ").find(evt.item);
-        $("#docQuestions").css({
-          background :"transparent"
-        });
-
-
-          // ---------------------------------------------------
-          // ------->> push and update indexes in array
-          // ---------------------------------------------------
-          var itemType = $(evt.item).attr('data-type');
+         $("#docQuestions").css({
+           background :"transparent"
+         });
+        // ==> push and update indexes in array
+        var itemType = $(evt.item).attr('data-type');
           var questionType = $(evt.item).attr('data-question-type');
           var new_question = {
             _id:$scope.mongoose_id,
@@ -791,9 +797,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             },
             answers_format : []
           };
+
           // Push Default answer ( one answer )
           var answer_obj = new Object() ;
-          // answer_obj['creator_id'] = $scope.user_id ;
           answer_obj['is_correct'] = false ;
           answer_obj['_id'] = $scope.mongoose_answer_id  ;
           if(questionType == 0 ){
@@ -816,10 +822,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             });
           }
           new_question.answers_format.push(answer_obj);
-          //-----------------------------
-          if($scope.mongoose_id == null ){
 
-            // ---------------------------------------------------
+          if($scope.mongoose_id == null ){
+          // ---------------------------------------------------
             // ------->> Get Id from mongoDB
             // ---------------------------------------------------
             $http({
@@ -836,71 +841,75 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
               },function(err){
                 console.log(err);
             });
-
-          }
-
-          // ---------------------------------------------------
-          // ------->>>>> Mongo Database
-          // ---------------------------------------------------
-          $timeout(function (){
-
-            // Push to array w index
-            var index_in_array = evt.newIndex;
-            $scope.questions_list.splice(index_in_array,0, new_question );
-
-            htmlVal.find("ul.question-option").find("li.right").addClass("animated bounceIn");
-            htmlVal.remove();
+        } // End Mmongodb Ids
 
 
 
+        // $timeout(function (){
+        //   var html_loader =
+        //     '<div class="loader-xc"><span></span><span></span><span></span></div>'
+        //     // htmlVal.html(html_loader);
+        // } , 500 );
+        $timeout(function (){
+          // sorting element with angular elements
+          var index_in_array = evt.newIndex;
+          $scope.questions_list.splice(index_in_array,0, new_question );
 
-            $scope.edit_this_question(new_question._id , index_in_array);
-
-            if(itemType == 'qst'){ //=> Question
-              $.getJSON($scope.json_apk_file , function(api_key_data){
-                $http({
-                      url   : $scope.api_url_question_creation ,
-                      method : "PATCH",
-                      data  : {
-                        "sorted_question": $scope.questions_list ,
-                        "creator_id":$scope.user_id
-                      } ,
-                      headers: {
-              					"X-api-keys": api_key_data.API_KEY,
-              					"X-api-app-name": api_key_data.APP_NAME
-            				  }
-                    }).then(function(resp){
-
-                      // $scope.questions_list = resp.questions;
-
-                      console.log(resp);
-                    },function(err){
-                      console.log(err);
-                    });
-              });
-            }
-            if(itemType == 'text'){ //=> Welcome / close message
-
-            }
-          } , 300 );
-
-          // ---------------------------------------------------
-          // ------->>>>> Ui Design
-          // ---------------------------------------------------
-
-          // build current element
-          // htmlVal.find("span.titles").html("Edit Model");
-          // // build action handler
-          // htmlVal.append($scope.quesion_actions);
-          // // Add animation for this question
+        } , 300 );
+        // =>> Transfeer data into mongoDB
+        $timeout(function (){
+          // sorting element with angular elements
+          var index_in_array = evt.newIndex;
+          
+          // Removing catches that stored from sortable
           // htmlVal.find("ul.question-option").find("li.right").addClass("animated bounceIn");
+          htmlVal.remove();
 
-      //  } , 300);
 
-
-        // ==================> close the loading here
-
+          // storing array that has all questions into our db
+          if(itemType == 'qst'){
+            $.getJSON($scope.json_apk_file , function(api_key_data){
+              $http({
+                url   : $scope.api_url_question_creation ,
+                method : "PATCH",
+                data  : {
+                 "sorted_question": $scope.questions_list ,
+                 "creator_id":$scope.user_id
+                } ,
+                headers: {
+                 "X-api-keys": api_key_data.API_KEY,
+                 "X-api-app-name": api_key_data.APP_NAME
+                }
+              }).then(function(resp){
+                console.log(resp);
+              } , function(err){
+                console.log(err);
+              });
+            });
+          }
+        } , 300 );
      },
+     onMove : function (evt){
+
+        var dragged = evt.dragged; // dragged HTMLElement
+     		var draggedRect = evt.draggedRect; // TextRectangle {left, top, right и bottom}
+     		var related = evt.related; // HTMLElement on which have guided
+     		var relatedRect = evt.relatedRect; // TextRectangle
+
+        var ParentID = $(dragged).parent().prop("id");
+        var ParentEl = $(dragged).parent();
+        if(ParentID == "qs-sortable") {
+          ParentEl.find(dragged).html("");
+          // set animation
+          ParentEl.find(dragged).addClass("animated wobble");
+
+          ParentEl.find(dragged).css({
+            minHeight : '40px' ,
+            background : "ghostwhite"
+          });
+        }
+
+     } ,
    }); // end sortable draggable
 
 
@@ -1857,6 +1866,14 @@ if($scope.model_type == 'questions'){
 //        revertClone: false,
 //     }
 // });
+/*
+// List with handle
+Sortable.create(listWithHandle, {
+  handle: '.my-handle',
+  animation: 3000
+});
+
+*/
 
 
 

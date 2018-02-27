@@ -64,6 +64,9 @@ body {
 .question-x > li > span > i {
     font-size: 30px;
 }
+.question-x > li:hover {
+  background: #fff;
+}
 .titles {
     width: 100%;
     display: block;
@@ -166,21 +169,23 @@ body {
     padding: 0px;
     margin: 0px;
 }
-.qsdragged-list > ul > li {
-    display: block;
+.qsdragged-list > ul > li ,
+.qsdragged-list > ul > li[data-type="qst"]
+ {
+    display: block ;
     position: relative;
     width: 95%;
     color: rgb(153, 153, 153);
     font-size: 14px;
     background: #fff;
     font-family: OpenSansRegular;
-    cursor: move;
+    cursor: pointer;
     /*overflow: hidden;*/
     border-width: 1px;
     border-style: dashed;
     border-color: #eee;;
     border-image: initial;
-    padding: 10px;
+    padding: 0px;
     margin: 0px auto 10px;
     margin-top: 15px;
 }
@@ -645,6 +650,9 @@ line-height: 16px !important;
   padding: 0px;
   width: 100%;
   overflow: hidden;
+  vertical-align: baseline;
+  position: relative;
+  line-height: 1.8;
 }
 .question-option li.left{
   margin-left: 5px;
@@ -672,7 +680,7 @@ vertical-align: middle;
     margin-left: 8px;
 }
 .qs-body {
-  margin-left: 8px;
+  margin-left: 5px;
 }
 .choices-part
 {
@@ -1475,10 +1483,10 @@ ul li:last-child.emails {
 
 
 .background_drag_drop {
-  background: linear-gradient(90deg, #eceff4, #ffffff, #eceff4);
-  background-size: 200% 200%;
+  /*background: linear-gradient(90deg, #eceff4, #ffffff, #eceff4);
+  background-size: 200% 200%;*/
   animation: animate_bg 3s linear infinite;
-
+  background :#fff;
   border: 3px dotted #d7d7fb54;
   box-shadow: 0px 0px 3px 0px #d7d7fb;
 }
@@ -1932,4 +1940,153 @@ span.loadin-editor{
   display: block;
   animation-delay: 0s;
   animation: pulse 5000s alternate infinite ease-in-out;
+}
+
+
+
+/*
+  ==================================================
+  ====> Modification part
+  ==================================================
+*/
+.drag-handler {
+  background: #fff;
+  display: inline-block;
+  vertical-align: baseline;
+  padding: 0px 0px 0px 0px;
+  margin-right: 5px;
+  position: relative;
+  z-index: 200;
+  border-right: 1px dashed #eee;
+  cursor: move;
+  -webkit-transition: background  .5s linear;
+  transition: background   .5s linear;
+  -moz-transition: background   .5s linear;
+}
+.drag-handler:hover {
+    background: #0AA6F7;
+}
+.drag-handler:hover > i  {
+    color: #fff;
+}
+.drag-handler > i {
+  transform: rotateZ(-90deg);
+  -webkit-transform: rotateZ(-90deg);
+  -moz-transform: rotateZ(-90deg);
+  -ms-transform: rotateZ(-90deg);
+  -o-transform: rotateZ(-90deg);
+  transform: rotateZ(90deg);
+  display: inline-block;
+  vertical-align: middle;
+  /* Internet Explorer */
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+  text-align: center;
+    vertical-align: baseline;
+    color: #222;
+    font-size: 25px;
+    padding-top: 0px;
+   margin-left: 15px;
+}
+.single-question-container {
+  display: inline-block;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  right: 0px;
+  line-height:3.4;
+    padding-left: 55px;
+}
+.single-question-container:hover {
+      background:ghostwhite; /* #f5f5dc40; */
+}
+.shadow_element {
+  background: ghostwhite !important ;
+  color: transparent !important ;
+  min-height: 40px;
+}
+ul.question-data > li[data-type="qst"] {
+  background: red !important;
+}
+
+
+.loader-xc > span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin: 0 4px;
+  background: #fff;
+  opacity: 0;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-animation: loader-fade 1s infinite;
+  -moz-animation: loader-fade 1s infinite;
+  -o-animation: loader-fade 1s infinite;
+  -ms-animation: loader-fade 1s infinite;
+  animation: loader-fade 1s infinite;
+}
+
+.loader-xc > span:nth-child(1) {
+  -webkit-animation-delay: 0.2s;
+  -moz-animation-delay: 0.2s;
+  -o-animation-delay: 0.2s;
+  -ms-animation-delay: 0.2s;
+  animation-delay: 0.2s;
+}
+
+.loader-xc > span:nth-child(2) {
+  -webkit-animation-delay: 0.4s;
+  -moz-animation-delay: 0.4s;
+  -o-animation-delay: 0.4s;
+  -ms-animation-delay: 0.4s;
+  animation-delay: 0.4s;
+}
+
+.loader-xc > span:nth-child(3) {
+  -webkit-animation-delay: 0.6s;
+  -moz-animation-delay: 0.6s;
+  -o-animation-delay: 0.6s;
+  -ms-animation-delay: 0.6s;
+  animation-delay: 0.6s;
+}
+
+@-webkit-keyframes loader-fade {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@-moz-keyframes loader-fade {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes loader-fade {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+ 
+.loader-xc {
+  position: absolute;
+  top: 50%;
+  left: 50%;
 }

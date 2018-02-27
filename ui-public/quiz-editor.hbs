@@ -97,22 +97,27 @@
                <li data-question-id="~>>qs_value._id<<~" ng:class="'question-li-x qs-'+qs_value._id" ng:repeat="(qs_key , qs_value) in questions_list ">
                      <div class="question-part">
                        <div class="qs-type quesiontlist_iconx">
-                         <span class="qs-type" title="Multiple Choices">
-                       	   <i ng:if="qs_value.question_type == 0" class="icon-insert-template"></i>
-                           <i ng:if="qs_value.question_type == 1" class="icon-image"></i>
-                           <i ng:if="qs_value.question_type == 2" class="icon-check-circle"></i>
-                         </span>
-                         <span class="qs-body" ng-bind-html="qs_value.question_body | this_chars_only">
-                           <!-- Append question title here ! -->
-                         </span>
-                         <ul class="question-option">
+                         <div class="drag-handler">
+                           <i>...</i>
+                         </div>
+                         <div class="single-question-container">
+                           <span class="qs-type" title="Multiple Choices">
+                              <i ng:if="qs_value.question_type == 0" class="icon-insert-template"></i>
+                             <i ng:if="qs_value.question_type == 1" class="icon-image"></i>
+                             <i ng:if="qs_value.question_type == 2" class="icon-check-circle"></i>
+                           </span>
+                           <span class="qs-body" ng-bind-html="qs_value.question_body | this_chars_only">
+                             <!-- Append question title here ! -->
+                           </span>
+                         </div>
+                         <!-- <ul class="question-option">
                            <li class="right">
                               <i ng:click="delete_this_question(qs_value._id)" style="cursor:pointer;" ng:class="'fa fa-trash iconx-trashable question-deletion qs-delete-'+qs_value._id"></i>
                            </li>
                            <li class="right">
                               <i ng:click="edit_this_question(qs_value._id , $index )" style="cursor:pointer;" ng:class="'fa fa-pencil iconex-movable qs-edit-'+qs_value._id"></i>
                            </li>
-                         </ul>
+                         </ul> -->
                        </div>
                      </div>
                 </li>
@@ -158,7 +163,7 @@
                   </div>
                </div>
             </div>
-            <!-- ----------------- -->
+            <!-- ------------------------------ -->
             <!-- Setttings -->
             <!-- ------------------------------ -->
            <div class="setting-part col-md-5 col-sm-6 col-xs-12">
@@ -168,8 +173,6 @@
                   </div>
                 </div>
                 <div class="right-menu-settings">
-                    <!-- ----------------------------- -->
-
 
                           <ul class="app-settings">
                            <li class="tasks">
