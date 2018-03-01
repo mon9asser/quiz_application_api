@@ -1892,6 +1892,7 @@ $scope.upload_handler.on("change" , function (){
 
 // ========> Saving Media
 $scope.save_media_with = function (type){
+
   var headers = new Object();
   if($scope.file_object.media_type == 0 ){
        // ==> Header
@@ -1929,7 +1930,7 @@ $scope.save_media_with = function (type){
          contentType: false         ,
          data: $scope.data_object
        }).then(function(success_data){
-         console.log("SUCCESS DATA ++++ ");
+         console.log("SUCCESS DATA ++++ |");
          console.log(success_data.data);
            // Case it image
           if($scope.file_object.media_type == 0 )
@@ -1976,6 +1977,8 @@ $scope.save_media_with = function (type){
             var target_answer = target_question.answers_format.find($scope.callback_answer_index);
             if( target_question.question_type == 1 ){
                   var answer_data = success_data.data ;
+                  console.log("ANSWER TYPE 1");
+                  console.log(answer_data);
                   // Store it into scope object
                   $scope.answer_media = answer_data ;
                   // Store it into Array
@@ -1991,6 +1994,9 @@ $scope.save_media_with = function (type){
             if(target_question.question_type == 0 ){
                   var answer_data = success_data.data ;
                   var media_optional = answer_data.media_optional;
+                  console.log("ANSWER TYPE 0");
+                  console.log(answer_data);
+                  console.log(media_optional);
                   // Store it into question list array
                   target_answer.media_optional = answer_data.media_optional ;
                   // Store it into scope object
