@@ -1896,7 +1896,7 @@ $scope.save_media_with = function (type){
   var headers = new Object();
   if($scope.file_object.media_type == 0 ){
        // ==> Header
-      headers["Content-Type"] = undefined ;
+      $scope.headers["Content-Type"] = undefined ;
        // ==> Show Progression bar for uploading image
        var image_container =  $(".emb-image-case") ;
        var upload_progeress  = "<div class='progress_barx'>";
@@ -1905,7 +1905,6 @@ $scope.save_media_with = function (type){
            upload_progeress += "</div>";
        image_container.html(upload_progeress);
   }
-
 
   $scope.save_changes_in_angular_backend();
   $timeout(function (){
@@ -1975,7 +1974,7 @@ $scope.save_media_with = function (type){
               // video_media_iframe
               $(".media-uploads").html(video_media_iframe);
             }
-          }else  {
+          }else {
             // --------------------------------------------
             // 1 ===> Answers
             // --------------------------------------------
