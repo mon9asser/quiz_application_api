@@ -1905,7 +1905,7 @@ $scope.save_media_with = function (type){
            upload_progeress += "</div>";
        image_container.html(upload_progeress);
   } else {
-    alert("VIDEO TYPE !!");
+    // Set header as an empty to fix issue related video urls !!
     $scope.headers = new Object();
   }
 
