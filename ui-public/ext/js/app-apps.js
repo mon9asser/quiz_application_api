@@ -1932,6 +1932,12 @@ $scope.save_media_with = function (type){
        }).then(function(success_data){
          console.log("SUCCESS DATA ++++ |");
          console.log(success_data.data);
+
+         console.log("DATA-SENT ------????");
+         console.log($scope.data_object);
+
+         console.log("HEADERS ------????");
+         console.log($scope.headers);
            // Case it image
           if($scope.file_object.media_type == 0 )
               image_container.html('');
