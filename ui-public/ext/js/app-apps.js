@@ -1651,9 +1651,7 @@ $scope.close_media_box = function (){
        //.text-formats > ul > li.ri
       //  var bold_option = "<u>" + $scope.selected_text + "</u>" ;
       //  $scope.questions_list[questionIndex].question_body = $scope.questions_list[questionIndex].question_body.replace(new RegExp($scope.selected_text , 'g'), bold_option);;
-
     };
-
 
 
     $scope.save_text_anchor_option = function (qsIndex){
@@ -1715,10 +1713,6 @@ Sortable.create(listWithHandle, {
 
 
 
-
-
-
-
 // ===============================================================>
 // =========>>> Extract Media Input field ( youtube vimeo mp4 )
 // =========================================================>
@@ -1727,7 +1721,7 @@ $(".show_media_link").on("change" , function (){
   // ====>>> Uploading media
   $scope.file_object['media_type'] = 1 ;
   $scope.file_object['link'] = $(this).val();
-  
+
   // LOADING PAGE
   var loader = '<div class="media-loader-spinner"><div class="spinner">'+
                 '<div class="rect1"></div>'+
@@ -1774,7 +1768,6 @@ $(".show_media_link").on("change" , function (){
         videoId = lastId ;
       else
         videoId = videos ;
-
 
       var afterEqualChar = videoId.lastIndexOf('=');
       videoId = videoId.substring(afterEqualChar + 1);
@@ -2020,4 +2013,9 @@ $scope.save_media_with = function (type){
 }
 
 
+  //----------------------------------------
+  // ==> End Loader
+  //----------------------------------------
+  $(".text-loader").delay(5000).fadeOut();
+  
 }]);

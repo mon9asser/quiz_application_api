@@ -59,6 +59,13 @@
 			<div class="row">
 					<div class="col-md-12">
 						 <div class="area-qs-ch quiz-titles">
+               <!-- Start Text Loader -->
+               <div class="text-loader">
+                   <span></span>
+                   <span></span>
+               </div>
+               <!-- End Text Loader -->
+
 							  <span class="questionnaire-title">
                   <!-- Quiz Name -->
                    <span>
@@ -78,11 +85,20 @@
     <div class="row">
        <!-- Question (Editor) menu -->
       <div class="left_part col-md-5 col-sm-6 col-xs-12">
+
           <div class="question-data qsdragged-list qs-dropped background_drag_drop">
             <!-- Messages -->
             <!-- <ul style="height:20px; background:red;" id="appMessages" class="dropped-qs dropped-qs-2">
             </ul> -->
-
+            <!-- Start Text Loader -->
+            <div class="text-loader">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <!-- End Text Loader -->
 						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
 
                <li data-index="~>>$index<<~" data-question-id="~>>qs_value._id<<~" ng:class="'question-li-x qs-'+qs_value._id" ng:repeat="(qs_key , qs_value) in questions_list track by $index">
