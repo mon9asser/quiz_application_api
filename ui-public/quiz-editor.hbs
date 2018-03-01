@@ -17,45 +17,39 @@
     <!-- Question Types -->
      <ul id="qs-sortable" class="question-x">
 
-
-       <!-- <li data-type="text" class="wc-screens">
-           <span class="titles">Welcome screen</span>
-       </li> -->
-
-       <li data-type="qst" data-question-type="0" question-data="partials/multi-choices.hbs">
+       <li id="question-muliple-choices" ng:click="onclick_items('question-muliple-choices')" data-type="qst" data-question-type="0" question-data="partials/multi-choices.hbs">
            <span class="qs-type" title="Multiple Choices">
               <i class="icon-insert-template"></i>
            </span>
            <span class="titles">Choices</span>
        </li>
 
-       <li data-type="qst" data-question-type="1" question-data="partials/media-choices.hbs">
+       <li id="question-media-choices" ng:click="onclick_items('question-media-choices')" data-type="qst" data-question-type="1" question-data="partials/media-choices.hbs">
         <span class="qs-type" title="Media Choices">
            <i class="icon-image"></i>
         </span>
         <span class="titles">Media</span>
-      </li>
+       </li>
 
-      <li data-type="qst" data-question-type="2" question-data="partials/true-false.hbs">
-              <span class="qs-type" title="Ture/False">
-                 <i class="icon-check-circle"></i>
-               </span>
-              <span class="titles">Boolean</span>
-      </li>
-      <!-- <li data-type="text" class="wc-screens">
-          <span class="titles">Thank you screen</span>
-      </li> -->
+       <li id="question-boolean-choices" ng:click="onclick_items('question-boolean-choices')" data-type="qst" data-question-type="2" question-data="partials/true-false.hbs">
+        <span class="qs-type" title="Ture/False">
+           <i class="icon-check-circle"></i>
+        </span>
+        <span class="titles">Boolean</span>
+       </li>
      </ul>
 
-     <!-- Messages -->
-     <!-- <ul id="msg-list" class="messages question-x">
-       <li>
-         <span class="titles">Welcome screen</span>
-       </li>
-       <li>
-         <span class="titles">End screen</span>
-       </li>
-     </ul> -->
+      <!-- Messages -->
+      <!--
+       <ul id="msg-list" class="messages question-x">
+         <li>
+           <span class="titles">Welcome screen</span>
+         </li>
+         <li>
+           <span class="titles">End screen</span>
+         </li>
+       </ul>
+      -->
 
   </div>
 </div>
@@ -71,13 +65,10 @@
                      ~>> application_settings.questionnaire_title <<~
                    </span>
                 </span>
-                <a class="choices-right-add btn-danger btn setting-menu-handler" href="#">
+                <!-- <a class="choices-right-add btn-danger btn setting-menu-handler" href="#">
                   <i class="fa fa-cog"></i>
-                </a>
-
- 							  <a class="choices-right-add btn-primary btn rm-margin" href="#">Preview Quiz</a>
-
-
+                </a> -->
+ 							  <a class="choices-right-add btn-primary preview-button btn rm-margin" href="#">Preview Quiz</a>
   					 </div>
 					</div>
 	    </div>
@@ -94,13 +85,13 @@
 
 						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
 
-               <li data-question-id="~>>qs_value._id<<~" ng:class="'question-li-x qs-'+qs_value._id" ng:repeat="(qs_key , qs_value) in questions_list ">
+               <li data-index="~>>$index<<~" data-question-id="~>>qs_value._id<<~" ng:class="'question-li-x qs-'+qs_value._id" ng:repeat="(qs_key , qs_value) in questions_list track by $index">
                      <div class="question-part">
                        <div class="qs-type quesiontlist_iconx">
                          <div class="drag-handler">
                            <i>...</i>
                          </div>
-                         <div class="single-question-container">
+                         <div  ng:click="edit_this_question(qs_value._id , $index )"  class="single-question-container">
                            <span class="qs-type" title="Multiple Choices">
                               <i ng:if="qs_value.question_type == 0" class="icon-insert-template"></i>
                              <i ng:if="qs_value.question_type == 1" class="icon-image"></i>
@@ -152,9 +143,7 @@
               {{> preview app = app }}
             </div>
             <div ng:show="true"><!-- template_mode -->
-
                {{> editor app = app }}
-
                <!-- Loading edditor -->
                <div class="loader-container">
                   <div class="loader">
@@ -163,199 +152,8 @@
                   </div>
                </div>
             </div>
-            <!-- ------------------------------ -->
-            <!-- Setttings -->
-            <!-- ------------------------------ -->
-           <div class="setting-part col-md-5 col-sm-6 col-xs-12">
-                <div class="collapse-menu text-center">
-                  <div class="switched-button switch-mode">
-                       <span>Settings</span>
-                  </div>
-                </div>
-                <div class="right-menu-settings">
-
-                          <ul class="app-settings">
-                           <li class="tasks">
-                              <div class="control-item-header">
-                                 <a href="#" class="icon-toggle">
-                                   <span class="caret-down fa fa-caret-down"></span>
-                                 </a>
-                                 <span class="text">General</span>
-                              </div>
-                              <div class="control-item-content open" style="height: auto;">
-                                 <!-- <div class="control-item-content-text">
-                                    <span>Quiz Name</span>
-                                    <input class="quiz-titlex " type="text" name="" value="" placeholder="Quiz Title">
-                                    </div> -->
-
-                                 <div class="control-item-content-text">
-                                   <div class="passing-grad-block">
-                                      <div class="checkbox-toggle">
-                                          <label class="labels-options lblxoption">Quiz Title</label>
-                                          <input class="checkbox-toggle input-app-title" type="text" placeholder="App title" name="" ng:model="application_settings.questionnaire_title">
-                                      </div>
-                                   </div>
-                                    <div class="passing-grad-block">
-                                       <div class="checkbox-toggle">
-                                          <input ng:model="application_settings.settings.grade_settings.is_graded" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                                          <label class="labels-options" for="check-toggle-2">Passing Grade</label>
-                                       </div>
-                                    </div>
-                                    <div class="form-group">
-                                       <div class="input-group bootstrap-touchspin">
-                                          <span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-                                          <input ng:model="application_settings.settings.grade_settings.value" id="demo1" type="text" value="" name="demo1" class="form-control" style="display: block;">
-                                          <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
-                                       </div>
-                                    </div>
-                                 </div>
-                                 <div class="control-item-content-text">
-                                    <div class="passing-grad-block">
-                                       <div class="checkbox-toggle">
-                                          <input ng:model="application_settings.settings.show_results_per_qs" type="checkbox" id="show-qs-pr" checked="" class="switch_1 input-checkboxes">
-                                          <label for="show-qs-pr" class="show-qs-pr labels-options">Show result on each question</label>
-                                       </div>
-                                    </div>
-                                    <div class="passing-grad-block">
-                                       <div class="checkbox-toggle">
-                                          <input ng:model="application_settings.settings.navigation_btns" type="checkbox" id="navigation-buttons" class="input-checkboxes switch_1">
-                                          <label for="navigation-buttons" class="show-qs-pr labels-options">
-                                          Hide quiz navigation buttons
-                                          </label>
-                                       </div>
-                                    </div>
-                                    <div class="passing-grad-block">
-                                       <div class="checkbox-toggle">
-                                          <input ng:model="application_settings.settings.retake_setting" class="input-checkboxes switch_1" type="checkbox" id="enable-button-retak">
-                                          <label for="enable-button-retak" class="labels-options show-qs-pr">
-                                          Enable Retake
-                                          </label>
-                                       </div>
-                                    </div>
-                                    <div class="passing-grad-block">
-                                       <div class="checkbox-toggle">
-                                          <input ng:model="application_settings.settings.review_setting" class="input-checkboxes switch_1" type="checkbox" id="enable-button-Review">
-                                          <label for="enable-button-Review" class="show-qs-pr labels-options">
-                                          Enable Review
-                                          </label>
-                                       </div>
-                                    </div>
-                                    <div class="passing-grad-block">
-                                       <div class="checkbox-toggle">
-                                          <input ng:model="application_settings.settings.randomize_settings" class="input-checkboxes switch_1" type="checkbox" id="Randomize-Questions">
-                                          <label for="Randomize-Questions" class="show-qs-pr labels-options">
-                                          Randomize Questions
-                                          </label>
-                                       </div>
-                                    </div>
-                                    <div class="passing-grad-block">
-                                       <div class="checkbox-toggle">
-                                          <input ng:model="application_settings.settings.progression_bar.is_available" class="input-checkboxes switch_1" type="checkbox" id="Randomize-Progress">
-                                          <label for="Randomize-Progress" class="show-qs-pr labels-options">
-                                          Use Progress bar
-                                          </label>
-                                       </div>
-                                    </div>
-                                 </div>
-
-                              </div>
-                           </li>
-                           <li class="tasks">
-                              <div class="control-item-header">
-                                 <a href="#" class="icon-toggle">
-                                 <span class="caret-down fa fa-caret-down"></span>
-                                 </a>
-                                 <span class="text">Quiz Timer</span>
-                              </div>
-                              <div class="control-item-content" >
-                                 <div class="control-item-content-text">
-                                    <div class="passing-grad-block">
-                                       <div class="checkbox-toggle">
-                                          <input ng:model="application_settings.settings.time_settings.is_with_time" class="input-checkboxes switch_1" type="checkbox" id="check-Timer-2" checked="">
-                                          <label class="labels-options" for="check-Timer-2">Require Timeframe</label>
-                                       </div>
-                                    </div>
-                                    <div class="form-group input-group input-groupx">
-                                       <input ng:model="application_settings.settings.time_settings.value" id="time-mask-input" type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="00:00:00">
-                                    </div>
-                                    <div class="time-fram-slidest ">
-                                      <span class="labels-options">Time Type :</span>
-                                       <div class="checkbox-slide xheckbox-timframe">
-                                         <label class="labels-options" for="time-type-slide">mins</label>
-                                          <input ng:model="application_settings.settings.time_settings.timer_type" class="input-checkboxes switch_1" type="checkbox" id="time-type-slide">
-                                          <label class="labels-options" for="time-type-slide">hrs</label>
-                                       </div>
-                                    </div>
-                                 </div>
-
-                              </div>
-                           </li>
-                           <li class="sticky-note">
-                              <div class="control-item-header">
-                                 <a href="#" class="icon-toggle">
-                                 <span class="caret-down fa fa-caret-down"></span>
-                                 </a>
-                                 <span class="text">Message and Texts</span>
-                              </div>
-                              <div class="control-item-content" >
-                                 <div class="control-item-content-text">
-                                    <span>Quiz Start text</span>
-                                    <input ng:model="application_settings.settings.titles.title_start_with" class="quiz-titlex " type="text" name="" value="" placeholder=" Lest start Quiz">
-                                 </div>
-                                 <div class="control-item-content-text">
-                                    <span>Quiz End text</span>
-                                    <input ng:model="application_settings.settings.titles.title_end_with" class="quiz-titlex " type="text" name="" value="" placeholder=" You have successfully  completed the this quizs">
-                                 </div>
-                                 <div class="control-item-content-text">
-                                    <span>Quiz Pass text:</span>
-                                    <input ng:model="application_settings.settings.titles.title_success_with"  class="quiz-titlex " type="text" name="" value="" placeholder="You have passed this quiz">
-                                 </div>
-                                 <div class="control-item-content-text">
-                                    <span>Quiz Fail text:</span>
-                                    <input ng:model="application_settings.settings.titles.title_failed_with" class="quiz-titlex " type="text" name="" value="" placeholder="You have failed this quiz">
-                                 </div>
-
-                              </div>
-                           </li>
-                           <li class="emails">
-                              <div class="control-item-header">
-                                 <a href="#" class="icon-toggle">
-                                 <span class="caret-down fa fa-caret-down"></span>
-                                 </a>
-                                 <span class="text">Labels</span>
-                              </div>
-                              <div class="control-item-content" >
-                                 <div class="control-item-content-text">
-                                    <span>Quiz Start Button:</span>
-                                    <input ng:model="application_settings.settings.label_btns.lbl_start_with" class="quiz-titlex " type="text" name="" value="" placeholder=" Start Quiz">
-                                 </div>
-                                 <div class="control-item-content-text">
-                                    <span>Restart Button</span>
-                                    <input ng:model="application_settings.settings.label_btns.lbl_retake_with" class="quiz-titlex " type="text" name="" value="" placeholder="Retake Quiz">
-                                 </div>
-                                 <div class="control-item-content-text">
-                                    <span>Continue Button</span>
-                                    <input ng:model="application_settings.settings.label_btns.lbl_continue_with" class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
-                                 </div>
-
-                                 <div class="control-item-content-text">
-                                    <span>Review Button</span>
-                                    <input ng:model="application_settings.settings.label_btns.lbl_review_with" class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
-                                 </div>
-
-                              </div>
-                           </li>
-
-                          </ul>
-                          <div class="quiz-setting-handler">
-                            <button ng:click="application_save_settings()" class="btn btn-primary" type="button" name="button">Save Changes</button>
-                          </div>
-
-
-                    <!-- +++++++++++++++++++++++ -->
-                </div>
-           </div>
-
+            <!-- Settings Menu -->
+            {{> settings_menu }}
         </div>
 
       </div>
@@ -363,12 +161,8 @@
     </div>
   </div>
 
-
 </div>
 </div>
-
-
-
 
 
 {{> bottom }}

@@ -68,12 +68,86 @@ apps.filter('this_chars_only' , [
 ]);
 // ==> Main Controller
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
+  //---------------------------------------
+  // Window init objects + menu settings
+  //---------------------------------------
+    $scope.window_navigation = $(window);
+    $scope.generated_media_box_handler = $(".box-data");
+    $scope.close_iconx = $(".setting-iconx");
+    $scope.settings_menu = $(".settings_menu") ;
+    $scope.questions_list_box = $(".left_part");
+    $scope.questions_editor_preview_box = $(".left_part");
+    $scope.left_part_position  = $scope.questions_list_box.width() + 21 ;
+    $scope.window_navigation.on("load" , function (){
+        $scope.close_iconx.trigger("click");
+        $timeout(function (){
+          $scope.settings_menu.css("display" , "block" );
+        }, 500);
+    });
+    $scope.window = {
+      // ===========> Width
+      current_window  : $(window).width()  ,
+      settings_menu   : $(".left_part").width() - 28
+    };
+    $scope.data_object   = null ;
+    $scope.answer_object = null ;
+    $scope.headers = new Object() ;
+    // =>> On load window
+    $scope.settings_menu.css({width:$scope.window.settings_menu});
+    // on resize window
+    $scope.window_navigation.resize(function(){
+      $scope.window = {
+        current_window  : $(window).width()  ,
+        settings_menu   : $(".left_part").width() - 28
+      };
+      $scope.settings_menu.css({width:$scope.window.settings_menu});
+    });
 
+  // ----------------------------------------
+  // => Close Settings menu
+  //-----------------------------------------
+
+  $scope.collapse_menu_settings = function (target_iconx){
+    target_iconx.removeClass("fa-times");
+    target_iconx.addClass("fa-cog");
+    // some styles
+    $scope.close_iconx.css("left", "-60px")
+    // => Slide settings Menu into ( - right)
+    $scope.settings_menu.animate({"margin-right": '-='+$scope.settings_menu.width()});
+    // Slide question settings into ( + left )
+    $scope.questions_list_box.css({"left": '0px'});
+    $scope.questions_editor_preview_box.css({"margin-left": '0px'});
+    // Generated media box
+    $scope.generated_media_box_handler.css({left:"0px"})
+  };
+
+
+
+  $scope.expand_menu_settings  = function (target_iconx){
+    target_iconx.removeClass("fa-cog");
+    target_iconx.addClass("fa-times");
+    // some styles
+    $scope.close_iconx.css("left", "-35px")
+    // => Slide settings Menu into ( + right)
+    $scope.settings_menu.animate({"margin-right": '+='+$scope.settings_menu.width()});
+    // Slide question list into ( + left )
+    $scope.questions_list_box.css({"left": '-'+ $scope.left_part_position + 'px'});
+    $scope.questions_editor_preview_box.css({"margin-left": '-'+ $scope.left_part_position + 'px'});
+    $scope.generated_media_box_handler.css({left:'-'+ Math.round(($scope.left_part_position / 2) + 25) + 'px'})
+  }
+  $scope.close_settings_menu_handler = $(".setting-iconx");
+  $scope.close_settings_menu_handler.on("click" , function (){
+    var target_iconx = $(".close-menu-icon");
+    if(target_iconx.hasClass("fa-times") == true )
+      $scope.collapse_menu_settings(target_iconx) ;
+      else
+      $scope.expand_menu_settings(target_iconx) ;
+  });
   $scope.current_answer_index = null ;
   $scope.model_type = null ;
   $scope.drag_drop_status = true ;
   $scope.questionIndex = null ;
-  $scope.current_video_id = "xdV4jPeXb4k";
+  $scope.current_video_id = null;
   $scope.change_media_link_by_system = true ;
   $scope.answer_media = null ;
   $scope.selected_text = null ;
@@ -347,6 +421,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
    $scope.api_url_create_question     = null;
    $scope.api_url_delete_question     = $scope.server_ip + "api/"+$scope.app_id+"/question/delete";
    $scope.api_url_edit_question       = $scope.server_ip + "api/"+$scope.app_id+"/question/edit";
+
    $scope.api_url_create_answer       = null;
    $scope.api_url_delete_answer       = null;
    $scope.api_url_edit_answer         = null;
@@ -658,7 +733,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
              $scope.question_id = questionId ;
              element.addClass("animated rotateOutUpLeft");//rollOut
 
-
              $timeout(function(){
                element.remove();
                 var found_qs = $scope.questions_list.find($scope.callback_index);
@@ -689,22 +763,36 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
      ghostClass: 'shadow_element' ,
      group: "question-list" ,
      disabled: false ,
-     animation: 220 ,
+     animation: 250 ,
      handle: '.drag-handler',
      onStart : function (evt){
        $scope.hide_loader ();
+
       //  console.log(evt.item);
       // var targetEl = $(evt.item).hasClass("draggable-x");
      } ,
      onEnd : function (evt){
 
        var itemEl = evt.item;  // dragged HTMLElement
-       var newIndex = evt.newIndex ;
-       var oldIndex = evt.oldIndex ;
+       var newIndex = evt.newIndex;
+       var oldIndex = evt.oldIndex;
        $scope.question_id = $(itemEl).attr("data-question-id");
        var question_sor = $scope.questions_list.find($scope.callback_index);
+       // newIndex
+       $scope.edit_this_question($scope.question_id  , newIndex ) ;
+      // var question_id_x = $("#docQuestions");
 
-       // store values
+      //  var currIndex = $("li").index(".qs-"+$scope.question_id);
+      //  alert(currIndex);
+      // question_id_x.children.addClass("highlighted-question");
+      //  question_id_x.children("li").each(function (i){
+      //      $(this).removeClass("highlighted-question");
+      //  });
+      //
+      //  question_id_x.children("li").eq(4).addClass("highlighted-question");
+      // ==> send highlighted-question to target qs
+      // store values
+
        var newPosition = question_sor;
        // remove old index
        $scope.questions_list.splice(oldIndex, 1);
@@ -734,18 +822,16 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
    // Add New Quiz
    $scope.sortble_draggable_handler = document.getElementById("qs-sortable");
    Sortable.create($scope.sortble_draggable_handler , {
-     sort: false,
-     animation: 150 ,
+    sort: false,
+    disabled: false,
+    animation: 180 ,
      group: {
         name: "question-list",
         pull: "clone",
         revertClone: false,
-     },
-
-     onStart : function (evt){
+    },
+    onStart : function (evt){
        $scope.hide_loader();
-
-
        // ---------------------------------------------------
        // ------->> Get Id from mongoDB
        // ---------------------------------------------------
@@ -766,128 +852,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       if(qsLength == 0 ){
         $("#docQuestions").css({
           minHeight:"20px" ,
-          background:"#eee"
+          background:"ghostwhite"
         });
       }
 
 
      } ,
      onEnd : function (evt){
-        $scope.drag_drop_status = false;
-        var htmlVal = $("#docQuestions ").find(evt.item);
-         $("#docQuestions").css({
-           background :"transparent"
-         });
-        // ==> push and update indexes in array
-        var itemType = $(evt.item).attr('data-type');
-          var questionType = $(evt.item).attr('data-question-type');
-          var new_question = {
-            _id:$scope.mongoose_id,
-            question_type :questionType,
-            question_body :"Edit Model",
-            enable_description : $scope.enable_description ,
-            created_at :$scope.mongoose_date,
-            answer_settings : {
-                answer_char_max : 200 ,
-                choice_style : "inline" ,
-                is_randomized : false,
-                is_required : false,
-                single_choice : true,
-                super_size : false
-            },
-            answers_format : []
-          };
-
-          // Push Default answer ( one answer )
-          var answer_obj = new Object() ;
-          answer_obj['is_correct'] = false ;
-          answer_obj['_id'] = $scope.mongoose_answer_id  ;
-          if(questionType == 0 ){
-            answer_obj['value'] = 'Answer 1';
-          }
-          if(questionType == 1 ){
-            answer_obj['media_type'] = 0 ;
-            answer_obj['media_src'] = $scope.server_ip + "img/media-icon.png";
-          }
-          if(questionType == 2 ){
-            answer_obj['boolean_type'] = "true/false";
-            answer_obj['boolean_value'] = false;
-
-            new_question.answers_format.push({
-              '_id': $scope.mongoose_answer_id.toString()+'12f',
-              'creator_id' : $scope.user_id ,
-              'is_correct' : true ,
-              'boolean_type' : "true/false" ,
-              'boolean_value': true
-            });
-          }
-          new_question.answers_format.push(answer_obj);
-
-          if($scope.mongoose_id == null ){
-          // ---------------------------------------------------
-            // ------->> Get Id from mongoDB
-            // ---------------------------------------------------
-            $http({
-                url : $scope.api_url_init_id_date ,
-                method : "GET"
-              }).then(function(resp){
-                new_question['_id'] = resp.data.id;
-                new_question['created_at'] = resp.data.date;;
-                $scope.unique_ids = resp.data.list_of_ids ;
-                new_question.answers_format[0]['_id'] = resp.data.id_1;
-                if(questionType == 2 ){
-                  new_question.answers_format[1]['_id'] = resp.data.id_1+'12fd';
-                }
-              },function(err){
-                console.log(err);
-            });
-        } // End Mmongodb Ids
-
-
-
-        // $timeout(function (){
-        //   var html_loader =
-        //     '<div class="loader-xc"><span></span><span></span><span></span></div>'
-        //     // htmlVal.html(html_loader);
-        // } , 500 );
-        $timeout(function (){
-          // sorting element with angular elements
-          var index_in_array = evt.newIndex;
-          $scope.questions_list.splice(index_in_array,0, new_question );
-
-        } , 300 );
-        // =>> Transfeer data into mongoDB
-        $timeout(function (){
-          // sorting element with angular elements
-          var index_in_array = evt.newIndex;
-          
-          // Removing catches that stored from sortable
-          // htmlVal.find("ul.question-option").find("li.right").addClass("animated bounceIn");
-          htmlVal.remove();
-
-
-          // storing array that has all questions into our db
-          if(itemType == 'qst'){
-            $.getJSON($scope.json_apk_file , function(api_key_data){
-              $http({
-                url   : $scope.api_url_question_creation ,
-                method : "PATCH",
-                data  : {
-                 "sorted_question": $scope.questions_list ,
-                 "creator_id":$scope.user_id
-                } ,
-                headers: {
-                 "X-api-keys": api_key_data.API_KEY,
-                 "X-api-app-name": api_key_data.APP_NAME
-                }
-              }).then(function(resp){
-                console.log(resp);
-              } , function(err){
-                console.log(err);
-              });
-            });
-          }
-        } , 300 );
+       return $scope.dragged_items(evt);
      },
      onMove : function (evt){
 
@@ -911,6 +883,157 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
      } ,
    }); // end sortable draggable
+
+
+
+  $scope.dragged_items = function (evt){
+
+
+
+      $http({
+          url : $scope.api_url_init_id_date ,
+          method : "GET"
+        }).then(function(resp){
+          $scope.mongoose_id = resp.data.id;
+          $scope.mongoose_answer_id = resp.data.id_1;
+          $scope.mongoose_date = resp.data.date;;
+          $scope.unique_ids = resp.data.list_of_ids ;
+
+
+
+
+
+          $scope.drag_drop_status = false;
+          var htmlVal = $("#docQuestions ").find(evt.item);
+           $("#docQuestions").css({
+             background :"transparent"
+           });
+          // ==> push and update indexes in array
+          var itemType = $(evt.item).attr('data-type');
+            var questionType = $(evt.item).attr('data-question-type');
+            var new_question = {
+              _id:$scope.mongoose_id,
+              question_type :questionType,
+              question_body :"Edit Model",
+              enable_description : $scope.enable_description ,
+              created_at :$scope.mongoose_date,
+              answer_settings : {
+                  answer_char_max : 200 ,
+                  choice_style : "inline" ,
+                  is_randomized : false,
+                  is_required : false,
+                  single_choice : true,
+                  super_size : false
+              },
+              answers_format : []
+            };
+
+            // Push Default answer ( one answer )
+            var answer_obj = new Object() ;
+            answer_obj['is_correct'] = false ;
+            answer_obj['_id'] = $scope.mongoose_answer_id  ;
+            var obj_2_id = $scope.mongoose_answer_id.toString()+'12f' ;
+            if(questionType == 0 ){
+              answer_obj['value'] = 'Answer 1';
+            }
+            if(questionType == 1 ){
+              answer_obj['media_type'] = 0 ;
+              answer_obj['media_src'] = $scope.server_ip + "img/media-icon.png";
+            }
+            if(questionType == 2 ){
+              answer_obj['boolean_type'] = "true/false";
+              answer_obj['boolean_value'] = false;
+
+              new_question.answers_format.push({
+                '_id': obj_2_id ,
+                'creator_id' : $scope.user_id ,
+                'is_correct' : true ,
+                'boolean_type' : "true/false" ,
+                'boolean_value': true
+              });
+            }
+            new_question.answers_format.push(answer_obj);
+
+            if($scope.mongoose_id == null ){
+            // ---------------------------------------------------
+              // ------->> Get Id from mongoDB
+              // ---------------------------------------------------
+              $http({
+                  url : $scope.api_url_init_id_date ,
+                  method : "GET"
+                }).then(function(resp){
+                  new_question['_id'] = resp.data.id;
+                  new_question['created_at'] = resp.data.date;;
+                  $scope.unique_ids = resp.data.list_of_ids ;
+                  new_question.answers_format[0]['_id'] = resp.data.id_1;
+                  if(questionType == 2 ){
+                    new_question.answers_format[1]['_id'] = resp.data.id_1+'12fd';
+                  }
+                },function(err){
+                  console.log(err);
+              });
+          } // End Mmongodb Ids
+
+
+
+          // $timeout(function (){
+          //   var html_loader =
+          //     '<div class="loader-xc"><span></span><span></span><span></span></div>'
+          //     // htmlVal.html(html_loader);
+          // } , 500 );
+          $timeout(function (){
+            // sorting element with angular elements
+            var index_in_array = evt.newIndex;
+            $scope.questions_list.splice(index_in_array,0, new_question );
+
+          } , 300 );
+          // =>> Transfeer data into mongoDB
+          $timeout(function (){
+            // sorting element with angular elements
+            var index_in_array = evt.newIndex;
+
+            // Removing catches that stored from sortable
+            // htmlVal.find("ul.question-option").find("li.right").addClass("animated bounceIn");
+            htmlVal.remove();
+
+
+            // storing array that has all questions into our db
+            if(itemType == 'qst'){
+              $.getJSON($scope.json_apk_file , function(api_key_data){
+                $http({
+                  url   : $scope.api_url_question_creation ,
+                  method : "PATCH",
+                  data  : {
+                   "sorted_question": $scope.questions_list ,
+                   "creator_id":$scope.user_id
+                  } ,
+                  headers: {
+                   "X-api-keys": api_key_data.API_KEY,
+                   "X-api-app-name": api_key_data.APP_NAME
+                  }
+                }).then(function(resp){
+                  console.log(resp);
+                } , function(err){
+                  console.log(err);
+                });
+              });
+            }
+          } , 300 );
+
+        },function(err){
+          console.log(err);
+      });
+
+
+  };
+  $scope.onclick_items = function (elementId){
+    var evt = {
+      item      :  $("#"+elementId) ,
+      newIndex  :  ( $("#docQuestions li" ).length - 1 )
+    }
+    return $scope.dragged_items(evt);
+  };
+
 
 
   //--------------------------------------------------------
@@ -1021,8 +1144,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     });
     $(".qs-edit-"+$scope.question_id).css({"color":"#89d7d7"});
     $(".qs-edit-"+$scope.question_id).addClass("fa-cog fa-spin -font");
-    $(".question-li-x").removeClass("highlighted-question");
-    $(".qs-"+$scope.question_id).addClass("highlighted-question");
+    //$(".question-li-x").removeClass("highlighted-question");
+    // $(".qs-"+$scope.question_id).addClass("highlighted-question");
 
     // init ids ===========>>>>
     $http({
@@ -1151,7 +1274,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         all_answers[i].is_correct = false;
       }
       answer_selected.is_correct = !answer_selected.is_correct ;
-
 
       return false ;
     }
@@ -1311,34 +1433,40 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
   };
   // $scope.open_settgins_menu();
-  $scope.settings_menu_handler = $(".setting-menu-handler");
-  $scope.settings_menu_handler.on("click" , function (){
-
-    if($scope.settings_menu_handler.hasClass("open") == true )
-    {
-      $scope.settings_menu_handler.removeClass("open");
-      $scope.close_settgins_menu();
-    }
-    else
-    {
-      $scope.settings_menu_handler.addClass("open");
-      $scope.open_settgins_menu();
-    }
-  });
-
+  // $scope.settings_menu_handler = $(".setting-menu-handler");
+  // $scope.settings_menu_handler.on("click" , function (){
+  //
+  //   if($scope.settings_menu_handler.hasClass("open") == true )
+  //   {
+  //     $scope.settings_menu_handler.removeClass("open");
+  //     $scope.close_settgins_menu();
+  //   }
+  //   else
+  //   {
+  //     $scope.settings_menu_handler.addClass("open");
+  //     $scope.open_settgins_menu();
+  //   }
+  // });
+  //
   // -------------------------------------------
   // collapsed - expanded options
   // --------------------------------------
   $scope.expand_collapse_handler =   $(".app-settings li .control-item-header") ;
   $scope.expand_collapse_handler.on("click" , function (){
-    var target = $(this) ;
+    var target = $(this).next(".control-item-content") ;
+    var target_index = $(this).parent("li").index();
 
-    $scope.expand_collapse_handler.each(function(i){
-        if(target.parent("li").index() != $(this).parent("li").index() )
-        $scope.expand_collapse_handler.next(".control-item-content").slideUp();
-
-    });
-    $(this).next(".control-item-content").slideDown();
+   $scope.expand_collapse_handler.each(function(i){
+     var this_index = $(this).parent("li").index();
+     var this_item = $(this).next(".control-item-content") ;
+     if(this_item.css("display") == "block" && this_index != target_index ){
+       this_item.slideUp();
+     } else  if(this_item.css("display") == "block" && this_index == target_index ) {
+       target.slideUp();
+     }
+   });
+    if(target.css("display") == "none")
+        target.slideDown();
   });
 
 
@@ -1347,7 +1475,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   // ==== Angular Backend into Mongo (data)
   // ===================================
   $scope.application_save_settings = function (){
-
 
     // $scope.api_url_app_settings
     // $scope.application_settings
@@ -1405,7 +1532,6 @@ $(".show_media_link").on("change keyup keydown keypress", function (){
         $scope.file_object['media_type'] = 1 ;
       }
     } // else => means this is changed by system
-
 });
 /* Video Handler part */
 $scope.video_handler = $(".video-handler");
@@ -1418,11 +1544,7 @@ $scope.image_handler = $(".image-handler");
 $scope.image_handler.on("click", function (){
   $(".image-uploader-x").trigger("click");
 });
-$scope.upload_handler = $(".image-uploader-x");
-$scope.upload_handler.on("change" , function (){
-  $scope.file_object['media_type'] = 0 ;
-  $scope.file_object['file'] = $(this)[0].files[0];
-});
+
 
 // ===============================
 // => Upload & save in mongoDB
@@ -1430,295 +1552,11 @@ $scope.upload_handler.on("change" , function (){
 $(".media-changeable-img-case").on("click" , function (){
     $(".box-overlay").fadeIn();
 });
-$scope.show_preview_media = function (media_object){
 
-  var media_field = media_object.media_field ;
-  var media_name  = media_object.media_name;
-  var media_type  = media_object.media_type;
-  var video_id    = media_object.video_id;
-  var video_type  = media_object.video_type;
-
-
-  var preview_box = $(".media-x-preview");
-  var media_iframe ;
-  $(".media-loader-spinner").fadeOut(2000);
-  switch (media_type) {
-    case 0: // Image Type
-      media_iframe = "<div style='background:url("+$scope.server_ip+media_field+")' class='emb-image-case public-media'></div>" ;
-      break;
-// ---------------------------------------->> Separated line
-    case 1: // Video Type
-        if (video_type == 0 ){
-          //  media_iframe = '<iframe width="100%" height="250px" src="http://www.youtube.com/embed/'+video_id+'?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
-          media_iframe = '<iframe class="iframe" width="100%" src="http://www.youtube.com/embed/'+video_id+'"    height="250px" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
-
-        } // Youtube
-        if (video_type == 1 ){
-          media_iframe = ' <style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style> <iframe src="https://player.vimeo.com/video/'+video_id+'" width="100%" height="250px" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
-        } // Vimeo
-        if (video_type == 2 ){
-          media_iframe = '<video width="100%" height="auto" controls>'
-              + '<source src="'+media_field+'.mp4" type="video/mp4">'
-              + '<source src="'+media_field+'.ogg" type="video/ogg">'
-              + 'Your browser does not support the video tag.'
-              + '</video>'
-        } // Mp4
-      break;
-  } // end switch ---
-
-  preview_box.html(media_iframe);
-}; // => beside qs Preview
 
 $scope.close_media_box = function (){
   $(".box-overlay").fadeOut();
 }; // => beside qs Preview
-
-$scope.save_media_with = function (action_type) {
-  // LOADING PAGE
-  var loader = '<div class="media-loader-spinner"><div class="spinner">'+
-                  '<div class="rect1"></div>'+
-                  '<div class="rect2"></div>'+
-                  '<div class="rect3"></div>'+
-                  '<div class="rect4"></div>'+
-                  '<div class="rect5"></div>'+
-                '</div>' +
-                '<span class="title-loader">Please wait it may take a few moments</span></div>';
-  $(".media-x-preview").html(loader);
-if($scope.model_type == 'questions'){
-
-  // ==> END LOADER HERE !!
-
-  // $scope.question_id = "5a8ea78a3a4c8d3a5c9a69e8"; // for testing only
-
-  if($scope.question_id == null ) {
-    alert("You've to select question first from question list to allow you edit it !");
-    return false ;
-  }
-
-  var found_qs = $scope.questions_list.find($scope.callback_index);
-  var targetIndex = $scope.questions_list.indexOf(found_qs);
-  // found_qs.media_question.media_name = " this is an update to see what happened in angular backend";
-  var headers = new Object();
-  var data_object ;
-  // console.log("media type " + $scope.file_object.media_type);
-  if($scope.file_object.media_type == 0 ) {// Image
-      data_object = new FormData();
-      data_object.append("creator_id" , $scope.user_id );
-      data_object.append("question_id" , $scope.question_id );
-      data_object.append("media_field" , $scope.file_object.file );
-      headers["Content-Type"] = undefined ;
-  }
-  if($scope.file_object.media_type == 1 ) { // Video
-    data_object = new Object();
-    data_object['creator_id']  =  $scope.user_id ;
-    data_object['question_id'] =  $scope.question_id ;
-    data_object['media_field'] =  $scope.file_object.link ;
-  }
-  console.log(data_object);
-   $.getJSON( $scope.json_apk_file , function (api_key_data ){
-    headers["X-api-keys"] = api_key_data.API_KEY ;
-    headers["X-api-app-name"] = api_key_data.APP_NAME ;
-
-    console.log("user ids ");
-    console.log(data_object);
-      $http({
-        method : "PATCH" ,
-        url : $scope.api_url_edit_question ,
-        headers: headers ,
-        processData: false,
-        contentType: false ,
-        data: data_object
-      }).then(function(success_data){    // console.log($scope.questions_list);
-        var question_data = success_data.data ;
-        var media_question_url = question_data.Media_directory;
-
-        var question_media_details = question_data.Question_details.media_question;
-        found_qs.media_question = question_media_details ;
-        var media_type_is = found_qs.media_question.media_type ;
-        if( media_type_is == 0 ){ // image
-          $(".media-changeable-img-case").css({
-            "background-image" : "url('"+$scope.server_ip+found_qs.media_question.media_field +"')"
-          });
-        }
-        if( media_type_is == 1 ){ // image
-          var video_type = found_qs.media_question.video_type ;
-          if(video_type == 0 ) {
-            $(".media-changeable-img-case").css({
-              "background-image" : "url('"+$scope.server_ip+'img/vid-youtube.jpg' +"')"
-            });
-          }
-          if(video_type == 1 ){
-            $(".media-changeable-img-case").css({
-              "background-image" : "url('"+$scope.server_ip+'img/vid-vimeo.jpg' +"')"
-            });
-          }
-          if (video_type == 2 ){
-            $(".media-changeable-img-case").css({
-              "background-image" : "url('"+$scope.server_ip+'img/vid-mp4.jpg' +"')"
-            })
-          }
-        }
-
-        // =========> Action Proccess
-           if (action_type == "close")
-                $scope.close_media_box();
-      else if (action_type == "preview")
-                $scope.show_preview_media(found_qs.media_question ); // media_type , video_type = null
-
-      },function(error_data){
-        console.log(error_data);
-      });
-  });
-
-
-} else {
-  /*
-      $scope.question_id
-      $scope.answer_id
-  */
-
-  if($scope.answer_id != null ){
-                                                  // api/{:app_id}/question/{:question_id}/answer/edit
-    $scope.api_url_edit_answer = $scope.server_ip + "api/"+$scope.app_id+"/question/"+$scope.question_id+"/answer/edit";
-    var headers = new Object();
-    var answer_object ;
-    // ====>> current answer id
-    var target_question = $scope.questions_list.find($scope.callback_index);
-    var target_answer = target_question.answers_format.find($scope.callback_answer_index);
-    $scope.question_id = target_question._id ;
-    if($scope.file_object.media_type == 0) {
-      answer_object = new FormData();
-      answer_object.append("creator_id" , $scope.user_id );
-      answer_object.append("question_id" , $scope.question_id );
-      answer_object.append("answer_id" , $scope.answer_id );
-      answer_object.append("media_src" , $scope.file_object.file );
-      headers["Content-Type"] = undefined ;
-    }else if($scope.file_object.media_type == 1) {
-      answer_object = new Object();
-      answer_object['creator_id']  =  $scope.user_id ;
-      answer_object['question_id'] =  $scope.question_id ;
-      answer_object['answer_id'] =  $scope.answer_id ;
-      answer_object['media_src'] =  $scope.file_object.link ;
-    }
-
-    $.getJSON( $scope.json_apk_file , function (api_key_data ){
-      headers["X-api-keys"] = api_key_data.API_KEY ;
-      headers["X-api-app-name"] = api_key_data.APP_NAME ;
-      // save question answers first into mongoDB
-      $scope.save_changes_in_angular_backend();
-      $timeout(function(){
-        // Sotre media
-          $http({
-            method : "PATCH" ,
-            url : $scope.api_url_edit_answer ,
-            headers: headers ,
-            processData: false,
-            contentType: false ,
-            data: answer_object
-          }).then(function(success_data){
-            if(target_question.question_type == 1){
-                var answer_data = success_data.data ;
-
-
-                // Store it into scope object
-                $scope.answer_media = answer_data ;
-                // Store it into Array
-                target_answer = answer_data ;
-
-                // update the-array
-                var thisAnswer = $scope.questions_list.find($scope.callback_index).answers_format.find($scope.callback_answer_index);
-                var currIndex = $scope.questions_list.find($scope.callback_index).answers_format.indexOf(thisAnswer);
-                if(currIndex != -1 ){
-                  $scope.questions_list.find($scope.callback_index).answers_format[currIndex] =
-                  answer_data ;
-                }
-
-            }
-            if(target_question.question_type == 0 ){
-                var answer_data = success_data.data ;
-                var media_optional = answer_data.media_optional;
-
-                // Store it into question list array
-                target_answer.media_optional = answer_data.media_optional ;
-                // Store it into scope object
-                $scope.answer_media = target_answer.media_optional ;
-            }
-
-
-
-
-
-
-
-            if(action_type == "close"){
-              $scope.close_media_box();
-            }else if (action_type == "preview"){
-                $scope.extract_answer_media_from_mongodb();
-            }
-
-
-
-          }, function(error_data){
-              console.log(error_data);
-          });
-      } , 500);
-
-    });
-  }
-  // ==>>> Save and show media related answer part
-}
-
-};
-
-
-  $scope.extract_answer_media_from_mongodb = function (){
-    if($scope.answer_media == null ) {
-      console.log("Error : Answer Media Not Found !");
-      return false;
-    }
-     console.log($scope.answer_media);
-     var preview_box = $(".media-x-preview");
-     var media_iframe ;
-     $(".media-loader-spinner").fadeOut(2000);
-     switch ($scope.answer_media.media_type) {
-       // =====================================> Image
-       case 0 :
-       media_iframe = "<div style='background:url("+$scope.server_ip+$scope.answer_media.media_src+")' class='emb-image-case public-media'></div>" ;
-       break;
-       // =====================================> Video
-       case  1 :
-       if($scope.answer_media.video_type == 0)
-         {
-           media_iframe = '<iframe class="iframe" width="100%" src="'+$scope.answer_media.embed_path+'"    height="250px" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
-         }
-       if($scope.answer_media.video_type == 1)
-         {
-           media_iframe = '<iframe class="iframe" width="100%" src="'+$scope.answer_media.embed_path+'"    height="250px" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
-         }
-       if($scope.answer_media.video_type == 2)
-        {
-          media_iframe = '<video width="100%" height="auto" controls>'
-             + '<source src="'+$scope.answer_media.mp4_option.mp4_url+'" type="video/mp4">'
-             + '<source src="'+$scope.answer_media.mp4_option.ogg_url+'" type="video/ogg">'
-             + 'Your browser does not support the video tag.'
-             + '</video>'
-        }
-       break;
-
-
-     }
-     preview_box.html(media_iframe);
-  } ; // end extract func here !
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1875,6 +1713,294 @@ Sortable.create(listWithHandle, {
 
 */
 
+
+
+
+
+
+
+// ===============================================================>
+// =========>>> Extract Media Input field ( youtube vimeo mp4 )
+// =========================================================>
+$(".show_media_link").on("change keyup keydown keypress" , function (){
+  // ====>>> Uploading media
+  $scope.file_object['media_type'] = 1 ;
+  $scope.file_object['link'] = $(this).val();
+  // LOADING PAGE
+  var loader = '<div class="media-loader-spinner"><div class="spinner">'+
+                '<div class="rect1"></div>'+
+                '<div class="rect2"></div>'+
+                '<div class="rect3"></div>'+
+                '<div class="rect4"></div>'+
+                '<div class="rect5"></div>'+
+              '</div>' +
+              '<span class="title-loader">Please wait while extract video url !</span></div>';
+
+  var preview_box = $(".media-x-preview");
+  preview_box.html(loader);
+
+  $timeout(function (){
+    var video ;
+    if($scope.model_type == 'questions'){ // => Question
+      $scope.data_object = null ;
+      $scope.data_object = new Object();
+      $scope.data_object['creator_id']  =  $scope.user_id ;
+      $scope.data_object['question_id'] =  $scope.question_id ;
+      $scope.data_object['media_field'] =  $scope.file_object.link ;
+      video = $scope.data_object['media_field'] ;
+    } else { // => Answer
+      $scope.data_object = null ;
+      $scope.data_object = new Object();
+      $scope.data_object['creator_id']  =  $scope.user_id ;
+      $scope.data_object['question_id'] =  $scope.question_id ;
+      $scope.data_object['answer_id'] =  $scope.answer_id ;
+      $scope.data_object['media_src'] =  $scope.file_object.link ;
+      video = $scope.data_object['media_src'] ;
+    }
+
+
+    var videoType = null ;
+    var videoId = null ;
+    var video_src_value = null;
+    if( video.toLowerCase().includes("youtube")    == true   ) {
+      videoType = 0 ; // => youtube
+      var idWithLastSplit = video.lastIndexOf('?');
+      var videos = video.substr(idWithLastSplit + 1);
+      var lastId = videos.substr(0, videos.indexOf('&'));
+
+      if(lastId != '' || lastId )
+        videoId = lastId ;
+      else
+        videoId = videos ;
+
+
+      var afterEqualChar = videoId.lastIndexOf('=');
+      videoId = videoId.substring(afterEqualChar + 1);
+      video_src_value = "http://youtube.com/embed/"+ videoId ;
+    }
+    else if( video.includes("vimeo") == true   ) {
+      videoType = 1 ; // => vimeo
+      var n = video.lastIndexOf('/');
+      videoId = video.substring(n + 1);
+      video_src_value = "https://player.vimeo.com/video/"+ videoId;;
+    }
+    else if( video.includes(".mp4")  == true   ) {
+      videoType = 2 ;
+      videoId = null;
+
+      video_src_value = video.substring(0, video.lastIndexOf('.'));
+    }
+
+    var media_iframe ;
+    switch (videoType) {
+      case 0 : // youtube
+          media_iframe = '<iframe class="iframe" width="100%" src="'+video_src_value+'"    height="250px" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
+      break;
+
+      case 1 : // Vimeo
+          media_iframe = '<iframe class="iframe" width="100%" src="'+video_src_value+'"    height="250px" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
+      break;
+
+      case 2 : // mp4
+          media_iframe = '<video width="100%" height="auto" controls>'
+                         + '<source src="'+video_src_value+'.mp4" type="video/mp4">'
+                         + '<source src="'+video_src_value+'.ogg" type="video/ogg">'
+                         + 'Your browser does not support the video tag.'
+                         + '</video>'
+      break;
+    }
+    preview_box.html(media_iframe);
+  } , 1200 );
+
+});
+
+
+
+// ==========================================>
+// =========>>> Extract Media when choose it
+// ==========================================>
+$scope.upload_handler = $(".image-uploader-x");
+$scope.upload_handler.on("change" , function (){
+  // ====>>> Uploading media
+  $scope.file_object['media_type'] = 0 ;
+  $scope.file_object['file'] = $(this)[0].files[0];
+
+  // LOADING PAGE
+    var loader = '<div class="media-loader-spinner"><div class="spinner">'+
+                '<div class="rect1"></div>'+
+                '<div class="rect2"></div>'+
+                '<div class="rect3"></div>'+
+                '<div class="rect4"></div>'+
+                '<div class="rect5"></div>'+
+              '</div>' +
+              '<span class="title-loader">Please wait it may take a few moments</span></div>';
+
+    $(".media-x-preview").html(loader);
+
+    if($scope.question_id == null ) {
+      alert("You've to select question first from question list to allow you edit it !");
+      return false ;
+    }
+    if($scope.model_type == 'questions'){ // => Case Question Images
+      var found_qs = $scope.questions_list.find($scope.callback_index);
+      var targetIndex = $scope.questions_list.indexOf(found_qs);
+
+
+      $scope.data_object = null ;
+      $scope.data_object = new FormData();
+      $scope.data_object.append("creator_id" , $scope.user_id );
+      $scope.data_object.append("question_id" , $scope.question_id );
+      $scope.data_object.append("media_field" , $scope.file_object.file );
+      $scope.headers["Content-Type"] = undefined ;
+    } else { // => Case Answer Image
+
+      $scope.headers["Content-Type"] = undefined ;
+      $scope.data_object = null ;
+      $scope.data_object = new FormData();
+      $scope.data_object.append("creator_id" , $scope.user_id );
+      $scope.data_object.append("question_id" , $scope.question_id );
+      $scope.data_object.append("answer_id" , $scope.answer_id );
+      $scope.data_object.append("media_src" , $scope.file_object.file );
+
+    }
+    // ===> Upload Image
+    if($scope.file_object['file'] != null ) {
+      var reader = new FileReader();
+      var thisReader = reader.readAsDataURL($scope.file_object['file']);
+      reader.onload = function (e){
+        var image_src = e.target.result ;
+
+        if($scope.model_type == 'questions'){
+              // Thumbnail
+              $(".media-changeable-img-case").css({
+                  "background-image" : "url('"+image_src+"')"
+              });
+         }else {
+            // nothing to show here , we need to upload it directly !
+         }
+
+         // Preview Image
+         var  image_iframe = "<div style='background:url("+image_src+")' class='emb-image-case public-media'></div>" ;
+         var preview_box = $(".media-x-preview");
+         preview_box.html(image_iframe);
+      };
+    }
+});
+
+
+
+
+// ========> Saving Media
+$scope.save_media_with = function (type){
+  var headers = new Object();
+  if($scope.file_object.media_type == 0 ){
+       // ==> Header
+      headers["Content-Type"] = undefined ;
+       // ==> Show Progression bar for uploading image
+       var image_container =  $(".emb-image-case") ;
+       var upload_progeress  = "<div class='progress_barx'>";
+           upload_progeress += '<div class="loaderxcv">Loading...</div>';
+          //  upload_progeress += "<center>Uploading Image</center>";
+           upload_progeress += "</div>";
+       image_container.html(upload_progeress);
+  }
+
+
+  $scope.save_changes_in_angular_backend();
+  $timeout(function (){
+    $.getJSON( $scope.json_apk_file , function (api_key_data ){
+      $scope.headers["X-api-keys"] = api_key_data.API_KEY ;
+      $scope.headers["X-api-app-name"] = api_key_data.APP_NAME ;
+
+        var url ;
+        if($scope.model_type == 'questions')
+          url =  $scope.api_url_edit_question ;
+          else
+          url =$scope.api_url_edit_answer = $scope.server_ip + "api/"+$scope.app_id+"/question/"+$scope.question_id+"/answer/edit";
+
+          // ==> Uploading and Saving Media
+       $http({
+         method : "PATCH"           ,
+         url :  url                 ,
+         headers: $scope.headers    ,
+         processData: false         ,
+         contentType: false         ,
+         data: $scope.data_object
+       }).then(function(success_data){
+
+           // Case it image
+          if($scope.file_object.media_type == 0 )
+              image_container.html('');
+
+
+          // Case preview answer thumbs and store it into array
+          if($scope.model_type == 'questions'){
+            if($scope.file_object.media_type == 0 ){
+              var image_iframe = '<div style="background-image:url('+success_data.data.Media_directory+')" class="image-case img_">';
+              $(".media-changeable-img-case").html(image_iframe);
+            }else {
+              var  videoTypeX =  success_data.data.Question_details.media_question.video_type ;
+              var  video_src_value = success_data.data.Question_details.media_question.video_source ;
+              var  video_media_iframe ;
+
+              console.log(success_data.data.Question_details.media_question);
+              switch (videoTypeX){
+                case 0 : // youtube
+                    video_media_iframe = '<iframe class="iframe" width="100%" src="'+video_src_value+'"    height="130px" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
+                break;
+
+                case 1 : // Vimeo
+                    video_media_iframe = '<iframe class="iframe" width="100%" src="'+video_src_value+'"    height="130px" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
+                break;
+
+                case 2 : // mp4
+                    video_media_iframe = '<video width="100%" height="auto" controls>'
+                                   + '<source src="'+success_data.data.Question_details.media_question.media_field+'.mp4" type="video/mp4">'
+                                   + '<source src="'+success_data.data.Question_details.media_question.media_field+'.ogg" type="video/ogg">'
+                                   + 'Your browser does not support the video tag.'
+                                   + '</video>'
+                break;
+              }
+
+              // video_media_iframe
+              $(".media-uploads").html(video_media_iframe);
+            }
+          }else  {
+            // --------------------------------------------
+            // 1 ===> Answers
+            // --------------------------------------------
+            var target_question = $scope.questions_list.find($scope.callback_index);
+            var target_answer = target_question.answers_format.find($scope.callback_answer_index);
+            if( target_question.question_type == 1 ){
+                  var answer_data = success_data.data ;
+                  // Store it into scope object
+                  $scope.answer_media = answer_data ;
+                  // Store it into Array
+                  target_answer = answer_data ;
+                  // update the-array
+                  var thisAnswer = $scope.questions_list.find($scope.callback_index).answers_format.find($scope.callback_answer_index);
+                  var currIndex = $scope.questions_list.find($scope.callback_index).answers_format.indexOf(thisAnswer);
+                  if(currIndex != -1 ){
+                    $scope.questions_list.find($scope.callback_index).answers_format[currIndex] =
+                    answer_data ;
+                  }
+              }
+            if(target_question.question_type == 0 ){
+                  var answer_data = success_data.data ;
+                  var media_optional = answer_data.media_optional;
+                  // Store it into question list array
+                  target_answer.media_optional = answer_data.media_optional ;
+                  // Store it into scope object
+                  $scope.answer_media = target_answer.media_optional ;
+              }
+          }
+       } , function(error_data){
+            console.log(error_data);
+       });
+     }); // End JSON File reader here !
+  } , 500 );
+
+}
 
 
 }]);

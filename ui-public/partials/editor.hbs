@@ -95,8 +95,6 @@
     </div>
   </li>
 
-
-
   <li>
     <div class="x-editor-x-title" data-toggle="#answers-pt">
       Answers
@@ -104,9 +102,7 @@
     <div ststyle="display:none;"class="x-editor-x-body" id="answers-pt">
         <div class="multi-answers-part">
           <ul class="choices-part">
-
-            <li class="answers_x"  data-answer-id="answer_id_~>>answer_value._id<<~" data-answer-index="~>>$index<<~"  ng:class="(answer_value.is_correct == true) ? 'highlighted-right-answers' : ''" ng:repeat="(answer_key , answer_value) in asnwers">
-
+            <li class="answers_x" data-answer-id="answer_id_~>>answer_value._id<<~" data-answer-index="~>>$index<<~"  ng:class="(answer_value.is_correct == true) ? 'highlighted-right-answers' : ''" ng:repeat="(answer_key , answer_value) in asnwers track by $index">
               <!-- text options value -->
                <div ng:if="question_type == 0" class="">
                  <ul class="answer-pt-controller">
@@ -117,8 +113,6 @@
                    <li ng:if="answer_value.is_correct == true" title="Remove Correct Answer">
                      <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
                    </li>
-
-
                    <li ng:click="show_media_uploader('answers' ,  answer_value._id  )" title="Edit it with media">
                      <span class="fa fa-pencil edit-options-answer"></span>
                    </li>
@@ -201,7 +195,6 @@
 
 
             </li>
-
           </ul>
           <!--  ng:if="question_type == 0" -->
           <div ng:click="create_new_answer()" ng:if="question_type == 0 || question_type == 1" class="add-new-option">
@@ -229,7 +222,6 @@
                    </div>
                 </li>
                 <li>
-
                    <span class="title-checkbox">Single Response</span>
                    <div class="slideThree on-off-checkbox-settings">
                       <input ng:model="question_settings.single_choice" type="checkbox" id="MultipleResponse-option" name="check" checked="">
@@ -246,7 +238,6 @@
                    </div>
                 </li>
                 <li>
-
                    <span class="title-checkbox">Super Size</span>
                    <div class="slideThree on-off-checkbox-settings">
                       <input ng:model="question_settings.super_size" type="checkbox"  id="SuperSize-option" name="check" checked="">
@@ -321,7 +312,6 @@
   </div>
 
 
-
 </div>
 
 
@@ -376,14 +366,11 @@
           </div>
         </div>
         <div class="preview-media-part butns-part">
-          <button ng:click="close_media_box()" class="btn btn-danger btn-close-media" type="button" name="button">
+          <button ng:click="close_media_box()" class="button_updates btn btn-danger btn-close-media" type="button" name="button">
             Close
           </button>
-          <button ng:click="save_media_with('close')" class="btn btn-warning-media" type="button" name="button">
-            Save and close
-          </button>
-          <button ng:click="save_media_with('preview')" class="btn btn-primary" type="button" name="button">
-            Save and Preview
+          <button ng:click="save_media_with('preview')" class="button_updates btn btn-primary" type="button" name="button">
+            Save
           </button>
         </div>
       </div>
