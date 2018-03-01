@@ -1904,6 +1904,9 @@ $scope.save_media_with = function (type){
           //  upload_progeress += "<center>Uploading Image</center>";
            upload_progeress += "</div>";
        image_container.html(upload_progeress);
+  } else {
+    alert("VIDEO TYPE !!");
+    $scope.headers = new Object();
   }
 
   $scope.save_changes_in_angular_backend();
