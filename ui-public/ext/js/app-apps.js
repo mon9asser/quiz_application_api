@@ -1939,6 +1939,7 @@ $scope.save_media_with = function (type){
               var image_iframe = '<div style="background-image:url('+success_data.data.Media_directory+')" class="image-case img_">';
               $(".media-changeable-img-case").html(image_iframe);
             }else {
+              console.log(success_data.data);
               var  videoTypeX =  success_data.data.Question_details.media_question.video_type ;
               var  video_src_value = success_data.data.Question_details.media_question.video_source ;
               var  video_media_iframe ;
