@@ -1825,6 +1825,8 @@ $scope.upload_handler.on("change" , function (){
   $scope.file_object['media_type'] = 0 ;
   $scope.file_object['file'] = $(this)[0].files[0];
 
+  if($(this).val() == null || $(this).val('')  )
+    return false ;
   // LOADING PAGE
     var loader = '<div class="media-loader-spinner"><div class="spinner">'+
                 '<div class="rect1"></div>'+
