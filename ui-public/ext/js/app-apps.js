@@ -1726,6 +1726,10 @@ $(".show_media_link").on("change keyup keydown keypress" , function (){
   // ====>>> Uploading media
   $scope.file_object['media_type'] = 1 ;
   $scope.file_object['link'] = $(this).val();
+
+  if($(this).val() == null || $(this).val('')  )
+    return false ;
+    
   // LOADING PAGE
   var loader = '<div class="media-loader-spinner"><div class="spinner">'+
                 '<div class="rect1"></div>'+
@@ -1825,8 +1829,7 @@ $scope.upload_handler.on("change" , function (){
   $scope.file_object['media_type'] = 0 ;
   $scope.file_object['file'] = $(this)[0].files[0];
 
-  if($(this).val() == null || $(this).val('')  )
-    return false ;
+
   // LOADING PAGE
     var loader = '<div class="media-loader-spinner"><div class="spinner">'+
                 '<div class="rect1"></div>'+
@@ -1934,14 +1937,14 @@ $scope.save_media_with = function (type){
          contentType: false         ,
          data: $scope.data_object
        }).then(function(success_data){
-         console.log("SUCCESS DATA ++++ |");
-         console.log(success_data.data);
-
-         console.log("DATA-SENT ------????");
-         console.log($scope.data_object);
-
-         console.log("HEADERS ------????");
-         console.log($scope.headers);
+        //  console.log("SUCCESS DATA ++++ |");
+        //  console.log(success_data.data);
+         //
+        //  console.log("DATA-SENT ------????");
+        //  console.log($scope.data_object);
+         //
+        //  console.log("HEADERS ------????");
+        //  console.log($scope.headers);
            // Case it image
           if($scope.file_object.media_type == 0 )
               image_container.html('');
@@ -1987,8 +1990,7 @@ $scope.save_media_with = function (type){
             var target_answer = target_question.answers_format.find($scope.callback_answer_index);
             if( target_question.question_type == 1 ){
                   var answer_data = success_data.data ;
-                  console.log("ANSWER TYPE 1");
-                  console.log(answer_data);
+
                   // Store it into scope object
                   $scope.answer_media = answer_data ;
                   // Store it into Array
@@ -2003,10 +2005,8 @@ $scope.save_media_with = function (type){
               }
             if(target_question.question_type == 0 ){
                   var answer_data = success_data.data ;
-                  var media_optional = answer_data.media_optional;
-                  console.log("ANSWER TYPE 0");
-                  console.log(answer_data);
-                  console.log(media_optional);
+                  var media_optional = answer_data.media_optional;                                                           console.log(answer_data);
+                                                                                        console.log(media_optional);
                   // Store it into question list array
                   target_answer.media_optional = answer_data.media_optional ;
                   // Store it into scope object
