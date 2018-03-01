@@ -1729,7 +1729,7 @@ $(".show_media_link").on("change keyup keydown keypress" , function (){
 
   if($(this).val() == null || $(this).val('')  )
     return false ;
-    
+
   // LOADING PAGE
   var loader = '<div class="media-loader-spinner"><div class="spinner">'+
                 '<div class="rect1"></div>'+
