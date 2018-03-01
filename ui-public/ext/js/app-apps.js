@@ -1722,14 +1722,12 @@ Sortable.create(listWithHandle, {
 // ===============================================================>
 // =========>>> Extract Media Input field ( youtube vimeo mp4 )
 // =========================================================>
-$(".show_media_link").on("change keyup keydown keypress" , function (){
+// ==> keyup keydown keypress
+$(".show_media_link").on("change" , function (){
   // ====>>> Uploading media
   $scope.file_object['media_type'] = 1 ;
   $scope.file_object['link'] = $(this).val();
-
-  if($(this).val() == null || $(this).val('')  )
-    return false ;
-
+  
   // LOADING PAGE
   var loader = '<div class="media-loader-spinner"><div class="spinner">'+
                 '<div class="rect1"></div>'+
