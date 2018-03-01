@@ -1919,6 +1919,8 @@ $scope.save_media_with = function (type){
           url =$scope.api_url_edit_answer = $scope.server_ip + "api/"+$scope.app_id+"/question/"+$scope.question_id+"/answer/edit";
 
           // ==> Uploading and Saving Media
+       console.log("Check Answer Value ... MAIN OBJECT");
+       console.log($scope.data_object);
        $http({
          method : "PATCH"           ,
          url :  url                 ,
@@ -1927,11 +1929,11 @@ $scope.save_media_with = function (type){
          contentType: false         ,
          data: $scope.data_object
        }).then(function(success_data){
-
+         console.log("SUCCESS DATA ++++ ");
+         console.log(success_data.data);
            // Case it image
           if($scope.file_object.media_type == 0 )
               image_container.html('');
-
 
           // Case preview answer thumbs and store it into array
           if($scope.model_type == 'questions'){
