@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const _ = require("lodash");
 var config = {
-    server_ip:             'http://34.215.133.182/' , // http://34.215.133.182/
+    server_ip:             'http://34.215.133.182/'  , // http://34.215.133.182/
     port :                  ':27017' ,
     database_name :         '/todo' ,
     host_name:              'mongodb://localhost' ,
