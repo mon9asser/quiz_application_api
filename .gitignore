@@ -1,6 +1,2 @@
 ./node_modules
 node_modules/
-./database
-./database/config.js
-./config.js
-config.js
