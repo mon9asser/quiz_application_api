@@ -29,7 +29,6 @@
     "express-router": "0.0.1",
     "express-session": "^1.15.6",
     "hbs": "^4.0.1",
-    "ip": "^1.1.5",
     "jsonwebtoken": "^8.1.1",
     "lodash": "^4.17.4",
     "mongodb": "^3.0.1",

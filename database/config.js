@@ -1,31 +1,12 @@
 const mongoose = require("mongoose");
 const _ = require("lodash");
-var ip = require('ip');
-
-// Detect server ip
- // "192.168.1.105" ==> My local machine
-
-
-
- var server_port , server_host  ;
-
-
-if(ip.address() == "172.31.18.252") {
-     server_host = "34.215.133.182";
-     server_port = 80  ;
-  } else {
-    server_host = "localhost:9000";
-    server_port = 9000  ;
-}
-
-
 var config = {
-    server_ip:             'http://'+server_host+'/'  , // http://34.215.133.182/
+    server_ip:             'http://34.215.133.182/'  , // http://34.215.133.182/
     port :                  ':27017' ,
     database_name :         '/todo' ,
     host_name:              'mongodb://localhost' ,
     options :               { useMongoClient:true }   ,
-    server_port :           process.env.port || server_port  ,
+    server_port :           process.env.port || 80  ,
     session_access : false ,
     default_records_per_page : 5 ,
     token_expiration_time : 9 , // means 9 hours  // => can be 500 hrs also
