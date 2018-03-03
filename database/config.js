@@ -4,17 +4,20 @@ var ip = require('ip');
 
 // Detect server ip
  // "192.168.1.105" ==> My local machine
+
+
+
  var server_port , server_host  ;
 
- // ==> Server Information
-  server_port= 80  ;
-  server_host = "34.215.133.182" ;
 
-if(ip.address() == "192.168.1.105") // this ip is my local machine !
-{
+if(ip.address() == "172.31.18.252") {
+     server_host = "34.215.133.182";
+     server_port = 80  ;
+  } else {
+    server_host = "localhost:9000";
     server_port = 9000  ;
-    server_host = "localhost:9000" ;
 }
+
 
 var config = {
     server_ip:             'http://'+server_host+'/'  , // http://34.215.133.182/
