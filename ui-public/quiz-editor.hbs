@@ -65,7 +65,6 @@
                    <span></span>
                </div>
                <!-- End Text Loader -->
-
 							  <span class="questionnaire-title">
                   <!-- Quiz Name -->
                    <span>
@@ -85,7 +84,14 @@
     <div class="row">
        <!-- Question (Editor) menu -->
       <div class="left_part col-md-5 col-sm-6 col-xs-12">
+
+
+
+
           <div class="question-data qsdragged-list qs-dropped background_drag_drop">
+            <div class="loading-data">
+                <div class="data-loader">Loading...</div>
+            </div>
             <!-- Messages -->
             <!-- <ul style="height:20px; background:red;" id="appMessages" class="dropped-qs dropped-qs-2">
             </ul> -->
@@ -100,7 +106,7 @@
             <!-- End Text Loader -->
 						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
 
-               <li data-index="~>>$index<<~" data-question-id="~>>qs_value._id<<~" ng:class="'question-li-x qs-'+qs_value._id" ng:repeat="(qs_key , qs_value) in questions_list track by $index">
+               <li id="questoin_tag_~>>qs_value._id<<~" data-index="~>>$index<<~" data-question-id="~>>qs_value._id<<~" ng:class="'question-li-x qs-'+qs_value._id" ng:repeat="(qs_key , qs_value) in questions_list track by $index">
                      <div class="question-part">
                        <div class="qs-type quesiontlist_iconx">
                          <div class="drag-handler">
@@ -108,7 +114,7 @@
                          </div>
                          <div  ng:click="edit_this_question(qs_value._id , $index )"  class="single-question-container">
                            <span class="qs-type" title="Multiple Choices">
-                              <i ng:if="qs_value.question_type == 0" class="icon-insert-template"></i>
+                             <i ng:if="qs_value.question_type == 0" class="icon-insert-template"></i>
                              <i ng:if="qs_value.question_type == 1" class="icon-image"></i>
                              <i ng:if="qs_value.question_type == 2" class="icon-check-circle"></i>
                            </span>

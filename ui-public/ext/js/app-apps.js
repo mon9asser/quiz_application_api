@@ -91,6 +91,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     };
     $scope.data_object   = null ;
     $scope.answer_object = null ;
+    $scope.question_object_that_added = null ;
     $scope.headers = new Object() ;
     // =>> On load window
     $scope.settings_menu.css({width:$scope.window.settings_menu});
@@ -778,8 +779,18 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
        var oldIndex = evt.oldIndex;
        $scope.question_id = $(itemEl).attr("data-question-id");
        var question_sor = $scope.questions_list.find($scope.callback_index);
-       // newIndex
-       $scope.edit_this_question($scope.question_id  , newIndex ) ;
+
+       $scope.edit_this_question ( $scope.question_id  , newIndex ) ;
+
+       $scope.highlighted_question_and_show_data (newIndex , itemEl);
+       //-------------------------------------------------
+       // highlighted-questions
+       //-------------------------------------------------
+        $("#docQuestions").children("li").each(function (){
+          ($(this).hasClass("highlighted-question")) ?
+            $(this).removeClass("highlighted-question") : null ;
+        })
+
       // var question_id_x = $("#docQuestions");
 
       //  var currIndex = $("li").index(".qs-"+$scope.question_id);
@@ -831,6 +842,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         revertClone: false,
     },
     onStart : function (evt){
+
        $scope.hide_loader();
        // ---------------------------------------------------
        // ------->> Get Id from mongoDB
@@ -899,19 +911,19 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           $scope.mongoose_date = resp.data.date;;
           $scope.unique_ids = resp.data.list_of_ids ;
 
-
-
-
-
           $scope.drag_drop_status = false;
-          var htmlVal = $("#docQuestions ").find(evt.item);
+          var htmlVal = $("#docQuestions").find(evt.item);
            $("#docQuestions").css({
              background :"transparent"
            });
+
           // ==> push and update indexes in array
           var itemType = $(evt.item).attr('data-type');
-            var questionType = $(evt.item).attr('data-question-type');
-            var new_question = {
+          var questionType = $(evt.item).attr('data-question-type');
+          var questionId = htmlVal.attr("data-question-id");
+
+
+          var new_question = {
               _id:$scope.mongoose_id,
               question_type :questionType,
               question_body :"Edit Model",
@@ -1012,7 +1024,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                    "X-api-app-name": api_key_data.APP_NAME
                   }
                 }).then(function(resp){
-                  console.log(resp);
+                    $scope.question_object_that_added = new_question ;
+                    $scope.edit_this_question(resp.data._id , evt.newIndex  );
                 } , function(err){
                   console.log(err);
                 });
@@ -1039,38 +1052,68 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   //--------------------------------------------------------
   // ==> Edit Current Question     color: #89d7d7;
   //--------------------------------------------------------
-  $scope.edit_this_question = function ( qs_id  , qsCurrIndex){
+  // => Issue #100
+  $scope.edit_this_question = function ( qs_id  , qsCurrIndex , nextIndex = null){
+    // alert(qs_id);
+    if(nextIndex == null ){
+        $("#docQuestions").children("li").each(function (){
+          ( $(this).hasClass("highlighted-question")  ) ?
+            $(this).removeClass("highlighted-question")
+            : null ;
+        });
+        $("#docQuestions").children("li").eq(qsCurrIndex).addClass("highlighted-question");
+
+    }
+
 
     var right_part = $(".right_part").css("display");
     if(right_part == "none")
     {
       $scope.hide_loader();
     }
-    // init Vars ===========>>>>
+
+
+
+
+
+
     $scope.questionIndex = qsCurrIndex ;
     $scope.question_id = qs_id ;
     $scope.indexes = 1 ;
-    // setup data into the -> array
+
+    // init Vars ===========>>>>
+    // if(drag_drop_items != null ) {
+    //   new_question
+    // }
+    // console.log(new_question);
+
     var taget_question = $scope.questions_list.find($scope.callback_index);
-    if(taget_question.answers_format.length > 1) {
-      $scope.indexes = taget_question.answers_format.length ;
+
+    if (taget_question == undefined )
+      taget_question = $scope.question_object_that_added ;
+
+    if( taget_question.answers_format.length > 1 ){
+        $scope.indexes = taget_question.answers_format.length ;
     }
-    // setup data into the -> ui { databinding part }
-     // 1 ==> question part
+
+
+
+
      $scope.question_id = taget_question._id;
      $scope.question_type = taget_question.question_type;
+
      // 2 ==> media parts
      $scope.question_media = taget_question.media_question ;
      // 3 ==> answer part
      $scope.asnwers = taget_question.answers_format;
-      //  $timeout(function(){
-      //    // retrieve answers w media
-      //    var answer_containers = $('.choices-part').children("li");
-      //    answer_containers.each(function(i){
-      //      var thisAns = $(this);
-      //      s
-      //    });
-      //  } , 300 );
+     //  $timeout(function(){
+     //    // retrieve answers w media
+     //    var answer_containers = $('.choices-part').children("li");
+     //    answer_containers.each(function(i){
+     //      var thisAns = $(this);
+     //      s
+     //    });
+     //  } , 300 );
 
      // 4 ==> question setting
      $scope.question_settings = {
@@ -1339,11 +1382,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   // =====>> Save Changes that completed in angular backend
   // ==============================================================
   $scope.save_changes_in_angular_backend = function (){
+
+
     console.log($scope.questions_list);
     if($scope.question_id == null ){
       alert("You should select question from question list to allow you edit it");
       return false ;
     }
+
     var changes_button = $(".save_changes");
     changes_button.html("Saving Changes ....");
 
@@ -1365,6 +1411,17 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           }).then(function(resp){
             changes_button.html("Save Changes");
 
+
+            // GO TO NEXT Question
+            var found_qs = $scope.questions_list.find($scope.callback_index);
+            var targetIndex = $scope.questions_list.indexOf(found_qs);
+            if(targetIndex != -1 ) {
+              if($scope.questions_list.length > ( targetIndex ) ) {
+                var next_question = targetIndex + 1 ;
+                if ( $scope.questions_list[next_question] != undefined )
+                $scope.edit_this_question($scope.questions_list[next_question]._id , next_question) ;
+              }
+            }
           },function(err){
             console.log(err);
           });
@@ -1884,8 +1941,6 @@ $scope.upload_handler.on("change" , function (){
 });
 
 
-
-
 // ========> Saving Media
 $scope.save_media_with = function (type){
 
@@ -1906,6 +1961,7 @@ $scope.save_media_with = function (type){
   }
 
   $scope.save_changes_in_angular_backend();
+
   $timeout(function (){
     $.getJSON( $scope.json_apk_file , function (api_key_data ){
       $scope.headers["X-api-keys"] = api_key_data.API_KEY ;
@@ -2016,6 +2072,24 @@ $scope.save_media_with = function (type){
   //----------------------------------------
   // ==> End Loader
   //----------------------------------------
-  $(".text-loader").delay(5000).fadeOut();
-  
+  $(".text-loader , .loading-data").delay(5000).fadeOut();
+
+  //----------------------------------------
+  // ==> highlighted question and show target data
+  //----------------------------------------
+ $scope.highlighted_question_and_show_data = function (newIndex , itemEl = null) {
+   // ==> Update highlighted question when update ( in sortable )
+   if ($(itemEl).hasClass("highlighted-question")) {
+       var new_index = newIndex ;
+       $timeout(function (){
+         $("#docQuestions").children("li").each(function (){
+           ($(this).hasClass("highlighted-question")) ?
+              $(this).removeClass("highlighted-question") : null ;
+         });
+         $("#docQuestions").children("li").eq(new_index).addClass("highlighted-question");
+       }, 200);
+    }
+ };
+
+
 }]);
