@@ -1530,12 +1530,14 @@ ul li:last-child.emails {
 }
 
 .media-parts-x {
-    margin-top: 15px;
-    overflow: hidden;
-    display: block;
-    position: relative;
-    height: 115px;
-    margin: 15px auto;
+  margin-top: 15px;
+  overflow: hidden;
+  display: block;
+  position: relative;
+  min-height: 115px;
+  margin: 15px auto;
+  border: dashed 1px #00a8ff;
+  padding-top: 15px;
 }
 
 
@@ -1765,21 +1767,33 @@ iframe {
   background-size:cover !important;
   background-repeat:no-repeat !important;
   background-position:center center !important;
+      margin-bottom: 15px;
   color: teal;
   font-weight: bold;
 }
 .edit-preview-media {
   display: block;
   position: absolute;
-    bottom: 1px;
+    bottom: 0px;
     background: #0909098f;
     left: 0px;
     right: 0px;
+    top: 0px;
     padding: 10px 5px;
     text-align: center;
     cursor: pointer;
     color: #fff;
 }
+.edit-preview-media i
+ {
+  border: 1px dashed;
+  padding: 5px;
+  border-radius: 2px;
+  vertical-align: middle;
+  margin-right: 5px;
+  box-shadow: 0px 0px 1px 0px #fff;
+  margin-top: 20%;
+ }
 .image-case {
   display: block;
   position: relative;
@@ -2089,7 +2103,6 @@ ul.question-data > li[data-type="qst"] {
   left: 50%;
 }
 
-
 .settings_menu {
   width: 505px;
   position: fixed;
@@ -2112,9 +2125,9 @@ ul.question-data > li[data-type="qst"] {
   bottom: 0px;
 }
 .setting-title {
-  color: #999;
+    color: #999;
     font-weight: 600;
-     background: #c6c6f76b;
+    background: #c6c6f76b;
     padding: 12px 15px;
     font-size: 20px;
     height: 90px;
@@ -2128,16 +2141,18 @@ ul.question-data > li[data-type="qst"] {
     cursor: pointer;
     background: #d7d7fb;
     padding: 0px 10px;
-    border-radius: 5px !important;
+    border-radius: 2px !important;
     height: 50px;
     overflow: hidden;
     line-height: 50px;
     margin-top: 8px;
-    padding: 2px 10px;
+    padding: 7px 10px;
     margin-left: -5px;
-  }
+    padding-right: 30px;
+  } /*color: #737272;*/
   .close-menu-icon {
     padding-left: 5px;
+    color: #737272;
   }
   .setting-title-x {
     margin-left: -20px;
@@ -2161,7 +2176,8 @@ ul.question-data > li[data-type="qst"] {
 .preview-button {
     background-color: #00a8ff;
     border:1px dashed #046394;
-    margin-right: 50px !important;
+    /*margin-right: 50px !important;*/
+    margin-right: 120px !important;
 }
 .progress_barx {
   display: block;
@@ -2274,7 +2290,7 @@ ul.question-data > li[data-type="qst"] {
   100% {background-color: #f9f9f9; width: 70%;}
 }
 .loading-data {
-  display: block;
+    display: block;
     position: absolute;
     overflow: hidden;
     top: 0px;
@@ -2353,4 +2369,72 @@ ul.question-data > li[data-type="qst"] {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+.media-controller {
+  width: 100%;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+.media-controller ul {
+  display: block;
+  position: relative;
+  list-style: none;
+  overflow: hidden;
+  padding: 0px;
+  margin: 0px;
+  text-align: center;
+  margin: 2px 0px;
+}
+.media-controller ul li {
+    position: relative;
+    overflow: hidden;
+    margin: 4px 0px;
+    display: inline-block;
+    border: 1px dashed #00a8ff;
+    height: 25px;
+    width: 25px;
+    border-radius: 12px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+.media-controller ul li span {
+  display: inline;
+  margin-top: 4px;
+    display: inline-block;
+    color: #00a8ff;
+}
+.video_cases {
+    width : 100% ;
+    height: 130px;
+    display: block;
+    position: relative;
+}
+.settings_title {
+    font-weight: normal;
+    color: #fff;
+    padding-right: 10px;
+    /*margin-left: 5px;*/
+    /*margin-left: -8px;*/
+    margin-bottom: 0;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    margin-top: -4px;
+    display: inline-block;
+    margin-left: 5px;
+    color: #737272;
 }

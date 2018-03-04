@@ -38,35 +38,39 @@
           <!--  ng:model="questions_list[questionIndex].question_body" -->
           <textarea  ng:model="questions_list[questionIndex].question_body"  id="editor-question-body" placeholder="Question Title ? " class="form-control quest-title-edit textarea-qs" rows="3"></textarea>
 
-
         </div>
       <div class="col-sm-4 media-uploads top-margins media-parts-x">
-        <!-- No Media Cases -->
-        <div ng:if="question_media == null" ng:click="show_media_uploader('question_media_type')"  style="background-image:url(~>>server_ip<<~img/media-icon.png)"  class="media-changeable media-changeable-img-case has-no-media">
-          Add Media
-        </div>
 
-        <!-- Media Cases -->
-        <div ng:if="question_media != null" class="media-changeable media-changeable-img-case">
-            <!-- Case it an image -->
-            <div ng:if="question_media.media_type == 0" style="background-image:url(~>>server_ip+question_media.media_field<<~)" class="image-case img_"></div>
-            <!-- Case it Video -->
-            <div ng:if="question_media.media_type == 1" class="video_">
-              <!-- Case It Youtube -->
-              <div ng:if="question_media.video_type == 0" style="background-image:url('~>>server_ip<<~img/vid-youtube.jpg')" class="image-case img_"></div>
-              <!-- Case It Vimeo -->
-              <div ng:if="question_media.video_type == 1" style="background-image:url('~>>server_ip<<~img/vid-vimeo.jpg')" class="image-case img_"></div>
-              <!-- Case It mp4 -->
-              <div ng:if="question_media.video_type == 2" style="background-image:url('~>>server_ip<<~img/vid-mp4.jpg')" class="image-case img_"></div>
+          <div class="ques-media-container">
+            <!-- No Media Cases -->
+            <div ng:if="quest_media_parts == null" ng:click="show_media_uploader('question_media_type')"  style="background-image:url(~>>server_ip<<~img/media-icon.png)"  class="media-changeable media-changeable-img-case has-no-media">
+              Add Media
             </div>
-            <!-- Add New -->
 
-            <span  ng:click="show_media_uploader('question_media_type')"  class="edit-preview-media"> <i class="fa fa-pencil"></i> Edit and Preview</span>
-        </div>
+            <!-- Image Cases -->
+            <div ng:if="quest_media_parts.media_type == 0" style="background-image:url('~>>server_ip+quest_media_parts.media_field<<~')" class="image_case">
+                <!-- Load image here -->
+            </div>
 
-
-
+            <!-- Video Cases -->
+            <div ng:if="quest_media_parts.media_type == 1" ng-bind-html="quest_media_parts | set_iframe"  class="video_cases">
+              <!-- Loading videos here -->
+            </div>
+          </div>
+          <!-- Media controller -->
+          <div ng:if="quest_media_parts != null" class="media-controller">
+              <ul>
+                <li>
+                  <!-- ng:click="show_media_uploader('question_media_type')" -->
+                  <span ng:click="show_media_uploader('question_media_type')" class="fa fa-pencil"></span>
+                </li>
+                <li>
+                  <span ng:click="remove_media_from_target_model('question')" class="fa fa-close"></span>
+                </li>
+              </ul>
+          </div>
       </div>
+
 
     </div>
   </li>
@@ -269,7 +273,7 @@
 <!--========= Question Settings  ================== -->
 <!-- ============================================== -->
 <div class="col-sm-12 text-right dash_sep">
-  <button ng:click="delete_this_question()" class="btn btn-danger-outline" type="button" name="button">
+  <button style="float:left;" ng:click="delete_this_question()" class="btn btn-danger-outline" type="button" name="button">
         Delete
   </button>
   <button ng:click="save_changes_in_angular_backend()" class="btn btn-primary-outline save_changes" type="button" name="button">

@@ -85,9 +85,6 @@
        <!-- Question (Editor) menu -->
       <div class="left_part col-md-5 col-sm-6 col-xs-12">
 
-
-
-
           <div class="question-data qsdragged-list qs-dropped background_drag_drop">
             <div class="loading-data">
                 <div class="data-loader">Loading...</div>
@@ -106,7 +103,8 @@
             <!-- End Text Loader -->
 						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
 
-               <li id="questoin_tag_~>>qs_value._id<<~" data-index="~>>$index<<~" data-question-id="~>>qs_value._id<<~" ng:class="'question-li-x qs-'+qs_value._id" ng:repeat="(qs_key , qs_value) in questions_list track by $index">
+               <li class="question-li-x qs-~>>qs_value._id<<~" id="questoin_tag_~>>qs_value._id<<~" data-index="~>>$index<<~" data-question-id="~>>qs_value._id<<~" ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " ng:repeat="(qs_key , qs_value) in questions_list track by $index">
+
                      <div class="question-part">
                        <div class="qs-type quesiontlist_iconx">
                          <div class="drag-handler">
