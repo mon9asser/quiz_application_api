@@ -13,6 +13,7 @@ Array.prototype.equals = function (array) {
         return false;
 
     for (var i = 0, l=this.length; i < l; i++) {
+
         // Check if we have nested arrays
         if (this[i] instanceof Array && array[i] instanceof Array) {
             // recurse into the nested arrays
@@ -113,7 +114,6 @@ apps.filter("set_iframe" , [
   }
 ]);
 
-
 apps.filter('this_chars_only' , [
   '$sce' ,
   function ($sce){
@@ -137,6 +137,7 @@ apps.filter('this_chars_only' , [
     }
   }
 ]);
+
 // ==> Main Controller
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
   //---------------------------------------
@@ -150,6 +151,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.questions_editor_preview_box = $(".left_part");
     $scope.quest_media_parts = null ;
     $scope.left_part_position  = $scope.questions_list_box.width() + 21 ;
+    $scope.questPreiouseId = null ;
     $scope.window_navigation.on("load" , function (){
         $scope.close_iconx.trigger("click");
         $timeout(function (){
@@ -244,7 +246,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       return false;
     return object._id == $scope.question_id ;
   };
+  $scope.callback_old_index = function (object){
+    if($scope.questPreiouseId == null )
+    $scope.questPreiouseId =   $scope.question_id ;
 
+    if(object == null )
+      return false ;
+    return object._id == $scope.questPreiouseId ;
+  };
   $scope.answer_id = null ;
   $scope.callback_answer_index = function (object){
     return object._id == $scope.answer_id ;
@@ -860,6 +869,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
        var itemEl = evt.item;  // dragged HTMLElement
        var newIndex = evt.newIndex;
        var oldIndex = evt.oldIndex;
+
+
        $scope.question_id = $(itemEl).attr("data-question-id");
        var question_sor = $scope.questions_list.find($scope.callback_index);
 
@@ -957,7 +968,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
      } ,
      onEnd : function (evt){
-
        return $scope.dragged_items(evt);
      },
      onMove : function (evt){
@@ -1147,6 +1157,20 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     // ==> Doing request into our db
     // $.getJSON( , function (){});
     // alert(qs_id);
+    // Target ID
+    $scope.question_id = qs_id ;
+    var backend_question = $scope.questions_list.find($scope.callback_old_index);
+    var mongoo_question = $scope.mongodb_questions.find($scope.callback_index);
+      // console.log("MONGO QUESTION");
+      // console.log(mongoo_question);
+      // console.log("BACKEND QUESTION");
+      // console.log(backend_question);
+      // console.log($scope.changed_data_in_draged(mongoo_question ,backend_question ) == false );
+
+    if( $scope.changed_data_in_draged ( mongoo_question , backend_question ) == false ){
+      alert("This question need to save firstly !!");
+    }
+
     if(nextIndex == null ){
         $("#docQuestions").children("li").each(function (){
           ( $(this).hasClass("highlighted-question")  ) ?
@@ -1156,6 +1180,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         $("#docQuestions").children("li").eq(qsCurrIndex).addClass("highlighted-question");
 
     }
+
 
 
     var right_part = $(".right_part").css("display");
@@ -1429,6 +1454,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   // ============================================
   // =====>> Edit Question Text
   // ============================================
+  $("#editor-question-body").on('keydown' , function (){
+    // store edited question into scope object
+    if($scope.question_id != null )
+      $scope.questPreiouseId = $scope.question_id ;
+
+  });
   // $("#editor-question-body").on('keydown' , function (){
   //   var question_value = $(this).val();
   //
@@ -1500,8 +1531,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
               "X-api-app-name": api_key_data.APP_NAME
             }
           }).then(function(resp){
-            changes_button.html("Save Changes");
+              changes_button.html("Save Changes");
 
+              $scope.questions_list = resp.data.questions ;
+              $scope.mongodb_questions = resp.data.questions ;
               if ( decline_next == null ){
                     // GO TO NEXT Question
                     var found_qs = $scope.questions_list.find($scope.callback_index);
@@ -2190,7 +2223,6 @@ $scope.remove_media_from_target_model = function (modelType = null ){
       delete found_qs['media_question'];
       // remove from view
       delete $scope.quest_media_parts ;
-
       // $scope.save_changes_in_angular_backend(true);
       // console.log(found_qs);
       // question_building["_id"] =
@@ -2199,7 +2231,6 @@ $scope.remove_media_from_target_model = function (modelType = null ){
     }
 };
 
-
 // ==> detect changes between db and
 $scope.status_of_questions = function (){
   // -----------------------------------------------------
@@ -2207,7 +2238,6 @@ $scope.status_of_questions = function (){
   // -----------------------------------------------------
   $.getJSON($scope.json_apk_file , function(api_key_data){
     var urls = $scope.server_ip+ 'api/' + $scope.app_id+"/application/questions";
-
     $http({
           url   : urls ,
           method : "POST",
@@ -2220,24 +2250,41 @@ $scope.status_of_questions = function (){
           }
         }).then(function (resp){
             $scope.mongodb_questions  = resp.data ;
-            // $scope.questions_list = resp.data;
-
-            // if($scope.questions_list.equals($scope.mongodb_questions) == false ){
-            //     alert("This Question didn't save ")
-            // }
-
-            console.log("------>>> Questions list");
-            console.log($scope.questions_list);
-            console.log("------>>> Question mongodb");
-            console.log($scope.mongodb_questions);
 
         } , function (err){
           console.log(err);
         });
   });
-
 };
- // Loading the existing questions
+
+// Loading the existing questions
 $scope.status_of_questions();
+
+$scope.changed_data_in_draged = function (question_db , question_backend){
+  // console.log(question_db['question_body']  + '...........'+  question_backend['question_body']);
+  console.log (  question_backend['question_body'] );
+  if(question_db!= undefined){
+    if (question_db['question_body'] !=  question_backend['question_body']){
+        // alert("This question didn't save !!");
+    }
+  }
+
+
+  // var premObject  ;
+  // for (var property in question_db) {
+  //     if (  question_db.hasOwnProperty(property) ) {
+  //         if(question_db[property] !=  question_backend[property] )
+  //           premObject = false
+  //         console.log(property);
+  //         console.log("QS DB " + question_db[property] + " QS BK " + question_backend[property]);
+  //     }
+  // }
+  // if(premObject == false )
+  //   return false ;
+  //   else
+  //   return true ;
+};
+
+
 
 }]);
