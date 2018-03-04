@@ -1167,9 +1167,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       // console.log(backend_question);
       // console.log($scope.changed_data_in_draged(mongoo_question ,backend_question ) == false );
 
-    if( $scope.changed_data_in_draged ( mongoo_question , backend_question ) == false ){
-      alert("This question need to save firstly !!");
-    }
+    // if( $scope.changed_data_in_draged ( mongoo_question , backend_question ) == false ){
+    //   alert("This question need to save firstly !!");
+    // }
 
     if(nextIndex == null ){
         $("#docQuestions").children("li").each(function (){
@@ -2262,12 +2262,12 @@ $scope.status_of_questions();
 
 $scope.changed_data_in_draged = function (question_db , question_backend){
   // console.log(question_db['question_body']  + '...........'+  question_backend['question_body']);
-  console.log (  question_backend['question_body'] );
-  if(question_db!= undefined){
-    if (question_db['question_body'] !=  question_backend['question_body']){
-        // alert("This question didn't save !!");
-    }
-  }
+  // console.log (  question_backend['question_body'] );
+  // if(question_db!= undefined){
+  //   if (question_db['question_body'] !=  question_backend['question_body']){
+  //       // alert("This question didn't save !!");
+  //   }
+  // }
 
 
   // var premObject  ;
