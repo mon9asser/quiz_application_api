@@ -1,36 +1,34 @@
-console.warn("QUIZ APPLICATION");
-// Warn if overriding existing method
-if(Array.prototype.equals)
-    console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
-// attach the .equals method to Array's prototype to call it on any array
-Array.prototype.equals = function (array) {
-    // if the other array is a falsy value, return
-    if (!array)
-        return false;
-
-    // compare lengths - can save a lot of time
-    if (this.length != array.length)
-        return false;
-
-    for (var i = 0, l=this.length; i < l; i++) {
-
-        // Check if we have nested arrays
-        if (this[i] instanceof Array && array[i] instanceof Array) {
-            // recurse into the nested arrays
-            if (!this[i].equals(array[i]))
-                return false;
-        }
-        else if (this[i] != array[i]) {
-            // Warning - two different object instances will never be equal: {x:20} != {x:20}
-            return false;
-        }
-    }
-    return true;
-}
-// Hide method from for-in loops
-Object.defineProperty(Array.prototype, "equals", {enumerable: false});
-
-
+// console.warn("QUIZ APPLICATION");
+// // Warn if overriding existing method
+// if(Array.prototype.equals)
+//     console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+// // attach the .equals method to Array's prototype to call it on any array
+// Array.prototype.equals = function (array) {
+//     // if the other array is a falsy value, return
+//     if (!array)
+//         return false;
+//
+//     // compare lengths - can save a lot of time
+//     if (this.length != array.length)
+//         return false;
+//
+//     for (var i = 0, l=this.length; i < l; i++) {
+//
+//         // Check if we have nested arrays
+//         if (this[i] instanceof Array && array[i] instanceof Array) {
+//             // recurse into the nested arrays
+//             if (!this[i].equals(array[i]))
+//                 return false;
+//         }
+//         else if (this[i] != array[i]) {
+//             // Warning - two different object instances will never be equal: {x:20} != {x:20}
+//             return false;
+//         }
+//     }
+//     return true;
+// }
+// // Hide method from for-in loops
+// Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 
 
 
@@ -246,14 +244,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       return false;
     return object._id == $scope.question_id ;
   };
-  $scope.callback_old_index = function (object){
-    if($scope.questPreiouseId == null )
-    $scope.questPreiouseId =   $scope.question_id ;
-
-    if(object == null )
-      return false ;
-    return object._id == $scope.questPreiouseId ;
-  };
+  // $scope.callback_old_index = function (object){
+  //   if($scope.questPreiouseId == null )
+  //   $scope.questPreiouseId =   $scope.question_id ;
+  //
+  //   if(object == null )
+  //     return false ;
+  //   return object._id == $scope.questPreiouseId ;
+  // };
   $scope.answer_id = null ;
   $scope.callback_answer_index = function (object){
     return object._id == $scope.answer_id ;
@@ -1159,8 +1157,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     // alert(qs_id);
     // Target ID
     $scope.question_id = qs_id ;
-    var backend_question = $scope.questions_list.find($scope.callback_old_index);
-    var mongoo_question = $scope.mongodb_questions.find($scope.callback_index);
+    // var backend_question = $scope.questions_list.find($scope.callback_old_index);
+    // var mongoo_question = $scope.mongodb_questions.find($scope.callback_index);
       // console.log("MONGO QUESTION");
       // console.log(mongoo_question);
       // console.log("BACKEND QUESTION");
@@ -1533,8 +1531,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           }).then(function(resp){
               changes_button.html("Save Changes");
 
-              $scope.questions_list = resp.data.questions ;
-              $scope.mongodb_questions = resp.data.questions ;
+              // $scope.questions_list = resp.data.questions ;
+              // $scope.mongodb_questions = resp.data.questions ;
               if ( decline_next == null ){
                     // GO TO NEXT Question
                     var found_qs = $scope.questions_list.find($scope.callback_index);
@@ -2150,6 +2148,8 @@ $scope.save_media_with = function (type){
             // 1 ===> Answers
             // --------------------------------------------
             var target_question = $scope.questions_list.find($scope.callback_index);
+            // $scope.asnwers = target_question.answers_format ;
+
             var target_answer = target_question.answers_format.find($scope.callback_answer_index);
             if( target_question.question_type == 1 ){
                   var answer_data = success_data.data ;
@@ -2164,6 +2164,8 @@ $scope.save_media_with = function (type){
                   if(currIndex != -1 ){
                     $scope.questions_list.find($scope.callback_index).answers_format[currIndex] =
                     answer_data ;
+                    console.log("ANSWER DATA");
+                    console.log(answer_data);
                   }
               }
             if(target_question.question_type == 0 ){
@@ -2175,7 +2177,9 @@ $scope.save_media_with = function (type){
                   target_answer.media_optional = answer_data.media_optional ;
                   // Store it into scope object
                   $scope.answer_media = target_answer.media_optional ;
+                  console.log(target_answer.media_optional);
               }
+
           }
 
         $(".media-imgvid-uploader").fadeOut();
