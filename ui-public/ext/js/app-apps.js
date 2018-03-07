@@ -1152,6 +1152,19 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
 
 
+  $scope.loading_redactor_editor = function (){
+    $timeout(function(){
+      $R('.answer-redactor-editors' ,  {
+        plugins: ['fontcolor' , 'fontsize'] ,
+        buttons: ['font','bold' , 'italic', 'underline' , 'link' , 'html'] ,
+        paragraphize: false,
+        replaceDivs: false,
+        linebreaks: false,
+        enterKey: false ,
+        toolbarExternal: '#text-options'
+      });
+    } , 100);
+  }
   //--------------------------------------------------------
   // ==> Edit Current Question     color: #89d7d7;
   //--------------------------------------------------------
@@ -1240,6 +1253,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
      //    });
      //  } , 300 );
 
+
+
      // 4 ==> question setting
      $scope.question_settings = {
         is_required           : taget_question.answer_settings.is_required ,
@@ -1255,6 +1270,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       show_media_link.val('') ;
       show_media_link.css("display","none");
       /*show media in ui*/
+      $scope.loading_redactor_editor();
+
 
       if($scope.question_media == undefined || $scope.question_media == null) {
         var no_media = "<b class='no-media'>There is no media ! </b>"
@@ -1405,6 +1422,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
          question_selected.answers_format.push(new_answer);
 
+      if($scope.question_type == 0 ){
+        $scope.loading_redactor_editor();
+        $scope.load_redactor_text_data();
+      }
 
   };
 
@@ -2310,6 +2331,11 @@ $scope.changed_data_in_draged = function (question_db , question_backend){
 };
 
 
+
+$scope.databiding_answers = function (thisElem , thisIndex){
+   var thisVal = thisElem.html();
+   $scope.questions_list[$scope.questionIndex].answers_format[thisIndex].value = thisVal;
+};
 $scope.databiding_question = function (){
    $scope.questions_list[$scope.questionIndex].question_body
    = $(".redactor-in-0").html();
@@ -2323,6 +2349,9 @@ $scope.databiding_description = function (){
 };
   // ==> loading first question from list
   $scope.window_navigation.bind("load" , function (){
+
+      $scope.loading_redactor_editor();
+
       $timeout(function (){
 
         if($scope.questions_list != null && $scope.questions_list.length > 0){
@@ -2331,7 +2360,7 @@ $scope.databiding_description = function (){
         }
 
         $R('.redactor-editor' , {
-          callbacks : {
+           callbacks : {
             start : function (){
               if($scope.questions_list != null  ) {
                 $timeout(function (){
@@ -2342,13 +2371,14 @@ $scope.databiding_description = function (){
                 } , 200);
               }
             }
-          } ,
-           buttons: ['html' , 'bold' , 'italic', 'underline' , 'sup' , 'link'] ,
-            paragraphize: false,
-            replaceDivs: false,
-            linebreaks: false,
-            enterKey: false ,
-            minHeight : '90px'
+           } ,
+           plugins: ['fontcolor' , 'fontsize'] ,
+           buttons: ['font','bold' , 'italic', 'underline' , 'link' , 'html'] ,
+           paragraphize: false,
+           replaceDivs: false,
+           linebreaks: false,
+           enterKey: false ,
+           minHeight : '90px'
         });
 
 
@@ -2375,10 +2405,21 @@ $scope.databiding_description = function (){
       } , 400 );
   });
   // $scope.redactor.val($scope.questions_list[$scope.questionIndex].question_body);
+// ==> Storing redactor data into backend array
+$scope.load_redactor_text_data = function (){
+  $timeout(function(){
+    var redactorIn = $(".redactor-in");
 
+    redactorIn.each(function(i){
+      if( i >= 2 ) {
+        $(this).bind("keyup input change" , function (){
+            var answerIndex = i ;
+            $scope.databiding_answers($(this) , answerIndex - 2 );
+        });
+      }
 
-
-
-
-
+    });
+  },3000 );
+};
+$scope.load_redactor_text_data();
 }]);

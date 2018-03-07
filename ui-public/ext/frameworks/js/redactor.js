@@ -1759,7 +1759,7 @@ $R.lang['en'] = {
     "link-insert": "Insert Link",
     "link-edit": "Edit Link",
     "link-in-new-tab": "Open link in new tab",
-    "unlink": "Unlink",
+    "unlink": "Unlink", 
     "cancel": "Cancel",
     "close": "Close",
     "insert": "Insert",
