@@ -2333,7 +2333,7 @@ $scope.databiding_description = function (){
         $R('.redactor-editor' , {
           callbacks : {
             start : function (){
-              if($scope.questions_list != null || $scope.questions_list.length != 0 ) {
+              if($scope.questions_list != null  ) {
                 $timeout(function (){
                   var targetQuestion = $scope.questions_list[$scope.questionIndex].question_body;
                   $(".redactor-in-0").html(targetQuestion);
