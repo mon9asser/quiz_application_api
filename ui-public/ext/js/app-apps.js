@@ -1219,7 +1219,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         $scope.indexes = taget_question.answers_format.length ;
     }
 
-
+    $(".redactor-in-0").html('');
+    $(".redactor-in-1").html('');
      $scope.question_id = taget_question._id;
      $scope.question_type = taget_question.question_type;
      $scope.old_question_data = taget_question.question_body ;

@@ -2465,3 +2465,6 @@ ul.question-data > li[data-type="qst"] {
 #editor-question-body-hidden {
   color: #000 !important;
 }
+#editor-question-desc {
+  color: #fff !important;
+}
