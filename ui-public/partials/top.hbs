@@ -12,7 +12,7 @@
     <!-- JS {Frameworks}-->
     <!-- public -->
     <script src="{{ server_ip }}ext/frameworks/js/jquery.min.js" charset="utf-8"></script>
-    <script src="{{ server_ip }}ext/frameworks/js/angular.min.js" charset="utf-8"></script>
+    <script src="{{ server_ip }}ext/frameworks/js/angular.min.js" ng:if="page_name=='api'" charset="utf-8"></script>
     <!-- Jquery pack -->
     <script ng:if="page_name=='api'" src="{{ server_ip }}ext/frameworks/js/jquery.pack.js" charset="utf-8"></script>
 
@@ -24,8 +24,10 @@
 
     <!-- Css -->
     <link href="{{ server_ip }}ext/frameworks/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ server_ip }}ext/frameworks/css/redactor.min.css" rel="stylesheet">
     <link href="{{ server_ip }}ext/frameworks/css/font-awesome.css" rel="stylesheet">
     <link href="{{ server_ip }}ext/frameworks/css/animate.css" rel="stylesheet">
+
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -50,7 +52,7 @@
     <!-- Api Key Creation -->
     <link ng:if="page_name=='create_app'" href="{{ server_ip }}ext/css/api-key.css" rel="stylesheet">
 
-    
+
 
   </head>
   <body >

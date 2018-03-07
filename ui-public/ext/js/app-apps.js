@@ -31,7 +31,6 @@
 // Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 
 
-
 apps.filter ("apply_html" , [
   '$sce' , function ($sce){
     return function (text_changed){
@@ -138,6 +137,7 @@ apps.filter('this_chars_only' , [
 
 // ==> Main Controller
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
+
   //---------------------------------------
   // Window init objects + menu settings
   //---------------------------------------
@@ -146,16 +146,25 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.close_iconx = $(".setting-iconx");
     $scope.settings_menu = $(".settings_menu") ;
     $scope.questions_list_box = $(".left_part");
+    $scope.redactor = $('.redactor-editor');
+    $scope.hidden_question_body = $("#editor-question-body-hidden");
     $scope.questions_editor_preview_box = $(".left_part");
     $scope.quest_media_parts = null ;
     $scope.left_part_position  = $scope.questions_list_box.width() + 21 ;
     $scope.questPreiouseId = null ;
+    $scope.unsaved_question = false ;
+    $scope.old_question_data = null ;
+    var old_question_list = null ;
     $scope.window_navigation.on("load" , function (){
         $scope.close_iconx.trigger("click");
         $timeout(function (){
           $scope.settings_menu.css("display" , "block" );
         }, 500);
     });
+
+
+
+
     $scope.window = {
       // ===========> Width
       current_window  : $(window).width()  ,
@@ -573,6 +582,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
    // ----> Init current App
    // -------------------------------------------------------
    $scope.questions_list = null ; // loading questions here from mongoDB
+   $scope.targetElement_bind = null ;
   //  $scope.application_settings = null ;
    $scope.application_stylesheet = null ;
    $scope.app_title = null ;
@@ -590,7 +600,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           }).then(function(resp){
             // Questions
             $scope.questions_list = resp.data.questions;
-
+            old_question_list = resp.data.questions;
             // Stylesheets
             $scope.application_stylesheet =  resp.data.theme_style;
             // APP Titles
@@ -971,9 +981,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
      onMove : function (evt){
 
         var dragged = evt.dragged; // dragged HTMLElement
-     		var draggedRect = evt.draggedRect; // TextRectangle {left, top, right и bottom}
-     		var related = evt.related; // HTMLElement on which have guided
-     		var relatedRect = evt.relatedRect; // TextRectangle
+            var draggedRect = evt.draggedRect; // TextRectangle {left, top, right и bottom}
+            var related = evt.related; // HTMLElement on which have guided
+            var relatedRect = evt.relatedRect; // TextRectangle
 
         var ParentID = $(dragged).parent().prop("id");
         var ParentEl = $(dragged).parent();
@@ -1156,6 +1166,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     // $.getJSON( , function (){});
     // alert(qs_id);
     // Target ID
+    $scope.ignore_last_changes_in_last_qs();
     $scope.question_id = qs_id ;
     // var backend_question = $scope.questions_list.find($scope.callback_old_index);
     // var mongoo_question = $scope.mongodb_questions.find($scope.callback_index);
@@ -1176,10 +1187,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             : null ;
         });
         $("#docQuestions").children("li").eq(qsCurrIndex).addClass("highlighted-question");
-
     }
-
-
 
     var right_part = $(".right_part").css("display");
     if(right_part == "none")
@@ -1214,7 +1222,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
      $scope.question_id = taget_question._id;
      $scope.question_type = taget_question.question_type;
-
+     $scope.old_question_data = taget_question.question_body ;
+     $(".redactor-in-0").html( taget_question.question_body );
+     $(".redactor-in-1").html(taget_question.question_description);
      // 2 ==> media parts
      $scope.question_media = taget_question.media_question ;
      $scope.quest_media_parts = taget_question.media_question ;
@@ -1447,17 +1457,27 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       answer_selected.is_correct = !answer_selected.is_correct ;
     }
 
-
   };
   // ============================================
   // =====>> Edit Question Text
   // ============================================
-  $("#editor-question-body").on('keydown' , function (){
-    // store edited question into scope object
-    if($scope.question_id != null )
-      $scope.questPreiouseId = $scope.question_id ;
-
+  $("#editor-question-body").on('input' , function (){
+     $scope.unsaved_question = true ;
   });
+
+
+  // ==> On before load page
+  $scope.window_navigation.bind("beforeunload" , function (e){
+    if( $scope.unsaved_question != false ){
+      return false ;
+    }
+  });
+
+  $scope.ignore_last_changes_in_last_qs = function (){
+    if($scope.unsaved_question != false ){
+       // Save the last changes ? or not
+    }
+  };
   // $("#editor-question-body").on('keydown' , function (){
   //   var question_value = $(this).val();
   //
@@ -1530,7 +1550,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             }
           }).then(function(resp){
               changes_button.html("Save Changes");
-
+              console.log(old_question_list);
               // $scope.questions_list = resp.data.questions ;
               // $scope.mongodb_questions = resp.data.questions ;
               if ( decline_next == null ){
@@ -1551,6 +1571,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             console.log(err);
           });
     });
+
+
 
   }
 
@@ -2254,7 +2276,6 @@ $scope.status_of_questions = function (){
           }
         }).then(function (resp){
             $scope.mongodb_questions  = resp.data ;
-
         } , function (err){
           console.log(err);
         });
@@ -2272,8 +2293,6 @@ $scope.changed_data_in_draged = function (question_db , question_backend){
   //       // alert("This question didn't save !!");
   //   }
   // }
-
-
   // var premObject  ;
   // for (var property in question_db) {
   //     if (  question_db.hasOwnProperty(property) ) {
@@ -2288,6 +2307,76 @@ $scope.changed_data_in_draged = function (question_db , question_backend){
   //   else
   //   return true ;
 };
+
+
+$scope.databiding_question = function (){
+   $scope.questions_list[$scope.questionIndex].question_body
+   = $(".redactor-in-0").html();
+$scope.targetElement_bind = $("#docQuestions").children("li").eq($scope.questionIndex);
+   $scope.targetElement_bind.find(".qs-body").html($(".redactor-in-0").html());
+};
+
+$scope.databiding_description = function (){
+   $scope.questions_list[$scope.questionIndex].question_description
+   = $(".redactor-in-1").html();
+};
+  // ==> loading first question from list
+  $scope.window_navigation.bind("load" , function (){
+      $timeout(function (){
+
+        if($scope.questions_list != null && $scope.questions_list.length > 0){
+          var first_question = $scope.questions_list[0];
+          $scope.edit_this_question  ( first_question._id  , 0 ) ;
+        }
+
+        $R('.redactor-editor' , {
+          callbacks : {
+            start : function (){
+              if($scope.questions_list.length != 0 ) {
+                $timeout(function (){
+                  var targetQuestion = $scope.questions_list[$scope.questionIndex].question_body;
+                  $(".redactor-in-0").html(targetQuestion);
+                  var description_ = $scope.questions_list[$scope.questionIndex].question_description;
+                   $(".redactor-in-1").html(description_);
+                } , 200);
+              }
+            }
+          } ,
+           buttons: ['html' , 'bold' , 'italic', 'underline' , 'sup' , 'link'] ,
+            paragraphize: false,
+            replaceDivs: false,
+            linebreaks: false,
+            enterKey: false ,
+            minHeight : '90px'
+        });
+
+
+        $(".redactor-in-0").bind("keyup" , function (){
+          $scope.databiding_question();
+        });
+
+        $(".redactor-in-0").bind("input change" , function (){
+          $scope.databiding_question();
+        });
+
+
+
+
+        $(".redactor-in-1").bind("keyup" , function (){
+          $scope.databiding_description();
+        });
+
+        $(".redactor-in-1").bind("input change" , function (){
+          $scope.databiding_description();
+        });
+
+
+      } , 300 );
+  });
+  // $scope.redactor.val($scope.questions_list[$scope.questionIndex].question_body);
+
+
+
 
 
 

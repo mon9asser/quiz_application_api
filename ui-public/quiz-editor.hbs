@@ -116,9 +116,8 @@
                              <i ng:if="qs_value.question_type == 1" class="icon-image"></i>
                              <i ng:if="qs_value.question_type == 2" class="icon-check-circle"></i>
                            </span>
-                           <span class="qs-body" ng-bind-html="qs_value.question_body | this_chars_only">
-                             <!-- Append question title here ! -->
-                           </span>
+                           <!-- Append question title here ! -->
+                           <span class="qs-body" ng-bind-html="qs_value.question_body | this_chars_only"></span>
                          </div>
                          <!-- <ul class="question-option">
                            <li class="right">

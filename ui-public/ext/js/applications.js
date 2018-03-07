@@ -12,7 +12,7 @@ apps.config([
   }
 ]);
 
- 
+
 
 apps.controller("page-controller",[ "$scope" , "$rootScope" , function( $scope , $rootScope ){
   // alert("Login controller");
