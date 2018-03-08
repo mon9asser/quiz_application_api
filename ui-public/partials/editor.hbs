@@ -75,7 +75,7 @@
 
     </div>
   </li>
- 
+
   <li>
     <div class="x-editor-x-title" data-toggle="#Description-pt">
       Description
@@ -100,7 +100,7 @@
           <div ng:if="question_type == 0" class="statusbar-obj" id="text-options"></div>
 
           <ul class="choices-part">
-            <li class="answers_x" data-answer-id="answer_id_~>>answer_value._id<<~" data-answer-index="~>>$index<<~"  ng:class="(answer_value.is_correct == true) ? 'highlighted-right-answers' : ''" ng:repeat="(answer_key , answer_value) in asnwers track by $index">
+            <li class="answers_x" data-answer-id="answer_id_~>>answer_value._id<<~" data-answer-index="~>>$index<<~"  ng:class="class_data_func( answer_value.is_correct , question_settings.choice_style )" ng:repeat="(answer_key , answer_value) in asnwers track by $index">
 
                 <!-- text options value -->
                 <div ng:if="question_type == 0" class="">
@@ -190,7 +190,6 @@
                     </div>
                 </div>
 
-
             </li>
           </ul>
           <!--  ng:if="question_type == 0" -->
@@ -242,15 +241,14 @@
                       <span class="off-value"></span>
                    </div>
                 </li>
-                <!-- <li>
-
-                   <span class="title-checkbox">Single Response</span>
+               <li>
+                  <span class="title-checkbox">Style of Answer ( ~>>(question_settings.choice_style ) ? "Two columns per row" : "One column per row"<<~ )</span>
                    <div class="slideThree on-off-checkbox-settings">
-                      <input ng:model="singleResponseOption" type="checkbox" value="None" id="SingleResponse-option" name="check" checked="">
+                      <input ng:model="question_settings.choice_style" type="checkbox" id="SingleResponse-option" name="check" checked="">
                       <label for="SingleResponse-option"></label>
                       <span class="off-value"></span>
                    </div>
-                </li> -->
+                </li>
 
              </ul>
           </div>

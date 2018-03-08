@@ -2513,3 +2513,7 @@ ul.question-data > li[data-type="qst"] {
   padding: 10px 10px 10px 10px;
   border-bottom: 1px dashed #0ca6f9;
 }
+
+.choices-part > li.one_column{
+   width: 90% !important;
+}

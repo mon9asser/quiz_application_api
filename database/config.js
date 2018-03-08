@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 const _ = require("lodash");
 var config = {
-    server_ip:             'http://34.215.133.182/'  , // http://34.215.133.182/
+    server_ip:             'http://4.215.133.182/'  , // http://34.215.133.182/
     port :                  ':27017' ,
     database_name :         '/todo' ,
     host_name:              'mongodb://localhost' ,
     options :               { useMongoClient:true }   ,
-    server_port :           process.env.port || 80  , 
+    server_port :           process.env.port || 80  ,
     session_access : false ,
     default_records_per_page : 5 ,
     token_expiration_time : 9 , // means 9 hours  // => can be 500 hrs also
@@ -31,7 +31,7 @@ var notes = {
                    Permission_Warning : { Warning : "You couldn't able to access this api ! because you dont have a permission !" }
                  },
   "Errors"     : {
-                  Error_Application_Verify : {
+                   Error_Application_Verify : {
                     "Authentication_Failed":"API keys not verified"
                   } ,
                    Error_Doesnt_exists : function (data) {

@@ -154,6 +154,19 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.questPreiouseId = null ;
     $scope.unsaved_question = false ;
     $scope.old_question_data = null ;
+    $scope.style_of_answers = "Two columns per row"
+    $timeout(function (){
+      $scope.style_of_answers = ($scope.question_settings.choice_style ) ? "Two columns per row" : "One column per row";
+    } , 1000 );
+    $scope.class_data_func = function (is_correct , choice_style){
+      var class_item = '';
+
+      if (choice_style != true )
+        class_item += 'one_column ';
+      if(is_correct)
+        class_item += 'highlighted-right-answers';
+      return class_item ;
+    };
     var old_question_list = null ;
     $scope.window_navigation.on("load" , function (){
         $scope.close_iconx.trigger("click");
@@ -163,7 +176,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     });
 
 
-
+    $scope.style_of_answers
 
     $scope.window = {
       // ===========> Width
@@ -575,7 +588,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
      is_required           : false ,
      single_choice  : false ,
      is_randomized          : false ,
-     super_size         : false
+     super_size         : false ,
+     choice_style : true  //
     }
 
    // -------------------------------------------------------
@@ -796,6 +810,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
    $("#Randomize-option").on("change" , function (){
       // $scope.answer_old_status;
       //$scope.question_id
+      /*
       var found_qs = $scope.questions_list.find($scope.callback_index)
       var questionInex = $scope.questions_list.indexOf(found_qs);
       if(questionInex == -1)
@@ -807,7 +822,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
       $scope.questions_list[questionInex].answers_format = $scope.randomize_arries(all_answers);
       $scope.save_changes_in_angular_backend();
-
+    */
    });
 
    //--------------------------------------------------------
@@ -1034,7 +1049,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
               created_at :$scope.mongoose_date,
               answer_settings : {
                   answer_char_max : 200 ,
-                  choice_style : "inline" ,
+                  choice_style : true , // ==> inline or block
                   is_randomized : false,
                   is_required : false,
                   single_choice : true,
@@ -1260,7 +1275,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         is_required           : taget_question.answer_settings.is_required ,
         single_choice   : taget_question.answer_settings.single_choice ,
         is_randomized          : taget_question.answer_settings.is_randomized ,
-        super_size         : taget_question.answer_settings.super_size
+        super_size         : taget_question.answer_settings.super_size ,
+        choice_style      : taget_question.answer_settings.choice_style
       }
       // 5 ==> box overlay ( show media part )
       var media_block = $(".media-x-preview"); // => preview div
@@ -1355,24 +1371,30 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
   // =====================================
   // ===> Question Settings
   // =====================================
-  $("#MultipleResponse-option , #Randomize-option , #SuperSize-option , #required-option").on("change",function(){
-    // console.log($scope.questions_list);
+  $("#SingleResponse-option").on("input change" , function (){
+    var questionSettings = $scope.question_settings;
+    if(questionSettings.choice_style){ // on
+
+    } else { //
+
+    }
+  })
+  $("#MultipleResponse-option , #Randomize-option , #SuperSize-option , #required-option").on("input change",function(){
+
     if($scope.question_id == null )
     {
       alert("Please select question first from question list !");
       return false ;
     }
-     // sotre settings in array => $scope.question_id
+
      var question_selected = $scope.questions_list.find($scope.callback_index);
      question_selected.answer_settings = $scope.question_settings ;
-    //  question_selected.answer_settings =
-     // Remove the current list from array
+
      var targetIndex = $scope.questions_list.indexOf(question_selected);
      if(targetIndex != -1 ){
        $scope.questions_list.splice(targetIndex, 1);
      }
-     // ==============================
-    //  alert(question_selected.answer_settings.single_choice);
+
      if(question_selected.answer_settings.single_choice == true ) {
        var all_answers = question_selected.answers_format;
        for (var i = 0; i < all_answers.length; i++) {
@@ -1380,13 +1402,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
        }
      }
 
-
-
-     // Push to array with index
      $scope.questions_list.splice(targetIndex, 0, question_selected);
-
-    //  console.log($scope.questions_list);
-  });
+   });
   // =====================================
   // ===> Answer Creation
   // =====================================
@@ -2362,13 +2379,15 @@ $scope.databiding_description = function (){
         $R('.redactor-editor' , {
            callbacks : {
             start : function (){
-              if($scope.questions_list != null  ) {
-                $timeout(function (){
-                  var targetQuestion = $scope.questions_list[$scope.questionIndex].question_body;
-                  $(".redactor-in-0").html(targetQuestion);
-                  var description_ = $scope.questions_list[$scope.questionIndex].question_description;
-                   $(".redactor-in-1").html(description_);
-                } , 200);
+              if( $scope.questions_list != null ) {
+                  $timeout(function (){
+                    if($scope.questions_list[$scope.questionIndex] != undefined ){
+                      var targetQuestion = $scope.questions_list[$scope.questionIndex].question_body;
+                      $(".redactor-in-0").html(targetQuestion);
+                      var description_ = $scope.questions_list[$scope.questionIndex].question_description;
+                       $(".redactor-in-1").html(description_);
+                    }
+                  } , 200);
               }
             }
            } ,
