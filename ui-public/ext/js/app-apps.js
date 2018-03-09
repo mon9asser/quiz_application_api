@@ -149,6 +149,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.redactor = $('.redactor-editor');
     $scope.hidden_question_body = $("#editor-question-body-hidden");
     $scope.questions_editor_preview_box = $(".left_part");
+
+    $scope.application_type = $("#applicationType").val();
     $scope.quest_media_parts = null ;
     $scope.left_part_position  = $scope.questions_list_box.width() + 21 ;
     $scope.questPreiouseId = null ;
@@ -1041,6 +1043,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           var questionId = htmlVal.attr("data-question-id");
 
 
+
+
           var new_question = {
               _id:$scope.mongoose_id,
               question_type :questionType,
@@ -1060,7 +1064,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
             // Push Default answer ( one answer )
             var answer_obj = new Object() ;
+            if($scope.application_type == 0 )
             answer_obj['is_correct'] = false ;
+
             answer_obj['_id'] = $scope.mongoose_answer_id  ;
             var obj_2_id = $scope.mongoose_answer_id.toString()+'12f' ;
             if(questionType == 0 ){
@@ -1081,6 +1087,21 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 'boolean_type' : "true/false" ,
                 'boolean_value': true
               });
+            }
+            if(questionType == 3 ){
+              var rating_scale = $(evt.item).attr("data-asnwer-type") ;
+              // case it scale should take ==> 0 else 1
+              answer_obj['ratscal_type'] = rating_scale ;
+              answer_obj['step_numbers'] = 5 ;
+              if(rating_scale == 0 ){ // show labels for scale values
+                  answer_obj['show_labels'] = false ;
+                  answer_obj['started_at'] = "Left label" ;
+                  answer_obj['centered_at'] = "Center label" ;
+                  answer_obj['ended_at'] = "Right label" ;
+              }
+            }
+            if(questionType == 4 ){
+                new_question.answer_settings.answer_char_max = 500 ;
             }
             new_question.answers_format.push(answer_obj);
 
@@ -2440,5 +2461,27 @@ $scope.load_redactor_text_data = function (){
     });
   },3000 );
 };
+
 $scope.load_redactor_text_data();
+
+
+$timeout(function (){
+    var rating_question = $scope.questions_list[$scope.questionIndex].answers_format[0].ratscal_type ;
+    console.log(rating_question);
+    var rating_answers = $('#rating_answer');
+    var option = '';
+    for (var i = 1; i < rating_question; i++) {
+      option += "<option value='"+i+"'>"+i+"</option>";
+      alert(option);
+    }
+    rating_answers.html(option);
+} , 900 );
+
+$timeout(function (){
+    // ==> ratings scale
+    $('#rating_answer').barrating({
+          theme: 'fontawesome-stars'
+    });
+
+  } ,1000 );
 }]);

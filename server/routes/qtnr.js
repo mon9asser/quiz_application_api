@@ -287,8 +287,6 @@ qtnrRouters.patch("/:app_id/app/edit", auth_verify_generated_tokens ,  (req, res
           $settings["description"] = req.body.description;
           $settings["updatedAt"] = new Date();
 
-
-
         // Edit and Create Settings
         if (req.body.titles) {
 
@@ -879,7 +877,7 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
             question_tag ["answer_settings"]['super_size'] = false ;
             question_tag ["answer_settings"]['single_choice'] = true ;
             question_tag ["answer_settings"]['is_required'] = false ;
-            question_tag ["answer_settings"]['choice_style'] = "inline";
+            question_tag ["answer_settings"]['choice_style'] = true;
             question_tag ["answer_settings"]['answer_char_max'] = 200;
           }else if(req.body.answer_settings != null){
               question_tag ["answer_settings"] = new Object();
@@ -1874,6 +1872,8 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
 
                       if(req.body.ratscal_type != null && req.body.ratscal_type == 0) // => means that is scale type
                         {
+                          if(req.body.show_labels != null )
+                              question_answers["show_labels"] = req.body.show_labels ;
                           if(req.body.started_at != null )
                               question_answers["started_at"] = req.body.started_at ;
                           if(req.body.centered_at != null )
@@ -1884,12 +1884,12 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
           break;
             // --------------------------------------------------------------
           case 4 :
-                        if(qtnairsDocument.app_type != 0 ){
-                          return new Promise((resolve , reject)=>{
-                            res.send({"Message":"That's not Survey !"});
-                          });
-                        }
-                        question_answers["_id"] = mongoose.Types.ObjectId();
+              if(qtnairsDocument.app_type != 0 ){
+                 return new Promise((resolve , reject)=>{
+                    res.send({"Message":"That's not Survey !"});
+                 });
+              }
+          question_answers["_id"] = mongoose.Types.ObjectId();
           break ; // Free Texts
        }
        }
@@ -2159,6 +2159,8 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
               }
               // => rating_scales
               if(question_type == 3) {
+                if(req.body.show_labels)
+                  answerArgs[answerIndex].show_labels = req.body.show_labels ;
                 if(req.body.ratscal_type)
                     answerArgs[answerIndex].ratscal_type = req.body.ratscal_type;
                 if(req.body.step_numbers)

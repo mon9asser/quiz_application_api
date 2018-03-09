@@ -1,15 +1,15 @@
 
     <!-- frameworks -->
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/bootstrap.min.js"></script>
+    <!-- Rating Scale Plugin -->
+    <script ng:if="page_name=='api'" src="{{ server_ip }}ext/frameworks/js/jquery.barrating.min.js" charset="utf-8"></script>
+    <!-- Redactor -->
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor.js" ng:if="page_name=='api'"></script>
     <!-- Redactor Plugins -->
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-color.js" ng:if="page_name=='api'"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-size.js" ng:if="page_name=='api'"></script>
     <!-- Quiz Application -->
     <script ng:if="page_name=='api'" type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sortable.min.js"></script>
-
-     <!-- Survey Application -->
-    <!-- <script ng:if="page_name=='api'" type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sortable.min.js"></script> -->
 
     <!-- Main Applications { Angular Part } -->
     <script type="text/javascript" src="{{ server_ip }}ext/js/applications.js"></script>

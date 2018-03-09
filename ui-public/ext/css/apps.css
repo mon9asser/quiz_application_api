@@ -2492,10 +2492,10 @@ ul.question-data > li[data-type="qst"] {
 .text-answers > .redactor-box {
       margin-top: 10px !important;
 }
+
 .text-answers >  .redactor-box.redactor-styles-on {
   border: none;
 }
-
 
 .text-answers > .redactor-box > .redactor-styles {
   margin: 0;
@@ -2516,4 +2516,30 @@ ul.question-data > li[data-type="qst"] {
 
 .choices-part > li.one_column{
    width: 90% !important;
+}
+ i.iconn-x {
+  font-size: 15px;
+}
+
+.survey-answers {
+  width: 90%;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  margin: 20px auto;
+}
+.br-theme-fontawesome-stars .br-widget a{
+  margin: 0px 0px 0px 8px;
+  font-size: 40px;
+}
+.br-theme-fontawesome-stars .br-widget {
+  height: auto;
+  text-align: center;
+}
+.survey-answer-settings , .survey-answer {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: auto;
 }

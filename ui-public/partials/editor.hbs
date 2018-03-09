@@ -71,8 +71,6 @@
               </ul>
           </div>
       </div>
-
-
     </div>
   </li>
 
@@ -99,22 +97,24 @@
           <!-- External status bar -->
           <div ng:if="question_type == 0" class="statusbar-obj" id="text-options"></div>
 
-          <ul class="choices-part">
+          <ul ng:if="question_type <= 2" class="choices-part">
             <li class="answers_x" data-answer-id="answer_id_~>>answer_value._id<<~" data-answer-index="~>>$index<<~"  ng:class="class_data_func( answer_value.is_correct , question_settings.choice_style )" ng:repeat="(answer_key , answer_value) in asnwers track by $index">
 
                 <!-- text options value -->
                 <div ng:if="question_type == 0" class="">
                    <ul class="answer-pt-controller">
                      <!-- is correct answer -->
-                     <li ng:if="answer_value.is_correct == false" title="Make it Correct Answer">
+                     <li ng:if="{{app.app_type }} == 1" ng:if="answer_value.is_correct == false" title="Make it Correct Answer">
                        <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
                      </li>
-                     <li ng:if="answer_value.is_correct == true" title="Remove Correct Answer">
+                     <li ng:if="{{app.app_type }} == 1" ng:if="answer_value.is_correct == true" title="Remove Correct Answer">
                        <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
                      </li>
+                     <!-- Edit This Answer -->
                      <li ng:click="show_media_uploader('answers' ,  answer_value._id  )" title="Edit it with media">
                        <span class="fa fa-pencil edit-options-answer"></span>
                      </li>
+                     <!-- Delete This Answer -->
                      <li ng:click="question_answer_deletion(answer_value._id)" title="Delete this answer">
                        <span class="fa fa-trash"></span>
                      </li>
@@ -142,7 +142,7 @@
                 <div ng:if="question_type == 1" class="">
 
                   <ul class="answer-pt-controller ">
-                    <li title="Make it Correct Answer">
+                    <li  ng:if="{{app.app_type }} == 1"  title="Make it Correct Answer">
                       <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
                     </li>
                     <li ng:click="show_media_uploader('answers' ,  answer_value._id)" title="Edit it with media">
@@ -178,7 +178,7 @@
                 <!-- true false value -->
                 <div ng:if="question_type == 2" class="">
 
-                    <ul class="answer-pt-controller ">
+                    <ul  ng:if="{{app.app_type }} == 1"  class="answer-pt-controller ">
                       <li data-toggle="asnwers-options" title="Make it Correct Answer">
                         <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
                       </li>
@@ -192,6 +192,22 @@
 
             </li>
           </ul>
+          <div ng:if="question_type > 2" class="survey-answers">
+
+              <div class="survey-answer">
+                <!-- Rating Case -->
+                <select ng:if="questions_list[questionIndex].answers_format[0].ratscal_type == 1" id="rating_answer" >
+
+                </select>
+              </div>
+
+              <div class="survey-answer-settings">
+
+              </div>
+          </div>
+           <pre ng:if="question_type > 2">
+            ~>> questions_list[questionIndex] <<~
+          </pre>
           <!--  ng:if="question_type == 0" -->
           <div ng:click="create_new_answer()" ng:if="question_type == 0 || question_type == 1" class="add-new-option">
               Add new option
@@ -249,20 +265,19 @@
                       <span class="off-value"></span>
                    </div>
                 </li>
-
              </ul>
           </div>
         </div>
-          </div>
+       </div>
     </div>
   </li>
 </ul>
-
 
 <!-- <div class="clearFix top-border"></div> -->
 <!-- ============================================== -->
 <!--========= Question Settings  ================== -->
 <!-- ============================================== -->
+
 <div class="col-sm-12 text-right dash_sep">
   <button style="float:left;" ng:click="delete_this_question()" class="btn btn-danger-outline" type="button" name="button">
         Delete
@@ -271,11 +286,6 @@
         Save Changes
   </button>
 </div>
-
-
-
-
-
 
 
 <!-- overlay answer -->
