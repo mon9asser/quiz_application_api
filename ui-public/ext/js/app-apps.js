@@ -135,6 +135,32 @@ apps.filter('this_chars_only' , [
   }
 ]);
 
+
+
+apps.filter('show_chars' , [
+  '$sce' ,
+  function ($sce){
+    return function (specs){
+      var spesificChars = '' ;
+      var char_counts = 16 ;
+
+      if(specs == undefined)
+        spesificChars = specs ;
+        else {
+            for (var i = 0; i < specs.length; i++) {
+              if(i < char_counts) {
+                spesificChars += specs[i];
+                if(i == (char_counts - 1) )
+                  spesificChars += " . ";
+              }
+            }
+        }
+
+       return $sce.trustAsHtml(spesificChars);
+    }
+  }
+]);
+
 // ==> Main Controller
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
   $scope.rating_scale_elements = [] ;
@@ -150,7 +176,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 });
               }
        }
-    } , 1000 );
+    } , 1200 );
   };
 
 
@@ -203,16 +229,41 @@ $scope.select_rating_scale__ = function ( index , type){
        }
     }
     if(type == 0 ) { // ==> Scale .scalet-o li span
-      console.log ( $('.scalet').children("li").eq(index).prop('tagName'));
-       if($('.scalet').children("li").eq(index).children("span").hasClass("highlighted_scale")){
-         $('.scalet').children("li").children("span").removeClass("highlighted_scale");
+       if($('.scalet-o').children("li").eq(index).children("span").hasClass("highlighted_scale")){
+         $('.scalet-o').children("li").eq(index).children("span").removeClass("highlighted_scale");
        }else {
-         $('.scalet').children("li").children("span").addClass("highlighted_scale");
+         $('.scalet-o').children("li").each(function (){
+           $(this).children("span").removeClass("highlighted_scale");
+         });
+         $('.scalet-o').children("li").eq(index).children("span").addClass("highlighted_scale");
        }
     }
    return false;
 };
+  $("#show-labels").on("change input" , function (){
+    var checked_value = $scope.questions_list[$scope.questionIndex].answers_format[0].show_labels ;
+    if(checked_value == true ) { // show labels
+      $(".item-labels").slideDown();
+      $(".block-labels").css("display" , "block");
+    }else { // remove labels
+      $(".block-labels").css("display" , "none");
+      $scope.questions_list[$scope.questionIndex].answers_format[0].started_at  = '';
+      $scope.questions_list[$scope.questionIndex].answers_format[0].centered_at = '';
+      $scope.questions_list[$scope.questionIndex].answers_format[0].ended_at    = '';
+      // hide labels
+      $(".item-labels").slideUp();
+    }
+  });
 
+  // $(".item-labels").on("change input" , function (){
+  //     var input_value = $(this).eq();
+  //     if($scope.questions_list[$scope.questionIndex].answers_format[0].started_at.length >= 16
+  //       ||
+  //      $scope.questions_list[$scope.questionIndex].answers_format[0].centered_at.length >= 16
+  //       ||
+  //      $scope.questions_list[$scope.questionIndex].answers_format[0].ended_at.length >= 16 )
+  //
+  // });
   //---------------------------------------
   // Window init objects + menu settings
   //---------------------------------------
@@ -871,12 +922,18 @@ $scope.select_rating_scale__ = function ( index , type){
    // ==> Sliding editor elements to show question details
    //--------------------------------------------------------
    $scope.slide_edditor_slices = $(".x-editor-x-title");
-   $scope.slide_edditor_slices.on("click",function (){
-      var targetId = $(this).attr('data-toggle');
-      var targetAll = $(".x-editor-x-body").height() ;
-      var targetH = $(targetId).height() ;
-      $(targetId).slideToggle();
-   });
+   $scope.expand_collapsed_items = function (id){
+     var targetId = id ;
+     var targetAll = $(".x-editor-x-body").height() ;
+     var targetH = $(targetId).height() ;
+     $(targetId).slideToggle();
+   };
+  //  $scope.slide_edditor_slices.on("click",function (){
+  //     var targetId = $(this).attr('data-toggle');
+  //     var targetAll = $(".x-editor-x-body").height() ;
+  //     var targetH = $(targetId).height() ;
+  //     $(targetId).slideToggle();
+  //  });
 
 
 
@@ -2556,5 +2613,43 @@ $scope.load_redactor_text_data();
 //
 //   } ,1000 );
 
+$scope.load_according_question_type = function (){
+
+  switch ($scope.question_type) {
+    case 0 :
+      $("li.steps_qs , li.show_lbls_qs , li.required_qs , li.single_response_qs , li.randomize_qs , li.super_sizer_qs , li.answer_stylish_qs").css({"display" :"none  !important"});
+      $("li.required_qs , li.single_response_qs , li.randomize_qs ,li.super_sizer_qs , li.answer_stylish_qs").css({"display" : "block  !important"});
+    break; // ===> multiple choices
+
+    case 1:
+    $("li.steps_qs , li.show_lbls_qs , li.required_qs , li.single_response_qs , li.randomize_qs , li.super_sizer_qs , li.answer_stylish_qs").css({"display" : "none  !important"});
+    $("li.required_qs , li.single_response_qs , li.randomize_qs ,li.super_sizer_qs , li.answer_stylish_qs").css({"display" :"block  !important"});
+    break; // ===>  media choices
+
+    case 2 :
+    $("li.steps_qs , li.show_lbls_qs , li.required_qs , li.single_response_qs , li.randomize_qs , li.super_sizer_qs , li.answer_stylish_qs").css({"display" : "none  !important"});
+    $("li.required_qs , li.randomize_qs , li.answer_stylish_qs").css({"display" : "block  !important"});
+    break; // ===>  true false
+
+    case 3 :
+    $("li.steps_qs , li.show_lbls_qs , li.required_qs , li.single_response_qs , li.randomize_qs , li.super_sizer_qs , li.answer_stylish_qs").css({"display" : "none !important"});
+    $("li.steps_qs , li.required_qs").css({"display" : "block !important"});
+      if($scope.questions_list[$scope.questionIndex].answers_format[0].ratscal_type == 1 )
+        $("li.show_lbls_qs").css({"display" : "block"});
+    break; // ===>  rating scales
+
+    case 4:
+    $("li.steps_qs , li.show_lbls_qs , li.required_qs , li.single_response_qs , li.randomize_qs , li.super_sizer_qs , li.answer_stylish_qs").css({"display" : "none !important"});
+      $("li.required_qs").css({"display" : "block !important"});
+    break; // ===>  free texts
+  }
+
+};
+
+$timeout(function (){
+  $scope.load_according_question_type();
+    $("li.required_qs").css('display' , 'block !important') ;
+    alert($("li.required_qs").css('display'));
+} , 1000);
 
  }]);

@@ -138,7 +138,7 @@
                              <i ng:if="qs_value.question_type == 0" class="icon-insert-template iconn-x"></i>
                              <i ng:if="qs_value.question_type == 1" class="icon-image iconn-x"></i>
                              <i ng:if="qs_value.question_type == 2" class="icon-check-circle iconn-x"></i>
-                             <i ng:if="qs_value.question_type == 3" class="fa fa-star-o iconn-x"></i>
+                             <i ng:if="qs_value.question_type == 3" class="fa iconn-x" ng:class="(qs_value.answers_format[0].ratscal_type == 0) ? 'fa-signal' :'fa-star-o' "></i> <!-- signal -->
                              <i ng:if="qs_value.question_type == 4" class="fa fa-text-width iconn-x"></i>
                            </span>
                            <!-- Append question title here ! -->

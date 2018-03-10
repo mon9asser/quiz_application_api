@@ -467,18 +467,21 @@ textarea:focus, textarea:active, textarea, .form-control:focus {
 }
 
 .listSettings-qs {
-    display: block;
-    margin: 0px auto;
-    padding: 0px;
-    width: 100%;
-    text-align: center;
+  display: block;
+  margin: 0px auto;
+  padding: 0px;
+  width: 100%;
+  text-align: center;
+
 }
 .listSettings-qs > li {
-    display: inline-block;
-    padding: 10px 0px;
-    width: 90%;
-    float: none;
-    line-height: 25px;
+  display: inline-block;
+  padding: 10px 0px;
+  width: 100%;
+  float: none;
+  line-height: 25px;
+  border-bottom: 1px dashed #a9444226;
+  color: #0aa6f9;
 }
 .title-checkbox {
     float: left;
@@ -2552,6 +2555,7 @@ ul.question-data > li[data-type="qst"] {
   text-align: center;
   margin: 0px auto;
   list-style: none;
+  padding: 0px;
 }
 .start-o li {
   display: inline;
@@ -2573,23 +2577,25 @@ ul.question-data > li[data-type="qst"] {
   cursor: pointer;
 }
 .scalet-o li span {
-    background: #e5f6ff; /*#a4dcf9*/
+    background: #e5f6ff;
     /* width: 30px; */
     /* height: 30px; */
     display: inline-block;
     border-left: 1px solid #0aa6f9;
     border-bottom: 1px solid #0aa6f9;
     border-top: 1px solid #0aa6f9;
-    padding: 10px 14px;
+    padding: 10px 20px;
     color: #1591d2;
     font-size: 15px;
 }
 .scalet-o li span.highlighted_scale {
-  background: red !important;
+  background: #1591d2 !important;
+  color: #fff;
+  font-weight: bold;
 }
 .scalet-o li span:hover {
+padding: 10px 20px;
   font-size: 15px;
-  padding: 10px 14px;
 }
 .scalet-o li:last-child span {
   border-radius: 0px 10px 10px 0px;
@@ -2696,3 +2702,66 @@ input[type=range]:focus::-ms-fill-lower {
 input[type=range]:focus::-ms-fill-upper {
     background: #ccc;
 }
+
+.scale-options {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  overflow: hidden;
+}
+/*.scale-options:first-child
+  {
+    margin-top: 15px;
+    margin-bottom: 5px;
+  }*/
+input.lab ,input.lab:focus , input.lab:checked , input.lab:active , input.lab:link  , input.lab:hover{
+    width: 32%;
+    display: inline;
+    margin: 22px auto 22px auto;
+    padding: 8px;
+    float: left;
+    margin-right: 5px;
+    border: 1px dashed #eee;
+    text-transform: none;
+    text-decoration: none;
+    outline: none;
+}
+
+.scale-optn {
+  display: inline-block;
+
+}
+.block-labels {
+  display: block;
+  position: relative;
+  padding: 10px 0px 0px 0px;
+  width: 100%;
+  color: #999;
+}
+.block-labels > span.first-lbl  {
+  float: left;
+  display: inline;
+
+  margin-left: -40px;
+}
+.block-labels > span.second-lbl {
+  display: inline;
+}
+.block-labels > span.third-lbl  {
+  float: right;
+  display: inline;
+
+  margin-right: -40px;
+}
+
+/*li.steps_qs ,
+li.show_lbls_qs ,
+li.required_qs ,
+li.single_response_qs ,
+li.randomize_qs ,
+li.super_sizer_qs ,
+li.answer_stylish_qs
+{
+  display: none !important;
+}*/

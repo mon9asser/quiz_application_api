@@ -5,11 +5,11 @@
 <!-- Tabs -->
 <ul class="tab-editor">
   <li>
-    <div class="x-editor-x-title question-opener" data-toggle="#question-pt">
+    <div class="x-editor-x-title question-opener"  ng:click="expand_collapsed_items('#question-pt')" >
       Question
     </div>
     <div style="display:none;" class="x-editor-x-body" id="question-pt">
-      <div id="dynamic-layer" class="col-sm-8 top-margins ">
+      <div id="dynamic-layer" class="col-sm-8 top-margins">
           <!-- ============================================== -->
           <!--========= Question With Media ================= -->
           <!-- ============================================== -->
@@ -38,7 +38,6 @@
           <!-- questions_list[questionIndex].question_body -- ng:model="questions_list[questionIndex].question_body" -->
           <!-- <textarea id="editor-question-body-hidden" placeholder="Question Title ?" ng:model="questions_list[questionIndex].question_body" class="form-control quest-title-edit textarea-qs" rows="3"></textarea> -->
           <textarea id="editor-question-body" placeholder="Question Title ?" ng:model="questions_list[questionIndex].question_body" class="form-control quest-title-edit textarea-qs redactor-editor"></textarea>
-
         </div>
       <div class="col-sm-4 media-uploads top-margins media-parts-x">
 
@@ -75,11 +74,10 @@
   </li>
 
   <li>
-    <div class="x-editor-x-title" data-toggle="#Description-pt">
+    <div class="x-editor-x-title" ng:click="expand_collapsed_items('#Description-pt')">
       Description
     </div>
     <div style="display:none;" class="x-editor-x-body" id="Description-pt">
-
       <div class="col-xs-12 col-md-12">
         <div class="row-cols margin-top">
            <textarea ng:model="question_description" id="editor-question-desc" name="name" class="form-control descriptions description-field description-field-x redactor-editor" placeholder="Description ..." rows="3" cols="80"></textarea>
@@ -87,12 +85,12 @@
       </div>
     </div>
   </li>
-
-  <li>
-    <div class="x-editor-x-title" data-toggle="#answers-pt">
+   <!-- ng:if="questions_list[questionIndex].question_type == 0" ng:if="questions_list[questionIndex].question_type == 1" ng:if="questions_list[questionIndex].question_type == 2" ng:if="questions_list[questionIndex].question_type == 3" -->
+  <li ng:if="questions_list[questionIndex].question_type == 0 || questions_list[questionIndex].question_type ==1 || questions_list[questionIndex].question_type ==2 || questions_list[questionIndex].question_type ==3">
+    <div class="x-editor-x-title" ng:click="expand_collapsed_items('#answers-pt')">
       Answers
     </div>
-    <div ststyle="display:none;"class="x-editor-x-body" id="answers-pt">
+    <div style="display:none;"class="x-editor-x-body" id="answers-pt">
         <div class="multi-answers-part">
           <!-- External status bar -->
           <div ng:if="question_type == 0" class="statusbar-obj" id="text-options"></div>
@@ -205,20 +203,31 @@
                     </li>
                   </ul>
                   <!-- Scale -->
-                  <ul ng:if="questions_list[questionIndex].answers_format[0].ratscal_type == 0 " class="scalet-o" >
-                    <li data-index='0' ng:repeat="(key_ , val_) in rating_scale_elements">
-                      <span ng:click="select_rating_scale__($index , 0 )" href="#">
-                          ~>>$index + 1 <<~
-                      </span>
-                    </li>
-                  </ul>
+                  <center>
+                    <div class="scale-optn" ng:if="questions_list[questionIndex].answers_format[0].ratscal_type == 0 ">
+                      <ul class="scalet-o" >
+                        <li data-index='0' ng:repeat="(key_ , val_) in rating_scale_elements">
+                          <span ng:click="select_rating_scale__($index , 0 )" href="#">
+                              ~>> $index + 1 <<~
+                          </span>
+                        </li>
+                      </ul>
+                      <div class="clearFix"></div>
+
+                      <div class="block-labels text-center">
+                        <span class="first-lbl">
+                          ~>>questions_list[questionIndex].answers_format[0].started_at | show_chars<<~
+                        </span>
+                        <span class="second-lbl">
+                          ~>>questions_list[questionIndex].answers_format[0].centered_at | show_chars <<~
+                        </span>
+                        <span class="third-lbl">
+                          ~>>questions_list[questionIndex].answers_format[0].ended_at | show_chars <<~
+                        </span>
+                      </div>
+                    </div>
+                  </center>
                 </div>
-
-                 <!-- Scale Case -->
-              </div>
-
-              <div class="survey-answer-settings">
-
               </div>
           </div>
            <!-- <pre ng:if="question_type > 2">
@@ -231,8 +240,9 @@
         </div>
     </div>
   </li>
+
   <li>
-    <div class="x-editor-x-title" data-toggle="#Settings-pt">
+    <div class="x-editor-x-title" ng:click="expand_collapsed_items('#Settings-pt')">
       Question Settings
     </div>
     <div style="display:none;" class="x-editor-x-body" id="Settings-pt">
@@ -241,13 +251,37 @@
           <!-- <label class="titles-question"> Question Settings : </label> -->
           <div class="question-settings">
              <ul class="listSettings-qs">
-               <li>
-                  <span class="title-checkbox"> Steps ( ~>>questions_list[questionIndex].answers_format[0].step_numbers<<~ )</span>
-                  <div class="rating_scale_options">
-                      <input ng:model="questions_list[questionIndex].answers_format[0].step_numbers" id="step_slider" min="2" max="10" type="range" name="">
-                  </div> <!-- Slide Range -->
+               <!-- Max characters -->
+               <li ng:if="questions_list[questionIndex].question_type == 4">
+                 <span class="title-checkbox"> Max characters ( ~>>questions_list[questionIndex].answer_settings.answer_char_max<<~ ) </span>
+                 <div class="rating_scale_options">
+                     <input ng:model="questions_list[questionIndex].answer_settings.answer_char_max" id="char_max_slider" min="100" max="2000" type="range" name="">
+                 </div> <!-- Slide Range -->
                </li>
-                <li>
+
+                <li class="steps_qs">
+                    <span class="title-checkbox"> Steps ( ~>>questions_list[questionIndex].answers_format[0].step_numbers<<~ )</span>
+                    <div class="rating_scale_options">
+                        <input ng:model="questions_list[questionIndex].answers_format[0].step_numbers" id="step_slider" min="2" max="10" type="range" name="">
+                    </div> <!-- Slide Range -->
+                </li>
+
+                <li class="show_lbls_qs">
+                    <div class="scale-options">
+                      <span class="title-checkbox">Show labels</span>
+                      <div class="slideThree on-off-checkbox-settings">
+                         <input type="checkbox" id="show-labels" name="check" ng:model="questions_list[questionIndex].answers_format[0].show_labels">
+                         <label for="show-labels"></label>
+                         <span class="off-value"></span>
+                      </div>
+                    </div>
+                    <div class="scale-options item-labels">
+                        <input class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].started_at" placeholder="Left">
+                        <input class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].centered_at" name="" value="" placeholder="Center">
+                        <input class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].ended_at" name="" value="" placeholder="Right">
+                    </div>
+                 </li>
+                <li class="required_qs">
                    <span class="title-checkbox">Required</span>
                    <div class="slideThree on-off-checkbox-settings">
                       <input ng:model="question_settings.is_required" type="checkbox" id="required-option" name="check" checked="">
@@ -255,7 +289,7 @@
                       <span class="off-value"></span>
                    </div>
                 </li>
-                <li>
+                <li class="single_response_qs">
                    <span class="title-checkbox">Single Response</span>
                    <div class="slideThree on-off-checkbox-settings">
                       <input ng:model="question_settings.single_choice" type="checkbox" id="MultipleResponse-option" name="check" checked="">
@@ -263,7 +297,7 @@
                       <span class="off-value"></span>
                    </div>
                 </li>
-                <li>
+                <li class="randomize_qs">
                    <span class="title-checkbox">Randomize</span>
                    <div class="slideThree on-off-checkbox-settings">
                       <input ng:model="question_settings.is_randomized" type="checkbox" id="Randomize-option" name="check" checked="">
@@ -271,7 +305,7 @@
                       <span class="off-value"></span>
                    </div>
                 </li>
-                <li>
+                <li class="super_sizer_qs">
                    <span class="title-checkbox">Super Size</span>
                    <div class="slideThree on-off-checkbox-settings">
                       <input ng:model="question_settings.super_size" type="checkbox"  id="SuperSize-option" name="check" checked="">
@@ -279,7 +313,7 @@
                       <span class="off-value"></span>
                    </div>
                 </li>
-               <li>
+               <li class="answer_stylish_qs">
                   <span class="title-checkbox">Style of Answer ( ~>>(question_settings.choice_style ) ? "Two columns per row" : "One column per row"<<~ )</span>
                    <div class="slideThree on-off-checkbox-settings">
                       <input ng:model="question_settings.choice_style" type="checkbox" id="SingleResponse-option" name="check" checked="">
@@ -287,6 +321,7 @@
                       <span class="off-value"></span>
                    </div>
                 </li>
+
              </ul>
           </div>
         </div>

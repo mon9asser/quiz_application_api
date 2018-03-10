@@ -99,7 +99,7 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
             creator_id : $scope.user_id
           }, // {{server_ip}}api/{{_id}}/editor/{{../user.token}}
           success : function (data){
-
+            console.log(data);
           } ,
           error : function (er){
             console.log(er);
