@@ -137,6 +137,81 @@ apps.filter('this_chars_only' , [
 
 // ==> Main Controller
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
+  $scope.rating_scale_elements = [] ;
+  $scope.rating_values = null ;
+  $scope.add_new_scale_rating = function (){
+    $timeout(function (){
+      if($scope.questions_list[$scope.questionIndex].question_type == 3 ){
+              var thisAnsQ = $scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers ;
+              $scope.rating_scale_elements = [];
+              for (var i = 0; i < thisAnsQ ; i++) {
+                $scope.rating_scale_elements.push({
+                  index : i
+                });
+              }
+       }
+    } , 1000 );
+  };
+
+
+
+
+
+  $scope.add_new_scale_rating_edit_question = function (){
+    $timeout(function (){
+      if($scope.questions_list[$scope.questionIndex].question_type == 3 ){
+              var thisAnsQ = $scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers ;
+              $scope.rating_scale_elements = [];
+              for (var i = 0; i < thisAnsQ ; i++) {
+                $scope.rating_scale_elements.push({
+                  index : i
+                });
+              }
+       }
+    } , 150 );
+  };
+
+
+
+
+$scope.add_new_scale_rating();
+
+$("#step_slider").on("input", function (){
+  var thiRatingValue = $(this).val();
+  $scope.rating_scale_elements = [] ;
+  for (var i = 0; i < thiRatingValue ; i++) {
+    $scope.rating_scale_elements.push({
+      index : i
+    });
+  }
+});
+$scope.select_rating_scale__ = function ( index , type){
+   var thisElement = index ;
+   if(type == 1 ) { // ==> Rating
+       if($('.start-o').children("li").eq(index).children("span").children("i").hasClass("fa-star")){
+         $(".start-o li").each(function(i){
+           $(this).children("span").children("i").removeClass("fa-star");
+           $(this).children("span").children("i").addClass("fa-star-o");
+         });
+       }else {
+         $(".start-o li").each(function(i){
+           if(i <= thisElement){
+             $(this).children("span").children("i").removeClass("fa-star-o");
+             $(this).children("span").children("i").addClass("fa-star");
+           }
+         });
+       }
+    }
+    if(type == 0 ) { // ==> Scale .scalet-o li span
+      console.log ( $('.scalet').children("li").eq(index).prop('tagName'));
+       if($('.scalet').children("li").eq(index).children("span").hasClass("highlighted_scale")){
+         $('.scalet').children("li").children("span").removeClass("highlighted_scale");
+       }else {
+         $('.scalet').children("li").children("span").addClass("highlighted_scale");
+       }
+    }
+   return false;
+};
 
   //---------------------------------------
   // Window init objects + menu settings
@@ -1216,6 +1291,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     // alert(qs_id);
     // Target ID
     $scope.ignore_last_changes_in_last_qs();
+
     $scope.question_id = qs_id ;
     // var backend_question = $scope.questions_list.find($scope.callback_old_index);
     // var mongoo_question = $scope.mongodb_questions.find($scope.callback_index);
@@ -1308,7 +1384,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       show_media_link.css("display","none");
       /*show media in ui*/
       $scope.loading_redactor_editor();
-
+      $scope.add_new_scale_rating_edit_question();
 
       if($scope.question_media == undefined || $scope.question_media == null) {
         var no_media = "<b class='no-media'>There is no media ! </b>"
@@ -2430,9 +2506,6 @@ $scope.databiding_description = function (){
           $scope.databiding_question();
         });
 
-
-
-
         $(".redactor-in-1").bind("keyup" , function (){
           $scope.databiding_description();
         });
@@ -2440,7 +2513,6 @@ $scope.databiding_description = function (){
         $(".redactor-in-1").bind("input change" , function (){
           $scope.databiding_description();
         });
-
 
       } , 400 );
   });
@@ -2461,27 +2533,28 @@ $scope.load_redactor_text_data = function (){
     });
   },3000 );
 };
-
 $scope.load_redactor_text_data();
 
 
-$timeout(function (){
-    var rating_question = $scope.questions_list[$scope.questionIndex].answers_format[0].ratscal_type ;
-    console.log(rating_question);
-    var rating_answers = $('#rating_answer');
-    var option = '';
-    for (var i = 1; i < rating_question; i++) {
-      option += "<option value='"+i+"'>"+i+"</option>";
-      alert(option);
-    }
-    rating_answers.html(option);
-} , 900 );
+// $timeout(function (){
+//     var rating_question = $scope.questions_list[$scope.questionIndex].answers_format[0].ratscal_type ;
+//     console.log(rating_question);
+//     var rating_answers = $('#rating_answer');
+//     var option = '';
+//     for (var i = 1; i < rating_question; i++) {
+//       option += "<option value='"+i+"'>"+i+"</option>";
+//       alert(option);
+//     }
+//     rating_answers.html(option);
+// } , 900 );
 
-$timeout(function (){
-    // ==> ratings scale
-    $('#rating_answer').barrating({
-          theme: 'fontawesome-stars'
-    });
+// $timeout(function (){
+//     // ==> ratings scale
+//     $('#rating_answer').barrating({
+//           theme: 'fontawesome-stars'
+//     });
+//
+//   } ,1000 );
 
-  } ,1000 );
-}]);
+
+ }]);

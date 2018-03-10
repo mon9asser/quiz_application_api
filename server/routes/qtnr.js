@@ -161,12 +161,11 @@ qtnrRouters.delete("/:app_id/delete", auth_verify_api_keys_tokens , (req, res)=>
         res.status(404).send(notes.Errors.Error_Doesnt_exists("Application"));
       });
     }
+
+    res.send({
+      "success" : "application has been deleted successfully !"
+    });
   });
-
-
-
-
-
 
 });
 

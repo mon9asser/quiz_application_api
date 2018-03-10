@@ -177,7 +177,6 @@
 
                 <!-- true false value -->
                 <div ng:if="question_type == 2" class="">
-
                     <ul  ng:if="{{app.app_type }} == 1"  class="answer-pt-controller ">
                       <li data-toggle="asnwers-options" title="Make it Correct Answer">
                         <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
@@ -196,18 +195,35 @@
 
               <div class="survey-answer">
                 <!-- Rating Case -->
-                <select ng:if="questions_list[questionIndex].answers_format[0].ratscal_type == 1" id="rating_answer" >
+                <div class=""> <!--  -->
+                  <!-- Ratings  -->
+                  <ul ng:if="questions_list[questionIndex].answers_format[0].ratscal_type == 1 " class="start-o" >
+                    <li data-index='0' ng:repeat="(key_ , val_) in rating_scale_elements">
+                      <span ng:click="select_rating_scale__($index , 1)" href="#">
+                          <i class="fa fa-star-o"></i>
+                      </span>
+                    </li>
+                  </ul>
+                  <!-- Scale -->
+                  <ul ng:if="questions_list[questionIndex].answers_format[0].ratscal_type == 0 " class="scalet-o" >
+                    <li data-index='0' ng:repeat="(key_ , val_) in rating_scale_elements">
+                      <span ng:click="select_rating_scale__($index , 0 )" href="#">
+                          ~>>$index + 1 <<~
+                      </span>
+                    </li>
+                  </ul>
+                </div>
 
-                </select>
+                 <!-- Scale Case -->
               </div>
 
               <div class="survey-answer-settings">
 
               </div>
           </div>
-           <pre ng:if="question_type > 2">
+           <!-- <pre ng:if="question_type > 2">
             ~>> questions_list[questionIndex] <<~
-          </pre>
+          </pre> -->
           <!--  ng:if="question_type == 0" -->
           <div ng:click="create_new_answer()" ng:if="question_type == 0 || question_type == 1" class="add-new-option">
               Add new option
@@ -225,6 +241,12 @@
           <!-- <label class="titles-question"> Question Settings : </label> -->
           <div class="question-settings">
              <ul class="listSettings-qs">
+               <li>
+                  <span class="title-checkbox"> Steps ( ~>>questions_list[questionIndex].answers_format[0].step_numbers<<~ )</span>
+                  <div class="rating_scale_options">
+                      <input ng:model="questions_list[questionIndex].answers_format[0].step_numbers" id="step_slider" min="2" max="10" type="range" name="">
+                  </div> <!-- Slide Range -->
+               </li>
                 <li>
                    <span class="title-checkbox">Required</span>
                    <div class="slideThree on-off-checkbox-settings">
