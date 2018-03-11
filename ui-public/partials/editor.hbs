@@ -93,7 +93,7 @@
     <div style="display:none;"class="x-editor-x-body" id="answers-pt">
         <div class="multi-answers-part">
           <!-- External status bar -->
-          <div ng:if="question_type == 0" class="statusbar-obj" id="text-options"></div>
+          <!-- <div ng:if="question_type == 0" class="statusbar-obj" id="text-options"></div> -->
 
           <ul ng:if="question_type <= 2" class="choices-part">
             <li class="answers_x" data-answer-id="answer_id_~>>answer_value._id<<~" data-answer-index="~>>$index<<~"  ng:class="class_data_func( answer_value.is_correct , question_settings.choice_style )" ng:repeat="(answer_key , answer_value) in asnwers track by $index">
@@ -259,14 +259,14 @@
                  </div> <!-- Slide Range -->
                </li>
 
-                <li class="steps_qs">
+                <li class="steps_qs" ng:if="questions_list[questionIndex].question_type == 3">
                     <span class="title-checkbox"> Steps ( ~>>questions_list[questionIndex].answers_format[0].step_numbers<<~ )</span>
                     <div class="rating_scale_options">
                         <input ng:model="questions_list[questionIndex].answers_format[0].step_numbers" id="step_slider" min="2" max="10" type="range" name="">
                     </div> <!-- Slide Range -->
                 </li>
 
-                <li class="show_lbls_qs">
+                <li class="show_lbls_qs" ng:if="questions_list[questionIndex].question_type == 3">
                     <div class="scale-options">
                       <span class="title-checkbox">Show labels</span>
                       <div class="slideThree on-off-checkbox-settings">

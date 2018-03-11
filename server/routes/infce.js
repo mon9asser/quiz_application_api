@@ -25,7 +25,7 @@ infceRouter.use(  bodyParser.urlencoded({ extended: false }) );
 infceRouter.get("/:app_id/editor/:token" , verify_access_tokens_admin_user , (req , res)=>{
   // ================> Params
   var app_id = req.params.app_id ;
-  console.log(app_id);
+
   // ================> Verif"This Application does not exists !" ,ied Items
   var Verified_user = req.user ;
   qtnr.findOne({_id:app_id} , (error , qtnrObject)=>{
@@ -56,7 +56,8 @@ infceRouter.get("/:app_id/editor/:token" , verify_access_tokens_admin_user , (re
 
     res.render( application_type , {
       app : qtnrObject ,
-      user : req.user
+      user : req.user ,
+      header_status : config.show_header
     });
 
   });

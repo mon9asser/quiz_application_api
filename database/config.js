@@ -10,6 +10,7 @@ var config = {
     session_access : false ,
     default_records_per_page : 5 ,
     token_expiration_time : 9 , // means 9 hours  // => can be 500 hrs also
+    show_header : true ,
     secretCode :             "@5rU5d@!tsd&$90f*&#5$~1100sdk$oprFRTgkjfddY1%js",
     apiSecret :              "DRdsd542sder@sds&%4sd854sd=+sds54sderSSfdf##$%@sd",
     apiSecretKey :           "s8Ee~$rV9%#t+T@y&9cY*c-!vJ^Pu" ,
