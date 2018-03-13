@@ -1487,21 +1487,32 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
              });
 
       };
-    $scope.redactor_menu_position = function (){
+    $scope.redactor_menu_position = function (evt){
+
+      var elemenQD = evt.target.className.includes('redactor-editor') ;
+
 
       if($scope.selected_passage != null ) {
         // ==> Show text option
        var targetClass = $.trim($scope.current_editor_index);
-       var currentPosition = $('.'+targetClass).parent('.redactor-box').parent(".text-answers").parent('div').parent('li.answers_x').offset();
-       $("#redactor-editor-menu").css({
-          top   : currentPosition.top   - 60  ,
-          left  : currentPosition.left - 40
-       });
-      $("#redactor-editor-menu").css("display","block");
+       var currentPosition ;
+
+
+       if(elemenQD == true ){ // question and description
+         alert("Question and body redactor under update !");
+       }else { // answer only
+           currentPosition = $('.'+targetClass).parent('.redactor-box').parent(".text-answers").parent('div').parent('li.answers_x').offset();
+           $("#redactor-editor-menu").css({
+              top   : currentPosition.top   - 60  ,
+              left  : currentPosition.left - 40
+           });
+          $("#redactor-editor-menu").css("display","block");
+       }
+
       }
     };
     $scope.show_redactor_menu_out_timeframe = function (){
-      $(".redactor-in").on("keyup mouseup click" , function (){
+      $(".redactor-in").on("keyup mouseup click" , function (evt){
         var sel = window.getSelection()
 
         if (sel.rangeCount === 0 || sel.isCollapsed || sel.toString() == null || sel.toString() == ' ') return ;
@@ -1509,7 +1520,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         $scope.selected_passage     = sel.toString() ;
         $scope.current_editor_index = $(this).prop('className').split(' ').pop();
 
-        $scope.redactor_menu_position();
+        $scope.redactor_menu_position(evt);
       });
     };
     $scope.show_redactor_menu_options_in_timeframe = function (opt = null){
@@ -1586,7 +1597,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                  linebreaks: false,
                  enterKey: false ,
                  minHeight : '90px' ,
-                 air : true
+                 toolbarExternal: '#redactor-editor-menu'
               });
 
 
