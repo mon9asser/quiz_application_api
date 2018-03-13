@@ -1594,7 +1594,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                  linebreaks: false,
                  enterKey: false ,
                  minHeight : '90px' ,
-                 toolbarExternal: '#redactor-editor-menu'
+                 air : true 
+                //  toolbarExternal: '#redactor-editor-menu'
               });
 
 
