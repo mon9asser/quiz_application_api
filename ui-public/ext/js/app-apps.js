@@ -1488,27 +1488,24 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
       };
     $scope.redactor_menu_position = function (evt){
-
-      var elemenQD = evt.target.className.includes('redactor-editor') ;
-
-
       if($scope.selected_passage != null ) {
-        // ==> Show text option
-       var targetClass = $.trim($scope.current_editor_index);
-       var currentPosition ;
+        var currentPosition ;
 
+        if ($scope.current_editor_index == 'redactor-in-0'){ // ==> Question
+            currentPosition = $('.redactor-in-0').offset();
+        }
+        if ($scope.current_editor_index == 'redactor-in-1'){ // ==> Description
+            currentPosition = $('.redactor-in-1').offset();
+        }
+        if ($scope.current_editor_index != 'redactor-in-0' && $scope.current_editor_index != 'redactor-in-1'){ // ==> Answers
+            currentPosition = $('.'+$scope.current_editor_index).parent('.redactor-box').parent(".text-answers").parent('div').parent('li.answers_x').offset();
+        }
 
-       if(elemenQD == true ){ // question and description
-         alert("Question and body redactor under update !");
-       }else { // answer only
-           currentPosition = $('.'+targetClass).parent('.redactor-box').parent(".text-answers").parent('div').parent('li.answers_x').offset();
-           $("#redactor-editor-menu").css({
+        $("#redactor-editor-menu").css({
               top   : currentPosition.top   - 60  ,
               left  : currentPosition.left - 40
-           });
-          $("#redactor-editor-menu").css("display","block");
-       }
-
+         });
+        $("#redactor-editor-menu").css("display","block");
       }
     };
     $scope.show_redactor_menu_out_timeframe = function (){
@@ -1714,7 +1711,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             }
         });
 
-
     // ==> do an action with calling elements
     $("html , body").on("click" , function (evt){
       var hasThisClass =  evt.target.className.includes('redactor-in');
@@ -1904,7 +1900,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $timeout(function (){
       $scope.style_of_answers = ($scope.question_settings.choice_style ) ? "Two columns per row" : "One column per row";
     } , 1000 );
-    $timeout(function(){
+    $timeout(function (){
       $(".loader_block").fadeOut(5000);
       $("#step_slider").on("input change", function (){
 
@@ -1918,11 +1914,13 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
       });
     } , 3000 );
+    $timeout(function (){
+      $scope.load_redactor_text_data();
+    } , 250);
 
     // ==> do an action
     $scope.add_new_scale_rating();
     $scope.status_of_questions();
-    $scope.load_redactor_text_data();
     $scope.show_redactor_menu_options_in_timeframe();
     $scope.settings_menu.css({width:$scope.window.settings_menu});
 
