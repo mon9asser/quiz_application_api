@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+     <link href="redactor.min.css" rel="stylesheet">
+  </head>
+  <body>
+
+
+<span id="vlsdsd">
+   Selection        issue related plugin
+</span>
+    <button id="selD" type="button" name="button">Selected</button>
+    <script src="http://34.215.133.182/ext/frameworks/js/jquery.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="redactor.js" ng:if="page_name=='api'"></script>
+
+    <!-- call -->
+    <script>
+    $("#vlsdsd").on("mousedown mousemove click" , function (){
+      var sel = window.getSelection()
+      if (sel.rangeCount === 0 || sel.isCollapsed || sel.toString() == null || sel.toString() == ' ') return false ;
+      // show redator menu acco
+        console.log(sel.toString())
+    });
+
+
+
+
+
+      function selected () {
+         var selObj = window.getSelection();
+         alert(selObj.length);
+        //  var selRange = selObj.getRangeAt(0);
+        //   console.log(selRange);
+      }
+    $("#selD").on("click" , function (){
+        selected();
+    });
+    </script>
+
+  </body>
+</html>

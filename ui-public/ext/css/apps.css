@@ -2753,7 +2753,6 @@ input.lab ,input.lab:focus , input.lab:checked , input.lab:active , input.lab:li
 .block-labels > span.third-lbl  {
   float: right;
   display: inline;
-
   margin-right: -40px;
 }
 .redactor-air {
@@ -2768,6 +2767,39 @@ input.lab ,input.lab:focus , input.lab:checked , input.lab:active , input.lab:li
 }
 .redactor-in-0 {
       min-height: 144px !important;
+}
+.redactor-menu-x
+{
+  position: absolute;
+    top: 0px;
+    z-index: 2000;
+    background: #222;
+    padding: 15px 5px;
+    border-radius: 100px;
+}
+.redactor-toolbar a.re-button-icon {
+    font-size: 16px;
+    padding: 9px 15px 6px 15px;
+    background: #111;
+    color: #fff;
+}
+.redactor-menu-x:after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 56%;
+    margin-left: -50px;
+    width: 0;
+    height: 0;
+    border-top: solid 25px #222;
+    border-left: solid 25px transparent;
+    border-right: solid 25px transparent;
+}
+.redactor-dropdown{
+  z-index: 2000;
+}
+#redactor-editor-menu {
+  display: none;
 }
 /*li.steps_qs ,
 li.show_lbls_qs ,
