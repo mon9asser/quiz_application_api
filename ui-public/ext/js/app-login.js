@@ -42,6 +42,8 @@ apps.controller("login-app" , ["$rootScope" , "$http" , "$scope" , function ($ro
     }
 
     $.getJSON($scope.json_apk_file , function(api_key_data){
+console.log($scope.json_apk_file)
+console.log(api_key_data)
       $http({
           method : "POST" ,
           url    : $scope.api_url ,
@@ -51,6 +53,8 @@ apps.controller("login-app" , ["$rootScope" , "$http" , "$scope" , function ($ro
 				  },
           data: $scope.access
       }).then(function (resData){
+	console.log(resData.data);
+
          if(resData.data.isRedirect != null && resData.data.isRedirect == true  ) {
            window.location.href = "/";
          }else {
