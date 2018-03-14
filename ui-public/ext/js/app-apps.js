@@ -1914,13 +1914,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
       });
     } , 3000 );
-    $timeout(function (){
-      $scope.load_redactor_text_data();
-    } , 1200);
+
 
     // ==> do an action
     $scope.add_new_scale_rating();
     $scope.status_of_questions();
+    $scope.load_redactor_text_data();
     $scope.show_redactor_menu_options_in_timeframe();
     $scope.settings_menu.css({width:$scope.window.settings_menu});
 
