@@ -1932,6 +1932,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
          var target_class ;
          var sel = window.getSelection();
          // what mouse click for !
+         console.log("CLASSES -->> " + evt.target.className);
          if(evt.target.className != undefined ){
             target_class = evt.target.className.split(' ').pop() ;
          };
