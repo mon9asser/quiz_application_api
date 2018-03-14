@@ -1928,7 +1928,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     } , 3000 );
     $timeout(function (){
       var redactor = $('.redactor-in');
-      alert(redactor.length)
+      redactor.each(function (){
+        document.addEventListener("selectionchange" , function (evt){
+          console.log(evt);
+        })
+      });
     } , 6000);
 
     // ==> do an action
