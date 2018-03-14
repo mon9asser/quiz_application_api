@@ -1913,15 +1913,26 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           }
 
       });
-      if($(".add-new-option").length != 0)
-         $(".add-new-option").trigger("click");
-    } , 3000 );
 
+    } , 3000 );
+    $timeout(function(){
+      var redactorIn = $(".redactor-in");
+
+      redactorIn.each(function(i){
+        if( i >= 2 ) {
+          $(this).bind("keyup input change" , function (){
+              var answerIndex = i ;
+              $scope.databiding_answers($(this) , answerIndex - 2 );
+          });
+        }
+
+      });
+    },3000 );
 
     // ==> do an action
     $scope.add_new_scale_rating();
     $scope.status_of_questions();
-    $scope.load_redactor_text_data();
+     
     $scope.show_redactor_menu_options_in_timeframe();
     $scope.settings_menu.css({width:$scope.window.settings_menu});
 
