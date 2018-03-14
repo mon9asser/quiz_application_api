@@ -1917,7 +1917,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     } , 3000 );
     $timeout(function(){
       var redactorIn = $(".redactor-in");
-
+      alert(redactorIn.length);
       redactorIn.each(function(i){
         if( i >= 2 ) {
           $(this).bind("keyup input change" , function (){
@@ -1927,12 +1927,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         }
 
       });
-    },3000 );
+    },4000 );
 
     // ==> do an action
     $scope.add_new_scale_rating();
     $scope.status_of_questions();
-     
+
     $scope.show_redactor_menu_options_in_timeframe();
     $scope.settings_menu.css({width:$scope.window.settings_menu});
 
