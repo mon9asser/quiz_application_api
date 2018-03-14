@@ -1929,9 +1929,25 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $timeout(function (){
       var redactor = $('.redactor-in');
       redactor.each(function (){
-        document.addEventListener("selectionchange" , function (evt){
-          console.log(evt);
-        })
+        $(document).bind("selectionchange  , click , mousemove" , function (evt){
+           var target_class ;
+           var sel = window.getSelection();
+           // what mouse click for !
+           if(evt.target.className != undefined ){
+              target_class = evt.target.className.split(' ').pop() ;
+           };
+           if(target_class != undefined && sel != null && sel != ''){
+             if(target_class == 'redactor-in-0'){ // question
+               target_class.offset();
+             }
+             if(target_class == 'redactor-in-1'){ // Description
+               target_class.offset();
+             }
+
+             console.log( target_class + ' ~~~~ ' + sel );
+           } // ==> End select text
+
+        });
       });
     } , 6000);
 
