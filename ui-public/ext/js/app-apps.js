@@ -1937,12 +1937,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
          };
          if(target_class != undefined && sel != null && sel != ''){
 
-           if(target_class == 'redactor-in-0'){ // question
-
-           }
-           if(target_class == 'redactor-in-1'){ // Description
-
-           } 
+          //  if(target_class == 'redactor-in-0'){ // question
+           //
+          //  }
+          //  if(target_class == 'redactor-in-1'){ // Description
+           //
+          //  }
 
            console.log( target_class + ' ~~~~ ' + sel );
          } // ==> End select text
