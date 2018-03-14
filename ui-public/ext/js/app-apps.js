@@ -790,7 +790,18 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             toolbarExternal: '#redactor-editor-menu'
             // , air : true
           });
+          $R('.redactor-editor' , {
+             plugins: ['fontcolor' , 'fontsize'] ,
+             buttons: ['font','bold' , 'italic', 'underline' , 'link' , 'html'] ,
+             paragraphize: false,
+             replaceDivs: false,
+             linebreaks: false,
+             enterKey: false ,
+             minHeight : '90px' ,
+             toolbarExternal: '#redactor-editor-menu'
+          });
         } , 100);
+
       }
     $scope.create_new_answer = function (){
       $("#redactor-editor-menu").css("display","none");
@@ -1917,7 +1928,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     } , 3000 );
     $timeout(function (){ // heeeeeeeeeeeeeeeeere
       $scope.loading_redactor_editor();
-    } , 3000);
+      alert();
+    } , 2000);
 
     // ==> do an action
     $scope.add_new_scale_rating();
