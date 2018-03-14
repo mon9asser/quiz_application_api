@@ -1614,7 +1614,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 $scope.databiding_description();
               });
 
-            } , 1000 );
+            } , 1300 );
         });
     $scope.expand_collapse_handler.on("click" , function (){
         var target = $(this).next(".control-item-content") ;
@@ -1915,24 +1915,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       });
 
     } , 3000 );
-    $timeout(function(){
-      var redactorIn = $(".redactor-in");
-
-      redactorIn.each(function(i){
-
-          $(this).bind("keyup input change" , function (){
-              var answerIndex = i ;
-              $scope.databiding_answers($(this) , answerIndex - 2 );
-          });
-
-
-      });
-    },3000 );
+    $timeout(function (){ // heeeeeeeeeeeeeeeeere
+      $scope.loading_redactor_editor();
+    } , 3000);
 
     // ==> do an action
     $scope.add_new_scale_rating();
     $scope.status_of_questions();
-
+    $scope.load_redactor_text_data();
     $scope.show_redactor_menu_options_in_timeframe();
     $scope.settings_menu.css({width:$scope.window.settings_menu});
 
