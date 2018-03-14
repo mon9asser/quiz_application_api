@@ -5,7 +5,7 @@ var config = {
     port :                  ':27017' ,
     database_name :         '/todo' ,
     host_name:              'mongodb://localhost' ,
-    options :               { useMongoClient:true }   ,
+    options :               { useMongoClient:true }   , 
     server_port :           process.env.port || 80  ,
     session_access : false ,
     default_records_per_page : 5 ,

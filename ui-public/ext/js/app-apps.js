@@ -1943,7 +1943,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
              if(target_class == 'redactor-in-1'){ // Description
                target_class.offset();
              }
-
+             console.log('');
              console.log( target_class + ' ~~~~ ' + sel );
            } // ==> End select text
 
