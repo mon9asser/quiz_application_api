@@ -1917,17 +1917,17 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     } , 3000 );
     $timeout(function(){
       var redactorIn = $(".redactor-in");
-      alert(redactorIn.length);
+
       redactorIn.each(function(i){
-        if( i >= 2 ) {
+
           $(this).bind("keyup input change" , function (){
               var answerIndex = i ;
               $scope.databiding_answers($(this) , answerIndex - 2 );
           });
-        }
+
 
       });
-    },4000 );
+    },3000 );
 
     // ==> do an action
     $scope.add_new_scale_rating();
