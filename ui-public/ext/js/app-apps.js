@@ -438,20 +438,20 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
     // ==> functions in scope object
     $scope.add_new_scale_rating = function (){
-      $timeout(function (){
-        if($scope.questions_list[0] !=undefined ){
-        if(  $scope.questions_list[0].question_type == 3 ){
-                var thisAnsQ = $scope.questions_list[0].answers_format[0].step_numbers ;
-                console.log(thisAnsQ);
-                $scope.rating_scale_elements = [];
-                for (var i = 0; i < thisAnsQ ; i++) {
-                  $scope.rating_scale_elements.push({
-                    index : i
-                  });
-                }
-         }
-       }
-      } , 1200 );
+      // $timeout(function (){
+      //   if($scope.questions_list[0] !=undefined ){
+      //   if(  $scope.questions_list[0].question_type == 3 ){
+      //           var thisAnsQ = $scope.questions_list[0].answers_format[0].step_numbers ;
+      //           console.log(thisAnsQ);
+      //           $scope.rating_scale_elements = [];
+      //           for (var i = 0; i < thisAnsQ ; i++) {
+      //             $scope.rating_scale_elements.push({
+      //               index : i
+      //             });
+      //           }
+      //    }
+      //  }
+      // } , 1200 );
     };
     $scope.add_new_scale_rating_edit_question = function (){
         $timeout(function (){
