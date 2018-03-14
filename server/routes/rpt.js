@@ -725,11 +725,7 @@ rptRouters.post(["/:creator_id/brief/report","/:creator_id/brief/:app_type/repor
      }
 
      res.send(breif);
-   }).catch((error)=>{
-     return new Promise((resolve , reject)=>{
-        res.status(403).send(error);
-     });
-   });
+   }) ;
 
 });
 
