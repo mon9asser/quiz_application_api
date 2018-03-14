@@ -1929,7 +1929,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $timeout(function (){
       var redactor = $('.redactor-in');
       redactor.each(function (){
-        $(document).bind("selectionchange  , click , mousemove" , function (evt){
+        $(document).bind("selectionchange  , click " , function (evt){
            var target_class ;
            var sel = window.getSelection();
            // what mouse click for !
