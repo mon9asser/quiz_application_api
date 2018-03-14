@@ -1916,7 +1916,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     } , 3000 );
     $timeout(function (){
       $scope.load_redactor_text_data();
-    } , 450);
+    } , 1200);
 
     // ==> do an action
     $scope.add_new_scale_rating();
