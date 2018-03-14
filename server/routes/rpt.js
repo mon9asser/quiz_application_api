@@ -707,8 +707,6 @@ rptRouters.post(["/:creator_id/brief/report","/:creator_id/brief/:app_type/repor
          var total_is_completed = _.countBy(current_page[i].attendees, {'is_completed': true});
          var total_is_completed_count = _.countBy(current_page[i].attendees, 'results.correct_answers');
 
-
-
          brief_object['app_id'] = current_page[i].questionnaire_info.id;
          brief_object['app_name'] =current_page[i].questionnaire_info.questionnaire_title;
          brief_object['app_type'] = (current_page[i].app_type == 1) ? "Quiz" : "Survey";

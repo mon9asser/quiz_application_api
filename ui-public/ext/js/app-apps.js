@@ -1543,6 +1543,64 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       }
     };
 
+    document.addEventListener("selectionchange", function (evt){
+
+     var sel = window.getSelection()
+     if (sel.rangeCount === 0 || sel.isCollapsed || sel.toString() == null || sel.toString() == ' ') return ;
+           // show redator menu according to the current position
+         $scope.selected_passage = sel.toString() ;
+
+         // $scope.current_editor_index
+         if($scope.selected_passage != null ) {
+           var currentPosition ;
+
+           if ($scope.current_editor_index == 'redactor-in-0'){ // ==> Question
+               currentPosition = $('.redactor-in-0').offset();
+           }
+           if ($scope.current_editor_index == 'redactor-in-1'){ // ==> Description
+               currentPosition = $('.redactor-in-1').offset();
+           }
+          //  if ($scope.current_editor_index != 'redactor-in-0' && $scope.current_editor_index != 'redactor-in-1'){ // ==> Answers
+          //      currentPosition = $('.'+$scope.current_editor_index).parent('.redactor-box').parent(".text-answers").parent('div').parent('li.answers_x').offset();
+          //  }
+           if(currentPosition){
+             $("#redactor-editor-menu").css({
+                   top   : currentPosition.top   - 60  ,
+                   left  : currentPosition.left - 40
+              });
+             $("#redactor-editor-menu").css("display","block");
+           }
+         }
+    });
+    // document.addEventListener("select", function (evt){
+
+     var sel = window.getSelection()
+     if (sel.rangeCount === 0 || sel.isCollapsed || sel.toString() == null || sel.toString() == ' ') return ;
+           // show redator menu according to the current position
+         $scope.selected_passage = sel.toString() ;
+
+         // $scope.current_editor_index
+         if($scope.selected_passage != null ) {
+           var currentPosition ;
+
+           if ($scope.current_editor_index == 'redactor-in-0'){ // ==> Question
+               currentPosition = $('.redactor-in-0').offset();
+           }
+           if ($scope.current_editor_index == 'redactor-in-1'){ // ==> Description
+               currentPosition = $('.redactor-in-1').offset();
+           }
+          //  if ($scope.current_editor_index != 'redactor-in-0' && $scope.current_editor_index != 'redactor-in-1'){ // ==> Answers
+          //      currentPosition = $('.'+$scope.current_editor_index).parent('.redactor-box').parent(".text-answers").parent('div').parent('li.answers_x').offset();
+          //  }
+           if(currentPosition){
+             $("#redactor-editor-menu").css({
+                   top   : currentPosition.top   - 60  ,
+                   left  : currentPosition.left - 40
+              });
+             $("#redactor-editor-menu").css("display","block");
+           }
+         }
+    });
     // ==> do an action with scope object
     $scope.window_navigation.on("load" , function (){
         $scope.close_iconx.trigger("click");
