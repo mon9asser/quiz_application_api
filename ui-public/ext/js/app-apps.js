@@ -804,7 +804,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
       }
     $scope.create_new_answer = function (){
-      $("#redactor-editor-menu").css("display","none");
+      // $("#redactor-editor-menu").css("display","none");
       if($scope.question_id == null ){
         alert("Please select question from question list");
       }
@@ -1551,9 +1551,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           $scope.settings_menu.css("display" , "block" );
         }, 500);
     });
-    $scope.window_navigation.on('keyup keydown' , function (){
-      $("#redactor-editor-menu").css("display" , "none");
-    });
+    // $scope.window_navigation.on('keyup keydown' , function (){
+    //   $("#redactor-editor-menu").css("display" , "none");
+    // });
     $scope.close_settings_menu_handler.on("click" , function (){
         var target_iconx = $(".close-menu-icon");
         if(target_iconx.hasClass("fa-times") == true )
@@ -1730,7 +1730,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       if(hasThisClass == true )
         return;
 
-      $("#redactor-editor-menu").css({display :"none"});
+      // $("#redactor-editor-menu").css({display :"none"});
 
     });
     $("#editor-question-body").on('input' , function (){
