@@ -1574,7 +1574,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       });
     $scope.window_navigation.bind("load" , function (){
 
-            $scope.loading_redactor_editor();
+            // $scope.loading_redactor_editor();
 
             $timeout(function (){
 
@@ -1928,8 +1928,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     } , 3000 );
     $timeout(function (){ // heeeeeeeeeeeeeeeeere
       $scope.loading_redactor_editor();
-      alert();
-    } , 2000);
+    } , 5000);
 
     // ==> do an action
     $scope.add_new_scale_rating();
