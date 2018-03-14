@@ -1927,26 +1927,41 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
     } , 3000 );
     $timeout(function (){
-      var redactor = $('.redactor-in');
+
       $(document).bind("selectionchange  , click" , function (evt){
+
          var target_class ;
          var sel = window.getSelection();
          // what mouse click for !
-         console.log("CLASSES -->> " + evt.target.className);
-         if(evt.target.className != undefined ){
-            target_class = evt.target.className.split(' ').pop() ;
-         };
-         if(target_class != undefined && sel != null && sel != ''){
+         if(evt.target != null ){
+             if(evt.target.className){
+               target_class = evt.target.className.split(' ').pop() ;
+             }else {
+               if(evt.target.parentNode != null ){
+                 if(evt.target.parentNode.className){
+                   target_class = evt.target.parentNode.className.split(' ').pop()  ;
+                 }
+               }
+             }
 
-          //  if(target_class == 'redactor-in-0'){ // question
-           //
-          //  }
-          //  if(target_class == 'redactor-in-1'){ // Description
-           //
-          //  }
+             if( target_class != undefined && sel != null && sel != ''){
+               var offset = $('.'+target_class).offset();
+               $("#redactor-editor-menu").css({
+                 left : offset.left - 40   ,
+                 top : offset.top - 80 ,
+                 display : 'block'
+               });
+             }else
+             $("#redactor-editor-menu").css("display" , "none");
+         }else {
+            $("#redactor-editor-menu").css("display" , "none");
+         }
 
-           console.log( target_class + ' ~~~~ ' + sel );
-         } // ==> End select text
+      });
+
+
+
+      $('html , body').on('click' , function (evt){
 
       });
     } , 6000);
