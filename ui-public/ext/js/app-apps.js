@@ -1572,7 +1572,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
            }
          }
     });
-    // document.addEventListener("select", function (evt){
+    document.addEventListener("select", function (evt){
 
      var sel = window.getSelection()
      if (sel.rangeCount === 0 || sel.isCollapsed || sel.toString() == null || sel.toString() == ' ') return ;
