@@ -1913,6 +1913,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           }
 
       });
+      if($(".add-new-option").length != 0)
+         $(".add-new-option").trigger("click");
     } , 3000 );
 
 
