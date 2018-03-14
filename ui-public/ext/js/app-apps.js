@@ -1381,7 +1381,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                        console.log(err);
                    });
 
-
+                   $scope.loading_redactor_editor();
                };
     $scope.edit_this_question = function ( qs_id  , qsCurrIndex , nextIndex = null){
 
