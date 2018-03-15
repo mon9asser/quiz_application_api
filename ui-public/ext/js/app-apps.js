@@ -1463,6 +1463,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
              });
 
       };
+    $scope.rating_scale_values = function (){
+      $timeout(function (){
+        alert($scope.question_type);
+      } , 7000 );
+    };
     // $scope.redactor_menu_position = function (evt){
     //   if($scope.selected_passage != null ) {
     //     var currentPosition ;
@@ -1929,12 +1934,13 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       //       }
       //     }
       // });
+
     } , 6000);
 
     // ==> Do an action
     $scope.status_of_questions();
     $scope.load_redactor_text_data();
-    // $scope.show_redactor_menu_options_in_timeframe();
+    $scope.rating_scale_values();
     $scope.settings_menu.css({width:$scope.window.settings_menu});
 
     // ==> Excute a funcs from a plugins
