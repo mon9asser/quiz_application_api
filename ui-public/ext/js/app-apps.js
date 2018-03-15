@@ -1365,129 +1365,126 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                    $scope.loading_redactor_editor();
                };
     $scope.edit_this_question = function ( qs_id  , qsCurrIndex , nextIndex = null){
+        $timeout(function(){
 
 
 
 
-          $scope.question_id = qs_id ;
-          if(nextIndex == null ){
-              $("#docQuestions").children("li").each(function (){
-                ( $(this).hasClass("highlighted-question")  ) ?
-                  $(this).removeClass("highlighted-question")
-                  : null ;
-              });
-              $("#docQuestions").children("li").eq(qsCurrIndex).addClass("highlighted-question");
-          }
-            var right_part = $(".right_part").css("display");
-             if(right_part == "none")
-             {
-               $scope.hide_loader();
-             }
-           $scope.questionIndex = qsCurrIndex ;
-           $scope.question_id = qs_id ;
-           $scope.indexes = 1 ;
-           var taget_question = $scope.questions_list.find($scope.callback_index);
 
-           if (taget_question == undefined )
-             taget_question = $scope.question_object_that_added ;
-
-           if( taget_question.answers_format.length > 1 ){
-               $scope.indexes = taget_question.answers_format.length ;
-           }
-           $(".redactor-in-0").html('');
-          $(".redactor-in-1").html('');
-           $scope.question_id = taget_question._id;
-           $scope.question_type = taget_question.question_type;
-           $scope.old_question_data = taget_question.question_body ;
-           $(".redactor-in-0").html( taget_question.question_body );
-           $(".redactor-in-1").html(taget_question.question_description);
-           // 2 ==> media parts
-           $scope.question_media = taget_question.media_question ;
-           $scope.quest_media_parts = taget_question.media_question ;
-           // 3 ==> answer part
-           $scope.asnwers = taget_question.answers_format;
-           console.log($scope.asnwers );
-           $scope.question_settings = {
-              is_required           : taget_question.answer_settings.is_required ,
-              single_choice   : taget_question.answer_settings.single_choice ,
-              is_randomized          : taget_question.answer_settings.is_randomized ,
-              super_size         : taget_question.answer_settings.super_size ,
-              choice_style      : taget_question.answer_settings.choice_style
-            }
-
-          // 4 ==> store rating scale values  to ui desing
-          if($scope.question_type == 3 ){
-            console.log({
-              "answer_value" :
-              $scope.questions_list[$scope.questionIndex] 
-            });
-
-            $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
-          }
-          var media_block = $(".media-x-preview"); // => preview div
-          var show_media_link = $(".show_media_link"); // => input
-          media_block.html('');
-          show_media_link.val('') ;
-          show_media_link.css("display","none");
-          $scope.loading_redactor_editor();
-
-          if($scope.question_media == undefined || $scope.question_media == null) {
-            var no_media = "<b class='no-media'>There is no media ! </b>"
-            media_block.html(no_media);
-          }else {
-            show_media_link.css("display","block");
-            var iframe = "<iframe width='100%' height='250px'></iframe>";
-            var image  = "<div class ='show-image'></div>";
-            var mp4    = '<video width="100%" height="auto" controls>' +
-                            '<source src="'+$scope.question_media.media_field+'.mp4" type="video/mp4">'+
-                            '<source src="'+$scope.question_media.media_field+'.ogg" type="video/ogg">'+
-                            'Your browser does not support the video tag.' +
-                          '</video>' ;
-
-            // image
-            if($scope.question_media.media_type == 0 ) {
-              media_block.html(image);
-              show_media_link.val($scope.server_ip + $scope.question_media.media_field);
-                media_block.find('div').css({
-                  "background-image":"url('"+$scope.server_ip + $scope.question_media.media_field +"')"
-                });
-            }
-            if($scope.question_media.media_type == 1 ) {
-              media_block.html(iframe);
-
-              show_media_link.val($scope.question_media.media_name);
-              // youtube or vimeo
-              if($scope.question_media.video_type == 0 || $scope.question_media.video_type == 1)
-                media_block.find('iframe').attr("src" , $scope.question_media.video_source);
-              // mp4
-              if( $scope.question_media.video_type == 2 ) {
-                media_block.html(mp4)
+                $scope.question_id = qs_id ;
+                if(nextIndex == null ){
+                    $("#docQuestions").children("li").each(function (){
+                      ( $(this).hasClass("highlighted-question")  ) ?
+                        $(this).removeClass("highlighted-question")
+                        : null ;
+                    });
+                    $("#docQuestions").children("li").eq(qsCurrIndex).addClass("highlighted-question");
                 }
-              }
-            }
-            $(".qs-edit-"+$scope.question_id).removeClass("fa-pencil");
-            $(".iconex-movable").each(function(){
-              if($(this).hasClass("fa-cog")){
-                $(this).removeClass("fa-cog fa-spin");
-                $(this).addClass("fa-pencil");
-                $(this).css({color:"tan"});
-              }
-            });
-            $(".qs-edit-"+$scope.question_id).css({"color":"#89d7d7"});
-            $(".qs-edit-"+$scope.question_id).addClass("fa-cog fa-spin -font");
-            $http({
-                 url : $scope.api_url_init_id_date ,
-                 method : "GET"
-               }).then(function(resp){
-                 $scope.mongoose_id = resp.data.id;
-                 $scope.mongoose_answer_id = resp.data.id_1;
-                 $scope.mongoose_date = resp.data.date;;
-                 $scope.unique_ids = resp.data.list_of_ids ;
+                  var right_part = $(".right_part").css("display");
+                   if(right_part == "none")
+                   {
+                     $scope.hide_loader();
+                   }
+                 $scope.questionIndex = qsCurrIndex ;
+                 $scope.question_id = qs_id ;
+                 $scope.indexes = 1 ;
+                 var taget_question = $scope.questions_list.find($scope.callback_index);
 
-               },function(err){
-                 console.log(err);
-             });
+                 if (taget_question == undefined )
+                   taget_question = $scope.question_object_that_added ;
 
+                 if( taget_question.answers_format.length > 1 ){
+                     $scope.indexes = taget_question.answers_format.length ;
+                 }
+                 $(".redactor-in-0").html('');
+                $(".redactor-in-1").html('');
+                 $scope.question_id = taget_question._id;
+                 $scope.question_type = taget_question.question_type;
+                 $scope.old_question_data = taget_question.question_body ;
+                 $(".redactor-in-0").html( taget_question.question_body );
+                 $(".redactor-in-1").html(taget_question.question_description);
+                 // 2 ==> media parts
+                 $scope.question_media = taget_question.media_question ;
+                 $scope.quest_media_parts = taget_question.media_question ;
+                 // 3 ==> answer part
+                 $scope.asnwers = taget_question.answers_format;
+                 console.log($scope.asnwers );
+                 $scope.question_settings = {
+                    is_required           : taget_question.answer_settings.is_required ,
+                    single_choice   : taget_question.answer_settings.single_choice ,
+                    is_randomized          : taget_question.answer_settings.is_randomized ,
+                    super_size         : taget_question.answer_settings.super_size ,
+                    choice_style      : taget_question.answer_settings.choice_style
+                  }
+
+                // 4 ==> store rating scale values  to ui desing
+                if($scope.question_type == 3 ){
+                  $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
+                }
+                var media_block = $(".media-x-preview"); // => preview div
+                var show_media_link = $(".show_media_link"); // => input
+                media_block.html('');
+                show_media_link.val('') ;
+                show_media_link.css("display","none");
+                $scope.loading_redactor_editor();
+
+                if($scope.question_media == undefined || $scope.question_media == null) {
+                  var no_media = "<b class='no-media'>There is no media ! </b>"
+                  media_block.html(no_media);
+                }else {
+                  show_media_link.css("display","block");
+                  var iframe = "<iframe width='100%' height='250px'></iframe>";
+                  var image  = "<div class ='show-image'></div>";
+                  var mp4    = '<video width="100%" height="auto" controls>' +
+                                  '<source src="'+$scope.question_media.media_field+'.mp4" type="video/mp4">'+
+                                  '<source src="'+$scope.question_media.media_field+'.ogg" type="video/ogg">'+
+                                  'Your browser does not support the video tag.' +
+                                '</video>' ;
+
+                  // image
+                  if($scope.question_media.media_type == 0 ) {
+                    media_block.html(image);
+                    show_media_link.val($scope.server_ip + $scope.question_media.media_field);
+                      media_block.find('div').css({
+                        "background-image":"url('"+$scope.server_ip + $scope.question_media.media_field +"')"
+                      });
+                  }
+                  if($scope.question_media.media_type == 1 ) {
+                    media_block.html(iframe);
+
+                    show_media_link.val($scope.question_media.media_name);
+                    // youtube or vimeo
+                    if($scope.question_media.video_type == 0 || $scope.question_media.video_type == 1)
+                      media_block.find('iframe').attr("src" , $scope.question_media.video_source);
+                    // mp4
+                    if( $scope.question_media.video_type == 2 ) {
+                      media_block.html(mp4)
+                      }
+                    }
+                  }
+                  $(".qs-edit-"+$scope.question_id).removeClass("fa-pencil");
+                  $(".iconex-movable").each(function(){
+                    if($(this).hasClass("fa-cog")){
+                      $(this).removeClass("fa-cog fa-spin");
+                      $(this).addClass("fa-pencil");
+                      $(this).css({color:"tan"});
+                    }
+                  });
+                  $(".qs-edit-"+$scope.question_id).css({"color":"#89d7d7"});
+                  $(".qs-edit-"+$scope.question_id).addClass("fa-cog fa-spin -font");
+                  $http({
+                       url : $scope.api_url_init_id_date ,
+                       method : "GET"
+                     }).then(function(resp){
+                       $scope.mongoose_id = resp.data.id;
+                       $scope.mongoose_answer_id = resp.data.id_1;
+                       $scope.mongoose_date = resp.data.date;;
+                       $scope.unique_ids = resp.data.list_of_ids ;
+
+                     },function(err){
+                       console.log(err);
+                   });
+        } , 1000)
       };
     $scope.rating_scale_values = function (){
       $timeout(function (){
