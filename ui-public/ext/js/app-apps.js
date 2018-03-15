@@ -1417,6 +1417,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
           // 4 ==> store rating scale values  to ui desing
           if($scope.question_type == 3 ){
+            console.log({
+              "answer_value" :
+              $scope.questions_list[$scope.questionIndex];
+            });
+
             $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
           }
           var media_block = $(".media-x-preview"); // => preview div
