@@ -437,12 +437,28 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
     $scope.select_rating_scale__ = function ( index , type){
        var thisElement = index ;
+
+
        if(type == 1 ) { // ==> Rating
+           var highlighted_stars = $('.fa-star').length ;
            if($('.start-o').children("li").eq(index).children("span").children("i").hasClass("fa-star")){
-             $(".start-o li").each(function(i){
-               $(this).children("span").children("i").removeClass("fa-star");
-               $(this).children("span").children("i").addClass("fa-star-o");
-             });
+              if((highlighted_stars - 1 ) == index){
+                $(".start-o li").each(function(i){
+                  $(this).children("span").children("i").removeClass("fa-star");
+                  $(this).children("span").children("i").addClass("fa-star-o");
+                });
+              }else {
+                $(".start-o li").each(function(i){
+                   if($(this).children("span").children("i").hasClass('fa-star')){
+                       $(this).children("span").children("i").removeClass('fa-star');
+                       $(this).children("span").children("i").addClass("fa-star-o");
+                   }
+                   if(i <= thisElement){
+                       $(this).children("span").children("i").removeClass("fa-star-o");
+                        $(this).children("span").children("i").addClass('fa-star');
+                    }
+                });
+              }
            }else {
              $(".start-o li").each(function(i){
                if(i <= thisElement){
@@ -1398,6 +1414,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
               super_size         : taget_question.answer_settings.super_size ,
               choice_style      : taget_question.answer_settings.choice_style
             }
+
+          // 4 ==> store rating scale values  to ui desing
+          if($scope.question_type == 3 ){
+            $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
+          }
           var media_block = $(".media-x-preview"); // => preview div
           var show_media_link = $(".show_media_link"); // => input
           media_block.html('');
@@ -1465,8 +1486,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       };
     $scope.rating_scale_values = function (){
       $timeout(function (){
-        alert($scope.question_type);
-      } , 7000 );
+        if($scope.question_type == 3 ){
+           $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
+        }
+      } , 5000 );
     };
     // $scope.redactor_menu_position = function (evt){
     //   if($scope.selected_passage != null ) {
