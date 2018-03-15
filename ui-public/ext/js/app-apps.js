@@ -1,6 +1,3 @@
-
-
-
 //==> Apply html tags
 apps.filter ("apply_html" , [
   '$sce' , function ($sce){
@@ -437,38 +434,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             }); // End Json Data
 
     // ==> functions in scope object
-    $scope.add_new_scale_rating = function (){
-      // $timeout(function (){
-      //   if($scope.questions_list[0] !=undefined ){
-      //   if(  $scope.questions_list[0].question_type == 3 ){
-      //           var thisAnsQ = $scope.questions_list[0].answers_format[0].step_numbers ;
-      //           console.log(thisAnsQ);
-      //           $scope.rating_scale_elements = [];
-      //           for (var i = 0; i < thisAnsQ ; i++) {
-      //             $scope.rating_scale_elements.push({
-      //               index : i
-      //             });
-      //           }
-      //    }
-      //  }
-      // } , 1200 );
-    };
-    $scope.add_new_scale_rating_edit_question = function (){
-        $timeout(function (){
 
-          if($scope.questions_list[$scope.questionIndex].question_type == 3 ){
-                  var thisAnsQ = $scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers ;
-                  console.log(thisAnsQ);
-                  $scope.rating_scale_elements = [];
-                  for (var i = 0; i < thisAnsQ ; i++) {
-                    $scope.rating_scale_elements.push({
-                      index : i
-                    });
-                  }
-           }
-
-        } , 150 );
-      };
     $scope.select_rating_scale__ = function ( index , type){
        var thisElement = index ;
        if(type == 1 ) { // ==> Rating
@@ -1438,7 +1404,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           show_media_link.val('') ;
           show_media_link.css("display","none");
           $scope.loading_redactor_editor();
-          $scope.add_new_scale_rating_edit_question();
+
           if($scope.question_media == undefined || $scope.question_media == null) {
             var no_media = "<b class='no-media'>There is no media ! </b>"
             media_block.html(no_media);
@@ -1609,19 +1575,19 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
               });
 
 
-              $(".redactor-in-0").bind("keyup" , function (){
+              // $(".redactor-in-0").bind("keyup" , function (){
+              //   $scope.databiding_question();
+              // });
+
+              $(".redactor-in-0").bind("input , change , keyup" , function (){
                 $scope.databiding_question();
               });
 
-              $(".redactor-in-0").bind("input change" , function (){
-                $scope.databiding_question();
-              });
+              // $(".redactor-in-1").bind("keyup" , function (){
+              //   $scope.databiding_description();
+              // });
 
-              $(".redactor-in-1").bind("keyup" , function (){
-                $scope.databiding_description();
-              });
-
-              $(".redactor-in-1").bind("input change" , function (){
+              $(".redactor-in-1").bind("input , change , keyup" , function (){
                 $scope.databiding_description();
               });
 
@@ -1735,7 +1701,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $("#editor-question-body").on('input' , function (){
          $scope.unsaved_question = true ;
       });
-    $("#show-labels").on("input change" , function (){
+    $("#show-labels").on("input,change" , function (){
         var checked_value = $scope.questions_list[$scope.questionIndex].answers_format[0].show_labels ;
         console.log(checked_value);
         if(checked_value == true ) { // show labels
@@ -1911,21 +1877,15 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $timeout(function (){
       $scope.style_of_answers = ($scope.question_settings.choice_style ) ? "Two columns per row" : "One column per row";
       } , 1500 );
-    $timeout(function (){
-      $(".loader_block").fadeOut(5000);
-      $("#step_slider").on("input change", function (){
-
-        var thiRatingValue = $(this).val();
-        $scope.rating_scale_elements = [] ;
-          for (var i = 0; i < thiRatingValue ; i++) {
-            $scope.rating_scale_elements.push({
-              index : i
-            });
-          }
-
-      });
-
-    } , 3000 );
+      $scope.change_rating_scale_value = function (val){
+        var rating_value = val;
+        $scope.rating_scale_elements = [];
+        for( i=0; i<rating_value; i++){
+          $scope.rating_scale_elements.push({
+             index : i
+          });
+        }
+      };
     $timeout(function (){
 
       $(document).bind("selectionchange  , click" , function (evt){
@@ -1956,6 +1916,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
          }
       });
 
+      // $("input[type='range']").on("change , input", function  (evt){
+      //   $scope.change_rating_scale_value($(this).val());
+      // });
 
 
       // $('html , body').on('click' , function (evt){
@@ -1968,8 +1931,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       // });
     } , 6000);
 
-    // ==> do an action
-    $scope.add_new_scale_rating();
+    // ==> Do an action
     $scope.status_of_questions();
     $scope.load_redactor_text_data();
     // $scope.show_redactor_menu_options_in_timeframe();

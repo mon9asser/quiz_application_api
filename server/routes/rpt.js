@@ -693,7 +693,7 @@ rptRouters.post(["/:creator_id/brief/report","/:creator_id/brief/:app_type/repor
                }
 
             var quesApplication  = questionnaireResult ;
-           
+
             for (var i = 0; i < quesApplication.length; i++) {
               var objQuestionnaire = new Object();
               objQuestionnaire['app_id'] = quesApplication[i]._id;

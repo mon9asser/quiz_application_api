@@ -92,8 +92,9 @@
     </div>
     <div style="display:none;"class="x-editor-x-body" id="answers-pt">
         <div class="multi-answers-part">
+          <!-- Repeating answers -->
           <ul ng:if="question_type <= 2" class="choices-part">
-            <li class="answers_x" data-answer-id="answer_id_~>>answer_value._id<<~" data-answer-index="~>>$index<<~"  ng:class="class_data_func( answer_value.is_correct , question_settings.choice_style )" ng:repeat="(answer_key , answer_value) in asnwers track by $index">
+            <li ng:class="class_data_func( answer_value.is_correct , question_settings.choice_style )" ng:repeat="(answer_key , answer_value) in asnwers track by $index" class="answers_x" data-answer-id="answer_id_~>>answer_value._id<<~" data-answer-index="~>>$index<<~">
 
                 <!-- text options value -->
                 <div ng:if="question_type == 0" class="">
@@ -131,7 +132,7 @@
                        </div>
                      </div>
                    </div>
-               </div>
+                 </div>
 
                 <!-- Media choices value -->
                 <div ng:if="question_type == 1" class="">
@@ -182,10 +183,11 @@
                           ~>>answer_value.boolean_value<<~
                         </span>
                     </div>
-                </div>
+                  </div>
 
             </li>
           </ul>
+          <!-- Only one row answer -->
           <div ng:if="question_type > 2" class="survey-answers">
 
               <div class="survey-answer">
@@ -259,7 +261,7 @@
                 <li class="steps_qs" ng:if="questions_list[questionIndex].question_type == 3">
                     <span class="title-checkbox"> Steps ( ~>>questions_list[questionIndex].answers_format[0].step_numbers<<~ )</span>
                     <div class="rating_scale_options">
-                        <input ng:model="questions_list[questionIndex].answers_format[0].step_numbers" id="step_slider" min="2" max="10" type="range" name="">
+                        <input ng:change="change_rating_scale_value(questions_list[questionIndex].answers_format[0].step_numbers)" ng:model="questions_list[questionIndex].answers_format[0].step_numbers" id="step_slider" min="2" max="10" type="range" name="">
                     </div> <!-- Slide Range -->
                 </li>
 
