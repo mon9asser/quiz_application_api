@@ -646,7 +646,7 @@ rptRouters.post(["/:creator_id/brief/report","/:creator_id/brief/:app_type/repor
         res.status(400).send(notes.Messages.Required_Message(obj_pagination));
       });
    }
- 
+
     // Sorting By Date
     if (req.body.date) {
       if (req.body.date.date_from != null && req.body.date.date_to != null) {
@@ -679,9 +679,37 @@ rptRouters.post(["/:creator_id/brief/report","/:creator_id/brief/:app_type/repor
      // Creator doesn't exists
      if(reportDocument.length == 0 ){
        return new Promise((resolve , reject)=>{
-         res.status(404).send({
-            "data":'This part under modification'
+
+         var creator_id = queries.creator_id ;
+         var sendList = new Array();
+         qtnr.find({ "creator_id" : creator_id } , (er,questionnaireResult)=>{
+             if(er || !questionnaireResult || questionnaireResult.length == 0)
+               {
+                 return new Promise((resolve , reject)=>{
+                   res.send({
+                     Error : "This creator has no applications !"
+                   });
+                 });
+               }
+
+            var quesApplication  = questionnaireResult ;
+           
+            for (var i = 0; i < quesApplication.length; i++) {
+              var objQuestionnaire = new Object();
+              objQuestionnaire['app_id'] = quesApplication[i]._id;
+              objQuestionnaire['app_name'] = quesApplication[i].questionnaire_title;
+              objQuestionnaire['app_type'] = (quesApplication[i].app_type == 1) ? 'Quiz':'Survey';
+              objQuestionnaire['total_questions'] = quesApplication[i].questions.length ;
+              objQuestionnaire['total_attendees'] = 0 ;
+              objQuestionnaire['total_completed'] = 0 ;
+              objQuestionnaire['history'] = "No histories meet your selected criteria"
+              sendList.push(objQuestionnaire) ;
+
+            }
+            res.status(404).send(sendList);
          });
+
+
           // res.status(404).send({"Error":notes.Errors.Error_Doesnt_exists("Application")});
        });
      }
