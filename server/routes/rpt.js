@@ -646,8 +646,7 @@ rptRouters.post(["/:creator_id/brief/report","/:creator_id/brief/:app_type/repor
         res.status(400).send(notes.Messages.Required_Message(obj_pagination));
       });
    }
-
-
+ 
     // Sorting By Date
     if (req.body.date) {
       if (req.body.date.date_from != null && req.body.date.date_to != null) {
@@ -680,7 +679,10 @@ rptRouters.post(["/:creator_id/brief/report","/:creator_id/brief/:app_type/repor
      // Creator doesn't exists
      if(reportDocument.length == 0 ){
        return new Promise((resolve , reject)=>{
-         res.status(404).send({"Error":notes.Errors.Error_Doesnt_exists("Application")});
+         res.status(404).send({
+            "data":'This part under modification'
+         });
+          // res.status(404).send({"Error":notes.Errors.Error_Doesnt_exists("Application")});
        });
      }
 

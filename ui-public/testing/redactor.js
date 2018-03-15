@@ -15896,6 +15896,7 @@ $R.add('module', 'file', {
         this.inspector = app.inspector;
         this.insertion = app.insertion;
         this.selection = app.selection;
+
     },
     // messages
     onstarted: function()

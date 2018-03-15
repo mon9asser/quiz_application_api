@@ -102,12 +102,12 @@
                      <li ng:if="{{app.app_type }} == 1" ng:if="answer_value.is_correct == false" title="Make it Correct Answer">
                        <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
                      </li>
-                     <li ng:if="{{app.app_type }} == 1" ng:if="answer_value.is_correct == true" title="Remove Correct Answer">
+                     <!-- <li ng:if="{{app.app_type }} == 1" ng:if="answer_value.is_correct == true" title="Remove Correct Answer">
                        <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
-                     </li>
+                     </li> -->
                      <!-- Edit This Answer -->
                      <li ng:click="show_media_uploader('answers' ,  answer_value._id  )" title="Edit it with media">
-                       <span class="fa fa-pencil edit-options-answer"></span>
+                       <span class="fa fa-file-image-o edit-options-answer"></span>
                      </li>
                      <!-- Delete This Answer -->
                      <li ng:click="question_answer_deletion(answer_value._id)" title="Delete this answer">

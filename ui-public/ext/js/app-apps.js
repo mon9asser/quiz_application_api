@@ -1929,7 +1929,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $timeout(function (){
 
       $(document).bind("selectionchange  , click" , function (evt){
-
          var target_class ;
          var sel = window.getSelection();
          // what mouse click for !
@@ -1943,8 +1942,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                  }
                }
              }
-
-             if( target_class != undefined && sel != null && sel != ''){
+             if( target_class != undefined && sel != null && sel != '' && target_class.includes("redactor-in-") != false ){
                var offset = $('.'+target_class).offset();
                $("#redactor-editor-menu").css({
                  left : offset.left - 40   ,
@@ -1956,14 +1954,18 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
          }else {
             $("#redactor-editor-menu").css("display" , "none");
          }
-
       });
 
 
 
-      $('html , body').on('click' , function (evt){
-
-      });
+      // $('html , body').on('click' , function (evt){
+      //     var classes = evt.target.className.split(' ') ;
+      //     if(classes[1]){
+      //       if (classes[1] != "redactor-in"){
+      //         $('#redactor-editor-menu').css('display','none');
+      //       }
+      //     }
+      // });
     } , 6000);
 
     // ==> do an action
