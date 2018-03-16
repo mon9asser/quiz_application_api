@@ -1365,10 +1365,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                    $scope.loading_redactor_editor();
                };
     $scope.edit_this_question = function ( qs_id  , qsCurrIndex , nextIndex = null){
-        $timeout(function(){
-
-
-
 
 
                 $scope.question_id = qs_id ;
@@ -1388,6 +1384,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                  $scope.questionIndex = qsCurrIndex ;
                  $scope.question_id = qs_id ;
                  $scope.indexes = 1 ;
+                 $timeout(function(){
                  var taget_question = $scope.questions_list.find($scope.callback_index);
 
                  if (taget_question == undefined )
@@ -1397,7 +1394,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                      $scope.indexes = taget_question.answers_format.length ;
                  }
                  $(".redactor-in-0").html('');
-                $(".redactor-in-1").html('');
+                 $(".redactor-in-1").html('');
                  $scope.question_id = taget_question._id;
                  $scope.question_type = taget_question.question_type;
                  $scope.old_question_data = taget_question.question_body ;
