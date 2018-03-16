@@ -1420,6 +1420,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                   console.log($scope.questions_list);
                   console.log("::QUES:INDEX::");
                   console.log($scope.questions_list[$scope.questionIndex]);
+                  console.log(qsCurrIndex);
                   $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
                 }
                 var media_block = $(".media-x-preview"); // => preview div
