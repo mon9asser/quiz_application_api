@@ -1221,6 +1221,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                           background :"transparent"
                         });
 
+                        alert("This is new Index" + evt.newIndex);
+
                        // ==> push and update indexes in array
                        var itemType = $(evt.item).attr('data-type');
                        var questionType = $(evt.item).attr('data-question-type');
@@ -1322,7 +1324,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                          // sorting element with angular elements
                          var index_in_array = evt.newIndex;
                          $scope.questions_list.splice(index_in_array,0, new_question );
-
                        } , 300 );
                        // =>> Transfeer data into mongoDB
                        $timeout(function (){
