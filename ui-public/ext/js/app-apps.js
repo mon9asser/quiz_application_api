@@ -1419,8 +1419,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 if($scope.question_type == 3 ){
                   if($scope.questions_list.length == 0 )
                     $scope.questionIndex = 0;
-                    console.log("SET QS ::--");
+                    console.log("1 SET QS ::--");
                     console.log($scope.questions_list[$scope.questionIndex]);
+                    console.log("2 SET QS ::--");
+                    console.log($scope.questions_list);
                   $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
                 }
               } , 4200);
