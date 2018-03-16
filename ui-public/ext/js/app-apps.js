@@ -1221,8 +1221,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                           background :"transparent"
                         });
 
-                        alert("This is new Index" + evt.newIndex);
-
                        // ==> push and update indexes in array
                        var itemType = $(evt.item).attr('data-type');
                        var questionType = $(evt.item).attr('data-question-type');
@@ -1324,6 +1322,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                          // sorting element with angular elements
                          var index_in_array = evt.newIndex;
                          $scope.questions_list.splice(index_in_array,0, new_question );
+
                        } , 300 );
                        // =>> Transfeer data into mongoDB
                        $timeout(function (){
@@ -1417,11 +1416,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
                 // 4 ==> store rating scale values  to ui desing
                 if($scope.question_type == 3 ){
-                  console.log("::QUES::");
-                  console.log($scope.questions_list);
-                  console.log("::QUES:INDEX::");
-                  console.log($scope.questions_list[$scope.questionIndex]);
-                  console.log(qsCurrIndex);
+                  if($scope.questions_list.length == 0 )
+                    $scope.questionIndex = 0;
                   $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
                 }
                 var media_block = $(".media-x-preview"); // => preview div
