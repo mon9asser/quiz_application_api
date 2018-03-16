@@ -748,7 +748,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
      };
     $scope.hide_loader = function (){
        $(".right_part").fadeIn( function (){
-         $(".loader-container").fadeOut(2000 , function (){
+         $(".loader-container").fadeOut(6000 , function (){
            $(".question-opener").next().slideDown();
          });
        });
@@ -1419,13 +1419,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 if($scope.question_type == 3 ){
                   if($("#docQuestions").children('li').length <= 1  )
                     $scope.questionIndex = 0;
-
-                    // alert($scope.questionIndex);
-                    // console.log("LENGTH :- " + $("#docQuestions").children('li').length);
-                    // console.log("1 SET QS ::--");
-                    // console.log($scope.questions_list[$scope.questionIndex]); // giving me "undefined"
-                    // console.log("2 SET QS ::--");
-                    // console.log($scope.questions_list); // => giving me "questions array"
                   $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
                 }
               } , 4200);
@@ -1909,7 +1902,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             } , 1200 );
 
           });
-    $(".text-loader , .loading-data").delay(5000).fadeOut();
+    $(".text-loader , .loading-data").delay(6000).fadeOut();
 
     // ==> excute an actions with timeframes
     $timeout(function (){
