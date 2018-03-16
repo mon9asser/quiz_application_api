@@ -2,6 +2,7 @@
 apps.filter ("apply_html" , [
   '$sce' , function ($sce){
     return function (text_changed){
+
       return $sce.trustAsHtml(text_changed);
     }
   }
@@ -68,22 +69,27 @@ apps.filter('this_chars_only' , [
   '$sce' ,
   function ($sce){
     return function (specs){
+      var div = $("<div>"+ specs + "</div>");
+      var text_values = div.text() ;
       var spesificChars = '' ;
-      var char_counts = 40 ;
+      var char_counts = 55 ;
 
-      if(specs == undefined)
-        spesificChars = specs ;
+      if(text_values == undefined)
+        spesificChars = text_values ;
         else {
-            for (var i = 0; i < specs.length; i++) {
+            for (var i = 0; i < text_values.length; i++) {
               if(i < char_counts) {
-                spesificChars += specs[i];
+                spesificChars += text_values[i];
                 if(i == (char_counts - 1) )
                   spesificChars += " ... ";
               }
             }
         }
 
-       return $sce.trustAsHtml(spesificChars);
+      // spesificChars =  spesificChars.textContent || spesificChars.innerText || "";
+      // remove ( &nbsp; ) from text
+
+       return spesificChars ;
     }
   }
 ]);
@@ -105,7 +111,7 @@ apps.filter('show_chars' , [
               }
             }
         }
-
+        // ng:bind:html = "value | filter"
        return $sce.trustAsHtml(spesificChars);
     }
   }
@@ -758,6 +764,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           item      :  $("#"+elementId) ,
           newIndex  :  ( $("#docQuestions li" ).length - 1 )
         }
+
         return $scope.dragged_items(evt);
       };
     $scope.loading_redactor_editor = function (){
@@ -1183,7 +1190,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             $scope.questions_list[$scope.questionIndex].question_body
             = $(".redactor-in-0").html();
          $scope.targetElement_bind = $("#docQuestions").children("li").eq($scope.questionIndex);
-            $scope.targetElement_bind.find(".qs-body").html($(".redactor-in-0").html());
+            $scope.targetElement_bind.find(".qs-body").html($(".redactor-in-0").text());
          };
     $scope.databiding_description = function (){
         $scope.questions_list[$scope.questionIndex].question_description
@@ -1229,6 +1236,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
 
 
+
                        var new_question = {
                            _id:$scope.mongoose_id,
                            question_type :questionType,
@@ -1245,7 +1253,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                            },
                            answers_format : []
                          };
-                         console.log("Check de india");
+
                          console.log(new_question);
                          // Push Default answer ( one answer )
                          var answer_obj = new Object() ;
@@ -1288,7 +1296,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                          if(questionType == 4 ){
                              new_question.answer_settings.answer_char_max = 500 ;
                          }
-                          console.log(new_question);
+                         console.log("answer_obj --- " + questionType);
+                          console.log(answer_obj);
                          new_question.answers_format.push(answer_obj);
                           console.log(new_question.answers_format);
                          if($scope.mongoose_id == null ){
@@ -1415,13 +1424,15 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                   }
 
                 // 4 ==> store rating scale values  to ui desing
-              $timeout(function (){
+
                 if($scope.question_type == 3 ){
-                  if($("#docQuestions").children('li').length <= 1  )
-                    $scope.questionIndex = 0;
-                  $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
+                    $timeout(function (){
+                       if( $("#docQuestions").children('li').length <= 1  )
+                        $scope.questionIndex = 0;
+                        $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
+                    } , 2500 );
                 }
-              } , 4200);
+
                 var media_block = $(".media-x-preview"); // => preview div
                 var show_media_link = $(".show_media_link"); // => input
                 media_block.html('');
@@ -1936,7 +1947,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
              if( target_class != undefined && sel != null && sel != '' && target_class.includes("redactor-in-") != false ){
                var offset = $('.'+target_class).offset();
                $("#redactor-editor-menu").css({
-                 left : offset.left - 40   ,
+                 left : offset.left - 140   ,
                  top : offset.top - 80 ,
                  display : 'block'
                });

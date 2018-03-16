@@ -44,21 +44,21 @@
         <span class="titles">Boolean</span>
        </li>
 
-       <li id="question-boolean-choices" ng:click="onclick_items('question-ratingscal-choices')" data-type="qst" data-question-type="3" data-asnwer-type="1" question-data="partials/rating-scale.hbs">
+       <li id="question-ratingscal-choices1" ng:click="onclick_items('question-ratingscal-choices1')" data-type="qst" data-question-type="3" data-asnwer-type="1" question-data="partials/rating-scale.hbs">
         <span class="qs-type" title="Ratings">
            <i class="fa fa-star-o"></i>
         </span>
         <span class="titles">Rating</span>
        </li>
 
-       <li id="question-boolean-choices" ng:click="onclick_items('question-ratingscal-choices')" data-type="qst" data-question-type="3" data-asnwer-type="0" question-data="partials/rating-scale.hbs">
+       <li id="question-ratingscal-choices2" ng:click="onclick_items('question-ratingscal-choices2')" data-type="qst" data-question-type="3" data-asnwer-type="0" question-data="partials/rating-scale.hbs">
         <span class="qs-type" title="Scale">
            <i class="fa fa-signal"></i>
         </span>
         <span class="titles">Scale</span>
        </li>
 
-       <li id="question-boolean-choices" ng:click="onclick_items('question-freetexts-choices')" data-type="qst" data-question-type="4" question-data="partials/free-texts.hbs">
+       <li id="question-freetexts-choices" ng:click="onclick_items('question-freetexts-choices')" data-type="qst" data-question-type="4" question-data="partials/free-texts.hbs">
         <span class="qs-type" title="Free Texts">
            <i class="fa fa-text-width"></i>
         </span>
@@ -136,7 +136,9 @@
                                <i ng:if="qs_value.question_type == 4" class="fa fa-text-width iconn-x"></i>
                              </span>
                              <!-- Append question title here ! -->
-                             <span class="qs-body" ng-bind-html="qs_value.question_body | this_chars_only"></span>
+                             <span class="qs-body">
+                               ~>> qs_value.question_body | this_chars_only <<~
+                             </span>
                            </div>
                          </div>
                      </div>
