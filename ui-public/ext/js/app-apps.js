@@ -1421,6 +1421,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                     $scope.questionIndex = 0;
 
                     alert($scope.questionIndex);
+                    console.log("LENGTH :- " + $("#docQuestions").children('li').length);
                     console.log("1 SET QS ::--");
                     console.log($scope.questions_list[$scope.questionIndex]); // giving me "undefined"
                     console.log("2 SET QS ::--");
