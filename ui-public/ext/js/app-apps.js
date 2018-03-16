@@ -1419,10 +1419,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 if($scope.question_type == 3 ){
                   if($scope.questions_list.length == 0 )
                     $scope.questionIndex = 0;
+
+                    alert($scope.questionIndex);
                     console.log("1 SET QS ::--");
-                    console.log($scope.questions_list[$scope.questionIndex]);
+                    console.log($scope.questions_list[$scope.questionIndex]); // giving me "undefined"
                     console.log("2 SET QS ::--");
-                    console.log($scope.questions_list);
+                    console.log($scope.questions_list); // => giving me "questions array"
                   $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
                 }
               } , 4200);
