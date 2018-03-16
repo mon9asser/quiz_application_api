@@ -1384,7 +1384,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                  $scope.questionIndex = qsCurrIndex ;
                  $scope.question_id = qs_id ;
                  $scope.indexes = 1 ;
-               
+
                  var taget_question = $scope.questions_list.find($scope.callback_index);
 
                  if (taget_question == undefined )
@@ -1418,6 +1418,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 if($scope.question_type == 3 ){
                   console.log("::QUES::");
                   console.log($scope.questions_list);
+                  console.log("::QUES:INDEX::");
+                  console.log($scope.questions_list[$scope.questionIndex]);
                   $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
                 }
                 var media_block = $(".media-x-preview"); // => preview div
