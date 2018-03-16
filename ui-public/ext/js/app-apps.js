@@ -1417,7 +1417,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 // 4 ==> store rating scale values  to ui desing
               $timeout(function (){
                 if($scope.question_type == 3 ){
-                  if($scope.questions_list.length == 0 )
+                  if($("#docQuestions").children('li').length == 0 )
                     $scope.questionIndex = 0;
 
                     alert($scope.questionIndex);
