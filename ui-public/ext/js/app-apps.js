@@ -1415,6 +1415,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                   }
 
                 // 4 ==> store rating scale values  to ui desing
+              $timeout(function (){
                 if($scope.question_type == 3 ){
                   if($scope.questions_list.length == 0 )
                     $scope.questionIndex = 0;
@@ -1422,6 +1423,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                     console.log($scope.questions_list[$scope.questionIndex]);
                   $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
                 }
+              } , 4200);
                 var media_block = $(".media-x-preview"); // => preview div
                 var show_media_link = $(".show_media_link"); // => input
                 media_block.html('');
