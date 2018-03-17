@@ -1670,7 +1670,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             // $scope.loading_redactor_editor();
 
             $timeout(function (){
-
+              console.log($scope.questions_list[0]);
               if($scope.questions_list[0] != null && $scope.questions_list != null && $scope.questions_list.length > 0){
                 var first_question = $scope.questions_list[0];
                 $scope.edit_this_question  ( first_question._id  , 0 ) ;
@@ -1721,7 +1721,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 $scope.databiding_description();
               });
 
-            } , 1300 );
+            } , 2000 );
         });
     $scope.expand_collapse_handler.on("click" , function (){
         var target = $(this).next(".control-item-content") ;
