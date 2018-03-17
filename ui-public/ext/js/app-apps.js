@@ -13,13 +13,13 @@ apps.filter("image_w_server" , [
   function ( $timeout  , $sce   ){
       return function (img_source){
         var current_server = $("#serverIp").val() ;
-        var current_server = current_server + "img/media-icon.png";
+        var default_image = current_server + "img/media-icon.png";
 
-        if (img_source == current_server){
+        if (img_source == default_image){
           return img_source ;
         }else {
-          // what current server ip  ?
-          return current_server + img_source;
+          // alert(current_server + 'themeimages'+img_source.split('themeimages').pop());
+          return current_server + 'themeimages'+img_source.split('themeimages').pop() ;
         }
       };
   }

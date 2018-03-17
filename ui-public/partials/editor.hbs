@@ -142,7 +142,7 @@
                       <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
                     </li>
                     <li ng:click="show_media_uploader('answers' ,  answer_value._id)" title="Edit it with media">
-                      <span class="fa fa-pencil edit-options-answer"></span>
+                      <span class="fa fa-file-image-o edit-options-answer"></span>
                     </li>
                     <li ng:click="question_answer_deletion(answer_value._id)" title="Delete this answer">
                       <span class="fa fa-trash"></span>
@@ -156,7 +156,7 @@
                         <!-- Case it a defaultimage -->
                         <div ng:if="answer_value.media_type == null" style="background-image:url('~>>answer_value.media_src<<~')"  class="image_case"></div>
 
-                        <div ng:if="answer_value.media_type != null" style="background-image:url('~>>answer_value.media_src<<~')"  class="image_case">
+                        <div ng:if="answer_value.media_type != null"  class="image_case">
                           <div ng:if="answer_value.media_type == 0" style="background-image:url('~>>  answer_value.media_src |   image_w_server <<~')"  class="image_case"></div>
 
                           <!-- Case it Video -->
