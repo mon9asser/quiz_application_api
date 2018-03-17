@@ -89,7 +89,7 @@ apps.filter('this_chars_only' , [
       var div = $("<div>"+ specs + "</div>");
       var text_values = div.text() ;
       var spesificChars = '' ;
-      var char_counts = 55 ;
+      var char_counts = 35 ;
 
       if(text_values == undefined)
         spesificChars = text_values ;
@@ -162,6 +162,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.questPreiouseId = null ;
     $scope.unsaved_question = false ;
     $scope.old_question_data = null ;
+    $scope.spesific_chars = null ;
     $scope.left_part_position  = $scope.questions_list_box.width() + 21 ;
     $scope.sort_handler = document.getElementById("docQuestions");
     $scope.sortble_draggable_handler = document.getElementById("qs-sortable");
@@ -440,7 +441,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                   settings_obj['settings']['review_setting'] = $scope.application_settings.settings.review_setting ;
 
                 }else{
-                  // console.log($scope.application_settings);
+                  // //console.log($scope.application_settings);
                   settings_obj['settings'] = $scope.application_settings.settings;
                   // alert(settings_obj['settings']);
                 }
@@ -627,7 +628,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                                   $timeout(function(){
                                     // styling vimeo
                                     if ($scope.question_media.video_type == 1 ){
-                                      // console.log(  media_block.find('iframe').html());
+                                      // //console.log(  media_block.find('iframe').html());
                                     }
                                   } , 3000 );
                                 }
@@ -644,14 +645,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           // ====>> current answer id
           var target_question = $scope.questions_list.find($scope.callback_index);
           var target_answer = target_question.answers_format.find($scope.callback_answer_index);
-          console.log(target_answer);
+          // //console.log(target_answer);
           if(target_answer.media_src  == $scope.server_ip + "img/media-icon.png" ){
             var no_media = "<b class='no-media'>There is no media ! </b>"
              media_block.html(no_media);
           }else {
-            // console.log("/*/*/*/*/*//*/*/*/*/*/*/*/*/*/*///*");
-            // console.log(target_answer);
-            // console.log("/*/*/*/*/*//*/*/*/*/*/*/*/*/*/*///*");
+            // //console.log("/*/*/*/*/*//*/*/*/*/*/*/*/*/*/*///*");
+            // //console.log(target_answer);
+            // //console.log("/*/*/*/*/*//*/*/*/*/*/*/*/*/*/*///*");
             show_media_link.css("display","block");
             var iframe = "<iframe width='100%' height='250px'></iframe>";
             var image  = "<div class ='show-image'></div>";
@@ -723,12 +724,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
 
           }
-          // console.log(target_answer);
+          // //console.log(target_answer);
           // ('Answer Details');
-          // console.log(target_answer);
-          // console.log(">>>-----*************************----<<<");
+          // //console.log(target_answer);
+          // //console.log(">>>-----*************************----<<<");
           // // ========> Show values related this part
-          // console.log($scope.file_object);
+          // //console.log($scope.file_object);
           // alert("Answer media uploader !! " + answer_id);
         }
 
@@ -816,7 +817,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
       var question_selected = $scope.questions_list.find($scope.callback_index);
       var answer_length = question_selected.answers_format.length ;
-      console.log(answer_length);
+      // //console.log(answer_length);
       $scope.indexes = answer_length+1;
       if($scope.unique_ids[$scope.indexes] == undefined)
       {
@@ -827,10 +828,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         $(".add-new-option").html("You couldn't able create more answers !!");
         return false ;
       }
-      var new_answer = {
+      var new_answer  = {
            is_correct: false,
            _id : $scope.unique_ids[$scope.indexes]
-         };
+      };
 
          if($scope.question_type == 0 )
             new_answer['value'] = "Answer " + $scope.indexes;
@@ -839,7 +840,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           new_answer['media_src'] = $scope.server_ip + "img/media-icon.png" ;
 
            question_selected.answers_format.push(new_answer);
-           console.log(question_selected);
+           //console.log(question_selected);
         if($scope.question_type == 0 ){
           $scope.loading_redactor_editor();
           $scope.load_redactor_text_data();
@@ -852,7 +853,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       $scope.answer_id = answer_id ;
       var question_selected = $scope.questions_list.find($scope.callback_index); //heeer
       var answer_selected = question_selected.answers_format.find($scope.callback_answer_index);
-      console.log(answer_selected);
+      //console.log(answer_selected);
       // let's excute our func here
       var targetIndex = question_selected.answers_format.indexOf(answer_selected);
 
@@ -866,14 +867,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         $scope.answer_id = answer_id ;
         var question_selected = $scope.questions_list.find($scope.callback_index);
         var answer_selected = question_selected.answers_format.find($scope.callback_answer_index);
-        console.log(answer_selected);
+        //console.log(answer_selected);
         if( question_selected.question_type == 2 ){
           var all_answers = question_selected.answers_format;
           for (var i = 0; i < all_answers.length; i++) {
             all_answers[i].is_correct = false;
           }
           answer_selected.is_correct = !answer_selected.is_correct ;
-          console.log(answer_selected);
+          //console.log(answer_selected);
           return false ;
         }
 
@@ -881,7 +882,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         // let's excute our func here
         if(question_selected.answer_settings.single_choice == true ) { // only one response
           var all_answers = question_selected.answers_format;
-          console.log(all_answers);
+          //console.log(all_answers);
           for (var i = 0; i < all_answers.length; i++) {
             all_answers[i].is_correct = false;
           }
@@ -893,8 +894,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       };
     $scope.save_changes_in_angular_backend = function ( decline_next = null ){
 
-        console.log($scope.questions_list);
-          // console.log($scope.questions_list);
+        //console.log($scope.questions_list);
+          // //console.log($scope.questions_list);
           if($scope.question_id == null ){
             alert("You should select question from question list to allow you edit it");
             return false ;
@@ -918,7 +919,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                   }
                 }).then(function(resp){
                     changes_button.html("Save Changes");
-                    // console.log(old_question_list);
+                    // //console.log(old_question_list);
                     // $scope.questions_list = resp.data.questions ;
                     // $scope.mongodb_questions = resp.data.questions ;
                     if ( decline_next == null ){
@@ -936,7 +937,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
 
                 },function(err){
-                  console.log(err);
+                  //console.log(err);
                 });
           });
         };
@@ -1009,9 +1010,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 questionnaire_title : $scope.application_settings.questionnaire_title
               }
                 }).then(function(resp){
-                console.log(resp);
+                //console.log(resp);
                   } , function(err){
-                console.log(err);
+                //console.log(err);
 
               });
         });
@@ -1069,12 +1070,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                           // ==> Image : success_data.data.Media_directory
 
                         // }else {
-                        //   console.log(success_data.data);
+                        //   //console.log(success_data.data);
                         //   var  videoTypeX =  success_data.data.Question_details.media_question.video_type ;
                         //   var  video_src_value = success_data.data.Question_details.media_question.video_source ;
                         //   var  video_media_iframe ;
                         //
-                        //   console.log(success_data.data.Question_details.media_question);
+                        //   //console.log(success_data.data.Question_details.media_question);
                         //   switch (videoTypeX){
                         //     case 0 : // youtube
                         //         video_media_iframe = '<iframe class="iframe" width="100%" src="'+video_src_value+'"    height="130px" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
@@ -1102,9 +1103,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                         // --------------------------------------------
                         var target_question = $scope.questions_list.find($scope.callback_index);
                         // $scope.asnwers = target_question.answers_format ;
-                        console.log(target_question);
+                        //console.log(target_question);
                         var target_answer = target_question.answers_format.find($scope.callback_answer_index);
-                        console.log(target_answer);
+                        //console.log(target_answer);
                         if( target_question.question_type == 1 ){
                               var answer_data = success_data.data ;
 
@@ -1114,33 +1115,33 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                               target_answer = answer_data ;
                               // update the-array
                               var thisAnswer = $scope.questions_list.find($scope.callback_index).answers_format.find($scope.callback_answer_index);
-                              console.log(thisAnswer);
+                              //console.log(thisAnswer);
                               var currIndex = $scope.questions_list.find($scope.callback_index).answers_format.indexOf(thisAnswer);
-                              console.log(currIndex);
+                              //console.log(currIndex);
                               if(currIndex != -1 ){
                                 $scope.questions_list.find($scope.callback_index).answers_format[currIndex] =
                                 answer_data ;
-                                console.log("ANSWER DATA");
-                                console.log(answer_data);
+                                //console.log("ANSWER DATA");
+                                //console.log(answer_data);
                               }
                           }
                         if(target_question.question_type == 0 ){
                               var answer_data = success_data.data ;
                               var media_optional = answer_data.media_optional;
-                              // console.log(answer_data);
-                              //  console.log(media_optional);
+                              // //console.log(answer_data);
+                              //  //console.log(media_optional);
                               // Store it into question list array
                               target_answer.media_optional = answer_data.media_optional ;
                               // Store it into scope object
                               $scope.answer_media = target_answer.media_optional ;
-                              console.log(target_answer.media_optional);
+                              //console.log(target_answer.media_optional);
                           }
 
                       }
 
                     $(".media-imgvid-uploader").fadeOut();
                    } , function(error_data){
-                        console.log(error_data);
+                        //console.log(error_data);
                    });
                  }); // End JSON File reader here !
               } , 500 );
@@ -1170,7 +1171,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
            // remove from view
            delete $scope.quest_media_parts ;
            // $scope.save_changes_in_angular_backend(true);
-           // console.log(found_qs);
+           // //console.log(found_qs);
            // question_building["_id"] =
          } else { // answer
            // alert("answer")
@@ -1195,20 +1196,31 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                }).then(function (resp){
                    $scope.mongodb_questions  = resp.data ;
                } , function (err){
-                 console.log(err);
+                 //console.log(err);
                });
          });
        };
     $scope.databiding_answers = function (thisElem , thisIndex){
           var thisVal = thisElem.html();
           $scope.questions_list[$scope.questionIndex].answers_format[thisIndex].value = thisVal;
-          console.log($scope.questions_list);
+          //console.log($scope.questions_list);
        };
     $scope.databiding_question = function (){
             $scope.questions_list[$scope.questionIndex].question_body
             = $(".redactor-in-0").html();
          $scope.targetElement_bind = $("#docQuestions").children("li").eq($scope.questionIndex);
-            $scope.targetElement_bind.find(".qs-body").html($(".redactor-in-0").text());
+            var text_question_list = $(".redactor-in-0").text() ;
+            var char_counts = 35 ;
+            if(text_question_list.length <= char_counts){
+              var points = ' ... ';
+                if( text_question_list.length == ( char_counts - 1 ) )
+                    $scope.spesific_chars  = text_question_list + points ;
+                else if ( text_question_list.length < char_counts - 2 ) {
+                    $scope.spesific_chars  = text_question_list ;
+                }
+            }
+
+            $scope.targetElement_bind.find(".qs-body").html($scope.spesific_chars);
          };
     $scope.databiding_description = function (){
         $scope.questions_list[$scope.questionIndex].question_description
@@ -1272,7 +1284,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                            answers_format : []
                          };
 
-                         console.log(new_question);
+                         //console.log(new_question);
                          // Push Default answer ( one answer )
                          var answer_obj = new Object() ;
                          if($scope.application_type == 0 )
@@ -1314,10 +1326,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                          if(questionType == 4 ){
                              new_question.answer_settings.answer_char_max = 500 ;
                          }
-                         console.log("answer_obj --- " + questionType);
-                          console.log(answer_obj);
+                         //console.log("answer_obj --- " + questionType);
+                          //console.log(answer_obj);
                          new_question.answers_format.push(answer_obj);
-                          console.log(new_question.answers_format);
+                          //console.log(new_question.answers_format);
                          if($scope.mongoose_id == null ){
                          // ---------------------------------------------------
                            // ------->> Get Id from mongoDB
@@ -1334,7 +1346,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                                  new_question.answers_format[1]['_id'] = resp.data.id_1+'12fd';
                                }
                              },function(err){
-                               console.log(err);
+                               //console.log(err);
                            });
                        } // End Mmongodb Ids
 
@@ -1379,14 +1391,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                                  $scope.question_object_that_added = new_question ;
                                  $scope.edit_this_question(resp.data._id , evt.newIndex  );
                              } , function(err){
-                               console.log(err);
+                               //console.log(err);
                              });
                            });
                          }
                        } , 300 );
 
                      },function(err){
-                       console.log(err);
+                       //console.log(err);
                    });
 
                    $scope.loading_redactor_editor();
@@ -1432,7 +1444,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                  $scope.quest_media_parts = taget_question.media_question ;
                  // 3 ==> answer part
                  $scope.asnwers = taget_question.answers_format;
-                 console.log($scope.asnwers );
+                 //console.log($scope.asnwers );
                  $scope.question_settings = {
                     is_required           : taget_question.answer_settings.is_required ,
                     single_choice   : taget_question.answer_settings.single_choice ,
@@ -1512,7 +1524,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                        $scope.unique_ids = resp.data.list_of_ids ;
 
                      },function(err){
-                       console.log(err);
+                       //console.log(err);
                    });
 
       };
@@ -1763,7 +1775,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       });
     $("#show-labels").on("input,change" , function (){
         var checked_value = $scope.questions_list[$scope.questionIndex].answers_format[0].show_labels ;
-        console.log(checked_value);
+        //console.log(checked_value);
         if(checked_value == true ) { // show labels
           $(".item-labels").slideDown();
           $(".block-labels").css("display" , "block");
@@ -1794,14 +1806,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
        if(question_selected.answer_settings.single_choice == true ) {
          var all_answers = question_selected.answers_format;
-         console.log(all_answers);
+         //console.log(all_answers);
          for (var i = 0; i < all_answers.length; i++) {
              all_answers[i].is_correct = false;
          }
        }
 
        $scope.questions_list.splice(targetIndex, 0, question_selected);
-       console.log($scope.questions_list);
+       //console.log($scope.questions_list);
      });
     $("#editor-question-desc").on('keydown change keypress keyup' , function (){
        var question_value = $(this).val();
@@ -2049,7 +2061,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                }).then(function(resp){
 
                },function(err){
-                 console.log(err);
+                 //console.log(err);
                });
          });
        }
@@ -2079,7 +2091,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 $scope.unique_ids = resp.data.list_of_ids ;
 
               },function(err){
-                console.log(err);
+                //console.log(err);
             });
 
 
