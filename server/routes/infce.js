@@ -15,12 +15,50 @@ const {insertIntoApiKey} = require("./qtnr");
 
 
 var infceRouter = express.Router();
-infceRouter.use(build_session);
+infceRouter.use(  build_session );
 infceRouter.use(  bodyParser.json() );
 infceRouter.use(  bodyParser.urlencoded({ extended: false }) );
+// ################################################################
+// ==========>>> Application Interface Api  ( Quiz VS Survey ) Player <<====
+// ################################################################
+infceRouter.get("/:app_id/:player_type/player/:token" , verify_access_tokens_admin_user ,  (req , res) => {
+  var player = req.params.player_type;
+  var app_id = req.params.app_id;
+  // Player (does not exists) case
+  if( player != 'quiz' && player != 'survey' ){
+    res.send({
+      error : "This iframe doesn't exists !"
+    });
+  }
+  // application (does not exists) case
+  qtnr.findOne({_id:app_id} , (error , qtnrObject)=>{
+    if(!qtnrObject || error){
+      return new Promise((resolve, reject) => {
+        res.render("page-404" , {
+          data_404 : "This application does not exists !" ,
+          user : req.user
+        });
+      });
+    }
+
+    var app_type = qtnrObject.app_type ;
+    var application_type ;
+    if ( app_type == 0 ) application_type = "survey-player";
+    else application_type = "quiz-player";
+
+
+    res.render( application_type , {
+      app : qtnrObject ,
+      user : req.user ,
+      header_status : config.show_header
+    });
+
+  });
+
+});
 
 // ################################################################
-// ==========>>> Application Interface Api  ( Quiz VS Survey ) ====
+// ==========>>> Application Interface Api  ( Quiz VS Survey ) Editor <<====
 // ################################################################
 infceRouter.get("/:app_id/editor/:token" , verify_access_tokens_admin_user , (req , res)=>{
   // ================> Params

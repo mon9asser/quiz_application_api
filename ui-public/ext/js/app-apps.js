@@ -7,6 +7,23 @@ apps.filter ("apply_html" , [
     }
   }
 ]);
+// ==> This filter to fix javascript issue ( that show in browser console )
+apps.filter("image_w_server" , [
+  "$timeout" ,"$sce"  ,
+  function ( $timeout  , $sce   ){
+      return function (img_source){
+        var current_server = $("#serverIp").val() ;
+        var current_server = current_server + "img/media-icon.png";
+
+        if (img_source == current_server){
+          return img_source ;
+        }else {
+          // what current server ip  ?
+          return current_server + img_source;
+        }
+      };
+  }
+]);
 apps.filter("set_iframe" , [
       "$timeout" ,"$sce" ,
   function (  $timeout , $sce){
