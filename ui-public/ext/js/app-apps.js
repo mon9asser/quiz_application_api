@@ -91,7 +91,7 @@ apps.filter('this_chars_only' , [
       var spesificChars = '' ;
       var char_counts = 35 ;
 
-      if(text_values == undefined)
+      if( text_values == undefined )
         spesificChars = text_values ;
         else {
             for (var i = 0; i < text_values.length; i++) {
@@ -1974,7 +1974,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                  }
                }
              }
-             if( target_class != undefined && sel != null && sel != '' && target_class.includes("redactor-in-") != false ){
+
+
+             if( target_class != undefined && sel != null && sel != '' && ( target_class.includes("redactor-in-") != false || target_class == "redactor-source-open" )   ){
+               console.log(target_class);
                var offset = $('.'+target_class).offset();
                $("#redactor-editor-menu").css({
                  left : offset.left - 140   ,
