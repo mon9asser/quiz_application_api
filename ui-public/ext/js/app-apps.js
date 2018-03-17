@@ -458,7 +458,48 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             }); // End Json Data
 
     // ==> functions in scope object
+    $scope.swal_message = function (){
+      if($scope.unsaved_question) {
+          $scope.unsaved_question = false;
+          $(".swal-overlay").fadeIn();
+           swal({
+            text: "Would you like to save the last changes ?",
+            icon: "warning",
+            buttons: ["No" , "Save Changes"],
+            dangerMode: true
+          }).then((saving) => {
 
+        if (saving) {
+          // ==> Saving current change
+          swal("Question has been saved successfully", {
+            icon: "success",
+            buttons: false,
+          }) ;
+          $scope.save_changes_in_angular_backend();
+        }else {
+          // ==> return old changes
+          $.getJSON( $scope.json_apk_file , function (api_key_data ){
+              $http({
+                 method : "POST" ,
+                 url    : $scope.api_url_current_app ,
+                 headers: {
+                   "X-api-keys": api_key_data.API_KEY,
+                   "X-api-app-name": api_key_data.APP_NAME
+                 },
+                 data: {
+                   creator_id : $scope.user_id
+                 }
+              }).then(function(resp){
+                  $scope.questions_list = resp.data.questions;
+              });
+            });
+        }
+        $(".swal-overlay").fadeOut(1000);
+
+      });;
+      }
+
+    }
     $scope.select_rating_scale__ = function ( index , type){
        var thisElement = index ;
 
@@ -922,18 +963,21 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                     // //console.log(old_question_list);
                     // $scope.questions_list = resp.data.questions ;
                     // $scope.mongodb_questions = resp.data.questions ;
-                    if ( decline_next == null ){
-                          // GO TO NEXT Question
-                          var found_qs = $scope.questions_list.find($scope.callback_index);
-                          var targetIndex = $scope.questions_list.indexOf(found_qs);
-                          if(targetIndex != -1 ) {
-                            if($scope.questions_list.length > ( targetIndex ) ) {
-                              var next_question = targetIndex + 1 ;
-                              if ( $scope.questions_list[next_question] != undefined )
-                              $scope.edit_this_question($scope.questions_list[next_question]._id , next_question) ;
-                            }
-                          }
-                    }
+
+
+                    // ==> Ignore next question
+                    // if ( decline_next == null ){
+                    //       // GO TO NEXT Question
+                    //       var found_qs = $scope.questions_list.find($scope.callback_index);
+                    //       var targetIndex = $scope.questions_list.indexOf(found_qs);
+                    //       if(targetIndex != -1 ) {
+                    //         if($scope.questions_list.length > ( targetIndex ) ) {
+                    //           var next_question = targetIndex + 1 ;
+                    //           if ( $scope.questions_list[next_question] != undefined )
+                    //           $scope.edit_this_question($scope.questions_list[next_question]._id , next_question) ;
+                    //         }
+                    //       }
+                    // }
 
 
                 },function(err){
@@ -1406,6 +1450,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.edit_this_question = function ( qs_id  , qsCurrIndex , nextIndex = null){
 
 
+
+                $scope.check_unsaved_data();
+
                 $scope.question_id = qs_id ;
                 if(nextIndex == null ){
                     $("#docQuestions").children("li").each(function (){
@@ -1535,6 +1582,13 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         }
       } , 5000 );
     };
+
+
+    $scope.check_unsaved_data = function (){
+      if($scope.unsaved_question == true ){
+        $scope.swal_message();
+      }
+    };
     // $scope.redactor_menu_position = function (evt){
     //   if($scope.selected_passage != null ) {
     //     var currentPosition ;
@@ -1608,7 +1662,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.window_navigation.bind("beforeunload" , function (e){
         if( $scope.unsaved_question != false ){
           return false ;
-        }
+        }else
+        return true ;
       });
     $scope.window_navigation.bind("load" , function (){
 
@@ -1631,6 +1686,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                             $(".redactor-in-0").html(targetQuestion);
                             var description_ = $scope.questions_list[$scope.questionIndex].question_description;
                              $(".redactor-in-1").html(description_);
+
                           }
                         } , 200);
                     }
@@ -1652,7 +1708,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
               // });
 
               $(".redactor-in-0").bind("input , change , keyup" , function (){
+                $scope.unsaved_question = true ;
                 $scope.databiding_question();
+                console.log($scope.unsaved_question);
               });
 
               // $(".redactor-in-1").bind("keyup" , function (){
@@ -1974,7 +2032,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                  }
                }
              }
-
 
              if( target_class != undefined && sel != null && sel != '' && ( target_class.includes("redactor-in-") != false || target_class == "redactor-source-open" )   ){
                console.log(target_class);
