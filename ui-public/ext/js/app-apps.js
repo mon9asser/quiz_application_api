@@ -490,7 +490,13 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                    creator_id : $scope.user_id
                  }
               }).then(function(resp){
-                  $scope.questions_list = resp.data.questions;
+                if($scope.application_type == 0){
+                   $("#docQuestions").children("li").each(function(i){
+                     $(this).children('.question-part')
+                      .children('.qs-type').find('.qs-body').html(resp.data.questions[i].question_body);
+                   });
+                }
+                  $scope.questions_list = resp.data.questions ;
               });
             });
         }
@@ -943,8 +949,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           }
 
           var changes_button = $(".save_changes");
-          changes_button.html("Saving Changes ....");
-
+          changes_button.html("<span class='saving_option'></span> Saving Changes");
+          changes_button.css("padding-left","40px");
+         
           // Save change in db
           $.getJSON($scope.json_apk_file , function(api_key_data){
             $http({
@@ -959,6 +966,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                     "X-api-app-name": api_key_data.APP_NAME
                   }
                 }).then(function(resp){
+                  $(".save_changes").css("padding-left","5px");
                     changes_button.html("Save Changes");
                     // //console.log(old_question_list);
                     // $scope.questions_list = resp.data.questions ;
@@ -1038,6 +1046,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       };
     $scope.application_save_settings = function (){
 
+      var saving_settings = $(".saving-settings-changes");
+      saving_settings.html("<span class='saving_option'></span> Saving Changes");
+      saving_settings.css("padding-left","40px");
+
         // $scope.api_url_app_settings
         // $scope.application_settings
         $.getJSON( $scope.json_apk_file , function (api_key_data ){
@@ -1054,6 +1066,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 questionnaire_title : $scope.application_settings.questionnaire_title
               }
                 }).then(function(resp){
+                  saving_settings.css("padding-left","5px");
+                  saving_settings.html("Save changes")
                 //console.log(resp);
                   } , function(err){
                 //console.log(err);
