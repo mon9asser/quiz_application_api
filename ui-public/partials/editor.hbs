@@ -173,7 +173,7 @@
 
                 <!-- true false value -->
                 <div ng:if="question_type == 2" class="">
-                    <ul  ng:if="{{app.app_type }} == 1"  class="answer-pt-controller ">
+                    <ul ng:if="{{app.app_type }} == 1"  class="answer-pt-controller ">
                       <li data-toggle="asnwers-options" title="Make it Correct Answer">
                         <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
                       </li>
@@ -183,7 +183,7 @@
                           ~>>answer_value.boolean_value<<~
                         </span>
                     </div>
-                  </div>
+                </div>
 
             </li>
           </ul>

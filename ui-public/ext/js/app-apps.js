@@ -546,11 +546,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
        return false;
     };
     $scope.class_data_func = function (is_correct , choice_style){
-      var class_item = '';
 
+      var class_item = '';
       if (choice_style != true )
         class_item += 'one_column ';
-      if(is_correct)
+      if(is_correct && $scope.application_type == 1 )
         class_item += 'highlighted-right-answers';
       return class_item ;
     };
@@ -1659,12 +1659,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           current_window  : $(window).width()  ,
           settings_menu   : $(".left_part").width() - 28
         };
-    $scope.window_navigation.bind("beforeunload" , function (e){
-        if( $scope.unsaved_question != false ){
-          return false ;
-        }else
-        return true ;
-      });
+    // $scope.window_navigation.bind("beforeunload" , function (e){
+    //     if( $scope.unsaved_question != false ){
+    //       return false ;
+    //     }else
+    //     return true ;
+    // });
     $scope.window_navigation.bind("load" , function (){
 
             // $scope.loading_redactor_editor();
