@@ -1634,7 +1634,7 @@ $R.opts = {
     replaceTags: {
         'b': 'strong',
         'i': 'em',
-        'strike': 'del'
+        'strike': 'strong'
     },
 
     // paste
@@ -1657,7 +1657,7 @@ $R.opts = {
         i: 'italic',
         em: 'italic',
         del: 'deleted',
-        strike: 'deleted'
+        strike: 'bold'
     },
     activeButtonsAdd: {},
     activeButtonsObservers: {},
@@ -1711,7 +1711,7 @@ $R.opts = {
     emptyHtml: '<p></p>',
     invisibleSpace: '&#x200b;',
     imageTypes: ['image/png', 'image/jpeg', 'image/gif'],
-    inlineTags: ['a', 'span', 'strong', 'strike', 'b', 'u', 'em', 'i', 'code', 'del', 'ins', 'samp', 'kbd', 'sup', 'sub', 'mark', 'var', 'cite', 'small', 'abbr'],
+    inlineTags: ['a', 'span', 'strong', 'b', 'b', 'u', 'em', 'i', 'code', 'del', 'ins', 'samp', 'kbd', 'sup', 'sub', 'mark', 'var', 'cite', 'small', 'abbr'],
     blockTags: ['pre', 'ul', 'ol', 'li', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',  'dl', 'dt', 'dd', 'div', 'table', 'tbody', 'thead', 'tfoot', 'tr', 'th', 'td', 'blockquote', 'output', 'figcaption', 'figure', 'address', 'section', 'header', 'footer', 'aside', 'article', 'iframe'],
     regex: {
         youtube: /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube\.com\S*[^\w\-\s])([\w\-]{11})(?=[^\w\-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/gi,
@@ -1759,7 +1759,7 @@ $R.lang['en'] = {
     "link-insert": "Insert Link",
     "link-edit": "Edit Link",
     "link-in-new-tab": "Open link in new tab",
-    "unlink": "Unlink", 
+    "unlink": "Unlink",
     "cancel": "Cancel",
     "close": "Close",
     "insert": "Insert",
@@ -8420,10 +8420,11 @@ $R.add('service', 'inline', {
         {
             if (node.style.textDecoration === 'line-through' || node.style.textDecorationLine === 'line-through')
             {
-                var $el = $R.dom(node);
-                $el.css('textDecorationLine', '');
-                $el.css('textDecoration', '');
-                $el.wrap('<strike>');
+
+                // var $el = $R.dom(node);
+                // $el.css('textDecorationLine', '');
+                // $el.css('textDecoration', '');
+                // $el.wrap('<strike>');
             }
         });
 
@@ -8483,6 +8484,7 @@ $R.add('service', 'inline', {
             $el = $R.dom(replacedNodes[i]);
             $el.replaceWith(function()
             {
+              console.log($el.contents());
                 return $R.dom('<strike>').append($el.contents());
             });
         }
@@ -8589,9 +8591,10 @@ $R.add('service', 'inline', {
 
         }.bind(this));
 
-        $editor.find('strike').each(function(node)
+        $editor.find('strike').each(function(node) // ==> Issue here !!
         {
             var $el = this.utils.replaceToTag(node, this.tag);
+            console.log($el.get());
             nodes.push($el.get());
 
         }.bind(this));
@@ -9642,6 +9645,7 @@ $R.add('module', 'editor', {
     onclick: function(e)
     {
         this.component.setOnEvent(e);
+
     },
     onkeyup: function(e)
     {
@@ -16972,6 +16976,7 @@ $R.add('module', 'list', {
         for (var i = 0; i < buttons.length; i++)
         {
             var button = this.toolbar.getButton(buttons[i]);
+
             if (button)
             {
                 if (param) button.disable();

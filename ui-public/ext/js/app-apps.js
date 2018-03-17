@@ -876,6 +876,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       };
     $scope.save_changes_in_angular_backend = function ( decline_next = null ){
 
+        console.log($scope.questions_list);
           // console.log($scope.questions_list);
           if($scope.question_id == null ){
             alert("You should select question from question list to allow you edit it");
