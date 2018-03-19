@@ -254,7 +254,7 @@
                <li ng:if="questions_list[questionIndex].question_type == 4">
                  <span class="title-checkbox"> Max characters ( ~>>questions_list[questionIndex].answer_settings.answer_char_max<<~ ) </span>
                  <div class="rating_scale_options">
-                     <input ng:model="questions_list[questionIndex].answer_settings.answer_char_max" id="char_max_slider" min="100" max="2000" type="range" name="">
+                     <input ng:change="unsaved_question_x()" ng:model="questions_list[questionIndex].answer_settings.answer_char_max" id="char_max_slider" min="100" max="2000" type="range" name="">
                  </div> <!-- Slide Range -->
                </li>
 
@@ -269,21 +269,21 @@
                     <div class="scale-options">
                       <span class="title-checkbox">Show labels</span>
                       <div class="slideThree on-off-checkbox-settings">
-                         <input type="checkbox" id="show-labels" name="check" ng:model="questions_list[questionIndex].answers_format[0].show_labels">
+                         <input ng:change="unsaved_question_x()" type="checkbox" id="show-labels" name="check" ng:model="questions_list[questionIndex].answers_format[0].show_labels">
                          <label for="show-labels"></label>
                          <span class="off-value"></span>
                       </div>
                     </div>
                     <div class="scale-options item-labels">
-                        <input class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].started_at" placeholder="Left">
-                        <input class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].centered_at" name="" value="" placeholder="Center">
-                        <input class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].ended_at" name="" value="" placeholder="Right">
+                        <input ng:change="unsaved_question_x()" class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].started_at" placeholder="Left">
+                        <input ng:change="unsaved_question_x()" class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].centered_at" name="" value="" placeholder="Center">
+                        <input ng:change="unsaved_question_x()" class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].ended_at" name="" value="" placeholder="Right">
                     </div>
                  </li>
                 <li class="required_qs">
                    <span class="title-checkbox">Required</span>
                    <div class="slideThree on-off-checkbox-settings">
-                      <input ng:model="question_settings.is_required" type="checkbox" id="required-option" name="check" checked="">
+                      <input ng:change="unsaved_question_x()" ng:model="question_settings.is_required" type="checkbox" id="required-option" name="check" checked="">
                       <label for="required-option"></label>
                       <span class="off-value"></span>
                    </div>
@@ -291,7 +291,7 @@
                 <li class="single_response_qs">
                    <span class="title-checkbox">Single Response</span>
                    <div class="slideThree on-off-checkbox-settings">
-                      <input ng:model="question_settings.single_choice" type="checkbox" id="MultipleResponse-option" name="check" checked="">
+                      <input ng:change="unsaved_question_x()" ng:model="question_settings.single_choice" type="checkbox" id="MultipleResponse-option" name="check" checked="">
                       <label for="MultipleResponse-option"></label>
                       <span class="off-value"></span>
                    </div>
@@ -299,7 +299,7 @@
                 <li class="randomize_qs">
                    <span class="title-checkbox">Randomize</span>
                    <div class="slideThree on-off-checkbox-settings">
-                      <input ng:model="question_settings.is_randomized" type="checkbox" id="Randomize-option" name="check" checked="">
+                      <input ng:change="unsaved_question_x()" ng:model="question_settings.is_randomized" type="checkbox" id="Randomize-option" name="check" checked="">
                       <label for="Randomize-option"></label>
                       <span class="off-value"></span>
                    </div>
@@ -307,7 +307,7 @@
                 <li class="super_sizer_qs">
                    <span class="title-checkbox">Super Size</span>
                    <div class="slideThree on-off-checkbox-settings">
-                      <input ng:model="question_settings.super_size" type="checkbox"  id="SuperSize-option" name="check" checked="">
+                      <input ng:change="unsaved_question_x()" ng:model="question_settings.super_size" type="checkbox"  id="SuperSize-option" name="check" checked="">
                       <label for="SuperSize-option"></label>
                       <span class="off-value"></span>
                    </div>
@@ -315,7 +315,7 @@
                <li class="answer_stylish_qs">
                   <span class="title-checkbox">Style of Answer ( ~>>(question_settings.choice_style ) ? "Two columns per row" : "One column per row"<<~ )</span>
                    <div class="slideThree on-off-checkbox-settings">
-                      <input ng:model="question_settings.choice_style" type="checkbox" id="SingleResponse-option" name="check" checked="">
+                      <input ng:change="unsaved_question_x()" ng:model="question_settings.choice_style" type="checkbox" id="SingleResponse-option" name="check" checked="">
                       <label for="SingleResponse-option"></label>
                       <span class="off-value"></span>
                    </div>

@@ -133,11 +133,10 @@ apps.filter('show_chars' , [
     }
   }
 ]);
-
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
-
     // ==> Vars in scope object
     $scope.rating_scale_elements = [] ;
+    $scope.display_menu = 'none';
     $scope.rating_values = null ;
     $scope.questions_list = null ;
     $scope.window_navigation = $(window);
@@ -861,7 +860,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       if($scope.question_id == null ){
         alert("Please select question from question list");
       }
-
+      $scope.unsaved_question = true;
       var question_selected = $scope.questions_list.find($scope.callback_index);
       var answer_length = question_selected.answers_format.length ;
       // //console.log(answer_length);
@@ -891,6 +890,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         if($scope.question_type == 0 ){
           $scope.loading_redactor_editor();
           $scope.load_redactor_text_data();
+          $scope.add_events_to_redactor_answer();
           // $scope.show_redactor_menu_options_in_timeframe('add-answer');
         }
 
@@ -941,6 +941,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       };
     $scope.save_changes_in_angular_backend = function ( decline_next = null ){
 
+      $scope.unsaved_question = false;
         //console.log($scope.questions_list);
           // //console.log($scope.questions_list);
           if($scope.question_id == null ){
@@ -951,7 +952,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           var changes_button = $(".save_changes");
           changes_button.html("<span class='saving_option'></span> Saving Changes");
           changes_button.css("padding-left","40px");
-         
+
           // Save change in db
           $.getJSON($scope.json_apk_file , function(api_key_data){
             $http({
@@ -1291,6 +1292,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             redactorIn.each(function(i){
               if( i >= 2 ) {
                 $(this).bind("keyup input change" , function (){
+                    $scope.unsaved_question = true;
                     var answerIndex = i ;
                     $scope.databiding_answers($(this) , answerIndex - 2 );
                 });
@@ -1587,7 +1589,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                      },function(err){
                        //console.log(err);
                    });
-
+                   $scope.add_events_to_redactor_answer();
       };
     $scope.rating_scale_values = function (){
       $timeout(function (){
@@ -1596,8 +1598,18 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         }
       } , 5000 );
     };
-
-
+    $scope.unsaved_question_x = function(){
+      $scope.unsaved_question = true;
+    }
+    $scope.add_events_to_redactor_answer = function (){
+      $timeout(function (){
+        $('.redactor-in').each(function(){
+          $(this).on('change , keyup , input' , function(evt){
+              $scope.unsaved_question = true ;
+          });
+        });
+      } , 2000 );
+    };
     $scope.check_unsaved_data = function (){
       if($scope.unsaved_question == true ){
         $scope.swal_message();
@@ -2017,7 +2029,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           });
     $(".text-loader , .loading-data").delay(6000).fadeOut();
 
-    // ==> excute an actions with timeframes
+    // ==> excute an actions with timeframes redactor-in
     $timeout(function (){
       $scope.style_of_answers = ($scope.question_settings.choice_style ) ? "Two columns per row" : "One column per row";
       } , 1500 );
@@ -2030,6 +2042,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           });
         }
       };
+
     $timeout(function (){
 
       $(document).bind("selectionchange  , click" , function (evt){
@@ -2050,18 +2063,24 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
              if( target_class != undefined && sel != null && sel != '' && ( target_class.includes("redactor-in-") != false || target_class == "redactor-source-open" )   ){
                console.log(target_class);
                var offset = $('.'+target_class).offset();
+
                $("#redactor-editor-menu").css({
                  left : offset.left - 140   ,
                  top : offset.top - 80 ,
                  display : 'block'
                });
+
+
              }else
-             $("#redactor-editor-menu").css("display" , "none");
+              $("#redactor-editor-menu").css("display" , $scope.display_menu);
          }else {
-            $("#redactor-editor-menu").css("display" , "none");
+              $("#redactor-editor-menu").css("display" , $scope.display_menu);
          }
       });
 
+      // $("#redactor-editor-menu").children(".redactor-toolbar").children(".re-html").on("click" , function (){
+      //    $scope.display_menu = 'block';
+      // });
       // $("input[type='range']").on("change , input", function  (evt){
       //   $scope.change_rating_scale_value($(this).val());
       // });
