@@ -47,7 +47,7 @@
           <div style="display:none;" class="x-editor-x-body" id="Description-pt">
             <div class="col-xs-12 col-md-12">
               <div class="row-cols margin-top">
-                 <textarea ng:model="question_description" id="editor-question-desc" name="name" class="form-control descriptions description-field description-field-x redactor-editor" placeholder="Description ..." rows="3" cols="80"></textarea>
+                 <textarea ng:model="questions_list[questionIndex].question_description" id="editor-question-desc" name="name" class="form-control descriptions description-field description-field-x redactor-editor" placeholder="Description ..." rows="3" cols="80"></textarea>
               </div>
             </div>
           </div>
@@ -219,7 +219,7 @@
                <li ng:if="questions_list[questionIndex].question_type == 4">
                  <span class="title-checkbox"> Max characters ( ~>>questions_list[questionIndex].answer_settings.answer_char_max<<~ ) </span>
                  <div class="rating_scale_options">
-                     <input ng:change="unsaved_question_x()" ng:model="questions_list[questionIndex].answer_settings.answer_char_max" id="char_max_slider" min="100" max="2000" type="range" name="">
+                     <input ng:change="unsaved_question_x(questions_list[questionIndex].answer_settings.answer_char_max , 'answer_char_max')" ng:model="questions_list[questionIndex].answer_settings.answer_char_max" id="char_max_slider" min="100" max="2000" type="range" name="">
                  </div> <!-- Slide Range -->
                </li>
 
@@ -234,7 +234,7 @@
                     <div class="scale-options">
                       <span class="title-checkbox">Show labels</span>
                       <div class="input_wrapper">
-                          <input ng:change="unsaved_question_x()" ng:model="questions_list[questionIndex].answers_format[0].show_labels" type="checkbox" class="switch_4">
+                          <input ng:change="unsaved_question_x(questions_list[questionIndex].answers_format[0].show_labels , 'show_labels')" ng:model="questions_list[questionIndex].answers_format[0].show_labels" type="checkbox" class="switch_4">
                           <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
                             <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
                           </svg>
@@ -249,15 +249,15 @@
                       </div> -->
                     </div>
                     <div class="scale-options item-labels">
-                        <input ng:change="unsaved_question_x()" class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].started_at" placeholder="Left">
-                        <input ng:change="unsaved_question_x()" class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].centered_at" name="" value="" placeholder="Center">
-                        <input ng:change="unsaved_question_x()" class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].ended_at" name="" value="" placeholder="Right">
+                        <input ng:change="unsaved_question_x(questions_list[questionIndex].answers_format[0].started_at , null )" class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].started_at" placeholder="Left">
+                        <input ng:change="unsaved_question_x(questions_list[questionIndex].answers_format[0].centered_at, null )" class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].centered_at" name="" value="" placeholder="Center">
+                        <input ng:change="unsaved_question_x(questions_list[questionIndex].answers_format[0].ended_at , null )" class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].ended_at" name="" value="" placeholder="Right">
                     </div>
                  </li>
                 <li class="required_qs">
                    <span class="title-checkbox">Required</span>
                    <div class="input_wrapper">
-                       <input ng:change="unsaved_question_x()" ng:model="question_settings.is_required" type="checkbox" class="switch_4">
+                       <input ng:change="unsaved_question_x(question_settings.is_required)" ng:model="question_settings.is_required" type="checkbox" class="switch_4">
                        <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
                          <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
                        </svg>
@@ -274,7 +274,7 @@
                 <li class="single_response_qs">
                    <span class="title-checkbox">Single Response</span>
                    <div class="input_wrapper">
-                       <input ng:change="unsaved_question_x()" ng:model="question_settings.single_choice" type="checkbox" class="switch_4">
+                       <input ng:change="unsaved_question_x(question_settings.single_choice)" ng:model="question_settings.single_choice" type="checkbox" class="switch_4">
                        <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
                          <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
                        </svg>
@@ -291,7 +291,7 @@
                 <li class="randomize_qs">
                    <span class="title-checkbox">Randomize</span>
                    <div class="input_wrapper">
-                       <input ng:change="unsaved_question_x()" ng:model="question_settings.is_randomized" type="checkbox" class="switch_4">
+                       <input ng:change="unsaved_question_x(question_settings.is_randomized)" ng:model="question_settings.is_randomized" type="checkbox" class="switch_4">
                        <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
                          <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
                        </svg>
@@ -308,7 +308,7 @@
                 <li class="super_sizer_qs">
                    <span class="title-checkbox">Super Size</span>
                    <div class="input_wrapper">
-                       <input ng:change="unsaved_question_x()" ng:model="question_settings.super_size" type="checkbox" class="switch_4">
+                       <input ng:change="unsaved_question_x(question_settings.super_size)" ng:model="question_settings.super_size" type="checkbox" class="switch_4">
                        <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
                          <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
                        </svg>
@@ -325,7 +325,7 @@
                <li class="answer_stylish_qs">
                   <span class="title-checkbox">Style of Answer ( ~>>(question_settings.choice_style ) ? "Two columns per row" : "One column per row"<<~ )</span>
                   <div class="input_wrapper">
-                      <input ng:change="unsaved_question_x()" ng:model="question_settings.choice_style" type="checkbox" class="switch_4">
+                      <input ng:change="unsaved_question_x(question_settings.choice_style)" ng:model="question_settings.choice_style" type="checkbox" class="switch_4">
                       <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
                         <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
                       </svg>
