@@ -1548,13 +1548,16 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                    });
 
                    $timeout(function () {
+
+                      $('.redactor-in').each(function(){
+                        $(this).html('');
+                      });
+
                        $scope.loading_redactor_models();
-                       // Loading editor values
-                       $('.redactor-in-0').html('');
-                       $('.redactor-in-1').html('');
 
                        $('.redactor-in-0').html(taget_question.question_body);
                        $('.redactor-in-1').html(taget_question.question_description);
+
                    }, 200);
       };
     $scope.rating_scale_values = function (){
