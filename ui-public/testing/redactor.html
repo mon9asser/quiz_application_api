@@ -6,37 +6,51 @@
      <link href="redactor.min.css" rel="stylesheet">
   </head>
   <body>
+    <!--element -->
+    <textarea class="content"></textarea>
+    <textarea class="content"></textarea>
+    <textarea class="content"></textarea>
+    <textarea class="content"></textarea>
+    <textarea class="content"></textarea>
+    <textarea class="content"></textarea>
+    <textarea class="content"></textarea>
+    <textarea class="content"></textarea>
+    <textarea class="content"></textarea>
+    <textarea class="content"></textarea>
+    <textarea class="content"></textarea>
+    <textarea class="content"></textarea>
+    <textarea class="content"></textarea>
+    <textarea class="content"></textarea>
 
 
-<span id="vlsdsd">
-   Selection        issue related plugin
-</span>
+
     <button id="selD" type="button" name="button">Selected</button>
-    <script src="http://34.215.133.182/ext/frameworks/js/jquery.min.js" charset="utf-8"></script>
+  <script src="http://localhost:9000/ext/frameworks/js/jquery.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="redactor.js" ng:if="page_name=='api'"></script>
+    <!-- Redactor Plugins -->
+    <script type="text/javascript" src="http://localhost:9000/ext/frameworks/js/redactor-font-color.js"></script>
+    <script type="text/javascript" src="http://localhost:9000/ext/frameworks/js/redactor-font-size.js"></script>
+
 
     <!-- call -->
     <script>
-    $("#vlsdsd").on("mousedown mousemove click" , function (){
-      var sel = window.getSelection()
-      if (sel.rangeCount === 0 || sel.isCollapsed || sel.toString() == null || sel.toString() == ' ') return false ;
-      // show redator menu acco
-        console.log(sel.toString())
-    });
+    $R('.content', {
+      buttonsHide: ['format' , 'lists'] ,
+      buttonsAddBefore: {
+          before: 'html',
+          buttons: ['underline','bold','italic' , 'link' , 'fontsize' , 'fontcolor' ]
+      } ,
+      callbacks: {
+            airOpened: function()
+            {
 
-
-
-
-
-      function selected () {
-         var selObj = window.getSelection();
-         alert(selObj.length);
-        //  var selRange = selObj.getRangeAt(0);
-        //   console.log(selRange);
-      }
-    $("#selD").on("click" , function (){
-        selected();
-    });
+              var app = $(this);
+              // app[0].rootElement ==> Get the textarea
+               console.log($(app[0].component.toolbar.$toolbar.nodes[0]).find('.re-bold').eq(1).css('display','none'));
+            }
+        } ,
+        air : true ,
+        plugins: ['fontcolor' , 'fontsize'] });
     </script>
 
   </body>

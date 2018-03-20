@@ -1,25 +1,17 @@
-<script type="text/javascript">
-function shuffle(array) {
-var currentIndex = array.length, temporaryValue, randomIndex;
 
-// While there remain elements to shuffle...
-while (0 !== currentIndex) {
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="https://imperavi.com/assets/redactor/redactor.min.css">
+  </head>
+  <body>
 
-// Pick a remaining element...
-randomIndex = Math.floor(Math.random() * currentIndex);
-currentIndex -= 1;
 
-// And swap it with the current element.
-temporaryValue = array[currentIndex];
-array[currentIndex] = array[randomIndex];
-array[randomIndex] = temporaryValue;
-}
 
-return array;
-}
 
-  // Used like so
-  var arr = [{"data": "25"}, {"data": "65"}, {"data": "23"}, {"data": "12"}];
-  arr = shuffle(arr);
-  console.log(arr);
-</script>
+    <script src="https://imperavi.com/assets/redactor/redactor.js" charset="utf-8"></script>
+
+  </body>
+</html>
