@@ -865,7 +865,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
            question_selected.answers_format.push(new_answer);
       //console.log(question_selected);
 
-
+      $scope.loading_redactor_editor_for_answers();
     };
     $scope.question_answer_deletion = function (answer_id){
       // ==> This Answer
