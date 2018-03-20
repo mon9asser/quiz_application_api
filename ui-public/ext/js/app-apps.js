@@ -864,8 +864,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
            question_selected.answers_format.push(new_answer);
       //console.log(question_selected);
+      $timeout(function () {
+          $scope.loading_redactor_editor_for_answers();
+      }, 200);
 
-      $scope.loading_redactor_editor_for_answers();
     };
     $scope.question_answer_deletion = function (answer_id){
       // ==> This Answer
@@ -2009,41 +2011,43 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         // ===>>>>>> Everything about redactor !!
         // ====================================================================
         // ==> Question and descroption
-        $R("#editor-question-body , #editor-question-desc"  ,{
-          paragraphize: false,
-          replaceDivs: false,
-          linebreaks: false,
-          enterKey: false ,
-          minHeight : '90px' ,
-          air : true ,
-          buttonsAddBefore : {
-            before: 'html',
-            buttons: ['bold','italic','link','deleted','underline']
-          } ,
-          plugins: ['fontcolor' , 'fontsize'] ,
-          buttonsHide: ['format' , 'lists'] ,
-          callbacks: {
-            airOpened : function (){
-              var app = $(this);
-              var elems = $(app[0].component.toolbar.$toolbar.nodes[0]);
-
-              if(elems.find(".re-bold").length > 1 )
-              elems.find(".re-bold").eq(elems.find(".re-bold").length - 1).css('display','none')
-
-              if(elems.find(".re-italic").length > 1 )
-              elems.find(".re-italic").eq(elems.find(".re-italic").length - 1).css('display','none')
-
-              if(elems.find(".re-deleted").length > 1 )
-              elems.find(".re-deleted").eq(elems.find(".re-deleted").length - 1).css('display','none')
-
-              if(elems.find(".re-link").length > 1 )
-              elems.find(".re-link").eq(elems.find(".re-link").length - 1).css('display','none')
-            }
-          }
-        });
+        // $R("#editor-question-body , #editor-question-desc"  ,{
+        //   paragraphize: false,
+        //   replaceDivs: false,
+        //   linebreaks: false,
+        //   enterKey: false ,
+        //   minHeight : '90px' ,
+        //   air : true ,
+        //   buttonsAddBefore : {
+        //     before: 'html',
+        //     buttons: ['bold','italic','link','deleted','underline']
+        //   } ,
+        //   plugins: ['fontcolor' , 'fontsize'] ,
+        //   buttonsHide: ['format' , 'lists'] ,
+        //   callbacks: {
+        //     airOpened : function (){
+        //       var app = $(this);
+        //       var elems = $(app[0].component.toolbar.$toolbar.nodes[0]);
+        //       elems.css({
+        //         left: '-330px'
+        //       })
+        //       if(elems.find(".re-bold").length > 1 )
+        //       elems.find(".re-bold").eq(elems.find(".re-bold").length - 1).css('display','none')
+        //
+        //       if(elems.find(".re-italic").length > 1 )
+        //       elems.find(".re-italic").eq(elems.find(".re-italic").length - 1).css('display','none')
+        //
+        //       if(elems.find(".re-deleted").length > 1 )
+        //       elems.find(".re-deleted").eq(elems.find(".re-deleted").length - 1).css('display','none')
+        //
+        //       if(elems.find(".re-link").length > 1 )
+        //       elems.find(".re-link").eq(elems.find(".re-link").length - 1).css('display','none')
+        //     }
+        //   }
+        // });
         // ==> Answers
         $scope.loading_redactor_editor_for_answers = function (){
-          $R(".answer-redactor-editors-x"  ,{
+          $R(".answer-redactor-editors-x , #editor-question-body , #editor-question-desc"  ,{
             paragraphize: false,
             replaceDivs: false,
             linebreaks: false,
@@ -2062,7 +2066,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
                 elems.css({
                   left: '-330px'
-                })
+                });
                 if(elems.find(".re-bold").length > 1 )
                 elems.find(".re-bold").eq(elems.find(".re-bold").length - 1).css('display','none')
 

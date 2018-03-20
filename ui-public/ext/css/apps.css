@@ -2912,6 +2912,9 @@ button.saving-settings-changes:hover{
   width: 100%;
   padding: 25px 10px;
 }
+.text-answers > .redactor-box > .redactor-toolbar-wrapper-air > .redactor-air{
+  display: none;
+}
 /*li.steps_qs ,
 li.show_lbls_qs ,
 li.required_qs ,
