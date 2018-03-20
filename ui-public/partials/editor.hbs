@@ -11,22 +11,33 @@
             <textarea id="editor-question-body" placeholder="Question Title ?" ng:model="questions_list[questionIndex].question_body" class="form-control quest-title-edit textarea-qs redactor-editor"></textarea>
           </div>
           <div class="col-sm-4 media-uploads top-margins media-parts-x">
-            <!-- No Media Cases -->
             <div class="ques-media-container">
+              <!-- No Media Cases -->
               <div ng:if="quest_media_parts == null" ng:click="show_media_uploader('question_media_type')"  style="background-image:url(~>>server_ip<<~img/media-icon.png)"  class="media-changeable media-changeable-img-case has-no-media">
                 Add Media
               </div>
-            </div>
-            <!-- Image Cases -->
-            <div ng:if="quest_media_parts.media_type == 0" style="background-image:url('~>>server_ip+quest_media_parts.media_field<<~')" class="image_case">
+              <!-- Image Cases -->
+              <div ng:if="quest_media_parts.media_type == 0" style="background-image:url('~>>server_ip+quest_media_parts.media_field<<~')" class="image_case">
                   <!-- Load image here -->
-            </div>
-            <!-- Video Cases -->
-            <div ng:if="quest_media_parts.media_type == 1" ng-bind-html="quest_media_parts | set_iframe"  class="video_cases">
+              </div>
+              <!-- Video Cases -->
+              <div ng:if="quest_media_parts.media_type == 1" ng-bind-html="quest_media_parts | set_iframe"  class="video_cases">
                 <!-- Loading videos here -->
+              </div>
             </div>
-
-          </div>
+            <!-- Media controller -->
+            <div ng:if="quest_media_parts != null" class="media-controller">
+                <ul>
+                  <li>
+                    <!-- ng:click="show_media_uploader('question_media_type')" -->
+                    <span ng:click="show_media_uploader('question_media_type')" class="fa fa-pencil"></span>
+                  </li>
+                  <li>
+                    <span ng:click="remove_media_from_target_model('question')" class="fa fa-close"></span>
+                  </li>
+                </ul>
+            </div>
+        </div>
         </div>
       </li>
       <li>
@@ -222,11 +233,20 @@
                 <li class="show_lbls_qs" ng:if="questions_list[questionIndex].question_type == 3">
                     <div class="scale-options">
                       <span class="title-checkbox">Show labels</span>
-                      <div class="slideThree on-off-checkbox-settings">
-                         <input ng:change="unsaved_question_x()" type="checkbox" id="show-labels" name="check" ng:model="questions_list[questionIndex].answers_format[0].show_labels">
+                      <div class="input_wrapper">
+                          <input ng:change="unsaved_question_x()" ng:model="questions_list[questionIndex].answers_format[0].show_labels" type="checkbox" class="switch_4">
+                          <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
+                            <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
+                          </svg>
+                          <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
+                            <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
+                          </svg>
+                      </div>
+                      <!-- <div class="slideThree on-off-checkbox-settings">
+                         <input  type="checkbox" id="show-labels" name="check" ng:change="unsaved_question_x()" ng:model="questions_list[questionIndex].answers_format[0].show_labels">
                          <label for="show-labels"></label>
                          <span class="off-value"></span>
-                      </div>
+                      </div> -->
                     </div>
                     <div class="scale-options item-labels">
                         <input ng:change="unsaved_question_x()" class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].started_at" placeholder="Left">
@@ -236,43 +256,88 @@
                  </li>
                 <li class="required_qs">
                    <span class="title-checkbox">Required</span>
-                   <div class="slideThree on-off-checkbox-settings">
+                   <div class="input_wrapper">
+                       <input ng:change="unsaved_question_x()" ng:model="question_settings.is_required" type="checkbox" class="switch_4">
+                       <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
+                         <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
+                       </svg>
+                       <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
+                         <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
+                       </svg>
+                   </div>
+                   <!-- <div class="slideThree on-off-checkbox-settings">
                       <input ng:change="unsaved_question_x()" ng:model="question_settings.is_required" type="checkbox" id="required-option" name="check" checked="">
                       <label for="required-option"></label>
                       <span class="off-value"></span>
-                   </div>
+                   </div> -->
                 </li>
                 <li class="single_response_qs">
                    <span class="title-checkbox">Single Response</span>
-                   <div class="slideThree on-off-checkbox-settings">
+                   <div class="input_wrapper">
+                       <input ng:change="unsaved_question_x()" ng:model="question_settings.single_choice" type="checkbox" class="switch_4">
+                       <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
+                         <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
+                       </svg>
+                       <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
+                         <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
+                       </svg>
+                   </div>
+                   <!-- <div class="slideThree on-off-checkbox-settings">
                       <input ng:change="unsaved_question_x()" ng:model="question_settings.single_choice" type="checkbox" id="MultipleResponse-option" name="check" checked="">
                       <label for="MultipleResponse-option"></label>
                       <span class="off-value"></span>
-                   </div>
+                   </div> -->
                 </li>
                 <li class="randomize_qs">
                    <span class="title-checkbox">Randomize</span>
-                   <div class="slideThree on-off-checkbox-settings">
+                   <div class="input_wrapper">
+                       <input ng:change="unsaved_question_x()" ng:model="question_settings.is_randomized" type="checkbox" class="switch_4">
+                       <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
+                         <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
+                       </svg>
+                       <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
+                         <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
+                       </svg>
+                   </div>
+                   <!-- <div class="slideThree on-off-checkbox-settings">
                       <input ng:change="unsaved_question_x()" ng:model="question_settings.is_randomized" type="checkbox" id="Randomize-option" name="check" checked="">
                       <label for="Randomize-option"></label>
                       <span class="off-value"></span>
-                   </div>
+                   </div> -->
                 </li>
                 <li class="super_sizer_qs">
                    <span class="title-checkbox">Super Size</span>
-                   <div class="slideThree on-off-checkbox-settings">
+                   <div class="input_wrapper">
+                       <input ng:change="unsaved_question_x()" ng:model="question_settings.super_size" type="checkbox" class="switch_4">
+                       <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
+                         <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
+                       </svg>
+                       <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
+                         <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
+                       </svg>
+                   </div>
+                   <!-- <div class="slideThree on-off-checkbox-settings">
                       <input ng:change="unsaved_question_x()" ng:model="question_settings.super_size" type="checkbox"  id="SuperSize-option" name="check" checked="">
                       <label for="SuperSize-option"></label>
                       <span class="off-value"></span>
-                   </div>
+                   </div> -->
                 </li>
                <li class="answer_stylish_qs">
                   <span class="title-checkbox">Style of Answer ( ~>>(question_settings.choice_style ) ? "Two columns per row" : "One column per row"<<~ )</span>
-                   <div class="slideThree on-off-checkbox-settings">
+                  <div class="input_wrapper">
+                      <input ng:change="unsaved_question_x()" ng:model="question_settings.choice_style" type="checkbox" class="switch_4">
+                      <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
+                        <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
+                      </svg>
+                      <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
+                        <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
+                      </svg>
+                  </div>
+                   <!-- <div class="slideThree on-off-checkbox-settings">
                       <input ng:change="unsaved_question_x()" ng:model="question_settings.choice_style" type="checkbox" id="SingleResponse-option" name="check" checked="">
                       <label for="SingleResponse-option"></label>
                       <span class="off-value"></span>
-                   </div>
+                   </div> -->
                 </li>
 
              </ul>
@@ -293,3 +358,56 @@
       </button>
   </div>
 </div>
+
+
+
+
+
+
+<!-- Overlay box -- w -- edit media -->
+  <div class="box-overlay media-uploader media-imgvid-uploader">
+    <!--
+    ++++++++++++++++++++++++++++++++++++
+    Box Overlay
+    ++++++++++++++++++++++++++++++++++++
+    -->
+    <div class="box-data">
+      <div class="box-data-title">
+        <b>Media Uploader</b>
+      </div>
+      <div class="media-part-controller">
+        <input ng:model="file_object.link" type="text" class="form-control media-inputs show_media_link" placeholder="Media Link">
+        <ul class="media-links">
+          <li>
+            <a class="video-handler" href="#">
+              Add Video
+            </a>
+          </li>
+          <li>
+            <input ng:model="file_object.file" class="image-uploader-x" type="file" name="" value="">
+            <a class="image-handler" href="#">
+              Add Image
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="preview-media">
+        <div class="pre-title media-im-vid">
+          <span>Preview</span>
+        </div>
+        <div class="preview-media-part media-im-vid">
+          <div class="media-x-preview">
+            <!-- List media part here -->
+          </div>
+        </div>
+        <div class="preview-media-part butns-part">
+          <button ng:click="close_media_box()" class="button_updates btn btn-danger btn-close-media" type="button" name="button">
+            Close
+          </button>
+          <button ng:click="save_media_with('preview')" class="button_updates btn btn-primary" type="button" name="button">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -489,12 +489,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                    creator_id : $scope.user_id
                  }
               }).then(function(resp){
-                if($scope.application_type == 0){
-                   $("#docQuestions").children("li").each(function(i){
-                     $(this).children('.question-part')
-                      .children('.qs-type').find('.qs-body').html(resp.data.questions[i].question_body);
-                   });
-                }
+                // if($scope.application_type == 0){
+                //    $("#docQuestions").children("li").each(function(i){
+                //      $(this).children('.question-part')
+                //       .children('.qs-type').find('.qs-body').html(resp.data.questions[i].question_body);
+                //    });
+                // }
                   $scope.questions_list = resp.data.questions ;
               });
             });
@@ -831,13 +831,15 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
         return $scope.dragged_items(evt);
       };
-
+    $scope.unsaved_question_x = function (){
+        $scope.unsaved_question = true;
+    };
     $scope.create_new_answer = function (){
 
       if($scope.question_id == null ){
         alert("Please select question from question list");
       }
-
+      $scope.unsaved_question = true ;
       var question_selected = $scope.questions_list.find($scope.callback_index);
       var answer_length = question_selected.answers_format.length ;
       // //console.log(answer_length);
@@ -915,7 +917,26 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       };
     $scope.save_changes_in_angular_backend = function ( decline_next = null ){
 
-        //console.log($scope.questions_list);
+
+        // ==> Storing Data related redactors into ( angular backend )
+        // --> 1 Answers
+        if($scope.questions_list.length != 0) {
+              if($scope.question_type == 0 ){ // => Saving text answers
+                  var answers = $R(".answer-redactor-editors-x" , "source.getCode");
+                  var ang_backend_answer_arrgs = $scope.questions_list[$scope.questionIndex].answers_format ;
+                  for (var i = 0; i < ang_backend_answer_arrgs.length; i++) {
+                    ang_backend_answer_arrgs[i].value = answers[i];
+                  }
+              }
+
+            // --> Question
+            var question = $R("#editor-question-body" , "source.getCode");
+            $scope.questions_list[$scope.questionIndex].question_body = question;
+
+            var description = $R("#editor-question-desc" , "source.getCode");
+            $scope.questions_list[$scope.questionIndex].question_description = description;
+        }
+        //console.log($scope.questions_list); #editor-question-body , #editor-question-desc
           // //console.log($scope.questions_list);
           if($scope.question_id == null ){
             alert("You should select question from question list to allow you edit it");
@@ -961,7 +982,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                     //       }
                     // }
 
-
+                    console.log("Save change button");
+                    console.log($scope.questions_list);
                 },function(err){
                   //console.log(err);
                 });
@@ -1232,10 +1254,13 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                });
          });
        };
-    $scope.databiding_answers = function (thisElem , thisIndex){
-          var thisVal = thisElem.html();
-          $scope.questions_list[$scope.questionIndex].answers_format[thisIndex].value = thisVal;
-          //console.log($scope.questions_list);
+
+    $scope.store_into_answer_array = function (targetIndex , targetRedactorData){
+      console.log(targetRedactorData);
+      $scope.questions_list[$scope.questionIndex].answers_format[targetIndex].value = targetRedactorData;
+
+            $scope.questions_list[$scope.questionIndex].answers_format[targetIndex].value = targetRedactorData;
+
        };
 
 
@@ -1527,6 +1552,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                        //console.log(err);
                    });
 
+                   $timeout(function () {
+                       $scope.loading_redactor_editor_for_answers();
+                   }, 200);
       };
     $scope.rating_scale_values = function (){
       $timeout(function (){
@@ -1535,8 +1563,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         }
       } , 5000 );
     };
-
-
     $scope.check_unsaved_data = function (){
       if($scope.unsaved_question == true ){
         $scope.swal_message();
@@ -2003,49 +2029,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
 
 
-
-
-
-
-        // ====================================================================
-        // ===>>>>>> Everything about redactor !!
-        // ====================================================================
-        // ==> Question and descroption
-        // $R("#editor-question-body , #editor-question-desc"  ,{
-        //   paragraphize: false,
-        //   replaceDivs: false,
-        //   linebreaks: false,
-        //   enterKey: false ,
-        //   minHeight : '90px' ,
-        //   air : true ,
-        //   buttonsAddBefore : {
-        //     before: 'html',
-        //     buttons: ['bold','italic','link','deleted','underline']
-        //   } ,
-        //   plugins: ['fontcolor' , 'fontsize'] ,
-        //   buttonsHide: ['format' , 'lists'] ,
-        //   callbacks: {
-        //     airOpened : function (){
-        //       var app = $(this);
-        //       var elems = $(app[0].component.toolbar.$toolbar.nodes[0]);
-        //       elems.css({
-        //         left: '-330px'
-        //       })
-        //       if(elems.find(".re-bold").length > 1 )
-        //       elems.find(".re-bold").eq(elems.find(".re-bold").length - 1).css('display','none')
-        //
-        //       if(elems.find(".re-italic").length > 1 )
-        //       elems.find(".re-italic").eq(elems.find(".re-italic").length - 1).css('display','none')
-        //
-        //       if(elems.find(".re-deleted").length > 1 )
-        //       elems.find(".re-deleted").eq(elems.find(".re-deleted").length - 1).css('display','none')
-        //
-        //       if(elems.find(".re-link").length > 1 )
-        //       elems.find(".re-link").eq(elems.find(".re-link").length - 1).css('display','none')
-        //     }
-        //   }
-        // });
-        // ==> Answers
         $scope.loading_redactor_editor_for_answers = function (){
           $R(".answer-redactor-editors-x , #editor-question-body , #editor-question-desc"  ,{
             paragraphize: false,
@@ -2081,7 +2064,31 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
               }
             }
           });
+          // Add Event fo each one
+          $('.redactor-in').on("keyup keydown change click input" , function (){
+            $scope.unsaved_question = true ;
+             var model_type = $(this).prop('className').split(' ').pop() ;
+             var redactor_value = $R(".answer-redactor-editors-x , #editor-question-body , #editor-question-desc" ,'source.getCode' );
+
+              if( model_type == 'redactor-in-0' ){ //=> Question
+
+              } else if (model_type == 'redactor-in-1'){ //=> Description
+
+              } else { //=> answers
+                // ==> in this case we need to check about answer index
+                var answerIndex = model_type.split('-').pop();
+                var answer_target_index = Math.round((parseInt(answerIndex)) - 2) ;
+
+
+                $scope.store_into_answer_array ( answer_target_index , redactor_value[answerIndex]) ;
+
+              }
+          });
         };
+
+
+
+
         $timeout(function(){
           $scope.loading_redactor_editor_for_answers();
         } , 6000 );

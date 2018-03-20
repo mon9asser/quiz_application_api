@@ -6,52 +6,70 @@
      <link href="redactor.min.css" rel="stylesheet">
   </head>
   <body>
-    <!--element -->
-    <textarea class="content"></textarea>
-    <textarea class="content"></textarea>
-    <textarea class="content"></textarea>
-    <textarea class="content"></textarea>
-    <textarea class="content"></textarea>
-    <textarea class="content"></textarea>
-    <textarea class="content"></textarea>
-    <textarea class="content"></textarea>
-    <textarea class="content"></textarea>
-    <textarea class="content"></textarea>
-    <textarea class="content"></textarea>
-    <textarea class="content"></textarea>
-    <textarea class="content"></textarea>
-    <textarea class="content"></textarea>
 
+    <textarea id="selD" ></textarea>
+    <div id="original">
 
-
-    <button id="selD" type="button" name="button">Selected</button>
-  <script src="http://localhost:9000/ext/frameworks/js/jquery.min.js" charset="utf-8"></script>
+    </div>
+    <button type="button" name="button">Set</button>
+    <script src="http://localhost:9000/ext/frameworks/js/jquery.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="redactor.js" ng:if="page_name=='api'"></script>
     <!-- Redactor Plugins -->
     <script type="text/javascript" src="http://localhost:9000/ext/frameworks/js/redactor-font-color.js"></script>
     <script type="text/javascript" src="http://localhost:9000/ext/frameworks/js/redactor-font-size.js"></script>
 
 
-    <!-- call -->
-    <script>
-    $R('.content', {
-      buttonsHide: ['format' , 'lists'] ,
-      buttonsAddBefore: {
-          before: 'html',
-          buttons: ['underline','bold','italic' , 'link' , 'fontsize' , 'fontcolor' ]
-      } ,
-      callbacks: {
-            airOpened: function()
-            {
 
-              var app = $(this);
-              // app[0].rootElement ==> Get the textarea
-               console.log($(app[0].component.toolbar.$toolbar.nodes[0]).find('.re-bold').eq(1).css('display','none'));
-            }
-        } ,
-        air : true ,
-        plugins: ['fontcolor' , 'fontsize'] });
+
+
+
+    <script type="text/javascript">
+    /* A convenience function to reverse a string, and
+* one to set the content of an element.
+*/
+
+function reverse(s){return s.split('').reverse().join('')}
+
+function set(el,text){
+while(el.firstChild)el.removeChild(el.firstChild);
+el.appendChild(document.createTextNode(text))}
+
+/* setupUpdater will be called once, on page load.
+*/
+  $("button").on('click',function (){
+    var newText= $R("#selD" , 'source.getCode');
+    set(orig, newText);
+  });
+
+  $R("#selD");
+        var input =document.getElementsByClassName('redactor-in')[0]
+          , orig=document.getElementById('original')
+          , timeout=null;
+
+        /* handleChange is called 50ms after the user stops
+          typing. */
+        function handleChange(){
+         var newText= $('.redactor-in').html();
+
+
+         set(orig, newText);
+        }
+
+        /* eventHandler is called on keyboard and mouse events.
+          If there is a pending timeout, it cancels it.
+          It sets a timeout to call handleChange in 50ms. */
+        function eventHandler(){
+         if(timeout) clearTimeout(timeout);
+         timeout=setTimeout(handleChange, 50);
+        }
+
+        input.onkeydown=input.onkeyup=input.onclick=eventHandler;
+
+
+
+
     </script>
+
 
   </body>
 </html>
