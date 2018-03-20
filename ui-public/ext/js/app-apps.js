@@ -135,6 +135,8 @@ apps.filter('show_chars' , [
 ]);
 
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
+  try {
+
 
     // ==> Vars in scope object
     $scope.rating_scale_elements = [] ;
@@ -820,6 +822,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         $scope.unsaved_question = true;
         $scope.questions_list[$scope.questionIndex].answer_settings = $scope.question_settings;
     };
+   
     $scope.create_new_answer = function (){
 
       if($scope.question_id == null ){
@@ -2099,5 +2102,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           $scope.loading_redactor_models();
         } , 6000 );
 
+      } catch (e) {
 
+      }
 }]);

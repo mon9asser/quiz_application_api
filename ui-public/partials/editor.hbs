@@ -179,7 +179,7 @@
                               </ul>
                               <div class="clearFix"></div>
 
-                              <div class="block-labels text-center">
+                              <div class="block-labels text-center"  ng:show="questions_list[questionIndex].answers_format[0].show_labels == true">
                                 <span class="first-lbl">
                                   ~>>questions_list[questionIndex].answers_format[0].started_at | show_chars<<~
                                 </span>
@@ -212,28 +212,21 @@
     <div style="display:none;" class="x-editor-x-body" id="Settings-pt">
       <div class="col-sm-12">
         <div class="row-cols margin-top">
-          <!-- <label class="titles-question"> Question Settings : </label> -->
+          <!-- <label class="titles-question"> Question Settings  : </label> -->
           <div class="question-settings">
              <ul class="listSettings-qs">
                <!-- Max characters -->
-               <li ng:if="questions_list[questionIndex].question_type == 4">
+                <li ng:if="questions_list[questionIndex].question_type == 4">
                  <span class="title-checkbox"> Max characters ( ~>>questions_list[questionIndex].answer_settings.answer_char_max<<~ ) </span>
                  <div class="rating_scale_options">
                      <input ng:change="unsaved_question_x(questions_list[questionIndex].answer_settings.answer_char_max , 'answer_char_max')" ng:model="questions_list[questionIndex].answer_settings.answer_char_max" id="char_max_slider" min="100" max="2000" type="range" name="">
                  </div> <!-- Slide Range -->
-               </li>
-
-                <li class="steps_qs" ng:if="questions_list[questionIndex].question_type == 3">
-                    <span class="title-checkbox"> Steps ( ~>>questions_list[questionIndex].answers_format[0].step_numbers<<~ )</span>
-                    <div class="rating_scale_options">
-                        <input ng:change="change_rating_scale_value(questions_list[questionIndex].answers_format[0].step_numbers)" ng:model="questions_list[questionIndex].answers_format[0].step_numbers" id="step_slider" min="2" max="10" type="range" name="">
-                    </div> <!-- Slide Range -->
                 </li>
+                <li class="show_lbls_qs" ng:if="questions_list[questionIndex].question_type == 3 || questions_list[questionIndex].answers_format[0].ratscal_type == 0">
 
-                <li class="show_lbls_qs" ng:if="questions_list[questionIndex].question_type == 3">
                     <div class="scale-options">
-                      <span class="title-checkbox">Show labels</span>
-                      <div class="input_wrapper">
+
+                      <!-- <div class="input_wrapper" style="margin-top:0px;">
                           <input ng:change="unsaved_question_x(questions_list[questionIndex].answers_format[0].show_labels , 'show_labels')" ng:model="questions_list[questionIndex].answers_format[0].show_labels" type="checkbox" class="switch_4">
                           <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
                             <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
@@ -241,22 +234,34 @@
                           <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
                             <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
                           </svg>
-                      </div>
+                      </div> -->
+
+
+                         <div class="checkbox-toggle answer-settins">
+                            <input ng:change="unsaved_question_x()" ng:model="questions_list[questionIndex].answers_format[0].show_labels" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                            <span class="title-checkbox">Show labels</span>
+                         </div>
+
+
                       <!-- <div class="slideThree on-off-checkbox-settings">
                          <input  type="checkbox" id="show-labels" name="check" ng:change="unsaved_question_x()" ng:model="questions_list[questionIndex].answers_format[0].show_labels">
                          <label for="show-labels"></label>
                          <span class="off-value"></span>
                       </div> -->
                     </div>
-                    <div class="scale-options item-labels">
+                    <div ng:show="questions_list[questionIndex].answers_format[0].show_labels == true" class="scale-options item-labels">
                         <input ng:change="unsaved_question_x(questions_list[questionIndex].answers_format[0].started_at , null )" class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].started_at" placeholder="Left">
                         <input ng:change="unsaved_question_x(questions_list[questionIndex].answers_format[0].centered_at, null )" class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].centered_at" name="" value="" placeholder="Center">
                         <input ng:change="unsaved_question_x(questions_list[questionIndex].answers_format[0].ended_at , null )" class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].ended_at" name="" value="" placeholder="Right">
                     </div>
                  </li>
                 <li class="required_qs">
-                   <span class="title-checkbox">Required</span>
-                   <div class="input_wrapper">
+
+                   <div class="checkbox-toggle answer-settins">
+                      <input ng:change="unsaved_question_x(question_settings.is_required)" ng:model="question_settings.is_required" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                      <span class="title-checkbox">Required</span>
+                   </div>
+                   <!-- <div class="input_wrapper">
                        <input ng:change="unsaved_question_x(question_settings.is_required)" ng:model="question_settings.is_required" type="checkbox" class="switch_4">
                        <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
                          <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
@@ -264,16 +269,20 @@
                        <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
                          <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
                        </svg>
-                   </div>
+                   </div> -->
                    <!-- <div class="slideThree on-off-checkbox-settings">
                       <input ng:change="unsaved_question_x()" ng:model="question_settings.is_required" type="checkbox" id="required-option" name="check" checked="">
                       <label for="required-option"></label>
                       <span class="off-value"></span>
                    </div> -->
                 </li>
-                <li class="single_response_qs">
-                   <span class="title-checkbox">Single Response</span>
-                   <div class="input_wrapper">
+                <li class="single_response_qs" ng:if="questions_list[questionIndex].question_type == 0 || questions_list[questionIndex].question_type == 1">
+
+                   <div class="checkbox-toggle answer-settins">
+                      <input ng:change="unsaved_question_x(question_settings.single_choice)" ng:model="question_settings.single_choice" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                      <span class="title-checkbox">Single Response</span>
+                   </div>
+                   <!-- <div class="input_wrapper">
                        <input ng:change="unsaved_question_x(question_settings.single_choice)" ng:model="question_settings.single_choice" type="checkbox" class="switch_4">
                        <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
                          <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
@@ -281,16 +290,20 @@
                        <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
                          <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
                        </svg>
-                   </div>
+                   </div> -->
                    <!-- <div class="slideThree on-off-checkbox-settings">
                       <input ng:change="unsaved_question_x()" ng:model="question_settings.single_choice" type="checkbox" id="MultipleResponse-option" name="check" checked="">
                       <label for="MultipleResponse-option"></label>
                       <span class="off-value"></span>
                    </div> -->
                 </li>
-                <li class="randomize_qs">
-                   <span class="title-checkbox">Randomize</span>
-                   <div class="input_wrapper">
+                <li class="randomize_qs" ng:if="questions_list[questionIndex].question_type == 0 || questions_list[questionIndex].question_type == 1 || questions_list[questionIndex].question_type == 2">
+
+                   <div class="checkbox-toggle answer-settins">
+                      <input ng:change="unsaved_question_x(question_settings.is_randomized)" ng:model="question_settings.is_randomized" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                      <span class="title-checkbox">Randomize</span>
+                   </div>
+                   <!-- <div class="input_wrapper">
                        <input ng:change="unsaved_question_x(question_settings.is_randomized)" ng:model="question_settings.is_randomized" type="checkbox" class="switch_4">
                        <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
                          <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
@@ -298,16 +311,20 @@
                        <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
                          <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
                        </svg>
-                   </div>
+                   </div> -->
                    <!-- <div class="slideThree on-off-checkbox-settings">
                       <input ng:change="unsaved_question_x()" ng:model="question_settings.is_randomized" type="checkbox" id="Randomize-option" name="check" checked="">
                       <label for="Randomize-option"></label>
                       <span class="off-value"></span>
                    </div> -->
                 </li>
-                <li class="super_sizer_qs">
-                   <span class="title-checkbox">Super Size</span>
-                   <div class="input_wrapper">
+                <li class="super_sizer_qs" ng:if="questions_list[questionIndex].question_type == 0 || questions_list[questionIndex].question_type == 1">
+
+                   <div class="checkbox-toggle answer-settins">
+                      <input ng:change="unsaved_question_x(question_settings.super_size)" ng:model="question_settings.super_size" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                      <span class="title-checkbox">Super Size</span>
+                   </div>
+                   <!-- <div class="input_wrapper">
                        <input ng:change="unsaved_question_x(question_settings.super_size)" ng:model="question_settings.super_size" type="checkbox" class="switch_4">
                        <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
                          <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
@@ -315,16 +332,20 @@
                        <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
                          <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
                        </svg>
-                   </div>
+                   </div> -->
                    <!-- <div class="slideThree on-off-checkbox-settings">
                       <input ng:change="unsaved_question_x()" ng:model="question_settings.super_size" type="checkbox"  id="SuperSize-option" name="check" checked="">
                       <label for="SuperSize-option"></label>
                       <span class="off-value"></span>
                    </div> -->
                 </li>
-               <li class="answer_stylish_qs">
-                  <span class="title-checkbox">Style of Answer ( ~>>(question_settings.choice_style ) ? "Two columns per row" : "One column per row"<<~ )</span>
-                  <div class="input_wrapper">
+                <li class="answer_stylish_qs" ng:if="questions_list[questionIndex].question_type == 0 || questions_list[questionIndex].question_type == 1 || questions_list[questionIndex].question_type == 2">
+
+                  <div class="checkbox-toggle answer-settins">
+                     <input ng:change="unsaved_question_x(question_settings.choice_style)" ng:model="question_settings.choice_style" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                     <span class="title-checkbox">Style of Answer ( ~>>(question_settings.choice_style ) ? "Two columns per row" : "One column per row"<<~ )</span>
+                  </div>
+                  <!-- <div class="input_wrapper">
                       <input ng:change="unsaved_question_x(question_settings.choice_style)" ng:model="question_settings.choice_style" type="checkbox" class="switch_4">
                       <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
                         <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
@@ -332,14 +353,19 @@
                       <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
                         <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
                       </svg>
-                  </div>
+                  </div> -->
                    <!-- <div class="slideThree on-off-checkbox-settings">
                       <input ng:change="unsaved_question_x()" ng:model="question_settings.choice_style" type="checkbox" id="SingleResponse-option" name="check" checked="">
                       <label for="SingleResponse-option"></label>
                       <span class="off-value"></span>
                    </div> -->
                 </li>
-
+                <li class="steps_qs" ng:if="questions_list[questionIndex].question_type == 3">
+                    <span class="title-checkbox"> Steps ( ~>>questions_list[questionIndex].answers_format[0].step_numbers<<~ )</span>
+                    <div class="rating_scale_options">
+                        <input ng:change="change_rating_scale_value(questions_list[questionIndex].answers_format[0].step_numbers)" ng:model="questions_list[questionIndex].answers_format[0].step_numbers" id="step_slider" min="2" max="10" type="range" name="">
+                    </div> <!-- Slide Range -->
+                </li>
              </ul>
           </div>
         </div>
