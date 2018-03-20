@@ -1548,15 +1548,20 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                    });
 
                    $timeout(function () {
-
-                      $('.redactor-in').each(function(){
-                        $(this).html('');
+                      $('.redactor-in').each(function(i){
+                        var thisAnswer = $(this);
+                        if(i >= 2 ){
+                            if(thisAnswer.hasClass('redactor-in-'+i)){
+                              thisAnswer.html ( $scope.questions_list[$scope.questionIndex].answers_format[i - 2].value )
+                            }
+                          }
                       });
 
-                       $scope.loading_redactor_models();
+                      $scope.loading_redactor_models();
 
-                       $('.redactor-in-0').html(taget_question.question_body);
-                       $('.redactor-in-1').html(taget_question.question_description);
+                      $('.redactor-in-0 , .redactor-in-1').html('');
+                      $('.redactor-in-0').html(taget_question.question_body);
+                      $('.redactor-in-1').html(taget_question.question_description);
 
                    }, 200);
       };
