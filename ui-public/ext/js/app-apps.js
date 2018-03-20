@@ -476,28 +476,13 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           }) ;
           $scope.save_changes_in_angular_backend();
         }else {
-          // ==> return old changes
-          $.getJSON( $scope.json_apk_file , function (api_key_data ){
-              $http({
-                 method : "POST" ,
-                 url    : $scope.api_url_current_app ,
-                 headers: {
-                   "X-api-keys": api_key_data.API_KEY,
-                   "X-api-app-name": api_key_data.APP_NAME
-                 },
-                 data: {
-                   creator_id : $scope.user_id
-                 }
-              }).then(function(resp){
-                // if($scope.application_type == 0){
-                //    $("#docQuestions").children("li").each(function(i){
-                //      $(this).children('.question-part')
-                //       .children('.qs-type').find('.qs-body').html(resp.data.questions[i].question_body);
-                //    });
-                // }
-                  $scope.questions_list = resp.data.questions ;
-              });
-            });
+          // alert();
+          var all_old_questions = $scope.questions_list;
+          for (var i = 0; i < all_old_questions.length; i++) {
+            var qs_body = all_old_questions[i].question_body;
+            $("#docQuestions").children("li").eq(i).children(".question-part").children('.qs-type').children('.single-question-container').
+            children('.qs-body').html(qs_body);
+          }
         }
         $(".swal-overlay").fadeOut(1000);
 
