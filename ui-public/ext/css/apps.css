@@ -331,7 +331,7 @@ left: 65px;
 .question-preview , .question-editor {
   /*margin: 28px auto;*/
   width: 100%;
-  overflow: hidden;
+  /*overflow: hidden;*/
   height: auto;
   padding: 8px 20px;
   /*border: 2px dashed antiquewhite;;*/
@@ -340,7 +340,7 @@ left: 65px;
 .tab-editor {
     display: block;
     position: relative;
-    overflow: hidden;
+    /*overflow: hidden;*/
     width: 100%;
     line-height: normal;
     list-style: none;
@@ -349,14 +349,16 @@ left: 65px;
     /* background: red; */
 }
 .tab-editor > li {
-    display: block;
+    display: inline-block;
     position: relative;
-    overflow: hidden;
+    /*overflow: hidden;*/
     width: 100%;
     display: block;
     height: auto;
 }
-
+.tab-editor > li:after {
+  clear: both;
+}
 .tab-editor > li > .x-editor-x-title {
     background: #fff;
     padding: 13px 5px 15px 5px;
@@ -372,7 +374,7 @@ left: 65px;
 .x-editor-x-title {
     display: block;
     position: relative;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 .top-margins {
@@ -558,9 +560,12 @@ visibility: hidden;
 left: 43px;
 }
 .x-editor-x-body {
-padding: 0px 0px;
-overflow: hidden;
-display: none;
+  padding: 0px 0px;
+  /*overflow: hidden;*/
+  display: none;
+  display: inline-block;
+  width: 100%;
+  position: relative;
 }
 
 .dash_sep {
@@ -2889,6 +2894,23 @@ button.saving-settings-changes:hover{
   color: #fff !important;
   border: 1px dashed #222 !important;
   background: #222 !important;;
+}
+.editor-block {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+.editor-blocker{
+  display: inline-block;
+  position: relative;
+  width: 100%;
+}
+.buttons-container{
+  display: block;
+  position: relative;
+  width: 100%;
+  padding: 25px 10px;
 }
 /*li.steps_qs ,
 li.show_lbls_qs ,

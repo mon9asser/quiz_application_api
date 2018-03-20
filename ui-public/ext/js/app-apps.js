@@ -2059,9 +2059,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
               airOpened : function (){
                 var app = $(this);
                 var elems = $(app[0].component.toolbar.$toolbar.nodes[0]);
-                 
+
                 elems.css({
-                  left: '-150px'
+                  left: '-330px'
                 })
                 if(elems.find(".re-bold").length > 1 )
                 elems.find(".re-bold").eq(elems.find(".re-bold").length - 1).css('display','none')
