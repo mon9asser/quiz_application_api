@@ -1256,13 +1256,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                });
          });
        };
-    $scope.store_into_answer_array = function (targetIndex , targetRedactorData){
-      console.log(targetRedactorData);
-      $scope.questions_list[$scope.questionIndex].answers_format[targetIndex].value = targetRedactorData;
-
-            $scope.questions_list[$scope.questionIndex].answers_format[targetIndex].value = targetRedactorData;
-
-       };
+    // $scope.store_into_answer_array = function (targetIndex , targetRedactorData){
+    //
+    // };
 
 
 
@@ -2097,7 +2093,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                 var answer_target_index = Math.round((parseInt(answerIndex)) - 2) ;
 
 
-                $scope.store_into_answer_array ( answer_target_index , redactor_value[answerIndex]) ;
+                // $scope.store_into_answer_array ( answer_target_index , redactor_value[answerIndex]) ;
 
               }
           });
