@@ -819,11 +819,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.onclick_items = function (elementId){
         var evt = {
           item      :  $("#"+elementId) ,
-          newIndex  :  ( $("#docQuestions li" ).length - 1 )
+          newIndex  :  ( $("#docQuestions li" ).length > 0 ) ? $("#docQuestions li" ).length  : 0
         }
-
         return $scope.dragged_items(evt);
-      };
+      }; 
     $scope.unsaved_question_x = function (new_vals , for_this_setting = null ){
         $scope.unsaved_question = true;
         $scope.questions_list[$scope.questionIndex].answer_settings = $scope.question_settings;
@@ -2052,7 +2051,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
 
         $scope.loading_redactor_models = function (){
-          $R(".answer-redactor-editors-x , #editor-question-body , #editor-question-desc"  ,{
+
+          try {
+              $R(".answer-redactor-editors-x , #editor-question-body , #editor-question-desc"  ,{
             paragraphize: false,
             replaceDivs: false,
             linebreaks: false,
@@ -2086,6 +2087,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
               }
             }
           });
+            } catch (e) {
+
+            }
           // Add Event fo each one
           $('.redactor-in').on("keyup keydown change click input" , function (){
             $scope.unsaved_question = true ;
@@ -2105,7 +2109,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                     }
 
                   $("#docQuestions").children("li").eq($scope.questionIndex).find(".qs-body").html(thisValues);
-                   
+
                   // $('.'+model_type).html();
               } else if (model_type == 'redactor-in-1'){ //=> Description
 
