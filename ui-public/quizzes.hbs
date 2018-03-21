@@ -46,11 +46,11 @@
                       <!-- 12 <i class="fa fa-user"></i> take this quiz -->
                   </span>
                    <!-- localhost:9000/api/:app_id/:player_type/player/:token -->
-                   <a href="{{server_ip}}api/{> app_val._id <}/quiz/{{user.token}}">
+                   <a href="{{server_ip}}api/{> app_val._id <}/{> ( app_val.app_type == 0 ) ? 'survey' : 'quiz' <}/{{user.token}}">
                      Take this {> ( app_val.app_type == 0 ) ? "Survey" : "Quiz" <}
                    </a>
                 </li>
- 
+
               </ul>
           </div>
         </div>
