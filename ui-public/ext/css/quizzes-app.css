@@ -85,13 +85,30 @@ html , body {
   position: relative;
   overflow: hidden;
   width: 100%;
+  border-bottom: 1px dashed #eee;
+}
+.my-qusu li:hover {
+  background: #fbfbfbb8;
+  cursor: pointer;
+}
+.my-qusu li:last-child{
+  border: none;
 }
 .my-qusu li a , .my-qusu li span {
   padding: 3px;
   display: inline-block;
   color: #999;
 }
-
+.my-qusu li span span {
+  display: block;
+  width: 100%;
+  margin: 0px;
+  line-height: 1.2;
+}
+.my-qusu li span span:last-child {
+  font-size: 10px;
+  color: #999;
+}
 .my-qusu li a {
   float: right
 }

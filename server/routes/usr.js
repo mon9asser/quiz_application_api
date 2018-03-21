@@ -241,6 +241,37 @@ usrRouters.delete("/users/:uid/delete" ,verify_api_keys_user_apis , (req, res)=>
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+// Get user info according to id
+usrRouters.get("/user/:uid" ,verify_api_keys_user_apis , (req, res)=>{
+    var userId = req.params.uid ;
+    if(!req.params.uid)
+      res.status(404).send({"Error":notes.Errors.Error_Doesnt_exists("User")});
+
+    if(!ObjectID.isValid(userId))
+      res.status(404).send();
+
+    usr.findById(userId).then((user)=>{
+      if(!user)
+        res.status(404).send({"Error":notes.Errors.Error_Doesnt_exists("User")});
+        res.send(user);
+    }).catch((error)=>{
+      res.status(404).send({"Error":notes.Errors.Error_Doesnt_exists("User")});
+    });
+
+});
+
+
 // usrRouters.post( "/date" , (req,res)=>{
 //     var date1 = new Date("01/10/2018 8:00:00"); // stored token date
 //     var date2 = new Date();

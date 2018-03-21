@@ -2339,14 +2339,16 @@ qtnrRouters.get("/:uid/applications" , authenticate_keys_with_curr_status ,  (re
 
 
 qtnrRouters.get("/applications/list" , auth_api_keys_only , (req , res )=>{
-  qtnr.find().then((doc)=>{
-    if(!doc ){
+  qtnr.find().populate("creator_id").exec((error , doc)=>{
+    if(!doc || error){
       return new Promise((resolve, reject) => {
          res.status(404).send("There are no any applications");
         });
     }
+    console.log(doc);
     res.send(doc);
   });
+
 });
 
 

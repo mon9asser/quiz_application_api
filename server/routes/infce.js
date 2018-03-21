@@ -32,29 +32,29 @@ infceRouter.get("/:app_id/:player_type/:token" , verify_access_tokens_admin_user
     return false ;
   }
   // application (does not exists) case
-  qtnr.findOne({_id:app_id} , (error , qtnrObject)=>{
-    if(!qtnrObject || error){
-      return new Promise((resolve, reject) => {
-        res.render("page-404" , {
-          data_404 : "This application does not exists !" ,
-          user : req.user
+  qtnr.findOne({_id:app_id}).populate("created_id").exec((error , qtnrObject)=>{
+
+      if(!qtnrObject || error){
+        return new Promise((resolve, reject) => {
+          res.render("page-404" , {
+            data_404 : "This application does not exists !" ,
+            user : req.user
+          });
         });
+          return false ;
+      }
+
+      var app_type = qtnrObject.app_type ;
+      var application_type ;
+      if ( app_type == 0 ) application_type = "survey-player";
+      else application_type = "quiz-player";
+
+
+      res.render( application_type , {
+        app : qtnrObject ,
+        user : req.user ,
+        header_status : config.show_header
       });
-        return false ;
-    }
-
-    var app_type = qtnrObject.app_type ;
-    var application_type ;
-    if ( app_type == 0 ) application_type = "survey-player";
-    else application_type = "quiz-player";
-
-
-    res.render( application_type , {
-      app : qtnrObject ,
-      user : req.user ,
-      header_status : config.show_header
-    });
-
   });
 
 });

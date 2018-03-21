@@ -9,9 +9,12 @@ attendeeApp.config([
 attendeeApp.factory("settings" , [
   function (){
      var applications = {
-        json_source : "ext/json/json-keys.json" , 
+        server_ip : (window.location.toString().includes('localhost')) ? "http://localhost:9000/" : "http://34.215.133.182/" ,
+        json_source : "ext/json/json-keys.json" ,
+        server_url : window.location.toString() ,
         page_name : window.location.pathname.replace(/^\/([^\/]*).*$/, '$1')
       }
+
       return applications ;
    }
 ]);

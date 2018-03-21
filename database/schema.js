@@ -332,7 +332,7 @@ var boolean_choices_object = {
     boolean_type :        { type : String } , //=> yes/no OR true/false
     boolean_valuex :       {type : String } ,
     is_correct :          { type : Boolean} // => true (Yes) or false (No)
-    
+
 };
 var rating_scales_object = {
 
@@ -381,7 +381,7 @@ var Questionnaire_questions = {
     ]
 };
 var questionnaireDataTypes = {
-   creator_id : { type : String , required : true ,  trim : true  } ,
+   creator_id : { type : String , required : true ,  trim : true  ,  ref : "users" } ,
    app_type : {  type : String ,  required : true  } ,
    theme_style : { type:[] } ,
    description : { type : String ,  trim : true ,  },
