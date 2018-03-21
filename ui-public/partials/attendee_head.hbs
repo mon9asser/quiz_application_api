@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html  ng:app="applications" ng:controller="attendee-controller">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <!-- Styles -->
+    <!--
+    ==========================>>>>>> Public
+    -->
+    <link href="{{ server_ip }}ext/frameworks/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ server_ip }}ext/frameworks/css/font-awesome.css" rel="stylesheet">
+    <link href="{{ server_ip }}ext/frameworks/css/animate.css" rel="stylesheet">
+    <!-- <link href="{{ server_ip }}ext/frameworks/css/swiper.css" rel="stylesheet"> -->
+    <!--  >>>>>Custom css -->
+    <link ng:if="page_name == 'quizzes'" rel="stylesheet" href="{{ server_ip }}ext/css/quizzes-app.css">
+    <!-- scripts -->
+    <!--
+    ==========================>>>>>> Public
+    -->
+    <script src="{{ server_ip }}ext/frameworks/js/jquery.min.js" charset="utf-8"></script>
+    <script src="{{ server_ip }}ext/frameworks/js/bootstrap.min.js"></script>
+    <script src="{{ server_ip }}ext/frameworks/js/angular.min.js"></script>
+  </head>
+  <body>
+
+      <!-- init information -->
+      <input id="serverIp" type="text" name="{{ server_ip }}" value="">
+      <input id="userId" type="text" name="" value="{{ user.id }}">

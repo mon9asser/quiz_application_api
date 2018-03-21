@@ -2,7 +2,6 @@
 apps.filter ("apply_html" , [
   '$sce' , function ($sce){
     return function (text_changed){
-
       return $sce.trustAsHtml(text_changed);
     }
   }

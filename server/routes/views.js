@@ -104,6 +104,40 @@ viewRouters.get('/questionnaires' , verify_session , ( req , res )=>{
 
 
 // ======================================================
+// ===========>>>>>>>>> Quizzes
+// ======================================================
+viewRouters.get('/quizzes' , verify_session , ( req , res )=>{
+  if(req.session.userInfo.userType == 0 ) {
+
+    // req.session.userInfo.id
+    qtnr.find().then((doc)=>{
+      if(!doc ){
+        return new Promise((resolve, reject) => {
+           res.status(404).send("There are no any applications");
+       });
+      }
+
+      res.render("quizzes" , {
+          user : req.session.userInfo ,
+          myApps : doc ,
+          server_ip : config.server_ip
+      });
+
+    });
+
+
+  }else {
+    res.render("page-401" , {
+        user : req.session.userInfo ,
+        data_401 : "Permission Denied !! , You don't have any permission to use this page !"
+    });
+  }
+});
+
+
+
+
+// ======================================================
 // ===========>>>>>>>>> API key Creation
 // ======================================================
 viewRouters.get('/create_app' , ( req , res )=>{

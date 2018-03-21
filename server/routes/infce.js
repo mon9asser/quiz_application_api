@@ -21,7 +21,7 @@ infceRouter.use(  bodyParser.urlencoded({ extended: false }) );
 // ################################################################
 // ==========>>> Application Interface Api  ( Quiz VS Survey ) Player <<====
 // ################################################################
-infceRouter.get("/:app_id/:player_type/player/:token" , verify_access_tokens_admin_user ,  (req , res) => {
+infceRouter.get("/:app_id/:player_type/:token" , verify_access_tokens_admin_user ,  (req , res) => {
   var player = req.params.player_type;
   var app_id = req.params.app_id;
   // Player (does not exists) case
@@ -29,6 +29,7 @@ infceRouter.get("/:app_id/:player_type/player/:token" , verify_access_tokens_adm
     res.send({
       error : "This iframe doesn't exists !"
     });
+    return false ;
   }
   // application (does not exists) case
   qtnr.findOne({_id:app_id} , (error , qtnrObject)=>{
@@ -39,6 +40,7 @@ infceRouter.get("/:app_id/:player_type/player/:token" , verify_access_tokens_adm
           user : req.user
         });
       });
+        return false ;
     }
 
     var app_type = qtnrObject.app_type ;

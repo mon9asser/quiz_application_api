@@ -28,7 +28,8 @@ const {
     auth_verify_api_keys,
     auth_verify_api_keys_tokens,
     auth_verify_generated_tokens ,
-    authenticate_keys_with_curr_status
+    authenticate_keys_with_curr_status ,
+    auth_api_keys_only
 } = require("../../middlewares/authenticate");
 const {
     authByTokenWCreatorType ,
@@ -2337,23 +2338,32 @@ qtnrRouters.get("/:uid/applications" , authenticate_keys_with_curr_status ,  (re
 
 
 
-
-
-
-
-qtnrRouters.post("/app/files" ,question_answer_images.single("media_field") , (req , res ) => {
-  if(req.body.media_field != null ){
-    res.send(req.body.media_field);
-    return false ;
-  }
-  res.send({file_status : req.file_status , file : req.file, bod : req.body });
-  // fs.rename(req.file.path , "ui-public/themes/tested_image.jpg");
-})
-
-qtnrRouters.post("/app/files_n" , (req , res ) => {
-  // fs.rename( "ui-public/themes/image-test.jpg" ,   req.body.file);
-  res.send(req.body);
+qtnrRouters.get("/applications/list" , auth_api_keys_only , (req , res )=>{
+  qtnr.find().then((doc)=>{
+    if(!doc ){
+      return new Promise((resolve, reject) => {
+         res.status(404).send("There are no any applications");
+        });
+    }
+    res.send(doc);
+  });
 });
+
+
+//
+// qtnrRouters.post("/app/files" ,question_answer_images.single("media_field") , (req , res ) => {
+//   if(req.body.media_field != null ){
+//     res.send(req.body.media_field);
+//     return false ;
+//   }
+//   res.send({file_status : req.file_status , file : req.file, bod : req.body });
+//   // fs.rename(req.file.path , "ui-public/themes/tested_image.jpg");
+// })
+//
+// qtnrRouters.post("/app/files_n" , (req , res ) => {
+//   // fs.rename( "ui-public/themes/image-test.jpg" ,   req.body.file);
+//   res.send(req.body);
+// });
 
 module.exports = {
     qtnrRouters
