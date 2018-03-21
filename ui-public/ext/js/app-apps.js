@@ -811,9 +811,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
      };
     $scope.hide_loader = function (){
        $(".right_part").fadeIn( function (){
-         $(".loader-container").fadeOut(6000 , function (){
-           $(".question-opener").next().slideDown();
-         });
+         $(".question-opener").trigger("click");
+         $(".loader-container").fadeOut(6000);
        });
     };
     $scope.onclick_items = function (elementId){
@@ -822,7 +821,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           newIndex  :  ( $("#docQuestions li" ).length > 0 ) ? $("#docQuestions li" ).length  : 0
         }
         return $scope.dragged_items(evt);
-      }; 
+      };
     $scope.unsaved_question_x = function (new_vals , for_this_setting = null ){
         $scope.unsaved_question = true;
         $scope.questions_list[$scope.questionIndex].answer_settings = $scope.question_settings;
