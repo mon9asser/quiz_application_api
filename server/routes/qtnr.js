@@ -1813,20 +1813,16 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                                           question_answers["boolean_value"] = "False";
 
                                        }
-
-
                                   }
                             if(req.body.boolean_type == "yes/no")
                                   {
                                       if(req.body.boolean_value == true)
                                         {
                                           question_answers["boolean_value"] =  "Yes";
-
                                         }
                                         else
                                         {
                                           question_answers["boolean_value"] =  "No";
-
                                         }
                                   }
                               }else {

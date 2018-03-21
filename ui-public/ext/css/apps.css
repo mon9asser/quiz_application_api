@@ -2932,3 +2932,8 @@ button.saving-settings-changes:hover{
 .answer-settins > input[type="checkbox"].switch_1 {
   float: right;
 }
+.true-false-value , .true-false-value:focus , .true-false-value:active , .true-false-value:hover , .true-false-value:link {
+  border: 0px transparent solid;
+  background: transparent;
+  outline: none;
+}

@@ -146,7 +146,7 @@
                             </ul>
                             <div class="text-answers">
                                 <span class="text-field-inpu">
-                                  ~>>answer_value.boolean_value<<~
+                                 <input class="true-false-value" type="text" ng:change="unsaved_question_x()" ng:model="answer_value.boolean_value" name="" value="">
                                 </span>
                             </div>
                         </div>
@@ -215,13 +215,6 @@
           <!-- <label class="titles-question"> Question Settings  : </label> -->
           <div class="question-settings">
              <ul class="listSettings-qs">
-               <!-- Max characters -->
-                <li ng:if="questions_list[questionIndex].question_type == 4">
-                 <span class="title-checkbox"> Max characters ( ~>>questions_list[questionIndex].answer_settings.answer_char_max<<~ ) </span>
-                 <div class="rating_scale_options">
-                     <input ng:change="unsaved_question_x(questions_list[questionIndex].answer_settings.answer_char_max , 'answer_char_max')" ng:model="questions_list[questionIndex].answer_settings.answer_char_max" id="char_max_slider" min="100" max="2000" type="range" name="">
-                 </div> <!-- Slide Range -->
-                </li>
                 <li class="show_lbls_qs" ng:if="questions_list[questionIndex].question_type == 3 || questions_list[questionIndex].answers_format[0].ratscal_type == 0">
 
                     <div class="scale-options">
@@ -363,8 +356,14 @@
                 <li class="steps_qs" ng:if="questions_list[questionIndex].question_type == 3">
                     <span class="title-checkbox"> Steps ( ~>>questions_list[questionIndex].answers_format[0].step_numbers<<~ )</span>
                     <div class="rating_scale_options">
-                        <input ng:change="change_rating_scale_value(questions_list[questionIndex].answers_format[0].step_numbers)" ng:model="questions_list[questionIndex].answers_format[0].step_numbers" id="step_slider" min="2" max="10" type="range" name="">
+                        <input ng:change="change_rating_scale_value(questions_list[questionIndex].answers_format[0].step_numbers , true)" ng:model="questions_list[questionIndex].answers_format[0].step_numbers" id="step_slider" min="2" max="10" type="range" name="">
                     </div> <!-- Slide Range -->
+                </li>
+                <li ng:if="questions_list[questionIndex].question_type == 4">
+                 <span class="title-checkbox"> Max characters ( ~>>questions_list[questionIndex].answer_settings.answer_char_max<<~ ) </span>
+                 <div class="rating_scale_options">
+                     <input ng:change="unsaved_question_x(questions_list[questionIndex].answer_settings.answer_char_max , 'answer_char_max')" ng:model="questions_list[questionIndex].answer_settings.answer_char_max" id="char_max_slider" min="100" max="2000" type="range" name="">
+                 </div> <!-- Slide Range -->
                 </li>
              </ul>
           </div>
@@ -379,7 +378,7 @@
       <button style="float:left;" ng:click="delete_this_question()" class="btn btn-danger-outline" type="button" name="button">
             Delete
       </button>
-      <button ng:click="save_changes_in_angular_backend()" class="btn btn-primary-outline save_changes" type="button" name="button">
+      <button id="saving-changes" ng:click="save_changes_in_angular_backend()" class="btn btn-primary-outline save_changes " type="button" name="button">
             Save Changes
       </button>
   </div>
