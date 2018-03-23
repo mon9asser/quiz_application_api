@@ -1,3 +1,5 @@
+<!-- Redactor for texts  -->
+<div class="setting-text-redactor" id="redactor-editor-menu"></div>
 <div class="settings_menu">
               <div class="setting-title">
                   <span class="setting-iconx">
@@ -22,13 +24,12 @@
                                    <span>Quiz Name</span>
                                    <input class="quiz-titlex " type="text" name="" value="" placeholder="Quiz Title">
                                    </div> -->
-
                                 <div class="control-item-content-text">
                                   <div class="passing-grad-block">
-                                     <div class="checkbox-toggle">
-                                         <label class="labels-options lblxoption">Quiz Title</label>
-                                         <input class="checkbox-toggle input-app-title" type="text" placeholder="App title" name="" ng:model="application_settings.questionnaire_title">
-                                     </div>
+                                    <div class="checkbox-toggle">
+                                        <label class="labels-options lblxoption">~>>(application_settings.app_type == 0 ) ? "Survey" :"Quiz" <<~ Title</label>
+                                        <input class="checkbox-toggle input-app-title" type="text" placeholder="App title" name="" ng:model="application_settings.questionnaire_title">
+                                    </div>
                                   </div>
                                    <div class="passing-grad-block">
                                       <div class="checkbox-toggle">
@@ -125,7 +126,7 @@
 
                              </div>
                           </li>
-                          <li class="sticky-note">
+                          <li class="tasks">
                              <div class="control-item-header">
                                 <a href="#" class="icon-toggle">
                                 <span class="caret-down fa fa-caret-down"></span>
@@ -134,25 +135,26 @@
                              </div>
                              <div class="control-item-content" >
                                 <div class="control-item-content-text">
-                                   <span>Quiz Start text</span>
-                                   <input ng:model="application_settings.settings.titles.title_start_with" class="quiz-titlex " type="text" name="" value="" placeholder=" Lest start Quiz">
+                                   <span class="screen-texts">Quiz Start text</span>
+                                   <textarea ng:model="application_settings.settings.titles.title_start_with" class="quiz-titlex screen-redactors-strt-txt">Writ start Quiz</textarea>
                                 </div>
                                 <div class="control-item-content-text">
-                                   <span>Quiz End text</span>
-                                   <input ng:model="application_settings.settings.titles.title_end_with" class="quiz-titlex " type="text" name="" value="" placeholder=" You have successfully  completed the this quizs">
+                                   <span class="screen-texts">Quiz End text</span>
+                                   <!-- <input  type="text" name="" value="" placeholder=""> -->
+                                   <textarea ng:model="application_settings.settings.titles.title_end_with" class="quiz-titlex screen-redactors-end-txt">You have successfully completed the this quizs</textarea>
                                 </div>
                                 <div class="control-item-content-text">
-                                   <span>Quiz Pass text:</span>
-                                   <input ng:model="application_settings.settings.titles.title_success_with"  class="quiz-titlex " type="text" name="" value="" placeholder="You have passed this quiz">
+                                   <span class="screen-texts">Quiz Pass text:</span>
+                                   <textarea ng:model="application_settings.settings.titles.title_success_with" class="quiz-titlex screen-redactors-scs-txt">You have passed this quiz</textarea>
                                 </div>
                                 <div class="control-item-content-text">
-                                   <span>Quiz Fail text:</span>
-                                   <input ng:model="application_settings.settings.titles.title_failed_with" class="quiz-titlex " type="text" name="" value="" placeholder="You have failed this quiz">
-                                </div>
+                                   <span class="screen-texts">Quiz Fail text:</span>
+                                   <textarea ng:model="application_settings.settings.titles.title_failed_with" class="quiz-titlex screen-redactors-fld-txt">You have failed this quiz</textarea>
+                                 </div>
 
                              </div>
                           </li>
-                          <li class="emails">
+                          <li class="tasks">
                              <div class="control-item-header">
                                 <a href="#" class="icon-toggle">
                                 <span class="caret-down fa fa-caret-down"></span>

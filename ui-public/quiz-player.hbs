@@ -1,14 +1,30 @@
 <!--   header_status
-
+  {> __player_object <}
   user
 -->
+{{> attendee_head }}
+ <div class="container-fluid" data:ng:controller="players">
+   <!-- Welcoming screen  -->
+   <div  class="container about-quiz">
+     <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
+     <div class="qusu-details text-right">
+       <button ng:click="back_to_quizzes()" class="button-take-this" type="button" name="button">
+         <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+         Back
+       </button>
+       <button class="button-take-this" type="button" name="button">
+         <i class="fa fa-sign-in" aria-hidden="true"></i>
+         Take this Quiz
+       </button>
+     </div>
+   </div>
 
-{{
-  app.questions
-}}
-{{
-  header_status
-}}
-{{
-  user
-}}
+   <!-- Question screens -->
+   <div style="display:none;" class="container-fluid">
+    <div class="quiz-tools">
+
+    </div>
+
+   </div>
+ </div>
+{{> attendee_footer }}

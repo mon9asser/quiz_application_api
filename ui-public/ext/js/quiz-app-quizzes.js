@@ -25,9 +25,9 @@ attendeeApp.filter("user_name" , [
 attendeeApp.controller('list-apps' , [
   '$scope' , '$rootScope' , '$timeout' , '$http' , 'settings',
   function ($scope, $rootScope, $timeout , $http , settings ){
-  
+
      // => Scopes
-      $("#serverIp").val();
+
      $scope.user_id = $("#userId").val();
      $scope.json_source = settings.server_ip + settings.json_source;
      $scope.__applications = null ;

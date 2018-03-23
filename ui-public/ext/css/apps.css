@@ -1006,7 +1006,7 @@ span:nth-child(5) {
     list-style: none;
     /*margin-top: 60px;*/
 }
-.app-settings li {
+.app-settings li.tasks {
     position: relative;
     overflow: hidden;
     width: 100%;
@@ -1426,7 +1426,7 @@ float: left;
 }
 .control-item-content-text{
       padding: 5px 0px;
-      width: 90%;
+      width: 97%;
       margin: 0px auto;
       position: relative;
 
@@ -2936,4 +2936,15 @@ button.saving-settings-changes:hover{
   border: 0px transparent solid;
   background: transparent;
   outline: none;
+}
+.screen-texts{
+  margin-bottom: 5px;
+  display: block;
+  position: relative;
+}
+.redactor-styles p{
+  font-weight: normal;
+}
+.redactor-styles ol li, .redactor-styles ul li{
+  font-weight: normal;
 }

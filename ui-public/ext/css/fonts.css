@@ -59,12 +59,25 @@
 }
 
 @font-face {
+  font-family: 'Roboto Bold';
+  src:url('../fonts/roboto/Roboto-Bold.ttf') ;
+}
+
+@font-face {
   font-family: 'RobotoMedium';
+  src:url('../fonts/roboto/Roboto-Medium.ttf') ;
+}
+@font-face {
+  font-family: 'Roboto Medium';
   src:url('../fonts/roboto/Roboto-Medium.ttf') ;
 }
 
 @font-face {
   font-family: 'RobotoRegular';
+  src:url('../fonts/roboto/Roboto-Regular.ttf') ;
+}
+@font-face {
+  font-family: 'Roboto Regular';
   src:url('../fonts/roboto/Roboto-Regular.ttf') ;
 }
 
@@ -74,11 +87,26 @@
   src:url('../fonts/Open_Sans/OpenSans-Bold.ttf') ;
 }
 @font-face {
+  font-family: 'Open Sans Bold';
+  src:url('../fonts/Open_Sans/OpenSans-Bold.ttf') ;
+}
+
+@font-face {
   font-family: 'OpenSansSemiBold';
   src:url('../fonts/Open_Sans/OpenSans-SemiBold.ttf') ;
 }
 @font-face {
+  font-family: 'Open Sans Semi Bold';
+  src:url('../fonts/Open_Sans/OpenSans-SemiBold.ttf') ;
+}
+
+@font-face {
   font-family: 'OpenSansRegular';
+  src:url('../fonts/Open_Sans/OpenSans-Regular.ttf') ;
+}
+
+@font-face {
+  font-family: 'Open Sans Regular';
   src:url('../fonts/Open_Sans/OpenSans-Regular.ttf') ;
 }
 
@@ -87,8 +115,17 @@
   font-family: 'NumbansRegular';
   src:url('../fonts/Numans/Numans-Regular.ttf') ;
 }
+
+@font-face {
+  font-family: 'Numbans Regular';
+  src:url('../fonts/Numans/Numans-Regular.ttf') ;
+}
 /** Petit_Formal_Script */
 @font-face {
   font-family: 'PetitFormalScript';
+  src:url('../fonts/Petit_Formal_Script/PetitFormalScript-Regular.ttf') ;
+}
+@font-face {
+  font-family: 'Petit Formal Script';
   src:url('../fonts/Petit_Formal_Script/PetitFormalScript-Regular.ttf') ;
 }

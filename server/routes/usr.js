@@ -74,7 +74,7 @@ usrRouters.use(session({
           if(comparePassword != true ){
             return new Promise((reject , resolve)=>{
               res.send({"Message":"Rejected Authentication"});
-            });
+            }); 
           }
 
 

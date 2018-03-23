@@ -2319,6 +2319,66 @@ qtnrRouters.post("/:app_id/application/:objects" , auth_verify_api_keys , (req ,
        });
 });
 
+
+
+
+qtnrRouters.get("/:app_id/application/:objects" , auth_api_keys_only , (req ,res )=>{
+      var objects= req.params.objects ;
+      var app_id = req.params.app_id ;
+
+    qtnr.findOne({ _id:app_id }).then( ( qtnairsDocument) => {
+
+         if (!qtnairsDocument){
+           return new Promise((resolve, reject)=>{
+              res.status(404).send(notes.Errors.Error_Doesnt_exists("Application"));
+           });
+         }
+
+       
+        var apps ;
+        if( objects == 'retrieve'){
+             apps = qtnairsDocument ;
+
+        }
+        if( objects == 'settings'){
+             apps = qtnairsDocument.settings ;
+        }
+        if( objects == 'questions'){
+          if(req.body.target_id != null ){
+            var isexists = _.findIndex(qtnairsDocument.questions , {"id":req.body.target_id});
+            if(isexists == -1 )
+              {
+                return new Promise((resolve , reject)=>{
+                  res.send(notes.Errors.Error_Doesnt_exists("Question"));
+                });
+              }
+            apps =  _.find(qtnairsDocument.questions , {"id":req.body.target_id});
+          } else
+            apps = qtnairsDocument.questions ;
+        }
+        if( objects == 'stylesheets'){
+          if(req.body.target_id != null ){
+            var isexists = _.findIndex(qtnairsDocument.theme_style , { "file_name":  "styletheme_"+req.body.target_id+".css" });
+            // console.log(isexists);
+            if(isexists == -1 )
+              {
+                return new Promise((resolve , reject)=>{
+                  res.send(notes.Errors.Error_Doesnt_exists("Stylesheet"));
+                });
+              }
+            apps =  _.find(qtnairsDocument.theme_style , {"file_name":  "styletheme_"+req.body.target_id+".css"});
+          } else
+             apps = qtnairsDocument.theme_style ;
+        }
+
+       res.send(apps);
+        }).catch((er)=>{
+          return new Promise((resolve, reject)=>{
+            res.status(404).send(notes.Errors.General_Error);
+          });
+       });
+});
+
 qtnrRouters.get("/:uid/applications" , authenticate_keys_with_curr_status ,  (req,res) => {
 
   var userId= req.params.uid ;

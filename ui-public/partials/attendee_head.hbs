@@ -9,11 +9,16 @@
     ==========================>>>>>> Public
     -->
     <link href="{{ server_ip }}ext/frameworks/css/bootstrap.min.css" rel="stylesheet">
+
     <link href="{{ server_ip }}ext/frameworks/css/font-awesome.css" rel="stylesheet">
     <link href="{{ server_ip }}ext/frameworks/css/animate.css" rel="stylesheet">
-    <!-- <link href="{{ server_ip }}ext/frameworks/css/swiper.css" rel="stylesheet"> -->
+    <link href="{{ server_ip }}ext/frameworks/css/swiper.css" rel="stylesheet">
     <!--  >>>>>Custom css -->
     <link ng:if="page_name == 'quizzes'" rel="stylesheet" href="{{ server_ip }}ext/css/quizzes-app.css">
+    <link ng:if="page_name == 'api'" rel="stylesheet" href="{{ server_ip }}ext/css/default-player.css">
+    <link ng:if="page_name == 'api'" rel="stylesheet" href="{{ server_ip }}ext/css/default-themes.css">
+    <!-- <link href="{{ server_ip }}ext/frameworks/css/redactor.min.css" rel="stylesheet"> -->
+
     <!-- scripts -->
     <!--
     ==========================>>>>>> Public
@@ -23,7 +28,6 @@
     <script src="{{ server_ip }}ext/frameworks/js/angular.min.js"></script>
   </head>
   <body>
-
-      <!-- init information -->
-      <input id="serverIp" type="text" name="{{ server_ip }}" value="">
-      <input id="userId" type="text" name="" value="{{ user.id }}">
+    <!-- User Id -->
+   <input id="userId" type="hidden" name="" value="{{ user.id }}">
+   <input id="appId" type="hidden" name="" value="{{app._id}}">
