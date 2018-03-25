@@ -37,6 +37,6 @@ attendeeApp.controller("attendee-controller" , [
   '$scope' , '$rootScope' , 'settings' ,
    function ($scope , $rootScope , settings ){
       $rootScope.page_name = settings.page_name;
-     
+
    }
 ]); // ==> End The parent controller !!

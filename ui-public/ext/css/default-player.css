@@ -17,13 +17,15 @@
 .about-quiz , .screen-container {
   display: block;
   position: relative;
-  margin-top: 10%;
-  width: 50%;
+  /*margin-top: 10%;*/
+  width:55%;
   min-height: 120;
   padding: 35px;
+  margin: 0px auto;
 }
 .screen-container {
   margin-top: 0px;
+  /*margin-bottom: 10%;*/
 }
 @media only screen and (max-width:750px){
   .about-quiz , .screen-container {
@@ -96,7 +98,7 @@
       height: 100%;
     }
 .swiper-slide {
-      text-align: center;
+      text-align: inherit;
       font-size: 18px;
       background: #fff;
       /* Center slide text vertically */
@@ -113,3 +115,127 @@
       -webkit-align-items: center;
       align-items: center;
     }
+.container-fluid-x , .quizapp-tools {
+  display: block;
+  position: relative;
+  width: 100%;
+}
+.quizapp-tools {
+  min-height: 120px;
+}
+.swiper-slide {
+  background: transparent;
+}
+.question-container {
+  width: 100%;
+  display: block;
+  position: relative;
+  /*border-bottom: 1px dashed #ddd;*/
+}
+.question-body {
+  width: 100%;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.question-media {
+  width: 60%;
+  display: block;
+  position: relative;
+  margin: 15px 0px;
+}
+.super-size {
+  width: 85%;
+}
+.image-media-case , .video-media-case {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  min-height: 200px;
+}
+.answer-container {
+  display: block;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+/* .survey_questions */
+.answer-container ul {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: 0px;
+  margin: 15px auto 0px auto;
+  text-align: left;
+
+}
+.answer-container ul li {
+  padding: 10px 15px;
+  border: 1px dashed #ddd;
+  margin: 3px;
+  text-align: left;
+}
+.answer-container ul li.ng_block {
+  width: 98%;
+  display: block;
+  position: relative;
+}
+.answer-container ul li.ng_inline_block{
+  width: 48%;
+  display: inline-block;
+  position: relative;
+}
+
+.answer-contents{
+  display: block;
+  position: relative;
+  width: 100%;
+}
+.text-values {
+  width: 100%;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+.media-cases {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%
+}
+.media-options{
+  display: block;
+  position: relative;
+}
+.image_case , .video_case {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: auto;
+
+  background-position: center center;
+  background-size: cover;
+  margin-bottom: 11px;
+}
+.video_case{
+  height: auto;
+}
+.buttonController {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: 20px 0px 0px 0px;
+  text-align: right;
+}
+.slick-slide {
+  outline: none;
+}

@@ -138,7 +138,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
 
     // ==> Vars in scope object
-    $scope.redactor_object = null ;
     $scope.rating_scale_elements = [] ;
     $scope.rating_values = null ;
     $scope.questions_list = null ;
@@ -1039,13 +1038,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       };
     $scope.application_save_settings = function (){
 
-      // Build quizzes or survey data
-
-
-      $scope.application_settings.settings.titles.title_end_with = $R('.screen-redactors-end-txt' , 'source.getCode');
-      $scope.application_settings.settings.titles.title_failed_with = $R('.screen-redactors-fld-txt' , 'source.getCode');
-      $scope.application_settings.settings.titles.title_start_with = $R('.screen-redactors-strt-txt' , 'source.getCode');
-      $scope.application_settings.settings.titles.title_success_with = $R('.screen-redactors-scs-txt' , 'source.getCode');
+      var redactor_start_text = $R(".screen-redactors-strt-txt" , "source.getCode");
+      $scope.application_settings.settings.titles.title_start_with =redactor_start_text;
+      var redactor_end_text = $R(".screen-redactors-end-txt", "source.getCode");
+      $scope.application_settings.settings.titles.title_end_with = redactor_end_text ;
+      var redactor_scs_text =  $R(".screen-redactors-scs-txt", "source.getCode");
+      $scope.application_settings.settings.titles.title_success_with   = redactor_scs_text ;
+      var redactor_fld_text = $R(".screen-redactors-fld-txt", "source.getCode");
+      $scope.application_settings.settings.titles.title_failed_with = redactor_fld_text ;
 
       var saving_settings = $(".saving-settings-changes");
       saving_settings.html("<span class='saving_option'></span> Saving Changes");
@@ -2058,8 +2058,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
 
         $scope.loading_redactor_models = function (){
-          try {
 
+          try {
               $R(".answer-redactor-editors-x , #editor-question-body , #editor-question-desc"  ,{
             paragraphize: false,
             replaceDivs: false,
@@ -2097,7 +2097,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             } catch (e) {
 
             }
-
           // Add Event fo each one
           $('.redactor-in').on("keyup keydown change click input" , function (){
             $scope.unsaved_question = true ;
@@ -2137,41 +2136,21 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
 
         $timeout(function(){
-          $R(".screen-redactors-strt-txt , .screen-redactors-end-txt , .screen-redactors-fld-txt , .screen-redactors-scs-txt" , {
-            buttons: ['format' , 'lists' , 'italic','link','underline'] ,
-            plugins: ['fontcolor' , 'fontsize' , 'fontfamily']
-          });
-          // document.addEventListener("selectionchange", function (evt){
-          //   var sel = window.getSelection()
-          //    if (sel.rangeCount === 0 || sel.isCollapsed || sel.toString() == null || sel.toString() == ' ') return ;
-          //    $scope.selected_passage = sel.toString() ;
-          //    if($scope.selected_passage != null && $scope.redactor_object != null) {
-          //
-          //      if(($scope.redactor_object.redactor_number >= 4 || $scope.redactor_object.redactor_number <= 7 ) && $scope.redactor_object.class_name != undefined ){
-          //        var redactorCl = $("."+$scope.redactor_object.class_name).position();
-          //        alert(redactorCl.left)
-          //        $("#redactor-editor-menu").css({
-          //               top   :  redactorCl.top   ,
-          //               left  :  redactorCl.left
-          //         });
-          //       $("#redactor-editor-menu").css("display","block");
-          //      }
-          //    }
-          // });
-
-          $(".redactor-in").on("keyup mouseup click" , function (evt){
-            $scope.redactor_object =  {
-              class_name : $(this).prop('className').split(' ').pop(),
-              redactor_number : $(this).prop('className').split(' ').pop().split('redactor-in-').pop()
-            } ;
-          });
           $scope.loading_redactor_models();
         } , 6000 );
-
-
-
 
       } catch (e) {
 
       }
+
+
+  // ===============> Setup redactor
+  $timeout(function(){
+    $R(".screen-redactors-strt-txt , .screen-redactors-end-txt , .screen-redactors-scs-txt , .screen-redactors-fld-txt" , {
+       buttons : ["format","lists"  , "bold" , "italic" , "html"] ,
+       plugins : ['fontcolor' , 'fontsize', 'fontfamily']
+    });
+  } , 6000 );
+
+
 }]);
