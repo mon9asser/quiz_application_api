@@ -445,7 +445,9 @@ var reportDataTypes = {
    created_at         : { type : Date } ,
    updated_at         : { type : Date }
  }
-
+var attendeeDraftDataTypes = {
+  type : []
+};
  var clientServersDataType = {
       _id :{ type:mongoose.Schema.ObjectId } ,
       api_public_keys : { type:String } , // user_name + id + secretApiCode
@@ -471,5 +473,6 @@ var reportDataTypes = {
  }
 
 module.exports = {
+       attendeeDraftDataTypes ,
        clientServersDataType , userDataTypes , questionnaireDataTypes , reportDataTypes
 }

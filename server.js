@@ -8,8 +8,10 @@ const {qtnrRouters} = require("./server/routes/qtnr");
 const {viewRouters} = require("./server/routes/views");
 const {rptRouters} = require("./server/routes/rpt");
 const {apkRouter } = require("./server/routes/apk");
+const {drftRouter} = require("./server/routes/drft");
 const {infceRouter} = require("./server/routes/infce");
 const {usr} = require("./models/users");
+
 
 const app = express();
 // const exphbs  = require('express-handlebars'); // => Deprecated !!
@@ -55,6 +57,12 @@ app.use( apis._dir_ ,  usrRouters );
 // ----------> Routers ( Api key ) => Api
 //------------------------------------------------
 app.use( apis._dir_ ,  apkRouter );
+
+// -----------------------------------------------
+// ----------> Attendee draft ( Case Broswer is closed will use this api )
+//------------------------------------------------
+app.use ( apis._dir_ , drftRouter);
+
 
 // -----------------------------------------------
 // ----------> Interface ( Api's ) =>  For usgin in Iframes ( Client Server)

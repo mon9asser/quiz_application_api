@@ -57,7 +57,6 @@ attendeeApp.filter("set_iframe" , [
       return $sce.trustAsHtml(embed_video) ;
     };
 }]);
-
 // >> true html value inside element
 attendeeApp.filter('trust_this_html_values' , [
   '$sce' , function ($sce){
@@ -66,7 +65,7 @@ attendeeApp.filter('trust_this_html_values' , [
     }
   }
 ]);
-
+// >> application controller
 attendeeApp.controller('players' , [
   '$scope' , '$rootScope' , '$timeout' , '$http' , 'settings',
   function ($scope, $rootScope, $timeout , $http , settings ){
@@ -74,16 +73,38 @@ attendeeApp.controller('players' , [
      $scope.user_id = $("#userId").val();
      $scope.application_id = $("#appId").val();
      $scope.server_ip = settings.server_ip ;
-     $scope.app_screens = null ;
      $scope.json_source = settings.server_ip + settings.json_source;
+     $scope.labels = [  'a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
+     $scope.application_status = [] ;
+     $scope.app_screens = null ;
      $scope.__player_object = null ;
      $scope.__report_object = null ;
-     $timeout(function (){
-       console.log($scope.__player_object);
-     } , 2000 );
-     // ==> Functionalities
-     // ==>> Load all applications into angular object
-    //  alert(settings.server_ip + 'api/'+$scope.application_id+'/application/retrieve');
+     $scope.attendee_draft = new Array();
+     $scope.current_question = null ;
+     $scope.slide_screens = null ;
+
+     $scope.callback_question_id = function (object){
+       if($scope.current_question == null )
+        return false
+
+       return object.question_id == $scope.current_question ;
+     };
+     $scope.callback_correct_answer = function (object){
+       return object.is_correct == true ;
+     };
+     $scope.fill_with_labels = function (){
+       // => Loading Answer labels
+       $(".question-list").each(function(){
+         $(this).children('li').each(function(i){
+           // => Answers
+           $(this).find('label.labels').html($scope.labels[i].toUpperCase())
+         })
+       });
+       // => Loading Question Labels
+       $('.question-container').each(function(i){
+         $(this).children('.question-body').find('.label-question').html(i + 1 );
+       })
+     };
      $scope.load_attendee_application = function (){
        $.getJSON( $scope.json_source , function (keys_object){
          $http({
@@ -95,28 +116,103 @@ attendeeApp.controller('players' , [
            }
          }).then(function (resps){
             $scope.__player_object = resps.data ;
+            if($scope.__player_object.app_type == 1 ){ // => Quiz type
+              var all_questions = $scope.__player_object.questions ;
+
+              for (var i = 0; i < all_questions.length; i++) {
+                 var this_question = all_questions[i];
+                 var status_object = new Object();
+                 // 1 -> check about count of answers
+                      // A => only these question type is 0 - 1
+                      if(this_question.question_type == 0 || this_question.question_type == 1 ){
+                        if(this_question.answers_format.length < 3 ){
+                          status_object['question_id'] = this_question._id ;
+                          status_object['question_number'] = i + 1 ;
+                          status_object['note_message'] = 0 ;
+                          $scope.application_status.push(status_object);
+                        }
+                      }
+                 // 2 -> check about correct answer is available or not
+                    // for all questions
+                    var answers = this_question.answers_format ;
+                    if (answers.findIndex($scope.callback_correct_answer) == -1) {
+                      status_object['question_id'] = this_question._id ;
+                      status_object['question_number'] = i + 1 ;
+                      status_object['note_message'] = 1;
+                      $scope.application_status.push(status_object);
+                    }
+
+
+              }
+            }
+
          } , function (err){
               console.log(err);
          });
        }); // End JSON
      };
+     $scope.select_this_answer = function (questionId , answerId , question , answers , app_id , user_id){
 
+        var is_single_choice = question.answer_settings.single_choice ;
+        var answer_id = answerId ;
+
+        $scope.current_question = questionId ;
+        var index = $scope.attendee_draft.findIndex($scope.callback_question_id)
+        if( index == -1 ){ // => first time to store it
+          $scope.attendee_draft.push({
+            application_id : app_id  , // under progression
+            user_id : user_id , // under progression
+            question_id : $scope.current_question ,
+            answer_ids : new Array (answer_id) ,
+            correct_answers : new Array() ,
+            is_completed : false ,
+            updated_date : new Date ()
+          });
+
+          // => storing correct answers
+          for (var i = 0; i < question.answers_format.length; i++) {
+            if(question.answers_format[i].is_correct == true)
+              $scope.attendee_draft.find($scope.callback_question_id).correct_answers.push(question.answers_format[i]._id)
+          }
+
+        }else { // => Update question answers !
+          if( !is_single_choice ) {
+              var currAnswer = $scope.attendee_draft[index].answer_ids.indexOf(answer_id);
+              if(currAnswer == -1 ){ // add new answer
+                $scope.attendee_draft[index].answer_ids.push(answer_id);
+              }
+          }
+        }
+
+        var next_question_index = $scope.attendee_draft.length + 1 ;
+        console.log($scope.attendee_draft);
+        // => Go to next slide { Case it only one answer }
+        if( is_single_choice ) {
+          $scope.continue_to_next_slider();
+        }
+     };
+     $scope.load_this_slider = function (){
+       $scope.slide_screens = new Swiper('.swiper-container');
+     };
+     $scope.start_this_quiz = function (){
+       $scope.slide_screens.slideNext();
+     };
+     $scope.continue_to_next_slider = function (){
+       $scope.start_this_quiz();
+     }
      $scope.back_to_quizzes = function (){
        return window.location.href = settings.server_ip + "quizzes";
      };
-     // return new Array(num);
-     // ==> Calling Functionalities
      $scope.load_attendee_application();
      $timeout(function (){
-       $scope.app_screens = $('.slide_screens').slick({
-         infinite: true,
-         slidesToShow: 1,
-         slidesToScroll:1 ,
-         mobileFirst : true ,
-         prevArrow : '' ,
-         nextArrow : ''
-       });
+       $scope.load_this_slider();
      }, 1000);
 
 
+
+     $timeout(function(){
+      //  console.log("ISSUES");
+      console.log($scope.application_status);
+       $scope.fill_with_labels ();
+     } , 1000 );
   }]);

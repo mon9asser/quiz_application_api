@@ -136,8 +136,7 @@ apps.filter('show_chars' , [
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
   try {
 
-
-    // ==> Vars in scope object
+    // ==> Vars in scope $R
     $scope.rating_scale_elements = [] ;
     $scope.rating_values = null ;
     $scope.questions_list = null ;
@@ -240,7 +239,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           //  theme_style : [] ,
            randomize_settings : false ,
            step_type : true ,
-
+           auto_slide : true ,
            show_results_per_qs : false ,
            retake_setting : false ,
            navigation_btns : false ,
@@ -254,7 +253,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       single_choice  : false ,
       is_randomized          : false ,
       super_size         : false ,
-      choice_style : true  //
+      choice_style : false  //
                 }
     $scope.labels = [  'a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
 
@@ -424,6 +423,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                     settings_obj['settings']['show_results_per_qs'] = mongo_settings.show_results_per_qs;
                   }else  // end step_type settings
                   settings_obj['settings']['show_results_per_qs'] = $scope.application_settings.settings.show_results_per_qs;
+
+                  if(mongo_settings.auto_slide != null ){
+                    settings_obj['settings']['auto_slide'] = mongo_settings.auto_slide;
+                  }else
+                  settings_obj['settings']['auto_slide'] = $scope.application_settings.settings.auto_slide;
 
 
                   if(mongo_settings.retake_setting != null ){
@@ -1299,7 +1303,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                            created_at :$scope.mongoose_date,
                            answer_settings : {
                                answer_char_max : 200 ,
-                               choice_style : true , // ==> inline or block
+                               choice_style : false , // ==> inline or block
                                is_randomized : false,
                                is_required : false,
                                single_choice : true,
@@ -2150,7 +2154,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
        buttons : ["format","lists"  , "bold" , "italic" , "html"] ,
        plugins : ['fontcolor' , 'fontsize', 'fontfamily']
     });
-  } , 6000 );
+  } , 9000 );
 
 
 }]);

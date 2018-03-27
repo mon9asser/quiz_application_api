@@ -17,9 +17,14 @@
 .about-quiz , .screen-container {
   display: block;
   position: relative;
-  /*margin-top: 10%;*/
+  margin-top: 10%;
   width:55%;
   min-height: 120;
+  padding: 35px;
+  margin: 0px auto;
+}
+.buttons-container {
+  width:55%;
   padding: 35px;
   margin: 0px auto;
 }
@@ -28,7 +33,7 @@
   /*margin-bottom: 10%;*/
 }
 @media only screen and (max-width:750px){
-  .about-quiz , .screen-container {
+  .about-quiz , .screen-container , .buttons-container{
       width: 95%;
   }
 }
@@ -178,15 +183,35 @@
 }
 .answer-container ul li {
   padding: 10px 15px;
-  border: 1px dashed #ddd;
+  border: 1px solid #ececec;
   margin: 3px;
   text-align: left;
+  box-shadow: 0px 0px 1px 0px #eee;
+  cursor: pointer;
 }
 .answer-container ul li.ng_block {
   width: 98%;
   display: block;
   position: relative;
 }
+
+.answer-container ul li:hover {
+    border: 1px solid #81c784;
+    box-shadow: 0px 0px 1px 0px #81c784;
+    background: #fdfdfd;
+}
+
+.success_answer {
+  border: 1px solid #81c784 !important;
+  background: rgba(129,199,132,0.2) !important;
+}
+
+.success_answer > .labels {
+  border: 1px solid #81c784 !important;
+  background: rgba(129,199,132,0.2) !important;
+}
+
+
 .answer-container ul li.ng_inline_block{
   width: 48%;
   display: inline-block;
@@ -199,10 +224,18 @@
   width: 100%;
 }
 .text-values {
-  width: 100%;
-  display: block;
+  width: auto;
+  display: inline;
   position: relative;
   overflow: hidden;
+}
+.labels {
+  display: inline-block;
+  padding: 2px 8px;
+  background: bisque;
+  margin: 0px 5px 0px 0px;
+  border: 1px solid #ef9122;
+  border-radius: 3px;
 }
 .media-cases {
   display: block;
@@ -225,6 +258,9 @@
   background-size: cover;
   margin-bottom: 11px;
 }
+.image_case {
+  min-height: 115px;
+}
 .video_case{
   height: auto;
 }
@@ -238,4 +274,49 @@
 }
 .slick-slide {
   outline: none;
+}
+
+.nextSlide , .prevSlide {
+  display: none !important;
+}
+
+.ques-questions {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin-top: 25px;
+}
+
+.swiper-container {
+  width: 100%;
+  height: 100%;
+}
+.swiper-slide {
+  text-align: inherit;
+  font-size: 18px;
+  background: transparent;
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+.label-question {
+    display: inline;
+    float: left;
+    margin-right: 10px;
+    padding: 0px 10px;
+    background: bisque;
+    border: 1px solid #ef9122;
+    color: #222;
+    border-radius: 13px;
 }
