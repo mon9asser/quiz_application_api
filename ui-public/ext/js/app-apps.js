@@ -863,7 +863,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
            question_selected.answers_format.push(new_answer);
       //console.log(question_selected);
       $timeout(function () {
-          $scope.loading_redactor_models();
+          $scope.loading_redactor_models("answer");
 
       }, 200);
 
@@ -2061,7 +2061,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
 
 
-        $scope.loading_redactor_models = function (){
+        $scope.loading_redactor_models = function (is_answer = null){
 
           try {
               $R(".answer-redactor-editors-x , #editor-question-body , #editor-question-desc"  ,{
@@ -2098,6 +2098,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
               }
             }
           });
+
+
+
+
             } catch (e) {
 
             }
@@ -2141,6 +2145,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
         $timeout(function(){
           $scope.loading_redactor_models();
+          
+          // $(".screen-redactors-strt-txt , .screen-redactors-end-txt , .screen-redactors-scs-txt , .screen-redactors-fld-txt").redactor ({
+          //    buttons : ["format","lists"  , "bold" , "italic" , "html"] ,
+          //    plugins : ['fontcolor' , 'fontsize', 'fontfamily']
+          // });
         } , 6000 );
 
       } catch (e) {
@@ -2149,12 +2158,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
 
   // ===============> Setup redactor
-  $timeout(function(){
-    $R(".screen-redactors-strt-txt , .screen-redactors-end-txt , .screen-redactors-scs-txt , .screen-redactors-fld-txt" , {
-       buttons : ["format","lists"  , "bold" , "italic" , "html"] ,
-       plugins : ['fontcolor' , 'fontsize', 'fontfamily']
-    });
-  } , 9000 );
+
 
 
 }]);
