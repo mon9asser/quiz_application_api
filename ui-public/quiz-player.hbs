@@ -51,7 +51,7 @@
 
                           <!-- Quiz Questions -->
                           <ul class="question-list" ng:if="obj_val.question_type <= 2"> <!-- Question id , answer id  -->
-                            <li data:ng:click="select_this_answer(obj_val._id , ansvalue._id , obj_val , ansvalue , __player_object._id , '{{user.id}}')" data:ng:repeat="(anskey , ansvalue) in obj_val.answers_format" data:ng:class="(obj_val.answer_settings.choice_style)?'ng_inline_block':'ng_block'">
+                            <li data:ng:click="select_this_answer(obj_val._id , ansvalue._id , obj_val , ansvalue , __player_object._id , '{{user.id}}' , ansvalue.is_correct )" data:ng:repeat="(anskey , ansvalue) in obj_val.answers_format" data:ng:class="(obj_val.answer_settings.choice_style)?'ng_inline_block':'ng_block'">
                                <!-- Cases with question type-->
                                  <!-- Case it 0 => Text choices -->
                                  <div ng:if="obj_val.question_type == 0" class="answer-contents">
@@ -117,7 +117,7 @@
                              <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                              Back
                            </button>
-                           <button class="button-take-this" type="button" name="button">
+                           <button data:ng:click="submit_quiz_into_report()" class="button-take-this" type="button" name="button">
                              <i class="fa fa-sign-in" aria-hidden="true"></i>
                              Submit Quiz
                            </button>

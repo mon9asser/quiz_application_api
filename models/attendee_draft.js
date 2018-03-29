@@ -10,8 +10,8 @@ const jwt = require("jsonwebtoken");
 
 var attendeeDraftSchema = mongoose.Schema(attendeeDraftDataTypes );
 attendeeDraftSchema.statics.save_attendee_draft = function (app_id ,attendee_draft ){
-  console.log(app_id);
-  console.log(attendee_draft);
+  var attendee_draft = this ;
+  attendee_draft.push(attendee_draft);
 };
 var drft = mongoose.model("attendee_draft" , attendeeDraftSchema );
 module.exports = {drft};

@@ -13,6 +13,7 @@ const session = require("express-session");
 const mongoose = require("mongoose");
 const {MongoClient} = require("mongodb");
 const {drft} = require("../../models/attendee_draft");
+const {qtnr} = require("../../models/questionnaires");
 const {apis , config, notes} = require("../../database/config");
 const {authByToken , verify_api_keys} = require("../../middlewares/authenticate") ;
 
@@ -24,21 +25,54 @@ drftRouter.use(session({
   resave : true ,
   saveUninitialized : true
 }));
-
+drftRouter.get("/application/user_status/:app_id/get" , (req,res)=>{
+  var app_id = req.params.app_id;
+  drft.findOne({application_id: app_id } , (err , draftDocument )=>{
+    if(!draftDocument || err ){
+      return new Promise((resolve , reject )=>{
+        res.send({error : "This application doesn't exists"});
+        return false;
+      });
+      res.send(draftDocument);
+    }
+  }).then((draftDocument)=>{
+    res.send(draftDocument);
+  }).catch((er)=>{
+    res.send(er);
+  });
+});
 drftRouter.post("/application/user_status/:app_id" , (req,res)=>{
 
-  if(req.body.attendee_draft_arrgs != null )
+  if(req.body.application_fields == null )
     {
         return new Promise((resolve, reject) => {
           res.send("attendee_draft_arrgs args is required !")
         });
     }
   var app_id = req.params.app_id;
-  var attendee_draft = req.body.attendee_draft_arrgs;
+  var object = req.body.application_fields ;
+  var userId = req.body.user_id ;
 
-  drft.find().then((objDrft)=>{
-    console.log(objDrft);
-    return  drft.save_attendee_draft(app_id ,attendee_draft );
+  drft.findOne({application_id: app_id } , (err , draftDocument )=>{
+      if(!draftDocument || err ){
+        var dr = new drft(object);
+        dr.save().then((data)=>{
+          res.send("Successed");
+          return false ;
+        });
+      }else {
+          var userIndex = draftDocument.att_draft.findIndex(x => x.user_id == userId);
+          if(userIndex != -1 ){
+            draftDocument.att_draft[userIndex].questions_data = object.att_draft[userIndex].questions_data ;
+            // console.log(draftDocument.att_draft[userIndex].questions_data);
+            // console.log("------------------------------------------------<><>");
+            // console.log(object.att_draft[userIndex].questions_data);
+            draftDocument.markModified('questions_data');
+            draftDocument.save();
+          }
+      }
+
+
   });
 
 

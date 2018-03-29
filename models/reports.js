@@ -155,9 +155,11 @@ reportSchema.methods.quiz_calculation = function(attendee_user, questionnaire) {
          else
              thisReport.attendees[attendee_user.index].is_completed = false;
 
+
          // Calculations
          var correct_ans_count = thisReport.attendees[attendee_user.index].results.correct_answers;
          var total_question = thisReport.attendees[attendee_user.index].results.count_of_questions;
+         console.log(questionnaire.settings);
          var graded_settings = questionnaire.settings.grade_settings.value;
 
          thisReport.attendees[attendee_user.index].passed_the_grade = true;
@@ -171,6 +173,7 @@ reportSchema.methods.quiz_calculation = function(attendee_user, questionnaire) {
 
          thisReport.attendees[attendee_user.index].results.result.raw_value = correct_ans_count;
          thisReport.attendees[attendee_user.index].results.result.percentage_value = graded_attendee;
+         console.log(thisReport.attendees[attendee_user.index].results);
          // =====> Save
          thisReport.markModified('attendees');
          thisReport.save();

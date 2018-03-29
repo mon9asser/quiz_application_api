@@ -79,9 +79,14 @@ attendeeApp.controller('players' , [
      $scope.app_screens = null ;
      $scope.__player_object = null ;
      $scope.__report_object = null ;
-     $scope.attendee_draft = new Array();
+     $scope.attendee_draft = new Object();
      $scope.current_question = null ;
      $scope.slide_screens = null ;
+
+     // => Api urls
+     $scope.url_attendee_draft = $scope.server_ip + 'api/application/user_status/' + $scope.application_id
+     $scope.url_attendee_draft_get = $scope.server_ip + 'api/application/user_status/' + $scope.application_id + '/get'
+     $scope.url_report_add = $scope.server_ip + 'api/'+ $scope.application_id  +'/report/add';
 
      $scope.callback_question_id = function (object){
        if($scope.current_question == null )
@@ -151,45 +156,161 @@ attendeeApp.controller('players' , [
          });
        }); // End JSON
      };
-     $scope.select_this_answer = function (questionId , answerId , question , answers , app_id , user_id){
-
+     $scope.submit_quiz_into_report = function (){
+        //  $scope.user_id ; // $scope.url_report_add // $scope.application_id  ;
+        //  $.getJSON($scope.json_source , (api_keys) => {
+        //
+        //   $http({
+        //     method : "GET" ,
+        //     url : $scope.url_attendee_draft_get ,
+        //     headers : {
+        //       "Content-Type":"application/json"
+        //     }
+        //   }).then(function(resp){
+        //       var userInfo = resp.data.att_draft.find(x => x.user_id == $scope.user_id );
+        //       var questions = userInfo.questions_data ;
+        //       for (var i = 0; i < questions.length; i++) {
+        //         var question_object = questions[i] ;
+        //
+        //         var data = {
+        //           attendee_id : $scope.user_id ,
+        //           question_id : question_object.question_id,
+        //           answer_ids : question_object.answer_ids
+        //         };
+        //
+        //
+        //         if(question_object.question_type == 2 )
+        //           data['true_false_value'] = false ; // for testing only
+        //
+        //
+        //         $http({
+        //           method : "POST" ,
+        //           url : $scope.url_report_add ,
+        //           data : data ,
+        //           headers : {
+        //               "X-api-app-name" : api_keys.APP_NAME ,
+        //               "X-api-keys":api_keys.API_KEY
+        //           }
+        //         }).then((resp)=>{
+        //           console.log(resp);
+        //         } , (err)=>{
+        //           console.log(err);
+        //         });
+        //       }
+        //   } , function(err){
+        //     console.log(err);
+        //   });
+        //
+        //
+        //
+        //
+        // });
+     };
+     $scope.select_this_answer = function (questionId , answerId , question , answers , app_id , user_id , is_correct ){
+        // given !
         var is_single_choice = question.answer_settings.single_choice ;
         var answer_id = answerId ;
-
         $scope.current_question = questionId ;
-        var index = $scope.attendee_draft.findIndex($scope.callback_question_id)
-        if( index == -1 ){ // => first time to store it
-          $scope.attendee_draft.push({
-            application_id : app_id  , // under progression
-            user_id : user_id , // under progression
-            question_id : $scope.current_question ,
-            answer_ids : new Array (answer_id) ,
-            correct_answers : new Array() ,
+        $scope.user_id =  user_id ;
+
+        $scope.attendee_draft['application_id'] = $scope.__player_object._id;
+        $scope.attendee_draft['questionnaire_info'] = $scope.__player_object._id;
+        $scope.attendee_draft['application'] =  $scope.__player_object  ;
+        $scope.attendee_draft['creation_date'] = new Date();
+        if ($scope.attendee_draft.att_draft == undefined )
+          $scope.attendee_draft['att_draft'] = new Array() ;
+
+        var attendeeIndex = $scope.attendee_draft.att_draft.findIndex( x => x.user_id ==  user_id );
+
+
+        if(attendeeIndex == -1 ){ // => Add new
+          // => Build attendee information
+          $scope.attendee_draft.att_draft.push({
+            user_id : user_id ,
+            user_info : user_id ,
             is_completed : false ,
-            updated_date : new Date ()
+            questions_data : new Array()
           });
 
-          // => storing correct answers
-          for (var i = 0; i < question.answers_format.length; i++) {
-            if(question.answers_format[i].is_correct == true)
-              $scope.attendee_draft.find($scope.callback_question_id).correct_answers.push(question.answers_format[i]._id)
-          }
+          // => Push the question data
+          var cnt = $scope.attendee_draft.att_draft.length - 1 ;
 
-        }else { // => Update question answers !
-          if( !is_single_choice ) {
-              var currAnswer = $scope.attendee_draft[index].answer_ids.indexOf(answer_id);
-              if(currAnswer == -1 ){ // add new answer
-                $scope.attendee_draft[index].answer_ids.push(answer_id);
+         if($scope.attendee_draft.att_draft[cnt].questions_data == undefined )
+          $scope.attendee_draft.att_draft[cnt].questions_data = new Array ();
+
+          $scope.attendee_draft.att_draft[cnt].questions_data.push({
+            question_id : $scope.current_question,
+            answer_ids : new Array({answer_id : answer_id , is_correct : is_correct }) ,
+            question_index : 0 ,
+            question_type : question.question_type ,
+            correct_answers : new Array () ,
+            updated_date : new Date()
+          });
+
+          // => store correct answers here !
+          for (var i = 0; i < question.answers_format.length; i++) {
+             if(question.answers_format[i].is_correct == true){
+              //  console.log({"123":$scope.attendee_draft.att_draft[cnt]});
+               $scope.attendee_draft.att_draft[cnt].questions_data.find($scope.callback_question_id).correct_answers.push(question.answers_format[i]._id);
+
+             }
+           }
+        }else { // => Update the current
+          var questionIndex = $scope.attendee_draft.att_draft[attendeeIndex].questions_data.findIndex(x => x.question_id == questionId );
+          if(questionIndex == -1){ // => Add New Question
+            $scope.attendee_draft.att_draft[attendeeIndex].questions_data.push({
+              question_id : $scope.current_question,
+              answer_ids : new Array({answer_id : answer_id , is_correct : is_correct }) ,
+              question_type : question.question_type ,
+              question_index : $scope.attendee_draft.att_draft[attendeeIndex].questions_data.length ,
+              correct_answers : new Array () ,
+              updated_date : new Date()
+            });
+
+            // => store correct answers here !
+            var cnt = $scope.attendee_draft.att_draft.length - 1 ;
+            for (var i = 0; i < question.answers_format.length; i++) {
+               if(question.answers_format[i].is_correct == true)
+               {
+
+                 $scope.attendee_draft.att_draft[cnt].questions_data.find($scope.callback_question_id).correct_answers.push(question.answers_format[i]._id);
+
+               }
+             }
+          }else { // => update ( multi answers inside each question  )
+              if( !is_single_choice ) {
+                 var answerExists = $scope.attendee_draft.att_draft[attendeeIndex].questions_data[questionIndex].answer_ids.findIndex(x => x.answer_id == answer_id);
+                 if(answerExists == -1 ) { // Add this answer into args
+                    $scope.attendee_draft.att_draft[attendeeIndex].questions_data[questionIndex].answer_ids.push({
+                      answer_id : answer_id , is_correct : is_correct
+                    });
+                 }else { // => Update current answer value
+                    // => we do not need to do that !!
+                 }
               }
           }
         }
 
-        var next_question_index = $scope.attendee_draft.length + 1 ;
+          console.log($scope.attendee_draft);
+
+        // => Save this question into draft
+        $http({
+          url : $scope.url_attendee_draft ,
+          method : "POST" ,
+          data : {
+            app_id : app_id ,
+            user_id : user_id ,
+            application_fields : $scope.attendee_draft
+          } ,
+          headers : {
+            "Content-Type":"application/json"
+          }
+        }).then(function(respData){
+          console.log({"Successed" : respData});
+        } , function(err){
+          console.log(err);
+        });
         console.log($scope.attendee_draft);
-        // => Go to next slide { Case it only one answer }
-        if( is_single_choice ) {
-          $scope.continue_to_next_slider();
-        }
      };
      $scope.load_this_slider = function (){
        $scope.slide_screens = new Swiper('.swiper-container');
@@ -198,7 +319,40 @@ attendeeApp.controller('players' , [
        $scope.slide_screens.slideNext();
      };
      $scope.continue_to_next_slider = function (){
-       $scope.start_this_quiz();
+       //  $scope.user_id ; // $scope.url_report_add // $scope.application_id  ;
+
+       // => Build Data According to question type
+       var attendee_results = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id );
+       var attendee_index = $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id );
+       var dt = $scope.attendee_draft.att_draft[attendee_index].questions_data[$scope.attendee_draft.att_draft[attendee_index].questions_data.length - 1] ;
+       var dAnswers = [];
+       for (var i = 0; i < dt.answer_ids.length; i++) {
+          dAnswers.push(dt.answer_ids[i].answer_id)
+       }
+       var question_data = {
+          answer_ids : dAnswers ,
+          question_id : dt.question_id ,
+          attendee_id : $scope.user_id
+       };
+     
+       // => Save into report
+       $.getJSON($scope.json_source , (api_keys) => {
+          $http({
+            method : "POST" ,
+            url : $scope.url_report_add ,
+            data : question_data ,
+            headers : {
+                "X-api-app-name" : api_keys.APP_NAME ,
+                "X-api-keys":api_keys.API_KEY
+            }
+          }).then((res)=>{
+            console.log(res.data);
+          } , (err)=>{
+             console.log(err);
+          });
+       });
+       // => Next Question
+       $scope.slide_screens.slideNext();
      }
      $scope.back_to_quizzes = function (){
        return window.location.href = settings.server_ip + "quizzes";
@@ -212,7 +366,7 @@ attendeeApp.controller('players' , [
 
      $timeout(function(){
       //  console.log("ISSUES");
-      console.log($scope.application_status);
+      // console.log($scope.application_status);
        $scope.fill_with_labels ();
      } , 1000 );
   }]);

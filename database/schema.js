@@ -446,7 +446,30 @@ var reportDataTypes = {
    updated_at         : { type : Date }
  }
 var attendeeDraftDataTypes = {
-  type : []
+  // _id :{ type:mongoose.Schema.ObjectId } ,
+  application_id : { type : String }  ,
+  questionnaire_info : {type : String , ref : 'questionnaire'} ,
+  application : {type : Object } , // => application ( Quiz - survey => object )
+  creation_date : {type : Date } ,
+  att_draft : { type : [ // for use if browser is closed without complete this quiz
+          {
+             _id :{ type:mongoose.Schema.ObjectId } ,
+            user_id : { type : String }  ,
+            user_info : {type : String , ref : 'users'} ,
+            is_completed : { type : Boolean } ,
+            questions_data : {type : [ // => All questions with answer
+                {
+                  question_id :  { type : String }  ,
+                  question_index : { type : Number } ,
+                  question_type : { type : Number } ,
+                  answer_ids : { type : [] }  ,
+                  correct_answers : { type : [] }  ,
+                  updated_date :{ type : Date   }
+                }
+            ]}
+          }
+    ]}
+
 };
  var clientServersDataType = {
       _id :{ type:mongoose.Schema.ObjectId } ,

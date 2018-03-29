@@ -98,6 +98,7 @@ rptRouters.post("/:app_id/report/add" , api_key_report_auth , helper , ( req , r
       });
     }
 
+
    rpt.findOne({"questionnaire_id":qtnrDocument._id , "creator_id": qtnrDocument.creator_id}).then((rptDocument)=>{
 
      // ========> report object
@@ -120,16 +121,23 @@ rptRouters.post("/:app_id/report/add" , api_key_report_auth , helper , ( req , r
 
           var answer_id = answer_ids[ans]  ;
           var ans_index , find_answer ;
+
+
+
           try {
-            ans_index = _.findIndex(find_question.answers_format , {"_id":ObjectID( answer_id ) });
-            find_answer = _.find(find_question.answers_format , {"_id":ObjectID(answer_id)});
+            // ans_index = _.findIndex(find_question.answers_format , {"_id":ObjectID( answer_id ) });
+            // find_answer = _.find(find_question.answers_format , {"_id":ObjectID(answer_id)});
+            ans_index = find_question.answers_format.findIndex(x => x._id == answer_id );
+            ans_index = find_question.answers_format.find(x => x._id == answer_id );
            } catch (e) {
                answers_doesnt_exists[answers_doesnt_exists.length] = ans ;
            }
            userAnswers[userAnswers.length]= {"id":answer_ids[ans]}
            if(ans_index == -1)
              answers_doesnt_exists[answers_doesnt_exists.length] = ans ;
+
        }
+
 
         if(answers_doesnt_exists.length != 0 ){
             var indexes = "[";
@@ -145,15 +153,20 @@ rptRouters.post("/:app_id/report/add" , api_key_report_auth , helper , ( req , r
 
 
       var collected_answers = new Object();
+
       for( var i =0; i < answer_ids.length ; i++ ){
         var answer_id =  answer_ids[i];
-        var ans_index = _.findIndex(find_question.answers_format , {"_id":ObjectID( answer_id ) });
-        var find_answer = _.find(find_question.answers_format , {"_id":ObjectID(answer_id)});
+        // var ans_index = _.findIndex(find_question.answers_format , {"_id":ObjectID( answer_id ) });
+        // var find_answer = _.find(find_question.answers_format , {"_id":ObjectID(answer_id)});
+        var ans_index = find_question.answers_format.findIndex( x => x._id == answer_id);
+        var find_answer = find_question.answers_format.find( x => x._id == answer_id);
 
         collected_answers['answer_id_'+answer_id] = new Object();
         collected_answers['answer_id_'+answer_id]['answer_id']  = answer_id;
         if( find_question.question_type == 0 ||  find_question.question_type == 1 ){ // => 0 or 1 question type
           collected_answers['answer_id_'+answer_id]['answer_body']  = find_answer ;
+
+
           if(qtnrDocument.app_type == 1 )
             collected_answers['answer_id_'+answer_id]['is_correct'] = find_answer.is_correct; /* @Deprecated in v1.2.0 */
 
@@ -330,20 +343,25 @@ rptRouters.post("/:app_id/report/add" , api_key_report_auth , helper , ( req , r
         report_object['created_at'] = new Date();
         report_object['updated_at'] = new Date();
 
+
         var reporting = new rpt(report_object);
         reporting.save().then((reports)=>{
+            console.log('#1 Create Attendees');
             // #1 Create Attendees
            return reporting.create_attendees(attendee_object );
         }).then((attendee_arguments)=>{
+          console.log('#2 Create Questions and answers');
            // #2 Create Questions and answers
            return reporting.create_survey_quiz_answers(question_answers_object , helper);
         }).then((attendee_user)=>{
            // #3 Calculation Part
+           console.log('#3 Calculation Part');
            if(qtnrDocument.app_type == 1)
            return reporting.quiz_calculation(attendee_user,qtnrDocument);
         }).then(()=>{
           return reporting.detailed_report ( req.body.attendee_id  , req.params.app_id , qtnrDocument );
         }).then(()=>{
+
         if(find_question.answer_settings != null ){
            res.send({"Answer_Settings":find_question.answer_settings});
         }else {
