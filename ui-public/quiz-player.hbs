@@ -48,10 +48,14 @@
                    </div>
                    <!-- Answer container -->
                    <div class="answer-container">
-
+                      <!-- data:ng:class="(obj_val.answer_settings.choice_style)?'ng_inline_block':'ng_block'" -->
                           <!-- Quiz Questions -->
                           <ul class="question-list" ng:if="obj_val.question_type <= 2"> <!-- Question id , answer id  -->
-                            <li data:ng:click="select_this_answer(obj_val._id , ansvalue._id , obj_val , ansvalue , __player_object._id , '{{user.id}}' , ansvalue.is_correct )" data:ng:repeat="(anskey , ansvalue) in obj_val.answers_format" data:ng:class="(obj_val.answer_settings.choice_style)?'ng_inline_block':'ng_block'">
+                            <li
+                              class="answer_{>obj_val._id<}"
+                              data:ng:class="classes_for_this_answer(obj_val.answer_settings , obj_val._id)"
+                              data:ng:click="select_this_answer(obj_val._id , ansvalue._id , obj_val , ansvalue , __player_object._id , '{{user.id}}' , ansvalue.is_correct )"
+                              data:ng:repeat="(anskey , ansvalue) in obj_val.answers_format">
                                <!-- Cases with question type-->
                                  <!-- Case it 0 => Text choices -->
                                  <div ng:if="obj_val.question_type == 0" class="answer-contents">

@@ -25,6 +25,7 @@ drftRouter.use(session({
   resave : true ,
   saveUninitialized : true
 }));
+
 drftRouter.get("/application/user_status/:app_id/get" , (req,res)=>{
   var app_id = req.params.app_id;
   drft.findOne({application_id: app_id } , (err , draftDocument )=>{
@@ -40,6 +41,28 @@ drftRouter.get("/application/user_status/:app_id/get" , (req,res)=>{
   }).catch((er)=>{
     res.send(er);
   });
+});
+drftRouter.get("/application/user_status/:app_id/get/:user_id" , (req,res)=> {
+  var user_id = req.params.user_id ;
+  var app_id = req.params.app_id ;
+  drft.findOne({application_id : app_id} , (err , drftDoc) => {
+    if(err , !drftDoc){
+      return new Promise((resolve , reject)=>{
+        return false ;
+      })
+    }
+    // => looking for this user id
+    var attendeeObject = drftDoc.att_draft.find(x => x.user_id == user_id );
+    var attendeeIndex = drftDoc.att_draft.findIndex(x => x.user_id == user_id );
+    if(attendeeIndex == -1 )
+      res.send({message : false })
+    else {
+      res.send({
+        message : true ,
+        object : attendeeObject
+      });
+    }
+  }).then();
 });
 drftRouter.post("/application/user_status/:app_id" , (req,res)=>{
 
@@ -77,4 +100,5 @@ drftRouter.post("/application/user_status/:app_id" , (req,res)=>{
 
 
 });
+
 module.exports = { drftRouter };

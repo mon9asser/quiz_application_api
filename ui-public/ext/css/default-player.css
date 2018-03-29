@@ -320,3 +320,7 @@
     color: #222;
     border-radius: 13px;
 }
+.selected_answers {
+  border: 1px solid #0743ea ;
+  background: #acc2ff3d;
+}

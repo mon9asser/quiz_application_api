@@ -86,6 +86,7 @@ attendeeApp.controller('players' , [
      // => Api urls
      $scope.url_attendee_draft = $scope.server_ip + 'api/application/user_status/' + $scope.application_id
      $scope.url_attendee_draft_get = $scope.server_ip + 'api/application/user_status/' + $scope.application_id + '/get'
+     $scope.url_attendee_draft_get_attendee =$scope.server_ip + 'api/application/user_status/' + $scope.application_id + '/get/' +$scope.user_id;
      $scope.url_report_add = $scope.server_ip + 'api/'+ $scope.application_id  +'/report/add';
 
      $scope.callback_question_id = function (object){
@@ -155,6 +156,35 @@ attendeeApp.controller('players' , [
               console.log(err);
          });
        }); // End JSON
+     };
+     $scope.load_attendee_draft = function (){
+        // $scope.attendee_draft
+        $http({
+          method : "GET" ,
+          url : $scope.url_attendee_draft_get_attendee ,
+          headers : {
+                "Content-Type":"application/json"
+          }
+        }).then((res)=>{
+          $scope.attendee_draft = res.data ;
+        } , (err)=>{
+          console.log(err);
+        });
+     }
+
+     $scope.classes_for_this_answer = function (quiz_settings , question_id){
+        var classes = '';
+        // => Two blocks per row or else
+        if(quiz_settings.choice_style)
+          classes += 'ng_inline_block';
+          else
+          classes += 'ng_block';
+
+           console.log($scope.attendee_draft);
+
+        // => selected answer
+        // question_id
+          return classes ;
      };
      $scope.submit_quiz_into_report = function (){
         //  $scope.user_id ; // $scope.url_report_add // $scope.application_id  ;
@@ -334,7 +364,7 @@ attendeeApp.controller('players' , [
           question_id : dt.question_id ,
           attendee_id : $scope.user_id
        };
-     
+
        // => Save into report
        $.getJSON($scope.json_source , (api_keys) => {
           $http({
@@ -363,7 +393,7 @@ attendeeApp.controller('players' , [
      }, 1000);
 
 
-
+     $scope.load_attendee_draft();
      $timeout(function(){
       //  console.log("ISSUES");
       // console.log($scope.application_status);

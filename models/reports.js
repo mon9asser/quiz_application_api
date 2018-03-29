@@ -159,7 +159,7 @@ reportSchema.methods.quiz_calculation = function(attendee_user, questionnaire) {
          // Calculations
          var correct_ans_count = thisReport.attendees[attendee_user.index].results.correct_answers;
          var total_question = thisReport.attendees[attendee_user.index].results.count_of_questions;
-         console.log(questionnaire.settings);
+          
          var graded_settings = questionnaire.settings.grade_settings.value;
 
          thisReport.attendees[attendee_user.index].passed_the_grade = true;
