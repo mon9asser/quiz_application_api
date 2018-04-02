@@ -7,69 +7,32 @@
   </head>
   <body>
 
-    <textarea id="selD" ></textarea>
-    <div id="original">
-
-    </div>
-    <button type="button" name="button">Set</button>
-    <script src="http://localhost:9000/ext/frameworks/js/jquery.min.js" charset="utf-8"></script>
-    <script type="text/javascript" src="redactor.js" ng:if="page_name=='api'"></script>
-    <!-- Redactor Plugins -->
-    <script type="text/javascript" src="http://localhost:9000/ext/frameworks/js/redactor-font-color.js"></script>
-    <script type="text/javascript" src="http://localhost:9000/ext/frameworks/js/redactor-font-size.js"></script>
-
-
-
-
-
 
     <script type="text/javascript">
-    /* A convenience function to reverse a string, and
-* one to set the content of an element.
-*/
+      Array.prototype.diff = function (questions_list) {
+          return this.filter(function (i) {
+            return questions_list.findIndex(x => x.question_id == i.id) === -1;
+          });
+      };
 
-function reverse(s){return s.split('').reverse().join('')}
-
-function set(el,text){
-while(el.firstChild)el.removeChild(el.firstChild);
-el.appendChild(document.createTextNode(text))}
-
-/* setupUpdater will be called once, on page load.
-*/
-  $("button").on('click',function (){
-    var newText= $R("#selD" , 'source.getCode');
-    set(orig, newText);
-  });
-
-  $R("#selD");
-        var input =document.getElementsByClassName('redactor-in')[0]
-          , orig=document.getElementById('original')
-          , timeout=null;
-
-        /* handleChange is called 50ms after the user stops
-          typing. */
-        function handleChange(){
-         var newText= $('.redactor-in').html();
-
-
-         set(orig, newText);
-        }
-
-        /* eventHandler is called on keyboard and mouse events.
-          If there is a pending timeout, it cancels it.
-          It sets a timeout to call handleChange in 50ms. */
-        function eventHandler(){
-         if(timeout) clearTimeout(timeout);
-         timeout=setTimeout(handleChange, 50);
-        }
-
-        input.onkeydown=input.onkeyup=input.onclick=eventHandler;
-
-
-
-
+      var ob = [
+        {id:1 , question_data : "question text here"},
+        {id:2 , question_data : "question text here"},
+        {id:3 , question_data : "question text here"},
+        {id:4 , question_data : "question text here"},
+        {id:5 , question_data : "question text here"},
+        {id:6 , question_data : "question text here"},
+        {id:7 , question_data : "question text here"}
+      ];
+      var solved = [
+        {question_id:7 , question_data : "question text here"},
+        {question_id:2 , question_data : "question text here"},
+        {question_id:6 , question_data : "question text here"},
+        {question_id:5 , question_data : "question text here"}
+      ];
+      // 2 3 5 7
+      var dif = ob.diff(solved);
+      console.log(dif);
     </script>
-
-
   </body>
 </html>

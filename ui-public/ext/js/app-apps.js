@@ -240,6 +240,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
            randomize_settings : false ,
            step_type : true ,
            auto_slide : true ,
+           allow_touch_move : false ,
            show_results_per_qs : false ,
            retake_setting : false ,
            navigation_btns : false ,
@@ -429,6 +430,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                   }else
                   settings_obj['settings']['auto_slide'] = $scope.application_settings.settings.auto_slide;
 
+                  if(mongo_settings.allow_touch_move != null ){
+                    settings_obj['settings']['allow_touch_move'] = mongo_settings.allow_touch_move;
+                  }else
+                  settings_obj['settings']['allow_touch_move'] = $scope.application_settings.settings.allow_touch_move;
 
                   if(mongo_settings.retake_setting != null ){
                     settings_obj['settings']['retake_setting'] = mongo_settings.retake_setting;
@@ -2145,7 +2150,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
         $timeout(function(){
           $scope.loading_redactor_models();
-          
+
           // $(".screen-redactors-strt-txt , .screen-redactors-end-txt , .screen-redactors-scs-txt , .screen-redactors-fld-txt").redactor ({
           //    buttons : ["format","lists"  , "bold" , "italic" , "html"] ,
           //    plugins : ['fontcolor' , 'fontsize', 'fontfamily']

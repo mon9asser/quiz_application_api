@@ -11,11 +11,10 @@ html , body {
 }
 
 .button-take-this {
-  background: tomato;
   color: #fff;
 }
 .about-quiz , .screen-container {
-  background: #fff;
+  background: #f9f9f9;
   box-shadow: 0px 0px 5px 0px #dfdfdf;
 }
 /*

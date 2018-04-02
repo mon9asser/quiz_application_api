@@ -108,6 +108,7 @@ rptRouters.post("/:app_id/report/add" , api_key_report_auth , helper , ( req , r
       // ========> Get question information from ..
       var index_question = _.findIndex(qtnrDocument.questions , {"id": question_id});
       var find_question  = _.find(qtnrDocument.questions , {"id": question_id});
+
       if(index_question == -1 ){ // Question
         return new Promise((resolve , reject)=>{
           res.send(notes.Errors.Error_Doesnt_exists("Question"));
@@ -160,6 +161,7 @@ rptRouters.post("/:app_id/report/add" , api_key_report_auth , helper , ( req , r
         // var find_answer = _.find(find_question.answers_format , {"_id":ObjectID(answer_id)});
         var ans_index = find_question.answers_format.findIndex( x => x._id == answer_id);
         var find_answer = find_question.answers_format.find( x => x._id == answer_id);
+
 
         collected_answers['answer_id_'+answer_id] = new Object();
         collected_answers['answer_id_'+answer_id]['answer_id']  = answer_id;

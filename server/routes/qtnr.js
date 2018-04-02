@@ -142,7 +142,9 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
                  res.status(204).send( `${notes.Errors.General_Error}`  );
             });
         }
-
+        // => Save id to set attendee_draft
+        qtnrs.app_registry = qtner._id ;
+        qtnrs.save();
         res.send(qtner);
     }).catch((e) => {
 
@@ -2321,20 +2323,20 @@ qtnrRouters.post("/:app_id/application/:objects" , auth_verify_api_keys , (req ,
 
 
 
-
+// ==> populate for attendee draft
 qtnrRouters.get("/:app_id/application/:objects" , auth_api_keys_only , (req ,res )=>{
       var objects= req.params.objects ;
       var app_id = req.params.app_id ;
 
-    qtnr.findOne({ _id:app_id }).then( ( qtnairsDocument) => {
+    qtnr.findOne({ _id:app_id }).populate('app_registry').exec( (error , qtnairsDocument) => {
 
-         if (!qtnairsDocument){
+         if (!qtnairsDocument || error ){
            return new Promise((resolve, reject)=>{
               res.status(404).send(notes.Errors.Error_Doesnt_exists("Application"));
+              return false ;
            });
          }
 
-       
         var apps ;
         if( objects == 'retrieve'){
              apps = qtnairsDocument ;
@@ -2350,6 +2352,7 @@ qtnrRouters.get("/:app_id/application/:objects" , auth_api_keys_only , (req ,res
               {
                 return new Promise((resolve , reject)=>{
                   res.send(notes.Errors.Error_Doesnt_exists("Question"));
+                  return false ;
                 });
               }
             apps =  _.find(qtnairsDocument.questions , {"id":req.body.target_id});
@@ -2364,6 +2367,7 @@ qtnrRouters.get("/:app_id/application/:objects" , auth_api_keys_only , (req ,res
               {
                 return new Promise((resolve , reject)=>{
                   res.send(notes.Errors.Error_Doesnt_exists("Stylesheet"));
+                  return false ;
                 });
               }
             apps =  _.find(qtnairsDocument.theme_style , {"file_name":  "styletheme_"+req.body.target_id+".css"});
@@ -2371,12 +2375,19 @@ qtnrRouters.get("/:app_id/application/:objects" , auth_api_keys_only , (req ,res
              apps = qtnairsDocument.theme_style ;
         }
 
+        console.log({
+          'cacac' : apps
+        });
        res.send(apps);
-        }).catch((er)=>{
+       return false ;
+     });
+        /*
+        .catch((er)=>{
           return new Promise((resolve, reject)=>{
             res.status(404).send(notes.Errors.General_Error);
           });
-       });
+        });
+        */
 });
 
 qtnrRouters.get("/:uid/applications" , authenticate_keys_with_curr_status ,  (req,res) => {

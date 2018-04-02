@@ -389,7 +389,8 @@ var questionnaireDataTypes = {
    createdAt : { type : Date } ,
    updatedAt : {  type : Date   },
    settings :  Questionnaire_settings  ,
-   questions : Questionnaire_questions
+   questions : Questionnaire_questions ,
+   app_registry : { type : String , ref : "attendee_drafts" }
 };
 
 
@@ -449,19 +450,22 @@ var attendeeDraftDataTypes = {
   // _id :{ type:mongoose.Schema.ObjectId } ,
   application_id : { type : String }  ,
   questionnaire_info : {type : String , ref : 'questionnaire'} ,
-  application : {type : Object } , // => application ( Quiz - survey => object )
+  // application : {type : Object } , // => application ( Quiz - survey => object )
   creation_date : {type : Date } ,
   att_draft : { type : [ // for use if browser is closed without complete this quiz
           {
              _id :{ type:mongoose.Schema.ObjectId } ,
             user_id : { type : String }  ,
             user_info : {type : String , ref : 'users'} ,
+            impr_application_object : {type : Object } ,
             is_completed : { type : Boolean } ,
+            time_tracker : {type : String}  ,
             questions_data : {type : [ // => All questions with answer
                 {
                   question_id :  { type : String }  ,
                   question_index : { type : Number } ,
                   question_type : { type : Number } ,
+                  question_text : { type : String } ,
                   answer_ids : { type : [] }  ,
                   correct_answers : { type : [] }  ,
                   updated_date :{ type : Date   }

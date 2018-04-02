@@ -28,18 +28,16 @@ drftRouter.use(session({
 
 drftRouter.get("/application/user_status/:app_id/get" , (req,res)=>{
   var app_id = req.params.app_id;
-  drft.findOne({application_id: app_id } , (err , draftDocument )=>{
-    if(!draftDocument || err ){
+  drft.findOne({application_id: app_id }).populate('questionnaire_info').exec( ( err , draftDocument )=>{
+
+    if(!draftDocument){
       return new Promise((resolve , reject )=>{
         res.send({error : "This application doesn't exists"});
         return false;
       });
-      res.send(draftDocument);
     }
-  }).then((draftDocument)=>{
+
     res.send(draftDocument);
-  }).catch((er)=>{
-    res.send(er);
   });
 });
 drftRouter.get("/application/user_status/:app_id/get/:user_id" , (req,res)=> {

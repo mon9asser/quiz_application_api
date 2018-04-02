@@ -13,5 +13,5 @@ attendeeDraftSchema.statics.save_attendee_draft = function (app_id ,attendee_dra
   var attendee_draft = this ;
   attendee_draft.push(attendee_draft);
 };
-var drft = mongoose.model("attendee_draft" , attendeeDraftSchema );
+var drft = mongoose.model("attendee_drafts" , attendeeDraftSchema );
 module.exports = {drft};
