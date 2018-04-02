@@ -944,8 +944,7 @@ attendeeApp.controller('players' , [
 
      $scope.load_application_draft();
      $timeout(function(){
-      //  console.log("ISSUES");
-      // console.log($scope.application_status);
+      $scope.slide_screens.allowTouchMove = $scope.__player_object.settings.allow_touch_move ;
        $scope.fill_with_labels ();
      } , 1000 );
   }]);
