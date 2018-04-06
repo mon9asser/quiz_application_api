@@ -1411,9 +1411,13 @@ float: left;
   width: 100%;
   margin: 0px auto;
 }
- #time-mask-input {
-  width: 85px !important;
+ .time-tracker-elem {
+  width: 148px !important;
+  margin-left: 5px;
 }
+ .time-tracker-elem:first-child {
+   margin-left: 0px  !important;
+ }
 .quiz-titlex , .quiz-titlex:active , .quiz-titlex:focus {
     width: 100%;
     display: block;
@@ -2198,7 +2202,9 @@ ul.question-data > li[data-type="qst"] {
   }
 .time-fram-slidest {
   overflow: hidden;
-    padding: 5px 0px;
+    padding: 10px 0px;
+    width: 100%;
+    display: block;
 }
 .xbootstrap-touchspin{
   display: block;
@@ -2948,4 +2954,29 @@ button.saving-settings-changes:hover{
 }
 .redactor-styles ol li, .redactor-styles ul li{
   font-weight: normal;
+}
+.expire-though , .expire-though:hover , .expire-though:focus , .expire-though:active {
+  width: 20% !important;
+  margin-bottom:0px !important;
+}
+.equal-this{
+  margin-top: 15px !important;
+  margin-bottom: 0px !important;
+  display: inline-block;
+  margin-left: 10px;
+}
+.for-x-daf{
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+.input-group .form-control,
+.input-group .form-control:hover ,
+.input-group .form-control:focus ,
+.input-group .form-control:active ,
+.expire-title ,
+.expire-title:hover,
+.expire-title:focus,
+.expire-title:active{
+margin-bottom: 0px !important;
 }

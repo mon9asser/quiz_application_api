@@ -101,6 +101,12 @@
 }
 
 @font-face {
+  font-family: 'PTSansRegular';
+  src:url('../fonts/PT_Sans/PT_Sans-Web-Regular.ttf') ;
+}
+
+
+@font-face {
   font-family: 'OpenSansRegular';
   src:url('../fonts/Open_Sans/OpenSans-Regular.ttf') ;
 }
@@ -109,6 +115,8 @@
   font-family: 'Open Sans Regular';
   src:url('../fonts/Open_Sans/OpenSans-Regular.ttf') ;
 }
+
+
 
 /*Numans*/
 @font-face {

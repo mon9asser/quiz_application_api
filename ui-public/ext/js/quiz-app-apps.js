@@ -30,15 +30,15 @@ attendeeApp.filter("set_iframe" , [
         video_mp4['ogg_url'] = media_object.mp4_option.ogg_url ;
 
         iframe_size = new Object();
-        iframe_size.width = "100%";
-        iframe_size.height = "130px" ;
+        iframe_size.width = "250px";
+        iframe_size.height = "160px" ;
       }else {
         video_mp4 = new Object();
         video_mp4['mp4_url'] =  media_object.media_field+'.mp4';
         video_mp4['ogg_url'] =  media_object.media_field+'.ogg';
         iframe_size = new Object();
-        iframe_size.width = "100%";
-        iframe_size.height = "130px" ;
+        iframe_size.width = "250px";
+        iframe_size.height = "160px" ;
       }
       switch (media_object.media_type) {
         case 1:
@@ -46,7 +46,7 @@ attendeeApp.filter("set_iframe" , [
             embed_video = "<iframe width='"+iframe_size.width+"' height='"+iframe_size.height+"' src='"+video_path+"' ></iframe>";
           }
           if( media_object.video_type == 1 ){
-            embed_video = "<iframe width='"+iframe_size.width+"' height='"+iframe_size.height+"' src='"+video_path+"' webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>";
+            embed_video = "<iframe style='border:none;' width='"+iframe_size.width+"' height='"+iframe_size.height+"' src='"+video_path+"' webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>";
           }
           if( media_object.video_type == 2 ){
             embed_video = '<video style="width:'+iframe_size.width+'; height:'+iframe_size.height+';" controls>' +
@@ -76,9 +76,12 @@ attendeeApp.filter('trust_this_html_values' , [
 attendeeApp.controller('players' , [
   '$scope' , '$rootScope' , '$timeout' , '$http' , 'settings',
   function ($scope, $rootScope, $timeout , $http , settings ){
+
      // => Scopes
      $scope.user_id = $("#userId").val();
      $scope.application_id = $("#appId").val();
+     $scope.is_resume = null ;
+     $scope.application_data_object = null ;
      $scope.server_ip = settings.server_ip ;
      $scope.json_source = settings.server_ip + settings.json_source;
      $scope.labels = [  'a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
@@ -91,11 +94,227 @@ attendeeApp.controller('players' , [
      $scope.current_question = null ;
      $scope.slide_screens = null ;
 
+     // ==> timer object
+     $scope.collected_time_vals = 0;
+     $scope.seconds = 00 ;
+     $scope.minutes = 00   ;
+     $scope.hours = 0 ;
+     $scope.timer = null ;
+     $scope.quiz_time_tracker = "00:00";
+     $scope.curren_question_slide = 0;
+     $scope.warning_at_time = {
+       number_1 : 0 ,
+       number_2 : 0
+     };
+     $scope.warning_for_not_attended_question = function (){
+
+       if($scope.attendee_draft.att_draft == undefined){
+         if($scope.attendee_draft.error != undefined ){
+           var not_attended_count = $scope.__player_object.questions.length;
+           var plural_case = (not_attended_count > 1)? "s":"" ;
+           $('.warning_case').css({display:'block'});
+           $('.warning_case').html(not_attended_count+" question"+plural_case+" is not attended Click here to attend");
+           return false;
+         }
+
+         var userInfo = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+         var not_attended_count = $scope.__player_object.questions.length;
+         var plural_case = (not_attended_count > 1)? "s":"" ;
+         $('.warning_case').css({display:'block'});
+         $('.warning_case').html(not_attended_count+" question"+plural_case+" is not attended Click here to attend");
+
+         return false ;
+       }
+        var userInfo = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+        if(userInfo != undefined){
+         if($scope.__player_object.questions.length != userInfo.questions_data.length)
+          {
+
+            var not_attended_count = Math.round($scope.__player_object.questions.length - userInfo.questions_data.length)
+            var plural_case = (not_attended_count > 1)? "s":"" ;
+            $('.warning_case').css({display:'block'});
+            $('.warning_case').html(not_attended_count+" question"+plural_case+" is not attended Click here to attend");
+            return false;
+          } else
+          return true
+        }
+
+     };
+     $scope.submit_quiz_into_report = function (show_warning = true ){
+       console.log($scope.json_source);
+       $.getJSON( $scope.json_source , function(api_key){
+         console.log($scope.json_source );
+         console.log(api_key);
+       });
+     };
+     $scope.add_quiz_time_tracker = function (){
+
+       var sec  = $('.sec');
+       var mins = $('.min');
+       var hrs  = $('.hr');
+
+       // ==> Calculate the time and transfer it into minutes
+
+        if($scope.collected_time_vals  > 1 ){
+            $scope.warning_at_time.number_1 = Math.round((15 / 100 ) * $scope.collected_time_vals );
+            $scope.warning_at_time.number_2 = Math.round((5 / 100 ) * $scope.collected_time_vals );
+        }
+        var collected_time = Math.round( ( $scope.hours * 60 ) + ( (  $scope.seconds> 60 ) ?   $scope.seconds  / 60 : 0 ) + $scope.minutes ) ;
+
+        if(collected_time <= $scope.warning_at_time.number_1 && collected_time > $scope.warning_at_time.number_2) {
+          // => Change the color of timeframe
+          $(".time-obj").css({
+              color:'violet'
+          });
+        }else if (collected_time <= $scope.warning_at_time.number_2){
+          $(".time-obj").addClass("highlighted_estimated_time")
+        }
+
+
+      //  console.log($scope.minutes);
+       // => Calculate the time and show the warning regarding time 5% from all time '
+
+       if( $scope.attendee_draft != undefined && $scope.attendee_draft.att_draft != undefined){
+         $scope.this_attendee_draft_index = $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id);
+         $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+         if( $scope.this_attendee_draft_index != -1 && $scope.attendee_draft.att_draft != undefined){
+           // console.log($scope.this_attendee_draft.impr_application_object.settings );
+           // => Save the current time into settings
+
+           try {
+             $http({
+               method : "PATCH" ,
+               data : {
+                  user_id : $scope.user_id ,
+                  data_timed_with : {
+                    seconds :  $scope.seconds ,
+                    minutes : $scope.minutes  ,
+                    hours : $scope.hours
+                  }
+               } ,
+               url : $scope.server_ip + 'api/' + $scope.application_id + "/update/settings"
+             }).then((res)=>{
+                //  console.log(res.data);
+
+             } , (er)=>{
+               console.log(er);
+             });
+           } catch (e) {
+
+           }
+
+          }
+       }
+
+       if($scope.hours == 0 && $scope.minutes == 0 && $scope.seconds == 0)
+       {
+
+
+          clearTimeout($scope.timer);
+          // =>> Do an action for mongo ( Submit the quiz )
+
+          // 1- ==> Slide into result screen to show the results  ;
+          // ......
+
+          // 2- ==> disable swip slider
+          $scope.slide_screens.allowSlidePrev = false ;
+          $scope.slide_screens.allowSlideNext = false ;
+          $scope.slide_screens.noSwiping = false ;
+          // 3- => Submit the quiz into report
+          $scope.submit_quiz_into_report(false);
+          // alert($scope.server_ip+"api/"+$scope.application_id+"/update/status");
+
+
+          // 5- Freezing it
+          return false ;
+       }
+
+       $scope.seconds--;
+
+       //00:30:-1 ==> 00:29:00
+       if( $scope.seconds < 0 ){
+           $scope.seconds = 59;
+           $scope.minutes--;
+       }
+
+
+       if($scope.__player_object.settings.time_settings.timer_type){
+           if($scope.minutes < 00 && $scope.hours > 0 ) {
+              $scope.minutes = 59;
+              $scope.hours--;
+           }
+       }else {
+         if($scope.minutes < 00 ) $scope.minutes = 00 ;
+       }
+
+       if($scope.seconds < 10 )
+       $scope.seconds = '0' + $scope.seconds;
+
+       sec.html($scope.seconds);
+       mins.html(($scope.minutes < 10 ) ? '0'+$scope.minutes:$scope.minutes );
+
+       if($scope.__player_object.settings.time_settings.timer_type == true)
+        hrs.html( $scope.hours);
+
+       $scope.quiz_timer();
+     }
+     $scope.quiz_timer = function (){
+       $scope.timer = setTimeout($scope.add_quiz_time_tracker , 1000 );
+     }
+     $scope.calculate_usage_time = function(){
+
+       if($scope.__player_object.settings.time_settings.is_with_time){
+
+        // ==> Remaining times
+        var remaining_hours =  $scope.__player_object.settings.time_settings.hours * 60
+        var remaining_minutes =  $scope.__player_object.settings.time_settings.minutes
+        var remaining_seconds =  parseInt(( $scope.__player_object.settings.time_settings.seconds > 60 ) ?  $scope.__player_object.settings.time_settings.seconds / 60 : 0);
+        // console.log({remaining_hours : remaining_hours , remaining_minutes : remaining_minutes , remaining_seconds : remaining_seconds });
+        // ==> Main Times
+        var app_hours = $scope.application_data_object.settings.time_settings.hours * 60
+        var app_minutes = $scope.application_data_object.settings.time_settings.minutes
+        var app_seconds = parseInt(($scope.application_data_object.settings.time_settings.seconds > 60 ) ?  $scope.application_data_object.settings.time_settings.seconds / 60 : 0  );
+        // console.log({app_hours : app_hours , app_minutes : app_minutes , app_seconds : app_seconds });
+
+        // ==> Calculated the-usage times
+        var usage_hours =  Math.round(app_hours - remaining_hours);
+        var usage_minutes = Math.round ( app_minutes - remaining_minutes);
+        var usage_seconds = Math.round ( app_seconds - remaining_seconds);
+
+        var usage_times = usage_hours + usage_minutes  + usage_seconds;
+        $('.time-status').html("Completed in : "+usage_times+" minute(s)");
+       }
+     };
+     // quiz_timer();
+     $scope.slide_screens_index = function (index){
+       if(index > $scope.__player_object.questions.length )
+        $scope.curren_question_slide = $scope.__player_object.questions.length;
+         else
+         $scope.curren_question_slide = parseInt(index) ;
+
+         // calculation
+         if($scope.__player_object.settings.progression_bar.is_available == true && $scope.__player_object.settings.progression_bar.progression_bar_layout == 0 ){
+           var calc = $scope.curren_question_slide * 100 /  $scope.__player_object.questions.length ;
+            $('.progress-highlighted').css({width: calc + '%'})
+         }
+     };
+
+     // ==> time layouts
+     $scope.time_tracker_layout = function(){
+       var layout_template = $scope.__player_object.settings.time_settings.timer_layout;
+       return '/time-layouts/layout-'+layout_template+'.hbs';
+     };
+     // ==> progression layouts
+     $scope.progression_layout = function(){
+       var layout_template = $scope.__player_object.settings.progression_bar.progression_bar_layout;
+       return '/progressbar-layouts/layout-'+layout_template+'.hbs';
+     };
      // => Api urls
      $scope.url_attendee_draft = $scope.server_ip + 'api/application/user_status/' + $scope.application_id;
      $scope.url_attendee_draft_get = $scope.server_ip + 'api/application/user_status/' + $scope.application_id + '/get';
      $scope.url_attendee_draft_get_attendee =$scope.server_ip + 'api/application/user_status/' + $scope.application_id + '/get/' +$scope.user_id;
      $scope.url_report_add = $scope.server_ip + 'api/'+ $scope.application_id  +'/report/add';
+     $scope.url_attend_quiz = $scope.server_ip + 'api/'+ $scope.application_id  +'/add/attended/quiz';
 
      $scope.callback_question_id = function (object){
        if($scope.current_question == null )
@@ -109,80 +328,124 @@ attendeeApp.controller('players' , [
      $scope.fill_with_labels = function (){
        // => Loading Answer labels
        $(".question-list").each(function(){
-         $(this).children('li').each(function(i){
-           // => Answers
-           $(this).find('label.labels').html($scope.labels[i].toUpperCase())
-         })
-       });
-       // => Loading Question Labels
-       $('.question-container').each(function(i){
-         $(this).children('.question-body').find('.qs-numericals').html(i + 1 );
-       })
+      $(this).children('li').each(function(i){
+        // => Answers
+        $(this).find('label.labels').html($scope.labels[i].toUpperCase())
+
+          });
+        });
+        // => Loading Question Labels
+        $('.question-container').each(function(i){
+          $(this).children('.question-body').find('.qs-numericals').html(i + 1 );
+        });
+
      };
 
      $scope.load_attendee_application = function (){
-       $.getJSON( $scope.json_source , function (keys_object){
-         $http({
-           url : settings.server_ip + 'api/'+$scope.application_id+'/application/retrieve' ,
-           type : "GET" ,
-           headers: {
-             "X-api-keys": keys_object.API_KEY,
-             "X-api-app-name": keys_object.APP_NAME
-           }
-         }).then(function (resps){
+       try {
 
-            $scope.__player_object = resps.data ;
 
-            if($scope.__player_object.app_type == 1 ){ // => Quiz type
-              var all_questions = $scope.__player_object.questions ;
+           $.getJSON( $scope.json_source , function (keys_object){
+             $http({
+               url : settings.server_ip + 'api/'+$scope.application_id+'/application/retrieve' ,
+               type : "GET" ,
+               headers: {
+                 "X-api-keys": keys_object.API_KEY,
+                 "X-api-app-name": keys_object.APP_NAME
+               }
+             }).then(function (resps){
+               // ==> unchanged value
+                $scope.application_data_object = resps.data ;
+                $scope.__player_object = resps.data ;
+                // ==> time tracker
+                $scope.quiz_time_tracker =
+                ($scope.__player_object.settings.time_settings.timer_type == true ) ?
+                $scope.__player_object.settings.time_settings.value + ':00:00' :
+                $scope.__player_object.settings.time_settings.value + ':00';
 
-              for (var i = 0; i < all_questions.length; i++) {
-                 var this_question = all_questions[i];
-                 var status_object = new Object();
-                 // 1 -> check about count of answers
-                      // A => only these question type is 0 - 1
-                      if(this_question.question_type == 0 || this_question.question_type == 1 ){
-                        if(this_question.answers_format.length < 3 ){
+                // => time tacker (time)
+                $scope.collected_time_vals = Math.round( ( $scope.__player_object.settings.time_settings.hours * 60 ) + ( ( $scope.__player_object.settings.time_settings.seconds> 60 ) ?   $scope.__player_object.settings.time_settings.seconds  / 60 : 0 ) + $scope.__player_object.settings.time_settings.minutes ) ;
+
+
+                if($scope.attendee_draft == null || $scope.attendee_draft.att_draft == undefined ) {
+                  $scope.seconds = $scope.__player_object.settings.time_settings.seconds ;
+                  $scope.minutes = $scope.__player_object.settings.time_settings.minutes ;
+                  $scope.hours = $scope.__player_object.settings.time_settings.hours ;
+                }else {
+                  var attendee_app =  $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+                  if ( attendee_app.is_loaded == undefined   )
+                      {
+                        $scope.seconds = $scope.__player_object.settings.time_settings.seconds ;
+                        $scope.minutes = $scope.__player_object.settings.time_settings.minutes ;
+                        $scope.hours = $scope.__player_object.settings.time_settings.hours ;
+                      }
+                }
+
+
+
+
+                if($scope.__player_object.app_type == 1 ){ // => Quiz type
+                  var all_questions = $scope.__player_object.questions ;
+
+                  for (var i = 0; i < all_questions.length; i++) {
+                     var this_question = all_questions[i];
+                     var status_object = new Object();
+                     // 1 -> check about count of answers
+                          // A => only these question type is 0 - 1
+                          if(this_question.question_type == 0 || this_question.question_type == 1 ){
+                            if(this_question.answers_format.length < 3 ){
+                              status_object['question_id'] = this_question._id ;
+                              status_object['question_number'] = i + 1 ;
+                              status_object['note_message'] = 0 ;
+                              $scope.application_status.push(status_object);
+                            }
+                          }
+                     // 2 -> check about correct answer is available or not
+                        // for all questions
+                        var answers = this_question.answers_format ;
+                        if (answers.findIndex($scope.callback_correct_answer) == -1) {
                           status_object['question_id'] = this_question._id ;
                           status_object['question_number'] = i + 1 ;
-                          status_object['note_message'] = 0 ;
+                          status_object['note_message'] = 1;
                           $scope.application_status.push(status_object);
                         }
-                      }
-                 // 2 -> check about correct answer is available or not
-                    // for all questions
-                    var answers = this_question.answers_format ;
-                    if (answers.findIndex($scope.callback_correct_answer) == -1) {
-                      status_object['question_id'] = this_question._id ;
-                      status_object['question_number'] = i + 1 ;
-                      status_object['note_message'] = 1;
-                      $scope.application_status.push(status_object);
-                    }
 
 
-              }
-            }
+                  }
+                }
 
-         } , function (err){
-              console.log(err);
-         });
-       }); // End JSON
+             } , function (err){
+                  console.log(err);
+             });
+           }); // End JSON
+       } catch (e) {
+
+       }
      };
      $scope.load_application_draft = function (){
-        // $scope.attendee_draft
-        $http({
-          method : "GET" ,
-          url : $scope.url_attendee_draft_get ,
-          headers : {
-                "Content-Type":"application/json"
-          }
-        }).then((res)=>{
-          $scope.attendee_draft = res.data;
-          if($scope.attendee_draft.att_draft != undefined)
-          $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
-        } , (err)=>{
-          console.log(err);
-        });
+       try {
+
+            // $scope.attendee_draft
+            $http({
+              method : "POST" ,
+              url : $scope.url_attendee_draft_get ,
+              headers : {
+                    "Content-Type":"application/json"
+              } ,
+              data : {
+                user_id : $scope.user_id
+              }
+            }).then((res)=>{
+              $scope.attendee_draft = res.data;
+
+              if($scope.attendee_draft.att_draft != undefined)
+              $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+            } , (err)=>{
+              console.log(err);
+            });
+       } catch (e) {
+
+       }
      }
      $scope.classes_for_this_answer = function (quiz_settings , question_id , answer_id ){
         var classes = '';
@@ -224,8 +487,7 @@ attendeeApp.controller('players' , [
                    }
                  }else {
                    // =>> check if it else show the selected answer
-                   classes += ' selected_answer'
-
+                   classes += ' selected_answer';
                  }
                 }
                 // => some out cases !!
@@ -239,39 +501,17 @@ attendeeApp.controller('players' , [
         // question_id
           return classes ;
      };
-     $scope.submit_quiz_into_report = function (){
-       // ==============> Starting progression
-        var submit_icon = $('.fac-icon-submit');
-        if(submit_icon.hasClass('fa-arrow-right')) {
-            submit_icon.removeClass('fa-arrow-right');
-            submit_icon.addClass('fa-spinner fa-spin');
-
-            submit_icon.next('span').html('Submitting Quiz ...');
-        }else
-        return false ;
 
 
-        $.getJSON($scope.server_ip+settings.json_source , (apk_keys) =>{
-          console.log(apk_keys);
-          // => Check if there is any question not solved and back to those questions ( According to impr_application_object )
-          // => Case required question dont move to next slide without resolve it
-          // => Track these actions into report
-          // => Confirm completed status in attendee draft
-        });
 
-        //----------------------
-        if(submit_icon.hasClass('fa-spinner')){
-          submit_icon.removeClass('fa-spinner fa-spin');
-          submit_icon.addClass('fa-arrow-right');
-          submit_icon.next('span').html('Submit Quiz');
-        }
-      // ==============> End the progression
-     };
 
 
      $scope.go_to_next_question = () => {
        $timeout( () => {
          $scope.slide_screens.slideNext();
+         $timeout(function (){
+           $scope.slide_screens_index($scope.slide_screens.activeIndex);
+         } , 80);
        } , 1500 );
      }
      $scope.store_into_attendee_draft = ( object , is_single = null ) => {
@@ -282,7 +522,6 @@ attendeeApp.controller('players' , [
          if($scope.attendee_draft.application_id != undefined || $scope.attendee_draft.application_id != null){
             // => dont change anything here !
          }
-         // Update on attendee draft
 
 
          var findAttendeeIndex = $scope.attendee_draft.att_draft.findIndex(x => x.user_id == object.user_id);
@@ -329,6 +568,7 @@ attendeeApp.controller('players' , [
               }
             }
          }else {
+
           //  alert(findAttendeeIndex);
             // ==> attendee doesn't exists
             // => Apply first impression rule ( store it for only one time => first time )
@@ -359,7 +599,8 @@ attendeeApp.controller('players' , [
                }
              }
          }
-       } else { // first time store register app into scope object !
+       } else { // first time store/register app into scope object !
+
          // Add new application into attendee_draft
          application_object['application_id'] = object.app_id;
          application_object['questionnaire_info']  = object.app_id;
@@ -367,11 +608,14 @@ attendeeApp.controller('players' , [
          application_object['created_at'] = new Date();
          // ==> Attendee data
          application_object['att_draft'].push({
+           is_loaded : true ,
+           start_expiration_time : new Date(),
            user_id: object.user_id ,
            user_info : object.user_id ,
            is_completed : false ,
            questions_data : new Array(),
            impr_application_object : $scope.__player_object
+
          });
          // ===> Question data
          application_object.att_draft[0].questions_data.push({
@@ -399,27 +643,31 @@ attendeeApp.controller('players' , [
       // ============>>> Databases proccess
       //------------------------------------------------------------------
 
-      $.getJSON( $scope.server_ip + settings.json_source , (api_key) => {
-        // ==> ATTENDEE DRAFT COLLECTION ===========>>>>>============>>>>
-        $http({
-            url : $scope.url_attendee_draft ,
-            method : "POST" ,
-            data : {
-              app_id : object.app_id ,
-              user_id : object.user_id ,
-              application_fields : $scope.attendee_draft
-            } ,
-            headers : {
-              "Content-Type":"application/json"
-            }
-          }).then(function(respData){
-            // console.log({"Successed" : respData});
-          } , function(err){
-            console.log(err);
-          });
-        // ==> REPORT COLLECTION ===================>>>>>============>>>>
+      try {
+        $.getJSON( $scope.server_ip + settings.json_source , (api_key) => {
+          // ==> ATTENDEE DRAFT COLLECTION ===========>>>>>============>>>>
+          $http({
+              url : $scope.url_attendee_draft ,
+              method : "POST" ,
+              data : {
+                app_id : object.app_id ,
+                user_id : object.user_id ,
+                application_fields : $scope.attendee_draft
+              } ,
+              headers : {
+                "Content-Type":"application/json"
+              }
+            }).then(function(respData){
+              // console.log({"Successed" : respData});
+            } , function(err){
+              console.log(err);
+            });
+          // ==> REPORT COLLECTION ===================>>>>>============>>>>
 
-      });
+        });
+      } catch (e) {
+
+      }
 
      }; // => END ----------------------
      $scope.select_this_answer = ( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex) => {
@@ -823,9 +1071,9 @@ attendeeApp.controller('players' , [
      }
      $scope.load_slide_theme = (question_type) => {
        var classes = '';
-       if(question_type == 0 ) classes = 'question_type_texts_bg';
-       if(question_type == 1 ) classes = 'question_type_media_bg';
-       if(question_type == 2 ) classes = 'question_type_boolean_bg';
+         if(question_type == 0 ) classes = 'question_type_texts_bg';
+         if(question_type == 1 ) classes = 'question_type_media_bg';
+         if(question_type == 2 ) classes = 'question_type_boolean_bg';
        return classes;
      };
      $scope.get_slide_styles = (question_type) => {
@@ -837,60 +1085,83 @@ attendeeApp.controller('players' , [
      };
      $scope.load_this_slider = function (){
        // { allowTouchMove : $scope.__player_object.settings.allow_touch_move  }
-       $scope.slide_screens = new Swiper('.swiper-container' );
+       $scope.slide_screens = new Swiper('.swiper-container') ;
+
      };
      $scope.start_this_quiz = function (){
+       $scope.quiz_timer();
+       // Slide to next slide
        $scope.slide_screens.slideNext();
+       $timeout(function (){
+         $scope.slide_screens_index($scope.slide_screens.activeIndex);
+       } , 80);
+
+       // delete this slide
+      //  $timeout(function(){
+      //    $('.welcoming-screen-x').remove();
+      //     $scope.slide_screens.slideTo( 0 );
+      //  } , 500);
+     };
+     $scope.resume_quiz_next_unsolved_question = function (){
+       $scope.quiz_timer();
+       var app_questions = $scope.__player_object.questions;
+       var me = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+
+       var solved_questions = me.questions_data ; // .question_id
+       var unsolved = app_questions.find_unsolved_questions(solved_questions);
+
+       if(unsolved != undefined && unsolved.length >= 1) {
+         var thisIndex = app_questions.findIndex(x => x._id == unsolved[0]._id );
+         $scope.slide_screens.slideTo( thisIndex + 1);
+         $timeout(function (){
+
+           $scope.slide_screens_index($scope.slide_screens.activeIndex);
+           return false ;
+         } , 80);
+       }
+
+       if($scope.slide_screens.activeIndex != app_questions.length)
+        $scope.slide_screens.slideTo( app_questions.length + 1 )
      };
      $scope.go_to_not_attended_question = function(){
         var app_questions = $scope.__player_object.questions;
-        var me = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+        if($scope.attendee_draft.error == undefined ){
+            var me = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
 
-        var solved_questions = me.questions_data ; // .question_id
-        var unsolved = app_questions.find_unsolved_questions(solved_questions);
+            var solved_questions = me.questions_data ; // .question_id
+            var unsolved = app_questions.find_unsolved_questions(solved_questions);
 
-        if(unsolved != undefined && unsolved.length >= 1) {
-          var thisIndex = app_questions.findIndex(x => x._id == unsolved[0]._id );
-          $scope.slide_screens.slideTo( thisIndex + 1 );
+            if(unsolved != undefined && unsolved.length >= 1) {
+              var thisIndex = app_questions.findIndex(x => x._id == unsolved[0]._id );
+              $scope.slide_screens.slideTo( thisIndex +1 );
+              $timeout(function (){
+                $scope.slide_screens_index($scope.slide_screens.activeIndex);
+              } , 80);
+            }
         }
      };
-     $scope.warning_for_not_attended_question = function (){
 
-       if($scope.attendee_draft.att_draft == undefined){
-         alert();
-         var userInfo = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
-         var not_attended_count = $scope.__player_object.questions.length;
-         var plural_case = (not_attended_count > 1)? "s":"" ;
-         $('.warning_case').css({display:'block'});
-         $('.warning_case').html(not_attended_count+" question"+plural_case+" is not attended Click here to attend");
-
-         return false ;
-       }
-        var userInfo = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
-        if(userInfo != undefined){
-         if($scope.__player_object.questions.length != userInfo.questions_data.length)
-          {
-
-            var not_attended_count = Math.round($scope.__player_object.questions.length - userInfo.questions_data.length)
-            var plural_case = (not_attended_count > 1)? "s":"" ;
-            $('.warning_case').css({display:'block'});
-            $('.warning_case').html(not_attended_count+" question"+plural_case+" is not attended Click here to attend");
-            return false;
-          }
-        }
-
-     };
      $scope.back_to_prev_slider = function (){
+
        $scope.slide_screens.slidePrev();
+       $timeout(function (){
+         $scope.slide_screens_index($scope.slide_screens.activeIndex);
+       } , 80);
+
      };
      $scope.go_to_next_slider = function (  QSindex , warning_case = null ){
-       if(warning_case == true && QSindex == ($scope.__player_object.questions.length - 1) ){
+       if(warning_case == true && QSindex == ($scope.__player_object.questions.length - 1 ) ){
          if($scope.warning_for_not_attended_question() == false )
           return false ;
        }
 
+
       //  if($scope.__player_object.questions.length != $scope.attendee_draft.)
        $scope.slide_screens.slideNext();
+       $timeout(function (){
+         $scope.slide_screens_index($scope.slide_screens.activeIndex);
+       } , 80);
+
      };
 
      $scope.continue_to_next_slider = function (){
@@ -911,23 +1182,30 @@ attendeeApp.controller('players' , [
        };
 
        // => Save into report
-       $.getJSON($scope.json_source , (api_keys) => {
-          $http({
-            method : "POST" ,
-            url : $scope.url_report_add ,
-            data : question_data ,
-            headers : {
-                "X-api-app-name" : api_keys.APP_NAME ,
-                "X-api-keys":api_keys.API_KEY
-            }
-          }).then((res)=>{
-            // console.log(res.data);
-          } , (err)=>{
-             console.log(err);
-          });
-       });
+       try {
+         $.getJSON($scope.json_source , (api_keys) => {
+            $http({
+              method : "POST" ,
+              url : $scope.url_report_add ,
+              data : question_data ,
+              headers : {
+                  "X-api-app-name" : api_keys.APP_NAME ,
+                  "X-api-keys":api_keys.API_KEY
+              }
+            }).then((res)=>{
+              // console.log(res.data);
+            } , (err)=>{
+               console.log(err);
+            });
+         });
+       } catch (e) {
+
+       }
        // => Next Question
        $scope.slide_screens.slideNext();
+       $timeout(function (){
+         $scope.slide_screens_index($scope.slide_screens.activeIndex);
+       } , 80);
      }
      $scope.back_to_quizzes = function (){
        return window.location.href = settings.server_ip + "quizzes";
@@ -944,7 +1222,108 @@ attendeeApp.controller('players' , [
 
      $scope.load_application_draft();
      $timeout(function(){
-      $scope.slide_screens.allowTouchMove = $scope.__player_object.settings.allow_touch_move ;
-       $scope.fill_with_labels ();
+        // => check if thi quiz is loaded or closed by attendee
+      if($scope.attendee_draft.error == null ){
+        var attendee_app =  $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+        if( attendee_app.is_loaded != undefined && attendee_app.is_loaded ){
+           $scope.__player_object = attendee_app.impr_application_object ;
+           // => Store the stopwatch
+           $scope.seconds = $scope.__player_object.settings.time_settings.seconds ;
+           $scope.minutes = $scope.__player_object.settings.time_settings.minutes ;
+           $scope.hours = $scope.__player_object.settings.time_settings.hours ;
+
+           if(attendee_app.is_completed == true ){
+             var lastIndex = $(".quiz-contents").children('.swiper-slide').length ;
+
+             // 1- ==> Move to last slide
+             $scope.slide_screens.slideTo(lastIndex - 1);
+
+             // 2- ==> Disable swip slider
+             $scope.slide_screens.allowSlidePrev = false ;
+             $scope.slide_screens.allowSlideNext = false ;
+             $scope.slide_screens.noSwiping = false ;
+
+             // 3- ==> Fill the progress bar
+             if($scope.__player_object.settings.progression_bar.is_available)
+             $('.progress-highlighted').css({width:'100%'});
+
+             // 4- ==> Fill the question numbers
+             if($scope.__player_object.settings.progression_bar.is_available)
+              $scope.curren_question_slide = $scope.__player_object.questions.length;
+
+             // 5- ==> Disable time ()
+             $scope.calculate_usage_time ();
+
+             return false ;
+           }
+
+           // => apply (inform not) about expiration date
+           if( $scope.__player_object.settings.expiration.is_set ){ // => This quiz support expiration date
+             var expiration_object = $scope.__player_object.settings.expiration ;
+             // ==> check if this quiz is expired or not
+             var expire_during_this_time = parseInt(expiration_object.through_time);
+             var started_at = new Date(attendee_app.start_expiration_time).getTime() ;
+             var date_now = new Date().getTime() ;
+             var time_diff = Math.round(date_now - started_at);
+             var days = Math.round(time_diff / ( 1000 * parseInt(60*60*24) ));
+             if(days > expire_during_this_time ){
+                // stop the slide
+                $('.quiz-contents').remove(function(){
+                  $('expired_message').css({display:'block'})
+                });
+             }else {
+               /*
+                  var tomorrow = new Date();
+                  tomorrow.setDate(tomorrow.getDate() + 1);
+               */
+               var attendee_app =  $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+               var expiration_object = $scope.__player_object.settings.expiration ;
+               var expire_during_this_time = parseInt(expiration_object.through_time);
+               var started_at = new Date(attendee_app.start_expiration_time)
+               var roughly_date =  started_at.setDate(started_at.getDate() + expire_during_this_time);
+
+               var date_now = new Date().getTime() ;
+               var time_diff = Math.round(roughly_date - date_now  );
+               var days = Math.round(time_diff / ( 1000 * parseInt(60*60*24) ));
+
+               $scope.is_resume = {
+                  status : true ,
+                  expire_message :   expiration_object.title ,
+                  through_timed : expire_during_this_time ,
+                  through_date : {
+                    after : days ,
+                    in : new Date(roughly_date)
+                  }
+               };
+
+
+             }
+             // ==> Add new slide show the expiration date
+           }else {
+
+             $scope.is_resume = {
+                status : false
+             };
+           }
+           // => load the impr_application_object ( quiz object )
+           // => Get the-index of unsolved question
+           // => Go to this question
+           // => Some cases ---
+              // A ) Case all questions are solved => get submit slide
+              // B ) Case there is no anquestions solved ( show it from first qs ) => hide the ( start screen )
+              // C ) Case we've many random unsolved questions ( => go to first unsolved question )
+        }
+       }
+       $scope.slide_screens.allowTouchMove = $scope.__player_object.settings.allow_touch_move ;
+
+
+
      } , 1000 );
+
+
+
+     $timeout(function(){
+       $scope.fill_with_labels();
+       $('.loading-player').fadeOut();
+     } , 1700);
   }]);

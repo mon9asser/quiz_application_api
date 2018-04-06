@@ -140,6 +140,7 @@ var Questionnaire_settings = {
       } ,
       time_settings : {
         type : {
+
                 is_with_time : {
                     type : Boolean
                 } ,
@@ -153,7 +154,10 @@ var Questionnaire_settings = {
                 } ,
                 timer_layout : {
                   type : Number
-                }
+                } ,
+                seconds : { type : Number } ,
+                minutes: { type : Number } ,
+                hours: { type : Number } ,
               }
       } ,
       progression_bar : {
@@ -455,6 +459,8 @@ var attendeeDraftDataTypes = {
   att_draft : { type : [ // for use if browser is closed without complete this quiz
           {
              _id :{ type:mongoose.Schema.ObjectId } ,
+            is_loaded : { type : Boolean }  ,
+            start_expiration_time : { type : Date   } ,
             user_id : { type : String }  ,
             user_info : {type : String , ref : 'users'} ,
             impr_application_object : {type : Object } ,

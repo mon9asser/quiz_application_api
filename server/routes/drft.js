@@ -26,8 +26,12 @@ drftRouter.use(session({
   saveUninitialized : true
 }));
 
-drftRouter.get("/application/user_status/:app_id/get" , (req,res)=>{
+drftRouter.post("/application/user_status/:app_id/get" , (req,res)=>{
   var app_id = req.params.app_id;
+  var user_id = req.body.user_id ;
+  try {
+
+
   drft.findOne({application_id: app_id }).populate('questionnaire_info').exec( ( err , draftDocument )=>{
 
     if(!draftDocument){
@@ -37,12 +41,19 @@ drftRouter.get("/application/user_status/:app_id/get" , (req,res)=>{
       });
     }
 
+
     res.send(draftDocument);
   });
+} catch (e) {
+
+}
 });
 drftRouter.get("/application/user_status/:app_id/get/:user_id" , (req,res)=> {
   var user_id = req.params.user_id ;
   var app_id = req.params.app_id ;
+  try {
+
+
   drft.findOne({application_id : app_id} , (err , drftDoc) => {
     if(err , !drftDoc){
       return new Promise((resolve , reject)=>{
@@ -61,6 +72,10 @@ drftRouter.get("/application/user_status/:app_id/get/:user_id" , (req,res)=> {
       });
     }
   }).then();
+
+} catch (e) {
+
+}
 });
 drftRouter.post("/application/user_status/:app_id" , (req,res)=>{
 
@@ -73,6 +88,7 @@ drftRouter.post("/application/user_status/:app_id" , (req,res)=>{
   var app_id = req.params.app_id;
   var object = req.body.application_fields ;
   var userId = req.body.user_id ;
+try {
 
   drft.findOne({application_id: app_id } , (err , draftDocument )=>{
       if(!draftDocument || err ){
@@ -96,7 +112,69 @@ drftRouter.post("/application/user_status/:app_id" , (req,res)=>{
 
   });
 
+} catch (e) {
+
+}
 
 });
 
+drftRouter.patch("/:app_id/update/status" , (req , res )=>{
+  var app_id = req.params.app_id ;
+  var user_id = req.body.user_id
+  try {
+
+
+  drft.findOne({ application_id: app_id} , (err , response) => {
+    if(!response) {
+      return new Promise((resolve, reject) => {
+          res.send({"error" : "Application doesn't exists !"});
+      });
+      return false;
+    }
+    var resAttendee = response.att_draft.find(x => x.user_id == req.body.user_id);
+    var resAttendeeIndex = response.att_draft.findIndex(x => x.user_id == req.body.user_id);
+    if(resAttendeeIndex != -1){
+          resAttendee.is_completed = true;
+
+          response.markModified('att_draft');
+          response.save().then((reData)=>{
+            res.send(reData);
+          });
+      }
+  }).catch((err)=>{
+    console.log(err);
+  });
+} catch (e) {
+
+}
+});
+
+drftRouter.patch("/:app_id/update/settings" , (req , res )=>{
+  var app_id = req.params.app_id ;
+
+  drft.findOne({application_id: app_id }).then((response)=>{
+
+    if(!response){
+      return new Promise((resolve, reject) => {
+          res.send({"error" : "Application doesn't exists !"});
+      });
+    }
+    var attendee_information = response.att_draft.find(x => x.user_id == req.body.user_id)  ;
+
+    // attendee_information.impr_application_object.settings.time_settings.timer_type = false ;
+    attendee_information.impr_application_object.settings.time_settings.value = req.body.data_timed_with.minutes;
+    attendee_information.impr_application_object.settings.time_settings.seconds = req.body.data_timed_with.seconds;
+    attendee_information.impr_application_object.settings.time_settings.minutes = req.body.data_timed_with.minutes
+    attendee_information.impr_application_object.settings.time_settings.hours = req.body.data_timed_with.hours;
+    response.markModified('att_draft');
+    response.save().then((resp)=>{
+      res.send(resp);
+    });
+  }).catch((err)=>{
+      return new Promise((resolve, reject) => {
+        res.send({error : err});
+      });
+  });
+
+});
 module.exports = { drftRouter };

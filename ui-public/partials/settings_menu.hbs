@@ -123,9 +123,6 @@
                                          <label class="labels-options" for="check-Timer-2">Require Timeframe</label>
                                       </div>
                                    </div>
-                                   <div class="form-group input-group input-groupx">
-                                      <input ng:model="application_settings.settings.time_settings.value" id="time-mask-input" type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="00:00:00">
-                                   </div>
                                    <div class="time-fram-slidest">
                                      <span class="labels-options">Time Type :</span>
                                       <div class="checkbox-slide xheckbox-timframe">
@@ -133,6 +130,39 @@
                                          <input ng:model="application_settings.settings.time_settings.timer_type" class="input-checkboxes switch_1" type="checkbox" id="time-type-slide">
                                          <label class="labels-options" for="time-type-slide">hrs</label>
                                       </div>
+                                   </div>
+                                   <div class="form-group input-group input-groupx">
+                                      <input ng:show="application_settings.settings.time_settings.timer_type" ng:model="application_settings.settings.time_settings.hours" id="time-mask-input" type="number" class="form-control time-tracker-elem" aria-label="Text input with dropdown button" placeholder="hrs">
+                                      <input ng:model="application_settings.settings.time_settings.minutes" id="time-mask-inputx" type="number" class="form-control time-tracker-elem" aria-label="Text input with dropdown button" placeholder="mins">
+                                      <input ng:model="application_settings.settings.time_settings.seconds" id="time-mask-inputxsd" type="number" class="form-control time-tracker-elem" aria-label="Text input with dropdown button" placeholder="secs">
+                                   </div>
+
+                                </div>
+
+                             </div>
+                          </li>
+                          <li class="tasks">
+                             <div class="control-item-header">
+                                <a href="#" class="icon-toggle">
+                                <span class="caret-down fa fa-caret-down"></span>
+                                </a>
+                                <span class="text">Expiration</span>
+                             </div>
+                             <div class="control-item-content" >
+                                <div class="control-item-content-text">
+                                   <div class="passing-grad-block">
+                                      <div class="checkbox-toggle">
+                                         <input ng:model="application_settings.settings.expiration.is_set" class="input-checkboxes switch_1" type="checkbox" id="check-Timer-2xxf" checked="">
+                                         <label class="labels-options" for="check-Timer-2xxf">Allow expiration date</label>
+                                      </div>
+                                   </div>
+                                   <div class="form-group input-group input-groupx text-left for-x-daf">
+                                      <input ng:model="application_settings.settings.expiration.through_time"   type="text" class="expire-though form-control " aria-label="Text input with dropdown button" placeholder="3 days">
+                                      <span class="equal-this">days</span>
+                                   </div>
+                                   <div class="form-group input-group input-groupx text-left for-x-daf">
+                                      <span class="equal-this">Expiration message</span>
+                                      <input ng:model="application_settings.settings.expiration.title"   type="text" class="expire-title form-control " aria-label="Text input with dropdown button">
                                    </div>
                                 </div>
 

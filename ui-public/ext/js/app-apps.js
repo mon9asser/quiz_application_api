@@ -209,6 +209,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.application_settings = {
          questionnaire_title : null ,
          settings : {
+
            titles :
              {
                title_start_with : "Write Starting Text"  ,
@@ -228,13 +229,21 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
            } ,
            time_settings : {
              is_with_time:false ,
-             value : "15" ,
+             value : "30" ,
              timer_type : false ,
-             timer_layout : 0
+             timer_layout : 0 ,
+             hours : 0 ,
+             minutes : 29 ,
+             seconds : 59
            },
            progression_bar : {
              is_available:false ,
              progression_bar_layout:0
+           } ,
+           expiration : {
+             is_set : false  ,
+             through_time : 3 , // => it will be per day
+             title : "This quiz will expire after"
            } ,
           //  theme_style : [] ,
            randomize_settings : false ,
@@ -394,6 +403,24 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                     else // default
                     settings_obj['settings']['time_settings']['timer_layout'] = $scope.application_settings.settings.timer_layout;
 
+
+
+                    if(mongo_settings.time_settings.seconds != null)
+                    settings_obj['settings']['time_settings']['seconds'] = mongo_settings.time_settings.seconds;
+                    else // default
+                    settings_obj['settings']['time_settings']['seconds'] = $scope.application_settings.settings.seconds;
+
+
+                    if(mongo_settings.time_settings.minutes != null)
+                    settings_obj['settings']['time_settings']['minutes'] = mongo_settings.time_settings.minutes;
+                    else // default
+                    settings_obj['settings']['time_settings']['minutes'] = $scope.application_settings.settings.minutes;
+
+                    if(mongo_settings.time_settings.hours != null)
+                    settings_obj['settings']['time_settings']['hours'] = mongo_settings.time_settings.hours;
+                    else // default
+                    settings_obj['settings']['time_settings']['hours'] = $scope.application_settings.settings.hours;
+
                   }else // end grade setting
                     $scope.application_settings.settings.time_settings;
 
@@ -411,6 +438,27 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                     settings_obj['settings']['progression_bar']['progression_bar_layout'] = $scope.application_settings.settings.progression_bar.progression_bar_layout;
 
                   }// end grade progress bar
+
+                  if(mongo_settings.expiration != null ){
+
+                    if(mongo_settings.expiration.is_set != null)
+                      settings_obj['settings']['expiration']['is_set'] = mongo_settings.expiration.is_set ;
+                    else
+                      settings_obj['settings']['expiration']['is_set'] = $scope.application_settings.settings.expiration.is_set;
+
+                    if(mongo_settings.expiration.through_time != null)
+                    settings_obj['settings']['expiration']['through_time'] = mongo_settings.expiration.through_time ;
+                    else
+                    settings_obj['settings']['expiration']['through_time'] = $scope.application_settings.settings.expiration.through_time;
+
+                    if(mongo_settings.expiration.title != null)
+                    settings_obj['settings']['expiration']['title'] = mongo_settings.expiration.title ;
+                    else
+                    settings_obj['settings']['expiration']['title'] = $scope.application_settings.settings.expiration.title;
+                  } // end expiration date for this quiz
+
+
+
                   if(mongo_settings.randomize_settings!= null ){
                     settings_obj['settings']['randomize_settings'] = mongo_settings.randomize_settings ;
                   }else  // end randomize settings
@@ -434,6 +482,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                     settings_obj['settings']['allow_touch_move'] = mongo_settings.allow_touch_move;
                   }else
                   settings_obj['settings']['allow_touch_move'] = $scope.application_settings.settings.allow_touch_move;
+
+
 
                   if(mongo_settings.retake_setting != null ){
                     settings_obj['settings']['retake_setting'] = mongo_settings.retake_setting;
@@ -918,6 +968,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
       };
     $scope.save_changes_in_angular_backend = function ( decline_next = null ){
+
+        // ==> Save the quiz settings
+        $scope.application_save_settings();
 
         $scope.unsaved_question = false;
         // ==> Storing Data related redactors into ( angular backend )

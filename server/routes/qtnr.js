@@ -113,14 +113,14 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
     if(required.length != 0 )
     {
       return new Promise((resolve , reject)=>{
-        // console.log(required);
+        // //console.log(required);
         res.status(201).send(notes.Messages.Required_Message(required));
       });
     }
     var appt  = parseInt(req.body.app_type)
     if( appt >= 2  || appt < 0 ||  !_.isInteger(appt)){
        return new Promise((resolve , reject)=>{
-        // console.log(required);
+        // //console.log(required);
         res.status(404).send(notes.Errors.Error_Doesnt_exists("Application Type"));
       });
     }
@@ -191,7 +191,7 @@ qtnrRouters.post("/init", auth_verify_api_keys_tokens  , (req, res) => {
     }
     if(req.body.app_type >= 2  || req.body.app_type < 0  ||  !_.isInteger(req.body.app_type )){
        return new Promise( ( resolve , reject ) => {
-        // console.log(required);
+        // //console.log(required);
         res.status(404).send(notes.Errors.Error_Doesnt_exists("Application Type"));
       });
     }
@@ -353,6 +353,12 @@ qtnrRouters.patch("/:app_id/app/edit", auth_verify_generated_tokens ,  (req, res
                 $settings["settings.time_settings.timer_type"] = req.body.time_settings.timer_type;
             if (req.body.time_settings.timer_layout !=null)
                 $settings["settings.time_settings.timer_layout"] = req.body.time_settings.timer_layout;
+            if (req.body.time_settings.seconds !=null)
+                $settings["settings.time_settings.seconds"] = req.body.time_settings.seconds;
+            if (req.body.time_settings.minutes !=null)
+                $settings["settings.time_settings.minutes"] = req.body.time_settings.minutes;
+            if (req.body.time_settings.hours !=null)
+                $settings["settings.time_settings.hours"] = req.body.time_settings.hours;
         }
         if (req.body.progression_bar) {
             if (req.body.progression_bar.is_available != null)
@@ -500,7 +506,7 @@ qtnrRouters.patch("/:app_id/settings/style/:process", auth_verify_api_keys , (re
 
             fs.appendFile("ui-public/themes/"+stylesheet['file_name'],for_stylesheet_file, (err) => {
                 if (err) throw err;
-                  console.log('The "data to append" was appended to file!');
+                  //console.log('The "data to append" was appended to file!');
             });
 
             var style_codes = _.find(stylesheets.theme_style , {'file_name':stylesheet['file_name']} );
@@ -511,7 +517,7 @@ qtnrRouters.patch("/:app_id/settings/style/:process", auth_verify_api_keys , (re
             });
           });
         }).catch((err)=>{
-          // console.log(err);
+          // //console.log(err);
           return new Promise((resolve, reject) => {
               res.status(401).send(notes.Errors.General_Error);
           });
@@ -636,7 +642,7 @@ qtnrRouters.patch("/:app_id/settings/style/:process", auth_verify_api_keys , (re
                    if (fs.existsSync(stylesheetPath)) {
                     fs.appendFile(stylesheetPath ,for_stylesheet_file, (err) => {
                         if (err) throw err;
-                          console.log('Stylesheet codes is appended !');
+                          //console.log('Stylesheet codes is appended !');
                     });
                   }
                      var Stylecodes_Find  = _.find( theme_stylish.theme_style , {"file_name":"styletheme_"+stylefile_id+".css"} );
@@ -982,7 +988,7 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
                 if( fs.existsSync(tempPath)){
                   fs.unlink(tempPath, (err) => {
                    if (err) throw err;
-                    console.log('successfully deleted');
+                    //console.log('successfully deleted');
                   });
                 }
               }
@@ -1218,7 +1224,7 @@ qtnrRouters.patch("/:app_id/question/:process" , question_answer_images.single("
           var image_root =/* __dirname + "/../../*/"ui-public/themeimages/" +target_question[findIndex_this_qs].media_question.media_field;
           if( fs.existsSync(image_root)){
             fs.unlink(image_root , function (err) {
-                console.log("Deleted Image !!");
+                //console.log("Deleted Image !!");
             });
           }
         }
@@ -1346,7 +1352,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/media/edit" , question_
               answerArgs[answerIndex].media_optional.Media_directory = config.server_ip + "themeimages/" + new_filename;
               if (fs.existsSync(imagePath)) {
                   fs.rename(imagePath, targetPath, function(err) {
-                      console.log(err);
+                      //console.log(err);
                   });
               }
             }else {
@@ -1416,7 +1422,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/media/edit" , question_
 
                         if (fs.existsSync(imagePath)) {
                             fs.rename(imagePath, targetPath, function(err) {
-                                console.log(err);
+                                //console.log(err);
                             });
                         }
                     } else { // Video
@@ -1600,7 +1606,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                          question_answers["media_optional"]["Media_directory"] = config.server_ip + "themeimages/"+new_filename;
                          if( fs.existsSync(imagePath)){
                            fs.rename( imagePath , targetPath , function (err) {
-                               console.log(err);
+                               //console.log(err);
                            });
                          }
                       }else {
@@ -1726,7 +1732,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
 
                      if( fs.existsSync(imagePath)){
                         fs.rename( imagePath , targetPath , function (err) {
-                               console.log(err);
+                               //console.log(err);
                         });
                      }
                  }else {
@@ -1834,7 +1840,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                                 });
                               }
                     //}
-                    // console.log(question_answers);
+                    // //console.log(question_answers);
 
                      if(qtnairsDocument.app_type == 1 ){
                        if(req.body.is_correct != null )
@@ -1908,7 +1914,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
 
 
            qtnairsDocument.questions[questionIndex].answers_format.push(question_answers);
-           //console.log(qtnairsDocument.questions[questionIndex].answers_format);
+           ////console.log(qtnairsDocument.questions[questionIndex].answers_format);
             questionnaire_results = question_answers ;
          }
 
@@ -1977,7 +1983,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
 
                           if( fs.existsSync(imagePath)){
                             fs.rename( imagePath , targetPath , function (err) {
-                                console.log(err);
+                                //console.log(err);
                             });
                           }
                        }else { // Video
@@ -2046,9 +2052,9 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                 }
                 //-------------------------------------
               }
-              console.log("+++>>>+++>>> {-----} <<<<+++<<<++++");
-              console.log(answerArgs);
-              console.log("+++>>>+++>>> {-----} <<<<+++<<<++++");
+              // //console.log("+++>>>+++>>> {-----} <<<<+++<<<++++");
+              // //console.log(answerArgs);
+              // //console.log("+++>>>+++>>> {-----} <<<<+++<<<++++");
 
               // => media_choices
               if(question_type == 1) {
@@ -2076,7 +2082,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
 
                           if( fs.existsSync(imagePath)){
                             fs.rename( imagePath , targetPath , function (err) {
-                                console.log(err);
+                                //console.log(err);
                             });
                           }
                        }else { // Video
@@ -2112,7 +2118,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                           else if( video.includes(".mp4")  == true   ) {
                             videoType = 2 ;
                             videoId = null;
-                            console.log("MP4 ++++");
+                            // //console.log("MP4 ++++");
                             var media_mp4 = req.body.media_src.substring(0, req.body.media_src.lastIndexOf('.'));
 
                             // question_tag ["media_question"]["media_src"] = media_mp4 ;
@@ -2132,9 +2138,9 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                            answerArgs[answerIndex]["embed_path"] = video_src_value ;
 
 
-                           console.log("----------------------");
-                           console.log(answerArgs[answerIndex]);
-                           console.log("----------------------");
+                          //  //console.log("----------------------");
+                          //  //console.log(answerArgs[answerIndex]);
+                          //  //console.log("----------------------");
                        }
                 }
                 //-------------------------------------
@@ -2209,7 +2215,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                 if( fs.existsSync(image_directory ) ) {
                   fs.unlink(image_directory , (err)=>{
                     if(err) throw err ;
-                    console.log("Deleted Image !");
+                    //console.log("Deleted Image !");
                   });
                 }
               }
@@ -2220,7 +2226,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                     if( fs.existsSync(image_directory ) ) {
                       fs.unlink(image_directory , (err)=>{
                         if(err) throw err ;
-                        console.log("Deleted Image !");
+                        //console.log("Deleted Image !");
                       });
                     }
                 }
@@ -2301,7 +2307,7 @@ qtnrRouters.post("/:app_id/application/:objects" , auth_verify_api_keys , (req ,
         if( objects == 'stylesheets'){
           if(req.body.target_id != null ){
             var isexists = _.findIndex(qtnairsDocument.theme_style , { "file_name":  "styletheme_"+req.body.target_id+".css" });
-            // console.log(isexists);
+            // //console.log(isexists);
             if(isexists == -1 )
               {
                 return new Promise((resolve , reject)=>{
@@ -2362,7 +2368,7 @@ qtnrRouters.get("/:app_id/application/:objects" , auth_api_keys_only , (req ,res
         if( objects == 'stylesheets'){
           if(req.body.target_id != null ){
             var isexists = _.findIndex(qtnairsDocument.theme_style , { "file_name":  "styletheme_"+req.body.target_id+".css" });
-            // console.log(isexists);
+            // //console.log(isexists);
             if(isexists == -1 )
               {
                 return new Promise((resolve , reject)=>{
@@ -2375,9 +2381,9 @@ qtnrRouters.get("/:app_id/application/:objects" , auth_api_keys_only , (req ,res
              apps = qtnairsDocument.theme_style ;
         }
 
-        console.log({
-          'cacac' : apps
-        });
+        // //console.log({
+        //   'cacac' : apps
+        // });
        res.send(apps);
        return false ;
      });
@@ -2416,7 +2422,7 @@ qtnrRouters.get("/applications/list" , auth_api_keys_only , (req , res )=>{
          res.status(404).send("There are no any applications");
         });
     }
-    console.log(doc);
+    //console.log(doc);
     res.send(doc);
   });
 

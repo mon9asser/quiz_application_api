@@ -47,12 +47,433 @@ const {
 } = require("../../models/reports");
 var rptRouters = express.Router();
 
+var date_made = function() {
+    var dateObj = new Date();
+    var month = dateObj.getUTCMonth() + 1; //months from 1-12
+    var day = dateObj.getUTCDate();
+    var year = dateObj.getUTCFullYear();
+    return newdate = year + "/" + month + "/" + day;
+};
 rptRouters.use(bodyParser.json());
 rptRouters.use(bodyParser.urlencoded({
     extended: false
 }));
 rptRouters.use(build_session);
 
+// ==> Add report ( all questions )
+rptRouters.post("/:app_id/add/attended/quiz" ,api_key_report_auth , (req , res)=>{
+    var application_id = req.params.app_id;
+    if(!req.body.attendee_object || req.body.attendee_object == null )
+      {
+          return new Promise((resolve , reject)=>{
+            res.send({
+              error : "attendee_object is required !"
+            });
+          });
+      }
+
+    var attendee_object = req.body.attendee_object;
+
+
+    qtnr.findOne({_id:application_id} , (error , qtnrDocument)=>{
+        if (!qtnrDocument || error){
+           return new Promise((resolve , reject )=>{
+             res.status(404).send(notes.Errors.Error_Doesnt_exists("Application"));
+           });
+
+           return false;
+        }
+    });
+
+    // building +++++++++++++++++++++++++++++++++++++++++++
+    rpt.findOne({"questionnaire_id":application_id} , (error , rptDocument)=>{
+      var report = rptDocument ;
+      var reportObject
+
+
+      if(error || !report){
+
+
+        reportObject = new Object();
+        // => Add New Report
+        reportObject['attendees'] = new Array ();
+        reportObject['history'] = new Array ();
+        reportObject['statistics'] = new Array ();
+        reportObject['attendee_details'] = new Array ();
+        reportObject['questionnaire_id'] = application_id;
+        reportObject['questionnaire_info'] = application_id;
+        reportObject['app_type'] = attendee_object.impr_application_object.app_type;
+        reportObject['creator_id']= attendee_object.impr_application_object.creator_id;;
+        reportObject['created_at'] = new Date();
+        reportObject['updated_at'] = new Date();
+
+
+
+
+        /*  Building ....  *///attendee_object
+        // ========================================>>>>>
+
+          // ==> [A] Attendees --------------------------------
+              // Givens
+              var quiz_results = {
+                right_answers : 0 ,
+                wrong_answers  : 0
+              }
+              // 1 ) - questions
+              var questions = new Array();
+              var is_correct_val = true ;
+              for (var i = 0; i < attendee_object.questions_data.length; i++) {
+                var question_data = attendee_object.questions_data[i];
+                // ==> I - question data
+                var question_object = new Object();
+                question_object['_id'] = mongoose.Types.ObjectId() ;
+                question_object['question_id'] = question_data.question_id;
+                question_object['questions'] = new Object();
+                    question_object['questions']['question_id'] = question_data.question_id ;
+                    question_object['questions']['question_body'] = question_data.question_text ;
+                    question_object['questions']['question_type'] =question_data.question_type ;
+                question_object['answers'] = new Object();
+                    question_object['answers']['answer_id'] = new Array(); // fill it right now
+                    question_object['answers']['answer_body'] = new Object();  // fill it
+                question_object['is_correct'] = true ; // fill it
+
+                // ==> II - Answer data
+                var answer_obj = question_data.answer_ids;
+                for (var ix = 0; ix < answer_obj.length; ix++) {
+                  var attendee_answers = answer_obj[ix];
+                  // push attendee answers into qustion data in report
+                  question_object.answers.answer_id.push(attendee_answers.answer_id);
+                  question_object.answers.answer_body['answer_id_'+attendee_answers.answer_id] = new Object();
+                  question_object.answers.answer_body['answer_id_'+attendee_answers.answer_id]['answer_id'] = attendee_answers.answer_id;
+                  question_object.answers.answer_body['answer_id_'+attendee_answers.answer_id]['answer_body'] = attendee_answers.answer_object;
+                  question_object.answers.answer_body['answer_id_'+attendee_answers.answer_id]['is_correct']  = attendee_answers.is_correct;
+                }
+
+                // ==> III - Calculate correct Answers
+
+                if( question_data.answer_ids.length != question_data.correct_answers.length ){
+                  // wrong answer
+                  quiz_results.wrong_answers = quiz_results.wrong_answers + 1;
+                  question_object['is_correct'] = false ;
+                }else {
+                  var correct_answers = question_data.correct_answers;
+                  for (var iv = 0; iv < correct_answers.length; iv++) {
+                      var right_answer = correct_answers[iv];
+                      var is_right = question_data.answer_ids.findIndex(x => x.answer_id == right_answer);
+                      if(is_right == -1){
+                        question_object['is_correct'] = false ;
+                        quiz_results.wrong_answers = quiz_results.wrong_answers + 1;
+                        break;
+                      }
+                  }
+                }
+
+                // => calculate the right answers
+                quiz_results.right_answers = Math.round(attendee_object.questions_data.length - quiz_results.wrong_answers) ;
+                // ==> IV register it into questions argument
+                questions.push(question_object);
+              }
+
+
+            // ==> Main  Calculation
+            var right_question_counts = quiz_results.right_answers;
+            var quiz_question_counts =parseInt(attendee_object.impr_application_object.questions.length);
+            var grade_setting_value =  parseInt(attendee_object.impr_application_object.settings.grade_settings.value);
+            var attendee_grade_perc = Math.round(right_question_counts * 100 / quiz_question_counts);
+
+            // 2 ) - Build attendees
+            var this_attendee = reportObject.attendees.find(x => x.attendee_id == attendee_object.user_id);
+            var this_attendee_index = reportObject.attendees.findIndex(x => x.attendee_id == attendee_object.user_id);
+            if(this_attendee_index == -1 ){
+              // Add New Attendee
+              // ==> [A] Attendee -------------------------------------
+              reportObject.attendees.push({
+                _id : mongoose.Types.ObjectId() ,
+                survey_quiz_answers : questions ,
+                attendee_id : attendee_object.user_id ,
+                user_information : attendee_object.user_id ,
+                is_completed : true  ,
+                passed_the_grade : ( attendee_grade_perc >= grade_setting_value ) ? true : false ,
+                results : {
+                    wrong_answers : quiz_results.wrong_answers,
+                    correct_answers : quiz_results.right_answers,
+                    count_of_questions : quiz_question_counts ,
+                    result : {
+                      percentage_value :attendee_grade_perc ,
+                      raw_value : quiz_results.right_answers
+                    }
+                } ,
+                created_at : new Date () ,
+                updated_at : new Date ()
+              });
+
+
+              // ==> [B] History --------------------------------
+              var histor_object = reportObject.history.findIndex(x => x.date_made == date_made().toString());
+              if(histor_object == -1 ){
+                  reportObject.history.push({
+                    date_made : date_made().toString() ,attendee_counts : 1  , _id : mongoose.Types.ObjectId()
+                  })
+              }else {
+                reportObject.history[histor_object].attendee_counts =  reportObject.history[histor_object].attendee_counts + 1 ;
+              }
+
+
+
+            }else {
+              // Update The-Existing Attendee
+              this_attendee.survey_quiz_answers = questions ;
+              this_attendee.is_completed = true ;
+              this_attendee.passed_the_grade = ( attendee_grade_perc >= grade_setting_value ) ? true : false ;
+              this_attendee.results.wrong_answers = quiz_results.wrong_answers;
+              this_attendee.results.correct_answers = quiz_results.right_answers;
+              this_attendee.results.count_of_questions = quiz_question_counts;
+              this_attendee.results.result.percentage_value = attendee_grade_perc ;
+              this_attendee.results.result.raw_value = quiz_results.right_answers ;
+              this_attendee.user_information = attendee_object.user_id ;
+              this_attendee.updated_at = new Date();
+
+            }
+
+
+
+
+
+
+
+            // ==> Main  Calculation
+            var right_question_counts = quiz_results.right_answers;
+            var quiz_question_counts =parseInt(attendee_object.impr_application_object.questions.length);
+            var grade_setting_value =  parseInt(attendee_object.impr_application_object.settings.grade_settings.value);
+            var attendee_grade_perc = Math.round(right_question_counts * 100 / quiz_question_counts);
+
+            // ==> [D] Attendee_details --------------------------------
+            var attendeeDetIndex = reportObject.attendee_details.findIndex(x => x.attendee_id == attendee_object.user_id);
+            if(attendeeDetIndex == -1 ){
+              // add new
+              reportObject.attendee_details.push({
+                _id : mongoose.Types.ObjectId()    ,
+                attendee_id :attendee_object.user_id ,
+                attendee_information : attendee_object.user_id,
+                total_questions : quiz_question_counts ,
+                pass_mark : ( attendee_grade_perc >= grade_setting_value ) ? true : false ,
+                correct_answers : quiz_results.right_answers,
+                wrong_answers : quiz_results.wrong_answers,
+                status : ( attendee_grade_perc >= grade_setting_value ) ? "Passed" : "Failed",
+                score : attendee_grade_perc,
+                completed_status : true ,
+                created_at : new Date (),
+                completed_date : new Date ()
+              });
+            }else {
+              // update
+              reportObject.attendee_details[attendeeDetIndex].total_questions = quiz_question_counts ;
+              reportObject.attendee_details[attendeeDetIndex].pass_mark = ( attendee_grade_perc >= grade_setting_value ) ? true : false ;
+              reportObject.attendee_details[attendeeDetIndex].correct_answers = quiz_results.right_answers ;
+              reportObject.attendee_details[attendeeDetIndex].wrong_answers = quiz_results.wrong_answers
+              reportObject.attendee_details[attendeeDetIndex].status = ( attendee_grade_perc >= grade_setting_value ) ? "Passed" : "Failed" ;
+              reportObject.attendee_details[attendeeDetIndex].score = attendee_grade_perc;
+              reportObject.attendee_details[attendeeDetIndex].completed_date = new Date() ;
+            }
+
+
+
+
+            var rpting = new rpt(reportObject);
+            rpting.save().then(()=>{
+              res.send("success !!");
+            });
+          // res.send({quiz_results: quiz_results , questions : questions  });
+        // ========================================>>>>>
+      }else  {
+        reportObject = report;
+        reportObject.updated_at = new Date();
+
+
+
+
+        /*  Building ....  *///attendee_object
+        // ========================================>>>>>
+
+          // ==> [A] Attendees --------------------------------
+              // Givens
+              var quiz_results = {
+                right_answers : 0 ,
+                wrong_answers  : 0
+              }
+              // 1 ) - questions
+              var questions = new Array();
+              var is_correct_val = true ;
+              for (var i = 0; i < attendee_object.questions_data.length; i++) {
+                var question_data = attendee_object.questions_data[i];
+                // ==> I - question data
+                var question_object = new Object();
+                question_object['_id'] = mongoose.Types.ObjectId() ;
+                question_object['question_id'] = question_data.question_id;
+                question_object['questions'] = new Object();
+                    question_object['questions']['question_id'] = question_data.question_id ;
+                    question_object['questions']['question_body'] = question_data.question_text ;
+                    question_object['questions']['question_type'] =question_data.question_type ;
+                question_object['answers'] = new Object();
+                    question_object['answers']['answer_id'] = new Array(); // fill it right now
+                    question_object['answers']['answer_body'] = new Object();  // fill it
+                question_object['is_correct'] = true ; // fill it
+
+                // ==> II - Answer data
+                var answer_obj = question_data.answer_ids;
+                for (var ix = 0; ix < answer_obj.length; ix++) {
+                  var attendee_answers = answer_obj[ix];
+                  // push attendee answers into qustion data in report
+                  question_object.answers.answer_id.push(attendee_answers.answer_id);
+                  question_object.answers.answer_body['answer_id_'+attendee_answers.answer_id] = new Object();
+                  question_object.answers.answer_body['answer_id_'+attendee_answers.answer_id]['answer_id'] = attendee_answers.answer_id;
+                  question_object.answers.answer_body['answer_id_'+attendee_answers.answer_id]['answer_body'] = attendee_answers.answer_object;
+                  question_object.answers.answer_body['answer_id_'+attendee_answers.answer_id]['is_correct']  = attendee_answers.is_correct;
+                }
+
+                 // ==> III - Calculate correct Answers
+
+                if( question_data.answer_ids.length != question_data.correct_answers.length ){
+                  // wrong answer
+                  quiz_results.wrong_answers = quiz_results.wrong_answers + 1;
+                  question_object['is_correct'] = false ;
+                }else {
+                  var correct_answers = question_data.correct_answers;
+                  for (var iv = 0; iv < correct_answers.length; iv++) {
+                      var right_answer = correct_answers[iv];
+                      var is_right = question_data.answer_ids.findIndex(x => x.answer_id == right_answer);
+                      if(is_right == -1){
+                        question_object['is_correct'] = false ;
+                        quiz_results.wrong_answers = quiz_results.wrong_answers + 1;
+                        break;
+                      }
+                  }
+                }
+
+                // => calculate the right answers
+                quiz_results.right_answers = Math.round(attendee_object.questions_data.length - quiz_results.wrong_answers) ;
+                // ==> IV register it into questions argument
+                questions.push(question_object);
+              }
+
+
+            // ==> Main  Calculation
+            var right_question_counts = quiz_results.right_answers;
+            var quiz_question_counts =parseInt(attendee_object.impr_application_object.questions.length);
+            var grade_setting_value =  parseInt(attendee_object.impr_application_object.settings.grade_settings.value);
+            var attendee_grade_perc = Math.round(right_question_counts * 100 / quiz_question_counts);
+
+
+
+            // 2 ) - Build attendees
+            var this_attendee = reportObject.attendees.find(x => x.attendee_id == attendee_object.user_id);
+            var this_attendee_index = reportObject.attendees.findIndex(x => x.attendee_id == attendee_object.user_id);
+            if(this_attendee_index == -1 ){
+              // Add New Attendee
+              // ==> [A] Attendee -------------------------------------
+              reportObject.attendees.push({
+                _id : mongoose.Types.ObjectId() ,
+                survey_quiz_answers : questions ,
+                attendee_id : attendee_object.user_id ,
+                user_information : attendee_object.user_id ,
+                is_completed : true  ,
+                passed_the_grade : ( attendee_grade_perc >= grade_setting_value ) ? true : false ,
+                results : {
+                    wrong_answers : quiz_results.wrong_answers,
+                    correct_answers : quiz_results.right_answers,
+                    count_of_questions : quiz_question_counts ,
+                    result : {
+                      percentage_value :attendee_grade_perc ,
+                      raw_value : quiz_results.right_answers
+                    }
+                } ,
+                created_at : new Date () ,
+                updated_at : new Date ()
+              });
+
+
+              // ==> [B] History --------------------------------
+              var histor_object = reportObject.history.findIndex(x => x.date_made == date_made().toString());
+              if(histor_object == -1 ){
+                  reportObject.history.push({
+                    date_made : date_made().toString() ,attendee_counts : 1  , _id : mongoose.Types.ObjectId()
+                  })
+              }else {
+                reportObject.history[histor_object].attendee_counts =  reportObject.history[histor_object].attendee_counts + 1 ;
+              }
+
+
+
+            }else {
+              // Update The-Existing Attendee
+              this_attendee.survey_quiz_answers = questions ;
+              this_attendee.is_completed = true ;
+              this_attendee.passed_the_grade = ( attendee_grade_perc >= grade_setting_value ) ? true : false ;
+              this_attendee.results.wrong_answers = quiz_results.wrong_answers;
+              this_attendee.results.correct_answers = quiz_results.right_answers;
+              this_attendee.results.count_of_questions = quiz_question_counts;
+              this_attendee.results.result.percentage_value = attendee_grade_perc ;
+              this_attendee.results.result.raw_value = quiz_results.right_answers ;
+              this_attendee.user_information = attendee_object.user_id ;
+              this_attendee.updated_at = new Date();
+
+            }
+
+
+
+
+
+
+
+            // ==> Main  Calculation
+            var right_question_counts = quiz_results.right_answers;
+            var quiz_question_counts =parseInt(attendee_object.impr_application_object.questions.length);
+            var grade_setting_value =  parseInt(attendee_object.impr_application_object.settings.grade_settings.value);
+            var attendee_grade_perc = Math.round(right_question_counts * 100 / quiz_question_counts);
+
+            // ==> [D] Attendee_details --------------------------------
+            var attendeeDetIndex = reportObject.attendee_details.findIndex(x => x.attendee_id == attendee_object.user_id);
+            if(attendeeDetIndex == -1 ){
+              // add new
+              reportObject.attendee_details.push({
+                _id : mongoose.Types.ObjectId()    ,
+                attendee_id :attendee_object.user_id ,
+                attendee_information : attendee_object.user_id,
+                total_questions : quiz_question_counts ,
+                pass_mark : ( attendee_grade_perc >= grade_setting_value ) ? true : false ,
+                correct_answers : quiz_results.right_answers,
+                wrong_answers : quiz_results.wrong_answers,
+                status : ( attendee_grade_perc >= grade_setting_value ) ? "Passed" : "Failed",
+                score : attendee_grade_perc,
+                completed_status : true ,
+                created_at : new Date (),
+                completed_date : new Date ()
+              });
+            }else {
+              // update
+              reportObject.attendee_details[attendeeDetIndex].total_questions = quiz_question_counts ;
+              reportObject.attendee_details[attendeeDetIndex].pass_mark = ( attendee_grade_perc >= grade_setting_value ) ? true : false ;
+              reportObject.attendee_details[attendeeDetIndex].correct_answers = quiz_results.right_answers ;
+              reportObject.attendee_details[attendeeDetIndex].wrong_answers = quiz_results.wrong_answers
+              reportObject.attendee_details[attendeeDetIndex].status = ( attendee_grade_perc >= grade_setting_value ) ? "Passed" : "Failed" ;
+              reportObject.attendee_details[attendeeDetIndex].score = attendee_grade_perc;
+              reportObject.attendee_details[attendeeDetIndex].completed_date = new Date() ;
+            }
+
+
+
+
+          reportObject.markModified('attendees');
+          reportObject.save().then((reData)=>{
+            res.send("Successed !");
+          })
+
+      } ;
+
+
+    }); // end report object
+}); // end api
+//==> ADd answer by answer
 rptRouters.post("/:app_id/report/add" , api_key_report_auth , helper , ( req , res ) => {
   // => attendee id | questions id | answer ids |
   var required_fields = new Array();
