@@ -1366,7 +1366,7 @@ attendeeApp.controller('players' , [
 
 
 
-     } , 1000 );
+     } , 1500 );
 
 
 
