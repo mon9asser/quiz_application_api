@@ -141,11 +141,59 @@ attendeeApp.controller('players' , [
 
      };
      $scope.submit_quiz_into_report = function (show_warning = true ){
-       console.log($scope.json_source);
-       $.getJSON( $scope.json_source , function(api_key){
-         console.log($scope.json_source );
-         console.log(api_key);
-       });
+       // ==============> Starting progression
+        var submit_icon = $('.fac-icon-submit');
+        if(submit_icon.hasClass('fa-arrow-right')) {
+            submit_icon.removeClass('fa-arrow-right');
+            submit_icon.addClass('fa-spinner fa-spin');
+
+            submit_icon.next('span').html('Submitting Quiz ...');
+        }else
+        return false ;
+        // alert();
+        if(show_warning == true ){
+            // => Check if there is any question not solved and back to those questions ( According to impr_application_object )
+            if( $scope.warning_for_not_attended_question() == false ) {
+                if(submit_icon.hasClass('fa-spinner')){
+                  submit_icon.removeClass('fa-spinner fa-spin');
+                  submit_icon.addClass('fa-arrow-right');
+                  submit_icon.next('span').html('Submit Quiz');
+                }
+              return false
+            } ;
+        }
+
+
+
+        $.getJSON($scope.json_source , function (apk_keys){
+
+           $http({
+            url : $scope.url_attend_quiz ,
+            method: "POST",
+            data : { attendee_object : $scope.this_attendee_draft }  ,
+            headers : {
+              "X-api-app-name" : apk_keys.APP_NAME,
+              "X-api-keys": apk_keys.API_KEY
+            }
+          }).then(function (response){
+            // 4- => Update the status into completed ( attendee + report )
+            try {
+                 $http({method:'PATCH' , url : $scope.server_ip+"api/"+$scope.application_id+"/update/status" , data : {user_id:$scope.user_id}}).then((d)=>{
+                 $scope.calculate_usage_time();
+              } , function (err){console.log(err);});
+            }catch (e) { }
+          },(err)=>{console.log(err);})
+
+
+        });
+        //----------------------
+        if(submit_icon.hasClass('fa-spinner')){
+          submit_icon.removeClass('fa-spinner fa-spin');
+          submit_icon.addClass('fa-arrow-right');
+          submit_icon.next('span').html('Submit Quiz');
+        }
+      // ==============> End the progression
+      $scope.slide_screens.slideNext();
      };
      $scope.add_quiz_time_tracker = function (){
 
