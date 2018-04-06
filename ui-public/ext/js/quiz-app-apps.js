@@ -1271,7 +1271,7 @@ attendeeApp.controller('players' , [
      $scope.load_application_draft();
      $timeout(function(){
         // => check if thi quiz is loaded or closed by attendee
-      if($scope.attendee_draft != null || $scope.attendee_draft.error == null ){
+      if($scope.attendee_draft != null && $scope.attendee_draft.error == null ){
         var attendee_app =  $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
         if( attendee_app.is_loaded != undefined && attendee_app.is_loaded ){
            $scope.__player_object = attendee_app.impr_application_object ;
