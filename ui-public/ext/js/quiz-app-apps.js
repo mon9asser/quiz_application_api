@@ -114,7 +114,7 @@ attendeeApp.controller("players" , [
 
     // ====> Api urls
     $scope.url_attendee_draft_get = $scope.server_ip + 'api/application/user_status/' + $scope.application_id + '/get';
-
+    $scope.url_main_application_get = settings.server_ip + 'api/'+$scope.application_id+'/application/retrieve';
 
     // ====> Scope functionalities
     $scope.load_application_draft = function (){
@@ -148,16 +148,23 @@ attendeeApp.controller("players" , [
     }
     $scope.load_main_attendee_application = function (){
 
+      $http({
+        headers : $scope.api_key_headers ,
+        url : $scope.url_main_application_get ,
+        type : "GET"
+      }).then(function(resp){console.log(resp.data);} , function(err){console.log(err);})
     }
     // ====> Scope Do An Actions
     $scope.load_application_draft();
     $scope.load_application_json_file();
-    $scope.load_main_attendee_application();
+
 
     // ====> Do An Actions through time
-    $timeout(function (){ // => time is 1500
+    $timeout(function (){ // => time is 50 => api keys
         console.log($scope.api_key_headers);
+        $scope.load_main_attendee_application();
     } , 50);
+
 
   } // => end controller functionality
 ]);
