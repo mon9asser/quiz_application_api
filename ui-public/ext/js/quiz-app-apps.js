@@ -157,7 +157,7 @@ attendeeApp.controller("players" , [
     // ====> Do An Actions through time
     $timeout(function (){ // => time is 1500
         console.log($scope.api_key_headers);
-    } , 0);
+    } , 50);
 
   } // => end controller functionality
 ]);
