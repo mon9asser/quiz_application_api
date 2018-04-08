@@ -1,7 +1,14 @@
 {{> attendee_head }}
 
    <!-- Loading page  (BLANK) -->
-   <div class="loading-player"></div>
+   <div class="loading-player text-center">
+     <h1>Some issues related EC2 InProgress</h1>
+     <!-- <div class="cssload-square">
+       <div class="cssload-square-part cssload-square-green"></div>
+       <div class="cssload-square-part cssload-square-pink"></div>
+       <div class="cssload-square-blend"></div>
+      </div> -->
+   </div>
 
 
    <div class="container-fluid-x" data:ng:controller="players">
@@ -240,7 +247,7 @@
                               </div>
                               <!-- Question buttons  -->
                               <div class="qusu-details text-right">
-                                  <button ng:click="" class="button-take-this" type="button" name="button">
+                                  <button ng:click="review_all_resolved_question()" class="button-take-this" type="button" name="button">
                                     <i class="fa fa-reply-all" aria-hidden="true"></i>
                                     Review
                                   </button>
