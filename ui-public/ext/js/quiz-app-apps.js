@@ -899,7 +899,7 @@ attendeeApp.controller("players" , [
       }
     };
     $scope.submit_quiz_into_a_report = () => {
-      alert($scope.this_attendee_draft);
+      // alert($scope.this_attendee_draft);
       console.log({'val-1':$scope.this_attendee_draft});
       return $http({
          url : $scope.url_attend_quiz ,
@@ -907,8 +907,9 @@ attendeeApp.controller("players" , [
          data : { "attendee_object" : $scope.this_attendee_draft } ,
          headers : $scope.api_key_headers
       }).then(function(resp){
-        console.log(resp.data);
-        console.log({'val-2':resp.data });
+        $http({method:'PATCH' , url : $scope.server_ip+"api/"+$scope.application_id+"/update/status" , data : {user_id:$scope.user_id}}).then((d)=>{
+
+            } , function (err){console.log(err);});
         return true ;
       } , function(err){
         console.log(err); return false;
