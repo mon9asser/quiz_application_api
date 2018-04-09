@@ -917,6 +917,7 @@ attendeeApp.controller("players" , [
       }
     };
     $scope.submit_quiz_into_a_report = () => {
+      $scope.this_attendee_draft = application_object.att_draft.find(x => x.user_id == $scope.user_id);
       // alert($scope.this_attendee_draft);
       console.log({'val-1':$scope.this_attendee_draft});
       return $http({
