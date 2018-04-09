@@ -144,7 +144,7 @@ attendeeApp.controller("players" , [
       }).then(function(resp){
         $scope.__report_object = resp.data ;
         console.log($scope.__report_object);
-        alert();
+        // alert();
       } , function(res){
         console.log(res);
       });
@@ -1008,7 +1008,7 @@ attendeeApp.controller("players" , [
         console.log($scope.api_key_headers);
         $scope.load_main_attendee_application();
         $scope.load_attendee_report();
-    } , 50);
+    } , 100);
     $timeout(function () { // => time is 150
       $scope.slide_screens = new Swiper('.swiper-container') ;
       $scope.slide_screens.on('slideChange' , function (i){
