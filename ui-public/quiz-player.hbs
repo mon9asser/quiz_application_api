@@ -45,7 +45,7 @@
            <div class="swiper-wrapper quiz-contents">
                <div class="swiper-slide welcoming-screen-x">
                  <div ng:class="load_quiz_status_theme()" class="container screen-container">
-                 
+
                        <!-- Welcoming message ( Welcoming ) -->
                        <div ng:show="(quiz_status == 0)? true : false">
                            <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
@@ -98,16 +98,16 @@
                        <!-- Quiz is Completed -->
                        <div ng:show="(quiz_status == 3)? true : false">
                          <!-- Case successed in quiz  -->
-                         <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_success_with | trust_this_html_values"></div>
+                         <div ng:if="__report_object.status != 'Failed'" class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_success_with | trust_this_html_values"></div>
                          <!-- Case failed in quiz  -->
-                         <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_failed_with | trust_this_html_values"></div>
+                         <div ng:if="__report_object.status == 'Failed'" class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_failed_with | trust_this_html_values"></div>
                          <!-- The Grade  -->
                          <div class="quiz-grade">
                            <div class="quiz-grade grade-score text-center">
-                             <h3>Your score : 10/20</h3>
+                             <h3>Your score : {> __report_object.correct_answers <}/{> __report_object.total_questions <}</h3>
                            </div>
                            <div class="quiz-grade grade-score text-center">
-                             <h5>Pass grade : 50%</h5>
+                             <h5>Pass grade : {> __report_object.score <}%</h5>
                            </div>
                          </div>
                          <!-- Question buttons  -->
