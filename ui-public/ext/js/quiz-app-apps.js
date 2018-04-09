@@ -133,7 +133,7 @@ attendeeApp.controller("players" , [
     $scope.url_attendee_draft = $scope.server_ip + 'api/application/user_status/' + $scope.application_id;
     $scope.url_attend_quiz = $scope.server_ip + 'api/'+ $scope.application_id  +'/add/attended/quiz';
     $scope.url_attendee_report = $scope.server_ip + "api/"+ $scope.application_id + "/retrieve/"+$scope.user_id+"/report";
-
+    alert($scope.url_attendee_report);
     // ====> Scope functionalities
     $scope.load_attendee_report = () => {
       $http({

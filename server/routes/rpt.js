@@ -64,7 +64,7 @@ rptRouters.use(bodyParser.urlencoded({
 rptRouters.use(build_session);
 
 // => Get a report for only one attendee
-rptRouters.get("/:app_id/retrieve/:attendee_id/report" , api_key_report_auth , (req , res)=>{
+rptRouters.post("/:app_id/retrieve/:attendee_id/report" , api_key_report_auth , (req , res)=>{
 
     if(req.params.attendee_id == null ) return false ;
     if(req.params.app_id == null ) return false ;
