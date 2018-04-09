@@ -1086,5 +1086,10 @@ attendeeApp.controller("players" , [
       } , 500);
     });
 
+    $timeout(function () {
+        alert( $scope.quiz_status);
+    }, 1200);
+
+
   } // => end controller functionality
 ]);
