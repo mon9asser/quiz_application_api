@@ -132,19 +132,19 @@ attendeeApp.controller("players" , [
     $scope.url_main_application_get = settings.server_ip + 'api/'+$scope.application_id+'/application/retrieve';
     $scope.url_attendee_draft = $scope.server_ip + 'api/application/user_status/' + $scope.application_id;
     $scope.url_attend_quiz = $scope.server_ip + 'api/'+ $scope.application_id  +'/add/attended/quiz';
-    $scope.url_attendee_report = $scope.server_ip + "api/"+ $scope.application_id + "/retrieve/"+$scope.user_id+"/report";
-    alert($scope.url_attendee_report);
+    $scope.url_attendee_report = $scope.server_ip + "api/"+ $scope.application_id + "/retrieve/"+$scope.user_id+"/report/details";
+    // alert($scope.url_attendee_report);
     // ====> Scope functionalities
     $scope.load_attendee_report = () => {
 
       $http({
         headers : $scope.api_key_headers ,
-        method : "PATCH" ,
+        method : "GET" ,
         url : $scope.url_attendee_report
       }).then(function(resp){
         $scope.__report_object = resp.data ;
         console.log($scope.__report_object);
-        // alert();
+
       } , function(res){
         console.log(res);
       });
@@ -1000,6 +1000,7 @@ attendeeApp.controller("players" , [
     }
     // ====> Scope Do An Actions
     $scope.load_application_draft();
+
     $scope.load_application_json_file();
 
 
@@ -1007,9 +1008,9 @@ attendeeApp.controller("players" , [
     $timeout(function (){ // => time is 50
         console.log($scope.api_key_headers);
         $scope.load_main_attendee_application();
-        $scope.load_attendee_report();
-    } , 100);
+    } , 50);
     $timeout(function () { // => time is 150
+        $scope.load_attendee_report();
       $scope.slide_screens = new Swiper('.swiper-container') ;
       $scope.slide_screens.on('slideChange' , function (i){
         $scope.touch_move++;
