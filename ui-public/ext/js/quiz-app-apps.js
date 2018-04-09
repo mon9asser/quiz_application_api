@@ -1005,11 +1005,11 @@ attendeeApp.controller("players" , [
         $scope.slide_screens_index(current_index);
 
       });
-    }, 350);
+    }, 1350);
     $timeout(function(){ // => time is 1000
       $scope.fill_with_labels();
       $('.loading-player').fadeOut();
-    } , 1000);
+    } , 1500);
 
     //=====> Load window objects
     $scope.window_object.on("load" , function (){
