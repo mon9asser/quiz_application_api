@@ -1083,12 +1083,10 @@ attendeeApp.controller("players" , [
          } // End user object
         }// End if statement
 
-      } , 500);
+      } , 1300);
     });
 
-    $timeout(function () {
-        alert( $scope.quiz_status);
-    }, 1200);
+
 
 
   } // => end controller functionality
