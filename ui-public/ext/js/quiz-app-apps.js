@@ -900,11 +900,10 @@ attendeeApp.controller("players" , [
       return $http({
          url : $scope.url_attend_quiz ,
          method: "POST",
-         data : { attendee_object : $scope.this_attendee_draft } ,
+         data : { "attendee_object" : $scope.this_attendee_draft } ,
          headers : $scope.api_key_headers
       }).then(function(resp){
         console.log(resp.data);
-
         return true ;
       } , function(err){
         console.log(err); return false;
@@ -1025,7 +1024,7 @@ attendeeApp.controller("players" , [
           var userIndex = $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id);
           if(userIndex != -1 ){
             var user = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
-             console.log({this_attendee:$scope.this_attendee_draft ,user:user });
+             console.log({this_attendee:$scope.this_attendee_draft ,user:user});
             // ==> Load the navigation status
             if(user.is_loaded != undefined && user.is_loaded){
               $scope.__player_object = user.impr_application_object;
