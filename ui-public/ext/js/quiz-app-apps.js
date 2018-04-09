@@ -1020,7 +1020,7 @@ attendeeApp.controller("players" , [
     $timeout(function(){ // => time is 1000
       $scope.fill_with_labels();
       $('.loading-player').fadeOut();
-    } , 1500);
+    } , 1800);
 
     //=====> Load window objects
     $scope.window_object.on("load" , function (){
@@ -1098,7 +1098,7 @@ attendeeApp.controller("players" , [
     });
 
 
-   
+
 
   } // => end controller functionality
 ]);
