@@ -2,12 +2,11 @@
 
    <!-- Loading page  (BLANK) -->
    <div class="loading-player text-center">
-     <h1>Some issues related EC2 InProgress</h1>
-     <!-- <div class="cssload-square">
+      <div class="cssload-square">
        <div class="cssload-square-part cssload-square-green"></div>
        <div class="cssload-square-part cssload-square-pink"></div>
        <div class="cssload-square-blend"></div>
-      </div> -->
+      </div>
    </div>
 
 
@@ -42,42 +41,88 @@
 
         <div class="swiper-container">
 
-
+          <!--  rouly-expired-text -->
            <div class="swiper-wrapper quiz-contents">
-               <!-- Welcoming screen  -->
                <div class="swiper-slide welcoming-screen-x">
-                   <!-- Welcoming screen contents  -->
-                   <div ng:class="(is_resume == null)?'about-quiz':'rouly-expired-text'" class="container screen-container"> <!-- label-question -->
-                       <div ng:if="is_resume == null">
-                              <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
-                              <!-- Question buttons  -->
-                              <div class="qusu-details text-right">
-                                  <button ng:click="back_to_quizzes()" class="button-take-this" type="button" name="button">
-                                    <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-                                    Back
-                                  </button>
-                                  <button ng:click="start_this_quiz()" class="button-take-this" type="button" name="button">
-                                    <i class="fa fa-sign-in" aria-hidden="true"></i>
-                                    Take this Quiz
-                                  </button>
-                             </div>
-                      </div>
-                      <div ng:if="is_resume != null">
-                        <div class="description-body redactor-styles">
-                          <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
-                          <div ng:if="is_resume.status == true">
-                              {> is_resume.expire_message <} <span class="in-date">{> is_resume.through_date.after <}</span> day(s) in next <span class="in-date">{> is_resume.through_date.in | date <}</span>
-                          </div>
-                          <div class="qusu-details detls-resume-quiz text-right">
-                            <button ng:click="resume_quiz_next_unsolved_question()" class="button-take-this" type="button" name="button">
-                              <i class="fa fa-angle-right" aria-hidden="true"></i>
-                              Resume Quiz
-                            </button>
+                 <div ng:class="load_quiz_status_theme()" class="container screen-container">
+                       <!-- Welcoming message ( Welcoming ) -->
+                       <div ng:if="quiz_status == 0">
+                           <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
+                           <div class="qusu-details text-right">
+                               <button ng:click="back_to_quizzes()" class="button-take-this" type="button" name="button">
+                                   <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                                   Back
+                               </button>
+                               <button ng:click="start_this_quiz()" class="button-take-this" type="button" name="button">
+                                   <i class="fa fa-sign-in" aria-hidden="true"></i>
+                                   Take this Quiz
+                               </button>
                            </div>
-                        </div>
-                      </div>
-                   </div>
-                   <!-- End Welcoming screen contents  -->
+                       </div>
+                       <!-- End Welcoming message -->
+
+                       <!-- Warning message ( Expired warning ) -->
+                       <div ng:if="quiz_status == 1">
+                           <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
+                           <div class="qusu-details text-center">
+                             <div>
+                                 {> is_resume.expire_message <} <span class="in-date">{> is_resume.through_date.after <}</span> day(s) in next <span class="in-date">{> is_resume.through_date.in | date <}</span>
+                             </div>
+                             <div class="qusu-details detls-resume-quiz text-right">
+                                <button ng:click="resume_quiz_next_unsolved_question()" class="button-take-this" type="button" name="button">
+                                  <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                  Resume Quiz
+                                </button>
+                             </div>
+                           </div>
+                       </div>
+                       <!-- End Warning message -->
+
+                       <!-- Quiz is Expired -->
+                       <div ng:if="quiz_status == 2">
+                           <div class="qusu-details text-right">
+                             <div class="text-center quiz-exp">
+                                 This Quiz is expired !!
+                             </div>
+                             <div class="qusu-details detls-resume-quiz text-right">
+                               <button ng:click="back_to_quizzes()" class="button-take-this" type="button" name="button">
+                                 <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                                 Back
+                              </button>
+                             </div>
+                           </div>
+                       </div>
+                       <!-- End Quiz is Expired -->
+
+                       <!-- Quiz is Completed -->
+                       <div ng:if="quiz_status == 3">
+                         <!-- Case successed in quiz  -->
+                         <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_success_with | trust_this_html_values"></div>
+                         <!-- Case failed in quiz  -->
+                         <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_failed_with | trust_this_html_values"></div>
+                         <!-- The Grade  -->
+                         <div class="quiz-grade">
+                           <div class="quiz-grade grade-score text-center">
+                             <h3>Your score : 10/20</h3>
+                           </div>
+                           <div class="quiz-grade grade-score text-center">
+                             <h5>Pass grade : 50%</h5>
+                           </div>
+                         </div>
+                         <!-- Question buttons  -->
+                         <div class="qusu-details text-right">
+                             <button ng:click="review_all_resolved_question()" class="button-take-this" type="button" name="button">
+                               <i class="fa fa-reply-all" aria-hidden="true"></i>
+                               Review
+                             </button>
+                              <button ng:click="" class="button-take-this" type="button" name="button">
+                               <i class="fa fa-repeat" aria-hidden="true"></i>
+                               Retake
+                             </button>
+                         </div>
+                       </div>
+                       <!-- End Quiz is Completed -->
+                 </div>
                </div>
                <!-- Questions -->
                <div class="swiper-slide" data:ng:repeat="(obj_key , obj_val) in __player_object.questions">
@@ -224,7 +269,6 @@
                    </div>
                    <!-- End Ending screen contents  -->
                </div>
-
                <!-- Result screen  -->
                <div class="swiper-slide welcoming-screen-x">
                    <!-- Result screen contents  -->

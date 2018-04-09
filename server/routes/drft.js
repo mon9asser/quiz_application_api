@@ -88,7 +88,6 @@ drftRouter.post("/application/user_status/:app_id" , (req,res)=>{
   var app_id = req.params.app_id;
   var object = req.body.application_fields ;
   var userId = req.body.user_id ;
-try {
 
   drft.findOne({application_id: app_id } , (err , draftDocument )=>{
       if(!draftDocument || err ){
@@ -100,22 +99,24 @@ try {
       }else {
           var userIndex = draftDocument.att_draft.findIndex(x => x.user_id == userId);
           if(userIndex != -1 ){
+            // => Found Attendee
             draftDocument.att_draft[userIndex].questions_data = object.att_draft[userIndex].questions_data ;
             // console.log(draftDocument.att_draft[userIndex].questions_data);
             // console.log("------------------------------------------------<><>");
             // console.log(object.att_draft[userIndex].questions_data);
-            draftDocument.markModified('questions_data');
-            draftDocument.save();
+          }else {
+            // => Unfound Attendee
+            var newAttendee = object.att_draft.find(x => x.user_id == userId) ;
+            draftDocument.att_draft.push(newAttendee);
           }
+
+          draftDocument.markModified('att_draft');
+          draftDocument.save();
       }
 
 
   });
-
-} catch (e) {
-
-}
-
+  console.log(userId);
 });
 
 drftRouter.patch("/:app_id/update/status" , (req , res )=>{

@@ -45,6 +45,9 @@ const {
 const {
     rpt
 } = require("../../models/reports");
+
+const {drft} = require("../../models/attendee_draft");
+
 var rptRouters = express.Router();
 
 var date_made = function() {
@@ -271,17 +274,26 @@ rptRouters.post("/:app_id/add/attended/quiz" ,api_key_report_auth , (req , res)=
               reportObject.attendee_details[attendeeDetIndex].pass_mark = ( attendee_grade_perc >= grade_setting_value ) ? true : false ;
               reportObject.attendee_details[attendeeDetIndex].correct_answers = quiz_results.right_answers ;
               reportObject.attendee_details[attendeeDetIndex].wrong_answers = quiz_results.wrong_answers
-              reportObject.attendee_details[attendeeDetIndex].status = ( attendee_grade_perc >= grade_setting_value ) ? "Passed" : "Failed" ;
+              reportObject.attendeattendee_objecte_details[attendeeDetIndex].status = ( attendee_grade_perc >= grade_setting_value ) ? "Passed" : "Failed" ;
               reportObject.attendee_details[attendeeDetIndex].score = attendee_grade_perc;
               reportObject.attendee_details[attendeeDetIndex].completed_date = new Date() ;
             }
 
 
 
-
+            drft.findOne({'application_id':application_id} , (err , raft_document) => {
+              if(err && !raft_document) return false ;
+              var target_user_index = raft_document.att_draft.findIndex(x => x.user_id == req.body.attendee_object.user_id);
+              if(target_user_index != -1){
+                var attendee_object = raft_document.att_draft.find(x => x.user_id == req.body.attendee_object.user_id);
+                attendee_object.is_completed = true ;
+                raft_document.markModified('attendees');
+                raft_document.save();
+              }
+            });
             var rpting = new rpt(reportObject);
             rpting.save().then(()=>{
-              res.send("success !!");
+              res.send("Successed !")
             });
           // res.send({quiz_results: quiz_results , questions : questions  });
         // ========================================>>>>>
@@ -463,9 +475,21 @@ rptRouters.post("/:app_id/add/attended/quiz" ,api_key_report_auth , (req , res)=
 
 
 
+            drft.findOne({'application_id':application_id} , (err , raft_document) => {
+              if(err && !raft_document) return false ;
+
+              var target_user_index = raft_document.att_draft.findIndex(x => x.user_id == req.body.attendee_object.user_id);
+              if(target_user_index != -1){
+                var attendee_object = raft_document.att_draft.find(x => x.user_id == req.body.attendee_object.user_id);
+                attendee_object.is_completed = true ;
+                raft_document.markModified('attendees');
+                raft_document.save();
+              }
+            });
+
           reportObject.markModified('attendees');
           reportObject.save().then((reData)=>{
-            res.send("Successed !");
+              res.send("successed");
           })
 
       } ;
