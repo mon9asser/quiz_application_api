@@ -63,6 +63,26 @@ rptRouters.use(bodyParser.urlencoded({
 }));
 rptRouters.use(build_session);
 
+// => Get a report for only one attendee
+rptRouters.get("/:app_id/retrieve/:attendee_id/report" , api_key_report_auth , (req , res)=>{
+
+    if(req.params.attendee_id == null ) return false ;
+    if(req.params.app_id == null ) return false ;
+
+    var application_id = req.params.app_id;
+    var attendee_id = req.params.attendee_id
+
+    rpt.findOne({"questionnaire_id":application_id} , (error , qtnrDocument)=>{
+        if(error , !qtnrDocument) return false ;
+        var attendee_report_index = qtnrDocument.attendee_details.findIndex(x => x.attendee_id == attendee_id );
+        if(attendee_report_index != -1 ){
+          var attendee_report = qtnrDocument.attendee_details.find(x => x.attendee_id == attendee_id );
+          res.send(attendee_report);
+        }else {
+          res.send({error:"This attendee not found !"});
+        }
+    });
+});
 // ==> Add report ( all questions )
 rptRouters.post("/:app_id/add/attended/quiz" ,api_key_report_auth , (req , res)=>{
     var application_id = req.params.app_id;

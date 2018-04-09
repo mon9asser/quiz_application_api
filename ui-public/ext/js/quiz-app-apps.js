@@ -96,7 +96,7 @@ attendeeApp.controller("players" , [
      $scope.window_object = $(window);
      $scope.app_screens = null ;
      $scope.__player_object = null ;
-     $scope.__report_object = null ;
+     $scope.__report_object = null ; //
      $scope.attendee_draft = null ;
      $scope.this_attendee_draft= null ;
      $scope.this_attendee_draft_index = null ;
@@ -132,7 +132,23 @@ attendeeApp.controller("players" , [
     $scope.url_main_application_get = settings.server_ip + 'api/'+$scope.application_id+'/application/retrieve';
     $scope.url_attendee_draft = $scope.server_ip + 'api/application/user_status/' + $scope.application_id;
     $scope.url_attend_quiz = $scope.server_ip + 'api/'+ $scope.application_id  +'/add/attended/quiz';
+    $scope.url_attendee_report = $scope.server_ip + "api/"+ $scope.application_id + "/retrieve/"+$scope.user_id+"/report";
+
     // ====> Scope functionalities
+    $scope.load_attendee_report = () => {
+      $http({
+        headers : $scope.api_key_headers ,
+        method : "GET" ,
+        url : $scope.url_attendee_report
+      }).then(function(resp){
+        $scope.__report_object = resp.data ;
+        console.log($scope.__report_object);
+        alert();
+      } , function(res){
+        console.log(res);
+      });
+
+    }
     $scope.load_application_draft = () => {
       try {
         $http({
@@ -983,6 +999,7 @@ attendeeApp.controller("players" , [
     }
     // ====> Scope Do An Actions
     $scope.load_application_draft();
+    $scope.load_attendee_report();
     $scope.load_application_json_file();
 
 
