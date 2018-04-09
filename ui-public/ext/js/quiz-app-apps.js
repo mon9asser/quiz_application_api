@@ -1038,13 +1038,13 @@ attendeeApp.controller("players" , [
              $scope.slide_screens.allowSlidePrev = false ;
              $scope.slide_screens.allowSlideNext = false ;
              $scope.slide_screens.noSwiping = false ;
-             return false ;
+            //  return false ;
            }
            // ==> Load The status if this quiz with expiration setting
            var expiration_object = $scope.__player_object.settings.expiration;
            if((expiration_object && expiration_object.is_set ) && (user.is_loaded != undefined && user.is_loaded) ){
             //  alert("Show the expiration warning")
-            $scope.quiz_status = 2; 
+            $scope.quiz_status = 2;
             var expiration_period =  parseInt(expiration_object.through_time);
             var started_at = new Date(user.start_expiration_time) ;
             var roughly_date = started_at.setDate(started_at.getDate() + expiration_period );
@@ -1056,7 +1056,7 @@ attendeeApp.controller("players" , [
               $scope.slide_screens.allowSlidePrev = false ;
               $scope.slide_screens.allowSlideNext = false ;
               $scope.slide_screens.noSwiping = false ;
-              return false ;
+              // return false ;
             }
            }// End expiration object
 
@@ -1078,7 +1078,7 @@ attendeeApp.controller("players" , [
                     in : new Date(roughly_date)
                   }
                };
-              return false ;
+
           }else {
             $scope.is_resume = {
                 status : false
