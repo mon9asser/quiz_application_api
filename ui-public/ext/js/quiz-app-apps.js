@@ -1098,7 +1098,9 @@ attendeeApp.controller("players" , [
     });
 
 
-
+    $timeout(function(){
+      alert($scope.quiz_status);
+    },1500)
 
   } // => end controller functionality
 ]);
