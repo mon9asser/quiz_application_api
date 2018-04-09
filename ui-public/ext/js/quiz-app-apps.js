@@ -926,7 +926,7 @@ attendeeApp.controller("players" , [
          headers : $scope.api_key_headers
       }).then(function(resp){
         $http({method:'PATCH' , url : $scope.server_ip+"api/"+$scope.application_id+"/update/status" , data : {user_id:$scope.user_id}}).then((d)=>{
-
+                $scope.load_attendee_report();
             } , function (err){console.log(err);});
         return true ;
       } , function(err){
