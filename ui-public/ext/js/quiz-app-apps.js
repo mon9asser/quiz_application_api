@@ -136,9 +136,10 @@ attendeeApp.controller("players" , [
     alert($scope.url_attendee_report);
     // ====> Scope functionalities
     $scope.load_attendee_report = () => {
+
       $http({
         headers : $scope.api_key_headers ,
-        method : "GET" ,
+        method : "PATCH" ,
         url : $scope.url_attendee_report
       }).then(function(resp){
         $scope.__report_object = resp.data ;
@@ -999,7 +1000,6 @@ attendeeApp.controller("players" , [
     }
     // ====> Scope Do An Actions
     $scope.load_application_draft();
-    $scope.load_attendee_report();
     $scope.load_application_json_file();
 
 
@@ -1007,6 +1007,7 @@ attendeeApp.controller("players" , [
     $timeout(function (){ // => time is 50
         console.log($scope.api_key_headers);
         $scope.load_main_attendee_application();
+        $scope.load_attendee_report();
     } , 50);
     $timeout(function () { // => time is 150
       $scope.slide_screens = new Swiper('.swiper-container') ;
