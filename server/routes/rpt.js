@@ -73,6 +73,7 @@ rptRouters.get("/:app_id/retrieve/:attendee_id/quiz/details" , api_key_report_au
     var attendee_id = req.params.attendee_id
     console.log(attendee_id);
     rpt.findOne({"questionnaire_id":application_id} , (error , qtnrDocument)=>{
+
         if(error , !qtnrDocument) {
           res.send({error:"application doesn't exists !"})
           return false ;
