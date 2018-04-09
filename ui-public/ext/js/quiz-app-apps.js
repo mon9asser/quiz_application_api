@@ -318,6 +318,8 @@ attendeeApp.controller("players" , [
            }
 
           $scope.attendee_draft = application_object ;
+          if(application_object.att_draft != undefined )
+             $scope.this_attendee_draft = application_object.att_draft.find(x => x.user_id == $scope.user_id);
        }
 
       //------------------------------------------------------------------
