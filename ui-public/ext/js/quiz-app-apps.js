@@ -897,6 +897,8 @@ attendeeApp.controller("players" , [
       }
     };
     $scope.submit_quiz_into_a_report = () => {
+      alert($scope.this_attendee_draft);
+      console.log({'val-1':$scope.this_attendee_draft});
       return $http({
          url : $scope.url_attend_quiz ,
          method: "POST",
@@ -904,6 +906,7 @@ attendeeApp.controller("players" , [
          headers : $scope.api_key_headers
       }).then(function(resp){
         console.log(resp.data);
+        console.log({'val-2':resp.data });
         return true ;
       } , function(err){
         console.log(err); return false;
