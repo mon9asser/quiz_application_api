@@ -46,7 +46,7 @@
                <div class="swiper-slide welcoming-screen-x">
                  <div ng:class="load_quiz_status_theme()" class="container screen-container">
                        <!-- Welcoming message ( Welcoming ) -->
-                       <div ng:if="quiz_status == 0">
+                       <div ng:show="(quiz_status == 0)? true : false">
                            <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
                            <div class="qusu-details text-right">
                                <button ng:click="back_to_quizzes()" class="button-take-this" type="button" name="button">
@@ -62,7 +62,7 @@
                        <!-- End Welcoming message -->
 
                        <!-- Warning message ( Expired warning ) -->
-                       <div ng:if="quiz_status == 1">
+                       <div ng:show="(quiz_status == 1)? true : false">
                            <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
                            <div class="qusu-details text-center">
                              <div>
@@ -79,7 +79,7 @@
                        <!-- End Warning message -->
 
                        <!-- Quiz is Expired -->
-                       <div ng:if="quiz_status == 2">
+                       <div ng:show="(quiz_status == 2)? true : false">
                            <div class="qusu-details text-right">
                              <div class="text-center quiz-exp">
                                  This Quiz is expired !!
@@ -95,7 +95,7 @@
                        <!-- End Quiz is Expired -->
 
                        <!-- Quiz is Completed -->
-                       <div ng:if="quiz_status == 3">
+                       <div ng:show="(quiz_status == 3)? true : false">
                          <!-- Case successed in quiz  -->
                          <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_success_with | trust_this_html_values"></div>
                          <!-- Case failed in quiz  -->

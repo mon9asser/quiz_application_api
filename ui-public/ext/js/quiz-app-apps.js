@@ -902,7 +902,13 @@ attendeeApp.controller("players" , [
          method: "POST",
          data : { attendee_object : $scope.this_attendee_draft } ,
          headers : $scope.api_key_headers
-      }).then(function(resp){console.log(resp.data); return true ;} , function(err){console.log(err); return false;});
+      }).then(function(resp){
+        console.log(resp.data);
+
+        return true ;
+      } , function(err){
+        console.log(err); return false;
+      });
     }
     $scope.show_warning_unsolved_question = () => {
        //  $(".warning_case").removeClass('warning_case_internet_connection');
@@ -1038,7 +1044,7 @@ attendeeApp.controller("players" , [
            var expiration_object = $scope.__player_object.settings.expiration;
            if((expiration_object && expiration_object.is_set ) && (user.is_loaded != undefined && user.is_loaded) ){
             //  alert("Show the expiration warning")
-            $scope.quiz_status = 2;
+            $scope.quiz_status = 2; 
             var expiration_period =  parseInt(expiration_object.through_time);
             var started_at = new Date(user.start_expiration_time) ;
             var roughly_date = started_at.setDate(started_at.getDate() + expiration_period );
