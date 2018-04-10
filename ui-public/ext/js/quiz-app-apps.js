@@ -145,7 +145,7 @@ attendeeApp.controller("players" , [
       }).then(function(resp){
         $scope.__report_object = resp.data ;
         console.log($scope.__report_object);
-        $('.res--x-score').html( 'Your score : '+ $scope.__report_object.correct_answers  + '/' + $scope.__report_object.total_questions);
+        $('.res--x-score').html( 'Your score : '+ ($scope.__report_object.correct_answers == undefined ) ? '--': $scope.__report_object.correct_answers  + '/' + ($scope.__report_object.total_questions == undefined)? '--' : $scope.__report_object.total_questions);
         $('.res--x-grade').html('Pass grade : '+ $scope.__report_object.score + '%');
       } , function(res){
         console.log(res);
