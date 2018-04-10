@@ -284,7 +284,7 @@
                               <!-- The Grade  -->
                               <div class="quiz-grade">
                                 <div class="quiz-grade grade-score text-center">
-                                  <h3>Your score : <span class="loading-results">__report_object.correct_answers  + "/" + __report_object.total_questions</span></h3>
+                                  <h3>Your score : <span class="loading-results" data:ng:bind="__report_object.correct_answers  + "/" + __report_object.total_questions"></span></h3>
                                 </div>
                                 <div class="quiz-grade grade-score text-center">
                                   <h5>Pass grade : {> __report_object.score <}%</h5>
