@@ -133,7 +133,7 @@ attendeeApp.controller("players" , [
     $scope.url_attendee_draft = $scope.server_ip + 'api/application/user_status/' + $scope.application_id;
     $scope.url_attend_quiz = $scope.server_ip + 'api/'+ $scope.application_id  +'/add/attended/quiz';
     $scope.url_attendee_report = $scope.server_ip + "api/"+ $scope.application_id + "/retrieve/"+$scope.user_id+"/quiz/details";
-
+    $scope.url_attendee_retake = $scope.server_ip + "api/"+$scope.application_id + "/clear/report/" + $scope.user_id ;
     // alert($scope.url_attendee_report);
     // ====> Scope functionalities
     $scope.load_attendee_report = () => {
@@ -156,7 +156,40 @@ attendeeApp.controller("players" , [
       // 1 => attebdee_draft mongo object
       // 2 => attendee_draft angular object
       // 3 => report Object
-      // $http({}).then(function(){} , function(){});
+
+      $http({
+        url :$scope.url_attendee_retake ,
+        method : "PATCH"
+      }).then(function(resp){
+
+        var retake_object = resp.data ;
+        if(retake_object.is_cleared != undefined && retake_object.is_cleared ){
+          if($scope.attendee_draft.att_draft != undefined){
+              var curIndex = $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id );
+              if(curIndex != -1 ){
+                $scope.attendee_draft.att_draft.splice(curIndex , 1);
+              }
+
+              $scope.quiz_status = 0 ;
+
+              $scope.load_main_attendee_application () ;
+              $timeout(function (){
+                      $scope.fill_with_labels();
+                      $scope.slide_screens.allowSlidePrev = true ;
+                      $scope.slide_screens.allowSlideNext = true ;
+                      if($scope.__player_object.settings.allow_touch_move)
+                        $scope.slide_screens.noSwiping = true ;
+
+                       $scope.slide_screens.slideTo(1);
+              } , 1200 );
+
+          }
+        }
+       // =================>> Start it
+
+      } , function(err){
+        console.log(err);
+      });
     }
     $scope.review_all_resolved_question = () => {
       // ==> Get application and change the value related settings

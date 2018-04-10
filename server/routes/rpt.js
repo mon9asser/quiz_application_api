@@ -6,6 +6,7 @@ const fs = require('fs');
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 const {helper} = require("../helpers");
+// const {drft} = require("../../models/attendee_draft");
 // const equals = require('array-equal');
 // const Moment = require('moment');
 // const MomentRange = require('moment-range');
@@ -1245,6 +1246,55 @@ rptRouters.post(["/:creator_id/brief/report","/:creator_id/brief/:app_type/repor
    }) ;
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+rptRouters.patch("/:app_id/clear/report/:attendee_id" , (req,res) => {
+
+  var app_id = req.params.app_id ;
+  var attendee_id = req.params.attendee_id ;
+  // =================================
+  // ==> Report
+  // =================================
+  rpt.findOne({questionnaire_id : app_id} , (error , reptDoc) => {
+    if(reptDoc && reptDoc.length != 0 && !error)  {
+    var attendee_object = reptDoc.attendees.findIndex(x => x.attendee_id == attendee_id );
+    if(attendee_object != -1 ){
+      reptDoc.attendees.splice(attendee_object , 1);
+    }
+    var attendee_details_object = reptDoc.attendee_details.findIndex(x => x.attendee_id == attendee_id );
+    if(attendee_details_object != -1 ){
+      reptDoc.attendee_details.splice(attendee_details_object , 1);
+    }
+    reptDoc.markModified('attendees');
+    reptDoc.save();
+    }
+  });
+
+  drft.findOne({application_id : app_id} , (error , attDraftDoc) => {
+    if(attDraftDoc && attDraftDoc.length != 0 && !error) {
+      var attendee_draft = attDraftDoc.att_draft.findIndex(x => x.user_id == attendee_id );
+      if(attendee_draft != -1 ){
+        attDraftDoc.att_draft.splice(attendee_draft , 1);
+      }
+    }
+    attDraftDoc.markModified('att_draft')
+    attDraftDoc.save();
+  });
+
+  res.send({is_cleared : true , message : "You can retake this quiz now"});
+});
+
 
 module.exports = {
     rptRouters
