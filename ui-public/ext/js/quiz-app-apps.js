@@ -1010,7 +1010,7 @@ attendeeApp.controller("players" , [
     $timeout(function (){ // => time is 50
         console.log($scope.api_key_headers);
         $scope.load_main_attendee_application();
-    } , 50);
+    } , 1200);
     $timeout(function () { // => time is 150
       console.log("------Report w Player objects --------");
       console.log($scope.__player_object);
@@ -1040,11 +1040,11 @@ attendeeApp.controller("players" , [
         $scope.slide_screens_index(current_index);
 
       });
-    }, 1350);
+    }, 1400);
     $timeout(function(){ // => time is 1000
       $scope.fill_with_labels();
       $('.loading-player').fadeOut();
-    } , 1800);
+    } , 2500);
 
     //=====> Load window objects
     $scope.window_object.on("load" , function (){
