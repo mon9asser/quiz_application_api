@@ -917,6 +917,7 @@ attendeeApp.controller("players" , [
       }
     };
     $scope.submit_quiz_into_a_report = () => {
+      $('.loading-results').html('<b>loading results ...</b>');
       $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
       // alert($scope.this_attendee_draft);
       console.log({'val-1':$scope.this_attendee_draft});
@@ -1013,7 +1014,7 @@ attendeeApp.controller("players" , [
         $scope.load_attendee_report();
     } , 650 );
     $timeout(function () { // => time is 150
-
+      // ====================== Delete this lines
       console.log("------Report w Player objects --------");
       console.log($scope.__player_object);
       console.log($scope.__report_object);
