@@ -284,10 +284,10 @@
                               <!-- The Grade  -->
                               <div class="quiz-grade">
                                 <div class="quiz-grade grade-score text-center">
-                                  <h3>Your score : <span class="loading-results" data:ng:bind="__report_object.correct_answers  + "/" + __report_object.total_questions"></span></h3>
+                                  <h3 class="res--x">Your score : <span class="loading_results" data:ng:bind="__report_object.correct_answers  + '/' + __report_object.total_questions"></span></h3>
                                 </div>
                                 <div class="quiz-grade grade-score text-center">
-                                  <h5>Pass grade : {> __report_object.score <}%</h5>
+                                  <h5 class="res--x">Pass grade : <span class="loading_results" data:ng:bind="__report_object.score + '%'"></h5>
                                 </div>
                               </div>
                               <!-- Question buttons  -->

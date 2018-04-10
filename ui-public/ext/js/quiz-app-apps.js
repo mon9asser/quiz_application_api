@@ -145,7 +145,7 @@ attendeeApp.controller("players" , [
       }).then(function(resp){
         $scope.__report_object = resp.data ;
         console.log($scope.__report_object);
-
+        $('.loading_results').css("display","none");
       } , function(res){
         console.log(res);
       });
@@ -917,7 +917,7 @@ attendeeApp.controller("players" , [
       }
     };
     $scope.submit_quiz_into_a_report = () => {
-      $('.loading-results').html('<b>loading results ...</b>');
+
       $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
       // alert($scope.this_attendee_draft);
       console.log({'val-1':$scope.this_attendee_draft});
