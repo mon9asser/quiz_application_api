@@ -1120,6 +1120,9 @@ attendeeApp.controller("players" , [
 
 
 
-
+    alert();
+    console.log("------Report w Player objects --------");
+    console.log($scope.__player_object);
+    console.log($scope.__report_object);
   } // => end controller functionality
 ]);
