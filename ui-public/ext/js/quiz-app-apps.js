@@ -1010,7 +1010,7 @@ attendeeApp.controller("players" , [
     $timeout(function (){ // => time is 50
         console.log($scope.api_key_headers);
         $scope.load_main_attendee_application();
-    } , 1200);
+    } , 650 );
     $timeout(function () { // => time is 150
       console.log("------Report w Player objects --------");
       console.log($scope.__player_object);
@@ -1040,11 +1040,8 @@ attendeeApp.controller("players" , [
         $scope.slide_screens_index(current_index);
 
       });
-    }, 1400);
-    $timeout(function(){ // => time is 1000
-      $scope.fill_with_labels();
-      $('.loading-player').fadeOut();
-    } , 2500);
+    }, 1200);
+
 
     //=====> Load window objects
     $scope.window_object.on("load" , function (){
@@ -1100,7 +1097,7 @@ attendeeApp.controller("players" , [
              var days = Math.round(time_diff / ( 1000 * parseInt(60*60*24) ));
              $scope.is_resume = {
                   status : true ,
-                  expire_message :   expiration_object.title ,
+                  expire_message2500 :   expiration_object.title ,
                   through_timed : expiration_period ,
                   through_date : {
                     after : days ,
@@ -1118,9 +1115,12 @@ attendeeApp.controller("players" , [
          } // End user object
         }// End if statement
 
-      } , 1300);
+      } , 1500);
     });
-
+    $timeout(function(){ // => time is 1000
+      $scope.fill_with_labels();
+      $('.loading-player').fadeOut();
+    } , 2000);
 
 
 
