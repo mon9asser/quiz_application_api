@@ -11,6 +11,8 @@ const {apis , config} = require("../../database/config");
 const {build_session , verify_session , build_header , verify_access_tokens_admin_user} = require("../../middlewares/authenticate");
 const {usr} = require("../../models/users");
 const {qtnr} = require("../../models/questionnaires");
+const {drft} = require("../../models/attendee_draft");
+const {rpt} = require("../../models/reports");
 const {insertIntoApiKey} = require("./qtnr");
 
 
@@ -113,6 +115,25 @@ infceRouter.get("/generate/new/data" , (req,res)=>{
   var id = mongoose.Types.ObjectId();
   var id_1 = mongoose.Types.ObjectId();
 
+infceRouter.patch("/:app_id/clear/this/report/:attendee_id" , (req,res) => {
+  res.send("DONE +++++++++++++++++++++++++");
+  // var app_id = req.params.app_id ;
+  // var attendee_id = req.params.attendee_id ;
+  // rpt.findOne({questionnaire_id : app_id} , (error , reptDoc) => {
+  //   if(!reptDoc || error) return false ;
+  //   var attendee_object = reptDoc.attendees.findIndex(x => x.attendee_id == attendee_id );
+  //   if(attendee_object != -1 ){
+  //     reptDoc.splice(attendee_object , 1);
+  //   }
+  //   var attendee_details_object = reptDoc.attendee_details.findIndex(x => x.attendee_id == attendee_id );
+  //   if(attendee_details_object != -1 ){
+  //     reptDoc.splice(attendee_details_object , 1);
+  //   }
+  //   reptDoc.markModified('attendees');
+  //   reptDoc.save();
+  // });
+
+});
 
 var asnwer_a = mongoose.Types.ObjectId();
 var asnwer_b  = mongoose.Types.ObjectId();

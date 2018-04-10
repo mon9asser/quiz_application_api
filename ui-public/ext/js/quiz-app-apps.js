@@ -144,12 +144,57 @@ attendeeApp.controller("players" , [
         url : $scope.url_attendee_report
       }).then(function(resp){
         $scope.__report_object = resp.data ;
-        console.log($scope.__report_object);
+        // console.log($scope.__report_object);
 
       } , function(res){
         console.log(res);
       });
 
+    }
+    $scope.retake_this_quiz = () => {
+      // ==> Destroy ==> Attendee object from anywhere
+      // 1 => attebdee_draft mongo object
+      // 2 => attendee_draft angular object
+      // 3 => report Object
+      // $http({}).then(function(){} , function(){});
+    }
+    $scope.review_all_resolved_question = () => {
+      // ==> Get application and change the value related settings
+      if(!$scope.this_attendee_draft || $scope.this_attendee_draft == null || $scope.this_attendee_draft == undefined )
+        return false ;
+
+      var attendee_application = $scope.this_attendee_draft.impr_application_object.settings;
+      if (attendee_application.review_setting == false )
+        attendee_application.review_setting = true ;
+
+      if($scope.slide_screens != null && $scope.slide_screens != undefined ){
+        // => Quiz status
+        //  $scope.quiz_status = 1
+        // => Enable slider
+        $scope.slide_screens.allowSlidePrev = true ;
+        $scope.slide_screens.allowSlideNext = true ;
+        if(attendee_application.allow_touch_move)
+          $scope.slide_screens.noSwiping = true ;
+        // => Go to first slide
+        $scope.slide_screens.slideTo(1);
+        // => Set event handler
+        $scope.slide_screens.on('slideChange' , function (i){
+          $scope.touch_move++;
+          var lengther = $(this);
+          var current_index = lengther[0].activeIndex ;
+          if(current_index >= $scope.__player_object.questions.length)
+             current_index = $scope.__player_object.questions.length ;
+        $scope.curren_question_slide = parseInt(current_index) ;
+          // => Store current index
+         $scope.curren_question_slide = current_index ;
+         $scope.current_index = current_index ;
+         $scope.previous_index =lengther[0].previousIndex;
+          // => load to ui
+          $(".current-question").html($scope.curren_question_slide);
+          // => Load to next index
+          $scope.slide_screens_index(current_index);
+        });
+      }
     }
     $scope.load_application_draft = () => {
       try {
@@ -220,7 +265,7 @@ attendeeApp.controller("players" , [
          var findAttendeeIndex = $scope.attendee_draft.att_draft.findIndex(x => x.user_id == object.user_id);
          var findAttendee = $scope.attendee_draft.att_draft.find(x => x.user_id == object.user_id);
          if(findAttendeeIndex != - 1){
-           console.log("Found Attendee !");
+          //  console.log("Found Attendee !");
             // ==> attendee already exists
             var attendeeInfo = $scope.attendee_draft.att_draft[findAttendeeIndex];
             if(attendeeInfo.questions_data == undefined )
@@ -262,7 +307,7 @@ attendeeApp.controller("players" , [
               }
             }
          }else {
-           console.log("unfound Attendee !");
+          //  console.log("unfound Attendee !");
 
           //  alert(findAttendeeIndex);
             // ==> attendee doesn't exists
@@ -363,7 +408,7 @@ attendeeApp.controller("players" , [
               console.log(err);
             });
           // ==> REPORT COLLECTION ===================>>>>>============>>>>
-          console.log($scope.attendee_draft.att_draft);
+          // console.log($scope.attendee_draft.att_draft);
       };
     $scope.classes_for_this_answer = ( quiz_settings , question_id , answer_id ) => {
       var classes = '';
@@ -438,7 +483,7 @@ attendeeApp.controller("players" , [
         };
 
 
-        console.log({sotred_object : stored_object});
+
         //---------------------------------------------------------------
               // ==============>> Multiple Choices ( Texts Or Media )
               //---------------------------------------------------------------
@@ -451,6 +496,16 @@ attendeeApp.controller("players" , [
                                          // => Delete the-old highlited answer and Highlight the new selected answer
                                          answer_iu_list.removeClass('selected_answer animated shake');
                                          this_answer.addClass('selected_answer animated shake');
+
+                                          if($scope.attendee_draft.att_draft != undefined){
+                                            // remove old answer answer_ids
+                                            var question_id = stored_object.question_id ;
+                                            // question_id
+                                            var attendee_part = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+                                            var target_question = attendee_part.questions_data.find(x => x.question_id == question_id);
+                                            if(target_question != undefined)
+                                            target_question.answer_ids = new Array();
+                                          }
                                          // => No need to show the correct answer here
                                          // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
                                          // => Mongo status => move the data into mongo ( attendee draft )
@@ -538,6 +593,9 @@ attendeeApp.controller("players" , [
                                             }
                                           });
                                         }
+
+
+
                                         // => Angular backend ( attendee_draft  ) do this ---> allow attendee change the selected answer
                                         $scope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
                                         // => Auto slide status ( true ) => move to next slide directly after few moments ( timeframe )
@@ -561,6 +619,9 @@ attendeeApp.controller("players" , [
                                       }else {
                                         this_answer.addClass('selected_answer animated shake');
                                       }
+
+                                      // ===================> Updates
+
                                       // => No need to show the correct answers
                                       // => Angular backend ( attendee_draft  ) do this --->  allow attendee change or add the answer
                                       // => Mongo status => move the data into mongo ( attendee draft )
@@ -702,6 +763,9 @@ attendeeApp.controller("players" , [
                      });
                      if(has_wrong_answer) return false ;
 
+
+                     // => Review Old answer
+
                      // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
                      // => Mongo status => move the data into mongo ( attendee draft )
                      $scope.store_into_attendee_draft( stored_object );
@@ -751,6 +815,18 @@ attendeeApp.controller("players" , [
                          there.removeClass('selected_answer animated shake')
                      });
                     this_answer.addClass('selected_answer animated shake');
+
+                    // ==> Review old Answer
+                    // ===================> Updates
+                    if($scope.attendee_draft.att_draft != undefined){
+                        // remove old answer answer_ids
+                        var question_id = stored_object.question_id ;
+                        // question_id
+                        var attendee_part = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+                        var target_question = attendee_part.questions_data.find(x => x.question_id == question_id);
+                        if(target_question != undefined)
+                          target_question.answer_ids = new Array();
+                      }
                     // => No need to show the correct answer here
                     // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
                     // => Mongo status => move the data into mongo ( attendee draft )
@@ -920,7 +996,7 @@ attendeeApp.controller("players" , [
 
       $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
       // alert($scope.this_attendee_draft);
-      console.log({'val-1':$scope.this_attendee_draft});
+      // console.log({'val-1':$scope.this_attendee_draft});
       return $http({
          url : $scope.url_attend_quiz ,
          method: "POST",
@@ -1009,15 +1085,15 @@ attendeeApp.controller("players" , [
 
     // ====> Do An Actions through time
     $timeout(function (){ // => time is 50
-        console.log($scope.api_key_headers);
+        // console.log($scope.api_key_headers);
         $scope.load_main_attendee_application();
         $scope.load_attendee_report();
     } , 650 );
     $timeout(function () { // => time is 150
       // ====================== Delete this lines
-      console.log("------Report w Player objects --------");
-      console.log($scope.__player_object);
-      console.log($scope.__report_object);
+      // console.log("------Report w Player objects --------");
+      // console.log($scope.__player_object);
+      // console.log($scope.__report_object);
 
       $scope.slide_screens = new Swiper('.swiper-container') ;
       $scope.slide_screens.on('slideChange' , function (i){
@@ -1054,7 +1130,7 @@ attendeeApp.controller("players" , [
           var userIndex = $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id);
           if(userIndex != -1 ){
             var user = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
-             console.log({this_attendee:$scope.this_attendee_draft ,user:user});
+            //  console.log({this_attendee:$scope.this_attendee_draft ,user:user});
             // ==> Load the navigation status
             if(user.is_loaded != undefined && user.is_loaded){
               $scope.__player_object = user.impr_application_object;
