@@ -173,16 +173,8 @@ attendeeApp.controller("players" , [
               $scope.quiz_status = 0 ;
 
               $scope.load_main_attendee_application () ;
-              $timeout(function (){
-                      $scope.fill_with_labels();
-                      $scope.slide_screens.allowSlidePrev = true ;
-                      $scope.slide_screens.allowSlideNext = true ;
-                      if($scope.__player_object.settings.allow_touch_move)
-                        $scope.slide_screens.noSwiping = true ;
-
-                       $scope.slide_screens.slideTo(1);
-              } , 1200 );
-
+              // ==> Reload Page
+              location.reload();
           }
         }
        // =================>> Start it
