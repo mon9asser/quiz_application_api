@@ -1012,6 +1012,9 @@ attendeeApp.controller("players" , [
         $scope.load_main_attendee_application();
     } , 50);
     $timeout(function () { // => time is 150
+      console.log("------Report w Player objects --------");
+      console.log($scope.__player_object);
+      console.log($scope.__report_object);
         $scope.load_attendee_report();
       $scope.slide_screens = new Swiper('.swiper-container') ;
       $scope.slide_screens.on('slideChange' , function (i){
@@ -1120,9 +1123,7 @@ attendeeApp.controller("players" , [
 
 
 
-    alert();
-    console.log("------Report w Player objects --------");
-    console.log($scope.__player_object);
-    console.log($scope.__report_object);
+
+
   } // => end controller functionality
 ]);
