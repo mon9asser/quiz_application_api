@@ -284,10 +284,10 @@
                               <!-- The Grade  -->
                               <div class="quiz-grade">
                                 <div class="quiz-grade grade-score text-center">
-                                  <h3 class="res--x res--x-score">Your score : -- </h3>
+                                  <h3>Your score : {> __report_object.correct_answers  + "/" + __report_object.total_questions <}</h3>
                                 </div>
                                 <div class="quiz-grade grade-score text-center">
-                                  <h5 class="res--x res--x-grade">Pass grade : -- </h5>
+                                  <h5>Pass grade : {> __report_object.score <}%</h5>
                                 </div>
                               </div>
                               <!-- Question buttons  -->
