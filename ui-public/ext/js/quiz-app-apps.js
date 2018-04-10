@@ -535,9 +535,11 @@ attendeeApp.controller("players" , [
                                             var question_id = stored_object.question_id ;
                                             // question_id
                                             var attendee_part = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
-                                            var target_question = attendee_part.questions_data.find(x => x.question_id == question_id);
-                                            if(target_question != undefined)
-                                            target_question.answer_ids = new Array();
+                                            if(attendee_part != undefined){
+                                              var target_question = attendee_part.questions_data.find(x => x.question_id == question_id);
+                                              if(target_question != undefined)
+                                              target_question.answer_ids = new Array();
+                                            }
                                           }
                                          // => No need to show the correct answer here
                                          // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
