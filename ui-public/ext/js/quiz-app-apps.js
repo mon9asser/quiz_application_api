@@ -1248,7 +1248,7 @@ attendeeApp.controller("players" , [
     // ====> Scope Do An Actions
     $scope.load_application_draft();
     $scope.load_application_json_file();
-
+    
 
     // ====> Do An Actions through time
     $timeout(function (){ // => time is 50
