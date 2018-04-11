@@ -1147,6 +1147,12 @@ attendeeApp.controller("players" , [
           $scope.slide_screens.slideTo(target_slider_index + 1);
       }
     };
+    $scope.freez_the_slider = () => {
+      $scope.slide_screens.allowSlidePrev = false ;
+      $scope.slide_screens.allowSlideNext = false ;
+      $scope.slide_screens.noSwiping = false ;
+    }
+
     $scope.submit_quiz_into_a_report = () => {
       if($scope.attendee_draft.att_draft == undefined ) return false ;
       $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
@@ -1162,7 +1168,8 @@ attendeeApp.controller("players" , [
                 $scope.load_attendee_report();
                 $scope.time__calculation_compilation();
                 $scope.progress__calculation_compilation();
-
+                // freez the slider right now
+                $scope.freez_the_slider();
             } , function (err){console.log(err);});
         return true ;
       } , function(err){
