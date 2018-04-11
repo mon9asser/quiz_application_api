@@ -119,13 +119,102 @@ attendeeApp.controller("players" , [
      };
      $scope.quiz_time_tracker = "00:00";
      $scope.collected_time_vals = 0;
-     $scope.seconds = 00 ;
-     $scope.minutes = 00;
+     $scope.seconds = 9 ;
+     $scope.minutes = 0;
      $scope.hours = 0 ;
      $scope.warning_at_time = {
        number_1 : 0 ,
        number_2 : 0
      };
+
+     $scope.time__calculation_compilation = () => {
+       if($scope.__player_object.settings.time_settings.is_with_time){
+        var remaining_hours =  $scope.__player_object.settings.time_settings.hours * 60
+        var remaining_minutes =  $scope.__player_object.settings.time_settings.minutes
+        var remaining_seconds =  parseInt(( $scope.__player_object.settings.time_settings.seconds > 60 ) ?  $scope.__player_object.settings.time_settings.seconds / 60 : 0);
+
+        var app_hours = $scope.application_data_object.settings.time_settings.hours * 60
+        var app_minutes = $scope.application_data_object.settings.time_settings.minutes
+        var app_seconds = parseInt(($scope.application_data_object.settings.time_settings.seconds > 60 ) ?  $scope.application_data_object.settings.time_settings.seconds / 60 : 0  );
+
+        var usage_hours =  Math.round(app_hours - remaining_hours);
+        var usage_minutes = Math.round ( app_minutes - remaining_minutes);
+        var usage_seconds = Math.round ( app_seconds - remaining_seconds);
+
+        var usage_times = usage_hours + usage_minutes  + usage_seconds;
+        $('.time-status').html("Completed in : "+usage_times+" minute(s)");
+       };
+     }
+     $scope.progress__calculation_compilation = () =>{
+       // => Question Numbers
+       var question_pro = $('.current-question');
+       question_pro.html($scope.__player_object.questions.length);
+       // => Question Progress
+       $scope.slide_screens_index($scope.__player_object.questions.length);
+     };
+     $scope.do_an_action_with_closest_time = () => {
+       $scope.submit_quiz_into_a_report();
+       $scope.slide_screens.slideTo(0);
+       $scope.quiz_status = 3 ;
+       $scope.slide_screens.allowSlidePrev = false ;
+       $scope.slide_screens.allowSlideNext = false ;
+       $scope.slide_screens.noSwiping = false ;
+       $scope.time__calculation_compilation();
+       $scope.progress__calculation_compilation();
+     };
+     $scope.load_time_tracker  = () => {
+
+       var sec  = $('.sec');
+       var mins = $('.min');
+       var hrs  = $('.hr');
+
+       var is_hourly = $scope.__player_object.settings.time_settings.timer_type ;
+
+       // ==> Check if all with 0 value
+       if(is_hourly){
+         if($scope.seconds == 0 && $scope.minutes == 0 && $scope.hours == 0)
+          {
+            $scope.do_an_action_with_closest_time();
+            return false ;
+          }
+       }else {
+          if( $scope.seconds == 0 && $scope.minutes == 0 )
+              {
+                $scope.do_an_action_with_closest_time();
+                return false ;
+              }
+       }
+
+
+
+       // ==> seconds and minutes object
+       $scope.seconds--;
+       if( $scope.seconds < 0 ){
+           $scope.seconds = 59;
+           $scope.minutes--;
+       }
+
+
+       if(is_hourly){
+         if($scope.minutes < 00 && $scope.hours > 0 ) {
+           $scope.minutes = 59;
+           $scope.hours--;
+         }
+       }
+
+       // ==> Html Values
+       sec.html($scope.seconds);
+       mins.html(($scope.minutes < 10 ) ? '0'+$scope.minutes:$scope.minutes );
+       if(is_hourly){
+          hrs.html( $scope.hours);
+       }
+       $scope.load_quiz_timer();
+     };
+
+     $scope.load_quiz_timer = () => {
+       $scope.timer = setTimeout($scope.load_time_tracker , 1000);
+     };
+
 
     // ====> Api urls
     $scope.url_attendee_draft_get = $scope.server_ip + 'api/application/user_status/' + $scope.application_id + '/get';
@@ -935,8 +1024,8 @@ attendeeApp.controller("players" , [
               return '/progressbar-layouts/layout-'+layout_template+'.hbs';
             };
     $scope.start_this_quiz = () => {
+      $scope.load_quiz_timer();
       $scope.slide_screens.slideNext();
-
     }
     $scope.back_to_prev_slider = () => {
       $scope.slide_screens.slidePrev();
@@ -964,6 +1053,7 @@ attendeeApp.controller("players" , [
       return window.location.href = $scope.server_ip+'quizzes';
     };
     $scope.resume_quiz_next_unsolved_question = () => {
+      $scope.load_quiz_timer();
       var app_questions = $scope.__player_object.questions;
       var me = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
 
@@ -1020,7 +1110,7 @@ attendeeApp.controller("players" , [
       }
     };
     $scope.submit_quiz_into_a_report = () => {
-
+      if($scope.attendee_draft.att_draft == undefined ) return false ;
       $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
       // alert($scope.this_attendee_draft);
       // console.log({'val-1':$scope.this_attendee_draft});
@@ -1106,7 +1196,6 @@ attendeeApp.controller("players" , [
     }
     // ====> Scope Do An Actions
     $scope.load_application_draft();
-
     $scope.load_application_json_file();
 
 
