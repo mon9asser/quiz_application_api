@@ -154,7 +154,7 @@ attendeeApp.controller("players" , [
         usage_format = " Minute(s)";
         if(usage_times == 0) {
           usage_format =( existing_seconds > 60 )? usage_format = " Minute(s)" : usage_format = " Second(s)";
-          usage_times = ( existing_seconds > 60 )? usage_times : existing_seconds;
+          usage_times = ( existing_seconds > 60 )? usage_times : Math.round(existing_seconds - $scope.__player_object.settings.time_settings.seconds);
         }
         $('.time-status').html("Completed in : "+usage_times+usage_format);
        };
