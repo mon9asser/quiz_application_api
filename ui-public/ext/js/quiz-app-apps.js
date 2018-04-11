@@ -247,7 +247,7 @@ attendeeApp.controller("players" , [
        if(is_hourly){
           hrs.html( ( $scope.hours < 10 ) ? '0'+$scope.hours : $scope.hours);
        }
-       $scope.time__calculation_compilation(true);
+      //  $scope.time__calculation_compilation(true);
        $scope.load_quiz_timer();
      };
      $scope.load_quiz_timer = () => {
