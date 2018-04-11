@@ -126,9 +126,18 @@ attendeeApp.controller("players" , [
        number_1 : 0 ,
        number_2 : 0
      };
-
+     $scope.load_template_timer = () => {
+       var timeSettings = $scope.__player_object.settings.time_settings;
+       if(timeSettings && timeSettings != undefined || timeSettings.is_with_time){
+         $scope.seconds =timeSettings.seconds;
+         $scope.minutes =timeSettings.minutes ;
+         $scope.hours =timeSettings.hours;
+       }
+     }
      $scope.time__calculation_compilation = () => {
        if($scope.__player_object.settings.time_settings.is_with_time){
+        var existing_seconds = $scope.application_data_object.settings.time_settings.seconds ;
+
         var remaining_hours =  $scope.__player_object.settings.time_settings.hours * 60
         var remaining_minutes =  $scope.__player_object.settings.time_settings.minutes
         var remaining_seconds =  parseInt(( $scope.__player_object.settings.time_settings.seconds > 60 ) ?  $scope.__player_object.settings.time_settings.seconds / 60 : 0);
@@ -142,15 +151,23 @@ attendeeApp.controller("players" , [
         var usage_seconds = Math.round ( app_seconds - remaining_seconds);
 
         var usage_times = usage_hours + usage_minutes  + usage_seconds;
-        $('.time-status').html("Completed in : "+usage_times+" minute(s)");
+        usage_format = " Minute(s)";
+        if(usage_times == 0) {
+          usage_format =( existing_seconds > 60 )? usage_format = " Minute(s)" : usage_format = " Second(s)";
+          usage_times = ( existing_seconds > 60 )? usage_times : existing_seconds;
+        }
+        $('.time-status').html("Completed in : "+usage_times+usage_format);
        };
      }
+
      $scope.progress__calculation_compilation = () =>{
-       // => Question Numbers
-       var question_pro = $('.current-question');
-       question_pro.html($scope.__player_object.questions.length);
-       // => Question Progress
-       $scope.slide_screens_index($scope.__player_object.questions.length);
+       if($scope.__player_object.settings.progression_bar.is_available ){
+         // => Question Numbers
+         var question_pro = $('.current-question');
+         question_pro.html($scope.__player_object.questions.length);
+         // => Question Progress
+         $scope.slide_screens_index($scope.__player_object.questions.length);
+       }
      };
      $scope.do_an_action_with_closest_time = () => {
        $scope.submit_quiz_into_a_report();
@@ -161,6 +178,21 @@ attendeeApp.controller("players" , [
        $scope.slide_screens.noSwiping = false ;
        $scope.time__calculation_compilation();
        $scope.progress__calculation_compilation();
+     };
+     $scope.impr_application_remainging_time = () => {
+       //  alert("store remainging time");
+       $http({
+         method : "PATCH" ,
+         data : {
+          user_id : $scope.user_id ,
+          data_timed_with : {
+            seconds :  $scope.seconds ,
+            minutes : $scope.minutes  ,
+            hours : $scope.hours
+          }
+          } ,
+          url : $scope.server_ip + 'api/' + $scope.application_id + "/update/settings"
+       }).then(function(){} , function(){});
      };
      $scope.load_time_tracker  = () => {
 
@@ -186,7 +218,8 @@ attendeeApp.controller("players" , [
        }
 
 
-
+       // ==> Store the remaining times into imper
+       $scope.impr_application_remainging_time ();
        // ==> seconds and minutes object
        $scope.seconds--;
        if( $scope.seconds < 0 ){
@@ -210,7 +243,6 @@ attendeeApp.controller("players" , [
        }
        $scope.load_quiz_timer();
      };
-
      $scope.load_quiz_timer = () => {
        $scope.timer = setTimeout($scope.load_time_tracker , 1000);
      };
@@ -317,7 +349,7 @@ attendeeApp.controller("players" , [
                 url : $scope.url_attendee_draft_get ,
                 data : { user_id : $scope.user_id }
                }).then(function(res){
-          $scope.attendee_draft = res.data;
+                  $scope.attendee_draft = res.data;
           if($scope.attendee_draft.att_draft != undefined)
             {
               $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
@@ -348,6 +380,12 @@ attendeeApp.controller("players" , [
         $scope.application_data_object = resp.data ;
         $scope.__player_object = resp.data ;
 
+        // Loading time
+        if($scope.__player_object.settings.time_settings.is_with_time){
+          $scope.seconds = $scope.__player_object.settings.time_settings.seconds ;
+          $scope.minutes = $scope.__player_object.settings.time_settings.minutes;
+          $scope.hours = $scope.__player_object.settings.time_settings.hours ;
+        }
 
       } , function(err){console.log(err);})
     }
@@ -1122,6 +1160,9 @@ attendeeApp.controller("players" , [
       }).then(function(resp){
         $http({method:'PATCH' , url : $scope.server_ip+"api/"+$scope.application_id+"/update/status" , data : {user_id:$scope.user_id}}).then((d)=>{
                 $scope.load_attendee_report();
+                $scope.time__calculation_compilation();
+                $scope.progress__calculation_compilation();
+
             } , function (err){console.log(err);});
         return true ;
       } , function(err){
@@ -1250,6 +1291,7 @@ attendeeApp.controller("players" , [
             // ==> Load the navigation status
             if(user.is_loaded != undefined && user.is_loaded){
               $scope.__player_object = user.impr_application_object;
+              $scope.load_template_timer();
             }else {
               // alert("Unloaded Page");
             } // End load navigation status
@@ -1259,6 +1301,11 @@ attendeeApp.controller("players" , [
              $scope.slide_screens.allowSlidePrev = false ;
              $scope.slide_screens.allowSlideNext = false ;
              $scope.slide_screens.noSwiping = false ;
+
+
+             $scope.time__calculation_compilation()
+             $scope.progress__calculation_compilation()
+
               return false ;
            }
            // ==> Load The status if this quiz with expiration setting
