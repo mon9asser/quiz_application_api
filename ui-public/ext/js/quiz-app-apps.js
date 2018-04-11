@@ -242,7 +242,7 @@ attendeeApp.controller("players" , [
        sec.html(($scope.seconds < 10 ) ? '0'+ $scope.seconds : $scope.seconds);
        mins.html(($scope.minutes < 10 ) ? '0'+$scope.minutes:$scope.minutes );
        if(is_hourly){
-          hrs.html( $scope.hours);
+          hrs.html( ( $scope.hours < 10 ) ? '0'+$scope.hours : $scope.hours);
        }
        $scope.load_quiz_timer();
      };
@@ -1171,7 +1171,8 @@ attendeeApp.controller("players" , [
                 $scope.load_attendee_report();
                 $scope.time__calculation_compilation();
                 $scope.progress__calculation_compilation();
-
+                $('.grade_result_loder').fadeOut();
+                 
                 // freez the slider right now
                 $scope.freez_the_slider();
             } , function (err){console.log(err);});

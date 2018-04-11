@@ -479,8 +479,9 @@ var attendeeDraftDataTypes = {
             ]}
           }
     ]}
-
 };
+
+
  var clientServersDataType = {
       _id :{ type:mongoose.Schema.ObjectId } ,
       api_public_keys : { type:String } , // user_name + id + secretApiCode
