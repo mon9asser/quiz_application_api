@@ -137,7 +137,9 @@ attendeeApp.controller("players" , [
        }
      }
 
-    var  time__calculation_compilation_ = function (){
+
+
+     $scope.time__calculation_compilation = (is_final = null) => {
        $scope.impr_application_remainging_time();
        if($scope.__player_object.settings.time_settings.is_with_time){
         var existing_seconds = $scope.application_data_object.settings.time_settings.seconds ;
@@ -160,33 +162,7 @@ attendeeApp.controller("players" , [
           usage_format =( existing_seconds > 60 )? usage_format = " Minute(s)" : usage_format = " Second(s)";
           usage_times = ( existing_seconds > 60 )? usage_times : Math.round(existing_seconds - $scope.__player_object.settings.time_settings.seconds);
         }
-        $('.time-status').html("Completed in : "+usage_times+usage_format);
-       };
-     }
-
-     $scope.time__calculation_compilation = () => {
-       $scope.impr_application_remainging_time();
-       if($scope.__player_object.settings.time_settings.is_with_time){
-        var existing_seconds = $scope.application_data_object.settings.time_settings.seconds ;
-
-        var remaining_hours =  $scope.__player_object.settings.time_settings.hours * 60
-        var remaining_minutes =  $scope.__player_object.settings.time_settings.minutes
-        var remaining_seconds =  parseInt(( $scope.__player_object.settings.time_settings.seconds > 60 ) ?  $scope.__player_object.settings.time_settings.seconds / 60 : 0);
-
-        var app_hours = $scope.application_data_object.settings.time_settings.hours * 60
-        var app_minutes = $scope.application_data_object.settings.time_settings.minutes
-        var app_seconds = parseInt(($scope.application_data_object.settings.time_settings.seconds > 60 ) ?  $scope.application_data_object.settings.time_settings.seconds / 60 : 0  );
-
-        var usage_hours =  Math.round(app_hours - remaining_hours);
-        var usage_minutes = Math.round ( app_minutes - remaining_minutes);
-        var usage_seconds = Math.round ( app_seconds - remaining_seconds);
-
-        var usage_times = usage_hours + usage_minutes  + usage_seconds;
-        usage_format = " Minute(s)";
-        if(usage_times == 0) {
-          usage_format =( existing_seconds > 60 )? usage_format = " Minute(s)" : usage_format = " Second(s)";
-          usage_times = ( existing_seconds > 60 )? usage_times : Math.round(existing_seconds - $scope.__player_object.settings.time_settings.seconds);
-        }
+        if(is_final == null )
         $('.time-status').html("Completed in : "+usage_times+usage_format);
        };
      }
@@ -271,6 +247,7 @@ attendeeApp.controller("players" , [
        if(is_hourly){
           hrs.html( ( $scope.hours < 10 ) ? '0'+$scope.hours : $scope.hours);
        }
+       $scope.time__calculation_compilation(true);
        $scope.load_quiz_timer();
      };
      $scope.load_quiz_timer = () => {
@@ -1196,7 +1173,7 @@ attendeeApp.controller("players" , [
       }).then(function(resp){
         $http({method:'PATCH' , url : $scope.server_ip+"api/"+$scope.application_id+"/update/status" , data : {user_id:$scope.user_id}}).then((d)=>{
                 $scope.load_attendee_report();
-                time__calculation_compilation_();
+
                 $scope.progress__calculation_compilation();
                 // store results
                 $('.resultx-x-counts').html($scope.__report_object.correct_answers);
