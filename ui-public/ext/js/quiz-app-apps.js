@@ -1175,9 +1175,13 @@ attendeeApp.controller("players" , [
                 $('.resultx-x-counts').html($scope.__report_object.correct_answers);
                 $('.resultx-x-all').html($scope.__report_object.total_questions);
                 $('.resultx-x-grade').html($scope.__report_object.score + '%');
-                $('.grade_result_loder').fadeOut();
+
                 // freez the slider right now
                 $scope.freez_the_slider();
+
+                $time(function(){
+                  $('.grade_result_loder').fadeOut();
+                } , 1000);
             } , function (err){console.log(err);});
         return true ;
       } , function(err){
