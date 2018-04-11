@@ -112,6 +112,8 @@ attendeeApp.controller("players" , [
      $scope.json_source = settings.server_ip + settings.json_source;
      $scope.application_status = [] ;
      $scope.labels = [  'a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
+
+
      $scope.slider_options = {
        allowSlidePrev : true ,
        allowSlideNext : true ,
@@ -236,9 +238,8 @@ attendeeApp.controller("players" , [
            $scope.hours--;
          }
        }
-
        // ==> Html Values
-       sec.html($scope.seconds);
+       sec.html(($scope.seconds < 10 ) ? '0'+ $scope.seconds : $scope.seconds);
        mins.html(($scope.minutes < 10 ) ? '0'+$scope.minutes:$scope.minutes );
        if(is_hourly){
           hrs.html( $scope.hours);
@@ -1248,7 +1249,7 @@ attendeeApp.controller("players" , [
     // ====> Scope Do An Actions
     $scope.load_application_draft();
     $scope.load_application_json_file();
-    
+
 
     // ====> Do An Actions through time
     $timeout(function (){ // => time is 50

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html  ng:app="applications" ng:controller="attendee-controller">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <!-- Styles -->
+    <!--
+    ==========================>>>>>> Public
+    -->
+    <link href="{{ server_ip }}ext/frameworks/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ server_ip }}ext/frameworks/css/hover.css" rel="stylesheet">
+
+    <link href="{{ server_ip }}ext/frameworks/css/font-awesome.css" rel="stylesheet">
+    <link href="{{ server_ip }}ext/frameworks/css/animate.css" rel="stylesheet">
+    <link href="{{ server_ip }}ext/frameworks/css/swiper.css" rel="stylesheet">
+    <!--  >>>>>Custom css -->
+
+    <link rel="stylesheet" href="{{ server_ip }}ext/css/default-player.css">
+    <link rel="stylesheet" href="{{ server_ip }}ext/css/default-themes.css">
+    <!-- <link href="{{ server_ip }}ext/frameworks/css/redactor.min.css" rel="stylesheet"> -->
+
+    <!-- scripts -->
+    <!--
+    ==========================>>>>>> Public
+    -->
+    <script src="{{ server_ip }}ext/frameworks/js/jquery.min.js" charset="utf-8"></script>
+    <script src="{{ server_ip }}ext/frameworks/js/bootstrap.min.js"></script>
+    <script src="{{ server_ip }}ext/frameworks/js/angular.min.js"></script>
+  </head>
+  <body>
+    <!-- User Id -->
+   <input id="userId" type="hidden" name="" value="{{ user.id }}">
+   <input id="appId" type="hidden" name="" value="{{app._id}}">
