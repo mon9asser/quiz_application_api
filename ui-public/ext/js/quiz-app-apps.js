@@ -134,7 +134,9 @@ attendeeApp.controller("players" , [
          $scope.hours =timeSettings.hours;
        }
      }
+
      $scope.time__calculation_compilation = () => {
+       $scope.impr_application_remainging_time();
        if($scope.__player_object.settings.time_settings.is_with_time){
         var existing_seconds = $scope.application_data_object.settings.time_settings.seconds ;
 
@@ -1166,10 +1168,9 @@ attendeeApp.controller("players" , [
       }).then(function(resp){
         $http({method:'PATCH' , url : $scope.server_ip+"api/"+$scope.application_id+"/update/status" , data : {user_id:$scope.user_id}}).then((d)=>{
                 $scope.load_attendee_report();
-                $timeout(function(){
-                  $scope.time__calculation_compilation();
-                  $scope.progress__calculation_compilation();
-                } , 300);
+                $scope.time__calculation_compilation();
+                $scope.progress__calculation_compilation();
+
                 // freez the slider right now
                 $scope.freez_the_slider();
             } , function (err){console.log(err);});
