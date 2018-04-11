@@ -1166,8 +1166,10 @@ attendeeApp.controller("players" , [
       }).then(function(resp){
         $http({method:'PATCH' , url : $scope.server_ip+"api/"+$scope.application_id+"/update/status" , data : {user_id:$scope.user_id}}).then((d)=>{
                 $scope.load_attendee_report();
-                $scope.time__calculation_compilation();
-                $scope.progress__calculation_compilation();
+                $timeout(function(){
+                  $scope.time__calculation_compilation();
+                  $scope.progress__calculation_compilation();
+                } , 300);
                 // freez the slider right now
                 $scope.freez_the_slider();
             } , function (err){console.log(err);});
