@@ -1196,7 +1196,7 @@ attendeeApp.controller("players" , [
       }).then(function(resp){
         $http({method:'PATCH' , url : $scope.server_ip+"api/"+$scope.application_id+"/update/status" , data : {user_id:$scope.user_id}}).then((d)=>{
                 $scope.load_attendee_report();
-                window.time__calculation_compilation_();
+                time__calculation_compilation_();
                 $scope.progress__calculation_compilation();
                 // store results
                 $('.resultx-x-counts').html($scope.__report_object.correct_answers);
