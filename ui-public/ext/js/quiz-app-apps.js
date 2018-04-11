@@ -234,7 +234,6 @@ attendeeApp.controller("players" , [
            $scope.minutes--;
        }
 
-
        if(is_hourly){
          if($scope.minutes < 00 && $scope.hours > 0 ) {
            $scope.minutes = 59;
