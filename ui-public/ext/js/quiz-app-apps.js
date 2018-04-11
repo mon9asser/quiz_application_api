@@ -1179,7 +1179,7 @@ attendeeApp.controller("players" , [
                 // freez the slider right now
                 $scope.freez_the_slider();
 
-                $time(function(){
+                $timeout(function(){
                   $('.grade_result_loder').fadeOut();
                 } , 1000);
             } , function (err){console.log(err);});
