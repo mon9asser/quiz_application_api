@@ -1171,8 +1171,11 @@ attendeeApp.controller("players" , [
                 $scope.load_attendee_report();
                 $scope.time__calculation_compilation();
                 $scope.progress__calculation_compilation();
+                // store results
+                $('.resultx-x-counts').html($scope.__report_object.correct_answers);
+                $('.resultx-x-all').html($scope.__report_object.total_questions);
+                $('.resultx-x-grade').html($scope.__report_object.score + '%');
                 $('.grade_result_loder').fadeOut();
-                 
                 // freez the slider right now
                 $scope.freez_the_slider();
             } , function (err){console.log(err);});
