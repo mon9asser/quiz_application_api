@@ -141,7 +141,7 @@
                                 <i ng:if="obj_val.question_type == 1" class="icon-image iconx-x"></i>
                                 <i ng:if="obj_val.question_type == 2" class="icon-check-circle iconx-x"></i>
                               </span>
-                              <span class="qs-numericals"></span>
+                              <span class="qs-numericals">{> $index + 1 <}</span>
                               <div class="arrow-right" ng:class="load_border_styles(obj_val.question_type)"></div>
                             </span>
                             <span data:ng:bind:html="obj_val.question_body | trust_this_html_values" class="question-body-text"></span>
@@ -183,7 +183,7 @@
                                         </div>
                                       </div>
                                       <!-- Text values -->
-                                      <label class="labels"></label>
+                                      <label class="labels">{> labels[$index] | uppercase <}</label>
                                       <div class="text-values" data:ng:bind:html="ansvalue.value | trust_this_html_values"></div>
                                       <!-- Case it wrong answer -->
                                       <span class="answer-results-wrong">
@@ -196,7 +196,7 @@
                                    </div>
                                    <!-- Case it 1 => Media choices -->
                                    <div ng:if="obj_val.question_type == 1" class="answer-contents">
-                                     <label class="labels"></label>
+                                     <label class="labels">{> labels[$index] | uppercase <}</label>
                                      <!-- Case it wrong answer -->
                                      <span class="answer-results-wrong">
                                        <i class="fa fa-close"></i>
@@ -216,7 +216,7 @@
                                    </div>
                                    <!-- Case it 2 => True/false choices -->
                                    <div ng:if="obj_val.question_type == 2" class="answer-contents">
-                                     <label class="labels"></label>
+                                     <label class="labels">{> labels[$index] | uppercase <}</label>
                                      <!-- Case it wrong answer -->
                                      <span class="answer-results-wrong">
                                        <i class="fa fa-close"></i>
