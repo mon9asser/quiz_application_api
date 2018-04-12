@@ -12,6 +12,13 @@ Array.prototype.find_unsolved_questions = function (questions_list) {
 //=============================================
 // => Filters
 //=============================================
+attendeeApp.filter('set_source_link' , [
+  ()=>{
+      return function (link_source){
+        alert(link_source);
+      }
+  }
+]);
 attendeeApp.filter("set_iframe" , [
       "$timeout" ,"$sce" ,
   function (  $timeout , $sce){
@@ -178,12 +185,16 @@ attendeeApp.controller("players" , [
      };
      $scope.do_an_action_with_closest_time = () => {
        $scope.submit_quiz_into_a_report();
-       $scope.slide_screens.slideTo(0);
        $scope.quiz_status = 3 ;
-       $scope.slide_screens.allowSlidePrev = false ;
-       $scope.slide_screens.allowSlideNext = false ;
-       $scope.slide_screens.allowTouchMove = false ;
-       $scope.slide_screens.noSwiping = false ;
+       try {
+         $scope.slide_screens.slideTo(0);
+         $scope.slide_screens.allowSlidePrev = false ;
+         $scope.slide_screens.allowSlideNext = false ;
+         $scope.slide_screens.allowTouchMove = false ;
+         $scope.slide_screens.noSwiping = false ;
+       } catch (e) {
+
+       }
        $scope.time__calculation_compilation();
        $scope.progress__calculation_compilation();
      };
@@ -327,33 +338,37 @@ attendeeApp.controller("players" , [
         // => Quiz status
         //  $scope.quiz_status = 1
         // => Enable slider
-        $scope.slide_screens.allowSlidePrev = true ;
-        $scope.slide_screens.allowSlideNext = true ;
+        try {
+          $scope.slide_screens.allowSlidePrev = true ;
+          $scope.slide_screens.allowSlideNext = true ;
 
-        if(attendee_application.allow_touch_move)
-          {
-            $scope.slide_screens.noSwiping = true ;
-            $scope.slide_screens.touches = true;
-          }
-        // => Go to first slide
-        $scope.slide_screens.slideTo(1);
-        // => Set event handler
-        $scope.slide_screens.on('slideChange' , function (i){
-          $scope.touch_move++;
-          var lengther = $(this);
-          var current_index = lengther[0].activeIndex ;
-          if(current_index >= $scope.__player_object.questions.length)
-             current_index = $scope.__player_object.questions.length ;
-        $scope.curren_question_slide = parseInt(current_index) ;
-          // => Store current index
-         $scope.curren_question_slide = current_index ;
-         $scope.current_index = current_index ;
-         $scope.previous_index =lengther[0].previousIndex;
-          // => load to ui
-          $(".current-question").html($scope.curren_question_slide);
-          // => Load to next index
-          $scope.slide_screens_index(current_index);
-        });
+          if(attendee_application.allow_touch_move)
+            {
+              $scope.slide_screens.noSwiping = true ;
+              $scope.slide_screens.touches = true;
+            }
+          // => Go to first slide
+          $scope.slide_screens.slideTo(1);
+          // => Set event handler
+          $scope.slide_screens.on('slideChange' , function (i){
+            $scope.touch_move++;
+            var lengther = $(this);
+            var current_index = lengther[0].activeIndex ;
+            if(current_index >= $scope.__player_object.questions.length)
+               current_index = $scope.__player_object.questions.length ;
+          $scope.curren_question_slide = parseInt(current_index) ;
+            // => Store current index
+           $scope.curren_question_slide = current_index ;
+           $scope.current_index = current_index ;
+           $scope.previous_index =lengther[0].previousIndex;
+            // => load to ui
+            $(".current-question").html($scope.curren_question_slide);
+            // => Load to next index
+            $scope.slide_screens_index(current_index);
+          });
+        } catch (e) {
+
+        }
       }
     }
     $scope.load_application_draft = () => {
@@ -440,15 +455,19 @@ attendeeApp.controller("players" , [
             var findQuestion = attendeeInfo.questions_data.find(x => x.question_id == object.question_id);
             if(findQuestionIndex == -1){ // question doesn't exits
               //=> Add new question with his answers
-              attendeeInfo.questions_data.push({
-                question_id : object.question_id ,
-                question_index : $scope.slide_screens.activeIndex - 1,
-                question_type : object.question.question_type,
-                question_text : object.question.question_body,
-                answer_ids : new Array({answer_id : object.answer_id , is_correct : object.is_correct , answer_object : object.answer , answer_index : object.answer_index }) ,
-                correct_answers : new Array() ,
-                updated_date : new Date()
-              });
+              try {
+                attendeeInfo.questions_data.push({
+                  question_id : object.question_id ,
+                  question_index : $scope.slide_screens.activeIndex - 1,
+                  question_type : object.question.question_type,
+                  question_text : object.question.question_body,
+                  answer_ids : new Array({answer_id : object.answer_id , is_correct : object.is_correct , answer_object : object.answer , answer_index : object.answer_index }) ,
+                  correct_answers : new Array() ,
+                  updated_date : new Date()
+                });
+              } catch (e) {
+
+              }
             // ==> add correct answer array
              var correct_answer_args = attendeeInfo.questions_data[attendeeInfo.questions_data.length-1].correct_answers ;
              for (var i = 0; i < object.question.answers_format.length; i++) {
@@ -489,15 +508,19 @@ attendeeApp.controller("players" , [
             });
 
           var currentAttendee = $scope.attendee_draft.att_draft[$scope.attendee_draft.att_draft.length-1];
-          currentAttendee.questions_data.push({
-            question_id : object.question_id ,
-            question_index : $scope.slide_screens.activeIndex - 1,
-            question_type : object.question.question_type,
-            question_text : object.question.question_body,
-            answer_ids : new Array({answer_id : object.answer_id , is_correct : object.is_correct , answer_object : object.answer , answer_index : object.answer_index }) ,
-            correct_answers : new Array() ,
-            updated_date : new Date()
-          });
+          try {
+            currentAttendee.questions_data.push({
+              question_id : object.question_id ,
+              question_index : $scope.slide_screens.activeIndex - 1,
+              question_type : object.question.question_type,
+              question_text : object.question.question_body,
+              answer_ids : new Array({answer_id : object.answer_id , is_correct : object.is_correct , answer_object : object.answer , answer_index : object.answer_index }) ,
+              correct_answers : new Array() ,
+              updated_date : new Date()
+            });
+          } catch (e) {
+
+          }
 
           var correctAnswer = currentAttendee.questions_data[currentAttendee.questions_data.length-1].correct_answers;
           for (var i = 0; i < object.question.answers_format.length; i++) {
@@ -528,15 +551,19 @@ attendeeApp.controller("players" , [
            impr_application_object : $scope.__player_object
          });
          // ===> Question data
-         application_object.att_draft[0].questions_data.push({
-           question_id : object.question_id ,
-           question_index : $scope.slide_screens.activeIndex - 1,
-           question_type : object.question.question_type,
-           question_text : object.question.question_body,
-           answer_ids : new Array({answer_id : object.answer_id , is_correct : object.is_correct , answer_object : object.answer , answer_index : object.answer_index }) ,
-           correct_answers : new Array() ,
-           updated_date : new Date()
-         });
+         try {
+           application_object.att_draft[0].questions_data.push({
+             question_id : object.question_id ,
+             question_index : $scope.slide_screens.activeIndex - 1,
+             question_type : object.question.question_type,
+             question_text : object.question.question_body,
+             answer_ids : new Array({answer_id : object.answer_id , is_correct : object.is_correct , answer_object : object.answer , answer_index : object.answer_index }) ,
+             correct_answers : new Array() ,
+             updated_date : new Date()
+           });
+         } catch (e) {
+
+         }
          // ===> answer data
         var correct_lst = application_object.att_draft[0].questions_data[0].correct_answers;
         for (var i = 0; i < object.question.answers_format.length; i++) {
@@ -692,6 +719,7 @@ attendeeApp.controller("players" , [
                                         this_answer.addClass('selected_answer animated shake');
                                         else
                                           return false ; // => Prevent user from correct or edit his answer
+
                                         // => Show the correct answer if selected is wrong show the wrong style + right style ( answer )
                                             // if user select the correct answer only need to show the right style in the selected answer
                                         var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
@@ -1081,17 +1109,33 @@ attendeeApp.controller("players" , [
             };
     $scope.start_this_quiz = () => {
       $scope.load_quiz_timer();
-      $scope.slide_screens.slideNext();
+      try {
+        $scope.slide_screens.slideNext();
+      } catch (e) {
+
+      }
     }
     $scope.back_to_prev_slider = () => {
-      $scope.slide_screens.slidePrev();
+      try {
+        $scope.slide_screens.slidePrev();
+      } catch (e) {
+
+      }
     }
     $scope.go_to_next_slider = () => {
-      $scope.slide_screens.slideNext();
+      try {
+        $scope.slide_screens.slideNext();
+      } catch (e) {
+
+      }
     }
     $scope.go_to_next_question = () => {
       $timeout(function(){
-        $scope.slide_screens.slideNext();
+        try {
+          $scope.slide_screens.slideNext();
+        } catch (e) {
+
+        }
       } , 1500);
     }
     $scope.load_quiz_status_theme = () => {
@@ -1118,11 +1162,19 @@ attendeeApp.controller("players" , [
 
       if(unsolved != undefined && unsolved.length >= 1) {
         var thisIndex = app_questions.findIndex(x => x._id == unsolved[0]._id );
-        $scope.slide_screens.slideTo( thisIndex + 1);
+        try {
+          $scope.slide_screens.slideTo( thisIndex + 1);
+        } catch (e) {
+
+        }
       }
 
       if(unsolved == undefined || unsolved.length == 0 ) {
-        $scope.slide_screens.slideTo( app_questions.length + 1);
+        try {
+          $scope.slide_screens.slideTo( app_questions.length + 1);
+        } catch (e) {
+
+        }
       }
     };
     $scope.fill_unsolved_question_counts = () => {
@@ -1149,7 +1201,11 @@ attendeeApp.controller("players" , [
 
       if($scope.attendee_draft == null || $scope.attendee_draft.att_draft == undefined || $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) == -1 )
       {
-        $scope.slide_screens.slideTo(1);
+        try {
+          $scope.slide_screens.slideTo(1);
+        } catch (e) {
+
+        }
         $('.warning_case').css('display','none');
         return false;
       }
@@ -1162,14 +1218,22 @@ attendeeApp.controller("players" , [
       if(unsolved && unsolved.length > 0 ){
           var target_slider = unsolved[0]._id;
           var target_slider_index = app_questions.findIndex(x => x._id == target_slider)
-          $scope.slide_screens.slideTo(target_slider_index + 1);
+          try {
+            $scope.slide_screens.slideTo(target_slider_index + 1);
+          } catch (e) {
+
+          }
       }
     };
     $scope.freez_the_slider = () => {
-      $scope.slide_screens.allowSlidePrev = false ;
-      $scope.slide_screens.allowSlideNext = false ;
-      $scope.slide_screens.allowTouchMove = false ;
-      $scope.slide_screens.noSwiping = false ;
+      try {
+        $scope.slide_screens.allowSlidePrev = false ;
+        $scope.slide_screens.allowSlideNext = false ;
+        $scope.slide_screens.allowTouchMove = false ;
+        $scope.slide_screens.noSwiping = false ;
+      } catch (e) {
+
+      }
     }
 
     $scope.submit_quiz_into_a_report = () => {
@@ -1228,6 +1292,15 @@ attendeeApp.controller("players" , [
 
         return true ;
     };
+    $scope.set_image_background = (image_sourc , set_server = null)=>{
+      var set_server_ip = $scope.server_ip
+      if(set_server != null )
+        set_server_ip = '';
+
+      return {
+        "background-image" : "url('"+set_server_ip+image_sourc+"')"
+      }
+    }
     $scope.submit_quiz_into_report = () => {
       $scope.is_submitted = true ;
       var submit_icon = $('.fac-icon-submit');
@@ -1268,7 +1341,12 @@ attendeeApp.controller("players" , [
           submit_icon.addClass('fa-arrow-right');
           submit_icon.next('span').html('Submit Quiz');
       }
-      $scope.slide_screens.slideNext();
+      try {
+        $scope.slide_screens.slideNext();
+      } catch (e) {
+
+      }
+
     }
     // ====> Scope Do An Actions
     $scope.load_application_draft();
@@ -1286,35 +1364,41 @@ attendeeApp.controller("players" , [
       // console.log("------Report w Player objects --------");
       // console.log($scope.__player_object);
       // console.log($scope.__report_object);
+      try {
+        $scope.slide_screens = new Swiper('.swiper-container') ;
 
-      $scope.slide_screens = new Swiper('.swiper-container') ;
+        if($scope.__player_object != null ){
+          if($scope.__player_object.settings.allow_touch_move != undefined )
+            $scope.slide_screens.touches = $scope.__player_object.settings.allow_touch_move;
+        }
 
-        if($scope.__player_object != null || $scope.__player_object.settings.allow_touch_move != undefined )
-        $scope.slide_screens.touches = $scope.__player_object.settings.allow_touch_move;
+        $scope.slide_screens.on('slideChange' , function (i){
+          $scope.touch_move++;
+          var lengther = $(this);
+          var current_index = lengther[0].activeIndex ;
 
-      $scope.slide_screens.on('slideChange' , function (i){
-        $scope.touch_move++;
-        var lengther = $(this);
-        var current_index = lengther[0].activeIndex ;
+          if(current_index >= $scope.__player_object.questions.length)
+             current_index = $scope.__player_object.questions.length ;
 
-        if(current_index >= $scope.__player_object.questions.length)
-           current_index = $scope.__player_object.questions.length ;
+        $scope.curren_question_slide = parseInt(current_index) ;
 
-      $scope.curren_question_slide = parseInt(current_index) ;
-
-        // => Store current index
-       $scope.curren_question_slide = current_index ;
-       $scope.current_index = current_index ;
-       $scope.previous_index =lengther[0].previousIndex;
+          // => Store current index
+         $scope.curren_question_slide = current_index ;
+         $scope.current_index = current_index ;
+         $scope.previous_index =lengther[0].previousIndex;
 
 
-        // => load to ui
-        $(".current-question").html($scope.curren_question_slide);
+          // => load to ui
+          $(".current-question").html($scope.curren_question_slide);
 
-        // => Load to next index
-        $scope.slide_screens_index(current_index);
+          // => Load to next index
+          $scope.slide_screens_index(current_index);
 
-      });
+        });
+      } catch (e) {
+
+      }
+
     }, 1200);
 
 
@@ -1337,11 +1421,14 @@ attendeeApp.controller("players" , [
 
            if ( user.is_completed ) {
              $scope.quiz_status = 3;
-             $scope.slide_screens.allowSlidePrev = false ;
-             $scope.slide_screens.allowSlideNext = false ;
-             $scope.slide_screens.noSwiping = false ;
-             $scope.slide_screens.allowTouchMove = false ;
+             try {
+               $scope.slide_screens.allowSlidePrev = false ;
+               $scope.slide_screens.allowSlideNext = false ;
+               $scope.slide_screens.noSwiping = false ;
+               $scope.slide_screens.allowTouchMove = false ;
+             } catch (e) {
 
+             }
              $scope.time__calculation_compilation()
              $scope.progress__calculation_compilation()
 

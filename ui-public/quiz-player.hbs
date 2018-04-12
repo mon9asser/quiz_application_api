@@ -113,11 +113,11 @@
                          </div>
                          <!-- Question buttons  -->
                          <div class="qusu-details text-right">
-                             <button ng:click="review_all_resolved_question()" class="button-take-this" type="button" name="button">
+                             <button ng:if="__player_object.settings.review_setting == true" ng:click="review_all_resolved_question()" class="button-take-this" type="button" name="button">
                                <i class="fa fa-reply-all" aria-hidden="true"></i>
                                Review
                              </button>
-                              <button ng:click="retake_this_quiz()" class="button-take-this" type="button" name="button">
+                              <button ng:if="__player_object.settings.retake_setting == true"  ng:click="retake_this_quiz()" class="button-take-this" type="button" name="button">
                                <i class="fa fa-repeat" aria-hidden="true"></i>
                                Retake
                              </button>
@@ -152,7 +152,8 @@
                           </div>
                           <div data:ng:if="obj_val.media_question != null" class="question-media" ng:class="(obj_val.answer_settings.super_size)? 'super-size':''">
                             <!-- Case : image type  -->
-                            <div data:ng:if="obj_val.media_question.media_type == 0" class="image-media-case img-cases" style="background-image:url('{> server_ip + obj_val.media_question.media_field <}');"></div>
+                            <div data:ng:if="obj_val.media_question.media_type == 0" class="image-media-case img-cases" ng:style="set_image_background(obj_val.media_question.media_field)"></div>
+                            <!-- <div data:ng:if="obj_val.media_question.media_type == 0" class="image-media-case img-cases" style="background-image:url('{> server_ip + obj_val.media_question.media_field <}');"></div> -->
                             <!-- Case : Video type -->
                             <div data:ng:if="obj_val.media_question.media_type == 1" class="video-media-case" data:ng:bind:html="obj_val.media_question | set_iframe"></div>
                           </div>
@@ -173,7 +174,9 @@
                                    <div ng:if="obj_val.question_type == 0" class="answer-contents">
                                       <div ng:if="ansvalue.media_optional != null" class="media-options">
                                          <!--  image case  -->
-                                         <div ng:if="ansvalue.media_optional.media_type == 0" style="background-image:url('{>server_ip+ansvalue.media_optional.media_src<}')"  class="image_case"></div>
+
+                                         <div ng:if="ansvalue.media_optional.media_type == 0" ng:style="set_image_background(ansvalue.media_optional.media_src)"  class="image_case"></div>
+                                         <!-- <div ng:if="ansvalue.media_optional.media_type == 0" style="background-image:url('{>server_ip+ansvalue.media_optional.media_src<}')"  class="image_case"></div> -->
                                          <!-- Video Cases -->
                                          <div ng-bind-html="ansvalue.media_optional | set_iframe" ng:if="ansvalue.media_optional.media_type == 1"  class="video_case">
                                             <!-- Append answer media here -->
@@ -204,7 +207,8 @@
                                        <i class="fa fa-check"></i>
                                      </span>
                                      <!--  Image Case  -->
-                                     <div ng:if="ansvalue.media_type == null" style="background-image:url('{>ansvalue.media_src<}')"  class="image_case"></div>
+                                     <div ng:if="ansvalue.media_type == null" ng:style="set_image_background(ansvalue.media_src , true)"  class="image_case"></div>
+                                     <!-- <div ng:if="ansvalue.media_type == null" style="background-image:url('{>ansvalue.media_src<}')"  class="image_case"></div> -->
                                      <!--  Video Case  -->
                                      <div ng-bind-html="ansvalue | set_iframe" ng:if="ansvalue.media_type == 1"  class="video_case">
                                        <!-- Append answer media here -->
@@ -296,11 +300,11 @@
                               </div>
                               <!-- Question buttons  -->
                               <div class="qusu-details text-right">
-                                  <button ng:click="review_all_resolved_question()" class="button-take-this" type="button" name="button">
+                                  <button ng:if="__player_object.settings.review_setting == true" ng:click="review_all_resolved_question()" class="button-take-this" type="button" name="button">
                                     <i class="fa fa-reply-all" aria-hidden="true"></i>
                                     Review
                                   </button>
-                                   <button ng:click="retake_this_quiz()" class="button-take-this" type="button" name="button">
+                                   <button  ng:if="__player_object.settings.retake_setting == true" ng:click="retake_this_quiz()" class="button-take-this" type="button" name="button">
                                     <i class="fa fa-repeat" aria-hidden="true"></i>
                                     Retake
                                   </button>
