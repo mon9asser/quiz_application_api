@@ -410,12 +410,13 @@ attendeeApp.controller("players" , [
         $scope.__player_object = resp.data ;
 
         // Loading time
-        if($scope.__player_object.settings != null && $scope.__player_object.settings.time_settings.is_with_time){
-          $scope.seconds = $scope.__player_object.settings.time_settings.seconds ;
-          $scope.minutes = $scope.__player_object.settings.time_settings.minutes;
-          $scope.hours = $scope.__player_object.settings.time_settings.hours ;
+        if($scope.__player_object.settings != null ){
+          if( $scope.__player_object.settings.time_settings.is_with_time){
+            $scope.seconds = $scope.__player_object.settings.time_settings.seconds ;
+            $scope.minutes = $scope.__player_object.settings.time_settings.minutes;
+            $scope.hours = $scope.__player_object.settings.time_settings.hours ;
+          }
         }
-
       } , function(err){console.log(err);})
     }
     $scope.fill_with_labels = () => {
