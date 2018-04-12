@@ -984,6 +984,10 @@ attendeeApp.controller("players" , [
                         // question_id
                         var attendee_part = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
                         var target_question = attendee_part.questions_data.find(x => x.question_id == question_id);
+                        console.log({"check issue A - att_draft":attendee_part , attendees :$scope.attendee_draft , att_id : $scope.user_id });
+                        console.log({"check issue B - target_question" : target_question });
+                        console.log({"check issue C - attendee_part" : attendee_part });
+                        console.log({"check issue D - questions_data" : attendee_part.questions_data  , question_id : question_id });
                         if(target_question != undefined)
                           target_question.answer_ids = new Array();
                       }

@@ -81,14 +81,48 @@ attendeeApp.controller("preview_player" , [
   $scope.__player_object = null ;
   $scope.server_ip = $("#server_ip").val();
   $scope.user_id = $("#user_id").val();
-  $scope.application_id = $("#app_id").val();
+  $scope.app_id = $("input").val();
+  $scope.slide_screens = null;
+  $scope.json_source = $scope.server_ip + settings.json_source;
   $scope.quiz_status = 0 ;
+  $scope.api_key_headers = null ;
   // => Urls
-  $scope.url_application = $scope.server_ip + "api/" +$scope.application_id+'/application/retrieve';
+  $scope.url_application = $scope.server_ip + "api/" + $scope.app_id +'/application/retrieve';
+  alert($("input").eq(2).attr('id');
+
+  // => application key
 
   // => funcs
+
   $scope.load_application_for_preview = () => {
-    $http({}).then(function(){},function(){});
+
+    alert($scope.url_application)
+    $http({
+      url : $scope.url_application ,
+      type : "GET" ,
+      headers : $scope.api_key_headers
+    }).then(function(resp){
+      $scope.__player_object = resp.data ;
+      console.log($scope.__player_object);
+      $scope.slide_screens = Swiper('.swiper-container') ;
+    },function(err){ console.log(err); });
   }
+  $scope.load_application_keys = () => {
+    $.getJSON( $scope.json_source , function (apk_keys){
+      $scope.api_key_headers = {
+        "X-api-app-name":apk_keys.APP_NAME ,
+        "X-api-keys":apk_keys.API_KEY
+      }
+       $scope.api_key_headers ;
+
+       // ==> calling funcstionalities
+       $scope.load_application_for_preview();
+       // ...
+    });
+  }
+
+  // ==> Exc funcs
+  $scope.load_application_keys();
+
 
 }]);
