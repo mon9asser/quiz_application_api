@@ -993,6 +993,7 @@
   width: 99%;
   margin: 10px auto;
   font-size: 12px;
+  margin-left: -5px;
 }
 .question_notes span {
   display: inline-block;

@@ -238,9 +238,9 @@
                             <!-- Case it 4 => Free texts -->
                       </div>
                       <!-- ng:if="__player_object.settings.auto_slide == true"  -->
-                      <div ng:if="__player_object.settings.auto_slide == true && obj_val.question_type <= 2" class="question_notes" ng:class="load_qs_note_theme(obj_val.question_type)">
+                      <div ng:if="__player_object.settings.auto_slide == true && obj_val.question_type <= 2 && obj_val.answer_settings.single_choice == false" class="question_notes" ng:class="load_qs_note_theme(obj_val.question_type)">
                         <span class="fa fa-info-circle"></span>
-                        <span ng:if="$index != (__player_object.settings.questions.length - 1 )">Note : When you solve  this question the next one will come directly after few moments </span>
+                        <span>Note : When you solve  this question the next one will come directly after few moments </span>
                       </div>
                       <!--  Warning Case-->
                       <div class="warning_case" ng:class="load_slide_theme(obj_val.question_type)" ng:click="go_to_not_attended_question()"></div>
