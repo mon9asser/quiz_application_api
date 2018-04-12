@@ -988,3 +988,15 @@
   width: 100% !important;
   margin-top: 10px;
 }
+.question_notes{
+  display: block;
+  width: 99%;
+  margin: 10px auto;
+  font-size: 12px;
+}
+.question_notes span {
+  display: inline-block;
+}
+.question_notes span:last-child {
+  margin-left: 5px;
+}
