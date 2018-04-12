@@ -249,6 +249,9 @@
   font-size: 15px;
   vertical-align: baseline;
 }
+.text-values > p {
+  display: inline !important;
+}
 .labels {
   display: inline-block;
    padding: 2px 8px;
