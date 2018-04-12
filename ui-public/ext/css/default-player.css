@@ -983,3 +983,8 @@
     padding: 12px;
     z-index: 2000;
 }
+
+.video_case > iframe {
+  width: 100% !important;
+  margin-top: 10px;
+}
