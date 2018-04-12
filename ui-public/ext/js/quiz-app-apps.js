@@ -250,6 +250,9 @@ attendeeApp.controller("players" , [
        $scope.load_quiz_timer();
      };
      $scope.load_quiz_timer = () => {
+       var timeSettings = $scope.__player_object.settings.time_settings;
+
+       if(timeSettings && timeSettings.is_with_time)
        $scope.timer = setTimeout($scope.load_time_tracker , 1000);
      };
 
