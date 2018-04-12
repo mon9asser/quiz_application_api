@@ -141,7 +141,7 @@
                                 <i ng:if="obj_val.question_type == 1" class="icon-image iconx-x"></i>
                                 <i ng:if="obj_val.question_type == 2" class="icon-check-circle iconx-x"></i>
                               </span>
-                              <span class="qs-numericals">{> $index + 1 <}</span>
+                              <span class="qs-numericals"></span>
                               <div class="arrow-right" ng:class="load_border_styles(obj_val.question_type)"></div>
                             </span>
                             <span data:ng:bind:html="obj_val.question_body | trust_this_html_values" class="question-body-text"></span>
