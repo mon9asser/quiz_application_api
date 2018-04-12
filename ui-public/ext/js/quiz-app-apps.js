@@ -393,7 +393,9 @@ attendeeApp.controller("players" , [
         // ==> Setup data
         $scope.application_data_object = resp.data ;
         $scope.__player_object = resp.data ;
-
+        
+        if($scope.__player_object.settings.allow_touch_move != undefined )
+        $scope.slide_screens.allowSlideNext = $scope.__player_object.settings.allow_touch_move;
         // Loading time
         if($scope.__player_object.settings.time_settings.is_with_time){
           $scope.seconds = $scope.__player_object.settings.time_settings.seconds ;
