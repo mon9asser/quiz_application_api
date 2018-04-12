@@ -182,6 +182,7 @@ attendeeApp.controller("players" , [
        $scope.quiz_status = 3 ;
        $scope.slide_screens.allowSlidePrev = false ;
        $scope.slide_screens.allowSlideNext = false ;
+       $scope.slide_screens.allowTouchMove = false ;
        $scope.slide_screens.noSwiping = false ;
        $scope.time__calculation_compilation();
        $scope.progress__calculation_compilation();
@@ -328,8 +329,12 @@ attendeeApp.controller("players" , [
         // => Enable slider
         $scope.slide_screens.allowSlidePrev = true ;
         $scope.slide_screens.allowSlideNext = true ;
+
         if(attendee_application.allow_touch_move)
-          $scope.slide_screens.noSwiping = true ;
+          {
+            $scope.slide_screens.noSwiping = true ;
+            $scope.slide_screens.allowTouchMove = true;
+          }
         // => Go to first slide
         $scope.slide_screens.slideTo(1);
         // => Set event handler
@@ -1163,6 +1168,7 @@ attendeeApp.controller("players" , [
     $scope.freez_the_slider = () => {
       $scope.slide_screens.allowSlidePrev = false ;
       $scope.slide_screens.allowSlideNext = false ;
+      $scope.slide_screens.allowTouchMove = false ;
       $scope.slide_screens.noSwiping = false ;
     }
 
@@ -1330,7 +1336,7 @@ attendeeApp.controller("players" , [
              $scope.slide_screens.allowSlidePrev = false ;
              $scope.slide_screens.allowSlideNext = false ;
              $scope.slide_screens.noSwiping = false ;
-
+             $scope.slide_screens.allowTouchMove = false ;
 
              $scope.time__calculation_compilation()
              $scope.progress__calculation_compilation()
@@ -1352,6 +1358,7 @@ attendeeApp.controller("players" , [
               // alert("Quiz is expired !");
               $scope.slide_screens.allowSlidePrev = false ;
               $scope.slide_screens.allowSlideNext = false ;
+              $scope.slide_screens.allowTouchMove = false ;
               $scope.slide_screens.noSwiping = false ;
                 return false ;
             }
