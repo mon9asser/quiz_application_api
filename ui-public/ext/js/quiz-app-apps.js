@@ -333,7 +333,7 @@ attendeeApp.controller("players" , [
         if(attendee_application.allow_touch_move)
           {
             $scope.slide_screens.noSwiping = true ;
-            $scope.slide_screens.allowTouchMove = true;
+            $scope.slide_screens.touches = true;
           }
         // => Go to first slide
         $scope.slide_screens.slideTo(1);
@@ -1289,8 +1289,8 @@ attendeeApp.controller("players" , [
 
       $scope.slide_screens = new Swiper('.swiper-container') ;
 
-      if($scope.__player_object != null || $scope.__player_object.settings.allow_touch_move != undefined )
-      $scope.slide_screens.allowSlideNext = $scope.__player_object.settings.allow_touch_move;
+        if($scope.__player_object != null || $scope.__player_object.settings.allow_touch_move != undefined )
+        $scope.slide_screens.touches = $scope.__player_object.settings.allow_touch_move;
 
       $scope.slide_screens.on('slideChange' , function (i){
         $scope.touch_move++;
