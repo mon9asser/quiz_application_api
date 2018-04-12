@@ -393,9 +393,7 @@ attendeeApp.controller("players" , [
         // ==> Setup data
         $scope.application_data_object = resp.data ;
         $scope.__player_object = resp.data ;
-        
-        if($scope.__player_object.settings.allow_touch_move != undefined )
-        $scope.slide_screens.allowSlideNext = $scope.__player_object.settings.allow_touch_move;
+
         // Loading time
         if($scope.__player_object.settings.time_settings.is_with_time){
           $scope.seconds = $scope.__player_object.settings.time_settings.seconds ;
@@ -1290,6 +1288,10 @@ attendeeApp.controller("players" , [
       // console.log($scope.__report_object);
 
       $scope.slide_screens = new Swiper('.swiper-container') ;
+
+      if($scope.__player_object != null || $scope.__player_object.settings.allow_touch_move != undefined )
+      $scope.slide_screens.allowSlideNext = $scope.__player_object.settings.allow_touch_move;
+
       $scope.slide_screens.on('slideChange' , function (i){
         $scope.touch_move++;
         var lengther = $(this);
