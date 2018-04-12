@@ -1059,13 +1059,13 @@ attendeeApp.controller("players" , [
     $scope.load_case_many_answer_option = (question_type , is_single_choice ) => {
           var classes = '';
           if((question_type == 0 || question_type == 1 ) && is_single_choice == false )
-           classes =+ 'case_many_answers ';
+           classes += 'case_many_answers ';
 
            if( question_type == 0 && is_single_choice == false ){
-             classes =+ 'question_type_texts_qs_brd ';
+             classes += 'question_type_texts_qs_brd ';
            }
            if( question_type == 1 && is_single_choice == false ){
-             classes =+ 'question_type_media_qs_brd';
+             classes += 'question_type_media_qs_brd ';
            }
           return classes;
         }
