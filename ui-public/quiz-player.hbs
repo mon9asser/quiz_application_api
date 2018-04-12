@@ -183,7 +183,7 @@
                                         </div>
                                       </div>
                                       <!-- Text values -->
-                                      <label class="labels">{> labels[$index] <}</label>
+                                      <label class="labels">{> labels[$index] | uppercase <}</label>
                                       <div class="text-values" data:ng:bind:html="ansvalue.value | trust_this_html_values"></div>
                                       <!-- Case it wrong answer -->
                                       <span class="answer-results-wrong">
@@ -196,7 +196,7 @@
                                    </div>
                                    <!-- Case it 1 => Media choices -->
                                    <div ng:if="obj_val.question_type == 1" class="answer-contents">
-                                     <label class="labels">{> labels[$index] <}</label>
+                                     <label class="labels">{> labels[$index]  | uppercase} <}</label>
                                      <!-- Case it wrong answer -->
                                      <span class="answer-results-wrong">
                                        <i class="fa fa-close"></i>
@@ -216,7 +216,7 @@
                                    </div>
                                    <!-- Case it 2 => True/false choices -->
                                    <div ng:if="obj_val.question_type == 2" class="answer-contents">
-                                     <label class="labels">{> labels[$index] <}</label>
+                                     <label class="labels">{> labels[$index] | uppercase <}</label>
                                      <!-- Case it wrong answer -->
                                      <span class="answer-results-wrong">
                                        <i class="fa fa-close"></i>
