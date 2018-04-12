@@ -419,7 +419,20 @@ attendeeApp.controller("players" , [
         }
       } , function(err){console.log(err);})
     }
+    $scope.fill_with_labels = () => {
+          // => Loading Answer labels
+          $(".question-list").each(function(){
+             $(this).children('li').each(function(i){
+               // => Answers
+               $(this).find('label.labels').html($scope.labels[i].toUpperCase());
+             });
+           });
+           // => Loading Question Labels
+           $('.question-container').each(function(i){
+             $(this).children('.question-body').find('.qs-numericals').html(i + 1 );
+           });
 
+        };
     $scope.store_into_attendee_draft = ( object , is_single = null ) => {
 
        var application_object = new Object()
@@ -1484,6 +1497,10 @@ attendeeApp.controller("players" , [
 
       } , 1500);
     });
+    $timeout(function(){ // => time is 1000
+      $scope.fill_with_labels();
+      $('.loading-player').fadeOut();
+    } , 2000);
 
 
 
