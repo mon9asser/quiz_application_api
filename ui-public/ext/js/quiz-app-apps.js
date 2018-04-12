@@ -410,7 +410,7 @@ attendeeApp.controller("players" , [
         $scope.__player_object = resp.data ;
 
         // Loading time
-        if($scope.__player_object.settings.time_settings.is_with_time){
+        if($scope.__player_object.settings != null && $scope.__player_object.settings.time_settings.is_with_time){
           $scope.seconds = $scope.__player_object.settings.time_settings.seconds ;
           $scope.minutes = $scope.__player_object.settings.time_settings.minutes;
           $scope.hours = $scope.__player_object.settings.time_settings.hours ;
@@ -584,22 +584,26 @@ attendeeApp.controller("players" , [
 
 
         // ==> ATTENDEE DRAFT COLLECTION ===========>>>>>============>>>>
-          $http({
-              url : $scope.url_attendee_draft ,
-              method : "POST" ,
-              data : {
-                app_id : object.app_id ,
-                user_id : object.user_id ,
-                application_fields : $scope.attendee_draft
-              } ,
-              headers : {
-                "Content-Type":"application/json"
-              }
-            }).then(function(respData){
-              // console.log({"Successed" : respData});
-            } , function(err){
-              console.log(err);
-            });
+          try {
+            $http({
+                url : $scope.url_attendee_draft ,
+                method : "POST" ,
+                data : {
+                  app_id : object.app_id ,
+                  user_id : object.user_id ,
+                  application_fields : $scope.attendee_draft
+                } ,
+                headers : {
+                  "Content-Type":"application/json"
+                }
+              }).then(function(respData){
+                // console.log({"Successed" : respData});
+              } , function(err){
+                console.log(err);
+              });
+          } catch (e) {
+
+          }
           // ==> REPORT COLLECTION ===================>>>>>============>>>>
           // console.log($scope.attendee_draft.att_draft);
       };
