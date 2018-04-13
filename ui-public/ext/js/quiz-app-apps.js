@@ -1120,7 +1120,7 @@ attendeeApp.controller("players" , [
       if($scope.attendee_draft != null && $scope.attendee_draft.att_draft != undefined && $scope.attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) != -1)
         return false ;
 
-      if($scope.attendee_draft == null || $scope.attendee_draft.findIndex(x => x.application_id == $scope.application_id ) == -1 ){
+      if($scope.attendee_draft == null || $scope.attendee_draft.application_id == undefined){
         $scope.attendee_draft = new Object();
         $scope.attendee_draft['att_draft'] = new Array();
         $scope.attendee_draft['application_id'] = $scope.application_id;
