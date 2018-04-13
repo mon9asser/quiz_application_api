@@ -423,7 +423,7 @@ attendeeApp.controller("players" , [
       } , function(err){console.log(err);})
     }
     $scope.store_into_attendee_draft = ( object , is_single = null ) => {
-
+      console.log(object);
        var application_object = new Object()
        if (  $scope.attendee_draft != null && $scope.attendee_draft.application_id != undefined){
          // ==> application already exists
@@ -1136,6 +1136,7 @@ attendeeApp.controller("players" , [
             'impr_application_object':$scope.__player_object
           });
         }
+
 
     };
     $scope.start_this_quiz = () => {
