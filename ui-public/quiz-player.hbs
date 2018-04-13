@@ -206,7 +206,7 @@
                                      </span>
                                      <!--  Image Case  -->
 
-                                     <div ng:if="ansvalue.media_type == null" style="{> ansvalue.media_src | answe_background <}"  class="image_case"></div>
+                                     <div ng:if="ansvalue.media_type == null" ng:style="set_image_background(ansvalue.media_src , true )"  class="image_case"></div>
                                      <!-- <div ng:if="ansvalue.media_type == null" style="background-image:url('{>ansvalue.media_src<}')"  class="image_case"></div> -->
                                      <!--  Video Case  -->
                                      <div ng-bind-html="ansvalue | set_iframe" ng:if="ansvalue.media_type == 1"  class="video_case">
