@@ -26,6 +26,31 @@ drftRouter.use(session({
   saveUninitialized : true
 }));
 
+drftRouter.post("/:app_id/join/:user_id/quiz" , (req , res) => {
+  var app_id = req.params.app_id;
+  var user_id = req.body.user_id ;
+  var args = req.data.join_args ;
+  if(args == null ){
+    res.send({"Required" : "join_args is required"});
+    return false ;
+  }
+
+  drft.findOne({application_id: app_id } , (err , draftDocument) => {
+    if(!draftDocument){
+      var dr = new drft (args);
+      dr.save();
+    }else
+    {
+      var thisAttIndex = draftDocument.att_draft.findIndex(x => x.user_id == user_id );
+      if(thisAttIndex == -1 ){
+        draftDocument.att_draft.push(args[thisAttIndex]);
+        draftDocument.markModified('att_draft');
+        draftDocument.save();
+      }
+    }
+  });
+
+});
 drftRouter.post("/application/user_status/:app_id/get" , (req,res)=>{
   var app_id = req.params.app_id;
   var user_id = req.body.user_id ;

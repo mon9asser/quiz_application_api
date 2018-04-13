@@ -423,7 +423,7 @@ attendeeApp.controller("players" , [
       } , function(err){console.log(err);})
     }
     $scope.store_into_attendee_draft = ( object , is_single = null ) => {
-      console.log(object);
+
        var application_object = new Object()
        if (  $scope.attendee_draft != null && $scope.attendee_draft.application_id != undefined){
          // ==> application already exists
@@ -1109,6 +1109,13 @@ attendeeApp.controller("players" , [
               var layout_template = $scope.__player_object.settings.progression_bar.progression_bar_layout;
               return '/progressbar-layouts/layout-'+layout_template+'.hbs';
             };
+    $scope.join_into_this_quiz_data = (dataArgs) => {
+      $http({
+        url : $scope.server_ip +"api/" + $scope.application_id + "/join/" +  $scope.user_id + "/quiz" ,
+        data : {join_args: dataArgs} ,
+        method : "POST"
+      }).then(function(resData){console.log(resData.data);},function(err){console.log(err);});
+    }
     $scope.join_this_quiz = () => {
       if($scope.attendee_draft != null && $scope.attendee_draft.att_draft != undefined && $scope.attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) != -1)
         return false ;
@@ -1137,7 +1144,7 @@ attendeeApp.controller("players" , [
           });
         }
 
-
+        $scope.join_into_this_quiz_data( $scope.attendee_draft );
     };
     $scope.start_this_quiz = () => {
       $scope.join_this_quiz();
