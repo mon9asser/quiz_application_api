@@ -1293,7 +1293,7 @@ attendeeApp.controller("players" , [
       var set_server_ip = $scope.server_ip
       if(set_server != null )
         set_server_ip = '';
-
+        alert(image_sourc);
       return {
         "background-image" : "url('"+set_server_ip+image_sourc+"')"
       }

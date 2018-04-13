@@ -167,7 +167,9 @@
                                 data:ng:class="classes_for_this_answer(obj_val.answer_settings , obj_val._id , ansvalue._id)"
                                 data:ng:click="select_this_answer(obj_val._id , ansvalue._id , obj_val , ansvalue , __player_object._id , '{{user.id}}' , ansvalue.is_correct , $index)"
                                 data:ng:repeat="(anskey , ansvalue) in obj_val.answers_format">
-
+                                  <div class="">
+                                      Question type :: ==> {> obj_val.question_type <}
+                                  </div>
                                  <!-- Cases with question type-->
                                    <!-- Case it 0 => Text choices -->
                                    <div ng:if="obj_val.question_type == 0" class="answer-contents">
