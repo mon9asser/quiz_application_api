@@ -183,8 +183,9 @@ drftRouter.patch("/:app_id/update/settings" , (req , res )=>{
 
 
 
+
 // Draft router !
-drftRouter.post("/:app_id/join/:user_id/quiz/data" , (req , res) => {
+drftRouter.post("/:user_id/join/:app_id/quiz" , (req , res) => {
   res.send("DATA DRAFT");
 });
 
