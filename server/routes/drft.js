@@ -189,7 +189,7 @@ drftRouter.post("/:user_id/join/:app_id/quiz" , (req , res) => {
 
 var app_id = req.params.app_id;
 var user_id = req.body.user_id;
-var args = req.data.join_args ;
+var args = req.body.join_args ;
 if(args == null ){
   res.send({"Required" : "join_args is required"});
   return false ;
