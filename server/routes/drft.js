@@ -186,7 +186,30 @@ drftRouter.patch("/:app_id/update/settings" , (req , res )=>{
 
 // Draft router !
 drftRouter.post("/:user_id/join/:app_id/quiz" , (req , res) => {
-  res.send("DATA DRAFT");
+
+var app_id = req.params.app_id;
+var user_id = req.body.user_id;
+var args = req.data.join_args ;
+if(args == null ){
+  res.send({"Required" : "join_args is required"});
+  return false ;
+}
+
+drft.findOne({application_id: app_id } , (err , draftDocument) => {
+  if(!draftDocument){
+    var dr = new drft (args);
+    dr.save();
+  }else
+  {
+    var thisAttIndex = draftDocument.att_draft.findIndex(x => x.user_id == user_id );
+    if(thisAttIndex == -1 ){
+      draftDocument.att_draft.push(args[thisAttIndex]);
+      draftDocument.markModified('att_draft');
+      draftDocument.save();
+    }
+  }
+});
+
 });
 
 module.exports = { drftRouter };

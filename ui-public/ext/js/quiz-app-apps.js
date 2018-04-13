@@ -1111,7 +1111,7 @@ attendeeApp.controller("players" , [
             };
     $scope.join_into_this_quiz_data = (dataArgs) => {
       $http({
-        url : $scope.server_ip +"api/" + $scope.application_id + "/join/" +  $scope.user_id + "/quiz" ,
+        url : $scope.server_ip +"api/" +  $scope.user_id + "/join/" + $scope.application_id +  "/quiz" ,
         data : {join_args: dataArgs} ,
         method : "POST"
       }).then(function(resData){console.log(resData.data);},function(err){console.log(err);});
