@@ -205,8 +205,10 @@
                                        <i class="fa fa-check"></i>
                                      </span>
                                      <!--  Image Case  -->
-
-                                     <div ng:if="ansvalue.media_type == 0" ng:style="set_image_background(ansvalue.media_src )"  class="image_case"></div>
+                                     <div ng:if="ansvalue.Media_directory == null || ansvalue.Media_directory == undefined" class="image_case">
+                                       No Media here !
+                                     </div>
+                                     <div ng:if="ansvalue.media_type == 0 && ansvalue.Media_directory != null" ng:style="set_image_background(ansvalue.media_src )"  class="image_case"></div>
                                      <!-- <div ng:if="ansvalue.media_type == null" style="background-image:url('{>ansvalue.media_src<}')"  class="image_case"></div> -->
                                      <!--  Video Case  -->
                                      <div ng-bind-html="ansvalue | set_iframe" ng:if="ansvalue.media_type == 1"  class="video_case">
