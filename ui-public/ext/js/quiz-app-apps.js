@@ -1300,8 +1300,9 @@ attendeeApp.controller("players" , [
       var set_server_ip = $scope.server_ip
       if(set_server != null )
         set_server_ip = '';
-          console.log({set_server: set_server , image_sourc : image_sourc });
-         console.log(set_server_ip+image_sourc);
+        // http://34.215.133.182/img/media-icon.png
+      if(image_sourc == set_server_ip+image_sourc)
+        set_server_ip = '';
       return {
         "background-image" : "url('"+set_server_ip+image_sourc+"')"
       }
