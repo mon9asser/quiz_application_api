@@ -45,9 +45,7 @@ drftRouter.post("/application/user_status/:app_id/get" , (req,res)=>{
 
     res.send(draftDocument);
   });
-} catch (e) {
-
-}
+} catch (e) {}
 });
 drftRouter.get("/application/user_status/:app_id/get/:user_id" , (req,res)=> {
   var user_id = req.params.user_id ;
