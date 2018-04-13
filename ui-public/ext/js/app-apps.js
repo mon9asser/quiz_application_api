@@ -247,13 +247,13 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
            } ,
           //  theme_style : [] ,
            randomize_settings : false ,
-           step_type : true ,
-           auto_slide : true ,
+           step_type : false ,
+           auto_slide : false ,
            allow_touch_move : false ,
            show_results_per_qs : false ,
            retake_setting : false ,
-           navigation_btns : false ,
-           review_setting : true ,
+           navigation_btns : true ,
+           review_setting : false ,
            createdAt : new Date() ,
            updatedAt : new Date ()
          }
