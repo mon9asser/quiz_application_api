@@ -1127,7 +1127,7 @@ attendeeApp.controller("players" , [
         var cuIndex = $scope.attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) ;
         if(cuIndex == -1 ){
           $scope.attendee_draft.att_draft.push({
-            'questions_data' = new Array() ,
+            'questions_data' : new Array() ,
             'is_loaded':true ,
             'start_expiration_time' : new Date() ,
             'user_id' : $scope.user_id ,
