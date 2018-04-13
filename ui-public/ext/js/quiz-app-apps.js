@@ -270,10 +270,12 @@ attendeeApp.controller("players" , [
        $scope.load_quiz_timer();
      };
      $scope.load_quiz_timer = () => {
-       var timeSettings = $scope.__player_object.settings.time_settings;
+       if($scope.__player_object.settings != undefined ){
+         var timeSettings = $scope.__player_object.settings.time_settings;
 
-       if(timeSettings && timeSettings.is_with_time)
-       $scope.timer = setTimeout($scope.load_time_tracker , 1000);
+         if(timeSettings && timeSettings.is_with_time)
+         $scope.timer = setTimeout($scope.load_time_tracker , 1000);
+       }
      };
 
 
@@ -1099,11 +1101,13 @@ attendeeApp.controller("players" , [
            };
     $scope.slide_screens_index = function (index){
                 // calculation
+              if($scope.__player_object.settings != undefined ){
                 if($scope.__player_object.settings.progression_bar.is_available == true && $scope.__player_object.settings.progression_bar.progression_bar_layout == 0 ){
                   var calc = $scope.curren_question_slide * 100 /  $scope.__player_object.questions.length ;
                    $('.progress-highlighted').css({width: calc + '%'})
                 }
-            };
+              }
+        };
     $scope.time_tracker_layout = () => {
               var layout_template = $scope.__player_object.settings.time_settings.timer_layout;
               return '/time-layouts/layout-'+layout_template+'.hbs';
