@@ -1001,3 +1001,7 @@
 .question_notes span:last-child {
   margin-left: 5px;
 }
+
+.video_case video {
+  width: 100% !important ;
+}

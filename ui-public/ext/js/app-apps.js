@@ -209,7 +209,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.application_settings = {
          questionnaire_title : null ,
          settings : {
-
            titles :
              {
                title_start_with : "Write Starting Text"  ,
