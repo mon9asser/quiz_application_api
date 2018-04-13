@@ -515,7 +515,7 @@ rptRouters.post("/:app_id/add/attended/quiz" ,api_key_report_auth , (req , res)=
           reportObject.markModified('attendees');
           reportObject.save().then((reData)=>{
               res.send("successed");
-          })
+          });
 
       } ;
 

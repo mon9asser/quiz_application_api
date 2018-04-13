@@ -301,7 +301,6 @@ attendeeApp.controller("players" , [
       // 1 => attebdee_draft mongo object
       // 2 => attendee_draft angular object
       // 3 => report Object
-
       $http({
         url :$scope.url_attendee_retake ,
         method : "PATCH"
@@ -1285,6 +1284,9 @@ attendeeApp.controller("players" , [
       $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
       // alert($scope.this_attendee_draft);
       // console.log({'val-1':$scope.this_attendee_draft});
+      console.log({
+        "This Attendee Data" : $scope.this_attendee_draft
+      });
       return $http({
          url : $scope.url_attend_quiz ,
          method: "POST",

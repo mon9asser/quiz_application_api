@@ -32,7 +32,6 @@ drftRouter.post("/application/user_status/:app_id/get" , (req,res)=>{
   var user_id = req.body.user_id ;
   try {
 
-
   drft.findOne({application_id: app_id }).populate('questionnaire_info').exec( ( err , draftDocument )=>{
 
     if(!draftDocument){
@@ -41,7 +40,6 @@ drftRouter.post("/application/user_status/:app_id/get" , (req,res)=>{
         return false;
       });
     }
-
 
     res.send(draftDocument);
   });
