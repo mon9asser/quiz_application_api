@@ -12,6 +12,14 @@ Array.prototype.find_unsolved_questions = function (questions_list) {
 //=============================================
 // => Filters
 //=============================================
+attendeeApp.filter('answe_background' , [
+  ()=>{
+    return function (image_source) {
+      var bg = "background-image:url('"+ image_source  +"')" ;
+      return bg ;
+    };
+  }
+]);
 attendeeApp.filter('set_source_link' , [
   ()=>{
       return function (link_source){
@@ -1289,6 +1297,8 @@ attendeeApp.controller("players" , [
 
         return true ;
     };
+
+
     $scope.set_image_background = (image_sourc , set_server = null)=>{
       var set_server_ip = $scope.server_ip
       if(set_server != null )
