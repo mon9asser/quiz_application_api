@@ -205,7 +205,7 @@
                                        <i class="fa fa-check"></i>
                                      </span>
                                      <!--  Image Case  -->
-                                     <div ng:if="ansvalue.Media_directory == null || ansvalue.Media_directory == undefined" class="image_case">
+                                     <div ng:if="ansvalue.Media_directory == null || ansvalue.Media_directory == undefined" class="image_case no-media-here">
                                        No Media here !
                                      </div>
                                      <div ng:if="ansvalue.media_type == 0 && ansvalue.Media_directory != null" ng:style="set_image_background(ansvalue.media_src )"  class="image_case"></div>

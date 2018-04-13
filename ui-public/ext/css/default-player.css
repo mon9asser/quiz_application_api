@@ -1005,3 +1005,13 @@
 .video_case video {
   width: 100% !important ;
 }
+.no-media-here {
+  min-height: auto !important;
+    color: #999 !important;
+    font-size: 12px !important;
+    margin-top: 10px !important;
+    width: 100% !important;
+    margin-bottom: 0px !important;
+    text-align: center !important;
+    display: inline !important;
+}
