@@ -1109,8 +1109,42 @@ attendeeApp.controller("players" , [
               var layout_template = $scope.__player_object.settings.progression_bar.progression_bar_layout;
               return '/progressbar-layouts/layout-'+layout_template+'.hbs';
             };
+    $scope.join_this_quiz = () => {
+      if($scope.attendee_draft != null && $scope.attendee_draft.att_draft != undefined && $scope.attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) != -1)
+        return false ;
+
+      if($scope.attendee_draft == null ){
+        $scope.attendee_draft = new Object();
+        $scope.attendee_draft['att_draft'] = new Array();
+        $scope.attendee_draft['application_id'] = $scope.application_id;
+        $scope.attendee_draft['questionnaire_info'] = $scope.application_id;
+      }
+
+        if($scope.attendee_draft.att_draft == undefined)
+          $scope.attendee_draft.att_draft = new Array();
+
+
+        var cuIndex = $scope.attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) ;
+        if(cuIndex == -1 ){
+          $scope.attendee_draft.att_draft.push({
+            'questions_data' = new Array() ,
+            'is_loaded':true ,
+            'start_expiration_time' : new Date() ,
+            'user_id' : $scope.user_id ,
+            'user_info':$scope.user_id ,
+            'is_completed':false ,
+            'impr_application_object':$scope.__player_object
+          });
+        }
+
+    };
     $scope.start_this_quiz = () => {
-      $scope.load_quiz_timer();
+      $scope.join_this_quiz();
+
+      $timeout(function (){
+        $scope.load_quiz_timer ();
+      } , 30);
+
       try {
         $scope.slide_screens.slideNext();
       } catch (e) {
