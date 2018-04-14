@@ -20,10 +20,10 @@ const cors= require('cors');
 const app = express();
 // const exphbs  = require('express-handlebars'); // => Deprecated !!
 
-// app.use(function(req,res,next){
-//   req.connection.setNoDelay(true);
-//   next();
-// });
+app.use(function(req,res,next){
+  req.connection.setNoDelay(true);
+  next();
+});
 
 // Use `.hbs` for extensions and find partials in `views/partials`.
 app.engine('hbs', hbs.express4({
@@ -40,7 +40,7 @@ app.set('view engine', 'hbs');
 app.set('views',  __dirname +'/ui-public');
 app.use(express.json({limit: '50mb'}));
 
- 
+
 hbs.registerHelper('server_ip', config.server_ip );
 
 
