@@ -1187,19 +1187,10 @@ attendeeApp.controller("players" , [
     $scope.attendee_draft_collection = function (){
       if($scope.attendee_draft != null && $scope.attendee_draft != undefined && $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) != -1 ){
 
-        // $.ajax({
-        //   url:$scope.url_attendee_draft_collecation ,
-        //   type : "POST" ,
-        //   data : {attendee_draft : $scope.attendee_draft} ,
-        //   success : function (dataResponse){
-        //     console.log(dataResponse);
-        //
-        //   }
-        // });
         $http({
           url : $scope.url_attendee_draft_collecation ,
           method: "POST",
-          data : { attendee_draft : $scope.attendee_draft }
+          data : { attendee_draft : $scope.attendee_draft } ,
           headers : {
             "Content-Type": "application/json"
           } ,
