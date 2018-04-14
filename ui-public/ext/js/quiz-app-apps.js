@@ -1198,7 +1198,7 @@ attendeeApp.controller("players" , [
     };
     $scope.quiz_attendee_draft_time_store = () => {
       $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
-      $scope.attendee_draft_timeframe = setTimeout($scope.attendee_draft_collection , 600 );
+      $scope.attendee_draft_timeframe = setTimeout($scope.attendee_draft_collection , 250 );
     }
     $scope.join_this_quiz = () => {
       if($scope.attendee_draft != null && $scope.attendee_draft.att_draft != undefined && $scope.attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) != -1)
