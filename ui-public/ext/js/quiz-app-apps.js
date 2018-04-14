@@ -7,8 +7,21 @@ Array.prototype.find_unsolved_questions = function (questions_list) {
     });
 };
 
-
-
+Array.prototype.is_correct_question = function (correct_answers) {
+  return this.filter(function(i){
+    console.log({dd : i});
+    console.log({cor:correct_answers});
+    return correct_answers.findIndex (x => x._id == i.answer_id);
+  });
+}
+// a => correct answers
+// b => solved answer
+var question_status = function (a, b) {
+  var correct_answers = a.map( function(x){ return x._id; } );
+  var solved_answers = b.map( function(x){ return x.answer_id; } );
+  var is_right_question =  (solved_answers.sort().join('') == correct_answers.sort().join(''));
+  return is_right_question ;
+}
 
 //=============================================
 // => Filters
@@ -146,8 +159,6 @@ attendeeApp.controller("players" , [
        }
      }
 
-
-
      $scope.time__calculation_compilation = (is_final = null) => {
        $scope.impr_application_remainging_time();
        if($scope.__player_object.settings.time_settings.is_with_time){
@@ -194,9 +205,7 @@ attendeeApp.controller("players" , [
          $scope.slide_screens.allowSlideNext = false ;
          $scope.slide_screens.allowTouchMove = false ;
          $scope.slide_screens.noSwiping = false ;
-       } catch (e) {
-
-       }
+       } catch (e){}
        $scope.time__calculation_compilation();
        $scope.progress__calculation_compilation();
      };
@@ -467,7 +476,8 @@ attendeeApp.controller("players" , [
 
 
 
-    $scope.store_into_attendee_draft  = (object , is_single = null) => {
+    $scope.store_into_attendee_draft = (object , is_single = null) => {
+
         var application_object = new Object();
         if (  $scope.attendee_draft != null && $scope.attendee_draft.application_id != undefined)
           { // ==> attendee_draft is not empty
@@ -567,7 +577,7 @@ attendeeApp.controller("players" , [
                       attendeeInfo.report_attendees.results['count_of_questions'] = attendeeInfo.questions_data.length ;
                       attendeeInfo.report_attendees.results['result'] = new Object();
                       attendeeInfo.report_attendees.results['result']['percentage_value'] = percentage;
-                      attendeeInfo.report_attendees.results['result']['raw_value'] = wrong_questions ;
+                      attendeeInfo.report_attendees.results['result']['raw_value'] = correct_questions ;
                       attendeeInfo.report_attendees.survey_quiz_answers.push({
                         question_id :  object.question_id  ,
                         questions : {
@@ -588,16 +598,132 @@ attendeeApp.controller("players" , [
                                is_correct : object.is_correct
                        }
 
-                      console.log(attendeeInfo);
+                      // console.log(attendeeInfo);
                 }else {
-                  // ==> Question FOUND
+                  // ==> Question FOUND ==> Update here !
+                   var findAnswer = findQuestion.answer_ids.find(x => x.answer_id == object.answer_id);
+                   var findAnswerIndex = findQuestion.answer_ids.findIndex(x => x.answer_id == object.answer_id);
+                   if(findAnswerIndex == -1 ){
+                     findQuestion.answer_ids.push({
+                        answer_id : object.answer_id , is_correct : object.is_correct , answer_object : object.answer , answer_index : object.answer_index
+                      });
+                   }else{
+                     findQuestion.answer_ids.splice(findAnswerIndex, 1);
+                   }
+
+
+                   var app_correct_answers =  findQuestion.correct_answers
+                   var attendee_solved_answers =  findQuestion.answer_ids
+
+                   var isCorrect =  question_status (app_correct_answers , attendee_solved_answers);
+
+                   if(findQuestion.answer_ids.length != 0){
+                           var all_report_questions_index = attendeeInfo.report_questions.all_questions.findIndex(x => x == object.question_id);
+                           if(all_report_questions_index != -1 ){
+
+                             var wrong_exists =  attendeeInfo.report_questions.wrong_questions.findIndex(x => x == object.question_id);
+                             var right_exists =  attendeeInfo.report_questions.right_questions.findIndex(x => x == object.question_id);
+
+                             if(isCorrect == false ){
+                               if( wrong_exists == -1 )  // add  here
+                                 attendeeInfo.report_questions.wrong_questions.push(object.question_id);
+
+                               if(right_exists != -1 )  // delete it from here
+                                 attendeeInfo.report_questions.right_questions.splice(right_exists , 1 );
+                             }else {
+                               if(right_exists == -1 )  // add  here
+                                  attendeeInfo.report_questions.right_questions.push(object.question_id);
+
+                               if( wrong_exists != -1 ){ // delete it from here
+                                  attendeeInfo.report_questions.wrong_questions.splice(wrong_exists , 1);
+                               }
+                             }
+                           } // => End all questions
+                    }else if(findQuestion.answer_ids.length == 0){
+                     var qsIndex_all = attendeeInfo.report_questions.all_questions.findIndex( x => x == object.question_id);
+                     var qsIndex_wrong = attendeeInfo.report_questions.wrong_questions.findIndex(x => x == object.question_id);
+                     var qsIndex_right = attendeeInfo.report_questions.right_questions.findIndex(x => x == object.question_id);
+
+                     if(qsIndex_wrong != -1)
+                     attendeeInfo.report_questions.wrong_questions.splice(qsIndex_wrong , 1);
+
+                     if(qsIndex_right != -1)
+                     attendeeInfo.report_questions.right_questions.splice(qsIndex_right , 1);
+
+                     if(qsIndex_all != -1)
+                     attendeeInfo.report_questions.all_questions.splice(qsIndex_all , 1);
+                   } // End store answer question
+
+
+
+                   var app_grade_value = parseInt($scope.__player_object.settings.grade_settings.value);
+                   var total_app_questions = parseInt($scope.__player_object.questions.length);
+                   var correct_questions = parseInt(attendeeInfo.report_questions.right_questions.length);
+                   var wrong_questions  = parseInt(attendeeInfo.report_questions.wrong_questions.length);
+                   var percentage = Math.round(correct_questions * 100 ) / total_app_questions ;
+                   var isPassed = ( percentage >= app_grade_value )? true : false ;
+                   var is_completed = ( total_app_questions == attendeeInfo.questions_data.length ) ? true : false ;
+
+                   attendeeInfo.report_attendee_details.total_questions = attendeeInfo.questions_data.length ;
+                   attendeeInfo.report_attendee_details.pass_mark = isPassed ,
+                   attendeeInfo.report_attendee_details.correct_answers =  correct_questions ,
+                   attendeeInfo.report_attendee_details.wrong_answers = wrong_questions ;
+                   attendeeInfo.report_attendee_details.status= (isPassed == true ) ? "Passed": "Failed";
+                   attendeeInfo.report_attendee_details.score= percentage;
+                   attendeeInfo.report_attendee_details.completed_status= is_completed;
+                   attendeeInfo.report_attendee_details.completed_date= new Date();
+
+
+                   attendeeInfo.report_attendees.updated_at = new Date()
+                   attendeeInfo.report_attendees.attendee_id = $scope.user_id;
+                   attendeeInfo.report_attendees.user_information = $scope.user_id;
+                   attendeeInfo.report_attendees.is_completed = is_completed ;
+                   attendeeInfo.report_attendees.passed_the_grade = isPassed ;
+
+                   attendeeInfo.report_attendees.results['wrong_answers'] = wrong_questions;
+                   attendeeInfo.report_attendees.results['correct_answers'] = correct_questions ;
+                   attendeeInfo.report_attendees.results['count_of_questions'] = attendeeInfo.questions_data.length ;
+                   attendeeInfo.report_attendees.results['result']['percentage_value'] = percentage;
+                   attendeeInfo.report_attendees.results['result']['raw_value'] = correct_questions ;
+                   var qsIndex_x = attendeeInfo.report_attendees.survey_quiz_answers.findIndex(x => x.question_id == object.question_id);
+                   var question_obj_val ;
+                   if(qsIndex_x != -1 ){
+                      question_obj_val = {
+                        question_id :  object.question_id  ,
+                        questions : {
+                          question_id : object.question_id,
+                          question_body :object.question.question_body ,
+                          question_type : object.question.question_type
+                        } ,
+                        answers : {
+                          answer_id : new Array (object.answer_id) ,
+                          answer_body :  new Object() ,
+                          is_correct : object.is_correct
+                        }
+                      }; // end question object
+
+                       question_obj_val.answers.answer_body["answer_id_"+object.answer_id] = {
+                               answer_id : object.answer_id ,
+                               answer_body : object.answer ,
+                               is_correct : object.is_correct
+                       }
+
+                       attendeeInfo.report_attendees.survey_quiz_answers[qsIndex_x] = question_obj_val ;
+
+                   }
                 }
               }else {
                 // ==> Attenee Object [UNFOUND]
+                  console.log("Attenee Object [UNFOUND]");
               }
           }else {
             // ==> attendee_draft is empty
+                console.log('attendee_draft is empty');
           }
+
+
+       $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id) ;
+       console.log($scope.this_attendee_draft);
     };
     // ==> Select answer scenario !!
     $scope.select_this_answer = ( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex) => {
@@ -633,7 +759,7 @@ attendeeApp.controller("players" , [
 
 
 
-    //---------------------------------------------------------------
+          //---------------------------------------------------------------
           // ==============>> Multiple Choices ( Texts Or Media )
           //---------------------------------------------------------------
           if( question.question_type == 0 || question.question_type == 1 )
@@ -1072,12 +1198,13 @@ attendeeApp.controller("players" , [
               var layout_template = $scope.__player_object.settings.progression_bar.progression_bar_layout;
               return '/progressbar-layouts/layout-'+layout_template+'.hbs';
             };
-    $scope.join_into_this_quiz_data = (dataArgs) => {
-      $http({
-        url : $scope.server_ip +"api/" +  $scope.user_id + "/join/" + $scope.application_id +  "/quiz" ,
-        data : {join_args: dataArgs} ,
-        method : "POST"
-      }).then(function(resData){console.log(resData.data);},function(err){console.log(err);});
+    $scope.quiz_attendee_draft_time_store = function (){
+
+    };
+    $scope.join_into_this_quiz_data = () => {
+      $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+      console.log("Join This Quiz !!");
+      console.log($scope.this_attendee_draft);
     }
     $scope.join_this_quiz = () => {
       if($scope.attendee_draft != null && $scope.attendee_draft.att_draft != undefined && $scope.attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) != -1)
@@ -1107,7 +1234,7 @@ attendeeApp.controller("players" , [
           });
         }
 
-        $scope.join_into_this_quiz_data( $scope.attendee_draft );
+        $scope.join_into_this_quiz_data();
     };
     $scope.start_this_quiz = () => {
       $scope.join_this_quiz();
