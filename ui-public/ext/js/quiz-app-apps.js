@@ -499,7 +499,10 @@ attendeeApp.controller("players" , [
                   attendeeInfo.report_questions = new Object();
 
                   if(attendeeInfo.report_questions.all_questions == undefined )
-                    attendeeInfo.report_questions.all_questions = new Array(object.question_id);
+                    attendeeInfo.report_questions.all_questions = new Array();
+                    // ==> Store the questions here plz
+                    attendeeInfo.report_questions.all_questions.push(object.question_id);
+
 
                   // ==> store correct answers that solved
                   if(attendeeInfo.report_questions.right_questions == undefined )
@@ -508,6 +511,7 @@ attendeeApp.controller("players" , [
                   // ==> store wrong answers that solved
                   if(attendeeInfo.report_questions.wrong_questions == undefined )
                     attendeeInfo.report_questions.wrong_questions = new Array();
+
 
                   var answerIndexVal = object.question.answers_format.findIndex(x => x._id == object.answer_id );
                   if(answerIndexVal != -1 ){
