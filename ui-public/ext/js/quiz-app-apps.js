@@ -1192,7 +1192,6 @@ attendeeApp.controller("players" , [
           url : $scope.url_attendee_draft_collecation ,
           method: "POST",
           headers : {
-            "Content-Length": 20 ,
             "Content-Type": undefined
           } ,
           data : { attendee_draft : $scope.attendee_draft }
