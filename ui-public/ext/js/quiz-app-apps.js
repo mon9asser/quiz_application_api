@@ -462,7 +462,7 @@ attendeeApp.controller("players" , [
 
 
 
-    $scope.store_into_attendee_draft = (object , is_single = null) => {
+      $scope.store_into_attendee_draft = (object , is_single = null) => {
 
         var application_object = new Object();
         if (  $scope.attendee_draft != null && $scope.attendee_draft.application_id != undefined)
@@ -1199,11 +1199,13 @@ attendeeApp.controller("players" , [
         $http({
           url : $scope.url_attendee_draft_collecation ,
           method: "POST",
-          // headers : {
-          //   "Content-Type": undefined
-          // } ,
           data : { attendee_draft : $scope.attendee_draft }
+          headers : {
+            "Content-Type": "application/json"
+          } ,
+
         }).then(function(response){console.log(response.data);} , function(err){console.log(err);});
+        $scope.quiz_attendee_draft_time_store();
       }
 
     };
