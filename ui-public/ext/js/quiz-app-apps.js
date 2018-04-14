@@ -1187,17 +1187,25 @@ attendeeApp.controller("players" , [
     $scope.attendee_draft_collection = function (){
       if($scope.attendee_draft != null && $scope.attendee_draft != undefined && $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) != -1 ){
 
-
-        $http({
-          url : $scope.url_attendee_draft_collecation ,
-          method: "POST",
-          // headers : {
-          //   "Content-Type": undefined
-          // } ,
-          data : { attendee_draft : $scope.attendee_draft }
-        }).then(function(response){console.log(response.data);} , function(err){console.log(err);});
+        $.ajax({
+          url:$scope.url_attendee_draft_collecation ,
+          type : "POST" ,
+          data : {attendee_draft : $scope.attendee_draft} ,
+          success : function (dataResponse){
+            console.log(dataResponse);
+            $scope.quiz_attendee_draft_time_store();
+          }
+        });
+        // $http({
+        //   url : $scope.url_attendee_draft_collecation ,
+        //   method: "POST",
+        //   // headers : {
+        //   //   "Content-Type": undefined
+        //   // } ,
+        //   data : { attendee_draft : $scope.attendee_draft }
+        // }).then(function(response){console.log(response.data);} , function(err){console.log(err);});
       }
-      $scope.quiz_attendee_draft_time_store();
+
     };
     $scope.quiz_attendee_draft_time_store = () => {
       $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
