@@ -208,4 +208,10 @@ drft.findOne({application_id: app_id } , (err , draftDocument) => {
 
 });
 
+
+// => server_ip/api/:app_id/attendee_collection/:user_id
+drftRouter.post("/:app_id/attendee_collection/:user_id" , (req , res) => {
+  var attendee_draft = req.body.attendee_draft;
+  res.send(attendee_draft);
+});
 module.exports = { drftRouter };

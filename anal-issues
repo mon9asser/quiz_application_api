@@ -1,14 +1,14 @@
 
-- didn't load answer labels ==> DONE 
+- didn't load answer labels ==> DONE
+- By Default :-
+			=> Enable navigation buttons ==> DONE
+			=> Disable the auto slide ==> DONE
 -----------------------------------------------
-- didn't load full swiper for some reasons 
-- pass grade : undefine% for some reasons when time is finsished 
-- after time is completed wrong ( completed in ) => wrong time 
-- sometimes not load the correct slide 
-- when submit the quiz time should stop it and load the complation time 
+- didn't load full swiper for some reasons
+- impr_application_remainging_time ISSUE
+- pass grade : undefine % for some reasons when time is finished
+- after time is completed wrong ( completed in ) => wrong time
+- sometimes not load the correct slide
+- when submit the quiz time should stop it and load the compilation time
 - case swiper didn't load properly and time is enabled => pass grade giving us "undefined"
 - loading result issue not working properly !
-- By Default :- 
-	=> Enable navigation buttons 
-	=>  
-

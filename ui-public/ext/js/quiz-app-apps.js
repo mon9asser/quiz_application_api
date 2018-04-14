@@ -9,8 +9,6 @@ Array.prototype.find_unsolved_questions = function (questions_list) {
 
 Array.prototype.is_correct_question = function (correct_answers) {
   return this.filter(function(i){
-    console.log({dd : i});
-    console.log({cor:correct_answers});
     return correct_answers.findIndex (x => x._id == i.answer_id);
   });
 }
@@ -120,6 +118,7 @@ attendeeApp.controller("players" , [
      $scope.__player_object = null ;
      $scope.__report_object = null ; //
      $scope.attendee_draft = null ;
+     $scope.attendee_draft_timeframe = null ;
      $scope.this_attendee_draft= null ;
      $scope.this_attendee_draft_index = null ;
      $scope.current_question = null ;
@@ -151,16 +150,18 @@ attendeeApp.controller("players" , [
        number_2 : 0
      };
      $scope.load_template_timer = () => {
+       if($scope.__player_object != undefined && $scope.__player_object != null ){
        var timeSettings = $scope.__player_object.settings.time_settings;
-       if(timeSettings && timeSettings != undefined || timeSettings.is_with_time){
-         $scope.seconds =timeSettings.seconds;
-         $scope.minutes =timeSettings.minutes ;
-         $scope.hours =timeSettings.hours;
+         if(timeSettings && timeSettings != undefined || timeSettings.is_with_time){
+           $scope.seconds =timeSettings.seconds;
+           $scope.minutes =timeSettings.minutes ;
+           $scope.hours =timeSettings.hours;
+         }
        }
      }
 
      $scope.time__calculation_compilation = (is_final = null) => {
-       $scope.impr_application_remainging_time();
+
        if($scope.__player_object.settings.time_settings.is_with_time){
         var existing_seconds = $scope.application_data_object.settings.time_settings.seconds ;
 
@@ -209,21 +210,7 @@ attendeeApp.controller("players" , [
        $scope.time__calculation_compilation();
        $scope.progress__calculation_compilation();
      };
-     $scope.impr_application_remainging_time = () => {
-       //  alert("store remainging time");
-       $http({
-         method : "PATCH" ,
-         data : {
-          user_id : $scope.user_id ,
-          data_timed_with : {
-            seconds :  $scope.seconds ,
-            minutes : $scope.minutes  ,
-            hours : $scope.hours
-          }
-          } ,
-          url : $scope.server_ip + 'api/' + $scope.application_id + "/update/settings"
-       }).then(function(){} , function(){});
-     };
+
      $scope.load_time_tracker  = () => {
 
        var sec  = $('.sec');
@@ -248,8 +235,6 @@ attendeeApp.controller("players" , [
        }
 
 
-       // ==> Store the remaining times into imper
-       $scope.impr_application_remainging_time ();
        // ==> seconds and minutes object
        $scope.seconds--;
        if( $scope.seconds < 0 ){
@@ -286,6 +271,7 @@ attendeeApp.controller("players" , [
     $scope.url_attendee_draft_get = $scope.server_ip + 'api/application/user_status/' + $scope.application_id + '/get';
     $scope.url_main_application_get = settings.server_ip + 'api/'+$scope.application_id+'/application/retrieve';
     $scope.url_attendee_draft = $scope.server_ip + 'api/application/user_status/' + $scope.application_id;
+    $scope.url_attendee_draft_collecation = $scope.server_ip+"api/"+$scope.application_id+"/attendee_collection/"+$scope.user_id ;
     $scope.url_attend_quiz = $scope.server_ip + 'api/'+ $scope.application_id  +'/add/attended/quiz';
     $scope.url_attendee_report = $scope.server_ip + "api/"+ $scope.application_id + "/retrieve/"+$scope.user_id+"/quiz/details";
     $scope.url_attendee_retake = $scope.server_ip + "api/"+$scope.application_id + "/clear/report/" + $scope.user_id ;
@@ -714,16 +700,16 @@ attendeeApp.controller("players" , [
                 }
               }else {
                 // ==> Attenee Object [UNFOUND]
-                  console.log("Attenee Object [UNFOUND]");
+
               }
           }else {
             // ==> attendee_draft is empty
-                console.log('attendee_draft is empty');
+
           }
 
 
        $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id) ;
-       console.log($scope.this_attendee_draft);
+
     };
     // ==> Select answer scenario !!
     $scope.select_this_answer = ( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex) => {
@@ -1198,13 +1184,21 @@ attendeeApp.controller("players" , [
               var layout_template = $scope.__player_object.settings.progression_bar.progression_bar_layout;
               return '/progressbar-layouts/layout-'+layout_template+'.hbs';
             };
-    $scope.quiz_attendee_draft_time_store = function (){
+    $scope.attendee_draft_collection = function (){
+      if($scope.attendee_draft != null && $scope.attendee_draft != undefined && $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) != -1 ){
 
+
+        $http({
+          url : $scope.url_attendee_draft_collecation ,
+          method: "POST",
+          data : { attendee_draft : $scope.attendee_draft }
+        }).then(function(response){console.log(response.data);} , function(err){console.log(err);});
+      }
+      $scope.quiz_attendee_draft_time_store();
     };
-    $scope.join_into_this_quiz_data = () => {
+    $scope.quiz_attendee_draft_time_store = () => {
       $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
-      console.log("Join This Quiz !!");
-      console.log($scope.this_attendee_draft);
+      $scope.attendee_draft_timeframe = setTimeout($scope.attendee_draft_collection , 600 );
     }
     $scope.join_this_quiz = () => {
       if($scope.attendee_draft != null && $scope.attendee_draft.att_draft != undefined && $scope.attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) != -1)
@@ -1234,7 +1228,7 @@ attendeeApp.controller("players" , [
           });
         }
 
-        $scope.join_into_this_quiz_data();
+        $scope.quiz_attendee_draft_time_store();
     };
     $scope.start_this_quiz = () => {
       $scope.join_this_quiz();
@@ -1375,9 +1369,7 @@ attendeeApp.controller("players" , [
       $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
       // alert($scope.this_attendee_draft);
       // console.log({'val-1':$scope.this_attendee_draft});
-      console.log({
-        "This Attendee Data" : $scope.this_attendee_draft
-      });
+
       return $http({
          url : $scope.url_attend_quiz ,
          method: "POST",
