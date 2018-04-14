@@ -9,6 +9,45 @@
     is_correct
     answer_index
   */
+  /*
+      Report Object
+      ===============
+      ++ questions => Object
+            all_questions => [] => all question ids
+            right_questions => [] => question ids
+            wrong_questions => [] => question ids
+
+      ++ attendee_details ==> Object
+            attendee_id
+            attendee_information
+            total_questions
+            pass_mark
+            correct_answers
+            wrong_answers
+            status
+            score
+            completed_status
+            created_at
+            completed_date
+
+      ++ attendees ==> Object
+            created_at
+            updated_at
+            survey_quiz_answers
+            attendee_id
+            user_information
+            is_completed
+            passed_the_grade
+            results
+                -- wrong_answers
+                -- correct_answers
+                -- count_of_questions
+                -- result
+                    * percentage_value
+                    * raw_value
+
+  */
+
 
 $scope.store_into_attendee_draft = ( object , is_single = null ) => {
 

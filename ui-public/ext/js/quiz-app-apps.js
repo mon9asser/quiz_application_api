@@ -9,6 +9,7 @@ Array.prototype.find_unsolved_questions = function (questions_list) {
 
 
 
+
 //=============================================
 // => Filters
 //=============================================
@@ -464,47 +465,135 @@ attendeeApp.controller("players" , [
       return classes ;
     }
 
-    $scope.store_into_attendee_draft = (object , is_single = null) => {
-      /*
-          Report Object
-          ===============
-          ++ questions => Object
-                all_questions => [] => all question ids
-                right_questions => [] => question ids
-                wrong_questions => [] => question ids
-
-          ++ attendee_details ==> Object
-                attendee_id
-                attendee_information
-                total_questions
-                pass_mark
-                correct_answers
-                wrong_answers
-                status
-                score
-                completed_status
-                created_at
-                completed_date
-
-          ++ attendees ==> Object
-                created_at
-                updated_at
-                survey_quiz_answers
-                attendee_id
-                user_information
-                is_completed
-                passed_the_grade
-                results
-                    -- wrong_answers
-                    -- correct_answers
-                    -- count_of_questions
-                    -- result
-                        * percentage_value
-                        * raw_value
-
-      */
 
 
+    $scope.store_into_attendee_draft  = (object , is_single = null) => {
+        var application_object = new Object();
+        if (  $scope.attendee_draft != null && $scope.attendee_draft.application_id != undefined)
+          { // ==> attendee_draft is not empty
+              var findAttendeeIndex = $scope.attendee_draft.att_draft.findIndex(x => x.user_id == object.user_id);
+              var findAttendee = $scope.attendee_draft.att_draft.find(x => x.user_id == object.user_id);
+              if(findAttendeeIndex != - 1){
+                // ==> Attendee Object [FOUND]
+                var attendeeInfo = $scope.attendee_draft.att_draft[findAttendeeIndex];
+                if(attendeeInfo.questions_data == undefined )
+                attendeeInfo.questions_data = new Array();
+                var findQuestionIndex = attendeeInfo.questions_data.findIndex(x => x.question_id == object.question_id);
+                var findQuestion = attendeeInfo.questions_data.find(x => x.question_id == object.question_id);
+                if(findQuestionIndex == -1){
+
+                  // ==> Question UNFOUND
+                  attendeeInfo.questions_data.push({
+                    question_id : object.question_id ,
+                    question_index : $scope.slide_screens.activeIndex - 1,
+                    question_type : object.question.question_type,
+                    question_text : object.question.question_body,
+                    answer_ids : new Array({answer_id : object.answer_id , is_correct : object.is_correct , answer_object : object.answer , answer_index : object.answer_index }) ,
+                    correct_answers : object.question.answers_format.filter(x => x.is_correct == true) ,
+                    updated_date : new Date()
+                  });
+
+
+                  // ==============================>> Report Questions ( all_questions , right_questions , wrong_questions )
+                  if(attendeeInfo.report_questions == undefined)
+                  attendeeInfo.report_questions = new Object();
+
+                  if(attendeeInfo.report_questions.all_questions == undefined )
+                    attendeeInfo.report_questions.all_questions = new Array(object.question_id);
+
+                  // ==> store correct answers that solved
+                  if(attendeeInfo.report_questions.right_questions == undefined )
+                    attendeeInfo.report_questions.right_questions = new Array();
+
+                  // ==> store wrong answers that solved
+                  if(attendeeInfo.report_questions.wrong_questions == undefined )
+                    attendeeInfo.report_questions.wrong_questions = new Array();
+
+                  var answerIndexVal = object.question.answers_format.findIndex(x => x._id == object.answer_id );
+                  if(answerIndexVal != -1 ){
+                    answerObject = object.question.answers_format.find(x => x._id == object.answer_id );
+                    if(answerObject.is_correct == true )
+                      attendeeInfo.report_questions.right_questions.push(object.question_id) ;
+                    else
+                      attendeeInfo.report_questions.wrong_questions.push(object.question_id) ;
+                  }
+
+                  // ==============================>> Report attendee_details
+                  if(attendeeInfo.report_attendee_details == undefined )
+                    attendeeInfo.report_attendee_details = new Object();
+
+                    // ==> Calculations
+                    if( $scope.__player_object.settings  == undefined || $scope.__player_object.settings == null )
+                      alert("Something went wrong !")
+
+                    var app_grade_value = parseInt($scope.__player_object.settings.grade_settings.value);
+                    var total_app_questions = parseInt($scope.__player_object.questions.length);
+                    var correct_questions = parseInt(attendeeInfo.report_questions.right_questions.length);
+                    var wrong_questions  = parseInt(attendeeInfo.report_questions.wrong_questions.length);
+                    var percentage = Math.round(correct_questions * 100 ) / total_app_questions ;
+                    var isPassed = ( percentage >= app_grade_value )? true : false ;
+                    var is_completed = ( total_app_questions == attendeeInfo.questions_data.length ) ? true : false ;
+
+                    attendeeInfo.report_attendee_details.attendee_id = $scope.user_id ;
+                    attendeeInfo.report_attendee_details.attendee_information = $scope.user_id ;
+                    attendeeInfo.report_attendee_details.total_questions = attendeeInfo.questions_data.length ;
+                    attendeeInfo.report_attendee_details.pass_mark = isPassed ,
+                    attendeeInfo.report_attendee_details.correct_answers =  correct_questions ,
+                    attendeeInfo.report_attendee_details.wrong_answers = wrong_questions ;
+                    attendeeInfo.report_attendee_details.status= (isPassed == true ) ? "Passed": "Failed";
+                    attendeeInfo.report_attendee_details.score= percentage;
+                    attendeeInfo.report_attendee_details.completed_status= is_completed;
+                    attendeeInfo.report_attendee_details.created_at= new Date();
+                    attendeeInfo.report_attendee_details.completed_date= new Date();
+
+                    // ==============================>> Report report_attendees
+                    if(attendeeInfo.report_attendees == undefined )
+                      attendeeInfo.report_attendees = new Object();
+
+                      attendeeInfo.report_attendees.created_at = new Date()
+                      attendeeInfo.report_attendees.updated_at = new Date()
+                      attendeeInfo.report_attendees.attendee_id = $scope.user_id;
+                      attendeeInfo.report_attendees.user_information = $scope.user_id;
+                      attendeeInfo.report_attendees.is_completed = is_completed ;
+                      attendeeInfo.report_attendees.passed_the_grade = isPassed ;
+                      attendeeInfo.report_attendees.survey_quiz_answers = new Array();
+                      attendeeInfo.report_attendees.results = new Object();
+                      attendeeInfo.report_attendees.results['wrong_answers'] = wrong_questions;
+                      attendeeInfo.report_attendees.results['correct_answers'] = correct_questions ;
+                      attendeeInfo.report_attendees.results['count_of_questions'] = attendeeInfo.questions_data.length ;
+                      attendeeInfo.report_attendees.results['result'] = new Object();
+                      attendeeInfo.report_attendees.results['result']['percentage_value'] = percentage;
+                      attendeeInfo.report_attendees.results['result']['raw_value'] = wrong_questions ;
+                      attendeeInfo.report_attendees.survey_quiz_answers.push({
+                        question_id :  object.question_id  ,
+                        questions : {
+                          question_id : object.question_id,
+                          question_body :object.question.question_body ,
+                          question_type : object.question.question_type
+                        } ,
+                        answers : {
+                          answer_id : new Array (object.answer_id) ,
+                          answer_body :  new Object() ,
+                          is_correct : object.is_correct
+                        }
+                      });
+                      attendeeInfo.report_attendees.survey_quiz_answers[attendeeInfo.report_attendees.survey_quiz_answers.length - 1 ].
+                      answers.answer_body["answer_id_"+object.answer_id] = {
+                               answer_id : object.answer_id ,
+                               answer_body : object.answer ,
+                               is_correct : object.is_correct
+                       }
+
+                      console.log(attendeeInfo);
+                }else {
+                  // ==> Question FOUND
+                }
+              }else {
+                // ==> Attenee Object [UNFOUND]
+              }
+          }else {
+            // ==> attendee_draft is empty
+          }
     };
     // ==> Select answer scenario !!
     $scope.select_this_answer = ( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex) => {
