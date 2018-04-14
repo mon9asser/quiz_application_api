@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'ui-public')));
 // app.use( express.static(__dirname +'/ui-public') );
 app.set('view engine', 'hbs');
 app.set('views',  __dirname +'/ui-public');
-app.use(express.json({limit: '50mb'}));
+// app.use(express.json({limit: '50mb'}));
 
 
 hbs.registerHelper('server_ip', config.server_ip );
