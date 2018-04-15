@@ -1225,7 +1225,7 @@ attendeeApp.controller("players" , [
             var sAtt = $scope.attendee_draft.att_draft.find (x => x.user_id == $scope.user_id) ;
             if( sAtt  != undefined )
              dataObject.att_draft.push(  $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id));
-
+             // increase performace in express server nodejs 
           }
           console.log(dataObject);
         $http({

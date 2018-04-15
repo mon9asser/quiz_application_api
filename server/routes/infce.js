@@ -1,7 +1,7 @@
 
 const express = require("express");
 const hbs = require("hbs");
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const fs = require('fs');
 
@@ -18,8 +18,8 @@ const {insertIntoApiKey} = require("./qtnr");
 
 var infceRouter = express.Router();
 infceRouter.use(  build_session );
-infceRouter.use(  bodyParser.json() );
-infceRouter.use(  bodyParser.urlencoded({ extended: false }) );
+// infceRouter.use(  bodyParser.json() );
+// infceRouter.use(  bodyParser.urlencoded({ extended: false }) );
 // ################################################################
 // ==========>>> Application Interface Api  ( Quiz VS Survey ) Player <<====
 // ################################################################

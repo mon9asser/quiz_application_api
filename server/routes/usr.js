@@ -1,6 +1,6 @@
 const express = require("express");
 const hbs = require("hbs");
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
@@ -13,8 +13,8 @@ const {usr} = require("../../models/users");
 const {apis , config , notes} = require("../../database/config");
 const {authByToken , verify_api_keys_user_apis} = require("../../middlewares/authenticate") ;
 var usrRouters = express.Router();
-usrRouters.use(bodyParser.json());
-usrRouters.use(bodyParser.urlencoded({ extended: false}));
+// usrRouters.use(bodyParser.json());
+// usrRouters.use(bodyParser.urlencoded({ extended: false}));
 usrRouters.use(session({
   secret : config.apiSecret ,
   resave : true ,
@@ -74,7 +74,7 @@ usrRouters.use(session({
           if(comparePassword != true ){
             return new Promise((reject , resolve)=>{
               res.send({"Message":"Rejected Authentication"});
-            }); 
+            });
           }
 
 

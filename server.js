@@ -2,6 +2,7 @@ const express = require("express");
 const hbs = require('express-hbs');
 const http = require('http');
 const path = require('path');
+const bodyParser = require('body-parser');
 const {apis , config } = require("./database/config");
 const {usrRouters} = require("./server/routes/usr");
 const {qtnrRouters} = require("./server/routes/qtnr");
@@ -12,6 +13,7 @@ const {drftRouter} = require("./server/routes/drft");
 const {infceRouter} = require("./server/routes/infce");
 const {usr} = require("./models/users");
 const cors= require('cors');
+const compression = require('compression');
 
 
 
@@ -24,17 +26,15 @@ const app = express();
 app.engine('hbs', hbs.express4({
   partialsDir: path.join(__dirname, 'ui-public/partials' )
 }));
-
-
-
 // app.use(express.static(path.join(__dirname, 'ui-public')));
 app.use(express.static(path.join(__dirname, 'ui-public')));
-
 // app.use( express.static(__dirname +'/ui-public') );
 app.set('view engine', 'hbs');
 app.set('views',  __dirname +'/ui-public');
-app.use(express.json({limit: '50mb'}));
-
+// app.use(express.json({limit: '50mb'}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false}));
+app.use(compression());
 
 hbs.registerHelper('server_ip', config.server_ip );
 
@@ -88,7 +88,7 @@ app.use(function (req, res, next) {
 });
 
 
-
+http.globalAgent.maxSockets = 50;
 // http.createServer((req,res)=>{
 //   console.log(`Started up at port ${config.server_port}`);
 // }).listen(config.server_port);

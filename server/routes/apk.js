@@ -1,7 +1,7 @@
 
 const express = require("express");
 const hbs = require("hbs");
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const http = require('http');
@@ -17,8 +17,8 @@ const {apis , config, notes} = require("../../database/config");
 const {authByToken , verify_api_keys} = require("../../middlewares/authenticate") ;
 
 var apkRouter = express.Router();
-apkRouter.use(bodyParser.json());
-apkRouter.use(bodyParser.urlencoded({ extended: false}));
+// apkRouter.use(bodyParser.json());
+// apkRouter.use(bodyParser.urlencoded({ extended: false}));
 apkRouter.use(session({
   secret : config.apiSecret ,
   resave : true ,

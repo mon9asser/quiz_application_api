@@ -1,6 +1,6 @@
 const express = require("express");
 const hbs = require("hbs");
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path') ;
@@ -78,10 +78,11 @@ const question_answer_images = multer({
 
 var qtnrRouters = express.Router();
 
-qtnrRouters.use(bodyParser.json());
-qtnrRouters.use(bodyParser.urlencoded({
-    extended: false
-}));
+// qtnrRouters.use(bodyParser.json());
+// qtnrRouters.use(bodyParser.urlencoded({
+//     extended: false
+// }));
+
 // qtnrRouters.use(bodyParser.urlencoded());
 // qtnrRouters.use(bodyParser.json());
 qtnrRouters.use(build_session);

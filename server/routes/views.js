@@ -1,6 +1,6 @@
 const express = require("express");
 const hbs = require("hbs");
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const fs = require('fs');
 
@@ -15,8 +15,8 @@ const {insertIntoApiKey} = require("./qtnr");
 var viewRouters = express.Router();
 viewRouters.use(build_session);
 
-viewRouters.use(  bodyParser.json() );
-viewRouters.use(  bodyParser.urlencoded({ extended: false}) );
+// viewRouters.use(  bodyParser.json() );
+// viewRouters.use(  bodyParser.urlencoded({ extended: false}) );
 
 
 // ======================================================

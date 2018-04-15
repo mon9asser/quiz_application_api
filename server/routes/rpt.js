@@ -1,6 +1,6 @@
 const express = require("express");
 const hbs = require("hbs");
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const fs = require('fs');
 const _ = require('lodash');
@@ -58,10 +58,10 @@ var date_made = function() {
     var year = dateObj.getUTCFullYear();
     return newdate = year + "/" + month + "/" + day;
 };
-rptRouters.use(bodyParser.json());
-rptRouters.use(bodyParser.urlencoded({
-    extended: false
-}));
+// rptRouters.use(bodyParser.json());
+// rptRouters.use(bodyParser.urlencoded({
+//     extended: false
+// }));
 rptRouters.use(build_session);
 
 // => Get a report for only one attendee
@@ -1306,7 +1306,7 @@ rptRouters.post("/:app_id/report_collection/:user_id" , (req , res) => {
   }
 
   var attendee_draft = req.body.attendee_draft;
-  
+
 
 });
 
