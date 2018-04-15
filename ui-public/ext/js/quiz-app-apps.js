@@ -106,6 +106,8 @@ attendeeApp.controller("players" , [
   ( $scope, $rootScope, $timeout , $http , settings , $window ) => {
 
     // ====> Scope Variables
+     $scope.question_count_at_promise = -1 ;
+     $scope.is_review  == false ;
      $scope.is_submitted = false ;
      $scope.is_disabled = false ;
      $scope.quiz_status = 0; // => 0 => take quiz , 1 => expired warning , 2 => is expired   3 => is Completed
@@ -1228,18 +1230,25 @@ attendeeApp.controller("players" , [
              // increase performace in express server nodejs
           }
 
-        $http({
-          url : $scope.url_attendee_draft_collecation ,
-          method: "POST",
-          data : { attendee_draft : dataObject } ,
-          headers : {
-            "Content-Type": "application/json"
-          } ,
-        }).then(function(response){
-          console.log(response.data);
-        } , function(err){
-          console.log(err);
-        });
+        if(($scope.question_count_at_promise != parseInt($scope.__player_object.questions.length)) && $scope.is_review  == false ){
+            $http({
+              url : $scope.url_attendee_draft_collecation ,
+              method: "POST",
+              data : { attendee_draft : dataObject } ,
+              headers : {
+                "Content-Type": "application/json"
+              } ,
+            }).then(function(response){
+               if(response.data.question_data_count != undefined)
+                  $scope.question_count_at_promise = parseInt(response.data.question_data_count.length);
+            } , function(err){
+              console.log(err);
+            });
+        } // => End if case
+
+
+
+
 
       }
 
