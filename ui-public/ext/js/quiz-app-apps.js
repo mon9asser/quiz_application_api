@@ -1240,7 +1240,7 @@ attendeeApp.controller("players" , [
                 "Content-Type": "application/json"
               } ,
             }).then(function(response){
-              console.log({"FFCount" : response.data.question_data_count});
+              console.log({"FFCount" : response.data});
                if(response.data.question_data_count != undefined)
                   $scope.question_count_at_promise = parseInt(response.data.question_data_count);
             } , function(err){
