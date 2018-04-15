@@ -1298,6 +1298,15 @@ rptRouters.patch("/:app_id/clear/report/:attendee_id" , (req,res) => {
 
 
 
+rptRouters.post("/:app_id/report_collection/:user_id" , (req , res) => {
+  var attendee_draft = req.body.attendee_draft;
+
+  res.send({
+    Report_Collection : attendee_draft
+  });
+});
+
+
 module.exports = {
     rptRouters
 };
