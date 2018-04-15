@@ -1216,11 +1216,15 @@ attendeeApp.controller("players" , [
    }
    $scope.attendee_draft_collection = function (){
       if($scope.attendee_draft != null && $scope.attendee_draft != undefined && $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) != -1 ){
-
+        var dataObject ;
+        if($scope.attendee_draft.att_draft != undefined ){
+          var dataObject = $scope.attendee_draft.att_draft.find(x => x.user_id = $scope.user_id);
+        }
+        dataObject = $scope.attendee_draft ;
         $http({
           url : $scope.url_attendee_draft_collecation ,
           method: "POST",
-          data : { attendee_draft : $scope.attendee_draft } ,
+          data : { attendee_draft : dataObject } ,
           headers : {
             "Content-Type": "application/json"
           } ,

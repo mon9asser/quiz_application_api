@@ -213,17 +213,17 @@ drft.findOne({application_id: app_id } , (err , draftDocument) => {
 drftRouter.post("/:app_id/attendee_collection/:user_id" , (req , res) => {
   var attendee_draft = req.body.attendee_draft;
   var attendee_id = req.params.user_id;
-
+  var app_id = req.params.app_id ;
   if(req.body.attendee_draft == null){
     new Promise(function(resolve, reject) {
       res.status(404).send("attendee_draft unfound !");
       return false ;
     });
   }
-  drft.findOne({ "application_id":attendee_draft.application_id } , ( err , draftDoc ) => {
+  drft.findOne({ "application_id":app_id } , ( err , draftDoc ) => {
 
       if(!draftDoc){
-        var drf = new drft(attendee_draft);
+        var drf = new drft({"application_id":app_id , questionnaire_info:app_id , att_draft : attendee_draft});
         drf.save().then(()=>{
           res.send("Attendee draft is saved successfully!");
           return false ;
