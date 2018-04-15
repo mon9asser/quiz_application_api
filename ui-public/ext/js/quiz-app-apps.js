@@ -1242,7 +1242,7 @@ attendeeApp.controller("players" , [
             }).then(function(response){
               console.log({"FFCount" : response.data.question_data_count});
                if(response.data.question_data_count != undefined)
-                  $scope.question_count_at_promise = parseInt(response.data.question_data_count.length);
+                  $scope.question_count_at_promise = parseInt(response.data.question_data_count);
             } , function(err){
               console.log(err);
             });

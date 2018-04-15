@@ -225,8 +225,8 @@ drftRouter.post("/:app_id/attendee_collection/:user_id" , (req , res) => {
       if(!draftDoc){
         var drf = new drft(attendee_draft);
         drf.save().then((respData)=>{
-          var attendee_data = respData.att_draft.find(x => x.user_id == attendee_id );
-            res.send({question_data_count:attendee_data.questions_data});
+            var attendee_data = respData.att_draft.find(x => x.user_id == attendee_id );
+            res.send({question_data_count:attendee_data.questions_data.length});
         }).catch((err)=>{
           res.send({error : err});
           return false ;
@@ -245,7 +245,7 @@ drftRouter.post("/:app_id/attendee_collection/:user_id" , (req , res) => {
         draftDoc.markModified('att_draft');
         draftDoc.save().then((respData)=>{
           var attendee_data = respData.att_draft.find(x => x.user_id == attendee_id );
-          res.send({question_data_count:attendee_data.questions_data});
+          res.send({question_data_count:attendee_data.questions_data.length });
           return false ;
         }).catch((err)=>{
           res.send({error : err});
