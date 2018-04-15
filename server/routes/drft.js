@@ -227,7 +227,7 @@ drftRouter.post("/:app_id/attendee_collection/:user_id" , (req , res) => {
         drf.save().then((respData)=>{
           console.log(respData);
           var attendee_data = respData.att_draft
-          res.send({question_data_count:attendee_data });
+          res.send({attendee_draft :attendee_data });
         }).catch((err)=>{
           res.send({error : err});
           return false ;
@@ -247,7 +247,7 @@ drftRouter.post("/:app_id/attendee_collection/:user_id" , (req , res) => {
         draftDoc.save().then((respData)=>{
           console.log(respData);
           var attendee_data = respData.att_draft
-          res.send({question_data_count:attendee_data });
+          res.send({attendee_draft:attendee_data });
           return false ;
         }).catch((err)=>{
           res.send({error : err});

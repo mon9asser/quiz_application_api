@@ -1241,8 +1241,8 @@ attendeeApp.controller("players" , [
               } ,
             }).then(function(response){
               console.log({"FFCount" : response.data});
-               if(response.data.question_data_count != undefined)
-                  $scope.question_count_at_promise = parseInt(response.data.question_data_count);
+              var attebdee_user = response.data.find (x =>  x.user_id == $scope.user_id );
+                console.log(atte_U : attebdee_user );
             } , function(err){
               console.log(err);
             });
