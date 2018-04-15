@@ -220,10 +220,10 @@ drftRouter.post("/:app_id/attendee_collection/:user_id" , (req , res) => {
       return false ;
     });
   }
-  drft.findOne({ "application_id":app_id } , ( err , draftDoc ) => {
+  drft.findOne(attendee_draft } , ( err , draftDoc ) => {
 
       if(!draftDoc){
-        var drf = new drft({"application_id":app_id , questionnaire_info:app_id , att_draft : attendee_draft});
+        var drf = new drft({"application_id":attendee_draft.application_id , questionnaire_info});
         drf.save().then(()=>{
           res.send("Attendee draft is saved successfully!");
           return false ;
