@@ -1219,9 +1219,9 @@ attendeeApp.controller("players" , [
         var dataObject = new Object() ;
         if($scope.attendee_draft != null )
           {
-            dataObject['application_id'] = $scope.application_id
-            dataObject['questionnaire_info'] = $scope.application_id ,
-            var sAtt = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id) ;
+            dataObject['application_id'] = $scope.application_id;
+            dataObject['questionnaire_info'] = $scope.application_id  ;
+            var sAtt = $scope.attendee_draft.att_draft.find (x => x.user_id == $scope.user_id) ;
             if( sAtt  != undefined)
              dataObject['att_draft'] = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id) ;
 
