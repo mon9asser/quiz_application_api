@@ -363,6 +363,7 @@ attendeeApp.controller("players" , [
             $(".current-question").html($scope.curren_question_slide);
             // => Load to next index
             $scope.slide_screens_index(current_index);
+            $scope.attendee_draft_collection();
           });
         } catch (e) {
 
@@ -1196,14 +1197,11 @@ attendeeApp.controller("players" , [
           } ,
 
         }).then(function(response){console.log(response.data);} , function(err){console.log(err);});
-        $scope.quiz_attendee_draft_time_store();
+
       }
 
     };
-    $scope.quiz_attendee_draft_time_store = () => {
-      $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
-      $scope.attendee_draft_timeframe = setTimeout($scope.attendee_draft_collection , 250 );
-    }
+
     $scope.join_this_quiz = () => {
       if($scope.attendee_draft != null && $scope.attendee_draft.att_draft != undefined && $scope.attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) != -1)
         return false ;
@@ -1232,7 +1230,8 @@ attendeeApp.controller("players" , [
           });
         }
 
-        $scope.quiz_attendee_draft_time_store();
+        $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+        $scope.attendee_draft_collection();
     };
     $scope.start_this_quiz = () => {
       $scope.join_this_quiz();
@@ -1510,6 +1509,7 @@ attendeeApp.controller("players" , [
         }
 
         $scope.slide_screens.on('slideChange' , function (i){
+
           $scope.touch_move++;
           var lengther = $(this);
           var current_index = lengther[0].activeIndex ;
@@ -1530,7 +1530,7 @@ attendeeApp.controller("players" , [
 
           // => Load to next index
           $scope.slide_screens_index(current_index);
-
+          $scope.attendee_draft_collection();
         });
       } catch (e) {
 
