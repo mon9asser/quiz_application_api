@@ -1217,12 +1217,13 @@ attendeeApp.controller("players" , [
    $scope.attendee_draft_collection = function (){
       if($scope.attendee_draft != null && $scope.attendee_draft != undefined && $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) != -1 ){
         var dataObject = new Object() ;
-        if($scope.attendee_draft != null ) 
+        if($scope.attendee_draft != null )
           {
             dataObject['application_id'] = $scope.application_id
             dataObject['questionnaire_info'] = $scope.application_id ,
-            if($scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id) != undefined)
-            dataObject['att_draft'] = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id) ;
+            var sAtt = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id) ;
+            if( sAtt  != undefined)
+             dataObject['att_draft'] = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id) ;
 
           }
         $http({
