@@ -364,6 +364,8 @@ attendeeApp.controller("players" , [
             // => Load to next index
             $scope.slide_screens_index(current_index);
 
+            // => When slideChange is fired
+            $scope.attendee_draft_collection();
           });
         } catch (e) {
 
@@ -710,7 +712,8 @@ attendeeApp.controller("players" , [
 
 
        $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id) ;
-
+       // => When Select answer is happened
+       $scope.attendee_draft_collection();
     };
     // ==> Select answer scenario !!
     $scope.select_this_answer = ( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex) => {
@@ -1186,14 +1189,12 @@ attendeeApp.controller("players" , [
               return '/progressbar-layouts/layout-'+layout_template+'.hbs';
             };
 
-   $scope.show_test_obj = function (){
-              console.log ($scope.attendee_draft);
-            };
+
    $scope.submit_quiz_into_report = () => {
               // alert("I successed in storing bulk data in less than one second with online report");
-
-            }
-    $scope.attendee_draft_collection = function (){
+    $scope.attendee_draft_collection();
+   }
+   $scope.attendee_draft_collection = function (){
       if($scope.attendee_draft != null && $scope.attendee_draft != undefined && $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) != -1 ){
 
         $http({
@@ -1239,7 +1240,7 @@ attendeeApp.controller("players" , [
         }
 
         $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
-
+        $scope.attendee_draft_collection();
     };
     $scope.start_this_quiz = () => {
       $scope.join_this_quiz();
@@ -1250,6 +1251,7 @@ attendeeApp.controller("players" , [
 
       try {
         $scope.slide_screens.slideNext();
+
       } catch (e) {
 
       }
@@ -1257,6 +1259,8 @@ attendeeApp.controller("players" , [
     $scope.back_to_prev_slider = () => {
       try {
         $scope.slide_screens.slidePrev();
+        // => When button navigation is fired
+        $scope.attendee_draft_collection();
       } catch (e) {
 
       }
@@ -1264,6 +1268,8 @@ attendeeApp.controller("players" , [
     $scope.go_to_next_slider = () => {
       try {
         $scope.slide_screens.slideNext();
+        // => When button navigation is fired
+        $scope.attendee_draft_collection();
       } catch (e) {
 
       }
@@ -1492,7 +1498,8 @@ attendeeApp.controller("players" , [
 
           // => Load to next index
           $scope.slide_screens_index(current_index);
-
+          // => When slideChange is fired
+          $scope.attendee_draft_collection();
         });
       } catch (e) {
 

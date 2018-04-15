@@ -54,7 +54,7 @@
                                    <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                                    Back
                                </button>
-                               <button ng:click="start_this_quiz()" class="button-take-this" type="button" name="button">
+                               <button ng:click="attendee_draft_collection()" class="button-take-this" type="button" name="button">
                                    <i class="fa fa-sign-in" aria-hidden="true"></i>
                                    Take this Quiz
                                </button>
@@ -258,9 +258,7 @@
                             <span ng:if="$index != (__player_object.questions.length - 1)">Continue</span>
                             <span ng:if="$index == (__player_object.questions.length - 1)">Finish</span>
                           </button>
-                          <button ng:if="$index == (__player_object.questions.length - 1)" ng:click="show_test_obj()" type="button" name="button">
-                            Testing data
-                          </button>
+
                      </div>
                  </div>
                </div>
