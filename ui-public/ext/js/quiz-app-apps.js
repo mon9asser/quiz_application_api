@@ -1240,11 +1240,7 @@ attendeeApp.controller("players" , [
                 "Content-Type": "application/json"
               } ,
             }).then(function(respData){
-              console.log({"FFCount" : respData });
-              console.log({"FFCount" : respData.data.response_data });
-              console.log({"FFCount" : respData.data.response_data.questions_data.length });
-              var attebdee_user = response.data.find (x =>  x.user_id == $scope.user_id );
-                console.log({atte_U : attebdee_user} );
+              console.log(respData.data);
             } , function(err){
               console.log(err);
             });

@@ -13,7 +13,7 @@ const {drftRouter} = require("./server/routes/drft");
 const {infceRouter} = require("./server/routes/infce");
 const {usr} = require("./models/users");
 const cors= require('cors');
-const compression = require('compression');
+
 
 
 
@@ -34,7 +34,7 @@ app.set('views',  __dirname +'/ui-public');
 // app.use(express.json({limit: '50mb'}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false}));
-app.use(compression());
+
 
 hbs.registerHelper('server_ip', config.server_ip );
 
