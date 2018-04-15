@@ -450,38 +450,45 @@ var reportDataTypes = {
    created_at         : { type : Date } ,
    updated_at         : { type : Date }
  }
+// var attendeeDraftDataTypes = {
+//   // _id :{ type:mongoose.Schema.ObjectId } ,
+//   application_id : { type : String , unique : true }  ,
+//   questionnaire_info : {type : String , ref : 'questionnaire'} ,
+//   // application : {type : Object } , // => application ( Quiz - survey => object )
+//   creation_date : {type : Date } ,
+//   att_draft : { type : [ // for use if browser is closed without complete this quiz
+//           {
+//              _id :{ type:mongoose.Schema.ObjectId } ,
+//             is_loaded : { type : Boolean }  ,
+//             start_expiration_time : { type : Date   } ,
+//             user_id : { type : String }  ,
+//             user_info : {type : String , ref : 'users'} ,
+//             impr_application_object : {type : Object } ,
+//             is_completed : { type : Boolean } ,
+//             time_tracker : {type : String}  ,
+//             questions_data : {type : [ // => All questions with answer
+//                 {
+//                   question_id :  { type : String }  ,
+//                   question_index : { type : Number } ,
+//                   question_type : { type : Number } ,
+//                   question_text : { type : String } ,
+//                   answer_ids : { type : [] }  ,
+//                   correct_answers : { type : [] }  ,
+//                   updated_date :{ type : Date   }
+//                 }
+//             ]}
+//           }
+//     ]}
+// };
+
 var attendeeDraftDataTypes = {
-  // _id :{ type:mongoose.Schema.ObjectId } ,
-  application_id : { type : String , unique : true }  ,
-  questionnaire_info : {type : String , ref : 'questionnaire'} ,
-  // application : {type : Object } , // => application ( Quiz - survey => object )
-  creation_date : {type : Date } ,
-  att_draft : { type : [ // for use if browser is closed without complete this quiz
-          {
-             _id :{ type:mongoose.Schema.ObjectId } ,
-            is_loaded : { type : Boolean }  ,
-            start_expiration_time : { type : Date   } ,
-            user_id : { type : String }  ,
-            user_info : {type : String , ref : 'users'} ,
-            impr_application_object : {type : Object } ,
-            is_completed : { type : Boolean } ,
-            time_tracker : {type : String}  ,
-            questions_data : {type : [ // => All questions with answer
-                {
-                  question_id :  { type : String }  ,
-                  question_index : { type : Number } ,
-                  question_type : { type : Number } ,
-                  question_text : { type : String } ,
-                  answer_ids : { type : [] }  ,
-                  correct_answers : { type : [] }  ,
-                  updated_date :{ type : Date   }
-                }
-            ]}
-          }
-    ]}
+    _id :{ type:mongoose.Schema.ObjectId } ,
+    application_id : { type : String , unique : true }  ,
+    questionnaire_info : {type : String , ref : 'questionnaire'} ,
+    // application : {type : Object } , // => application ( Quiz - survey => object )
+    creation_date : {type : Date } ,
+    att_draft : {type : [] }
 };
-
-
  var clientServersDataType = {
       _id :{ type:mongoose.Schema.ObjectId } ,
       api_public_keys : { type:String } , // user_name + id + secretApiCode
