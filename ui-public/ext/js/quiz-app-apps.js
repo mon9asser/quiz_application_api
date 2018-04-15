@@ -363,7 +363,7 @@ attendeeApp.controller("players" , [
             $(".current-question").html($scope.curren_question_slide);
             // => Load to next index
             $scope.slide_screens_index(current_index);
-            $scope.attendee_draft_collection();
+
           });
         } catch (e) {
 
@@ -1185,6 +1185,14 @@ attendeeApp.controller("players" , [
               var layout_template = $scope.__player_object.settings.progression_bar.progression_bar_layout;
               return '/progressbar-layouts/layout-'+layout_template+'.hbs';
             };
+
+   $scope.show_test_obj = function (){
+              console.log ($scope.attendee_draft);
+            };
+   $scope.submit_quiz_into_report = () => {
+              // alert("I successed in storing bulk data in less than one second with online report");
+
+            }
     $scope.attendee_draft_collection = function (){
       if($scope.attendee_draft != null && $scope.attendee_draft != undefined && $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) != -1 ){
 
@@ -1231,7 +1239,7 @@ attendeeApp.controller("players" , [
         }
 
         $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
-        $scope.attendee_draft_collection();
+
     };
     $scope.start_this_quiz = () => {
       $scope.join_this_quiz();
@@ -1437,53 +1445,7 @@ attendeeApp.controller("players" , [
         "background-image" : "url('"+set_server_ip+image_sourc+"')"
       }
     }
-    $scope.submit_quiz_into_report = () => {
-      $scope.is_submitted = true ;
-      var submit_icon = $('.fac-icon-submit');
-      if(submit_icon.hasClass('fa-arrow-right')) {
-            submit_icon.removeClass('fa-arrow-right');
-            submit_icon.addClass('fa-spinner fa-spin');
 
-            submit_icon.next('span').html('Submitting Quiz ...');
-        }else
-      return false ;
-
-      if( $scope.show_warning_unsolved_question() == false ){
-        if(submit_icon.hasClass('fa-spinner')){
-            submit_icon.removeClass('fa-spinner fa-spin');
-            submit_icon.addClass('fa-arrow-right');
-            submit_icon.next('span').html('Submit Quiz');
-        }
-        return false ;
-      }
-
-      // ====================================
-      // =============>>>> Submit the Report
-      // ====================================
-      if ( $scope.submit_quiz_into_a_report() == false )
-        {
-          if(submit_icon.hasClass('fa-spinner')){
-              submit_icon.removeClass('fa-spinner fa-spin');
-              submit_icon.addClass('fa-arrow-right');
-              submit_icon.next('span').html('Submit Quiz');
-          }
-
-          $(".warning_case").html("Your internet connection is very slow , please try later");
-          $(".warning_case").addClass('warning_case_internet_connection');
-          return false ;
-        }
-      if(submit_icon.hasClass('fa-spinner')){
-          submit_icon.removeClass('fa-spinner fa-spin');
-          submit_icon.addClass('fa-arrow-right');
-          submit_icon.next('span').html('Submit Quiz');
-      }
-      try {
-        $scope.slide_screens.slideNext();
-      } catch (e) {
-
-      }
-
-    }
     // ====> Scope Do An Actions
     $scope.load_application_draft();
     $scope.load_application_json_file();
@@ -1530,7 +1492,7 @@ attendeeApp.controller("players" , [
 
           // => Load to next index
           $scope.slide_screens_index(current_index);
-          $scope.attendee_draft_collection();
+
         });
       } catch (e) {
 

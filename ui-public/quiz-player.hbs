@@ -258,6 +258,9 @@
                             <span ng:if="$index != (__player_object.questions.length - 1)">Continue</span>
                             <span ng:if="$index == (__player_object.questions.length - 1)">Finish</span>
                           </button>
+                          <button ng:if="$index == (__player_object.questions.length - 1)" ng:click="show_test_obj()" type="button" name="button">
+                            Testing data
+                          </button>
                      </div>
                  </div>
                </div>
