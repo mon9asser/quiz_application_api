@@ -482,12 +482,12 @@ var reportDataTypes = {
 // };
 
 var attendeeDraftDataTypes = {
-    _id :{ type:mongoose.Schema.ObjectId } ,
+    // _id :{ type:mongoose.Schema.ObjectId } ,
     application_id : { type : String , unique : true }  ,
     questionnaire_info : {type : String , ref : 'questionnaire'} ,
     // application : {type : Object } , // => application ( Quiz - survey => object )
     creation_date : {type : Date } ,
-    att_draft : {type : [] }
+    att_draft : {type : []}
 };
  var clientServersDataType = {
       _id :{ type:mongoose.Schema.ObjectId } ,
