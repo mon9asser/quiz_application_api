@@ -1231,7 +1231,7 @@ attendeeApp.controller("players" , [
           }
 
         if(($scope.question_count_at_promise != parseInt($scope.__player_object.questions.length)) && $scope.is_review  == false ){
-            console.log("Saved Qs Number " + $scope.question_count_at_pro);
+            console.log("Saved Qs Number " + $scope.question_count_at_promise);
             $http({
               url : $scope.url_attendee_draft_collecation ,
               method: "POST",
@@ -1242,7 +1242,7 @@ attendeeApp.controller("players" , [
             }).then(function(response){
               console.log({"FFCount" : response.data.question_data_count});
                if(response.data.question_data_count != undefined)
-                  $scope.question_count_at_promise = parseInt(response.data);
+                  $scope.question_count_at_promise = parseInt(response.data.question_data_count);
             } , function(err){
               console.log(err);
             });
