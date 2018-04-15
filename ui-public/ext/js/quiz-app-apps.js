@@ -1242,7 +1242,7 @@ attendeeApp.controller("players" , [
             }).then(function(response){
               console.log({"FFCount" : response.data});
               var attebdee_user = response.data.find (x =>  x.user_id == $scope.user_id );
-                console.log(atte_U : attebdee_user );
+                console.log({atte_U : attebdee_user} );
             } , function(err){
               console.log(err);
             });
