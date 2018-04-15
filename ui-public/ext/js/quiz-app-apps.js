@@ -1225,9 +1225,9 @@ attendeeApp.controller("players" , [
             var sAtt = $scope.attendee_draft.att_draft.find (x => x.user_id == $scope.user_id) ;
             if( sAtt  != undefined )
              dataObject.att_draft.push(  $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id));
-             // increase performace in express server nodejs 
+             // increase performace in express server nodejs
           }
-          console.log(dataObject);
+
         $http({
           url : $scope.url_attendee_draft_collecation ,
           method: "POST",
@@ -1235,8 +1235,11 @@ attendeeApp.controller("players" , [
           headers : {
             "Content-Type": "application/json"
           } ,
-
-        }).then(function(response){console.log(response.data);} , function(err){console.log(err);});
+        }).then(function(response){
+          console.log(response.data);
+        } , function(err){
+          console.log(err);
+        });
 
       }
 
