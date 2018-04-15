@@ -106,8 +106,7 @@ attendeeApp.controller("players" , [
   ( $scope, $rootScope, $timeout , $http , settings , $window ) => {
 
     // ====> Scope Variables
-     $scope.question_count_at_promise = -1 ;
-     $scope.is_review  == false ;
+
      $scope.is_submitted = false ;
      $scope.is_disabled = false ;
      $scope.quiz_status = 0; // => 0 => take quiz , 1 => expired warning , 2 => is expired   3 => is Completed
@@ -135,7 +134,8 @@ attendeeApp.controller("players" , [
      $scope.json_source = settings.server_ip + settings.json_source;
      $scope.application_status = [] ;
      $scope.labels = [  'a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
-
+     $scope.question_count_at_promise = -1 ;
+     $scope.is_review   = false ;
 
      $scope.slider_options = {
        allowSlidePrev : true ,
@@ -1231,6 +1231,7 @@ attendeeApp.controller("players" , [
           }
 
         if(($scope.question_count_at_promise != parseInt($scope.__player_object.questions.length)) && $scope.is_review  == false ){
+            console.log("Saved Qs Number " + $scope.question_count_at_pro);
             $http({
               url : $scope.url_attendee_draft_collecation ,
               method: "POST",
