@@ -368,6 +368,7 @@ attendeeApp.controller("players" , [
 
             // => When slideChange is fired
             // => Move into attendee draft object
+            if(current_index != 0)
             $scope.attendee_draft_collection();
           });
         } catch (e) {
@@ -1522,6 +1523,7 @@ attendeeApp.controller("players" , [
           $scope.slide_screens_index(current_index);
           // => When slideChange is fired
           // => Move into attendee draft object
+          if(current_index != 0)
           $scope.attendee_draft_collection();
         });
       } catch (e) {
