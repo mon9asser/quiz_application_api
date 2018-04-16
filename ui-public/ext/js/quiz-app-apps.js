@@ -340,7 +340,7 @@ attendeeApp.controller("players" , [
          $(".answer-container ul li").removeClass('selected_answer');
          $(".answer-container ul li").removeClass('right_answer');
          $(".answer-container ul li").removeClass('wrong_answer');
-
+         $scope.unfreez_the_quiz_right_now();
          // => Set event handler
          $scope.slide_screens.on('slideChange' , function (i){
            $scope.touch_move++;
@@ -364,9 +364,7 @@ attendeeApp.controller("players" , [
          $('.retake-this-quiz').children("i").removeClass('fa-spinner fa-spin')
          $('.retake-this-quiz').children("i").addClass('fa-repeat');
          $timeout(function(){
-           $scope.freez_the_quiz_right_now();
-           $scope.slide_screens.noSwiping = false ;
-          //  $scope.slide_screens.touches = true ;
+
          } , 1000 );
        } , 4000);
      }
@@ -1592,26 +1590,44 @@ attendeeApp.controller("players" , [
       }
     };
 
-    $scope.freez_the_quiz_right_now = () => {
+    // $scope.freez_the_quiz_right_now = () => {
+    //   try {
+    //     // ==> Freeze the slider application
+    //       $scope.slide_screens.allowSlidePrev = true ;
+    //       $scope.slide_screens.allowSlideNext = true ;
+    //       // Load The quiz from database right now
+    //       if($scope.__player_object != null && $scope.__player_object.settings != undefined){
+    //         $scope.slide_screens.allowTouchMove = $scope.__player_object.settings.allow_touch_move ;
+    //         $scope.slide_screens.noSwiping = $scope.__player_object.settings.allow_touch_move ;
+    //         $scope.slide_screens.touches = $scope.__player_object.settings.allow_touch_move ;
+    //       }
+    //       // extract this time
+    //     // ==> Stop the timer if it active
+    //
+    //     if($scope.__player_object != null && $scope.__player_object.settings != undefined){
+    //
+    //       if($scope.__player_object.settings.time_settings.is_with_time)
+    //          $scope.quiz_time_status_is_counting = false ;
+    //     }
+    //
+    //   } catch (e) {
+    //
+    //   }
+    // }
+
+    $scope.unfreez_the_quiz_right_now = () => {
       try {
         // ==> Freeze the slider application
           $scope.slide_screens.allowSlidePrev = true ;
           $scope.slide_screens.allowSlideNext = true ;
 
-          // Load The quiz from database right now
-
-          if($scope.__player_object != null && $scope.__player_object.settings != undefined){
-            $scope.slide_screens.allowTouchMove = $scope.__player_object.settings.allow_touch_move ;
-            $scope.slide_screens.noSwiping = $scope.__player_object.settings.allow_touch_move ;
-            $scope.slide_screens.touches = $scope.__player_object.settings.allow_touch_move ;
-          }
-          // extract this time
         // ==> Stop the timer if it active
 
         if($scope.__player_object != null && $scope.__player_object.settings != undefined){
 
-          if($scope.__player_object.settings.time_settings.is_with_time)
-             $scope.quiz_time_status_is_counting = false ;
+          $scope.slide_screens.allowTouchMove = $scope.__player_object.allow_touch_move ;
+          $scope.slide_screens.noSwiping = false ;
+
         }
 
       } catch (e) {
