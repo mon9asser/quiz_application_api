@@ -371,7 +371,7 @@ attendeeApp.controller("players" , [
             // => When slideChange is fired
             // => Move into attendee draft object
             // if(current_index != 0)
-            // $scope.attendee_draft_collection();
+            // // $scope.attendee_draft_collection();
           });
         } catch (e) {
 
@@ -720,7 +720,9 @@ attendeeApp.controller("players" , [
        $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id) ;
        // => When Select answer is happened
        // => Move into attendee draft object
-       $scope.attendee_draft_collection();
+       $timeout( function () {
+         $scope.attendee_draft_collection();
+       }, 1000);
     };
     // ==> Select answer scenario !!
     $scope.select_this_answer = ( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex) => {
@@ -1202,7 +1204,7 @@ attendeeApp.controller("players" , [
 
 
 
-     return false ; // ==> this function is disabled 
+     return false ; // ==> this function is disabled
         if($scope.attendee_draft != null && $scope.attendee_draft != undefined && $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) != -1 ){
           var dataObject = new Object() ;
           if($scope.attendee_draft != null )
@@ -1246,7 +1248,7 @@ attendeeApp.controller("players" , [
 
      $timeout(function(){
        // => Move to attendee draft
-       $scope.attendee_draft_collection();
+       // $scope.attendee_draft_collection();
        // => Move results into rebort
        $scope.report_quiz_collection();
 
@@ -1340,7 +1342,7 @@ attendeeApp.controller("players" , [
 
         $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
         // => Move into attendee draft object
-        $scope.attendee_draft_collection();
+        // $scope.attendee_draft_collection();
     };
     $scope.start_this_quiz = () => {
       $scope.join_this_quiz();
@@ -1361,7 +1363,7 @@ attendeeApp.controller("players" , [
         $scope.slide_screens.slidePrev();
         // => When button navigation is fired
         // => Move into attendee draft object
-        $scope.attendee_draft_collection();
+        // $scope.attendee_draft_collection();
       } catch (e) {
 
       }
@@ -1371,7 +1373,7 @@ attendeeApp.controller("players" , [
         $scope.slide_screens.slideNext();
         // => When button navigation is fired
         // => Move into attendee draft object
-        $scope.attendee_draft_collection();
+        // $scope.attendee_draft_collection();
       } catch (e) {
 
       }
@@ -1603,7 +1605,7 @@ attendeeApp.controller("players" , [
           // => When slideChange is fired
           // => Move into attendee draft object
           // if(current_index != 0)
-          // $scope.attendee_draft_collection();
+          // // $scope.attendee_draft_collection();
         });
       } catch (e) {
 
