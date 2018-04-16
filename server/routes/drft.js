@@ -228,7 +228,6 @@ drftRouter.post("/:app_id/attendee_collection/:user_id" , (req , res) => {
           res.send(respData);
         }).catch((err)=>{
           res.send({error : err});
-          return false ;
         });
       }else {
           console.log("Found it");
@@ -244,10 +243,8 @@ drftRouter.post("/:app_id/attendee_collection/:user_id" , (req , res) => {
         draftDoc.markModified('att_draft');
         draftDoc.save().then((respData)=>{
           res.send(respData);
-          return false ;
         }).catch((err)=>{
           res.send({error : err});
-          return false ;
         });
       }
   });

@@ -1240,7 +1240,16 @@ attendeeApp.controller("players" , [
                 "Content-Type": "application/json"
               } ,
             }).then(function(respData){
-              console.log(respData.data);
+              try {
+                var object_collection = respData.data ;
+                var this_attendee_index = object_collection.att_draft.findIndex(x => x.user_id == $scope.user_id) ;
+                if(this_attendee_index != -1){
+                    var this_att_object = object_collection.att_draft[this_attendee_index];
+                    $scope.question_count_at_promise = parseInt(this_att_object.questions_data.length);
+                }
+              } catch (e) {
+
+              }
             } , function(err){
               console.log(err);
             });
