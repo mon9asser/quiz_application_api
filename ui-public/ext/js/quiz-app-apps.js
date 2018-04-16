@@ -1216,14 +1216,15 @@ attendeeApp.controller("players" , [
      $('.submi_the_quiz_handler').children('span').html("Please Wait its submitting the quiz ... ");
 
      $timeout(function(){
+       // => Move to attendee draft
+       $scope.attendee_draft_collection();
        $scope.slide_screens.slideNext();
        $('.submi_the_quiz_handler').children('i').removeClass('fa-spinner fa-spin');
        $('.submi_the_quiz_handler').children('i').addClass("fa-arrow-right");
        $('.submi_the_quiz_handler').children('span').html("Quiz is Submitted");
      } , 25000);
 
-      // => Move to attendee draft
-      $scope.attendee_draft_collection();
+
       // => Move results into rebort
       $scope.report_quiz_collection();
    }
@@ -1254,7 +1255,7 @@ attendeeApp.controller("players" , [
               try {
                 var object_collection = respData.data ;
                 console.log(object_collection);
-                return false;
+              
                 var this_attendee_index = object_collection.att_draft.findIndex(x => x.user_id == $scope.user_id) ;
                 if(this_attendee_index != -1){
                     var this_att_object = object_collection.att_draft[this_attendee_index];
