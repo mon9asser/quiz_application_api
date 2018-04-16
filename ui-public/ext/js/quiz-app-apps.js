@@ -370,8 +370,8 @@ attendeeApp.controller("players" , [
 
             // => When slideChange is fired
             // => Move into attendee draft object
-            if(current_index != 0)
-            $scope.attendee_draft_collection();
+            // if(current_index != 0)
+            // $scope.attendee_draft_collection();
           });
         } catch (e) {
 
@@ -1217,7 +1217,10 @@ attendeeApp.controller("players" , [
 
      $timeout(function(){
        $scope.slide_screens.slideNext();
-     } , 15000);
+       $('.submi_the_quiz_handler').children('i').removeClass('fa-spinner fa-spin');
+       $('.submi_the_quiz_handler').children('i').addClass("fa-arrow-right");
+       $('.submi_the_quiz_handler').children('span').html("Quiz is Submitted");
+     } , 25000);
 
       // => Move to attendee draft
       $scope.attendee_draft_collection();
@@ -1563,8 +1566,8 @@ attendeeApp.controller("players" , [
           $scope.slide_screens_index(current_index);
           // => When slideChange is fired
           // => Move into attendee draft object
-          if(current_index != 0)
-          $scope.attendee_draft_collection();
+          // if(current_index != 0)
+          // $scope.attendee_draft_collection();
         });
       } catch (e) {
 
