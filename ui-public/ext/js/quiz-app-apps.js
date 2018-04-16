@@ -1221,6 +1221,9 @@ attendeeApp.controller("players" , [
        // => Move results into rebort
        $scope.report_quiz_collection();
        
+     } , 15000)
+     $timeout(function(){
+
        $scope.slide_screens.slideNext();
        $('.submi_the_quiz_handler').children('i').removeClass('fa-spinner fa-spin');
        $('.submi_the_quiz_handler').children('i').addClass("fa-arrow-right");
