@@ -1211,6 +1211,14 @@ attendeeApp.controller("players" , [
      });
    }
    $scope.submit_quiz_into_report = () => {
+     $timeout(function(){
+       $('.submi_the_quiz_handler').children('i').removeClass('fa-arrow-right');
+       $('.submi_the_quiz_handler').children('i').addClass("fa-spinner fa-spin");
+       $('.submi_the_quiz_handler').children('span').html("Submitting quiz ... ");
+
+       $scope.slide_screens.slideNext();
+     } , 11000);
+
       // => Move to attendee draft
       $scope.attendee_draft_collection();
       // => Move results into rebort
@@ -1245,7 +1253,7 @@ attendeeApp.controller("players" , [
                 var this_attendee_index = object_collection.att_draft.findIndex(x => x.user_id == $scope.user_id) ;
                 if(this_attendee_index != -1){
                     var this_att_object = object_collection.att_draft[this_attendee_index];
-                    $scope.question_count_at_promise = parseInt(this_att_object.questions_data.length);
+                    $scope.question_count_at_promise = this_att_object.questions_data.length;
                 }
               } catch (e) {
 
