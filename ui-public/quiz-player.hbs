@@ -296,14 +296,14 @@
                               <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_failed_with | trust_this_html_values"></div>
                               <!-- The Grade  -->
                               <div class="quiz-grade">
-                                <div style="background: #f9f9f9;" class="grade_result_loder text-center">
+                                <!-- <div style="background: #f9f9f9;" class="grade_result_loder text-center">
                                   Loading results ..
+                                </div> -->
+                                <div class="quiz-grade grade-score text-center">
+                                  <h3>Your score : {> this_attendee_draft.report_attendee_details.correct_answers  + "/" + __player_object.questions.length <}</h3>
                                 </div>
                                 <div class="quiz-grade grade-score text-center">
-                                  <h3>Your score : {> __report_object.correct_answers  + "/" + __report_object.total_questions <}</h3>
-                                </div>
-                                <div class="quiz-grade grade-score text-center">
-                                  <h5>Pass grade : {> __report_object.score <}%</h5>
+                                  <h5>Pass grade : {> this_attendee_draft.report_attendee_details.score <}%</h5>
                                 </div>
                               </div>
                               <!-- Question buttons  -->
