@@ -1198,6 +1198,11 @@ attendeeApp.controller("players" , [
 
    $scope.report_quiz_collection = () => {
 
+
+
+
+
+     return false ; // ==> this function is disabled 
         if($scope.attendee_draft != null && $scope.attendee_draft != undefined && $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) != -1 ){
           var dataObject = new Object() ;
           if($scope.attendee_draft != null )
@@ -1251,7 +1256,7 @@ attendeeApp.controller("players" , [
          $('.submi_the_quiz_handler').children('i').addClass("fa-arrow-right");
          $('.submi_the_quiz_handler').children('span').html("Quiz is Submitted");
        } , 20000)
-     } , 15000);
+     } , 20000);
 
 
 
