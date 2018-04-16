@@ -106,7 +106,7 @@ attendeeApp.controller("players" , [
   ( $scope, $rootScope, $timeout , $http , settings , $window ) => {
 
     // ====> Scope Variables
-
+     $scope.show_submitter_button = false ;
      $scope.is_submitted = false ;
      $scope.is_disabled = false ;
      $scope.quiz_status = 0; // => 0 => take quiz , 1 => expired warning , 2 => is expired   3 => is Completed
@@ -720,6 +720,14 @@ attendeeApp.controller("players" , [
        $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id) ;
        // => When Select answer is happened
        // => Move into attendee draft object
+
+
+
+       if($scope.is_submitted)
+          $scope.fill_unsolved_question_counts();
+         else
+         $('.warning_case').css({display:'none'});
+
        $timeout( function () {
          $scope.attendee_draft_collection();
        }, 1000);
@@ -1127,10 +1135,6 @@ attendeeApp.controller("players" , [
              }
           } // => End true/false question
 
-          if($scope.is_submitted)
-            $scope.fill_unsolved_question_counts();
-            else
-            $('.warning_case').css({display:'none'});
    };  // ==> End Select answer
     $scope.load_case_many_answer_option = (question_type , is_single_choice ) => {
           var classes = '';
@@ -1241,14 +1245,23 @@ attendeeApp.controller("players" , [
         }
    }
    $scope.submit_quiz_into_report = () => {
+     $scope.is_submitted = true ;
      $('.submi_the_quiz_handler').children('i').removeClass('fa-arrow-right');
      $('.submi_the_quiz_handler').children('i').addClass("fa-spinner fa-spin");
      $('.submi_the_quiz_handler').children('span').html("Please Wait its submitting the quiz ... ");
 
+     if( $scope.show_warning_unsolved_question() == false ){
+          $('.submi_the_quiz_handler').children('i').removeClass('fa-spinner fa-spin');
+          $('.submi_the_quiz_handler').children('i').addClass("fa-arrow-right");
+          $('.submi_the_quiz_handler').children('span').html("Submit quiz");
+        return false ;
+      }
+
+
 
      $timeout(function(){
        // => Move to attendee draft
-       // $scope.attendee_draft_collection();
+        // $scope.attendee_draft_collection();
        // => Move results into rebort
        $scope.report_quiz_collection();
 
@@ -1257,11 +1270,8 @@ attendeeApp.controller("players" , [
          $('.submi_the_quiz_handler').children('i').removeClass('fa-spinner fa-spin');
          $('.submi_the_quiz_handler').children('i').addClass("fa-arrow-right");
          $('.submi_the_quiz_handler').children('span').html("Quiz is Submitted");
-       } , 20000)
-     } , 20000);
-
-
-
+       } , 1000)
+     } , 3000);
    }
    $scope.attendee_draft_collection = function (){
       if($scope.attendee_draft != null && $scope.attendee_draft != undefined && $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) != -1 ){
@@ -1427,12 +1437,14 @@ attendeeApp.controller("players" , [
       }
     };
     $scope.fill_unsolved_question_counts = () => {
+
       if($scope.attendee_draft.att_draft == undefined || $scope.attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) == -1 ){
         // ==> This attendee didn't solve any thing
         $(".warning_case").html("You didn't solve any question , click here to attend ");
         $(".warning_case").css({display:'block'})
         return false;
       }
+
 
         var attendeeIndex = $scope.attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) ;
         var attendee = $scope.attendee_draft.att_draft.find (x => x.user_id == $scope.user_id) ;
@@ -1444,9 +1456,34 @@ attendeeApp.controller("players" , [
           $('.warning_case').html(unsolved_questions.length + " question(s) isn't attended click here to attend ");
           $(".warning_case").css({display:'block'})
           return false;
-        } else   $(".warning_case").css({display:'none'});
+        } else {
+            if(unsolved_questions.length < 1 ) {
+                // ==> Submit the quiz
+                $('.warning_case').css({
+                  background : "#C8F7C5" ,
+                  color : "#222"
+                });
+                $('.warning_case').html("Submit this quiz by clicking here");
+                $scope.show_submitter_button = true ;
+            }
+           // $(".warning_case").css({display:'none'})
+        };
     }
     $scope.go_to_not_attended_question = () => {
+
+      if($scope.show_submitter_button == true ){
+        $(".warning_case").html("<i class='fa fa-spinner fa-spin'></i> please wait while submitting the quiz ...");
+        $timeout(function(){
+          $scope.report_quiz_collection();
+          $timeout(function(){
+              $scope.slide_screens.slideTo($('.swiper-slide').length - 1);
+              $scope.freez_the_slider();
+            } , 1000);
+          } , 3000);
+
+
+      }
+
 
       if($scope.attendee_draft == null || $scope.attendee_draft.att_draft == undefined || $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) == -1 )
       {
@@ -1486,6 +1523,7 @@ attendeeApp.controller("players" , [
     }
 
     $scope.submit_quiz_into_a_report = () => {
+
       if($scope.attendee_draft.att_draft == undefined ) return false ;
       $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
       // alert($scope.this_attendee_draft);
