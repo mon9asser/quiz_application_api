@@ -340,9 +340,26 @@ attendeeApp.controller("players" , [
          $(".answer-container ul li").removeClass('selected_answer');
          $(".answer-container ul li").removeClass('right_answer');
          $(".answer-container ul li").removeClass('wrong_answer');
+         $scope.freez_the_quiz_right_now();
+         // => Set event handler
+         $scope.slide_screens.on('slideChange' , function (i){
+           $scope.touch_move++;
+           var lengther = $(this);
+           var current_index = lengther[0].activeIndex ;
+           if(current_index >= $scope.__player_object.questions.length)
+              current_index = $scope.__player_object.questions.length ;
+         $scope.curren_question_slide = parseInt(current_index) ;
+           // => Store current index
+          $scope.curren_question_slide = current_index ;
+          $scope.current_index = current_index ;
+          $scope.previous_index =lengther[0].previousIndex;
+           // => load to ui
+           $(".current-question").html($scope.curren_question_slide);
+           // => Load to next index
+           $scope.slide_screens_index(current_index);
+         });
 
          $scope.slide_screens.slideTo(1);
-         $scope.slide_screens_index(1);
          $('.retake-this-quiz').children("span").html("Retake");
          $('.retake-this-quiz').children("i").removeClass('fa-spinner fa-spin')
          $('.retake-this-quiz').children("i").addClass('fa-repeat');
