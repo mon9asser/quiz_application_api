@@ -1211,13 +1211,13 @@ attendeeApp.controller("players" , [
      });
    }
    $scope.submit_quiz_into_report = () => {
-     $timeout(function(){
-       $('.submi_the_quiz_handler').children('i').removeClass('fa-arrow-right');
-       $('.submi_the_quiz_handler').children('i').addClass("fa-spinner fa-spin");
-       $('.submi_the_quiz_handler').children('span').html("Submitting quiz ... ");
+     $('.submi_the_quiz_handler').children('i').removeClass('fa-arrow-right');
+     $('.submi_the_quiz_handler').children('i').addClass("fa-spinner fa-spin");
+     $('.submi_the_quiz_handler').children('span').html("Please Wait its submitting the quiz ... ");
 
+     $timeout(function(){
        $scope.slide_screens.slideNext();
-     } , 11000);
+     } , 15000);
 
       // => Move to attendee draft
       $scope.attendee_draft_collection();
