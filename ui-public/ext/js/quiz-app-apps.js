@@ -340,7 +340,7 @@ attendeeApp.controller("players" , [
          $(".answer-container ul li").removeClass('selected_answer');
          $(".answer-container ul li").removeClass('right_answer');
          $(".answer-container ul li").removeClass('wrong_answer');
-         $scope.freez_the_quiz_right_now();
+
          // => Set event handler
          $scope.slide_screens.on('slideChange' , function (i){
            $scope.touch_move++;
@@ -363,6 +363,9 @@ attendeeApp.controller("players" , [
          $('.retake-this-quiz').children("span").html("Retake");
          $('.retake-this-quiz').children("i").removeClass('fa-spinner fa-spin')
          $('.retake-this-quiz').children("i").addClass('fa-repeat');
+         $timeout(function(){
+           $scope.freez_the_quiz_right_now();
+         } , 1000 );
        } , 4000);
      }
      $scope.retake_this_quiz_deprecated = () => {
