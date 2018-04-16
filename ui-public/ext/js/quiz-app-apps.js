@@ -156,9 +156,9 @@ attendeeApp.controller("players" , [
        if($scope.__player_object != undefined && $scope.__player_object != null ){
        var timeSettings = $scope.__player_object.settings.time_settings;
          if(timeSettings && timeSettings != undefined || timeSettings.is_with_time){
-           $scope.seconds =timeSettings.seconds;
-           $scope.minutes =timeSettings.minutes ;
-           $scope.hours =timeSettings.hours;
+           $scope.seconds = timeSettings.seconds;
+           $scope.minutes = timeSettings.minutes ;
+           $scope.hours   = timeSettings.hours;
          }
        }
      }
@@ -200,27 +200,20 @@ attendeeApp.controller("players" , [
          $scope.slide_screens_index($scope.__player_object.questions.length);
        }
      };
-     $scope.do_an_action_with_closest_time = () => {
-       $scope.submit_quiz_into_a_report();
-       $scope.quiz_status = 3 ;
-       try {
-         $scope.slide_screens.slideTo(0);
-         $scope.slide_screens.allowSlidePrev = false ;
-         $scope.slide_screens.allowSlideNext = false ;
-         $scope.slide_screens.allowTouchMove = false ;
-         $scope.slide_screens.noSwiping = false ;
-       } catch (e){}
-       $scope.time__calculation_compilation();
-       $scope.progress__calculation_compilation();
-     };
+
 
      $scope.do_an_action_with_closest_time = () => {
          // => Calculate the quiz time and progress bar
          $scope.time__calculation_compilation();
          $scope.progress__calculation_compilation();
          // => Freeze the quiz right now !
-         $scope.slide_screens.slideTo(0);
-         $scope.freez_the_quiz_right_now();
+         $scope.slide_screens.slideTo($('.swiper-slide').length - 1);
+         $timeout(function () {
+           $scope.attendee_draft_collection();
+           $scope.report_quiz_collection();
+           $scope.freez_the_quiz_right_now();
+         }, 200);
+
      };
      $scope.load_time_tracker  = () => {
        if( $scope.quiz_time_status_is_counting){
@@ -265,9 +258,23 @@ attendeeApp.controller("players" , [
              if(is_hourly){
                 hrs.html( ( $scope.hours < 10 ) ? '0'+$scope.hours : $scope.hours);
              }
+
+             // => Storing data into array
+             $scope.store_the_current_time();
             //  $scope.time__calculation_compilation(true);
              $scope.load_quiz_timer();
       }
+     };
+     $scope.store_the_current_time = () => {
+       if($scope.attendee_draft != null && $scope.attendee_draft.att_draft != undefined ) {
+         var current_attendee_index = $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id );
+         if(current_attendee_index != -1 ){
+           var current_attendee = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id );
+           current_attendee.impr_application_object.settings.time_settings.hours    = $scope.hours;
+           current_attendee.impr_application_object.settings.time_settings.minutes  = $scope.minutes;
+           current_attendee.impr_application_object.settings.time_settings.seconds  = $scope.seconds;
+         }
+       }
      };
      $scope.load_quiz_timer = () => {
        if($scope.__player_object.settings != undefined ){
@@ -306,7 +313,39 @@ attendeeApp.controller("players" , [
       });
 
     }
-    $scope.retake_this_quiz = () => {
+     $scope.retake_this_quiz = () => {
+       $scope.load_main_attendee_application();
+       $('.retake-this-quiz').children("span").html("Please wait ..");
+       $('.retake-this-quiz').children("i").removeClass('fa-repeat')
+       $('.retake-this-quiz').children("i").addClass('fa-spinner fa-spin');
+
+       if($scope.attendee_draft != null && $scope.attendee_draft.att_draft != undefined){
+          var curIndex = $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id );
+          if(curIndex != -1 ){
+            // ==> Delete this user now
+            $scope.attendee_draft.att_draft.splice(curIndex , 1);
+          }
+       }
+       $scope.quiz_time_status_is_counting = true ;
+
+       $timeout(function(){
+
+         $scope.load_template_timer();
+         $scope.join_this_quiz();
+         $scope.load_quiz_timer ();
+         $scope.is_submitted = false ;
+         $scope.slide_screens = new Swiper('.swiper-container') ;
+         $(".answer-container ul li").removeClass('selected_answer');
+         $(".answer-container ul li").removeClass('right_answer');
+         $(".answer-container ul li").removeClass('wrong_answer');
+
+         $scope.slide_screens.slideTo(1);
+         $('.retake-this-quiz').children("span").html("Retake");
+         $('.retake-this-quiz').children("i").removeClass('fa-spinner fa-spin')
+         $('.retake-this-quiz').children("i").addClass('fa-repeat');
+       } , 4000);
+     }
+     $scope.retake_this_quiz_deprecated = () => {
       // ==> Destroy ==> Attendee object from anywhere
       // 1 => attebdee_draft mongo object
       // 2 => attendee_draft angular object
@@ -338,6 +377,7 @@ attendeeApp.controller("players" , [
       });
     }
     $scope.review_all_resolved_question = () => {
+        $scope.is_review = true ;
       // ==> Get application and change the value related settings
       if(!$scope.this_attendee_draft || $scope.this_attendee_draft == null || $scope.this_attendee_draft == undefined )
         return false ;
@@ -1255,7 +1295,7 @@ attendeeApp.controller("players" , [
         }
    }
    $scope.submit_quiz_into_report = () => {
-
+     $scope.is_review = false ;
      $scope.is_submitted = true ;
      $('.submi_the_quiz_handler').children('i').removeClass('fa-arrow-right');
      $('.submi_the_quiz_handler').children('i').addClass("fa-spinner fa-spin");
@@ -1272,7 +1312,7 @@ attendeeApp.controller("players" , [
 
      $timeout(function(){
        // => Move to attendee draft
-        // $scope.attendee_draft_collection();
+       $scope.attendee_draft_collection();
        // => Move results into rebort
        $scope.report_quiz_collection();
 
@@ -1300,8 +1340,8 @@ attendeeApp.controller("players" , [
              // increase performace in express server nodejs
           }
 
-        if(($scope.question_count_at_promise != parseInt($scope.__player_object.questions.length)) && $scope.is_review  == false ){
-            console.log("Saved Qs Number " + $scope.question_count_at_promise);
+         // if(($scope.question_count_at_promise != parseInt($scope.__player_object.questions.length)) && $scope.is_review  == false ){
+            console.log(" This Question is reviewed !! ====>=> " + $scope.question_count_at_promise);
             $http({
               url : $scope.url_attendee_draft_collecation ,
               method: "POST",
@@ -1325,7 +1365,7 @@ attendeeApp.controller("players" , [
             } , function(err){
               console.log(err);
             });
-        } // => End if case
+
 
 
 
@@ -1335,7 +1375,7 @@ attendeeApp.controller("players" , [
 
     };
 
-    $scope.join_this_quiz = () => {
+    $scope.join_this_quiz = (at_this_array_only = null ) => {
       if($scope.attendee_draft != null && $scope.attendee_draft.att_draft != undefined && $scope.attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) != -1)
         return false ;
 
@@ -1365,7 +1405,12 @@ attendeeApp.controller("players" , [
 
         $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
         // => Move into attendee draft object
-        // $scope.attendee_draft_collection();
+        if( at_this_array_only == null ){
+          $timeout(function(){
+            $scope.attendee_draft_collection();
+          } , 1500 );
+        }
+
     };
     $scope.start_this_quiz = () => {
       $scope.join_this_quiz();
@@ -1524,6 +1569,35 @@ attendeeApp.controller("players" , [
           }
       }
     };
+
+    $scope.freez_the_quiz_right_now = () => {
+      try {
+        // ==> Freeze the slider application
+          $scope.slide_screens.allowSlidePrev = true ;
+          $scope.slide_screens.allowSlideNext = true ;
+
+          // Load The quiz from database right now
+
+          if($scope.__player_object != null && $scope.__player_object.settings != undefined){
+            $scope.slide_screens.allowTouchMove = $scope.__player_object.settings.allow_touch_move ;
+            $scope.slide_screens.noSwiping = $scope.__player_object.settings.allow_touch_move ;
+            $scope.slide_screens.touches = $scope.__player_object.settings.allow_touch_move ;
+          }
+          // extract this time
+        // ==> Stop the timer if it active
+
+        if($scope.__player_object != null && $scope.__player_object.settings != undefined){
+
+          if($scope.__player_object.settings.time_settings.is_with_time)
+             $scope.quiz_time_status_is_counting = false ;
+        }
+
+      } catch (e) {
+
+      }
+    }
+
+
     $scope.freez_the_quiz_right_now = () => {
       try {
         // ==> Freeze the slider application
