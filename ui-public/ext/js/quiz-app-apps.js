@@ -329,7 +329,7 @@ attendeeApp.controller("players" , [
        $scope.quiz_time_status_is_counting = true ;
 
        $timeout(function(){
-         $scope.slide_screens_index(1);
+
          $scope.load_template_timer();
          $scope.join_this_quiz();
          $scope.load_quiz_timer ();
@@ -340,6 +340,7 @@ attendeeApp.controller("players" , [
          $(".answer-container ul li").removeClass('wrong_answer');
 
          $scope.slide_screens.slideTo(1);
+         $scope.slide_screens_index(1);
          $('.retake-this-quiz').children("span").html("Retake");
          $('.retake-this-quiz').children("i").removeClass('fa-spinner fa-spin')
          $('.retake-this-quiz').children("i").addClass('fa-repeat');
