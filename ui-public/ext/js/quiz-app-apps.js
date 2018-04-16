@@ -329,7 +329,7 @@ attendeeApp.controller("players" , [
        $scope.quiz_time_status_is_counting = true ;
 
        $timeout(function(){
-         $scope.slide_screens_index(2);
+         $scope.slide_screens_index(1);
          $scope.load_template_timer();
          $scope.join_this_quiz();
          $scope.load_quiz_timer ();
