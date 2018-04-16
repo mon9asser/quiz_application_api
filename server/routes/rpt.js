@@ -1307,6 +1307,9 @@ rptRouters.post("/:app_id/report_collection/:user_id" , (req , res) => {
 
   var attendee_draft = req.body.attendee_draft;
 
+  rpt.findOne({questionnaire_id : app_id} , (error , reptDoc) => {
+    res.send({message : "This api will design according to data capacity"});
+  });
 
 });
 

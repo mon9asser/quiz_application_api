@@ -1197,18 +1197,41 @@ attendeeApp.controller("players" , [
             };
 
    $scope.report_quiz_collection = () => {
-     $http({
-       url : $scope.url_report_collecation ,
-       method: "POST",
-       data : { attendee_draft : $scope.attendee_draft } ,
-       headers : {
-         "Content-Type": "application/json"
-       } ,
-     }).then(function(response){
-       console.log(response.data);
-     } , function(err){
-       console.log(err);
-     });
+
+        if($scope.attendee_draft != null && $scope.attendee_draft != undefined && $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) != -1 ){
+          var dataObject = new Object() ;
+          if($scope.attendee_draft != null )
+            {
+              dataObject['att_draft']  = new Array();
+              dataObject['application_id'] = $scope.application_id;
+              dataObject['questionnaire_info'] = $scope.application_id  ;
+              var sAtt = $scope.attendee_draft.att_draft.find (x => x.user_id == $scope.user_id) ;
+              if( sAtt  != undefined )
+               dataObject.att_draft.push(  $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id));
+               // increase performace in express server nodejs
+            }
+
+          if(($scope.question_count_at_promise != parseInt($scope.__player_object.questions.length)) && $scope.is_review  == false ){
+              console.log("Saved Qs Number " + $scope.question_count_at_promise);
+              $http({
+                url : $scope.url_report_collecation ,
+                method: "POST",
+                data : { attendee_draft : dataObject } ,
+                headers : {
+                  "Content-Type": "application/json"
+                } ,
+              }).then(function(respData){
+                 console.log(respData.data);
+              } , function(err){
+                console.log(err);
+              });
+          } // => End if case
+
+
+
+
+
+        }
    }
    $scope.submit_quiz_into_report = () => {
      $('.submi_the_quiz_handler').children('i').removeClass('fa-arrow-right');
