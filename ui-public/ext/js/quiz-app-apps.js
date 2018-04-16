@@ -106,6 +106,7 @@ attendeeApp.controller("players" , [
   ( $scope, $rootScope, $timeout , $http , settings , $window ) => {
 
     // ====> Scope Variables
+     $scope.quiz_time_status_is_counting = true ;
      $scope.show_submitter_button = false ;
      $scope.is_submitted = false ;
      $scope.is_disabled = false ;
@@ -213,58 +214,67 @@ attendeeApp.controller("players" , [
        $scope.progress__calculation_compilation();
      };
 
+     $scope.do_an_action_with_closest_time = () => {
+         // => Calculate the quiz time and progress bar
+         $scope.time__calculation_compilation();
+         $scope.progress__calculation_compilation();
+         // => Freeze the quiz right now !
+         $scope.slide_screens.slideTo(0);
+         $scope.freez_the_quiz_right_now();
+     };
      $scope.load_time_tracker  = () => {
+       if( $scope.quiz_time_status_is_counting){
+             var sec  = $('.sec');
+             var mins = $('.min');
+             var hrs  = $('.hr');
 
-       var sec  = $('.sec');
-       var mins = $('.min');
-       var hrs  = $('.hr');
+             var is_hourly = $scope.__player_object.settings.time_settings.timer_type ;
 
-       var is_hourly = $scope.__player_object.settings.time_settings.timer_type ;
-
-       // ==> Check if all with 0 value
-       if(is_hourly){
-         if($scope.seconds == 0 && $scope.minutes == 0 && $scope.hours == 0)
-          {
-            $scope.do_an_action_with_closest_time();
-            return false ;
-          }
-       }else {
-          if( $scope.seconds == 0 && $scope.minutes == 0 )
-              {
-                $scope.do_an_action_with_closest_time();
-                return false ;
-              }
-       }
+             // ==> Check if all with 0 value
+             if(is_hourly){
+               if($scope.seconds == 0 && $scope.minutes == 0 && $scope.hours == 0)
+                {
+                  $scope.do_an_action_with_closest_time();
+                  return false ;
+                }
+             }else {
+                if( $scope.seconds == 0 && $scope.minutes == 0 )
+                    {
+                      $scope.do_an_action_with_closest_time();
+                      return false ;
+                    }
+             }
 
 
-       // ==> seconds and minutes object
-       $scope.seconds--;
-       if( $scope.seconds < 0 ){
-           $scope.seconds = 59;
-           $scope.minutes--;
-       }
+             // ==> seconds and minutes object
+             $scope.seconds--;
+             if( $scope.seconds < 0 ){
+                 $scope.seconds = 59;
+                 $scope.minutes--;
+             }
 
-       if(is_hourly){
-         if($scope.minutes < 00 && $scope.hours > 0 ) {
-           $scope.minutes = 59;
-           $scope.hours--;
-         }
-       }
-       // ==> Html Values
-       sec.html(($scope.seconds < 10 ) ? '0'+ $scope.seconds : $scope.seconds);
-       mins.html(($scope.minutes < 10 ) ? '0'+$scope.minutes:$scope.minutes );
-       if(is_hourly){
-          hrs.html( ( $scope.hours < 10 ) ? '0'+$scope.hours : $scope.hours);
-       }
-      //  $scope.time__calculation_compilation(true);
-       $scope.load_quiz_timer();
+             if(is_hourly){
+               if($scope.minutes < 00 && $scope.hours > 0 ) {
+                 $scope.minutes = 59;
+                 $scope.hours--;
+               }
+             }
+             // ==> Html Values
+             sec.html(($scope.seconds < 10 ) ? '0'+ $scope.seconds : $scope.seconds);
+             mins.html(($scope.minutes < 10 ) ? '0'+$scope.minutes:$scope.minutes );
+             if(is_hourly){
+                hrs.html( ( $scope.hours < 10 ) ? '0'+$scope.hours : $scope.hours);
+             }
+            //  $scope.time__calculation_compilation(true);
+             $scope.load_quiz_timer();
+      }
      };
      $scope.load_quiz_timer = () => {
        if($scope.__player_object.settings != undefined ){
          var timeSettings = $scope.__player_object.settings.time_settings;
 
          if(timeSettings && timeSettings.is_with_time)
-         $scope.timer = setTimeout($scope.load_time_tracker , 1000);
+            $scope.timer = setTimeout($scope.load_time_tracker , 1000);
        }
      };
 
@@ -1245,6 +1255,7 @@ attendeeApp.controller("players" , [
         }
    }
    $scope.submit_quiz_into_report = () => {
+
      $scope.is_submitted = true ;
      $('.submi_the_quiz_handler').children('i').removeClass('fa-arrow-right');
      $('.submi_the_quiz_handler').children('i').addClass("fa-spinner fa-spin");
@@ -1270,6 +1281,8 @@ attendeeApp.controller("players" , [
          $('.submi_the_quiz_handler').children('i').removeClass('fa-spinner fa-spin');
          $('.submi_the_quiz_handler').children('i').addClass("fa-arrow-right");
          $('.submi_the_quiz_handler').children('span').html("Quiz is Submitted");
+         // freez the slider right now
+         $scope.freez_the_quiz_right_now();
        } , 1000)
      } , 3000);
    }
@@ -1477,7 +1490,7 @@ attendeeApp.controller("players" , [
           $scope.report_quiz_collection();
           $timeout(function(){
               $scope.slide_screens.slideTo($('.swiper-slide').length - 1);
-              $scope.freez_the_slider();
+              $scope.freez_the_quiz_right_now();
             } , 1000);
           } , 3000);
 
@@ -1511,12 +1524,21 @@ attendeeApp.controller("players" , [
           }
       }
     };
-    $scope.freez_the_slider = () => {
+    $scope.freez_the_quiz_right_now = () => {
       try {
-        $scope.slide_screens.allowSlidePrev = false ;
-        $scope.slide_screens.allowSlideNext = false ;
-        $scope.slide_screens.allowTouchMove = false ;
-        $scope.slide_screens.noSwiping = false ;
+        // ==> Freeze the slider application
+          $scope.slide_screens.allowSlidePrev = false ;
+          $scope.slide_screens.allowSlideNext = false ;
+          $scope.slide_screens.allowTouchMove = false ;
+          $scope.slide_screens.noSwiping = false ;
+        // ==> Stop the timer if it active
+
+        if($scope.__player_object != null && $scope.__player_object.settings != undefined){
+
+          if($scope.__player_object.settings.time_settings.is_with_time)
+             $scope.quiz_time_status_is_counting = false ;
+        }
+
       } catch (e) {
 
       }
@@ -1545,7 +1567,7 @@ attendeeApp.controller("players" , [
                 $('.resultx-x-grade').html($scope.__report_object.score + '%');
 
                 // freez the slider right now
-                $scope.freez_the_slider();
+                $scope.freez_the_quiz_right_now();
 
                 $timeout(function(){
                   $('.grade_result_loder').fadeOut();
