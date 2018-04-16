@@ -1215,20 +1215,19 @@ attendeeApp.controller("players" , [
      $('.submi_the_quiz_handler').children('i').addClass("fa-spinner fa-spin");
      $('.submi_the_quiz_handler').children('span').html("Please Wait its submitting the quiz ... ");
 
+
      $timeout(function(){
        // => Move to attendee draft
        $scope.attendee_draft_collection();
        // => Move results into rebort
        $scope.report_quiz_collection();
-       
-     } , 15000)
-     $timeout(function(){
-
        $scope.slide_screens.slideNext();
-       $('.submi_the_quiz_handler').children('i').removeClass('fa-spinner fa-spin');
-       $('.submi_the_quiz_handler').children('i').addClass("fa-arrow-right");
-       $('.submi_the_quiz_handler').children('span').html("Quiz is Submitted");
-     } , 30000);
+       $timeout(function(){
+         $('.submi_the_quiz_handler').children('i').removeClass('fa-spinner fa-spin');
+         $('.submi_the_quiz_handler').children('i').addClass("fa-arrow-right");
+         $('.submi_the_quiz_handler').children('span').html("Quiz is Submitted");
+       } , 20000)
+     } , 15000);
 
 
 
