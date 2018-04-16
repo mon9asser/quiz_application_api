@@ -365,7 +365,8 @@ attendeeApp.controller("players" , [
          $('.retake-this-quiz').children("i").addClass('fa-repeat');
          $timeout(function(){
            $scope.freez_the_quiz_right_now();
-           $scope.slide_screens.noSwiping = true ;
+           $scope.slide_screens.noSwiping = false ;
+          //  $scope.slide_screens.touches = true ;
          } , 1000 );
        } , 4000);
      }
