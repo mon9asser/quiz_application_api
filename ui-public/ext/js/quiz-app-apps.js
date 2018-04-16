@@ -329,6 +329,8 @@ attendeeApp.controller("players" , [
        $scope.quiz_time_status_is_counting = true ;
 
        $timeout(function(){
+         $('.warning_case').removeClass("submit_quiz_now_xx");
+         $scope.show_submitter_button = false ;
 
          $scope.load_template_timer();
          $scope.join_this_quiz();
@@ -1518,10 +1520,7 @@ attendeeApp.controller("players" , [
         } else {
             if(unsolved_questions.length < 1 ) {
                 // ==> Submit the quiz
-                $('.warning_case').css({
-                  background : "#C8F7C5" ,
-                  color : "#222"
-                });
+                $('.warning_case').addClass("submit_quiz_now_xx");
                 $('.warning_case').html("Submit this quiz by clicking here");
                 $scope.show_submitter_button = true ;
             }
