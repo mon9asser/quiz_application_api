@@ -1253,6 +1253,8 @@ attendeeApp.controller("players" , [
             }).then(function(respData){
               try {
                 var object_collection = respData.data ;
+                console.log(object_collection);
+                return false;
                 var this_attendee_index = object_collection.att_draft.findIndex(x => x.user_id == $scope.user_id) ;
                 if(this_attendee_index != -1){
                     var this_att_object = object_collection.att_draft[this_attendee_index];

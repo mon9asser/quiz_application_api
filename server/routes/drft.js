@@ -212,6 +212,9 @@ drft.findOne({application_id: app_id } , (err , draftDocument) => {
 // => server_ip/api/:app_id/attendee_collection/:user_id
 drftRouter.post("/:app_id/attendee_collection/:user_id" , (req , res) => {
   var attendee_draft = req.body.attendee_draft;
+  res.send(attendee_draft);
+  
+  return false ;
   var attendee_id = req.params.user_id;
   var app_id = req.params.app_id ;
   if(req.body.attendee_draft == null){
