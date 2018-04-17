@@ -1304,11 +1304,75 @@ rptRouters.post("/:app_id/report_collection/:user_id" , (req , res) => {
     res.send({err:"Unfound attendee_draft"})
     return false ;
   }
-
+  var app_id = req.params.app_id;
+  var user_id = req.params.user_id;
   var attendee_draft = req.body.attendee_draft;
 
   rpt.findOne({questionnaire_id : app_id} , (error , reptDoc) => {
-    res.send({message : "This api will design according to data capacity"});
+
+    var attendee_object_index = attendee_draft.att_draft.findIndex( x => x.user_id == user_id );
+    if(attendee_object_index != -1 ){
+      var attendee_obka = attendee_draft.att_draft.find ( x => x.user_id == user_id );
+      var rptObject = new Object();
+
+
+
+      if(!reptDoc){ // Add new Report
+
+        rptObject['attendees'] = attendee_obka.report_attendees;
+        rptObject['history'] = new Array({
+          date_made :  date_made().toString()  ,
+          attendee_counts : 1
+        });
+        rptObject['statistics'] = new Array();
+        rptObject['attendee_details']  = attendee_obka.report_attendee_details;
+        rptObject['questionnaire_id'] = app_id;
+        rptObject['questionnaire_info'] = app_id;
+        rptObject['app_type'] =  attendee_obka.impr_application_object.app_type ;
+        rptObject['creator_id'] = attendee_obka.impr_application_object.creator_id ;
+        rptObject['created_at'] = new Date();
+        rptObject['updated_at'] = new Date();
+        var reporting = new rpt(rptObject);
+        reporting.save().then((rptgObject)=>{
+          res.send(rptgObject);
+        }).catch((err)=>{
+          res.send(err);
+        });
+      }else { // Update the current report
+
+        // ==> Attendee
+          var AttendeeDocument = reptDoc.attendees.findIndex(x => x.attendee_id == user_id);
+          if(AttendeeDocument == -1 )  // => push new
+            reptDoc.attendees.push(attendee_obka.report_attendees);
+           else   // update the current
+            reptDoc.attendees[AttendeeDocument] =  attendee_obka.report_attendees;
+
+        // ==> Details
+          var AttendeeDetails = reptDoc.attendee_details.findIndex(x => x.attendee_id == user_id);
+          if(AttendeeDetails == -1 )  // => push new
+            reptDoc.attendee_details.push(attendee_obka.report_attendee_details);
+           else   // update the current
+            reptDoc.attendee_details[AttendeeDetails] = attendee_obka.report_attendee_details ;
+
+        // ==> History object
+        var dateMadeHistory = reptDoc.history.findIndex(x => x.date_made == date_made().toString() );
+        if(dateMadeHistory != -1 )
+          reptDoc.history[dateMadeHistory].attendee_counts =  reptDoc.history[dateMadeHistory].attendee_counts + 1 ;
+        else
+          reptDoc.history.push({
+            date_made :  date_made().toString()  ,
+            attendee_counts : 1
+          });
+
+         reptDoc.markModified("attendees");
+         reptDoc.save().then((rptgObject)=>{
+           res.send(rptgObject);
+         }).catch((err)=>{
+           res.send(err);
+         });
+
+      }
+    }
   });
 
 });

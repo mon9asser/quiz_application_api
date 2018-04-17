@@ -616,6 +616,7 @@ attendeeApp.controller("players" , [
                     var isPassed = ( percentage >= app_grade_value )? true : false ;
                     var is_completed = ( total_app_questions == attendeeInfo.questions_data.length ) ? true : false ;
 
+                    attendeeInfo.is_completed = is_completed ;
                     attendeeInfo.report_attendee_details.attendee_id = $scope.user_id ;
                     attendeeInfo.report_attendee_details.attendee_information = $scope.user_id ;
                     attendeeInfo.report_attendee_details.total_questions = attendeeInfo.questions_data.length ;
@@ -732,6 +733,7 @@ attendeeApp.controller("players" , [
                    var isPassed = ( percentage >= app_grade_value )? true : false ;
                    var is_completed = ( total_app_questions == attendeeInfo.questions_data.length ) ? true : false ;
 
+                   attendeeInfo.is_completed = is_completed ;
                    attendeeInfo.report_attendee_details.total_questions = attendeeInfo.questions_data.length ;
                    attendeeInfo.report_attendee_details.pass_mark = isPassed ,
                    attendeeInfo.report_attendee_details.correct_answers =  correct_questions ,
@@ -1275,48 +1277,7 @@ attendeeApp.controller("players" , [
               return '/progressbar-layouts/layout-'+layout_template+'.hbs';
             };
 
-   $scope.report_quiz_collection = () => {
 
-
-
-
-
-     return false ; // ==> this function is disabled
-        if($scope.attendee_draft != null && $scope.attendee_draft != undefined && $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) != -1 ){
-          var dataObject = new Object() ;
-          if($scope.attendee_draft != null )
-            {
-              dataObject['att_draft']  = new Array();
-              dataObject['application_id'] = $scope.application_id;
-              dataObject['questionnaire_info'] = $scope.application_id  ;
-              var sAtt = $scope.attendee_draft.att_draft.find (x => x.user_id == $scope.user_id) ;
-              if( sAtt  != undefined )
-               dataObject.att_draft.push(  $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id));
-               // increase performace in express server nodejs
-            }
-
-          if(($scope.question_count_at_promise != parseInt($scope.__player_object.questions.length)) && $scope.is_review  == false ){
-              console.log("Saved Qs Number " + $scope.question_count_at_promise);
-              $http({
-                url : $scope.url_report_collecation ,
-                method: "POST",
-                data : { attendee_draft : dataObject } ,
-                headers : {
-                  "Content-Type": "application/json"
-                } ,
-              }).then(function(respData){
-                 console.log(respData.data);
-              } , function(err){
-                console.log(err);
-              });
-          } // => End if case
-
-
-
-
-
-        }
-   }
    $scope.submit_quiz_into_report = () => {
      $scope.is_review = false ;
      $scope.is_submitted = true ;
@@ -1348,6 +1309,33 @@ attendeeApp.controller("players" , [
          $scope.freez_the_quiz_right_now();
        } , 1000)
      } , 3000);
+   }
+   $scope.report_quiz_collection = () => {
+     if($scope.attendee_draft != null && $scope.attendee_draft != undefined && $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) != -1 ){
+       var dataObject = new Object() ;
+       if($scope.attendee_draft != null )
+         {
+           dataObject['att_draft']  = new Array();
+           dataObject['application_id'] = $scope.application_id;
+           dataObject['questionnaire_info'] = $scope.application_id  ;
+           var sAtt = $scope.attendee_draft.att_draft.find (x => x.user_id == $scope.user_id) ;
+           if( sAtt  != undefined )
+            dataObject.att_draft.push(  $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id));
+            // increase performace in express server nodejs
+         }
+         $http({
+           url : $scope.url_report_collecation ,
+           method: "POST",
+           data : { attendee_draft : dataObject } ,
+           headers : {
+             "Content-Type": "application/json"
+           } ,
+         }).then(function(reData){
+           console.log(reData);
+         } , function (err){
+           console.log(err);
+         });
+     }
    }
    $scope.attendee_draft_collection = function (){
       if($scope.attendee_draft != null && $scope.attendee_draft != undefined && $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) != -1 ){
@@ -1831,6 +1819,7 @@ attendeeApp.controller("players" , [
             var days = Math.round(time_diff / ( 1000 * parseInt(60*60*24) ));
             if(days < 0 ) {
               // alert("Quiz is expired !");
+
               $scope.slide_screens.allowSlidePrev = false ;
               $scope.slide_screens.allowSlideNext = false ;
               $scope.slide_screens.allowTouchMove = false ;
