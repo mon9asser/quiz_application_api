@@ -2980,3 +2980,10 @@ button.saving-settings-changes:hover{
 .expire-title:active{
 margin-bottom: 0px !important;
 }
+.ifram-contaier {
+  outline: 0px;
+  border: 1px dashed #dfdfdf;
+  width: 100%;
+  min-height: 450px;
+  margin: 10px auto;
+}

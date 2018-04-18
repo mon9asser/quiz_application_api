@@ -65,26 +65,21 @@ viewRouters.get('/attendees' , verify_session , ( req , res )=>{
   }
 });
 
-
-
-
-
-
 // ======================================================
 // ===========>>>>>>>>> Views preview_iframe
 // ======================================================
-viewRouters.get('/:app_id/live_preview' , verify_session , ( req , res )=>{
+viewRouters.get('/:app_id/live_preview/:user_id'  , ( req , res )=>{
   var app_id = req.params.app_id;
-  var user = req.session.userInfo ;
-  qtnr.findOne({_id : app_id }).then((doc)=> {
+  var user_id = req.params.user_id;
+   qtnr.findOne({_id : app_id }).then((doc)=> {
     if( !doc ){
-     return new Promise((resolve, reject) => {
+     return new Promise((resolve , reject) => {
         res.status(404).send({error : "There are no any applications with this id ! , invalid id"});
         return false;
      });
    }
 
-   if(doc.creator_id != user.id ){
+   if(doc.creator_id != user_id ){
      return new Promise((resolve, reject) => {
           res.status(404).send({permission_denied :"You have no rights to see view this quiz "});
           return false;
@@ -92,12 +87,17 @@ viewRouters.get('/:app_id/live_preview' , verify_session , ( req , res )=>{
    }
 
   res.render("preview_iframe",{
-       user : req.session.userInfo ,
+       user : user_id ,
        myApps : doc ,
        server_ip : config.server_ip
    });
 
-  });
+ }).catch((err)=>{
+   res.send({
+     message : 'An error occurred !' ,
+     error : err
+   });
+ });
 });
 
 // ======================================================

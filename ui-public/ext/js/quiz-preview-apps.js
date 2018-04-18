@@ -74,55 +74,61 @@ attendeeApp.filter('trust_this_html_values' , [
     }
   }
 ]);
-attendeeApp.controller("preview_player" , [
+attendeeApp.controller("preview_players" , [
   '$scope' , '$rootScope' , '$timeout' , '$http' , 'settings' , '$window',
 ( $scope, $rootScope, $timeout , $http , settings , $window  ) => {
-  // => Scopes
-  $scope.__player_object = null ;
-  $scope.server_ip = $("#server_ip").val();
-  $scope.user_id = $("#user_id").val();
-  $scope.app_id = $("input").val();
-  $scope.slide_screens = null;
-  $scope.json_source = $scope.server_ip + settings.json_source;
-  $scope.quiz_status = 0 ;
-  $scope.api_key_headers = null ;
-  // => Urls
-  $scope.url_application = $scope.server_ip + "api/" + $scope.app_id +'/application/retrieve';
-  alert($("input").eq(2).attr('id');
 
-  // => application key
+    // ==> Scope init
+    $scope.app_id              = $("#app-id").val();
+    $scope.server_ip           = $("#server_ip").val();
+    $scope.user_id             = $("#user_id").val();
+    $scope.json_source         = $scope.server_ip + settings.json_source;
+    $scope.__player_object     = null;
+    $scope.this_attendee_draft = null;
+    $scope.api_key_headers     = null;
 
-  // => funcs
+    // => Urls
+    $scope.url_application = $scope.server_ip + "api/" + $scope.app_id +'/application/retrieve';
 
-  $scope.load_application_for_preview = () => {
+    // => Functionalities
+    $scope.get_slide_styles = () => {};
+    $scope.start_this_quiz = () => {};
+    $scope.back_to_quizzes = () => {};
+    $scope.load_quiz_status_theme = () => {};
+    $scope.load_application_for_preview = () => {
+          $http({
+            url : $scope.url_application ,
+            type : "GET" ,
+            headers : $scope.api_key_headers
+          }).then(function(resp){
+            $scope.__player_object = resp.data ;
+            console.log({
+              Player : $scope.__player_object
+            });
+          },function(err){ console.log(err); });
+      };
+    $scope.load_application_keys = () => {
+      $.getJSON( $scope.json_source , function (apk_keys){
+        $scope.api_key_headers = {
+          "X-api-app-name":apk_keys.APP_NAME ,
+          "X-api-keys":apk_keys.API_KEY
+        }
+         $scope.api_key_headers ;
 
-    alert($scope.url_application)
-    $http({
-      url : $scope.url_application ,
-      type : "GET" ,
-      headers : $scope.api_key_headers
-    }).then(function(resp){
-      $scope.__player_object = resp.data ;
-      console.log($scope.__player_object);
-      $scope.slide_screens = Swiper('.swiper-container') ;
-    },function(err){ console.log(err); });
-  }
-  $scope.load_application_keys = () => {
-    $.getJSON( $scope.json_source , function (apk_keys){
-      $scope.api_key_headers = {
-        "X-api-app-name":apk_keys.APP_NAME ,
-        "X-api-keys":apk_keys.API_KEY
-      }
-       $scope.api_key_headers ;
+         // ==> calling funcstionalities
+         $scope.load_application_for_preview();
+         // ...
+      });
+    }
+    $scope.time_tracker_layout = () => {
+      var layout_template = $scope.__player_object.settings.time_settings.timer_layout;
+      return '/time-layouts/layout-'+layout_template+'.hbs';
+    };
+    $scope.progression_layout = () => {
+       var layout_template = $scope.__player_object.settings.progression_bar.progression_bar_layout;
+       return '/progressbar-layouts/layout-'+layout_template+'.hbs';
+     };
 
-       // ==> calling funcstionalities
-       $scope.load_application_for_preview();
-       // ...
-    });
-  }
-
-  // ==> Exc funcs
-  $scope.load_application_keys();
-
-
+    // => Fire those fn.
+    $scope.load_application_keys();
 }]);
