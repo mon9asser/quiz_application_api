@@ -128,7 +128,7 @@ attendeeApp.controller("preview_players" , [
        var layout_template = $scope.__player_object.settings.progression_bar.progression_bar_layout;
        return '/progressbar-layouts/layout-'+layout_template+'.hbs';
      };
-
+ 
     // => Fire those fn.
     $scope.load_application_keys();
 }]);
