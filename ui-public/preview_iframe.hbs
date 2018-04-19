@@ -1,12 +1,17 @@
 {{> attendee_preview_head }}
- <div class="container-fluid-x" ng:controller="preview_players">
+<style media="screen">
+  html , body {
+    overflow: hidden;
+  }
+</style>
+ <div class="container-fluid-x preview_player_container" ng:controller="preview_players">
     <!-- Quiz tool  -->
-      <div class="quizapp-tools">
+      <div class="quizapp-tools" ng:if="__player_object.settings.time_settings.is_with_time == true || __player_object.settings.progression_bar.is_available == true">
         <!-- ++++++++++++ +++++++++++++ -->
         <!-- Tool_options -->
         <!-- ++++++++++++ +++++++++++++ -->
         <div class="tool-obj">
-           <div class="object-layouts" ng:if="__player_object.settings.time_settings.is_with_time == true || __player_object.settings.progression_bar.is_available == true">
+           <div class="object-layouts">
              <div class="object-layouts-container">
                <!-- Time tracker -->
                <div class="tracker" ng:include="time_tracker_layout()" ng:if="__player_object.settings.time_settings.is_with_time == true"></div>
@@ -28,10 +33,10 @@
                   <div>
                       <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
                       <div class="qusu-details text-right">
-                          <button ng:click="back_to_quizzes()" class="button-take-this" type="button" name="button">
+                          <!-- <button ng:click="back_to_quizzes()" class="button-take-this" type="button" name="button">
                               <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                               Back
-                          </button>
+                          </button> -->
                           <button ng:click="start_this_quiz()" class="button-take-this" type="button" name="button">
                               <i class="fa fa-sign-in" aria-hidden="true"></i>
                               Take this Quiz
@@ -48,7 +53,7 @@
                  <!-- Question Container -->
                  <div class="question-container">
                    <div ng:class="load_qs_theme(obj_val.question_type)" class="question-body">
-                     <span ng:class="load_slide_theme(obj_val.question_type)" class="label-question">
+                      <span ng:class="load_slide_theme(obj_val.question_type)" class="label-question">
                         <span class="qs-icons">
                                 <i ng:if="obj_val.question_type == 0" class="icon-insert-template iconx-x"></i>
                                 <i ng:if="obj_val.question_type == 1" class="icon-image iconx-x"></i>
@@ -177,5 +182,5 @@
             <!-- End Questions -->
         </div>
       </div>
-  </div>
+      </div>
 {{> attendee_preview_footer }}

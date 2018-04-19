@@ -517,9 +517,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             }); // End Json Data
 
     // ==> functions in scope object
+
     $scope.swal_message = function (){
       if($scope.unsaved_question) {
-
           $(".swal-overlay").fadeIn();
            swal({
             text: "Would you like to save the last changes ?",
@@ -528,7 +528,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             dangerMode: true
           }).then((saving) => {
 
-        if (saving) {
+          if (saving) {
           // ==> Saving current change
           swal("Question has been saved successfully", {
             icon: "success",
