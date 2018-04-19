@@ -2216,6 +2216,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
   // ===============> Setup redactor
 
+$timeout(function(){
+  var previewIfm = $('iframe.ifram-preview-quizzes'); //.about-quiz, .screen-container
+  var quiz_screen =  previewIfm.contents().find("html").html() ;
+  var quizContainer = $(quiz_screen).find('.screen-container') ;
+  console.log(quizContainer.html());
+} , 800);
 
 
 }]);

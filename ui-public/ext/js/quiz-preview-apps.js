@@ -292,6 +292,7 @@ attendeeApp.controller("preview_players" , [
        var layout_template = $scope.__player_object.settings.progression_bar.progression_bar_layout;
        return '/progressbar-layouts/layout-'+layout_template+'.hbs';
      };
+
     $scope.back_to_prev_slider = () => {
        try {
          $scope.slide_screens.slidePrev();
@@ -303,10 +304,11 @@ attendeeApp.controller("preview_players" , [
        }
      }
 
+=======
     // => Fire those fn.
     $scope.load_application_keys();
 
     // => Fire funcs with timeframe
-
+    
 
 }]);
