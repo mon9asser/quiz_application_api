@@ -89,7 +89,15 @@ attendeeApp.controller("preview_players" , [
     $scope.__player_object     = null;
     $scope.this_attendee_draft = null;
     $scope.api_key_headers     = null;
-
+    // ==> Time  objects
+    $scope.seconds = 9 ;
+    $scope.minutes = 0;
+    $scope.hours = 0 ;
+    $scope.quiz_time_status_is_counting = true ;
+    $scope.warning_at_time = {
+       number_1 : 0 ,
+       number_2 : 0
+    };
     // => Urls
     $scope.url_application = $scope.server_ip + "api/" + $scope.app_id +'/application/retrieve';
 
@@ -224,6 +232,9 @@ attendeeApp.controller("preview_players" , [
         $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
 
     };
+    $scope.load_time_tracker = () => {
+
+    }
     $scope.load_quiz_timer = () => {
       if($scope.__player_object.settings != undefined ){
          var timeSettings = $scope.__player_object.settings.time_settings;
@@ -231,6 +242,62 @@ attendeeApp.controller("preview_players" , [
          if(timeSettings && timeSettings.is_with_time)
             $scope.timer = setTimeout($scope.load_time_tracker , 1000);
        }
+    }
+    $scope.load_template_timer = () => {
+       console.log({
+         settings : $scope.__player_object
+       });
+       if($scope.__player_object != undefined && $scope.__player_object != null ){
+       var timeSettings = $scope.__player_object.settings.time_settings;
+
+         if(timeSettings && timeSettings != undefined || timeSettings.is_with_time){
+           $scope.seconds = timeSettings.seconds;
+           $scope.minutes = timeSettings.minutes ;
+           $scope.hours   = timeSettings.hours;
+
+         }
+       }
+     }
+    $scope.load_time_tracker  = () => {
+      if( $scope.quiz_time_status_is_counting){
+            var sec  = $('.sec');
+            var mins = $('.min');
+            var hrs  = $('.hr');
+            var is_hourly = $scope.__player_object.settings.time_settings.timer_type ;
+            if(is_hourly){
+               if($scope.seconds == 0 && $scope.minutes == 0 && $scope.hours == 0)
+                  {
+                    // $scope.do_an_action_with_closest_time();
+                    return false ;
+                  }
+               }else {
+                  if( $scope.seconds == 0 && $scope.minutes == 0 )
+                      {
+                        // $scope.do_an_action_with_closest_time();
+                        return false ;
+                      }
+            }
+            $scope.seconds--;
+            if( $scope.seconds < 0 ){
+               $scope.seconds = 59;
+               $scope.minutes--;
+            }
+
+            if(is_hourly){
+                 if($scope.minutes < 00 && $scope.hours > 0 ) {
+                   $scope.minutes = 59;
+                   $scope.hours--;
+                 }
+            }
+
+          sec.html(($scope.seconds < 10 ) ? '0'+ $scope.seconds : $scope.seconds);
+          mins.html(($scope.minutes < 10 ) ? '0'+$scope.minutes:$scope.minutes );
+          if(is_hourly){
+              hrs.html( ( $scope.hours < 10 ) ? '0'+$scope.hours : $scope.hours);
+          }
+          // Load time
+          $scope.load_quiz_timer();
+      }
     }
     $scope.start_this_quiz = () => {
       $scope.join_this_quiz();
@@ -296,12 +363,16 @@ attendeeApp.controller("preview_players" , [
        try { $scope.slide_screens.slidePrev(); } catch (e) { }
      }
 
- 
+
 
     // => Fire those fn.
     $scope.load_application_keys();
 
 
+    // => Fire after time
+    $timeout(function () {
+        $scope.load_template_timer();
+    }, 1000);
 
 
 }]);
