@@ -194,6 +194,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.app_title = null ;
     $scope.selected_passage = null ;
     $scope.current_editor_index = 0 ;
+    $scope.screen_slider = null ;
+
     // ==> Objects in scope object
     $scope.headers = new Object() ;
     $scope.window = {
@@ -2216,12 +2218,33 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
   // ===============> Setup redactor
 
-$timeout(function(){
-  var previewIfm = $('iframe.ifram-preview-quizzes'); //.about-quiz, .screen-container
-  var quiz_screen =  previewIfm.contents().find("html").html() ;
-  var quizContainer = $(quiz_screen).find('.screen-container') ;
-  console.log(quizContainer.html());
-} , 800);
+    // $timeout(function(){
+    //   var previewIfm = $('iframe.ifram-preview-quizzes'); //.about-quiz, .screen-container
+    //   var quiz_screen =  previewIfm.contents().find("html").html() ;
+    //   var quizContainer = $(quiz_screen).find('.screen-container') ;
+    //   console.log(quizContainer.html());
+    // } , 800);
 
+
+
+
+
+
+
+
+
+
+
+
+   $timeout(function(){
+    //  var previewIfm = $('iframe#prev-ifram-contaier');
+    //  var pageContents = previewIfm[0].contentDocument.children ;
+    //  var iframContents = $(pageContents).html() ;
+    //  var swipe_element = $(iframContents).find('.swiper-container');
+    //  $scope.screen_slider = new Swiper(swipe_element);
+    var previewIfm = $('iframe#prev-ifram-contaier');
+    var swipe_container = previewIfm.contents().find('.swiper-container');
+    $scope.screen_slider = new Swiper(swipe_container);
+   } , 1000);
 
 }]);

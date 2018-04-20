@@ -85,7 +85,7 @@ attendeeApp.controller("preview_players" , [
     $scope.user_id             = $("#user_id").val();
     $scope.labels = ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
     $scope.json_source         = $scope.server_ip + settings.json_source;
-    $scope.slide_screens = new Swiper('.swiper-container') ;
+    // $scope.slide_screens = new Swiper('.swiper-container') ;
     $scope.__player_object     = null;
     $scope.this_attendee_draft = null;
     $scope.api_key_headers     = null;
@@ -132,7 +132,7 @@ attendeeApp.controller("preview_players" , [
     };
     $scope.go_to_next_slider = () => {
       try {
-        $scope.slide_screens.slideNext();
+        // $scope.slide_screens.slideNext();
         // => When button navigation is fired
         // => Move into attendee draft object
         // $scope.attendee_draft_collection();
@@ -306,7 +306,7 @@ attendeeApp.controller("preview_players" , [
       } , 30);
 
       try {
-        $scope.slide_screens.slideNext();
+        // $scope.slide_screens.slideNext();
 
       } catch (e) {
 
@@ -360,7 +360,7 @@ attendeeApp.controller("preview_players" , [
        return '/progressbar-layouts/layout-'+layout_template+'.hbs';
      };
     $scope.back_to_prev_slider = () => {
-       try { $scope.slide_screens.slidePrev(); } catch (e) { }
+      //  try { $scope.slide_screens.slidePrev(); } catch (e) { }
      }
 
 
