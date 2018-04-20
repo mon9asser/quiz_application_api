@@ -1,15 +1,15 @@
 {{> attendee_preview_head }}
-<<<<<<< HEAD
+<!-- <<<<<<< HEAD -->
 <style media="screen">
   html , body {
     overflow: hidden;
   }
 </style>
- <div class="container-fluid-x preview_player_container" ng:controller="preview_players">
-=======
- 
+ <div id="preview_player_container" class="container-fluid-x preview_player_container" ng:controller="preview_players">
+<!-- ======= -->
+
  <div class="container-fluid-x" ng:controller="preview_players">
->>>>>>> 50e731f911414c734724c59498f171a582fc5bd3
+<!-- >>>>>>> 50e731f911414c734724c59498f171a582fc5bd3 -->
     <!-- Quiz tool  -->
       <div class="quizapp-tools" ng:if="__player_object.settings.time_settings.is_with_time == true || __player_object.settings.progression_bar.is_available == true">
         <!-- ++++++++++++ +++++++++++++ -->
@@ -188,4 +188,20 @@
         </div>
       </div>
       </div>
+
+
+      <script type="text/javascript">
+        setTimeout(function(){
+          if(window.location != window.parent.location){
+            // ==> check if this window in iframe !
+              var op = window.parent;
+              var offsetH = document.getElementById('preview_player_container').offsetHeight;
+                //alert(offsetH);
+
+                var frameObject = $(op.frames.window.document).find('iframe#prev-ifram-contaier')  ;
+                frameObject.css({'height' : offsetH + 20 + 'px' , width:'100%' , margin:'8px auto'});
+
+            }
+        } , 2800 )
+      </script>
 {{> attendee_preview_footer }}

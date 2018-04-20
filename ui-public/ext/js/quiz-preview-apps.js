@@ -304,11 +304,9 @@ attendeeApp.controller("preview_players" , [
        }
      }
 
-=======
+
     // => Fire those fn.
     $scope.load_application_keys();
 
-    // => Fire funcs with timeframe
-    
 
 }]);
