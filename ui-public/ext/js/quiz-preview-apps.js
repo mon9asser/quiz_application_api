@@ -296,17 +296,12 @@ attendeeApp.controller("preview_players" , [
        try { $scope.slide_screens.slidePrev(); } catch (e) { }
      }
 
-<<<<<<< HEAD
+ 
 
     // => Fire those fn.
     $scope.load_application_keys();
 
-=======
-    // => Fire those fn.
-    $scope.load_application_keys();
 
-    // => Fire funcs with timeframe
 
->>>>>>> 96e6285c4fa86c40fb4c169b1f8b2973e2645dd4
 
 }]);
