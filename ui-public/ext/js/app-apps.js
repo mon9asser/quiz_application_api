@@ -1,3 +1,4 @@
+
 //==> Apply html tags
 apps.filter ("apply_html" , [
   '$sce' , function ($sce){
@@ -132,7 +133,13 @@ apps.filter('show_chars' , [
     }
   }
 ]);
-
+apps.filter('trust_this_html_values' , [
+  '$sce' , function ($sce){
+    return function (returned_val){
+       return $sce.trustAsHtml(returned_val);
+    }
+  }
+]);
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
   try {
 
@@ -162,6 +169,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.unsaved_question = false ;
     $scope.old_question_data = null ;
     $scope.spesific_chars = null ;
+    $scope.__player_object     = null;
     $scope.timeFrame = 0;
     $scope.left_part_position  = $scope.questions_list_box.width() + 21 ;
     $scope.sort_handler = document.getElementById("docQuestions");
@@ -194,8 +202,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.app_title = null ;
     $scope.selected_passage = null ;
     $scope.current_editor_index = 0 ;
-    $scope.screen_slider = null ;
-
+    $scope.slide_screens = null ;
+    $scope.json_source = $scope.server_ip + "ext/json/json-keys.json";
     // ==> Objects in scope object
     $scope.headers = new Object() ;
     $scope.window = {
@@ -267,7 +275,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
       choice_style : false  //
                 }
     $scope.labels = [  'a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
-
+    $scope.seconds = 9 ;
+    $scope.minutes = 0;
+    $scope.hours = 0 ;
     // ==> API URLS
     $scope.api_url_current_app         = $scope.server_ip + "api/"+$scope.app_id+"/application/retrieve"
     $scope.json_apk_file               = $scope.server_ip + "ext/json/json-keys.json";
@@ -280,7 +290,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.api_url_init_id_date        = $scope.server_ip + "api/generate/new/data";
     $scope.api_url_question_creation   = $scope.server_ip + "api/" + $scope.app_id + "/question/creation"
     $scope.api_url_app_settings        = $scope.server_ip + "api/" + $scope.app_id + "/app/setup_settings"
-
+    $scope.url_application = $scope.server_ip + "api/" + $scope.app_id +'/application/retrieve';
 
 
     // ==> Loading and store main data
@@ -519,7 +529,39 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             }); // End Json Data
 
     // ==> functions in scope object
-
+    $scope.time_tracker_layout = () => {
+      var layout_template = $scope.__player_object.settings.time_settings.timer_layout;
+      return '/time-layouts/layout-'+layout_template+'.hbs';
+    };
+    $scope.progression_layout = () => {
+       var layout_template = $scope.__player_object.settings.progression_bar.progression_bar_layout;
+       return '/progressbar-layouts/layout-'+layout_template+'.hbs';
+     };
+    $scope.load_application_for_preview = () => {
+      // alert($scope.url_application );
+          $http({
+            url : $scope.url_application ,
+            type : "GET" ,
+            headers : $scope.api_key_headers
+          }).then(function(resp){
+            $scope.__player_object = resp.data ;
+            $timeout(function(){
+              $scope.slide_screens = new Swiper('.swiper-container');
+            } , 1000 );
+          },function(err){ console.log(err); });
+      };
+    $scope.load_application_keys = () => {
+        $.getJSON( $scope.json_source , function (apk_keys){
+          $scope.api_key_headers = {
+            "X-api-app-name":apk_keys.APP_NAME ,
+            "X-api-keys":apk_keys.API_KEY
+          }
+           $scope.api_key_headers ;
+           // ==> calling funcstionalities
+           $scope.load_application_for_preview();
+           // ...
+        });
+      }
     $scope.swal_message = function (){
       if($scope.unsaved_question) {
           $(".swal-overlay").fadeIn();
@@ -2211,13 +2253,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           // });
         } , 6000 );
 
-      } catch (e) {
-
-      }
-
-
+      } catch (e) {}
   // ===============> Setup redactor
-
     // $timeout(function(){
     //   var previewIfm = $('iframe.ifram-preview-quizzes'); //.about-quiz, .screen-container
     //   var quiz_screen =  previewIfm.contents().find("html").html() ;
@@ -2225,26 +2262,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     //   console.log(quizContainer.html());
     // } , 800);
 
-
-
-
-
-
-
-
-
-
-
-
-   $timeout(function(){
-    //  var previewIfm = $('iframe#prev-ifram-contaier');
-    //  var pageContents = previewIfm[0].contentDocument.children ;
-    //  var iframContents = $(pageContents).html() ;
-    //  var swipe_element = $(iframContents).find('.swiper-container');
-    //  $scope.screen_slider = new Swiper(swipe_element);
-    var previewIfm = $('iframe#prev-ifram-contaier');
-    var swipe_container = previewIfm.contents().find('.swiper-container');
-    $scope.screen_slider = new Swiper(swipe_container);
-   } , 1000);
+    $scope.load_application_keys();
 
 }]);

@@ -72,7 +72,7 @@
 							  <span class="questionnaire-title">
                   <!-- Quiz Name -->
                    <span>
-                     ~>> application_settings.questionnaire_title <<~
+                     {> application_settings.questionnaire_title <}
                    </span>
                 </span>
                 <!-- <a class="choices-right-add btn-danger btn setting-menu-handler" href="#">
@@ -107,7 +107,7 @@
             <!-- End Text Loader -->
 						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
 
-               <li class="question-li-x qs-~>>qs_value._id<<~" id="questoin_tag_~>>qs_value._id<<~" data-index="~>>$index<<~" data-question-id="~>>qs_value._id<<~" ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " ng:repeat="(qs_key , qs_value) in questions_list track by $index">
+               <li class="question-li-x qs-{>qs_value._id<}" id="questoin_tag_{>qs_value._id<}" data-index="{>$index<}" data-question-id="{>qs_value._id<}" ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " ng:repeat="(qs_key , qs_value) in questions_list track by $index">
 
                      <div class="question-part">
                        <div class="qs-type quesiontlist_iconx">
@@ -149,7 +149,7 @@
         <div class="switched-button switch-mode">
            <span class="swMode">
              <!-- Handel this by js -->
-             On <span class="action-case"> ~>> editor_mode <<~ </span>
+             On <span class="action-case"> {> editor_mode <} </span>
            </span>
            <div class="mode-chs-x">
                <input type="checkbox" class="slide-mode" ng:model="create_quiz.template_mode" id="mode-chox-option" name="check" /> <!--  checked -->

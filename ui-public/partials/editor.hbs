@@ -13,11 +13,11 @@
           <div class="col-sm-4 media-uploads top-margins media-parts-x">
             <div class="ques-media-container">
               <!-- No Media Cases -->
-              <div ng:if="quest_media_parts == null" ng:click="show_media_uploader('question_media_type')"  style="background-image:url(~>>server_ip<<~img/media-icon.png)"  class="media-changeable media-changeable-img-case has-no-media">
+              <div ng:if="quest_media_parts == null" ng:click="show_media_uploader('question_media_type')"  style="background-image:url({>server_ip<}img/media-icon.png)"  class="media-changeable media-changeable-img-case has-no-media">
                 Add Media
               </div>
               <!-- Image Cases -->
-              <div ng:if="quest_media_parts.media_type == 0" style="background-image:url('~>>server_ip+quest_media_parts.media_field<<~')" class="image_case">
+              <div ng:if="quest_media_parts.media_type == 0" style="background-image:url('{>server_ip+quest_media_parts.media_field<}')" class="image_case">
                   <!-- Load image here -->
               </div>
               <!-- Video Cases -->
@@ -60,7 +60,7 @@
                 <div class="multi-answers-part">
                   <!-- Repeating answers -->
                   <ul ng:if="question_type <= 2" class="choices-part">
-                    <li ng:class="class_data_func( answer_value.is_correct , question_settings.choice_style )" ng:repeat="(answer_key , answer_value) in asnwers track by $index" class="answers_x" data-answer-id="answer_id_~>>answer_value._id<<~" data-answer-index="~>>$index<<~">
+                    <li ng:class="class_data_func( answer_value.is_correct , question_settings.choice_style )" ng:repeat="(answer_key , answer_value) in asnwers track by $index" class="answers_x" data-answer-id="answer_id_{>answer_value._id<}" data-answer-index="{>$index<}">
 
                         <!-- text options value -->
                         <div ng:if="question_type == 0" class="">
@@ -89,7 +89,7 @@
 
                              <div ng:if="answer_value.media_optional != null" class="media-options">
                                <!-- Case it an image -->
-                               <div ng:if="answer_value.media_optional.media_type == 0" style="background-image:url('~>>server_ip+answer_value.media_optional.media_src<<~')"  class="image_case"></div>
+                               <div ng:if="answer_value.media_optional.media_type == 0" style="background-image:url('{>server_ip+answer_value.media_optional.media_src<}')"  class="image_case"></div>
                                <!-- Case it Video -->
 
                                <div ng-bind-html="answer_value.media_optional | set_iframe" ng:if="answer_value.media_optional.media_type == 1"  class="video_case answer_video_case">
@@ -118,12 +118,12 @@
                           <div class="text-answers">
                             <div class="media-answers">
                               <div class="media-options">
-                                <!-- ~>>answer_value<<~ -->
+                                <!-- {>answer_value<} -->
                                 <!-- Case it a defaultimage -->
-                                <div ng:if="answer_value.media_type == null" style="background-image:url('~>>answer_value.media_src<<~')"  class="image_case"></div>
+                                <div ng:if="answer_value.media_type == null" style="background-image:url('{>answer_value.media_src<}')"  class="image_case"></div>
 
                                 <div ng:if="answer_value.media_type != null"  class="image_case">
-                                  <div ng:if="answer_value.media_type == 0" style="background-image:url('~>>  answer_value.media_src |   image_w_server <<~')"  class="image_case"></div>
+                                  <div ng:if="answer_value.media_type == 0" style="background-image:url('{>  answer_value.media_src |   image_w_server <}')"  class="image_case"></div>
 
                                   <!-- Case it Video -->
                                   <div ng-bind-html="answer_value | set_iframe" ng:if="answer_value.media_type == 1"  class="video_case answer_video_case">
@@ -173,7 +173,7 @@
                               <ul class="scalet-o" >
                                 <li data-index='0' ng:repeat="(key_ , val_) in rating_scale_elements">
                                   <span ng:click="select_rating_scale__($index , 0 )" href="#">
-                                      ~>> $index + 1 <<~
+                                      {> $index + 1 <}
                                   </span>
                                 </li>
                               </ul>
@@ -181,13 +181,13 @@
 
                               <div class="block-labels text-center"  ng:show="questions_list[questionIndex].answers_format[0].show_labels == true">
                                 <span class="first-lbl">
-                                  ~>>questions_list[questionIndex].answers_format[0].started_at | show_chars<<~
+                                  {>questions_list[questionIndex].answers_format[0].started_at | show_chars<}
                                 </span>
                                 <span class="second-lbl">
-                                  ~>>questions_list[questionIndex].answers_format[0].centered_at | show_chars <<~
+                                  {>questions_list[questionIndex].answers_format[0].centered_at | show_chars <}
                                 </span>
                                 <span class="third-lbl">
-                                  ~>>questions_list[questionIndex].answers_format[0].ended_at | show_chars <<~
+                                  {>questions_list[questionIndex].answers_format[0].ended_at | show_chars <}
                                 </span>
                               </div>
                             </div>
@@ -196,7 +196,7 @@
                       </div>
                   </div>
                    <!-- <pre ng:if="question_type > 2">
-                    ~>> questions_list[questionIndex] <<~
+                    {> questions_list[questionIndex] <}
                   </pre> -->
                   <!--  ng:if="question_type == 0" -->
                   <div ng:click="create_new_answer()" ng:if="question_type == 0 || question_type == 1" class="add-new-option">
@@ -336,7 +336,7 @@
 
                   <div class="checkbox-toggle answer-settins">
                      <input ng:change="unsaved_question_x(question_settings.choice_style)" ng:model="question_settings.choice_style" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                     <span class="title-checkbox">Style of Answer ( ~>>(question_settings.choice_style ) ? "Two columns per row" : "One column per row"<<~ )</span>
+                     <span class="title-checkbox">Style of Answer ( {>(question_settings.choice_style ) ? "Two columns per row" : "One column per row"<} )</span>
                   </div>
                   <!-- <div class="input_wrapper">
                       <input ng:change="unsaved_question_x(question_settings.choice_style)" ng:model="question_settings.choice_style" type="checkbox" class="switch_4">
@@ -354,13 +354,13 @@
                    </div> -->
                 </li>
                 <li class="steps_qs" ng:if="questions_list[questionIndex].question_type == 3">
-                    <span class="title-checkbox"> Steps ( ~>>questions_list[questionIndex].answers_format[0].step_numbers<<~ )</span>
+                    <span class="title-checkbox"> Steps ( {>questions_list[questionIndex].answers_format[0].step_numbers<} )</span>
                     <div class="rating_scale_options">
                         <input ng:change="change_rating_scale_value(questions_list[questionIndex].answers_format[0].step_numbers , true)" ng:model="questions_list[questionIndex].answers_format[0].step_numbers" id="step_slider" min="2" max="10" type="range" name="">
                     </div> <!-- Slide Range -->
                 </li>
                 <li ng:if="questions_list[questionIndex].question_type == 4">
-                 <span class="title-checkbox"> Max characters ( ~>>questions_list[questionIndex].answer_settings.answer_char_max<<~ ) </span>
+                 <span class="title-checkbox"> Max characters ( {>questions_list[questionIndex].answer_settings.answer_char_max<} ) </span>
                  <div class="rating_scale_options">
                      <input ng:change="unsaved_question_x(questions_list[questionIndex].answer_settings.answer_char_max , 'answer_char_max')" ng:model="questions_list[questionIndex].answer_settings.answer_char_max" id="char_max_slider" min="100" max="2000" type="range" name="">
                  </div> <!-- Slide Range -->

@@ -27,7 +27,7 @@
                                 <div class="control-item-content-text">
                                   <div class="passing-grad-block">
                                     <div class="checkbox-toggle">
-                                        <label class="labels-options lblxoption">~>>(application_settings.app_type == 0 ) ? "Survey" :"Quiz" <<~ Title</label>
+                                        <label class="labels-options lblxoption"> {> (application_settings.app_type == 0 ) ? "Survey" :"Quiz" <} Title</label>
                                         <input class="checkbox-toggle input-app-title" type="text" placeholder="App title" name="" ng:model="application_settings.questionnaire_title">
                                     </div>
                                   </div>
