@@ -143,7 +143,10 @@ apps.filter('trust_this_html_values' , [
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
   try {
 
+
+
     // ==> Vars in scope $R
+    $scope.iframe_object = null ;
     $scope.rating_scale_elements = [] ;
     $scope.rating_values = null ;
     $scope.questions_list = null ;
@@ -1515,6 +1518,13 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
                                 "X-api-app-name": api_key_data.APP_NAME
                                }
                              }).then(function(resp){
+
+                                // Refresh iframe
+                                var targetIframe = document.getElementById("live-preview-iframe");
+                                if(targetIframe.length != 0){
+                                  targetIframe.contentWindow.location.reload();
+                                }
+
                                  $scope.question_object_that_added = new_question ;
                                  $scope.edit_this_question(resp.data._id , evt.newIndex  );
                              } , function(err){
@@ -1538,6 +1548,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             else
             $scope.timeFrame = 0 ;
           // =========================
+
+          // ==> Slide Into This index
+           if($scope.iframe_object != null ){
+            $($scope.iframe_object).find('input#cross_iframe_qs_index_value').val(qsCurrIndex + 1);
+            $($scope.iframe_object).find('button#cross_iframe_qs_index_button').trigger('click');
+           }
           $timeout(function(){
             $scope.question_id = qs_id ;
             if(nextIndex == null ){
@@ -2199,8 +2215,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
           });
 
 
-
-
             } catch (e) {
 
             }
@@ -2252,21 +2266,13 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
         } , 6000 );
 
       } catch (e) {}
-  // ===============> Setup redactor
-    // $timeout(function(){
-    //   var previewIfm = $('iframe.ifram-preview-quizzes'); //.about-quiz, .screen-container
-    //   var quiz_screen =  previewIfm.contents().find("html").html() ;
-    //   var quizContainer = $(quiz_screen).find('.screen-container') ;
-    //   console.log(quizContainer.html());
-    // } , 800);
+
 
     $scope.load_application_keys();
+
+    // ==> Loading Iframe
     $timeout(function(){
-      var iframe =   document.getElementById("live-preview-iframe").contentWindow.parent;
-      // $(iframe).find('input#cross_iframe_qs_index_value').val(4);
-      // angular.element(iframe).find('button#cross_iframe_qs_index_button').triggerHandler('click');
-       
-    // angular.element('#myselector').triggerHandler('click');
-    } , 1000 );
+      $scope.iframe_object = document.getElementById("live-preview-iframe").contentWindow.frames.document ;
+    },1000 );
 
 }]);

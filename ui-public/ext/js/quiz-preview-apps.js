@@ -86,7 +86,7 @@ attendeeApp.controller("preview_players" , [
     $scope.labels = ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
     $scope.json_source         = $scope.server_ip + settings.json_source;
     // if( window.parent.location == window.location )
-     $scope.slide_screens = new Swiper('.swiper-container') ;
+    $scope.slide_screens = new Swiper('.swiper-container') ;
     $scope.__player_object     = null;
     $scope.this_attendee_draft = null;
     $scope.api_key_headers     = null;
@@ -131,10 +131,11 @@ attendeeApp.controller("preview_players" , [
       if(question_type == 2 ) classes = 'question_type_boolean_brd';
       return classes;
     };
-    $scope.go_to_next_slider = () => {
+    $scope.go_to_next_slider = (current_index , val = null) => {
       try {
         // if( window.parent.location == window.location )
           $scope.slide_screens.slideNext();
+
         // => When button navigation is fired
         // => Move into attendee draft object
         // $scope.attendee_draft_collection();
@@ -143,8 +144,7 @@ attendeeApp.controller("preview_players" , [
       }
     }
     $scope.slide_to_question_cross_iframe = () => {
-      alert(0);
-      var this_input = $("#cross_iframe_qs_index_value").val();
+      var this_input = $("input#cross_iframe_qs_index_value").val();
       $scope.slide_screens.slideTo(this_input);
     };
     $scope.load_qs_note_theme =  (question_type) => {
@@ -254,7 +254,7 @@ attendeeApp.controller("preview_players" , [
        console.log({
          settings : $scope.__player_object
        });
-       if($scope.__player_object != undefined && $scope.__player_object != null ){
+       if($scope.__player_object != undefined && $scope.__player_object != null && $scope.__player_object.settings != undefined ){
        var timeSettings = $scope.__player_object.settings.time_settings;
 
          if(timeSettings && timeSettings != undefined || timeSettings.is_with_time){
@@ -373,17 +373,51 @@ attendeeApp.controller("preview_players" , [
         // }
      }
 
-
-
     // => Fire those fn.
     $scope.load_application_keys();
 
-
     // => Fire after time
     $timeout(function () {
+        $scope.slide_screens.update();
         $scope.load_template_timer();
+        $scope.slide_screens.on('slideChange' , function (i){
+              $scope.touch_move++;
+              var lengther = $(this);
+              var current_index = lengther[0].activeIndex ;
+              if(current_index >= $scope.__player_object.questions.length)
+                 current_index = $scope.__player_object.questions.length ;
+                // $scope.curren_question_slide = parseInt(current_index) ;
+                //   // => Store current index
+                //  $scope.curren_question_slide = current_index ;
+                //  $scope.current_index = current_index ;
+                //  $scope.previous_index =lengther[0].previousIndex;
+              // => load to ui
+
+              // => Load to next index
+
+              if (window.location != window.parent.location){
+                 var question_lists = $(window.parent.document).find('#docQuestions') ;
+
+                  $timeout(function(){
+                    if(current_index == 0 ) current_index = 0
+                    else current_index = current_index - 1 ;
+                    question_lists.children('li').eq(current_index).
+                    find('.single-question-container').trigger('click');
+
+                  } , 50 );
+                 // question_lists.children('li').eq( current_index - 1 ).trigger('click');
+               }
+              // current_index
+
+          // => When slideChange is fired
+          // => Move into attendee draft object
+          // if(current_index != 0)
+          // // $scope.attendee_draft_collection();
+        });
     }, 1000);
 
- 
+
+
+
 
 }]);

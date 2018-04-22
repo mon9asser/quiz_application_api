@@ -42,8 +42,9 @@ apps.controller("login-app" , ["$rootScope" , "$http" , "$scope" , function ($ro
     }
 
     $.getJSON($scope.json_apk_file , function(api_key_data){
-console.log($scope.json_apk_file)
-console.log(api_key_data)
+      console.log('----------------------------------------');
+      console.log({API_KEY : api_key_data.API_KEY});
+      console.log({APP_NAME : api_key_data.APP_NAME});
       $http({
           method : "POST" ,
           url    : $scope.api_url ,
@@ -53,8 +54,7 @@ console.log(api_key_data)
 				  },
           data: $scope.access
       }).then(function (resData){
-	console.log(resData.data);
-
+	      
          if(resData.data.isRedirect != null && resData.data.isRedirect == true  ) {
            window.location.href = "/";
          }else {
@@ -63,6 +63,8 @@ console.log(api_key_data)
       } , function (err){
         console.log(err);
       }); // End ajax login app
+
+      return false ;
     }); // End Json Apps
   });
 
