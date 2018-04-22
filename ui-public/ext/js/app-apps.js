@@ -545,9 +545,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
             headers : $scope.api_key_headers
           }).then(function(resp){
             $scope.__player_object = resp.data ;
-            $timeout(function(){
-              $scope.slide_screens = new Swiper('.swiper-container');
-            } , 1000 );
+
           },function(err){ console.log(err); });
       };
     $scope.load_application_keys = () => {
@@ -2263,5 +2261,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     // } , 800);
 
     $scope.load_application_keys();
+    $timeout(function(){
+      var iframe =   document.getElementById("live-preview-iframe").contentWindow.parent;
+      // $(iframe).find('input#cross_iframe_qs_index_value').val(4);
+      // angular.element(iframe).find('button#cross_iframe_qs_index_button').triggerHandler('click');
+       
+    // angular.element('#myselector').triggerHandler('click');
+    } , 1000 );
 
 }]);

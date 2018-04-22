@@ -85,7 +85,7 @@ attendeeApp.controller("preview_players" , [
     $scope.user_id             = $("#user_id").val();
     $scope.labels = ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
     $scope.json_source         = $scope.server_ip + settings.json_source;
-    if( window.parent.location == window.location )
+    // if( window.parent.location == window.location )
      $scope.slide_screens = new Swiper('.swiper-container') ;
     $scope.__player_object     = null;
     $scope.this_attendee_draft = null;
@@ -133,7 +133,7 @@ attendeeApp.controller("preview_players" , [
     };
     $scope.go_to_next_slider = () => {
       try {
-        if( window.parent.location == window.location )
+        // if( window.parent.location == window.location )
           $scope.slide_screens.slideNext();
         // => When button navigation is fired
         // => Move into attendee draft object
@@ -142,6 +142,11 @@ attendeeApp.controller("preview_players" , [
 
       }
     }
+    $scope.slide_to_question_cross_iframe = () => {
+      alert(0);
+      var this_input = $("#cross_iframe_qs_index_value").val();
+      $scope.slide_screens.slideTo(this_input);
+    };
     $scope.load_qs_note_theme =  (question_type) => {
       var classes = '';
       if(question_type == 0 ) classes = 'question_type_texts_colr';
@@ -308,7 +313,7 @@ attendeeApp.controller("preview_players" , [
       } , 30);
 
       try {
-        if( window.parent.location == window.location )
+        // if( window.parent.location == window.location )
           $scope.slide_screens.slideNext();
 
       } catch (e) {
@@ -363,9 +368,9 @@ attendeeApp.controller("preview_players" , [
        return '/progressbar-layouts/layout-'+layout_template+'.hbs';
      };
     $scope.back_to_prev_slider = () => {
-        if( window.parent.location == window.location ){
+        // if( window.parent.location == window.location ){
           try { $scope.slide_screens.slidePrev(); } catch (e) { }
-        }
+        // }
      }
 
 
@@ -379,5 +384,6 @@ attendeeApp.controller("preview_players" , [
         $scope.load_template_timer();
     }, 1000);
 
+ 
 
 }]);

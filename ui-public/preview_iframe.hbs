@@ -5,8 +5,12 @@
     overflow: hidden;
   }
 </style>
-
  <div id="preview_player_container" class="container-fluid-x preview_player_container" ng:controller="preview_players">
+
+   <input id="cross_iframe_qs_index_value" type="hidden" id="the-target-slide-index" name="" value="1" />
+   <button style="display:none;" id="cross_iframe_qs_index_button" ng:click="slide_to_question_cross_iframe()" type="button" name="button">Go To INDEX </button>
+
+
       <div class="quizapp-tools" ng:if="__player_object.settings.time_settings.is_with_time == true || __player_object.settings.progression_bar.is_available == true">
         <!-- ++++++++++++ +++++++++++++ -->
         <!-- Tool_options -->
@@ -194,9 +198,10 @@
               var offsetH = document.getElementById('preview_player_container').offsetHeight;
                 //alert(offsetH);
 
-                var frameObject = $(op.frames.window.document).find('iframe#prev-ifram-contaier')  ;
+                var frameObject = $(op.frames.window.document).find('iframe#live-preview-iframe')  ;
                 frameObject.css({'height' : offsetH + 20 + 'px' , width:'100%' , margin:'8px auto'});
 
+                $('.about-quiz, .screen-container , .object-layouts-container').css({width:'95%'})
             }
         } , 2800 )
       </script>

@@ -2987,3 +2987,9 @@ margin-bottom: 0px !important;
   overflow: hidden;
   margin: 8px auto;
 }
+
+#live-preview-iframe{
+  display: block;
+  position: relative;
+  width: 100%;
+}
