@@ -107,7 +107,7 @@ attendeeApp.controller("preview_players" , [
       var classes = '';
         if(question_type == 0 ) classes = 'question_type_texts';
         if(question_type == 1 ) classes = 'question_type_media';
-        if(question_type == 2 ) classes = 'question_type_boolean'; 
+        if(question_type == 2 ) classes = 'question_type_boolean';
       return classes;
     };
     $scope.load_qs_theme = (question_type) => {

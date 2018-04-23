@@ -178,6 +178,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $scope.sort_handler = document.getElementById("docQuestions");
     $scope.sortble_draggable_handler = document.getElementById("qs-sortable");
     $scope.expand_collapse_handler =   $(".app-settings li .control-item-header") ;
+    $scope.switching_editor_preview_value = true ;
     $scope.style_of_answers = "Two columns per row"
     $scope.data_object   = null ;
     $scope.answer_object = null ;
@@ -2086,7 +2087,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
          // remove old index
          $scope.questions_list.splice(oldIndex, 1);
          // relocate new position
-         $scope.questions_list.splice(newIndex ,0,  newPosition );
+         $scope.questions_list.splice( newIndex ,0,  newPosition );
          // Save change in db
          $.getJSON($scope.json_apk_file , function(api_key_data){
            $http({
@@ -2135,10 +2136,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
               },function(err){
                 //console.log(err);
             });
-
-
-
-
            var qsLength = $("#docQuestions").children("li").length ;
            if(qsLength == 0 ){
              $("#docQuestions").css({
@@ -2270,8 +2267,49 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
 
     $scope.load_application_keys();
 
+
+    $scope.switching_editor_preview = () => {
+
+        if($scope.switching_editor_preview_value == false ) { // => Editor
+          $(".editor-container").css({
+            position: 'relative' ,
+            right: '0%'
+          });
+          $(".preview-container").css({
+            position: 'relative' ,
+            left: '-105%'
+          });
+            $('.question-editor , .question-preview').addClass('overflow_hidden');
+            $timeout(function () {
+                $('.question-editor , .question-preview').removeClass("overflow_hidden");
+            }, 400);
+          $timeout(function(){
+            $(".editor-container").css({display: 'block'});
+            $(".preview-container").css({display: 'none'});
+
+          } , 200 );
+        }else { // => Preview
+          $(".editor-container").css({
+            position: 'relative' ,
+            right: '-105%'
+          });
+          $(".preview-container").css({
+            position: 'relative' ,
+            left: '0%'
+          });
+
+          $timeout(function(){
+            $(".editor-container").css({display: 'none'});
+            $(".preview-container").css({display: 'block'});
+            $('.question-editor , .question-preview').removeClass("overflow_hidden");
+          } , 200 );
+        }
+
+    };
+
     // ==> Loading Iframe
-    $timeout(function(){
+    $timeout(function(){ //     transform: translate3d(100%, 0px, 0px);
+      // $(".slick-container-block").slick();
       $scope.iframe_object = document.getElementById("live-preview-iframe").contentWindow.frames.document ;
     },1000 );
 

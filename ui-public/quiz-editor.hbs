@@ -147,24 +147,40 @@
       <div class="right_part col-md-7 col-sm-6 col-xs-12">
         <!-- Switch to view or editor [Handler]-->
         <div class="switched-button switch-mode">
-           <span class="swMode">
-             <!-- Handel this by js -->
+           <!-- <span class="swMode">
              On <span class="action-case"> {> editor_mode <} </span>
-           </span>
-           <div class="mode-chs-x">
-               <input type="checkbox" class="slide-mode" ng:model="create_quiz.template_mode" id="mode-chox-option" name="check" /> <!--  checked -->
+           </span> -->
+           <!-- <div class="mode-chs-x">
+               <input type="checkbox" class="slide-mode" ng:model="create_quiz.template_mode" id="mode-chox-option" name="check" />
                <label  ng:click="change_mode()" for="mode-chox-option"></label>
                <span class="image-on mode-option-x"></span>
-           </div>
+           </div> -->
+
+             <div class="input-switch">
+               <label for="switchy">Edit</label>
+               <input type="checkbox" id="switch-editor" ng:model="switching_editor_preview_value" ng:change="switching_editor_preview()" class="input" />
+               <label for="switch-editor" class="switch"></label>
+               <label for="switch-editor">Preview</label>
+             </div>
+
         </div>
 
 
         <!-- Edit Template && Preview Template  -->
-        <div class="question-editor swiper-container">
-            <div  ng:hide="false" style="position:relative;">
-              {{> preview app = app }}
-            </div>
-            <div ng:show="false"><!-- template_mode -->
+        <div class="question-editor swipper-container-block">
+            <!-- Preview Page -->
+            <div class="preview-container swiper-slide" style="position:relative;">
+                {{> preview app = app }}
+                <!-- Loading edditor -->
+                <div class="loader-container">
+                   <div class="loader">
+                     <span>{</span><span>}</span>
+                     <span class="loadin-editor">Loading Preview</span>
+                   </div>
+                </div>
+              </div>
+            <!-- Editor Page -->
+            <div class="editor-container swiper-slide" style="position:relative; "><!-- template_mode -->
                {{> editor app = app }}
                <!-- Loading edditor -->
                <div class="loader-container">
@@ -174,7 +190,6 @@
                   </div>
                </div>
             </div>
-
         </div>
 
       </div>
