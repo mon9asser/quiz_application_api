@@ -2314,7 +2314,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
       // iframe access
       var scp = $window.parent.angular.element($window) ;
- 
+      
 
     },1000 );
 

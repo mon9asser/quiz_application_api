@@ -1,6 +1,8 @@
 var apps = angular.module("applications" , [] );
     "use strict";
 
+// angular.module('applications', ['attedee_applications']);
+
 // =============================================================
 // ================> Configurations
 // =============================================================
