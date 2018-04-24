@@ -140,7 +140,7 @@ apps.filter('trust_this_html_values' , [
     }
   }
 ]);
-apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($scope , $http , $timeout){
+apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$rootScope', ($scope , $http , $timeout , $window , $rootScope) => {
   try {
 
 
@@ -2311,6 +2311,13 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout' , function ($
     $timeout(function(){ //     transform: translate3d(100%, 0px, 0px);
       // $(".slick-container-block").slick();
       $scope.iframe_object = document.getElementById("live-preview-iframe").contentWindow.frames.document ;
+
+      // iframe access
+      var scp = $window.parent.angular.element($window) ;
+      console.log($rootScope);
+
+      console.log(top.document.scope;
+
     },1000 );
 
 }]);
