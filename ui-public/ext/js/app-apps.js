@@ -140,7 +140,7 @@ apps.filter('trust_this_html_values' , [
     }
   }
 ]);
-apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$rootScope', ($scope , $http , $timeout , $window , $rootScope) => {
+apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$rootScope' , '$sce', ($scope , $http , $timeout , $window , $rootScope , $sce) => {
   try {
 
 
@@ -1229,8 +1229,37 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                       $scope.quest_media_parts = success_data.data.Question_details.media_question ;
                       $scope.question_id = success_data.data.Question_details._id;
                       var qsItem = $scope.questions_list.find($scope.callback_index);
+                      var qsItemIndex = $scope.questions_list.findIndex($scope.callback_index);
                       qsItem.media_question =success_data.data.Question_details.media_question ;
 
+                      if(qsItemIndex == -1 ) return false ;
+
+                      var media_objects = qsItem.media_question ;
+                      var question_container =  $($scope.iframe_object).find(".question-container").eq(qsItemIndex);
+                      var media_data = "<div class='question-media'>" ;
+                          // var element = "<div class='question-media'>";
+                          if(media_objects.media_type == 0 ){
+                              media_data += "<div style='background-image:url("+$scope.server_ip+media_objects.media_field+")' class='image-media-case img-cases'></div>";
+                          }
+                          if(media_objects.media_type == 1) { // => video_type
+                              if(media_objects.video_type == 0 ){ // => youtube
+                                media_data += "<iframe src='"+media_objects.video_source+"' width='250px' height='160px'></iframe>";
+                              }
+                              if(media_objects.video_type == 1 ){  // => vimeo
+                                media_data += "<iframe src='"+media_objects.video_source+"' width='250px' height='160px'></iframe>";
+                              }
+                              if(media_objects.video_type == 2 ){ // => mp4
+                                alert("mp4 inProgress");
+                              }
+                          }
+                      media_data += "</div>";
+
+                          var media_question_s = question_container.find('.question-media') ;
+                          if(media_question_s.length != 0 ) media_question_s.remove();
+
+                          question_container.append(media_data);
+
+                          console.log(media_objects);
                       //   if($scope.file_object.media_type == 0 ){
                           // var image_iframe = '<div style="background-image:url('+success_data.data.Media_directory+')" class="image-case img_">';
                           // ==> Image : success_data.data.Media_directory
@@ -2227,6 +2256,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                   var thisValues ;
                   var thisLength = 35 ;
 
+                  // ==> Loading questions into ifram object
+                  // => Question Body
+                  var question_body = $(".redactor-in-0").html() ;
+                  $($scope.iframe_object).find('.question-body-text').eq($scope.questionIndex).html(question_body);
+
+                  // ==> Loading question data into questions list
                   if($(".redactor-in-0").text().length <= thisLength )
                     thisValues = $(".redactor-in-0").text();
                     if($(".redactor-in-0").text().length == thisLength ) {
@@ -2249,9 +2284,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
               }
           });
         };
-
-
-
 
         $timeout(function(){
           $scope.loading_redactor_models();
@@ -2311,10 +2343,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     $timeout(function(){ //     transform: translate3d(100%, 0px, 0px);
       // $(".slick-container-block").slick();
       $scope.iframe_object = document.getElementById("live-preview-iframe").contentWindow.frames.document ;
-
-      // iframe access
-      var scp = $window.parent.angular.element($window) ;
-      
 
     },1000 );
 

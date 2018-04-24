@@ -418,6 +418,6 @@ attendeeApp.controller("preview_players" , [
 
 
 
-    $scope.to_another_page = "Editor Page ++++++++++++ ";
+    window.to_another_page = "Editor Page ++++++++++++ ";
 
 }]);

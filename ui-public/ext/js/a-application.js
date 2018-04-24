@@ -1,4 +1,4 @@
-var attendeeApp = angular.module("attedee_applications" , []);
+var attendeeApp = angular.module("applications" , []);
 attendeeApp.config([
   "$interpolateProvider"  ,
   function($interpolateProvider) {
