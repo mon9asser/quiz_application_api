@@ -1249,7 +1249,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                                 media_data += "<iframe src='"+media_objects.video_source+"' width='250px' height='160px'></iframe>";
                               }
                               if(media_objects.video_type == 2 ){ // => mp4
-                                alert("mp4 inProgress");
+                                media_data += "<video style='width:250px; height:160px;'>";
+                                  media_data += "<source src='"+media_objects.media_field+'.mp4'+"' type='video/mp4' />";
+                                  media_data += "<source src='"+media_objects.media_field+'.ogg'+"' type='video/ogg' />";
+                                media_data += "</video>";
                               }
                           }
                       media_data += "</div>";
@@ -1709,7 +1712,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                   var thisAnswer = $(this);
                   if(i >= 2 ){
                       if(thisAnswer.hasClass('redactor-in-'+i)){
-                        thisAnswer.html ( $scope.questions_list[$scope.questionIndex].answers_format[i - 2].value )
+                        thisAnswer.html ( $scope.questions_list[$scope.questionIndex].answers_format[i - 2].value );
                       }
                     }
                 });
@@ -2287,18 +2290,69 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
         $timeout(function(){
           $scope.loading_redactor_models();
-
-          // $(".screen-redactors-strt-txt , .screen-redactors-end-txt , .screen-redactors-scs-txt , .screen-redactors-fld-txt").redactor ({
-          //    buttons : ["format","lists"  , "bold" , "italic" , "html"] ,
-          //    plugins : ['fontcolor' , 'fontsize', 'fontfamily']
-          // });
         } , 6000 );
 
       } catch (e) {}
 
 
-    $scope.load_application_keys();
 
+    $scope.init_answer_preview = () => {
+      $timeout(function () {
+        var answer_xx = $R(".answer-redactor-editors-x" , "source.getCode");
+        var answer_ui_list = $($scope.iframe_object).find('ul#question_'+$scope.question_id);
+
+        var this_question = $scope.questions_list.find(x => x._id == $scope.question_id);
+        if(this_question == undefined) return false ;
+         // ==> Writing the preview Data ;
+         for (var i = 0; i < answer_xx.length; i++) {
+           var answer_values = answer_xx[i];
+           var answer_ui_view = answer_ui_list.children("li") ;
+           // choice texts or boolean choices
+
+           if(this_question.question_type == 0   ) // => multiple choices text
+           {
+             // ==> Case it text
+             answer_ui_view.eq(i).children('.answer-contents').children('.text-values').html(answer_values);
+             // ==> Case it with media
+                // .... note : when doing it when hit on save media
+           }
+
+
+         }
+      }, 100);
+    };
+    $scope.change_values_in_redactor_in_answers = () => {
+      var this_question = $scope.questions_list.find(x => x._id == $scope.question_id);
+      if(this_question == undefined) return false ;
+
+      if(this_question.question_type == 0 ){
+        // ==> Case it with redactors
+        $('.redactor-in').each(function(i){
+          var redactor_in = $(this);
+          var is_answer_list = redactor_in.parent().parent().parent().parent().hasClass('answers_x');
+          if(is_answer_list){
+            redactor_in.on("keyup , input , change" , function (){
+              $scope.init_answer_preview();
+            });
+          }
+        });
+      }
+      if(this_question.question_type == 2 ){
+        // ==> Case it with boolean choices
+        var answer_ui_list = $($scope.iframe_object).find('ul#question_'+ $scope.question_id);
+        // ==> Get the data from boolean question type
+        var boolean_type = $('.choices-part');
+        boolean_type.children("li").each(function(i){
+           $(this).find("input.true-false-value").on("change , input" , function (){
+             var boolean_value = $(this).val();
+             answer_ui_list.children('li').eq(i).find('.text-values').html(boolean_value);
+          });
+        });
+      }
+
+
+
+    };
 
     $scope.switching_editor_preview = () => {
 
@@ -2346,4 +2400,13 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
     },1000 );
 
+
+
+
+    $timeout(function (){
+      $scope.change_values_in_redactor_in_answers();
+    } , 4000 );
+
+
+    $scope.load_application_keys();
 }]);

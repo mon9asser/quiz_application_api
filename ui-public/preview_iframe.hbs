@@ -87,7 +87,7 @@
                   <div class="answer-container">
                         <!-- data:ng:class="(obj_val.answer_settings.choice_style)?'ng_inline_block':'ng_block'" -->
                             <!-- Quiz Questions -->
-                            <ul id="question_{>obj_val._id<}" ng:class="load_case_many_answer_option(obj_val.question_type , obj_val.answer_settings.single_choice)" class="question-list" ng:if="obj_val.question_type <= 2"> <!-- Question id , answer id  -->
+                            <ul id="question_{>obj_val._id<}" ng:class="load_case_many_answer_option(obj_val.question_type , obj_val.answer_settings.single_choice)" class="question-list question-list-preview-quta" ng:if="obj_val.question_type <= 2"> <!-- Question id , answer id  -->
                               <li
                                 class="answer_{>ansvalue._id<}"
                                 data:ng:class="classes_for_this_answer(obj_val.answer_settings , obj_val._id , ansvalue._id)"
