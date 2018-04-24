@@ -200,6 +200,7 @@
   margin: 3px;
   text-align: left;
   /*box-shadow: 0px 0px 1px 0px #eee;*/
+  list-style: none;
   cursor: pointer;
 }
 .answer-container ul li.ng_block {

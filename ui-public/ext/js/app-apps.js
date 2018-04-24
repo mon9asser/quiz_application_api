@@ -964,9 +964,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       //console.log(question_selected);
       $timeout(function () {
           $scope.loading_redactor_models("answer");
-
       }, 200);
 
+
+
+      $scope.change_values_in_redactor_in_answers(new_answer);
     };
     $scope.question_answer_deletion = function (answer_id){
       // ==> This Answer
@@ -2310,22 +2312,50 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
            // choice texts or boolean choices
 
            if(this_question.question_type == 0   ) // => multiple choices text
-           {
+             {
              // ==> Case it text
              answer_ui_view.eq(i).children('.answer-contents').children('.text-values').html(answer_values);
              // ==> Case it with media
                 // .... note : when doing it when hit on save media
-           }
+             }
 
 
          }
       }, 100);
     };
-    $scope.change_values_in_redactor_in_answers = () => {
+    $scope.change_values_in_redactor_in_answers = (new__Answer = null ) => {
+
+
       var this_question = $scope.questions_list.find(x => x._id == $scope.question_id);
       if(this_question == undefined) return false ;
 
-      if(this_question.question_type == 0 ){
+      if( this_question.question_type == 0 ){
+
+        if(new__Answer != null ){
+          console.log(new__Answer);
+
+
+          var answer_ui_list = $($scope.iframe_object).find('ul#question_'+$scope.question_id);
+
+          var this_question = $scope.questions_list.find(x => x._id == $scope.question_id);
+          if(this_question == undefined) return false ;
+
+
+          // Build new Answer
+          var list_item = "<li>" ;
+            list_item += "<div class='answer-contents'>";
+              list_item += "<label class='labels'>";
+              list_item += $scope.labels[answer_ui_list.children("li").length].toUpperCase();
+              list_item += "</label>";
+              list_item += "<div class='text-values'>";
+              list_item += new__Answer.value;
+              list_item += "</div>";
+            list_item +="</div>"
+          list_item += "</li>" ;
+
+          answer_ui_list.append(list_item);
+        }
+
         // ==> Case it with redactors
         $('.redactor-in').each(function(i){
           var redactor_in = $(this);
@@ -2349,9 +2379,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           });
         });
       }
-
-
-
     };
 
     $scope.switching_editor_preview = () => {
