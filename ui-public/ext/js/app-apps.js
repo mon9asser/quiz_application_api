@@ -909,6 +909,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
             // doing some delay !
             $timeout(function (){
                 $scope.questions_list.splice(targetIndex, 1);
+                  $scope.iframe_access.model_deletion(0 , $scope.question_id );
                 $scope.save_changes_in_angular_backend();
             } , 290);
          }
@@ -969,9 +970,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
 
       $scope.iframe_access.add_data_to_view($scope.question_id , new_answer);
-      
-      // $scope.change_values_in_redactor_in_answers(new_answer);
 
+      // $scope.change_values_in_redactor_in_answers(new_answer);
+      $timeout(function (){
+         $scope.change_values_in_redactor_in_answers();
+      } , 1000 );
     };
     $scope.question_answer_deletion = function (answer_id){
       // ==> This Answer
@@ -984,6 +987,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
       if(targetIndex != -1 ){
         question_selected.answers_format.splice(targetIndex, 1);
+
+        // ==> delete from iframe object ( Live Preview )
+        $timeout(function(){
+          $scope.iframe_access.model_deletion(1 , $scope.question_id , answer_id);
+        } , 350 );
       }
     };
     $scope.question_answer_mark_it_correct = function (answer_id){
@@ -1271,66 +1279,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                       if(qsItemIndex == -1 ) return false ;
 
                       var media_objects = qsItem.media_question ;
-                      var question_container =  $($scope.iframe_object).find(".question-container").eq(qsItemIndex);
-                      var media_data = "<div class='question-media'>" ;
-                          // var element = "<div class='question-media'>";
-                          if(media_objects.media_type == 0 ){
-                              media_data += "<div style='background-image:url("+$scope.server_ip+media_objects.media_field+")' class='image-media-case img-cases'></div>";
-                          }
-                          if(media_objects.media_type == 1) { // => video_type
-                              if(media_objects.video_type == 0 ){ // => youtube
-                                media_data += "<iframe src='"+media_objects.video_source+"' width='250px' height='160px'></iframe>";
-                              }
-                              if(media_objects.video_type == 1 ){  // => vimeo
-                                media_data += "<iframe src='"+media_objects.video_source+"' width='250px' height='160px'></iframe>";
-                              }
-                              if(media_objects.video_type == 2 ){ // => mp4
-                                media_data += "<video style='width:250px; height:160px;'>";
-                                  media_data += "<source src='"+media_objects.media_field+'.mp4'+"' type='video/mp4' />";
-                                  media_data += "<source src='"+media_objects.media_field+'.ogg'+"' type='video/ogg' />";
-                                media_data += "</video>";
-                              }
-                          }
-                      media_data += "</div>";
-
-                          var media_question_s = question_container.find('.question-media') ;
-                          if(media_question_s.length != 0 ) media_question_s.remove();
-
-                          question_container.append(media_data);
-
-                          console.log(media_objects);
-                      //   if($scope.file_object.media_type == 0 ){
-                          // var image_iframe = '<div style="background-image:url('+success_data.data.Media_directory+')" class="image-case img_">';
-                          // ==> Image : success_data.data.Media_directory
-
-                        // }else {
-                        //   //console.log(success_data.data);
-                        //   var  videoTypeX =  success_data.data.Question_details.media_question.video_type ;
-                        //   var  video_src_value = success_data.data.Question_details.media_question.video_source ;
-                        //   var  video_media_iframe ;
-                        //
-                        //   //console.log(success_data.data.Question_details.media_question);
-                        //   switch (videoTypeX){
-                        //     case 0 : // youtube
-                        //         video_media_iframe = '<iframe class="iframe" width="100%" src="'+video_src_value+'"    height="130px" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
-                        //     break;
-                        //
-                        //     case 1 : // Vimeo
-                        //         video_media_iframe = '<iframe class="iframe" width="100%" src="'+video_src_value+'"    height="130px" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
-                        //     break;
-                        //
-                        //     case 2 : // mp4
-                        //         video_media_iframe = '<video width="100%" height="auto" controls>'
-                        //                        + '<source src="'+success_data.data.Question_details.media_question.media_field+'.mp4" type="video/mp4">'
-                        //                        + '<source src="'+success_data.data.Question_details.media_question.media_field+'.ogg" type="video/ogg">'
-                        //                        + 'Your browser does not support the video tag.'
-                        //                        + '</video>'
-                        //     break;
-                        //   }
-                        //
-                        //   // video_media_iframe
-                        //   $(".media-uploads").html(video_media_iframe);
-                        // }
+                      // ==>>> MEDIA_DATA+++++++++
+                        $timeout(function (){
+                          $scope.iframe_access.change_data_in_answer_view ($scope.question_id  ,  0 , $scope.question_id , null  , null  , media_objects );
+                        },350);
                       }else {
                         // --------------------------------------------
                         // 1 ===> Answers
@@ -1355,8 +1307,31 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                               if(currIndex != -1 ){
                                 $scope.questions_list.find($scope.callback_index).answers_format[currIndex] =
                                 answer_data ;
+
                                 //console.log("ANSWER DATA");
                                 //console.log(answer_data);
+                                var media_obk_data = new Object();
+
+                                if(answer_data.media_type == 0) {
+                                  // => Image Type
+                                  media_obk_data['media_name'] = answer_data.media_name;
+                                  media_obk_data['media_src'] = answer_data.media_src;
+                                  media_obk_data['media_type'] = answer_data.media_type;
+                                }
+                                if(answer_data.media_type == 1){
+                                  // => Video Type
+                                  media_obk_data['Media_directory'] = answer_data.Media_directory;
+                                  media_obk_data['embed_path'] = answer_data.embed_path;
+                                  media_obk_data['media_name'] = answer_data.media_name;
+                                  media_obk_data['media_src'] = answer_data.media_src;
+                                  media_obk_data['media_type'] = answer_data.media_type;
+                                  media_obk_data['video_id'] = answer_data.video_id;
+                                  media_obk_data['video_type'] = answer_data.video_type;
+                                }
+
+                                $timeout(function(){
+                                  $scope.iframe_access.change_data_in_answer_view ( $scope.question_id  , 2 , answer_data._id ,  null  , null  , media_obk_data );
+                                } , 350);
                               }
                           }
                         if(target_question.question_type == 0 ){
@@ -1368,7 +1343,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                               target_answer.media_optional = answer_data.media_optional ;
                               // Store it into scope object
                               $scope.answer_media = target_answer.media_optional ;
-                              //console.log(target_answer.media_optional);
+
+                              // ==>>> MEDIA_DATA+++++++++
+                              $timeout(function (){
+                                $scope.iframe_access.change_data_in_answer_view ($scope.question_id  ,  2  , answer_data._id , null  , null  , answer_data.media_optional );
+                              },350);
+
                           }
 
                       }
@@ -1776,7 +1756,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
                 $scope.loading_redactor_models();
                 // ==> Start editin in nodeElements
-                $scope.change_values_in_redactor_in_answers();
+                // $scope.change_values_in_redactor_in_answers();
+
+
+
                 $('.redactor-in-0 , .redactor-in-1').html('');
                 $('.redactor-in-0').html(taget_question.question_body);
                 $('.redactor-in-1').html(taget_question.question_description);
@@ -2354,34 +2337,16 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
 
 
-    $scope.init_answer_preview = () => {
+    $scope.init_answer_preview = (redactorElement) => {
       $timeout(function () {
         var answer_xx = $R(".answer-redactor-editors-x" , "source.getCode");
-        var answer_ui_list = $($scope.iframe_object).find('ul#question_'+$scope.question_id);
-
-        var this_question = $scope.questions_list.find(x => x._id == $scope.question_id);
-        if(this_question == undefined) return false ;
-         // ==> Writing the preview Data ;
-         for (var i = 0; i < answer_xx.length; i++) {
-           var answer_values = answer_xx[i];
-           var answer_ui_view = answer_ui_list.children("li") ;
-           // choice texts or boolean choices
-
-           if(this_question.question_type == 0   ) // => multiple choices text
-             {
-             // ==> Case it text
-             answer_ui_view.eq(i).children('.answer-contents').children('.text-values').html(answer_values);
-             // ==> Case it with media
-                // .... note : when doing it when hit on save media
-             }
-
-
-         }
-      }, 100);
+        var answer_id = redactorElement.parent().parent().parent().parent().attr('data-answer-id').split('_').pop() ;
+        var answer_index = redactorElement.parent().parent().parent().parent().index();
+        var answer_value = answer_xx[answer_index];
+        $scope.iframe_access.change_data_in_answer_view($scope.question_id , 2 , answer_id , answer_index , answer_value );
+      }, 250);
     };
     $scope.change_values_in_redactor_in_answers = (new__Answer = null ) => {
-
-
       var this_question = $scope.questions_list.find(x => x._id == $scope.question_id);
       if(this_question == undefined) return false ;
 
@@ -2395,22 +2360,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
           var this_question = $scope.questions_list.find(x => x._id == $scope.question_id);
           if(this_question == undefined) return false ;
-
-
-          // Build new Answer
-          var list_item = "<li>" ;
-            list_item += "<div class='answer-contents'>";
-              list_item += "<label class='labels'>";
-              list_item += $scope.labels[answer_ui_list.children("li").length].toUpperCase();
-              list_item += "</label>";
-              list_item += "<div class='text-values'>";
-              list_item += new__Answer.value;
-              list_item += "</div>";
-            list_item +="</div>"
-          list_item += "</li>" ;
-
-          answer_ui_list.append(list_item);
-
         }
 
         // ==> Case it with redactors
@@ -2420,7 +2369,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
             var is_answer_list = redactor_in.parent().parent().parent().parent().hasClass('answers_x');
             if(is_answer_list){
               redactor_in.on("keyup , input , change" , function (){
-                $scope.init_answer_preview();
+                $scope.init_answer_preview(redactor_in);
               });
             }
           });
@@ -2490,11 +2439,38 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
 
 
-
+    $scope.edit_question_in_preview = (is_question) => {
+      $timeout(function(){
+        var qs_data = $R("#editor-question-body , #editor-question-desc" , "source.getCode");
+        if(is_question == 0 ) qs_data = qs_data[0];
+        else if(is_question == 1)  qs_data = qs_data[1];
+        var questionIndex = $scope.questions_list.findIndex(x => x._id == $scope.question_id);
+        $scope.iframe_access.change_data_in_answer_view ( $scope.question_id  , is_question , $scope.question_id , questionIndex  , qs_data  );
+      } , 350 );
+    };
     $timeout(function (){
       $scope.change_values_in_redactor_in_answers();
+
+        $('.redactor-in-0 , .redactor-in-1').on('change , input' , function (){
+          var isQuestion = 0 ;
+          var type = $(this).prop('className').split(' ').pop();
+          if(type == 'redactor-in-1')
+            isQuestion = 2;
+          else  isQuestion = 0 ;
+          $scope.edit_question_in_preview(isQuestion);
+        });
+
+        // var answer_id = redactorElement.parent().parent().parent().parent().attr('data-answer-id').split('_').pop() ;
+        // var answer_index = redactorElement.parent().parent().parent().parent().index();
+        // var answer_value = answer_xx[answer_index];
+        // $scope.iframe_access.change_data_in_answer_view($scope.question_id , 1 , answer_id , answer_index , answer_value );
+
     } , 4000 );
 
-
+    $timeout(function(){
+      $("input").on("change , input" , function (){
+        $scope.iframe_access.set_application_settings($scope.application_settings.settings);
+      });
+    } , 1000);
     $scope.load_application_keys();
 }]);

@@ -106,13 +106,146 @@ apps.controller("preview_players" , [
     $window.add_data_to_view = (question_id , answer_data) => {
 
      var this_question_data = $scope.__player_object.questions.find(x => x._id == question_id);
-     if(this_question_data != undefined)
-     {
-       this_question_data.answers_format.push(answer_data);
-       return this_question_data = this_question_data ;
-     }
-
+     var questionIndex = $scope.__player_object.questions.findIndex(x => x._id == question_id);
+     if( this_question_data != undefined )
+        {
+           this_question_data.answers_format.push({$$hashKey:null , _id:answer_data._id , value : answer_data.value});
+        }
+        $scope.$apply();
     };
+    $window.change_data_in_answer_view = (question_id  , model_type = 0 , model_id = null , model_index = null  , model_value  = null  , media_data = null ) => {
+      var this_question_data = $scope.__player_object.questions.find(x => x._id == question_id);
+      var questionIndex = $scope.__player_object.questions.findIndex(x => x._id == question_id);
+
+      if(model_type == 0){ // =>> Question
+          if(questionIndex != -1){
+            if(model_value != null)
+              $scope.__player_object.questions[questionIndex].question_body = model_value;
+
+            if(media_data != null ){
+              if($scope.__player_object.questions[questionIndex].media_question == undefined)
+              $scope.__player_object.questions[questionIndex].media_question  = new Object() ;
+              $scope.__player_object.questions[questionIndex].media_question = media_data ;
+            }
+          }
+      }else if (model_type == 1 ){ // =>> Description
+        if(questionIndex != -1){
+          if(model_value != null)
+            $scope.__player_object.questions[questionIndex].question_description = model_value;
+        }
+      }else if (model_type == 2 ){ // =>> Answer
+        if(questionIndex != -1){
+            var answerIndex = $scope.__player_object.questions[questionIndex].answers_format.findIndex( x => x._id ==  model_id );
+            if(answerIndex != -1 ){
+              if(model_value != null)
+              $scope.__player_object.questions[questionIndex].answers_format[answerIndex].value = model_value;
+
+              if(media_data != null ){
+                var question_object = $scope.__player_object.questions[questionIndex] ;
+                var thisAnswer = $scope.__player_object.questions[questionIndex].answers_format[answerIndex];
+
+
+                if(question_object.question_type == 0 ){
+                  // => Text optional with media optional
+                    thisAnswer.media_optional = media_data
+                }
+
+                if(question_object.question_type == 1 ){
+
+                  if( media_data.media_type == 0 ){
+                      if(thisAnswer.media_name == undefined )
+                        thisAnswer.media_name = null ;
+                      if(thisAnswer.media_src == undefined )
+                        thisAnswer.media_src = null ;
+                      if(thisAnswer.media_type == undefined )
+                        thisAnswer.media_type = null
+
+                      thisAnswer.media_name = media_data.media_name;
+                      thisAnswer.media_src= media_data.media_src;
+                      thisAnswer.media_type= media_data.media_type;
+                      thisAnswer.Media_directory = $scope.server_ip + media_data.media_src;
+                  }
+                  if( media_data.media_type == 1 ){
+                    if(thisAnswer.media_name == undefined )
+                    thisAnswer.media_name = null ;
+                    if(thisAnswer.media_src == undefined )
+                    thisAnswer.media_src = null ;
+                    if(thisAnswer.media_type == undefined )
+                    thisAnswer.media_type = null
+
+                    if(thisAnswer.Media_directory == undefined )
+                    thisAnswer.Media_directory = null
+                    if(thisAnswer.embed_path == undefined )
+                    thisAnswer.embed_path = null
+                    if(thisAnswer.video_id == undefined )
+                    thisAnswer.video_id = null
+                    if(thisAnswer.video_type == undefined )
+                    thisAnswer.video_video_typeid = null
+
+                    thisAnswer.Media_directory = media_data.Media_directory;
+                    thisAnswer.embed_path= media_data.embed_path;
+                    thisAnswer.video_id= media_data.video_id;
+                    thisAnswer.video_type= media_data.video_type;
+                    thisAnswer.media_name = media_data.media_name;
+                    thisAnswer.media_src= media_data.media_src;
+                    thisAnswer.media_type= media_data.media_type;
+                    thisAnswer.Media_directory =  media_data.media_src;
+
+                  }
+
+                }
+
+                  console.log({QUESTION_OBJECT__VF__TT : question_object});
+              }
+            }
+        }
+      }
+      $scope.$apply();
+
+      // ==> Expand the iframe according to content height !
+      if(window.location != window.parent.location){
+          $timeout(function (){
+            console.log(window.parent);
+          } , 1000 );
+      }
+    };
+    $window.set_application_settings = (settings) => {
+
+      if($scope.__player_object.settings == undefined )
+        $scope.__player_object.settings = new Object();
+
+      $scope.__player_object.settings = settings;
+      $scope.$apply();
+    };
+    $window.model_deletion = (model_type , basic_model_id , model_id = null) => {
+      var this_question_data = $scope.__player_object.questions.find(x => x._id == basic_model_id);
+      var questionIndex = $scope.__player_object.questions.findIndex(x => x._id == basic_model_id);
+      if(questionIndex == -1 ) return false ;
+
+      if(model_type == 0 ) {
+        // => Bug number 1
+        $scope.__player_object.questions.splice(questionIndex , 1);
+        $scope.$apply();
+      } // Question
+      if(model_type == 1 ) {
+        var answerIndex = $scope.__player_object.questions[questionIndex].answers_format.findIndex(x => x._id == model_id );
+        if(answerIndex  != -1) {
+          $scope.__player_object.questions[questionIndex].answers_format.splice(answerIndex , 1);
+        }
+      } //  Answer
+      $scope.$apply();
+    };
+    $scope.set_image_background = (image_sourc , set_server = null)=>{
+      var set_server_ip = $scope.server_ip
+      if(set_server != null )
+        set_server_ip = '';
+        // http://34.215.133.182/img/media-icon.png
+      if(image_sourc == set_server_ip+image_sourc)
+        set_server_ip = '';
+      return {
+        "background-image" : "url('"+set_server_ip+image_sourc+"')"
+      }
+    }
     $scope.get_slide_styles = (question_type) => {
       var classes = '';
         if(question_type == 0 ) classes = 'question_type_texts';
