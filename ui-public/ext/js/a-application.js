@@ -1,20 +1,20 @@
-var attendeeApp = angular.module("applications" , []);
+var apps = angular.module("applications" , []);
   "use strict";
 
-// attendeeApp.config([
-//   "$interpolateProvider"  ,
-//   function($interpolateProvider) {
-//       $interpolateProvider.startSymbol('{>');
-//       $interpolateProvider.endSymbol('<}');
-//   }
-// ]);
+apps.config([
+  "$interpolateProvider"  ,
+  function($interpolateProvider) {
+      $interpolateProvider.startSymbol('{>');
+      $interpolateProvider.endSymbol('<}');
+  }
+]);
 
 apps.controller("page-controller",[ "$scope" , "$rootScope" , function( $scope , $rootScope ){
   // alert("Login controller");
    $rootScope.page_name = window.location.pathname.replace(/^\/([^\/]*).*$/, '$1');
 }]);
 
-attendeeApp.factory("settings" , [
+apps.factory("settings" , [
   function (){
      var applications = {
         server_ip : (window.location.toString().includes('localhost')) ? "http://localhost:9000/" : "http://34.215.133.182/" ,
@@ -26,7 +26,7 @@ attendeeApp.factory("settings" , [
       return applications ;
    }
 ]);
-attendeeApp.filter ("caps_first_later" , [
+apps.filter ("caps_first_later" , [
   function (chars){
     return function (chars){
 
@@ -41,7 +41,7 @@ attendeeApp.filter ("caps_first_later" , [
     }
   }
 ]);
-attendeeApp.controller("attendee-controller" , [
+apps.controller("attendee-controller" , [
   '$scope' , '$rootScope' , 'settings' ,
    function ($scope , $rootScope , settings ){
       $rootScope.page_name = settings.page_name;

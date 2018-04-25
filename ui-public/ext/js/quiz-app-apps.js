@@ -25,14 +25,14 @@ var question_status = function (a, b) {
 // => Filters
 //=============================================
 
-attendeeApp.filter('set_source_link' , [
+apps.filter('set_source_link' , [
   ()=>{
       return function (link_source){
         alert(link_source);
       }
   }
 ]);
-attendeeApp.filter("set_iframe" , [
+apps.filter("set_iframe" , [
       "$timeout" ,"$sce" ,
   function (  $timeout , $sce){
     return function (media_object){
@@ -90,18 +90,18 @@ attendeeApp.filter("set_iframe" , [
       return $sce.trustAsHtml(embed_video) ;
     };
 }]);
-attendeeApp.filter('trust_this_html_values' , [
+apps.filter('trust_this_html_values' , [
   '$sce' , function ($sce){
     return function (returned_val){
        return $sce.trustAsHtml(returned_val);
     }
   }
 ]);
-
+ 
 //=============================================
 // => Controllers
 //=============================================
-attendeeApp.controller("players" , [
+apps.controller("players" , [
   '$scope' , '$rootScope' , '$timeout' , '$http' , 'settings' , '$window',
   ( $scope, $rootScope, $timeout , $http , settings , $window ) => {
 

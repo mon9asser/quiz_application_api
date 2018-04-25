@@ -1,4 +1,4 @@
-attendeeApp.filter("user_name" , [
+apps.filter("user_name" , [
   '$http', 'settings',
   function ($http , settings){
     return function (user_id){
@@ -22,7 +22,7 @@ attendeeApp.filter("user_name" , [
     }
   }
 ]);
-attendeeApp.controller('list-apps' , [
+apps.controller('list-apps' , [
   '$scope' , '$rootScope' , '$timeout' , '$http' , 'settings',
   function ($scope, $rootScope, $timeout , $http , settings ){
 

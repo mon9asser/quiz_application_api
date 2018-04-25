@@ -144,8 +144,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
   try {
 
 
-
+    // document.getElementById('iframe').contentWindow.angular.element(document.body).scope();
     // ==> Vars in scope $R
+    $scope.iframe_access = null ;
     $scope.iframe_object = null ;
     $scope.rating_scale_elements = [] ;
     $scope.rating_values = null ;
@@ -967,8 +968,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       }, 200);
 
 
+      $scope.iframe_access.add_data_to_view($scope.question_id , new_answer);
+      
+      // $scope.change_values_in_redactor_in_answers(new_answer);
 
-      $scope.change_values_in_redactor_in_answers(new_answer);
     };
     $scope.question_answer_deletion = function (answer_id){
       // ==> This Answer
@@ -1014,6 +1017,37 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
         }
 
       };
+    $scope.refresh_iframe_object = () => {
+      // ==> Load Application For preview
+      $scope.iframe_access.load_application_for_preview();
+      document.getElementById("live-preview-iframe").src =  document.getElementById("live-preview-iframe").src;
+
+      var existing_index = $scope.questions_list.findIndex(x => x._id == $scope.question_id);
+      $timeout(function(){
+        $(".builing_new_qs").fadeOut(20);
+        $scope.iframe_access.slide_screens.update();
+        $scope.iframe_access.slide_screens.on('slideChange' , function (i){
+        $scope.iframe_access.touch_move++;
+              var lengther = $(this);
+              var current_index = lengther[0].activeIndex ;
+              if(current_index >= $scope.iframe_access.__player_object.questions.length)
+                 current_index = $scope.iframe_access.__player_object.questions.length ;
+
+
+                 var question_lists = $(window.document).find('#docQuestions') ;
+
+                  $timeout(function(){
+                    if(current_index == 0 ) current_index = 0
+                    else current_index = current_index - 1 ;
+                    question_lists.children('li').eq(current_index).
+                    find('.single-question-container').trigger('click');
+
+                  } , 50 );
+        });
+        if(existing_index != -1)
+        $scope.iframe_access.slide_screens.slideTo(existing_index+1);
+      } , 600);
+    }
     $scope.save_changes_in_angular_backend = function ( decline_next = null ){
 
         // ==> Save the quiz settings
@@ -1554,11 +1588,33 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                                }
                              }).then(function(resp){
 
-                                // Refresh iframe
-                                var targetIframe = document.getElementById("live-preview-iframe");
-                                if(targetIframe.length != 0){
-                                  targetIframe.contentWindow.location.reload();
-                                }
+                               // ==> Load Application For preview
+                               $scope.iframe_access.load_application_for_preview();
+                               document.getElementById("live-preview-iframe").src =  document.getElementById("live-preview-iframe").src;
+
+                               $timeout(function(){
+                                 $(".builing_new_qs").fadeOut(20);
+                                 $scope.iframe_access.slide_screens.update();
+                                 $scope.iframe_access.slide_screens.on('slideChange' , function (i){
+                                  $scope.iframe_access.touch_move++;
+                                       var lengther = $(this);
+                                       var current_index = lengther[0].activeIndex ;
+                                       if(current_index >= $scope.iframe_access.__player_object.questions.length)
+                                          current_index = $scope.iframe_access.__player_object.questions.length ;
+
+
+                                          var question_lists = $(window.document).find('#docQuestions') ;
+
+                                           $timeout(function(){
+                                             if(current_index == 0 ) current_index = 0
+                                             else current_index = current_index - 1 ;
+                                             question_lists.children('li').eq(current_index).
+                                             find('.single-question-container').trigger('click');
+
+                                           } , 50 );
+                                 });
+                                 $scope.iframe_access.slide_screens.slideTo(evt.newIndex+1);
+                               } , 1800);
 
                                  $scope.question_object_that_added = new_question ;
                                  $scope.edit_this_question(resp.data._id , evt.newIndex  );
@@ -1577,7 +1633,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                };
     $scope.edit_this_question = function ( qs_id  , qsCurrIndex , nextIndex = null){
 
-
           if($scope.check_unsaved_data())
             $scope.timeFrame = 10000000000003000;
             else
@@ -1585,9 +1640,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           // =========================
 
           // ==> Slide Into This index
-           if($scope.iframe_object != null ){
-            $($scope.iframe_object).find('input#cross_iframe_qs_index_value').val(qsCurrIndex + 1);
-            $($scope.iframe_object).find('button#cross_iframe_qs_index_button').trigger('click');
+           if($scope.iframe_access != null ){
+             if($scope.iframe_access.slide_screens != undefined)
+              $scope.iframe_access.slide_screens.slideTo(qsCurrIndex+1);
            }
           $timeout(function(){
             $scope.question_id = qs_id ;
@@ -1720,7 +1775,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                 });
 
                 $scope.loading_redactor_models();
-
+                // ==> Start editin in nodeElements
+                $scope.change_values_in_redactor_in_answers();
                 $('.redactor-in-0 , .redactor-in-1').html('');
                 $('.redactor-in-0').html(taget_question.question_body);
                 $('.redactor-in-1').html(taget_question.question_description);
@@ -2153,7 +2209,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
              revertClone: false,
          },
          onStart : function (evt){
-
+           $(".builing_new_qs").fadeIn();
             $scope.hide_loader();
             // ---------------------------------------------------
             // ------->> Get Id from mongoDB
@@ -2354,18 +2410,21 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           list_item += "</li>" ;
 
           answer_ui_list.append(list_item);
+
         }
 
         // ==> Case it with redactors
-        $('.redactor-in').each(function(i){
-          var redactor_in = $(this);
-          var is_answer_list = redactor_in.parent().parent().parent().parent().hasClass('answers_x');
-          if(is_answer_list){
-            redactor_in.on("keyup , input , change" , function (){
-              $scope.init_answer_preview();
-            });
-          }
-        });
+        $timeout(function(){
+          $('.redactor-in').each(function(i){
+            var redactor_in = $(this);
+            var is_answer_list = redactor_in.parent().parent().parent().parent().hasClass('answers_x');
+            if(is_answer_list){
+              redactor_in.on("keyup , input , change" , function (){
+                $scope.init_answer_preview();
+              });
+            }
+          });
+        } , 120);
       }
       if(this_question.question_type == 2 ){
         // ==> Case it with boolean choices
@@ -2424,8 +2483,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     $timeout(function(){ //     transform: translate3d(100%, 0px, 0px);
       // $(".slick-container-block").slick();
       $scope.iframe_object = document.getElementById("live-preview-iframe").contentWindow.frames.document ;
+      $scope.iframe_access = document.getElementById("live-preview-iframe").contentWindow ;
 
-    },1000 );
+
+    },3000 );
 
 
 

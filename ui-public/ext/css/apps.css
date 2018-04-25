@@ -3073,5 +3073,23 @@ margin-bottom: 0px !important;
   -moz-transition: all 0.2s linear ;
 }
 .overflow_hidden{
-  overflow: hidden; 
+  overflow: hidden;
+}
+.builing_new_qs{
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    z-index: 2000000;
+    background: white;
+    opacity: 0.96;
+
+    vertical-align: middle;
+    text-align: center;
+    line-height: 11;
+    font-size: 25px;
+    font-weight: bold;
+    color: #ddd;
+    display: none;
 }
