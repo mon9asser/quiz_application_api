@@ -1011,7 +1011,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           return false ;
         }
 
-
         // let's excute our func here
         if(question_selected.answer_settings.single_choice == true ) { // only one response
           var all_answers = question_selected.answers_format;
@@ -1023,39 +1022,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
         }else { // multiple response
           answer_selected.is_correct = !answer_selected.is_correct ;
         }
-
       };
-    $scope.refresh_iframe_object = () => {
-      // ==> Load Application For preview
-      $scope.iframe_access.load_application_for_preview();
-      document.getElementById("live-preview-iframe").src =  document.getElementById("live-preview-iframe").src;
 
-      var existing_index = $scope.questions_list.findIndex(x => x._id == $scope.question_id);
-      $timeout(function(){
-        $(".builing_new_qs").fadeOut(20);
-        $scope.iframe_access.slide_screens.update();
-        $scope.iframe_access.slide_screens.on('slideChange' , function (i){
-        $scope.iframe_access.touch_move++;
-              var lengther = $(this);
-              var current_index = lengther[0].activeIndex ;
-              if(current_index >= $scope.iframe_access.__player_object.questions.length)
-                 current_index = $scope.iframe_access.__player_object.questions.length ;
-
-
-                 var question_lists = $(window.document).find('#docQuestions') ;
-
-                  $timeout(function(){
-                    if(current_index == 0 ) current_index = 0
-                    else current_index = current_index - 1 ;
-                    question_lists.children('li').eq(current_index).
-                    find('.single-question-container').trigger('click');
-
-                  } , 50 );
-        });
-        if(existing_index != -1)
-        $scope.iframe_access.slide_screens.slideTo(existing_index+1);
-      } , 600);
-    }
     $scope.save_changes_in_angular_backend = function ( decline_next = null ){
 
         // ==> Save the quiz settings
@@ -1442,10 +1410,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                        var questionType = $(evt.item).attr('data-question-type');
                        var questionId = htmlVal.attr("data-question-id");
 
-
-
-
-
                        var new_question = {
                            _id:$scope.mongoose_id,
                            question_type :questionType,
@@ -1530,12 +1494,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                        } // End Mmongodb Ids
 
 
-
-                       // $timeout(function (){
-                       //   var html_loader =
-                       //     '<div class="loader-xc"><span></span><span></span><span></span></div>'
-                       //     // htmlVal.html(html_loader);
-                       // } , 500 );
                        $timeout(function (){
                          // sorting element with angular elements
                          var index_in_array = evt.newIndex;
@@ -1567,37 +1525,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                                 "X-api-app-name": api_key_data.APP_NAME
                                }
                              }).then(function(resp){
+                              // ==> Add the new question into iframe object
+                              $scope.iframe_access.player_questions(resp.data.questions , evt.newIndex );
+                              // ==> Load slideSystem
+                              $scope.iframe_access.slide_system();
 
-                               // ==> Load Application For preview
-                               $scope.iframe_access.load_application_for_preview();
-                               document.getElementById("live-preview-iframe").src =  document.getElementById("live-preview-iframe").src;
+                              $scope.question_object_that_added = new_question ;
+                              $scope.edit_this_question(resp.data._id , evt.newIndex  );
 
-                               $timeout(function(){
-                                 $(".builing_new_qs").fadeOut(20);
-                                 $scope.iframe_access.slide_screens.update();
-                                 $scope.iframe_access.slide_screens.on('slideChange' , function (i){
-                                  $scope.iframe_access.touch_move++;
-                                       var lengther = $(this);
-                                       var current_index = lengther[0].activeIndex ;
-                                       if(current_index >= $scope.iframe_access.__player_object.questions.length)
-                                          current_index = $scope.iframe_access.__player_object.questions.length ;
-
-
-                                          var question_lists = $(window.document).find('#docQuestions') ;
-
-                                           $timeout(function(){
-                                             if(current_index == 0 ) current_index = 0
-                                             else current_index = current_index - 1 ;
-                                             question_lists.children('li').eq(current_index).
-                                             find('.single-question-container').trigger('click');
-
-                                           } , 50 );
-                                 });
-                                 $scope.iframe_access.slide_screens.slideTo(evt.newIndex+1);
-                               } , 1800);
-
-                                 $scope.question_object_that_added = new_question ;
-                                 $scope.edit_this_question(resp.data._id , evt.newIndex  );
                              } , function(err){
                                //console.log(err);
                              });
@@ -1619,11 +1554,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
             $scope.timeFrame = 0 ;
           // =========================
 
-          // ==> Slide Into This index
-           if($scope.iframe_access != null ){
-             if($scope.iframe_access.slide_screens != undefined)
-              $scope.iframe_access.slide_screens.slideTo(qsCurrIndex+1);
-           }
+
           $timeout(function(){
             $scope.question_id = qs_id ;
             if(nextIndex == null ){
@@ -2192,7 +2123,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
              revertClone: false,
          },
          onStart : function (evt){
-           $(".builing_new_qs").fadeIn();
+
             $scope.hide_loader();
             // ---------------------------------------------------
             // ------->> Get Id from mongoDB

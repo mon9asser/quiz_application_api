@@ -86,7 +86,6 @@ apps.controller("preview_players" , [
     $scope.labels = ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
     $scope.json_source         = $scope.server_ip + settings.json_source;
     // if( window.parent.location == window.location )
-    $scope.slide_screens = new Swiper('.swiper-container') ;
     $scope.__player_object     = null;
     $scope.this_attendee_draft = null;
     $scope.api_key_headers     = null;
@@ -101,7 +100,15 @@ apps.controller("preview_players" , [
     };
     // => Urls
     $scope.url_application = $scope.server_ip + "api/" + $scope.app_id +'/application/retrieve';
-
+    $window.player_questions = (questions , sliderIndex) => {
+      var newQuestion = questions[sliderIndex] ;
+      $scope.__player_object.questions.splice( sliderIndex , 0 , newQuestion );
+      // $scope.$apply();
+      $timeout(function(){
+        $scope.slide_screens.update();
+        $scope.slide_screens.slideTo(sliderIndex+1 , 0);
+      } , 100);
+    };
     // => Functionalities
     $window.add_data_to_view = (question_id , answer_data) => {
 
@@ -113,6 +120,38 @@ apps.controller("preview_players" , [
         }
         $scope.$apply();
     };
+    $window.slide_system = () => {
+        $scope.slide_screens = new Swiper('.swiper-container') ;
+        $scope.slide_screens.update();
+        $scope.slide_screens.on('slideChange' , function (i){
+              $scope.touch_move++;
+              var lengther = $(this);
+              var current_index = lengther[0].activeIndex ;
+              if(current_index >= $scope.__player_object.questions.length)
+                 current_index = $scope.__player_object.questions.length ;
+                // $scope.curren_question_slide = parseInt(current_index) ;
+                //   // => Store current index
+                //  $scope.curren_question_slide = current_index ;
+                //  $scope.current_index = current_index ;
+                //  $scope.previous_index =lengther[0].previousIndex;
+              // => load to ui
+
+              // => Load to next index
+
+              if (window.location != window.parent.location){
+                 var question_lists = $(window.parent.document).find('#docQuestions') ;
+
+                  $timeout(function(){
+                    if(current_index == 0 ) current_index = 0
+                    else current_index = current_index - 1 ;
+                    question_lists.children('li').eq(current_index).
+                    find('.single-question-container').trigger('click');
+
+                  } , 50 );
+               }
+
+        });
+    }
     $window.change_data_in_answer_view = (question_id  , model_type = 0 , model_id = null , model_index = null  , model_value  = null  , media_data = null ) => {
       var this_question_data = $scope.__player_object.questions.find(x => x._id == question_id);
       var questionIndex = $scope.__player_object.questions.findIndex(x => x._id == question_id);
@@ -573,7 +612,7 @@ apps.controller("preview_players" , [
     $window.labels = ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
     $window.json_source         = $window.server_ip + settings.json_source;
     // if( window.parent.location == window.location )
-    $window.slide_screens = new Swiper('.swiper-container') ;
+
     $window.__player_object     = null;
     $window.this_attendee_draft = null;
     $window.api_key_headers     = null;
@@ -863,35 +902,40 @@ apps.controller("preview_players" , [
 
     // => Fire after time
     $timeout(function () {
-        $window.slide_screens.update();
-        $window.load_template_timer();
-        $window.slide_screens.on('slideChange' , function (i){
-              $window.touch_move++;
-              var lengther = $(this);
-              var current_index = lengther[0].activeIndex ;
-              if(current_index >= $window.__player_object.questions.length)
-                 current_index = $window.__player_object.questions.length ;
-                // $window.curren_question_slide = parseInt(current_index) ;
-                //   // => Store current index
-                //  $window.curren_question_slide = current_index ;
-                //  $window.current_index = current_index ;
-                //  $window.previous_index =lengther[0].previousIndex;
-              // => load to ui
-
-              // => Load to next index
-
-              if (window.location != window.parent.location){
-                 var question_lists = $(window.parent.document).find('#docQuestions') ;
-
-                  $timeout(function(){
-                    if(current_index == 0 ) current_index = 0
-                    else current_index = current_index - 1 ;
-                    question_lists.children('li').eq(current_index).
-                    find('.single-question-container').trigger('click');
-
-                  } , 50 );
-                 // question_lists.children('li').eq( current_index - 1 ).trigger('click');
-               }
-        });
+        // $window.slide_screens.update();
+        // $window.load_template_timer();
+        // $window.slide_screens.on('slideChange' , function (i){
+        //       $window.touch_move++;
+        //       var lengther = $(this);
+        //       var current_index = lengther[0].activeIndex ;
+        //       if(current_index >= $window.__player_object.questions.length)
+        //          current_index = $window.__player_object.questions.length ;
+        //         // $window.curren_question_slide = parseInt(current_index) ;
+        //         //   // => Store current index
+        //         //  $window.curren_question_slide = current_index ;
+        //         //  $window.current_index = current_index ;
+        //         //  $window.previous_index =lengther[0].previousIndex;
+        //       // => load to ui
+        //
+        //       // => Load to next index
+        //
+        //       if (window.location != window.parent.location){
+        //          var question_lists = $(window.parent.document).find('#docQuestions') ;
+        //
+        //           $timeout(function(){
+        //             if(current_index == 0 ) current_index = 0
+        //             else current_index = current_index - 1 ;
+        //             question_lists.children('li').eq(current_index).
+        //             find('.single-question-container').trigger('click');
+        //
+        //           } , 50 );
+        //          // question_lists.children('li').eq( current_index - 1 ).trigger('click');
+        //        }
+        // });
     }, 1000);
+
+
+    $timeout(function(){
+      $window.slide_system();
+    } , 10);
 }]);
