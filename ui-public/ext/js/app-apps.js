@@ -1528,7 +1528,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                               // ==> Add the new question into iframe object
                               $scope.iframe_access.player_questions(resp.data.questions , evt.newIndex );
                               // ==> Load slideSystem
-                              $scope.iframe_access.slide_system();
+                             //  $scope.iframe_access.slide_system();
 
                               $scope.question_object_that_added = new_question ;
                               $scope.edit_this_question(resp.data._id , evt.newIndex  );

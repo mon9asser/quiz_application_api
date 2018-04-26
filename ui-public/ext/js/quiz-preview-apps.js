@@ -102,12 +102,14 @@ apps.controller("preview_players" , [
     $scope.url_application = $scope.server_ip + "api/" + $scope.app_id +'/application/retrieve';
     $window.player_questions = (questions , sliderIndex) => {
       var newQuestion = questions[sliderIndex] ;
+      $scope.slide_screens.noSwiping = true ;
       $scope.__player_object.questions.splice( sliderIndex , 0 , newQuestion );
       $scope.$apply();
-      // $scope.slide_screens.update();
+      $scope.slide_screens.update();
       $timeout(function(){
-        $scope.slide_screens.slideTo(sliderIndex+1 , 0);
-      } , 200)
+        var targetIndex = sliderIndex + 1 ;
+        $scope.slide_screens.slideTo ( targetIndex , 200 );
+      } , 500);
     };
     // => Functionalities
     $window.add_data_to_view = (question_id , answer_data) => {
