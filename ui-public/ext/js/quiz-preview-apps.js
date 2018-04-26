@@ -110,7 +110,24 @@ apps.controller("preview_players" , [
         var targetIndex = sliderIndex + 1 ;
         $scope.slide_screens.slideTo ( targetIndex , 200 );
       } , 500);
+
+      $window.expand_the_current_iframe_object();
     };
+    $window.expand_the_current_iframe_object = () => {
+      $timeout(function(){
+        var parentObject = $($window.parent.document.documentElement).find("iframe#live-preview-iframe");
+        var dataContents = $("#preview_player_container");
+        console.log({
+          contants : dataContents.height() ,
+          iframe : parentObject.height()
+        });
+        parentObject.css({
+          height : dataContents.height() + 30 + 'px' ,
+          width : '100%'
+        });
+        console.log({parentObject_____ : parentObject });
+      } , 800);
+    }
     // => Functionalities
     $window.add_data_to_view = (question_id , answer_data) => {
 
