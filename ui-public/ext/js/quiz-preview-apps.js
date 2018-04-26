@@ -104,10 +104,10 @@ apps.controller("preview_players" , [
       var newQuestion = questions[sliderIndex] ;
       $scope.__player_object.questions.splice( sliderIndex , 0 , newQuestion );
       // $scope.$apply();
+      $scope.slide_screens.update();
       $timeout(function(){
-        $scope.slide_screens.update();
         $scope.slide_screens.slideTo(sliderIndex+1 , 0);
-      } , 100);
+      } , 200);
     };
     // => Functionalities
     $window.add_data_to_view = (question_id , answer_data) => {
