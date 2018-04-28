@@ -78,7 +78,7 @@
                 <!-- <a class="choices-right-add btn-danger btn setting-menu-handler" href="#">
                   <i class="fa fa-cog"></i>
                 </a> -->
- 							  <a class="choices-right-add btn-primary preview-button btn rm-margin" href="#">Preview Quiz</a>
+ 							  <a class="choices-right-add btn-primary preview-button btn rm-margin" href="{{server_ip}}{{app._id}}/live_preview/{{user.id}}">Preview Quiz</a>
   					 </div>
 					</div>
 	    </div>
@@ -155,8 +155,13 @@
                <label  ng:click="change_mode()" for="mode-chox-option"></label>
                <span class="image-on mode-option-x"></span>
            </div> -->
-
-             <div class="input-switch">
+             <div ng:hide="activated_screens" class="input-switch">
+                  <label>
+                     <i class="fa fa-paperclip"></i>
+                     <span ng:bind="activated_screen_name"></span>
+                  </label>
+             </div>
+             <div ng:show="activated_screens" class="input-switch">
                <label for="switch-editor">Edit</label>
                <input type="checkbox" id="switch-editor" ng:model="switching_editor_preview_value" ng:change="switching_editor_preview()" class="input" />
                <label for="switch-editor" class="switch"></label>

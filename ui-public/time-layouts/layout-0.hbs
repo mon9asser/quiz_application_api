@@ -11,7 +11,7 @@
             is it minutes or hours ! ?
           -->
           <time class="hrs-timer time-obj">
-            <span ng:if="__player_object.settings.time_settings.timer_type == true" class="hr">{>hours<}</span><span ng:if="__player_object.settings.time_settings.timer_type == true">:</span><span class="min">{>minutes<}</span>:<span class="sec">{>seconds<}</span>
+            <span ng:if="__player_object.settings.time_settings.timer_type == true" class="hr">{>__player_object.settings.time_settings.hours<}</span><span ng:if="__player_object.settings.time_settings.timer_type == true">:</span><span class="min">{>__player_object.settings.time_settings.minutes<}</span>:<span class="sec">{>__player_object.settings.time_settings.seconds<}</span>
           </time>
 
           <span>

@@ -117,16 +117,11 @@ apps.controller("preview_players" , [
       $timeout(function(){
         var parentObject = $($window.parent.document.documentElement).find("iframe#live-preview-iframe");
         var dataContents = $("#preview_player_container");
-        console.log({
-          contants : dataContents.height() ,
-          iframe : parentObject.height()
-        });
         parentObject.css({
           height : dataContents.height() + 30 + 'px' ,
           width : '100%'
         });
-        console.log({parentObject_____ : parentObject });
-      } , 800);
+      } , 5);
     }
     // => Functionalities
     $window.add_data_to_view = (question_id , answer_data) => {
@@ -148,7 +143,14 @@ apps.controller("preview_players" , [
               var current_index = lengther[0].activeIndex ;
               if(current_index >= $scope.__player_object.questions.length)
                  current_index = $scope.__player_object.questions.length ;
-                // $scope.curren_question_slide = parseInt(current_index) ;
+
+                 $scope.slide_screens_index(current_index);
+
+                 if (window.location != window.parent.location){   //  alert(current_index - 1);
+                    $window.parent.edit_this_question_by_crossing_this_ifrm(current_index - 1);
+                 }
+
+                  $scope.curren_question_slide = parseInt(current_index) ;
                 //   // => Store current index
                 //  $scope.curren_question_slide = current_index ;
                 //  $scope.current_index = current_index ;
@@ -157,24 +159,24 @@ apps.controller("preview_players" , [
 
               // => Load to next index
 
-              if (window.location != window.parent.location){
-                 var question_lists = $(window.parent.document).find('#docQuestions') ;
-
-                  $timeout(function(){
-                    if(current_index == 0 ) current_index = 0
-                    else current_index = current_index - 1 ;
-                    question_lists.children('li').eq(current_index).
-                    find('.single-question-container').trigger('click');
-
-                  } , 50 );
-               }
+              // if (window.location != window.parent.location){
+              //    var question_lists = $(window.parent.document).find('#docQuestions') ;
+              //
+              //     $timeout(function(){
+              //       if(current_index == 0 ) current_index = 0
+              //       else current_index = current_index - 1 ;
+              //       question_lists.children('li').eq(current_index).
+              //       find('.single-question-container').trigger('click');
+              //
+              //     } , 50 );
+              //  }
 
         });
     }
     $window.change_data_in_answer_view = (question_id  , model_type = 0 , model_id = null , model_index = null  , model_value  = null  , media_data = null ) => {
       var this_question_data = $scope.__player_object.questions.find(x => x._id == question_id);
       var questionIndex = $scope.__player_object.questions.findIndex(x => x._id == question_id);
-
+      console.log(model_type);
       if(model_type == 0){ // =>> Question
           if(questionIndex != -1){
             if(model_value != null)
@@ -193,6 +195,7 @@ apps.controller("preview_players" , [
         }
       }else if (model_type == 2 ){ // =>> Answer
         if(questionIndex != -1){
+
             var answerIndex = $scope.__player_object.questions[questionIndex].answers_format.findIndex( x => x._id ==  model_id );
             if(answerIndex != -1 ){
               if(model_value != null)
@@ -274,6 +277,7 @@ apps.controller("preview_players" , [
 
       $scope.__player_object.settings = settings;
       $scope.$apply();
+      $window.expand_the_current_iframe_object();
     };
     $window.model_deletion = (model_type , basic_model_id , model_id = null) => {
       var this_question_data = $scope.__player_object.questions.find(x => x._id == basic_model_id);
@@ -510,7 +514,8 @@ apps.controller("preview_players" , [
     $scope.start_this_quiz = () => {
       $scope.join_this_quiz();
       $timeout(function (){
-        $scope.load_quiz_timer ();
+        if( window.location == window.parent.location )
+          $scope.load_quiz_timer ();
       } , 30);
 
       try {
@@ -574,7 +579,27 @@ apps.controller("preview_players" , [
           try { $scope.slide_screens.slidePrev(); } catch (e) { }
         // }
      }
+    $scope.slide_screens_index = function (index){
 
+        if($scope.__player_object.settings != undefined ){
+
+         if($scope.__player_object.settings.progression_bar.is_available == true && $scope.__player_object.settings.progression_bar.progression_bar_layout == 0 ){
+
+             var calc = $scope.curren_question_slide * 100 /  $scope.__player_object.questions.length ;
+                $('.progress-highlighted').css({width: calc + '%'})
+             }
+         }
+    };
+    $scope.progress__calculation_compilation = () =>{
+       if($scope.__player_object.settings.progression_bar.is_available ){
+         // => Question Numbers
+         var question_pro = $('.current-question');
+
+         question_pro.html($scope.__player_object.questions.length);
+         // => Question Progress
+         $scope.slide_screens_index($scope.__player_object.questions.length);
+       }
+     };
     // => Fire those fn.
     $scope.load_application_keys();
 
@@ -588,40 +613,43 @@ apps.controller("preview_players" , [
               var current_index = lengther[0].activeIndex ;
               if(current_index >= $scope.__player_object.questions.length)
                  current_index = $scope.__player_object.questions.length ;
-                // $scope.curren_question_slide = parseInt(current_index) ;
-                //   // => Store current index
-                //  $scope.curren_question_slide = current_index ;
-                //  $scope.current_index = current_index ;
-                //  $scope.previous_index =lengther[0].previousIndex;
-              // => load to ui
+
+              if($scope.curren_question_slide > $scope.__player_object.questions.length )
+              $scope.curren_question_slide =  $scope.__player_object.questions.length
+              else
+              $scope.curren_question_slide = current_index ;
+              $scope.slide_screens_index(current_index);
 
               // => Load to next index
-
               if (window.location != window.parent.location){
-                 var question_lists = $(window.parent.document).find('#docQuestions') ;
+                 $window.parent.edit_this_question_by_crossing_this_ifrm(current_index - 1);
+              }
 
-                  $timeout(function(){
-                    if(current_index == 0 ) current_index = 0
-                    else current_index = current_index - 1 ;
-                    question_lists.children('li').eq(current_index).
-                    find('.single-question-container').trigger('click');
-
-                  } , 50 );
-                 // question_lists.children('li').eq( current_index - 1 ).trigger('click');
-               }
-              // current_index
-
-          // => When slideChange is fired
-          // => Move into attendee draft object
-          // if(current_index != 0)
-          // // $scope.attendee_draft_collection();
+            $timeout(function(){ $scope.$apply(); } , 300 );
         });
     }, 1000);
 
 
 
+    $window.randomize_all_questions = (questions  ) => {
+        $scope.__player_object.questions = questions ;
+        $timeout(function(){$scope.$apply();} , 300 );
+    };
+    $scope.randomize_arries = function (array) {
+        var currentIndex = array.length, temporaryValue, randomIndex;
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+        }
 
-
+        return array;
+      }
     // ===========================================>>>> Window Objects
     // $window
 
@@ -688,9 +716,14 @@ apps.controller("preview_players" , [
 
       }
     }
-    $window.slide_to_question_cross_iframe = () => {
-      var this_input = $("input#cross_iframe_qs_index_value").val();
-      $window.slide_screens.slideTo(this_input);
+    $window.new_sorting_for_questions = (oldIndex , newIndex , newPosition ) => {
+      $scope.__player_object.questions.splice(oldIndex , 1);
+      $scope.__player_object.questions.splice(newIndex , 0 , newPosition);
+      $scope.$apply();
+    };
+    $window.slide_to_question_in_index_number = (indexNumber) => {
+      $scope.slide_screens.slideTo(indexNumber);
+      $window.expand_the_current_iframe_object();
     };
     $window.load_qs_note_theme =  (question_type) => {
       var classes = '';

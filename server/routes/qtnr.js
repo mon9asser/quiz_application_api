@@ -106,6 +106,9 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
     }
 
     var required = new Array()
+    if(  req.body.app_settings== null  )
+      required[required.length]='app_settings';
+
     if(req.body.app_type == null  )
        required[required.length]='app_type';
     if(req.body.questionnaire_title == null || !req.body.questionnaire_title )
@@ -129,7 +132,7 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
     // Builde And Init Default !
     req.body.createdAt = new Date();
     req.body.updatedAt = new Date();
-    req.body.settings = new Object();
+    req.body.settings = req.body.app_settings ;
     req.body.questions = [];
     req.body.creator_id = user.id;
     req.body.theme_style = [];

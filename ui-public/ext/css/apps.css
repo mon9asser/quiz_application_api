@@ -3092,3 +3092,7 @@ margin-bottom: 0px !important;
     color: #ddd;
     display: none;
 }
+.writanswer-input , .writanswer-input:active , .writanswer-input:focus {
+  border: none !important;
+  resize: none;
+}

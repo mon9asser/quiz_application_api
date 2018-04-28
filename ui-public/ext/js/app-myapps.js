@@ -5,7 +5,55 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
 
   $scope.server_ip = $("#serverIp").val() ;
   $scope.user_id = $("#userId").val() ;
+  $scope.application_settings = {
+         titles :
+           {
+             title_start_with : "Write Starting Text"  ,
+             title_end_with: "Write Ending Text" ,
+             title_success_with : " Success quiz Text" ,
+             title_failed_with : "Quiz Failed Text"
+           } ,
+         label_btns : {
+             lbl_start_with:"Start" ,
+             lbl_continue_with : "Continue" ,
+             lbl_retake_with : "Retake" ,
+             lbl_review_with : "Review"
+          } ,
+         grade_settings : {
+           is_graded : false ,
+           value : 90
+         } ,
+         time_settings : {
+           is_with_time:false ,
+           value : "30" ,
+           timer_type : false ,
+           timer_layout : 0 ,
+           hours : 0 ,
+           minutes : 29 ,
+           seconds : 59
+         },
+         progression_bar : {
+           is_available:false ,
+           progression_bar_layout:0
+         } ,
+         expiration : {
+           is_set : false  ,
+           through_time : 3 , // => it will be per day
+           title : "This quiz will expire after"
+         } ,
+        //  theme_style : [] ,
+         randomize_settings : false ,
+         step_type : false ,
+         auto_slide : false ,
+         allow_touch_move : false ,
+         show_results_per_qs : false ,
+         retake_setting : false ,
+         navigation_btns : true ,
+         review_setting : false ,
+         createdAt : new Date() ,
+         updatedAt : new Date ()
 
+     };
   $scope.json_apk_file = $scope.server_ip + "ext/json/json-keys.json";
   $scope.api_url =  $scope.server_ip + "api/create" ;
   $scope.api_url_delete =  $scope.server_ip + "api/delete" ;
@@ -62,6 +110,7 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
                data: {
                  creator_id :$scope.user_id ,
                  app_type : $scope.applicationType ,
+                 app_settings : $scope.application_settings ,
                  questionnaire_title : $scope.application_title ,
                  description : $scope.application_description
                }

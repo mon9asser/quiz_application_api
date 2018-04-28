@@ -8,7 +8,7 @@
         <div class="clearFix"></div>
         <div style="display:none;" class="x-editor-x-body open-this-tab" id="question-pt">
           <div id="dynamic-layer" class="col-sm-8 top-margins">
-            <textarea id="editor-question-body" placeholder="Question Title ?" ng:model="questions_list[questionIndex].question_body" class="form-control quest-title-edit textarea-qs redactor-editor"></textarea>
+            <textarea id="editor-quest-data" placeholder="Question Title ?" ng:model="questions_list[questionIndex].question_body" class="form-control quest-title-edit textarea-qs redactor-editor"></textarea>
           </div>
           <div class="col-sm-4 media-uploads top-margins media-parts-x">
             <div class="ques-media-container">
@@ -47,7 +47,7 @@
           <div style="display:none;" class="x-editor-x-body" id="Description-pt">
             <div class="col-xs-12 col-md-12">
               <div class="row-cols margin-top">
-                 <textarea ng:model="questions_list[questionIndex].question_description" id="editor-question-desc" name="name" class="form-control descriptions description-field description-field-x redactor-editor" placeholder="Description ..." rows="3" cols="80"></textarea>
+                 <textarea ng:model="questions_list[questionIndex].question_description" id="editor-desc-data" name="name" class="form-control descriptions description-field description-field-x redactor-editor" placeholder="Description ..." rows="3" cols="80"></textarea>
               </div>
             </div>
           </div>
@@ -85,7 +85,7 @@
                            <div class="text-answers">
                              <!-- Answer Texts -->
                              <!-- <input class="writanswer-input" type="text" name="" ng:model="answer_value.value"> -->
-                             <textarea class="writanswer-input  answer-redactor-editors-x" ng:model="answer_value.value"></textarea>
+                             <textarea class="writanswer-input editor-all-ans-data" ng:model="answer_value.value" ng:change="answer_in_ui_view(answer_value.value , $index , answer_value._id)"></textarea>
 
                              <div ng:if="answer_value.media_optional != null" class="media-options">
                                <!-- Case it an image -->
