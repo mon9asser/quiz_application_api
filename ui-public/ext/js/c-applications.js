@@ -7,10 +7,11 @@ var apps = angular.module("applications" , [] );
 // ================> Configurations
 // =============================================================
 apps.config([
-  "$interpolateProvider"  ,
-  function($interpolateProvider) {
+  "$interpolateProvider" , "$qProvider" ,
+  function($interpolateProvider , $qProvider) {
       $interpolateProvider.startSymbol('{>');
       $interpolateProvider.endSymbol('<}');
+      $qProvider.errorOnUnhandledRejections(false);
   }
 ]);
 

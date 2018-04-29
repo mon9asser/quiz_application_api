@@ -2,10 +2,11 @@ var apps = angular.module("applications" , []);
   "use strict";
 
 apps.config([
-  "$interpolateProvider"  ,
-  function($interpolateProvider) {
+  "$interpolateProvider" , "$qProvider" ,
+  function($interpolateProvider , $qProvider) {
       $interpolateProvider.startSymbol('{>');
       $interpolateProvider.endSymbol('<}');
+      $qProvider.errorOnUnhandledRejections(false);
   }
 ]);
 
