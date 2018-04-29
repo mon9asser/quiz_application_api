@@ -2288,7 +2288,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       // } , 350 );
     };
     $timeout(function (){
-      $scope.change_values_in_redactor_in_answers();
+      // $scope.change_values_in_redactor_in_answers();
 
         // $('.redactor-in-0 , .redactor-in-1').on('change , input' , function (){
         //   var isQuestion = 0 ;
