@@ -80,9 +80,10 @@ apps.controller("preview_players" , [
 ( $scope, $rootScope, $timeout , $http , settings , $window  ) => {
 
     // ==> Scope init
+
     $scope.app_id              = $("#app-id").val();
     $scope.server_ip           = $("#server_ip").val();
-    $scope.user_id             = $("#user_id").val();
+    $scope.user_id             = $window.location.toString().split("/").pop();
     $scope.labels = ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
     $scope.json_source         = $scope.server_ip + settings.json_source;
     // if( window.parent.location == window.location )
@@ -343,7 +344,7 @@ apps.controller("preview_players" , [
 
         // => When button navigation is fired
         // => Move into attendee draft object
-        // $scope.attendee_draft_collection();
+        // $scope.this_attendee_draft_collection();
       } catch (e) {
 
       }
@@ -381,8 +382,8 @@ apps.controller("preview_players" , [
           classes += 'ng_block';
 
       // => check if this is selected answer or not from attendee
-      if( $scope.attendee_draft != null && $scope.attendee_draft.user_id != undefined ){
-          var drft_question = $scope.attendee_draft.questions_data.find(x => x.question_id == question_id ) ;
+      if( $scope.this_attendee_draft != null && $scope.this_attendee_draft.user_id != undefined ){
+          var drft_question = $scope.this_attendee_draft.questions_data.find(x => x.question_id == question_id ) ;
           if(drft_question != undefined ){
             var drft_selected_answer = drft_question.answer_ids.findIndex(x => x.answer_id == answer_id );
           if (drft_selected_answer != -1 ){ // => Add ( selected_answers )
@@ -414,23 +415,23 @@ apps.controller("preview_players" , [
       return classes ;
     };
     $scope.join_this_quiz = (at_this_array_only = null ) => {
-      if($scope.attendee_draft != null && $scope.attendee_draft.att_draft != undefined && $scope.attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) != -1)
+      if($scope.this_attendee_draft != null && $scope.this_attendee_draft.att_draft != undefined && $scope.this_attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) != -1)
         return false ;
 
-      if($scope.attendee_draft == null || $scope.attendee_draft.application_id == undefined){
-        $scope.attendee_draft = new Object();
-        $scope.attendee_draft['att_draft'] = new Array();
-        $scope.attendee_draft['application_id'] = $scope.application_id;
-        $scope.attendee_draft['questionnaire_info'] = $scope.application_id;
+      if($scope.this_attendee_draft == null || $scope.this_attendee_draft.application_id == undefined){
+        $scope.this_attendee_draft = new Object();
+        $scope.this_attendee_draft['att_draft'] = new Array();
+        $scope.this_attendee_draft['application_id'] = $scope.app_id ;
+        $scope.this_attendee_draft['questionnaire_info'] = $scope.app_id ;
       }
 
-        if($scope.attendee_draft.att_draft == undefined)
-          $scope.attendee_draft.att_draft = new Array();
+        if($scope.this_attendee_draft.att_draft == undefined)
+          $scope.this_attendee_draft.att_draft = new Array();
 
 
-        var cuIndex = $scope.attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) ;
+        var cuIndex = $scope.this_attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) ;
         if(cuIndex == -1 ){
-          $scope.attendee_draft.att_draft.push({
+          $scope.this_attendee_draft.att_draft.push({
             'questions_data' : new Array() ,
             'is_loaded':true ,
             'start_expiration_time' : new Date() ,
@@ -441,7 +442,8 @@ apps.controller("preview_players" , [
           });
         }
 
-        $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+
+        // $scope.this_attendee_draft = $scope.this_attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
 
     };
     $scope.load_time_tracker = () => {
@@ -600,12 +602,440 @@ apps.controller("preview_players" , [
          $scope.slide_screens_index($scope.__player_object.questions.length);
        }
      };
+
+     $scope.store_into_attendee_draft = (stored_object) => {
+       console.log( $scope.this_attendee_draft );
+     }
+     $scope.select_this_answer = ( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex) => {
+
+       // ==> Register First Action
+       if( $scope.this_attendee_draft == null )
+             {
+                $scope.this_attendee_draft = new Object();
+                $scope.this_attendee_draft['att_draft'] = new Array();
+                $scope.this_attendee_draft['application_id'] = $scope.app_id;
+                $scope.this_attendee_draft['questionnaire_info'] = $scope.app_id;
+
+
+                var cuIndex = $scope.this_attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) ;
+                   if(cuIndex == -1 ){
+                     $scope.this_attendee_draft.att_draft.push({
+                       'questions_data' : new Array() ,
+                       'is_loaded':true ,
+                       'start_expiration_time' : new Date() ,
+                       'user_id' : $scope.user_id ,
+                       'user_info':$scope.user_id ,
+                       'is_completed':false ,
+                       'impr_application_object':$scope.__player_object
+                     });
+                   }
+             }
+
+   // ==> Consider the followings :-
+   // => Make sure from require qs option
+
+   /*+++++++++++++++++++++++++++++++++++*/
+   // Givens ======= *****
+   /*+++++++++++++++++++++++++++++++++++*/
+   // => consider ( show results per qs setting ) => ?
+   var show_results_setting =  ( $scope.__player_object.settings != undefined ) ? $scope.__player_object.settings.show_results_per_qs : false ;
+   // => consider ( review setting )
+   var review_setting =  ( $scope.__player_object.settings != undefined ) ? $scope.__player_object.settings.review_setting : false ;
+   // => consider ( multi answers  )
+   var is_single_choice_setting = ( question.answer_settings.single_choice != undefined) ?  question.answer_settings.single_choice : true ;
+   // => consider auto slide when answer select if it only single answer
+   var auto_slide_setting = ( $scope.__player_object.settings != undefined ) ? $scope.__player_object.settings.auto_slide : false ;
+
+
+   var answer_iu_list = $('#question_' + questionId).children('li');
+   var this_answer = $('.answer_'+answerId) ;
+   var stored_object = {
+         question_id : questionId ,
+         answer_id : answerId ,
+         question : question ,
+         answer: answer ,
+         app_id : app_id ,
+         user_id : user_id ,
+         is_correct : is_correct ,
+         answer_index : answerIndex
+     };
+
+
+
+           //---------------------------------------------------------------
+           // ==============>> Multiple Choices ( Texts Or Media )
+           //---------------------------------------------------------------
+           if( question.question_type == 0 || question.question_type == 1 )
+               {
+                   if( is_single_choice_setting ){ // 1 - case this question has single answer
+                                   // =====> Single Answer
+                         if(review_setting && show_results_setting == false ){
+                                       /* Many clicks ! */
+                                      // => Delete the-old highlited answer and Highlight the new selected answer
+                                      answer_iu_list.removeClass('selected_answer animated shake');
+                                      this_answer.addClass('selected_answer animated shake');
+
+                                       if($scope.this_attendee_draft.att_draft != undefined){
+                                         // remove old answer answer_ids
+                                         var question_id = stored_object.question_id ;
+                                         // question_id
+                                         var attendee_part = $scope.this_attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+                                         if(attendee_part != undefined){
+                                           var target_question = attendee_part.questions_data.find(x => x.question_id == question_id);
+                                           if(target_question != undefined)
+                                           target_question.answer_ids = new Array();
+                                         }
+                                       }
+                                      // => No need to show the correct answer here
+                                      // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
+                                      // => Mongo status => move the data into mongo ( attendee draft )
+                                      $scope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
+                                      // => Auto slide status ( true ) => move to next slide directly
+                                      if(auto_slide_setting) $scope.go_to_next_question();
+                         }else if(review_setting == false && show_results_setting ) {
+                                     /* One Click ! */
+                                     // => Highlight the selected answer for some moments ( timeframe )
+                                     var there_is_highlighted_answer = false ;
+                                     answer_iu_list.each(function (i){
+                                       var there = $(this).hasClass('selected_answer');
+                                       if(there) there_is_highlighted_answer = true;
+                                     });
+                                     if(there_is_highlighted_answer == false )
+                                     this_answer.addClass('selected_answer animated shake');
+                                     else
+                                       return false ; // => Prevent user from correct or edit his answer
+
+                                     // => Show the correct answer if selected is wrong show the wrong style + right style ( answer )
+                                         // if user select the correct answer only need to show the right style in the selected answer
+                                     var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                                     if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                                       // =>> Show The correct
+                                       this_answer.addClass('right_answer');
+                                     }else {
+                                       // => show wrong answer
+                                       this_answer.addClass('wrong_answer');
+                                       // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                                       answer_iu_list.each(function (i){
+                                         var currentAnswer = $(this);
+                                         var answers_inBackend = question.answers_format[i].is_correct ;
+                                         if(answers_inBackend){
+                                           currentAnswer.addClass('right_answer');
+                                         }
+                                       });
+                                     }
+                                     // => Angular backend ( attendee_draft  ) do this ---> don't allow attendee change the selected answer
+                                     // => Mongo status => move the data into mongo ( attendee draft )
+                                     $scope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
+                                     // => Auto slide status ( true ) => move to next slide directly after few moments ( timeframe )
+                                     if(auto_slide_setting) $scope.go_to_next_question();
+                         } else if ( review_setting == false && show_results_setting == false ) {
+                                     /* One Click ! */
+                                     // => Highlight the selected answer
+                                     var there_is_highlighted_answer = false ;
+                                     answer_iu_list.each(function (i){
+                                       var there = $(this).hasClass('selected_answer');
+                                       if(there) there_is_highlighted_answer = true;
+                                     });
+                                     if(there_is_highlighted_answer == false )
+                                     this_answer.addClass('selected_answer animated shake');
+                                     else
+                                       return false ;
+                                     // => No need to show the correct answer here
+                                     // => Angular backend ( attendee_draft  ) do this ---> don't allow attendee change the selected answer
+                                     // => Mongo status => move the data into mongo ( attendee draft )
+                                     $scope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
+                                     // => Auto slide status ( true ) => move to next slide directly
+                                     if(auto_slide_setting) $scope.go_to_next_question();
+                         } else if (review_setting   && show_results_setting ) {
+                                     /* Many clicks ! */
+                                     // => Delete the-old highlited answer and Highlight the new selected answer for some moments ( timeframe )
+                                     var there_is_highlighted_answer = false ;
+                                     answer_iu_list.each(function (i){
+                                       var there = $(this).hasClass('selected_answer');
+                                       if(there) there_is_highlighted_answer = true;
+                                     });
+                                     if(there_is_highlighted_answer == false )
+                                     this_answer.addClass('selected_answer animated shake');
+                                     // => Show the correct answer if selected is wrong show the wrong style + right style ( answer )
+                                     // if user select the correct answer only need to show the right style in the selected answer
+                                     var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                                     if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                                       // =>> Show The correct
+                                       this_answer.addClass('right_answer');
+                                     }else {
+                                       // => Show wrong answer
+                                       this_answer.addClass('wrong_answer');
+                                       // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                                       answer_iu_list.each(function (i){
+                                         var currentAnswer = $(this);
+                                         var answers_inBackend = question.answers_format[i].is_correct ;
+                                         if(answers_inBackend){
+                                           currentAnswer.addClass('right_answer');
+                                         }
+                                       });
+                                     }
+
+
+
+                                     // => Angular backend ( attendee_draft  ) do this ---> allow attendee change the selected answer
+                                     $scope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
+                                     // => Auto slide status ( true ) => move to next slide directly after few moments ( timeframe )
+                                     if(auto_slide_setting) $scope.go_to_next_question();
+                         }
+
+                   }else { // 2 - case this question has many answers
+                                 // =====> Many answer cases
+                         if(review_setting && show_results_setting == false ){
+                                   /* Many clicks ! */
+                                   /*
+                                     if attendee clicked on selected answer
+                                       ( Delete the highlighted style ) => from { UI - AngulrBD  - Mongo }
+                                   */
+                                   /*
+                                     if attendee clicked on unselected answer
+                                       ( Add the highlighted style ) => into { UI - AngulrBD  - Mongo }
+                                   */
+                                   if(this_answer.hasClass('selected_answer animated shake')){
+                                     this_answer.removeClass('selected_answer animated shake');
+                                   }else {
+                                     this_answer.addClass('selected_answer animated shake');
+                                   }
+
+                                   // ===================> Updates
+
+                                   // => No need to show the correct answers
+                                   // => Angular backend ( attendee_draft  ) do this --->  allow attendee change or add the answer
+                                   // => Mongo status => move the data into mongo ( attendee draft )
+                                   $scope.store_into_attendee_draft( stored_object , false );
+                                   // => Auto slide status ( NO need to go to the next slide ) onlu continue button do this action
+                         }else if(review_setting == false && show_results_setting ) {
+                                   /* One Click for each answer ! */
+                                   var has_wrong_answer = false ;
+                                   answer_iu_list.each(function(i){
+                                     var there = $(this);
+                                     if(there.hasClass('wrong_answer'))
+                                       has_wrong_answer = true;
+                                   });
+                                   if(has_wrong_answer ) return false ;
+                                   /*
+                                     if attendee clicked on selected answer
+                                     ( Add the highlighted style ) => into { UI } ==> consider ( timeframe )
+                                       Show the correct answers if attendee selected any wrong answer from many correct answers
+                                   */
+                                   if(!this_answer.hasClass('selected_answer'))
+                                   this_answer.addClass('selected_answer animated shake');
+                                   else return false ;
+
+
+                                   // => Show the correct answers ( Case all correct answers are selected ) without wrong style
+                                   var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                                   if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                                     // =>> Show The correct
+                                     this_answer.addClass('right_answer');
+                                   }else {
+                                     // => show wrong answer
+                                     this_answer.addClass('wrong_answer');
+                                     // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                                     answer_iu_list.each(function (i){
+                                       var currentAnswer = $(this);
+                                       var answers_inBackend = question.answers_format[i].is_correct ;
+                                       if(answers_inBackend){
+                                         currentAnswer.addClass('right_answer');
+                                       }
+                                     });
+                                   }
+                                   // => Angular backend ( attendee_draft  ) do this ---> dont allow attendee change the selected answer only add new answer !
+                                   // => Mongo status => move the data into mongo ( attendee draft )
+                                   $scope.store_into_attendee_draft( stored_object , false );
+                                   // => Auto slide status ( NO need to go to the next slide ) only continue button do this action
+                         } else if ( review_setting == false && show_results_setting == false ) {
+                                   /* One Click for each answer ! */
+                                   /*
+                                     if attendee clicked on selected answer
+                                     ( Add the highlighted style ) => into { UI }
+                                   */
+                                   if(!this_answer.hasClass('selected_answer'))
+                                   this_answer.addClass('selected_answer animated shake');
+                                   else return false ;
+                                   // => No need to show the correct answers
+                                   // => Angular backend ( attendee_draft  ) do this ---> dont allow attendee change the selected answer only add new answer !
+                                   // => Mongo status => move the data into mongo ( attendee draft )
+                                   $scope.store_into_attendee_draft( stored_object , false );
+                                   // => Auto slide status ( NO need to go to the next slide ) only continue button do this action
+                         } else if (review_setting   && show_results_setting ) {
+                                   /* Many clicks ! */
+                                   /*
+                                     if attendee clicked on selected answer
+                                       ( Delete the highlighted style ) => from  { UI } => with timeframe
+
+                                       => case the sleceted answer is wrong - show the correct results with wrong answer style
+                                   */
+                                   /*
+                                     if attendee clicked on unselected answer
+                                       ( Add the highlighted style ) => into { UI } => with timeframe
+
+                                       => case the sleceted answer is right - show the correct results
+                                   */
+
+                                    if(!this_answer.hasClass('selected_answer'))
+                                     this_answer.addClass('selected_answer animated shake');
+                                     else this_answer.removeClass('selected_answer animated shake');
+
+                                     var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                                     if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                                       // =>> Show The correct
+                                       this_answer.addClass('right_answer');
+                                     }else {
+                                       // => show wrong answer
+                                       this_answer.addClass('wrong_answer');
+                                       // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                                       answer_iu_list.each(function (i){
+                                         var currentAnswer = $(this);
+                                         var answers_inBackend = question.answers_format[i].is_correct ;
+                                         if(answers_inBackend){
+                                           currentAnswer.addClass('right_answer');
+                                         }
+                                       });
+                                     }
+                                   // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the selected answer Or add new answer !
+                                   // => Mongo status => move the data into mongo ( attendee draft )
+                                   $scope.store_into_attendee_draft( stored_object , false );
+                                   // => Auto slide status ( NO need to go to the next slide ) only continue button do this action
+                         }
+                   }  //  => ( End multi answers With single answer )
+               } // End multiple Choices OR Media answers
+           //---------------------------------------------------------------
+           // ==============>>  True False ( Questions )
+           //---------------------------------------------------------------
+           if( question.question_type == 2 ){ // => True False
+              if ( review_setting && show_results_setting ) {
+                  /* Many clicks ! */
+                  // => Delete the-old highlighted answer and Highlight the new selected answer
+                  if(!this_answer.hasClass('selected_answer')){
+                    answer_iu_list.each(function(i){
+                      var there = $(this);
+                       there.removeClass('selected_answer animated shake')
+                    });
+                   this_answer.addClass('selected_answer animated shake');
+                  }
+
+                  // => show the correct answer here
+                  var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                  if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                    // =>> Show The correct
+                    this_answer.addClass('right_answer');
+                  }else {
+                    // => show wrong answer
+                    this_answer.addClass('wrong_answer');
+                    // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                    answer_iu_list.each(function (i){
+                      var currentAnswer = $(this);
+                      var answers_inBackend = question.answers_format[i].is_correct ;
+                      if(answers_inBackend){
+                        currentAnswer.addClass('right_answer');
+                      }
+                    });
+                  }
+
+                  var has_wrong_answer = false ;
+                  answer_iu_list.each(function(i){
+                    var there = $(this);
+                   if(there.hasClass('wrong_answer')) has_wrong_answer = true ;
+                  });
+                  if(has_wrong_answer) return false ;
+
+                  // => Review Old answer
+
+                  // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
+                  // => Mongo status => move the data into mongo ( attendee draft )
+                  $scope.store_into_attendee_draft( stored_object );
+                  // => Auto slide status ( true ) => move to next slide directly
+                  if(auto_slide_setting) $scope.go_to_next_question();
+                } else if ( review_setting == false && show_results_setting ){
+                  /* One Click ! */
+                  // => Highlight the selected answer for some moments ( timeframe )
+                  var has_wrong_answer = false ;
+                  answer_iu_list.each(function(i){
+                    var there = $(this);
+                   if(there.hasClass('wrong_answer') || there.hasClass('right_answer')) has_wrong_answer = true ;
+                  });
+                  if(has_wrong_answer) return false ;
+                  // => Show the correct answer if selected is wrong show the wrong style + right style ( answer )
+                      // if user select the correct answer only need to show the right style in the selected answer
+                      var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                      if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                        // =>> Show The correct
+                        this_answer.addClass('right_answer');
+                      }else {
+                        // => show wrong answer
+                        this_answer.addClass('wrong_answer');
+                        // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                        answer_iu_list.each(function (i){
+                          var currentAnswer = $(this);
+                          var answers_inBackend = question.answers_format[i].is_correct ;
+                          if(answers_inBackend){
+                            currentAnswer.addClass('right_answer');
+                          }
+                        });
+                      }
+
+                  // => Angular backend ( attendee_draft  ) do this ---> don't allow attendee change the selected answer
+                  // => Mongo status => move the data into mongo ( attendee draft )
+                  $scope.store_into_attendee_draft( stored_object );
+                  // => Auto slide status ( true ) => move to next slide directly after few moments ( timeframe )
+                  if(auto_slide_setting) $scope.go_to_next_question();
+                } else if ( review_setting && show_results_setting == false ){
+                  /* Many clicks ! */
+                 // => Delete the-old highlited answer and Highlight the new selected answer
+                  answer_iu_list.each(function(i){
+                     var there = $(this);
+                       if(there.hasClass('selected_answer'))
+                      there.removeClass('selected_answer animated shake')
+                  });
+                 this_answer.addClass('selected_answer animated shake');
+
+                 // ==> Review old Answer
+                 // ===================> Updates
+                 if($scope.this_attendee_draft.att_draft != undefined){
+                     // remove old answer answer_ids
+                     var question_id = stored_object.question_id ;
+                     // question_id
+                     var attendee_part = $scope.this_attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+                     var attendee_inx = $scope.this_attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id);
+
+                     if(attendee_inx != -1 ){
+                         var target_question = attendee_part.questions_data.find(x => x.question_id == question_id);
+                         if(target_question != undefined)
+                           target_question.answer_ids = new Array();
+                      }
+                   }
+                 // => No need to show the correct answer here
+                 // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
+                 // => Mongo status => move the data into mongo ( attendee draft )
+                 $scope.store_into_attendee_draft( stored_object );
+                 // => Auto slide status ( true ) => move to next slide directly
+                  if(auto_slide_setting) $scope.go_to_next_question();
+              } else if ( review_setting == false && show_results_setting  == false ){
+                  var is_selected_answer = false ;
+                   answer_iu_list.each(function(){
+                     var there = $(this);
+                     if(there.hasClass('selected_answer')) is_selected_answer = true ;
+                   });
+                   if(is_selected_answer) return false ;
+                  this_answer.addClass('selected_answer animated shake');
+                  $scope.store_into_attendee_draft(stored_object);
+                  if(auto_slide_setting) $scope.go_to_next_question();
+              }
+           } // => End true/false question
+
+    };
     // => Fire those fn.
     $scope.load_application_keys();
 
     // => Fire after time
     $timeout(function () {
-        $scope.slide_screens.update();
+        $scope.slide_screens = new Swiper('.swiper-container') ;
+        $window.slide_screens = new Swiper('.swiper-container') ;
         $scope.load_template_timer();
         $scope.slide_screens.on('slideChange' , function (i){
               $scope.touch_move++;
@@ -653,341 +1083,16 @@ apps.controller("preview_players" , [
     // ===========================================>>>> Window Objects
     // $window
 
-    $window.app_id              = $("#app-id").val();
-    $window.server_ip           = $("#server_ip").val();
-    $window.user_id             = $("#user_id").val();
-    $window.labels = ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
-    $window.json_source         = $window.server_ip + settings.json_source;
-    // if( window.parent.location == window.location )
 
-    $window.__player_object     = null;
-    $window.this_attendee_draft = null;
-    $window.api_key_headers     = null;
-    // ==> Time  objects
-    $window.seconds = 9 ;
-    $window.minutes = 0;
-    $window.hours = 0 ;
-    $window.quiz_time_status_is_counting = true ;
-    $window.warning_at_time = {
-       number_1 : 0 ,
-       number_2 : 0
-    };
-    // => Urls
-    $window.url_application = $window.server_ip + "api/" + $window.app_id +'/application/retrieve';
-
-    // => Functionalities
-    $window.get_slide_styles = (question_type) => {
-      var classes = '';
-        if(question_type == 0 ) classes = 'question_type_texts';
-        if(question_type == 1 ) classes = 'question_type_media';
-        if(question_type == 2 ) classes = 'question_type_boolean';
-      return classes;
-    };
-    $window.load_qs_theme = (question_type) => {
-      var classes = '';
-        if(question_type == 0 ) classes = 'question_type_texts_qs_brd';
-        if(question_type == 1 ) classes = 'question_type_media_qs_brd';
-        if(question_type == 2 ) classes = 'question_type_boolean_qs_brd';
-      return classes;
-    };
-    $window.load_slide_theme = (question_type) => {
-      var classes = '';
-      if(question_type == 0 ) classes = 'question_type_texts_bg';
-      if(question_type == 1 ) classes = 'question_type_media_bg';
-      if(question_type == 2 ) classes = 'question_type_boolean_bg';
-      return classes;
-    };
-    $window.load_border_styles = (question_type) => {
-      var classes = '';
-      if(question_type == 0 ) classes = 'question_type_texts_brd';
-      if(question_type == 1 ) classes = 'question_type_media_brd';
-      if(question_type == 2 ) classes = 'question_type_boolean_brd';
-      return classes;
-    };
-    $window.go_to_next_slider = (current_index , val = null) => {
-      try {
-        // if( window.parent.location == window.location )
-          $window.slide_screens.slideNext();
-
-        // => When button navigation is fired
-        // => Move into attendee draft object
-        // $window.attendee_draft_collection();
-      } catch (e) {
-
-      }
-    }
     $window.new_sorting_for_questions = (oldIndex , newIndex , newPosition ) => {
       $scope.__player_object.questions.splice(oldIndex , 1);
       $scope.__player_object.questions.splice(newIndex , 0 , newPosition);
       $scope.$apply();
     };
     $window.slide_to_question_in_index_number = (indexNumber) => {
+       if($scope.slide_screens == undefined) $scope.slide_screens =  new Swiper('.swiper-container') ;
       $scope.slide_screens.slideTo(indexNumber);
       $window.expand_the_current_iframe_object();
     };
-    $window.load_qs_note_theme =  (question_type) => {
-      var classes = '';
-      if(question_type == 0 ) classes = 'question_type_texts_colr';
-      if(question_type == 1 ) classes = 'question_type_media_colr';
-      if(question_type == 2 ) classes = 'question_type_boolean_colr';
-      return classes;
-    };
-    $window.load_case_many_answer_option =  (question_type , is_single_choice) => {
-      var classes = '';
-         if((question_type == 0 || question_type == 1 ) && is_single_choice == false )
-          classes += 'case_many_answers ';
 
-          if( question_type == 0 && is_single_choice == false ){
-            classes += 'question_type_texts_qs_brd ';
-          }
-          if( question_type == 1 && is_single_choice == false ){
-            classes += 'question_type_media_qs_brd ';
-          }
-         return classes;
-    };
-    $window.classes_for_this_answer = (quiz_settings , question_id , answer_id) => {
-      var classes = '';
-      // => Two blocks per row or else
-      if(quiz_settings.choice_style)
-          classes += 'ng_inline_block';
-          else
-          classes += 'ng_block';
-
-      // => check if this is selected answer or not from attendee
-      if( $window.attendee_draft != null && $window.attendee_draft.user_id != undefined ){
-          var drft_question = $window.attendee_draft.questions_data.find(x => x.question_id == question_id ) ;
-          if(drft_question != undefined ){
-            var drft_selected_answer = drft_question.answer_ids.findIndex(x => x.answer_id == answer_id );
-          if (drft_selected_answer != -1 ){ // => Add ( selected_answers )
-            classes += ' selected_answer'
-                }
-            }
-       }
-
-      // => Get Classes according to database
-      if($window.this_attendee_draft != null && $window.this_attendee_draft.questions_data != undefined ){
-        var thisQuestion = $window.this_attendee_draft.questions_data.find(x => x.question_id == question_id) ;
-        if(thisQuestion != undefined) {
-          var answers_array = thisQuestion.answer_ids ;
-          var answer_object_index = answers_array.findIndex(x => x.answer_id == answer_id);
-          if( answer_object_index != -1 ){
-            var selected_answer = answers_array[answer_object_index];
-            if($window.__player_object.settings.show_results_per_qs){ // => true
-              // =>> check if show the right answer option is true
-              if(selected_answer.is_correct){
-                classes += ' right_answer';
-              }else {
-                classes += ' wrong_answer';
-              }
-            } else classes += ' selected_answer';
-          }
-        }
-      }
-
-      return classes ;
-    };
-    $window.join_this_quiz = (at_this_array_only = null ) => {
-      if($window.attendee_draft != null && $window.attendee_draft.att_draft != undefined && $window.attendee_draft.att_draft.findIndex (x => x.user_id == $window.user_id) != -1)
-        return false ;
-
-      if($window.attendee_draft == null || $window.attendee_draft.application_id == undefined){
-        $window.attendee_draft = new Object();
-        $window.attendee_draft['att_draft'] = new Array();
-        $window.attendee_draft['application_id'] = $window.application_id;
-        $window.attendee_draft['questionnaire_info'] = $window.application_id;
-      }
-
-        if($window.attendee_draft.att_draft == undefined)
-          $window.attendee_draft.att_draft = new Array();
-
-
-        var cuIndex = $window.attendee_draft.att_draft.findIndex (x => x.user_id == $window.user_id) ;
-        if(cuIndex == -1 ){
-          $window.attendee_draft.att_draft.push({
-            'questions_data' : new Array() ,
-            'is_loaded':true ,
-            'start_expiration_time' : new Date() ,
-            'user_id' : $window.user_id ,
-            'user_info':$window.user_id ,
-            'is_completed':false ,
-            'impr_application_object':$window.__player_object
-          });
-        }
-
-        $window.this_attendee_draft = $window.attendee_draft.att_draft.find(x => x.user_id == $window.user_id);
-
-    };
-    $window.load_time_tracker = () => {
-
-    }
-    $window.load_quiz_timer = () => {
-      if($window.__player_object.settings != undefined ){
-         var timeSettings = $window.__player_object.settings.time_settings;
-
-         if(timeSettings && timeSettings.is_with_time)
-            $window.timer = setTimeout($window.load_time_tracker , 1000);
-       }
-    }
-    $window.load_template_timer = () => {
-       console.log({
-         settings : $window.__player_object
-       });
-       if($window.__player_object != undefined && $window.__player_object != null && $window.__player_object.settings != undefined ){
-       var timeSettings = $window.__player_object.settings.time_settings;
-
-         if(timeSettings && timeSettings != undefined || timeSettings.is_with_time){
-           $window.seconds = timeSettings.seconds;
-           $window.minutes = timeSettings.minutes ;
-           $window.hours   = timeSettings.hours;
-
-         }
-       }
-     }
-    $window.load_time_tracker  = () => {
-      if( $window.quiz_time_status_is_counting){
-            var sec  = $('.sec');
-            var mins = $('.min');
-            var hrs  = $('.hr');
-            var is_hourly = $window.__player_object.settings.time_settings.timer_type ;
-            if(is_hourly){
-               if($window.seconds == 0 && $window.minutes == 0 && $window.hours == 0)
-                  {
-                    // $window.do_an_action_with_closest_time();
-                    return false ;
-                  }
-               }else {
-                  if( $window.seconds == 0 && $window.minutes == 0 )
-                      {
-                        // $window.do_an_action_with_closest_time();
-                        return false ;
-                      }
-            }
-            $window.seconds--;
-            if( $window.seconds < 0 ){
-               $window.seconds = 59;
-               $window.minutes--;
-            }
-
-            if(is_hourly){
-                 if($window.minutes < 00 && $window.hours > 0 ) {
-                   $window.minutes = 59;
-                   $window.hours--;
-                 }
-            }
-
-          sec.html(($window.seconds < 10 ) ? '0'+ $window.seconds : $window.seconds);
-          mins.html(($window.minutes < 10 ) ? '0'+$window.minutes:$window.minutes );
-          if(is_hourly){
-              hrs.html( ( $window.hours < 10 ) ? '0'+$window.hours : $window.hours);
-          }
-          // Load time
-          $window.load_quiz_timer();
-      }
-    }
-    $window.start_this_quiz = () => {
-      $window.join_this_quiz();
-      $timeout(function (){
-        $window.load_quiz_timer ();
-      } , 30);
-
-      try {
-        // if( window.parent.location == window.location )
-          $window.slide_screens.slideNext();
-
-      } catch (e) {
-
-      }
-    };
-    $window.back_to_quizzes = () => {
-      return window.location.href = $window.server_ip+'quizzes';
-    };
-    $window.load_quiz_status_theme = () => {
-      var classes = '';
-      // if($window.quiz_status == 0 ) // =>  take thi quiz
-       if ($window.quiz_status == 1) // =>  Expire warning
-      classes = 'expiration_warning_message'
-       if ($window.quiz_status == 2) // =>  is expire
-      classes = 'quiz_is_expired'
-      if ($window.quiz_status == 3) // =>  is Completed
-      classes = 'completed_quiz'
-      return classes ;
-    };
-    $window.load_application_for_preview = function () {
-      return  $http({
-            url : $window.url_application ,
-            type : "GET" ,
-            headers : $window.api_key_headers
-          }).then(function(resp){
-
-          return  $window.__player_object = resp.data ;
-          },function(err){ console.log(err); });
-      };
-    $window.load_application_keys = () => {
-      $.getJSON( $window.json_source , function (apk_keys){
-        $window.api_key_headers = {
-          "X-api-app-name":apk_keys.APP_NAME ,
-          "X-api-keys":apk_keys.API_KEY
-        }
-         $window.api_key_headers ;
-
-         // ==> calling funcstionalities
-         $window.load_application_for_preview();
-         // ...
-      });
-    }
-    $window.time_tracker_layout = () => {
-      var layout_template = $window.__player_object.settings.time_settings.timer_layout;
-      return '/time-layouts/layout-'+layout_template+'.hbs';
-    };
-    $window.progression_layout = () => {
-       var layout_template = $window.__player_object.settings.progression_bar.progression_bar_layout;
-       return '/progressbar-layouts/layout-'+layout_template+'.hbs';
-     };
-    $window.back_to_prev_slider = () => {
-        // if( window.parent.location == window.location ){
-          try { $window.slide_screens.slidePrev(); } catch (e) { }
-        // }
-     }
-
-    // => Fire those fn.
-    $window.load_application_keys();
-
-    // => Fire after time
-    $timeout(function () {
-        // $window.slide_screens.update();
-        // $window.load_template_timer();
-        // $window.slide_screens.on('slideChange' , function (i){
-        //       $window.touch_move++;
-        //       var lengther = $(this);
-        //       var current_index = lengther[0].activeIndex ;
-        //       if(current_index >= $window.__player_object.questions.length)
-        //          current_index = $window.__player_object.questions.length ;
-        //         // $window.curren_question_slide = parseInt(current_index) ;
-        //         //   // => Store current index
-        //         //  $window.curren_question_slide = current_index ;
-        //         //  $window.current_index = current_index ;
-        //         //  $window.previous_index =lengther[0].previousIndex;
-        //       // => load to ui
-        //
-        //       // => Load to next index
-        //
-        //       if (window.location != window.parent.location){
-        //          var question_lists = $(window.parent.document).find('#docQuestions') ;
-        //
-        //           $timeout(function(){
-        //             if(current_index == 0 ) current_index = 0
-        //             else current_index = current_index - 1 ;
-        //             question_lists.children('li').eq(current_index).
-        //             find('.single-question-container').trigger('click');
-        //
-        //           } , 50 );
-        //          // question_lists.children('li').eq( current_index - 1 ).trigger('click');
-        //        }
-        // });
-    }, 1000);
-
-
-    $timeout(function(){
-      $window.slide_system();
-    } , 10);
 }]);

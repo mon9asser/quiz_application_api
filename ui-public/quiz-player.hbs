@@ -286,9 +286,7 @@
                    <!-- Result screen contents  -->
                    <div ng:class="(is_resume == null)?'about-quiz':'result-slide'" class="container screen-container"> <!-- label-question -->
                        <div>
-
-
-                              <!-- Case successed in quiz  -->
+                            <!-- Case successed in quiz  -->
                               <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_success_with | trust_this_html_values"></div>
                               <!-- Case failed in quiz  -->
                               <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_failed_with | trust_this_html_values"></div>

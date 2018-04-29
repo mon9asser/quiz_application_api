@@ -1123,7 +1123,6 @@ apps.controller("players" , [
                  });
                  if(has_wrong_answer) return false ;
 
-
                  // => Review Old answer
 
                  // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
@@ -1140,8 +1139,6 @@ apps.controller("players" , [
                   if(there.hasClass('wrong_answer') || there.hasClass('right_answer')) has_wrong_answer = true ;
                  });
                  if(has_wrong_answer) return false ;
-
-
                  // => Show the correct answer if selected is wrong show the wrong style + right style ( answer )
                      // if user select the correct answer only need to show the right style in the selected answer
                      var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );

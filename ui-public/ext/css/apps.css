@@ -402,6 +402,7 @@ textarea.form-control {
     background: #fff;
     padding: 3px 10px;
     border-radius: 0px !important;
+    min-height: 300px;
 }
 .text-formats > ul {
     display: block;

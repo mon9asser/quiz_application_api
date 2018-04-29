@@ -186,23 +186,86 @@
             </div>
             <!-- End Questions -->
         </div>
+
+
+        <!-- Godbye screen  -->
+        <div class="swiper-slide">
+            <!-- Ending screen contents  -->
+            <div class="container screen-container about-quiz">
+                  <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_end_with | trust_this_html_values"></div>
+                  <!--  Warning Case-->
+                  <div class="warning_case" style="background: tomato;" ng:class="load_slide_theme(obj_val.question_type)" ng:click="go_to_not_attended_question()"></div>
+                  <!-- Question buttons  -->
+                  <div class="qusu-details ques-questions text-right">
+                      <button ng:click="back_to_prev_slider()" class="button-take-this" type="button" name="button">
+                        <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                        Back
+                      </button>
+                      <button data:ng:click="submit_quiz_into_report()" class="button-take-this submi_the_quiz_handler" type="button" name="button">
+                        <i class="fa fa-arrow-right fac-icon-submit" aria-hidden="true"></i>
+                        <span>Submit Quiz</span>
+                      </button>
+                 </div>
+            </div>
+            <!-- End Ending screen contents  -->
+        </div>
+
+        <div class="swiper-slide welcoming-screen-x">
+            <!-- Result screen contents  -->
+            <div ng:class="(is_resume == null)?'about-quiz':'result-slide'" class="container screen-container"> <!-- label-question -->
+                <div>
+                     <!-- Case successed in quiz  -->
+                       <div class="description-body redactor-styles title_success_with" ng:bind:html="__player_object.settings.titles.title_success_with | trust_this_html_values"></div>
+                       <!-- Case failed in quiz  -->
+                       <div class="description-body redactor-styles title_failed_with" ng:bind:html="__player_object.settings.titles.title_failed_with | trust_this_html_values"></div>
+                       <!-- The Grade  -->
+                       <div class="quiz-grade">
+                         <!-- <div style="background: #f9f9f9;" class="grade_result_loder text-center">
+                           Loading results ..
+                         </div> -->
+                         <div class="quiz-grade grade-score text-center">
+                           <h3>Your score : {> this_attendee_draft.report_attendee_details.correct_answers  + "/" + __player_object.questions.length <}</h3>
+                         </div>
+                         <div class="quiz-grade grade-score text-center">
+                           <h5>Pass grade : {> this_attendee_draft.report_attendee_details.score <}%</h5>
+                         </div>
+                       </div>
+                       <!-- Question buttons  -->
+                       <div class="qusu-details text-right">
+                           <button ng:if="__player_object.settings.review_setting == true" ng:click="review_all_resolved_question()" class="button-take-this" type="button" name="button">
+                             <i class="fa fa-reply-all" aria-hidden="true"></i>
+                             Review
+                           </button>
+                            <button  ng:if="__player_object.settings.retake_setting == true" ng:click="retake_this_quiz()" class="button-take-this retake-this-quiz" type="button" name="button">
+                             <i class="fa fa-repeat" aria-hidden="true"></i>
+                             <span>Retake</span>
+                           </button>
+                      </div>
+               </div>
+
+            </div>
+            <!-- End Result screen contents  -->
+        </div>
+
+
+
       </div>
       </div>
 
 
       <script type="text/javascript">
-        setTimeout(function(){
-          if(window.location != window.parent.location){
-            // ==> check if this window in iframe !
-              var op = window.parent;
-              var offsetH = document.getElementById('preview_player_container').offsetHeight;
-                //alert(offsetH);
-
-                var frameObject = $(op.frames.window.document).find('iframe#live-preview-iframe')  ;
-                frameObject.css({'height' : offsetH + 20 + 'px' , width:'100%' , margin:'8px auto'});
-
-                $('.about-quiz, .screen-container , .object-layouts-container').css({width:'95%'})
-            }
-        } , 2800 )
+        // setTimeout(function(){
+        //   // if(window.location != window.parent.location){
+        //   //   // ==> check if this window in iframe !
+        //   //     var op = window.parent;
+        //   //     var offsetH = document.getElementById('preview_player_container').offsetHeight;
+        //   //       //alert(offsetH);
+        //   //
+        //   //       var frameObject = $(op.frames.window.document).find('iframe#live-preview-iframe')  ;
+        //   //       frameObject.css({'height' : offsetH + 20 + 'px' , width:'100%' , margin:'8px auto'});
+        //   //
+        //   //       $('.about-quiz, .screen-container , .object-layouts-container').css({width:'95%'})
+        //   //   }
+        // } , 2800 )
       </script>
 {{> attendee_preview_footer }}

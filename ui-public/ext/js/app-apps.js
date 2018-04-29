@@ -2179,11 +2179,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
     $scope.init_answer_preview = (redactorElement) => {
       $timeout(function () {
-
-        var answer_id = redactorElement.parent().parent().parent().parent().attr('data-answer-id').split('_').pop() ;
-        var answer_index = redactorElement.parent().parent().parent().parent().index();
-        var answer_value = answer_xx[answer_index];
-        $scope.iframe_access.change_data_in_answer_view($scope.question_id , 2 , answer_id , answer_index , answer_value );
+          var answer_id = redactorElement.parent().parent().parent().parent().attr('data-answer-id').split('_').pop() ;
+          var answer_index = redactorElement.parent().parent().parent().parent().index();
+          var answer_value = answer_xx[answer_index];
+          $scope.iframe_access.change_data_in_answer_view($scope.question_id , 2 , answer_id , answer_index , answer_value );
       }, 250);
     };
     $scope.change_values_in_redactor_in_answers = (new__Answer = null ) => {
@@ -2338,16 +2337,29 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           // ==> Storing Data
           var app_setting_end_message = $R("#editor-end-txt" , "source.getCode");
           $scope.application_settings.settings.titles.title_end_with = app_setting_end_message ;
+          // ==> Slide to screen
+          $scope.iframe_access.slide_to_question_in_index_number($scope.questions_list.length + 1);
+          $scope.iframe_access.set_application_settings($scope.application_settings.settings);
         }
         if( model_type == 4 ){ // Success Screen
           // ==> Storing Data
           var app_setting_scs_message = $R("#editor-scs-txt" , "source.getCode");
           $scope.application_settings.settings.titles.title_success_with = app_setting_scs_message ;
+          // ==> Hide success case it failed screen
+          $scope.iframe_access.hide_this_access(model_type);
+          // ==> slide to screen
+          $scope.iframe_access.slide_to_question_in_index_number($scope.questions_list.length + 2);
+          $scope.iframe_access.set_application_settings($scope.application_settings.settings);
         }
         if( model_type == 5 ){ // Failed Screen
           // ==> Storing Data
           var app_setting_fld_message = $R("#editor-fld-txt" , "source.getCode");
           $scope.application_settings.settings.titles.title_failed_with = app_setting_fld_message ;
+          // ==> Hide success case it failed screen
+          $scope.iframe_access.hide_this_access(model_type);
+          // ==> Slide to screen
+          $scope.iframe_access.slide_to_question_in_index_number($scope.questions_list.length + 2);
+          $scope.iframe_access.set_application_settings($scope.application_settings.settings);
         }
         if( model_type > 5 ){ // Answers
           // ==> Storing Data
