@@ -177,11 +177,11 @@
                              </div>
                              <div class="control-item-content" >
                                 <div class="control-item-content-text">
-                                   <span class="screen-texts">Quiz Start text</span>
+                                   <span class="screen-texts">Welcome Text</span>
                                    <textarea ng:change="update_settings_in_view()" ng:model="application_settings.settings.titles.title_start_with" id="editor-strt-txt" class="quiz-titlex screen-redactors-strt-txt">Writ start Quiz</textarea>
                                 </div>
                                 <div class="control-item-content-text">
-                                   <span class="screen-texts">Quiz End text</span>
+                                   <span class="screen-texts">Goodbye Text</span>
                                    <!-- <input ng:change="update_settings_in_view()"  type="text" name="" value="" placeholder=""> -->
                                    <textarea ng:change="update_settings_in_view()" ng:model="application_settings.settings.titles.title_end_with" id="editor-end-txt" class="quiz-titlex screen-redactors-end-txt">You have successfully completed the this quizs</textarea>
                                 </div>
@@ -206,20 +206,20 @@
                              <div class="control-item-content" >
                                 <div class="control-item-content-text">
                                    <span>Quiz Start Button:</span>
-                                   <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.label_btns.lbl_start_with" class="quiz-titlex " type="text" name="" value="" placeholder=" Start Quiz">
+                                   <input ng:change="update_labels_in_srt_menu_settings()" ng:model="application_settings.settings.label_btns.lbl_start_with" class="quiz-titlex " type="text" name="" value="" placeholder=" Start Quiz">
                                 </div>
                                 <div class="control-item-content-text">
                                    <span>Restart Button</span>
-                                   <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.label_btns.lbl_retake_with" class="quiz-titlex " type="text" name="" value="" placeholder="Retake Quiz">
+                                   <input ng:change="update_labels_in_retk_menu_settings()" ng:model="application_settings.settings.label_btns.lbl_retake_with" class="quiz-titlex " type="text" name="" value="" placeholder="Retake Quiz">
                                 </div>
                                 <div class="control-item-content-text">
                                    <span>Continue Button</span>
-                                   <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.label_btns.lbl_continue_with" class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
+                                   <input ng:change="update_labels_in_question_buttons_mnu_settings()" ng:model="application_settings.settings.label_btns.lbl_continue_with" class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
                                 </div>
 
                                 <div class="control-item-content-text">
                                    <span>Review Button</span>
-                                   <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.label_btns.lbl_review_with" class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
+                                   <input ng:change="update_labels_in_retk_menu_settings()" ng:model="application_settings.settings.label_btns.lbl_review_with" class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
                                 </div>
 
                              </div>

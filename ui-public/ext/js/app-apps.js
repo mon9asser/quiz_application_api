@@ -1041,6 +1041,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     $scope.unsaved_question_x = function (new_vals , for_this_setting = null ){
         $scope.unsaved_question = true;
         $scope.questions_list[$scope.questionIndex].answer_settings = $scope.question_settings;
+
+        // ==> Show it in preview
+
+        var questionSettings = $scope.questions_list.find(x => x._id == $scope.question_id).answer_settings ;
+        $scope.iframe_access.view_question_answer($scope.question_id , questionSettings);
     };
 
     $scope.create_new_answer = function (){
@@ -2397,7 +2402,21 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     $scope.update_settings_in_view = ()=> {
       $scope.iframe_access.set_application_settings($scope.application_settings.settings);
     }
-
+    $scope.update_labels_in_question_buttons_mnu_settings = () => {
+      $scope.iframe_access.set_application_settings($scope.application_settings.settings);
+      $scope.iframe_access.slideToThisIndex(1);
+      $timeout(function(){ $scope.$apply() } , 300 );
+    };
+    $scope.update_labels_in_srt_menu_settings = () => {
+      $scope.iframe_access.set_application_settings($scope.application_settings.settings);
+      $scope.iframe_access.slideToThisIndex(0);
+      $timeout(function(){ $scope.$apply() } , 300 );
+    };
+    $scope.update_labels_in_retk_menu_settings = () => {
+      $scope.iframe_access.set_application_settings($scope.application_settings.settings);
+      $scope.iframe_access.slideToThisIndex($scope.questions_list.length + 2);
+      $timeout(function(){ $scope.$apply() } , 300 );
+    };
     $scope.randomize_all_questions =() => {
           var questionArgs ;
       if($scope.application_settings.settings.randomize_settings )
