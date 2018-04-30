@@ -130,13 +130,17 @@ apps.controller("preview_players" , [
       $timeout(function(){
         var parentObject = $($window.parent.document.documentElement).find("iframe#live-preview-iframe");
         var dataContents = $("#preview_player_container");
+        var targetHight = dataContents.height();
+        if ( targetHight == 0 ) {
+          targetHight = 320 ;
+        }
         parentObject.css({
-          height : dataContents.height() + 30 + 'px' ,
+          height : targetHight + 30 + 'px' ,
           width : '100%'
         });
       } , 5);
     }
-  
+
     $window.slideToThisIndex = (index) => {
       $scope.slide_screens.slideTo(index);
     };
