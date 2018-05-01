@@ -143,13 +143,15 @@ apps.controller("preview_players" , [
       $timeout(function(){
         var parentObject = $($window.parent.document.documentElement).find("iframe#live-preview-iframe");
         var dataContents = $("#preview_player_container");
-        var dataQuiz = ( $(".tool-obj").height() == null ) ? 0 : $(".tool-obj").height() ;
+        var dataQuiz = ( $(".tool-obj").outerHeight() == null ) ? 0 : $(".tool-obj").outerHeight() ;
         var dataTools = $(".swiper-container");
-        alert('preview_player = ' + dataContents.height() + ' tool-obj = ' + dataQuiz + ' swiperContainer ' + dataTools.height() );
+        alert('preview_player = ' + dataContents.outerHeight() + ' tool-obj = ' + dataQuiz + ' swiperContainer ' + dataTools.outerHeight() );
+
         parentObject.css({
-          height : dataContents.height() + 30 + 'px' ,
+          height : dataContents.outerHeight() + 30 + 'px' ,
           width : '100%'
         });
+
       } , 500 );
     }
 
