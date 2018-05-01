@@ -145,10 +145,10 @@ apps.controller("preview_players" , [
         var parentObject = $($window.parent.document.documentElement).find("iframe#live-preview-iframe");
         var dataContents = $("#preview_player_container");
         var dataQuiz = ( $(".tool-obj").outerHeight() == null ) ? 0 : $(".tool-obj").outerHeight() ;
-        var dataTools = $(".swiper-container");
-        alert('preview_player = ' + dataContents.outerHeight() + ' tool-obj = ' + dataQuiz + ' swiperContainer ' + dataTools.outerHeight() );
+        var swiperContainer = $(".swiper-container").outerHeight();
+        alert('swiper-container = ' + swiperContainer );
         parentObject.css({
-          height : dataContents.outerHeight() + 30 + 'px' ,
+          height : swiperContainer + 30 + 'px' ,
           width : '100%'
         });
 
@@ -1608,5 +1608,5 @@ apps.controller("preview_players" , [
       $window.expand_the_current_iframe_object();
     };
 
-    
+
 }]);
