@@ -154,8 +154,11 @@ apps.controller("preview_players" , [
         {
            this_question_data.answers_format.push({$$hashKey:null , _id:answer_data._id , value : answer_data.value});
         }
-        $scope.$apply();
-        $scope.expand_the_current_iframe_object();
+
+        $timeout(function(){
+          $scope.expand_the_current_iframe_object();
+        } , 1000 );
+        $timeout(function(){ $scope.$apply(); } , 30);
     };
     $window.slide_system = () => {
         $scope.slide_screens = new Swiper('.swiper-container') ;

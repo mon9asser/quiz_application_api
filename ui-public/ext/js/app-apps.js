@@ -1081,14 +1081,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
          if( $scope.question_type == 1 )
           new_answer['media_src'] = $scope.server_ip + "img/media-icon.png" ;
 
-           question_selected.answers_format.push(new_answer);
-
-
-
+      question_selected.answers_format.push(new_answer);
       $scope.iframe_access.add_data_to_view($scope.question_id , new_answer);
-
-      //  $scope.iframe_access.expand_the_current_iframe_object();
-      // $scope.loading_application_redactors();
     };
     $scope.question_answer_deletion = function (answer_id){
 
