@@ -1050,7 +1050,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     };
 
     $scope.create_new_answer = function (){
-      var iframeObject = document.getElementById('live-preview-iframe').contentWindow.document.body.offsetHeight
+      var iframeObject = document.getElementById('live-preview-iframe').contentWindow.document.body.children[4].offsetHeight;
       console.log({iframeObject:iframeObject});
       if($scope.question_id == null ){
         console.log("Please select question from question list");
