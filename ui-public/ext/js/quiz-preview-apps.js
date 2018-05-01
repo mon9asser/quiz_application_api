@@ -85,7 +85,8 @@ apps.controller("preview_players" , [
       var solved_answers = b.map( function(x){ return x.answer_id; } );
       var is_right_question =  (solved_answers.sort().join('') == correct_answers.sort().join(''));
       return is_right_question ;
-    }
+    };
+
     $scope.app_id              = $("#app-id").val();
     $scope.server_ip           = $("#server_ip").val();
     $scope.user_id             = $window.location.toString().split("/").pop();
@@ -146,7 +147,6 @@ apps.controller("preview_players" , [
         var dataQuiz = ( $(".tool-obj").outerHeight() == null ) ? 0 : $(".tool-obj").outerHeight() ;
         var dataTools = $(".swiper-container");
         alert('preview_player = ' + dataContents.outerHeight() + ' tool-obj = ' + dataQuiz + ' swiperContainer ' + dataTools.outerHeight() );
-
         parentObject.css({
           height : dataContents.outerHeight() + 30 + 'px' ,
           width : '100%'
@@ -1608,4 +1608,10 @@ apps.controller("preview_players" , [
       $window.expand_the_current_iframe_object();
     };
 
+    $scope.window_navigation.on("load" , function (){
+      $timeout(function(){
+        var windowH =  $('.preview_player_container').height();
+        alert({'currentWindow':windowH});
+      } , 1000)
+    });
 }]);
