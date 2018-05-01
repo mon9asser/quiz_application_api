@@ -1,0 +1,35 @@
+    <!-- frameworks -->
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/swiper.min.js"></script>
+    <!-- Rating Scale Plugin -->
+    <!-- <script ng:if="page_name=='api'" src="{{ server_ip }}ext/frameworks/js/jquery.barrating.min.js" charset="utf-8"></script> -->
+    <!-- Redactor -->
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor.js" ng:if="page_name=='api'"></script>
+    <!-- Redactor Plugins -->
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-color.js" ng:if="page_name=='api'"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-size.js" ng:if="page_name=='api'"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-family.js" ng:if="page_name=='api'"></script>
+    <script src="http://cdn.iframe.ly/embed.js" async></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/slick/slick.min.js"></script>
+
+ 
+    <!-- SWAL Sweet Alert  -->
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sweetalert.min.js" ng:if="page_name=='api'"></script>
+    <!-- Quiz Application -->
+    <script ng:if="page_name=='api'" type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sortable.min.js"></script>
+
+    <!-- Main Applications { Angular Part } -->
+    <!-- <script type="text/javascript" src="{{ server_ip }}ext/js/a-applications.js"></script> -->
+    <script type="text/javascript" src="{{ server_ip }}ext/js/a-application.js"></script>
+    <!-- Login Page -->
+    <script ng:if="page_name=='login'" type="text/javascript" src="{{ server_ip }}ext/js/app-login.js"></script>
+    <!-- Register Page -->
+    <script ng:if="page_name=='register'" type="text/javascript" src="{{ server_ip }}ext/js/app-register.js"></script>
+    <!-- My application Page -->
+    <script ng:if="page_name=='questionnaires'" type="text/javascript" src="{{ server_ip }}ext/js/app-myapps.js"></script>
+    <!-- App editor page -->
+    <script ng:if="page_name=='api'" type="text/javascript" src="{{ server_ip }}ext/js/app-apps.js"></script>
+    <!-- APK api keys -->
+    <script ng:if="page_name=='create_app'" type="text/javascript" src="{{ server_ip }}ext/js/app-api-keys.js"></script>
+   </body>
+</html>

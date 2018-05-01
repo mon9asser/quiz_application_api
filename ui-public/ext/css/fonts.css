@@ -1,0 +1,139 @@
+
+@font-face {
+  font-family: 'icomoon';
+  src:  url('../fonts/icomoon/icomoon.eot?xgs8s');
+  src:  url('../fonts/icomoon/icomoon.eot?xgs8s#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon/icomoon.ttf?xgs8s') format('truetype'),
+    url('../fonts/icomoon/icomoon.woff?xgs8s') format('woff'),
+    url('../fonts/icomoon/icomoon.svg?xgs8s#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-check:before {
+  content: "\e900";
+}
+.icon-check-circle:before {
+  content: "\e901";
+}
+.icon-check-square:before {
+  content: "\e902";
+}
+.icon-list:before {
+  content: "\e903";
+}
+.icon-share-2:before {
+  content: "\e904";
+}
+.icon-image:before {
+  content: "\e90d";
+}
+.icon-ungroup:before {
+  content: "\ea59";
+}
+.icon-insert-template:before {
+  content: "\ea72";
+}
+
+
+
+/*Roboto Family*/
+@font-face {
+  font-family: 'RobotoBold';
+  src:url('../fonts/roboto/Roboto-Bold.ttf') ;
+}
+
+@font-face {
+  font-family: 'Roboto Bold';
+  src:url('../fonts/roboto/Roboto-Bold.ttf') ;
+}
+
+@font-face {
+  font-family: 'RobotoMedium';
+  src:url('../fonts/roboto/Roboto-Medium.ttf') ;
+}
+@font-face {
+  font-family: 'Roboto Medium';
+  src:url('../fonts/roboto/Roboto-Medium.ttf') ;
+}
+
+@font-face {
+  font-family: 'RobotoRegular';
+  src:url('../fonts/roboto/Roboto-Regular.ttf') ;
+}
+@font-face {
+  font-family: 'Roboto Regular';
+  src:url('../fonts/roboto/Roboto-Regular.ttf') ;
+}
+
+/*Open Sans*/
+@font-face {
+  font-family: 'OpenSansBold';
+  src:url('../fonts/Open_Sans/OpenSans-Bold.ttf') ;
+}
+@font-face {
+  font-family: 'Open Sans Bold';
+  src:url('../fonts/Open_Sans/OpenSans-Bold.ttf') ;
+}
+
+@font-face {
+  font-family: 'OpenSansSemiBold';
+  src:url('../fonts/Open_Sans/OpenSans-SemiBold.ttf') ;
+}
+@font-face {
+  font-family: 'Open Sans Semi Bold';
+  src:url('../fonts/Open_Sans/OpenSans-SemiBold.ttf') ;
+}
+
+@font-face {
+  font-family: 'PTSansRegular';
+  src:url('../fonts/PT_Sans/PT_Sans-Web-Regular.ttf') ;
+}
+
+
+@font-face {
+  font-family: 'OpenSansRegular';
+  src:url('../fonts/Open_Sans/OpenSans-Regular.ttf') ;
+}
+
+@font-face {
+  font-family: 'Open Sans Regular';
+  src:url('../fonts/Open_Sans/OpenSans-Regular.ttf') ;
+}
+
+
+
+/*Numans*/
+@font-face {
+  font-family: 'NumbansRegular';
+  src:url('../fonts/Numans/Numans-Regular.ttf') ;
+}
+
+@font-face {
+  font-family: 'Numbans Regular';
+  src:url('../fonts/Numans/Numans-Regular.ttf') ;
+}
+/** Petit_Formal_Script */
+@font-face {
+  font-family: 'PetitFormalScript';
+  src:url('../fonts/Petit_Formal_Script/PetitFormalScript-Regular.ttf') ;
+}
+@font-face {
+  font-family: 'Petit Formal Script';
+  src:url('../fonts/Petit_Formal_Script/PetitFormalScript-Regular.ttf') ;
+}

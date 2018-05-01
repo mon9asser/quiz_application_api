@@ -1,0 +1,120 @@
+html , body {
+  background: #fff ;
+}
+.app-container{
+  display: block;
+  width: 100%;
+  position: relative;
+  margin-top: 30px;
+  /*border-top: 1px dashed #eee;*/
+}
+.search-container {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  text-align: center;
+}
+.search-element,.search-element:focus , .search-element:active , .search-element:hover
+{
+    outline: none;
+    display: inline-block;
+    position: relative;
+    padding: 6px;
+    margin-top: 15px;
+    width: 60%;
+    border: 1px dashed teal;
+    color: teal;
+    color: #999;
+}
+.search-container > button,
+.search-container > button:hover ,
+.search-container > button:active ,
+.search-container > button:focus {
+  padding: 0px;
+  border: 1px dashed #eee;
+  background: transparent;
+  outline: none;
+  padding: 5px 10px;
+  margin: 0px 0px;
+  color: #fff;
+  background: teal ;
+}
+.search-ctr{
+  display: inline-block;
+  position: relative;
+  border-bottom: 1px dashed #dfdfdf;
+  padding-bottom: 20px;
+  width: 100%;
+}
+.questinnaire-list {
+  display: block;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #eee;
+  padding: 5px;
+  margin-top: 10px;
+  text-align: center;
+  color: #888;
+  border-radius: 5px;
+}
+.disabled-block {
+  display: none;
+}
+.list-apps{
+  display: block;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 1px dashed #eee;
+  border-top: 0px;
+  padding: 3px;
+}
+.my-qusu {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  padding: 0px;
+  margin: 0px;
+  margin-left: 0px;
+  width: 100%;
+}
+.my-qusu li {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border-bottom: 1px dashed #eee;
+}
+.my-qusu li:hover {
+  background: #fbfbfbb8;
+  cursor: pointer;
+}
+.my-qusu li:last-child{
+  border: none;
+}
+.my-qusu li a , .my-qusu li span {
+  padding: 3px;
+  display: inline-block;
+  color: #999;
+}
+.my-qusu li span span {
+  display: block;
+  width: 100%;
+  margin: 0px;
+  line-height: 1.2;
+}
+.my-qusu li span span:last-child {
+  font-size: 10px;
+  color: #999;
+}
+.my-qusu li a {
+  float: right
+}
+.my-qusu li span {
+  float: left;
+}
+.app-container {
+  margin-top: 60px;
+}

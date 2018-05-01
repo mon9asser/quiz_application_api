@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+     <link href="redactor.min.css" rel="stylesheet">
+  </head>
+  <body>
+
+
+    <script type="text/javascript">
+      Array.prototype.diff = function (questions_list) {
+          return this.filter(function (i) {
+            return questions_list.findIndex(x => x.question_id == i.id) === -1;
+          });
+      };
+
+      var ob = [
+        {id:1 , question_data : "question text here"},
+        {id:2 , question_data : "question text here"},
+        {id:3 , question_data : "question text here"},
+        {id:4 , question_data : "question text here"},
+        {id:5 , question_data : "question text here"},
+        {id:6 , question_data : "question text here"},
+        {id:7 , question_data : "question text here"}
+      ];
+      var solved = [
+        {question_id:7 , question_data : "question text here"},
+        {question_id:2 , question_data : "question text here"},
+        {question_id:6 , question_data : "question text here"},
+        {question_id:5 , question_data : "question text here"}
+      ];
+      // 2 3 5 7
+      var dif = ob.diff(solved);
+      console.log(dif);
+    </script>
+  </body>
+</html>

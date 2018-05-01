@@ -1,0 +1,60 @@
+{{> attendee_head }}
+
+  {{> navbar }}
+  <!-- {> __applications <} -->
+  <!-- {> message <}  -->
+  <div ng:controller="list-apps" class="container app-container">
+      <div class="search-ctr disabled-block">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="search-container">
+              <input class="search-element" type="text" placeholder="Search about application" name="" value="">
+              <button type="button" name="button">Search</button>
+              <button type="button" name="button">See all applications</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="clearFix"></div>
+      <div class="container">
+        <div class="col-md-4">
+          <div class="questinnaire-list">
+                My Quizzes and surveys
+          </div>
+          <div class="clearFix"></div>
+          <div class="list-apps">
+              <ul class="my-qusu">
+                <li>
+                  <span>
+                     My Quizzes and survey
+                  </span>
+                </li>
+              </ul>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="questinnaire-list">
+                All Quizzes and surveys
+          </div>
+          <div class="clearFix"></div>
+          <div class="list-apps">
+              <ul class="my-qusu">
+                <li ng:repeat="(app_key , app_val )  in __applications">
+                  <span href="#">
+                      <span>{> app_val.questionnaire_title <}</span>
+                      <span>{> app_val.creator_id.email <}</span>
+                      <!-- 12 <i class="fa fa-user"></i> take this quiz -->
+                  </span>
+                   <!-- localhost:9000/api/:app_id/:player_type/player/:token -->
+                   <a href="{{server_ip}}api/{> app_val._id <}/{> ( app_val.app_type == 0 ) ? 'survey' : 'quiz' <}/player/{{user.token}}/data">
+                     Take this {> ( app_val.app_type == 0 ) ? "Survey" : "Quiz" <}
+                   </a>
+                </li>
+
+              </ul>
+          </div>
+        </div>
+      </div>
+  </div>
+
+{{> attendee_footer }}

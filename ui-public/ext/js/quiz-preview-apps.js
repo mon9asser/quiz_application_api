@@ -143,9 +143,9 @@ apps.controller("preview_players" , [
       $timeout(function(){
         var parentObject = $($window.parent.document.documentElement).find("iframe#live-preview-iframe");
         var dataContents = $("#preview_player_container");
-        var dataQuiz = $(".tool-obj");
+        var dataQuiz = ( $(".tool-obj").height() == null ) ? 0 : $(".tool-obj").height() ;
         var dataTools = $(".swiper-container");
-        alert('preview_player = ' + dataContents.height() + ' tool-obj = ' + dataQuiz.height() + ' swiperContainer ' + dataTools.height() );
+        alert('preview_player = ' + dataContents.height() + ' tool-obj = ' + dataQuiz + ' swiperContainer ' + dataTools.height() );
         parentObject.css({
           height : dataContents.height() + 30 + 'px' ,
           width : '100%'
