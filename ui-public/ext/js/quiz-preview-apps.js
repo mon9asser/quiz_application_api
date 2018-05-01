@@ -1610,7 +1610,7 @@ apps.controller("preview_players" , [
 
     $scope.window_navigation.on("load" , function (){
       $timeout(function(){
-        var windowH =  $('.preview_player_container').height();
+        var windowH =  document.getElementById('preview_player_container').clientHeight;
         console.log({'currentWindow':windowH});
       } , 1000)
     });
