@@ -1083,6 +1083,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
       question_selected.answers_format.push(new_answer);
       $scope.iframe_access.add_data_to_view($scope.question_id , new_answer);
+      $scope.update_settings_in_view();
     };
     $scope.question_answer_deletion = function (answer_id){
 
