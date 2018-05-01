@@ -1054,11 +1054,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       setTimeout(function (){
           document.getElementById('live-preview-iframe').style.height =
           document.getElementById('live-preview-iframe').contentWindow.document.body.offsetHeight + 'px';
-       } , 50 );
+       } , 150 );
        $scope.iResize();
     }
     $scope.create_new_answer = function (){
-      $scope.iResize();
+
       if($scope.question_id == null ){
         console.log("Please select question from question list");
       }
@@ -1095,6 +1095,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
       $scope.iframe_access.expand_the_current_iframe_object_when_add_anwer();
       // $scope.loading_application_redactors();
+      $scope.iResize();
     };
     $scope.question_answer_deletion = function (answer_id){
 
