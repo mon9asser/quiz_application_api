@@ -3097,3 +3097,7 @@ margin-bottom: 0px !important;
   border: none !important;
   resize: none;
 }
+.preview_player_container {
+  position: relative;
+  overflow: hidden;
+}
