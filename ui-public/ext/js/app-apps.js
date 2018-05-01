@@ -1087,9 +1087,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
       $scope.iframe_access.add_data_to_view($scope.question_id , new_answer);
 
-      $scope.iframe_access.expand_the_current_iframe_object_when_add_anwer();
+    //  $scope.iframe_access.expand_the_current_iframe_object();
       // $scope.loading_application_redactors();
-
     };
     $scope.question_answer_deletion = function (answer_id){
 

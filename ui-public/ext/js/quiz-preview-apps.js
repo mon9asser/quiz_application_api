@@ -146,9 +146,9 @@ apps.controller("preview_players" , [
         var dataContents = $("#preview_player_container");
         var dataQuiz = ( $(".tool-obj").outerHeight() == null ) ? 0 : $(".tool-obj").outerHeight() ;
         var swiperContainer = $(".swiper-container").outerHeight();
-        alert('swiper-container = ' + swiperContainer );
+
         parentObject.css({
-          height : swiperContainer + 30 + 'px' ,
+          height : dataContents.outerHeight() + 30 + 'px' ,
           width : '100%'
         });
 
@@ -169,6 +169,7 @@ apps.controller("preview_players" , [
            this_question_data.answers_format.push({$$hashKey:null , _id:answer_data._id , value : answer_data.value});
         }
         $scope.$apply();
+        $window.expand_the_current_iframe_object();
     };
     $window.slide_system = () => {
         $scope.slide_screens = new Swiper('.swiper-container') ;
