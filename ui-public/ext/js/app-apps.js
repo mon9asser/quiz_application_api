@@ -1049,11 +1049,16 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
         $scope.iframe_access.view_question_answer($scope.question_id , questionSettings);
     };
 
+
+   $scope.iResize = () => {
+      setTimeout(function (){
+          document.getElementById('live-preview-iframe').style.height =
+          document.getElementById('live-preview-iframe').contentWindow.document.body.offsetHeight + 'px';
+       } , 50 );
+       $scope.iResize();
+    }
     $scope.create_new_answer = function (){
-      $timeout(function(){
-        var iframeObject = document.getElementById('live-preview-iframe').contentWindow.document.body.children[4].offsetHeight;
-        console.log({iframeObject:iframeObject});
-      } , 3000)
+      $scope.iResize();
       if($scope.question_id == null ){
         console.log("Please select question from question list");
       }
