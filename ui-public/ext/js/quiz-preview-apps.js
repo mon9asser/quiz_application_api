@@ -95,6 +95,8 @@ apps.controller("preview_players" , [
     $scope.__player_object     = null;
     $scope.this_attendee_draft = null;
     $scope.api_key_headers     = null;
+    $window.target_height = 50;
+    $scope.window_navigation = $(window);
     // ==> Time  objects
     $scope.seconds = 9 ;
     $scope.minutes = 0;
@@ -130,15 +132,25 @@ apps.controller("preview_players" , [
       $timeout(function(){
         var parentObject = $($window.parent.document.documentElement).find("iframe#live-preview-iframe");
         var dataContents = $("#preview_player_container");
-        var targetHight = dataContents.height();
-        if ( targetHight == 0 ) {
-          targetHight = 320 ;
-        }
         parentObject.css({
-          height : targetHight + 30 + 'px' ,
+          height : dataContents.height() + 30 + 'px' ,
           width : '100%'
         });
       } , 5);
+    }
+
+    $window.expand_the_current_iframe_object_when_add_anwer = () => {
+      $timeout(function(){
+        var parentObject = $($window.parent.document.documentElement).find("iframe#live-preview-iframe");
+        var dataContents = $("#preview_player_container");
+        var dataQuiz = $(".tool-obj");
+        var dataTools = $(".swiper-container");
+        alert('preview_player = ' + dataContents.height() + ' tool-obj = ' + dataQuiz.height() + ' swiperContainer ' + dataTools.height() );
+        parentObject.css({
+          height : dataContents.height() + 30 + 'px' ,
+          width : '100%'
+        });
+      } , 500 );
     }
 
     $window.slideToThisIndex = (index) => {
@@ -1563,8 +1575,6 @@ apps.controller("preview_players" , [
         });
     }, 1000);
 
-
-
     $window.randomize_all_questions = (questions  ) => {
         $scope.__player_object.questions = questions ;
         $timeout(function(){$scope.$apply();} , 300 );
@@ -1581,13 +1591,10 @@ apps.controller("preview_players" , [
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
         }
-
         return array;
       }
     // ===========================================>>>> Window Objects
     // $window
-
-
     $window.new_sorting_for_questions = (oldIndex , newIndex , newPosition ) => {
       $scope.__player_object.questions.splice(oldIndex , 1);
       $scope.__player_object.questions.splice(newIndex , 0 , newPosition);
