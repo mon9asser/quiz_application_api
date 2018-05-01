@@ -97,7 +97,13 @@ apps.filter('trust_this_html_values' , [
     }
   }
 ]);
-
+apps.filter('math_around_it' , [
+  '$sce' , function(){
+    return (round_p) => {
+      return ( Math.round(round_p) ) ? Math.round(round_p): 0  ;
+    }
+  }
+]);
 //=============================================
 // => Controllers
 //=============================================

@@ -75,6 +75,13 @@ apps.filter('trust_this_html_values' , [
     }
   }
 ]);
+apps.filter('math_around_it' , [
+  '$sce' , function(){
+    return (round_p) => {
+      return ( Math.round(round_p) ) ? Math.round(round_p): 0  ;
+    }
+  }
+]);
 apps.controller("preview_players" , [
   '$scope' , '$rootScope' , '$timeout' , '$http' , 'settings' , '$window',
 ( $scope, $rootScope, $timeout , $http , settings , $window  ) => {
@@ -87,6 +94,7 @@ apps.controller("preview_players" , [
       return is_right_question ;
     };
 
+    $scope.in_app_editor = false ;
     $scope.app_id              = $("#app-id").val();
     $scope.server_ip           = $("#server_ip").val();
     $scope.user_id             = $window.location.toString().split("/").pop();
@@ -121,6 +129,19 @@ apps.controller("preview_players" , [
       } , 500);
 
       $scope.expand_the_current_iframe_object();
+    };
+    //   title_success_with title_failed_with
+    $window.hide_this_access = (thisModel) => {
+      if(thisModel == 4 ) // => Success screen
+        {
+          $('.title_failed_with').css({display : 'none'});
+          $('.title_success_with').css({display : 'block'});
+        }
+      if(thisModel == 5 ) // => Failed screen
+        {
+          $('.title_failed_with').css({display : 'block'});
+          $('.title_success_with').css({display : 'none'});
+        }
     };
     $window.view_question_answer = (questionId , questionSettings) => {
       var player = $scope.__player_object.questions.find(x => x._id == questionId );
@@ -305,6 +326,19 @@ apps.controller("preview_players" , [
       $scope.$apply();
       $scope.expand_the_current_iframe_object();
     };
+    $window.set_application_settings_with_ui_view = (settings) => {
+
+      if($scope.__player_object.settings == undefined )
+        $scope.__player_object.settings = new Object();
+
+      $scope.__player_object.settings = settings;
+
+      // ==> Change the answer style ( show or not )
+
+      // => classes_for_this_answer(obj_val.answer_settings , obj_val._id , ansvalue._id)
+      $scope.$apply();
+      $scope.expand_the_current_iframe_object();
+    };
     $window.model_deletion = (model_type , basic_model_id , model_id = null) => {
       var this_question_data = $scope.__player_object.questions.find(x => x._id == basic_model_id);
       var questionIndex = $scope.__player_object.questions.findIndex(x => x._id == basic_model_id);
@@ -436,7 +470,7 @@ apps.controller("preview_players" , [
           }
         }
       }
-
+      // $timeout( function(){ $scope.$apply() } , 300 )
       return classes ;
     };
     $scope.join_this_quiz = (at_this_array_only = null ) => {
@@ -1598,5 +1632,9 @@ apps.controller("preview_players" , [
       $scope.expand_the_current_iframe_object();
     };
 
+    $window.change_editor_model = () => {
+      $scope.in_app_editor = true ;
+      $timeout( function(){$scope.$apply()} , 300 );
+    }
 
 }]);

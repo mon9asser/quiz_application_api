@@ -54,7 +54,7 @@
                                </button>
                                <button ng:click="start_this_quiz()" class="button-take-this" type="button" name="button">
                                    <i class="fa fa-sign-in" aria-hidden="true"></i>
-                                   Take this Quiz
+                                   {> __player_object.settings.label_btns.lbl_start_with <}
                                </button>
                            </div>
                        </div>
@@ -106,18 +106,18 @@
                              <h3>Your score : <span class="resultx-x-counts">{> __report_object.correct_answers <}</span>/<span class="resultx-x-all">{> __report_object.total_questions <}</span></h3>
                            </div>
                            <div class="quiz-grade grade-score text-center">
-                             <h5>Pass grade : <span class="resultx-x-grade">{> __report_object.score <}%</span></h5>
+                             <h5>Grade : <span class="resultx-x-grade">{> __report_object.score | math_around_it <}%</span></h5>
                            </div>
                          </div>
                          <!-- Question buttons  -->
                          <div class="qusu-details text-right">
                              <button ng:if="__player_object.settings.review_setting == true" ng:click="review_all_resolved_question()" class="button-take-this" type="button" name="button">
                                <i class="fa fa-reply-all" aria-hidden="true"></i>
-                               Review
+                               {> __player_object.settings.label_btns.lbl_review_with <}
                              </button>
                               <button ng:if="__player_object.settings.retake_setting == true"  ng:click="retake_this_quiz()" class="button-take-this retake-this-quiz" type="button" name="button">
                                <i class="fa fa-repeat" aria-hidden="true"></i>
-                               <span>Retake</span>
+                               <span>{> __player_object.settings.label_btns.lbl_retake_with <}</span>
                              </button>
                          </div>
                        </div>
@@ -253,7 +253,9 @@
                           </button>
                           <button ng:click="go_to_next_slider($index , true)" ng:class="load_slide_theme(obj_val.question_type)" class="button-take-this" type="button" name="button">
                             <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                            <span ng:if="$index != (__player_object.questions.length - 1)">Continue</span>
+                            <span ng:if="$index != (__player_object.questions.length - 1)">
+                               {> __player_object.settings.label_btns.lbl_continue_with <}
+                            </span>
                             <span ng:if="$index == (__player_object.questions.length - 1)">Finish</span>
                           </button>
 
@@ -287,9 +289,9 @@
                    <div ng:class="(is_resume == null)?'about-quiz':'result-slide'" class="container screen-container"> <!-- label-question -->
                        <div>
                             <!-- Case successed in quiz  -->
-                              <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_success_with | trust_this_html_values"></div>
+                              <div ng:if="__report_object.status != 'Failed'" class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_success_with | trust_this_html_values"></div>
                               <!-- Case failed in quiz  -->
-                              <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_failed_with | trust_this_html_values"></div>
+                              <div ng:if="__report_object.status == 'Failed'" class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_failed_with | trust_this_html_values"></div>
                               <!-- The Grade  -->
                               <div class="quiz-grade">
                                 <!-- <div style="background: #f9f9f9;" class="grade_result_loder text-center">

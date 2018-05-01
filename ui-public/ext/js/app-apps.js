@@ -2232,7 +2232,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     };
 
     $scope.switching_editor_preview = () => {
-
         if($scope.switching_editor_preview_value == false ) { // => Editor
           $(".editor-container").css({
             position: 'relative' ,
@@ -2349,6 +2348,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           // ==> Storing Data
           var app_setting_scs_message = $R("#editor-scs-txt" , "source.getCode");
           $scope.application_settings.settings.titles.title_success_with = app_setting_scs_message ;
+          // ==> You're in editor
+          $scope.iframe_access.change_editor_model();
           // ==> Hide success case it failed screen
           $scope.iframe_access.hide_this_access(model_type);
           // ==> slide to screen
@@ -2359,6 +2360,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           // ==> Storing Data
           var app_setting_fld_message = $R("#editor-fld-txt" , "source.getCode");
           $scope.application_settings.settings.titles.title_failed_with = app_setting_fld_message ;
+          // ==> You're in editor
+          $scope.iframe_access.change_editor_model();
           // ==> Hide success case it failed screen
           $scope.iframe_access.hide_this_access(model_type);
           // ==> Slide to screen
@@ -2400,6 +2403,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     // } , 1000);
     $scope.update_settings_in_view = ()=> {
       $scope.iframe_access.set_application_settings($scope.application_settings.settings);
+    }
+    $scope.update_settings_in_view_show_type_of_results = ()=> {
+
+      $scope.iframe_access.set_application_settings_with_ui_view($scope.application_settings.settings);
+
     }
     $scope.update_labels_in_question_buttons_mnu_settings = () => {
       $scope.iframe_access.set_application_settings($scope.application_settings.settings);

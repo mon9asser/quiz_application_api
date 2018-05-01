@@ -218,11 +218,10 @@
 
 
                        <!-- Case successed in quiz  -->
-                       <div class="description-body redactor-styles title_success_with" ng:bind:html="__player_object.settings.titles.title_success_with | trust_this_html_values"></div>
+                       <div ng:if="in_app_editor || this_attendee_draft.att_draft[0].report_attendee_details.status != 'Failed'" class="description-body redactor-styles title_success_with" ng:bind:html="__player_object.settings.titles.title_success_with | trust_this_html_values"></div>
 
                        <!-- Case failed in quiz  -->
-                       <div class="description-body redactor-styles title_failed_with" ng:bind:html="__player_object.settings.titles.title_failed_with | trust_this_html_values"></div>
-
+                       <div ng:if="in_app_editor || this_attendee_draft.att_draft[0].report_attendee_details.status == 'Failed'" class="description-body redactor-styles title_failed_with" ng:bind:html="__player_object.settings.titles.title_failed_with | trust_this_html_values"></div>
 
                        <!-- The Grade  -->
                        <div class="quiz-grade">
@@ -232,8 +231,8 @@
                          <div class="quiz-grade grade-score text-center">
                            <h3>Your score : {> this_attendee_draft.att_draft[0].report_attendee_details.correct_answers  + "/" + __player_object.questions.length <}</h3>
                          </div>
-                         <div class="quiz-grade grade-score text-center">
-                           <h5>Pass grade : {> this_attendee_draft.att_draft[0].report_attendee_details.score <}%</h5>
+                         <div ng:if="__player_object.settings.grade_settings.is_graded" class="quiz-grade grade-score text-center">
+                           <h5>Grade : {> this_attendee_draft.att_draft[0].report_attendee_details.score | math_around_it <}%</h5>
                          </div>
                        </div>
                        <!-- Question buttons  -->
@@ -261,19 +260,4 @@
       </div>
 
 
-      <script type="text/javascript">
-        // setTimeout(function(){
-        //   // if(window.location != window.parent.location){
-        //   //   // ==> check if this window in iframe !
-        //   //     var op = window.parent;
-        //   //     var offsetH = document.getElementById('preview_player_container').offsetHeight;
-        //   //       //alert(offsetH);
-        //   //
-        //   //       var frameObject = $(op.frames.window.document).find('iframe#live-preview-iframe')  ;
-        //   //       frameObject.css({'height' : offsetH + 20 + 'px' , width:'100%' , margin:'8px auto'});
-        //   //
-        //   //       $('.about-quiz, .screen-container , .object-layouts-container').css({width:'95%'})
-        //   //   }
-        // } , 2800 )
-      </script>
 {{> attendee_preview_footer }}
