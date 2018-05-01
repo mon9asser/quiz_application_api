@@ -146,6 +146,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
     // document.getElementById('iframe').contentWindow.angular.element(document.body).scope();
     // ==> Vars in scope $R
+    $scope.this_iframe = $("iframe#live-preview-iframe");
     $scope.first_load = 0;
     $scope.activated_screen_name = null;
     $scope.iframe_access = null ;
@@ -1049,7 +1050,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     };
 
     $scope.create_new_answer = function (){
-
+      var iframeObject = document.getElementById('live-preview-iframe').contentWindow.document.body.offsetHeight
+      console.log({iframeObject:iframeObject});
       if($scope.question_id == null ){
         console.log("Please select question from question list");
       }
@@ -2429,4 +2431,18 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           $scope.iframe_access.randomize_all_questions(questionArgs);
     }
     $scope.load_application_keys();
+
+
+    $scope.this_iframe.load(function() {
+      // this.style.height =
+      var iframeObject = this.contentWindow.document.body.offsetHeight
+      console.log({'.preview_player_container':  iframeObject });
+    });
+    // $scope.window_navigation.on("load" , function (){
+    //   $timeout(function(){
+    //     var windowH =  $window
+    //     console.log({'.preview_player_container':windowH});
+    //   } , 1000)
+    // });
+
 }]);

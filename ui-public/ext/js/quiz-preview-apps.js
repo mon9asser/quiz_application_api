@@ -1608,10 +1608,5 @@ apps.controller("preview_players" , [
       $window.expand_the_current_iframe_object();
     };
 
-    $scope.window_navigation.on("load" , function (){
-      $timeout(function(){
-        var windowH =  document.getElementById('preview_player_container').clientHeight;
-        console.log({'currentWindow':windowH});
-      } , 1000)
-    });
+    
 }]);
