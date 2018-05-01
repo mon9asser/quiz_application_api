@@ -1611,7 +1611,7 @@ apps.controller("preview_players" , [
     $scope.window_navigation.on("load" , function (){
       $timeout(function(){
         var windowH =  $('.preview_player_container').height();
-        alert({'currentWindow':windowH});
+        console.log({'currentWindow':windowH});
       } , 1000)
     });
 }]);
