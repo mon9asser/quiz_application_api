@@ -120,7 +120,7 @@ apps.controller("preview_players" , [
         $scope.slide_screens.slideTo ( targetIndex , 200 );
       } , 500);
 
-      $window.expand_the_current_iframe_object();
+      $scope.expand_the_current_iframe_object();
     };
     $window.view_question_answer = (questionId , questionSettings) => {
       var player = $scope.__player_object.questions.find(x => x._id == questionId );
@@ -129,7 +129,7 @@ apps.controller("preview_players" , [
       }
       $timeout(function (){$scope.$apply()} , 300 );
     }
-    $window.expand_the_current_iframe_object = () => {
+    $scope.expand_the_current_iframe_object = () => {
       $timeout(function(){
         var parentObject = $($window.parent.document.documentElement).find("iframe#live-preview-iframe");
         var dataContents = $("#preview_player_container");
@@ -138,21 +138,7 @@ apps.controller("preview_players" , [
           width : '100%'
         });
       } , 5);
-    }
-
-    $window.expand_the_current_iframe_object_when_add_anwer = () => {
-      $timeout(function(){
-        var parentObject = $($window.parent.document.documentElement).find("iframe#live-preview-iframe");
-        var dataContents = $("#preview_player_container");
-        var dataQuiz = ( $(".tool-obj").outerHeight() == null ) ? 0 : $(".tool-obj").outerHeight() ;
-        var swiperContainer = $(".swiper-container").outerHeight();
-
-        parentObject.css({
-          height : dataContents.outerHeight() + 30 + 'px' ,
-          width : '100%'
-        });
-
-      } , 500 );
+      $timeout(function(){  $scope.$apply(); } , 30);
     }
 
     $window.slideToThisIndex = (index) => {
@@ -169,7 +155,7 @@ apps.controller("preview_players" , [
            this_question_data.answers_format.push({$$hashKey:null , _id:answer_data._id , value : answer_data.value});
         }
         $scope.$apply();
-        $window.expand_the_current_iframe_object();
+        $scope.expand_the_current_iframe_object();
     };
     $window.slide_system = () => {
         $scope.slide_screens = new Swiper('.swiper-container') ;
@@ -314,7 +300,7 @@ apps.controller("preview_players" , [
 
       $scope.__player_object.settings = settings;
       $scope.$apply();
-      $window.expand_the_current_iframe_object();
+      $scope.expand_the_current_iframe_object();
     };
     $window.model_deletion = (model_type , basic_model_id , model_id = null) => {
       var this_question_data = $scope.__player_object.questions.find(x => x._id == basic_model_id);
@@ -1606,7 +1592,7 @@ apps.controller("preview_players" , [
     $window.slide_to_question_in_index_number = (indexNumber) => {
        if($scope.slide_screens == undefined) $scope.slide_screens =  new Swiper('.swiper-container') ;
       $scope.slide_screens.slideTo(indexNumber);
-      $window.expand_the_current_iframe_object();
+      $scope.expand_the_current_iframe_object();
     };
 
 
