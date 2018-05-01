@@ -1048,9 +1048,7 @@ apps.controller("preview_players" , [
         $('.retake-this-quiz').children("span").html("Retake");
         $('.retake-this-quiz').children("i").removeClass('fa-spinner fa-spin')
         $('.retake-this-quiz').children("i").addClass('fa-repeat');
-        $timeout(function(){
 
-        } , 1000 );
       } , 4000);
     }
      $scope.show_warning_unsolved_question = () => {
@@ -1074,7 +1072,6 @@ apps.controller("preview_players" , [
           return false;
         } else   $(".warning_case").css({display:'none'});
 
-
         return true ;
     };
      $scope.submit_quiz_into_report = () => {
@@ -1083,7 +1080,6 @@ apps.controller("preview_players" , [
       $('.submi_the_quiz_handler').children('i').removeClass('fa-arrow-right');
       $('.submi_the_quiz_handler').children('i').addClass("fa-spinner fa-spin");
       $('.submi_the_quiz_handler').children('span').html("Please Wait its submitting the quiz ... ");
-
 
       if( $scope.show_warning_unsolved_question() == false ){
            $('.submi_the_quiz_handler').children('i').removeClass('fa-spinner fa-spin');
@@ -1106,9 +1102,34 @@ apps.controller("preview_players" , [
         } , 500)
       } , 500);
     }
+     $window.change_answer_style_view = (show_answers) => {
+       // =>   $scope.classes_for_this_answer = (quiz_settings , question_id , answer_id)
+       var question_containers = $("#question-list") ;
+       if($scope.this_attendee_draft == null ) return false ;
+       console.log({selected_answer : $scope.this_attendee_draft.att_draft[0] });
+       var question_data = $scope.this_attendee_draft.att_draft[0].questions_data;
+       for (var i = 0; i < question_data.length; i++) {
+         var qs_object = question_data[i];
+         var user_answers = qs_object.answer_ids; // => array
+         var question_id = qs_object.question_id;
+         for (var answeri = 0; answeri < user_answers.length; answeri++) {
+           var answer_obj = user_answers[answeri];
+           var answer_ui = $('.answer_' + answer_obj.answer_id);
+           if(show_answers){ // ==> Show
+             // ==> Remove selected answer
+             if(answer_ui.hasClass('selected_answer')) answer_ui.removeClass('selected_answer');
+             answer_ui.addClass('wrong_answer');
+           }else { // dont show
+             // ==> Remove selected answer
+             if(answer_ui.hasClass('wrong_answer')) answer_ui.removeClass('selected_answer');
+             answer_ui.addClass('selected_answer');
+           }
+         }
 
+         console.log(question_id);
+       }
+     }
      $scope.select_this_answer = ( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex) => {
-
        var user_id = window.location.toString().split("/").pop();
        // ==> Register First Action
        if( $scope.this_attendee_draft == null )
@@ -1117,8 +1138,6 @@ apps.controller("preview_players" , [
                 $scope.this_attendee_draft['att_draft'] = new Array();
                 $scope.this_attendee_draft['application_id'] = $scope.app_id;
                 $scope.this_attendee_draft['questionnaire_info'] = $scope.app_id;
-
-
                 var cuIndex = $scope.this_attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) ;
                    if(cuIndex == -1 ){
                      $scope.this_attendee_draft.att_draft.push({
@@ -1446,9 +1465,7 @@ apps.controller("preview_players" , [
                    if(there.hasClass('wrong_answer')) has_wrong_answer = true ;
                   });
                   if(has_wrong_answer) return false ;
-
                   // => Review Old answer
-
                   // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
                   // => Mongo status => move the data into mongo ( attendee draft )
                   $scope.store_into_attendee_draft( stored_object );
@@ -1531,8 +1548,6 @@ apps.controller("preview_players" , [
               }
            } // => End true/false question
 
-
-
            if($scope.is_submitted)
               $scope.fill_unsolved_question_counts();
              else
@@ -1610,7 +1625,7 @@ apps.controller("preview_players" , [
         // While there remain elements to shuffle...
         while (0 !== currentIndex) {
         // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
+        randomIndex = Math.floor( Math.random() * currentIndex );
         currentIndex -= 1;
         // And swap it with the current element.
         temporaryValue = array[currentIndex];

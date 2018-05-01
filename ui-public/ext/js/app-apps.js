@@ -2407,6 +2407,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     $scope.update_settings_in_view_show_type_of_results = ()=> {
 
       $scope.iframe_access.set_application_settings_with_ui_view($scope.application_settings.settings);
+      if($scope.application_settings.settings == undefined ) return false ;
+      var quiz_settings = $scope.application_settings.settings;
+
+      $scope.iframe_access.change_answer_style_view(quiz_settings.show_results_per_qs);
+      
 
     }
     $scope.update_labels_in_question_buttons_mnu_settings = () => {
