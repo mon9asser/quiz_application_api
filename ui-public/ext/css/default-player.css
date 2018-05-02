@@ -1018,3 +1018,8 @@
   background : #C8F7C5 ,
   color : #222
 }
+.swipe-this-slide {
+  width: 97%;
+  display: inline-table;
+  /*display: none;*/
+}

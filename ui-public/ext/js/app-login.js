@@ -54,7 +54,7 @@ apps.controller("login-app" , ["$rootScope" , "$http" , "$scope" , function ($ro
 				  },
           data: $scope.access
       }).then(function (resData){
- 
+
          if(resData.data.isRedirect != null && resData.data.isRedirect == true  ) {
            window.location.href = "/";
          }else {

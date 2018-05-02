@@ -93,7 +93,7 @@ apps.controller("preview_players" , [
       var is_right_question =  (solved_answers.sort().join('') == correct_answers.sort().join(''));
       return is_right_question ;
     };
-
+    $scope.player_time_frame = 300 ;
     $scope.in_app_editor = false ;
     $scope.app_id              = $("#app-id").val();
     $scope.server_ip           = $("#server_ip").val();
@@ -182,7 +182,9 @@ apps.controller("preview_players" , [
         $timeout(function(){ $scope.$apply(); } , 30);
     };
     $window.slide_system = () => {
-        $scope.slide_screens = new Swiper('.swiper-container') ;
+        $scope.slide_screens = new Swiper('.swiper-container' , {
+          speed : $scope.player_time_frame
+        }) ;
         $scope.slide_screens.update();
         $scope.slide_screens.on('slideChange' , function (i){
               $scope.touch_move++;
@@ -1021,7 +1023,9 @@ apps.controller("preview_players" , [
         $scope.join_this_quiz();
         $scope.load_quiz_timer ();
         $scope.is_submitted = false ;
-        $scope.slide_screens = new Swiper('.swiper-container') ;
+        $scope.slide_screens = new Swiper('.swiper-container' , {
+          speed : $scope.player_time_frame
+        }) ;
         $(".answer-container ul li").removeClass('selected_answer');
         $(".answer-container ul li").removeClass('right_answer');
         $(".answer-container ul li").removeClass('wrong_answer');
@@ -1610,8 +1614,12 @@ apps.controller("preview_players" , [
 
     // => Fire after time
     $timeout(function () {
-        $scope.slide_screens = new Swiper('.swiper-container') ;
-        $window.slide_screens = new Swiper('.swiper-container') ;
+        $scope.slide_screens = new Swiper('.swiper-container' , {
+          speed : $scope.player_time_frame
+        }) ;
+        $window.slide_screens = new Swiper('.swiper-container' , {
+          speed : $scope.player_time_frame
+        }) ;
         $scope.load_template_timer();
         $scope.slide_screens.on('slideChange' , function (i){
               $scope.touch_move++;
@@ -1661,7 +1669,10 @@ apps.controller("preview_players" , [
       $scope.$apply();
     };
     $window.slide_to_question_in_index_number = (indexNumber) => {
-       if($scope.slide_screens == undefined) $scope.slide_screens =  new Swiper('.swiper-container') ;
+       if($scope.slide_screens == undefined)
+       {$scope.slide_screens =  new Swiper('.swiper-container' , {
+         speed : $scope.player_time_frame
+       }) ;}
       $scope.slide_screens.slideTo(indexNumber);
       $scope.expand_the_current_iframe_object();
     };
@@ -1672,6 +1683,7 @@ apps.controller("preview_players" , [
     }
 
     $scope.window_navigation.on("load" , function (){
-       
+      if($window.parent.location != $window.location )
+         $scope.player_time_frame = 0 ;
     });
 }]);

@@ -13,12 +13,7 @@ const {drftRouter} = require("./server/routes/drft");
 const {infceRouter} = require("./server/routes/infce");
 const {usr} = require("./models/users");
 const cors= require('cors');
-
-
-
-
-
-
+  
 const app = express();
 // const exphbs  = require('express-handlebars'); // => Deprecated !!
 

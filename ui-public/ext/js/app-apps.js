@@ -2411,7 +2411,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       var quiz_settings = $scope.application_settings.settings;
 
       $scope.iframe_access.change_answer_style_view(quiz_settings.show_results_per_qs);
-      
 
     }
     $scope.update_labels_in_question_buttons_mnu_settings = () => {
