@@ -1689,9 +1689,10 @@ apps.controller("preview_players" , [
              {
                $scope.slide_screens = new Swiper('.swiper-container' , {
                  speed : $scope.player_time_frame
-               }) ;
+               });
              }
 
+        
          }
     });
 }]);

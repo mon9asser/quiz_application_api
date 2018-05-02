@@ -2290,24 +2290,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       //   $scope.iframe_access.change_data_in_answer_view ( $scope.question_id  , is_question , $scope.question_id , questionIndex  , qs_data  );
       // } , 350 );
     };
-    $timeout(function (){
-      // $scope.change_values_in_redactor_in_answers();
 
-        // $('.redactor-in-0 , .redactor-in-1').on('change , input' , function (){
-        //   var isQuestion = 0 ;
-        //   var type = $(this).prop('className').split(' ').pop();
-        //   if(type == 'redactor-in-1')
-        //     isQuestion = 2;
-        //   else  isQuestion = 0 ;
-        //   $scope.edit_question_in_preview(isQuestion);
-        // });
-
-        // var answer_id = redactorElement.parent().parent().parent().parent().attr('data-answer-id').split('_').pop() ;
-        // var answer_index = redactorElement.parent().parent().parent().parent().index();
-        // var answer_value = answer_xx[answer_index];
-        // $scope.iframe_access.change_data_in_answer_view($scope.question_id , 1 , answer_id , answer_index , answer_value );
-
-    } , 4000 );
     $scope.edit_model_data = (model_type) => {
       $timeout(function(){
         var question = $scope.questions_list.find(x => x._id == $scope.question_id);
@@ -2447,11 +2430,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       var iframeObject = this.contentWindow.document.body.offsetHeight
       console.log({'.preview_player_container':  iframeObject });
     });
-    // $scope.window_navigation.on("load" , function (){
-    //   $timeout(function(){
-    //     var windowH =  $window
-    //     console.log({'.preview_player_container':windowH});
-    //   } , 1000)
-    // });
+
+
+    $timeout(function(){
+      
+    } , 1300 );
 
 }]);
