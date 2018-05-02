@@ -18,13 +18,13 @@
   display: block;
   position: relative;
   margin-top: 10%;
-  width:55%;
+  width: 60%;
   min-height: 120;
   padding: 35px;
   margin: 0px auto;
 }
 .buttons-container {
-  width:55%;
+  width: 60%;
   padding: 35px;
   margin: 0px auto;
 }
@@ -631,7 +631,7 @@
   overflow: hidden;
 }
 .object-layouts-container {
-  width: 55%;
+  width: 60%;
   margin: 0px auto;
   padding: 20px;
   height: auto;

@@ -1111,6 +1111,8 @@ apps.controller("preview_players" , [
        for (var i = 0; i < question_data.length; i++) {
          var qs_object = question_data[i];
          var user_answers = qs_object.answer_ids; // => array
+         var correct_answer = qs_object.correct_answers; // => array
+
          var question_id = qs_object.question_id;
          for (var answeri = 0; answeri < user_answers.length; answeri++) {
            var answer_obj = user_answers[answeri];
@@ -1118,11 +1120,28 @@ apps.controller("preview_players" , [
            if(show_answers){ // ==> Show
              // ==> Remove selected answer
              if(answer_ui.hasClass('selected_answer')) answer_ui.removeClass('selected_answer');
-             answer_ui.addClass('wrong_answer');
+             // => change it into right and wrong answers
+             if (!answer_obj.is_correct){
+               answer_ui.addClass('wrong_answer');
+               for (var icrr = 0; icrr < correct_answer.length; icrr++) {
+                var this_correct_answer =  correct_answer[icrr];
+                var crt_answer_ui = $('.answer_' + this_correct_answer._id);
+                crt_answer_ui.addClass('right_answer');
+               }
+             }
+             else if (answer_obj.is_correct)  answer_ui.addClass('right_answer');
            }else { // dont show
              // ==> Remove selected answer
-             if(answer_ui.hasClass('wrong_answer')) answer_ui.removeClass('selected_answer');
+             if(answer_ui.hasClass('wrong_answer')) answer_ui.removeClass('wrong_answer');
+             if(answer_ui.hasClass('right_answer')) answer_ui.removeClass('right_answer');
+
              answer_ui.addClass('selected_answer');
+             for (var icrr = 0; icrr < correct_answer.length; icrr++) {
+              var this_correct_answer =  correct_answer[icrr];
+              var crt_answer_ui = $('.answer_' + this_correct_answer._id);
+              if(crt_answer_ui.hasClass('right_answer'))
+                 crt_answer_ui.removeClass('right_answer');
+             }
            }
          }
 
@@ -1652,4 +1671,7 @@ apps.controller("preview_players" , [
       $timeout( function(){$scope.$apply()} , 300 );
     }
 
+    $scope.window_navigation.on("load" , function (){
+       
+    });
 }]);
