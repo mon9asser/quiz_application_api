@@ -2329,12 +2329,15 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           $scope.iframe_access.change_data_in_answer_view ($scope.question_id  , 1 , $scope.question_id , questionIndex  , question_description );
         }
         if( model_type == 2 ){ // Welcome Screen
-          // ==> Storing Data
-          var app_setting_strt_message = $R("#editor-strt-txt" , "source.getCode");
-          $scope.application_settings.settings.titles.title_start_with = app_setting_strt_message ;
-          // ==> Slide to This screen
-          $scope.iframe_access.slide_to_question_in_index_number(0);
-          $scope.iframe_access.set_application_settings($scope.application_settings.settings);
+          $scope.iframe_access.active_first_slider = true;
+          $timeout(function(){
+            // ==> Storing Data
+            var app_setting_strt_message = $R("#editor-strt-txt" , "source.getCode");
+            $scope.application_settings.settings.titles.title_start_with = app_setting_strt_message ;
+            // ==> Slide to This screen
+            $scope.iframe_access.slide_to_question_in_index_number(0);
+            $scope.iframe_access.set_application_settings($scope.application_settings.settings);
+          } , 300 );
         }
         if( model_type == 3 ){ // GoodBye Screen
           // ==> Storing Data

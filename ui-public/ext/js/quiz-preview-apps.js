@@ -95,6 +95,7 @@ apps.controller("preview_players" , [
     };
     $scope.player_time_frame = 300 ;
     $scope.in_app_editor = false ;
+    $scope.slide_screens_action = false;
     $scope.app_id              = $("#app-id").val();
     $scope.server_ip           = $("#server_ip").val();
     $scope.user_id             = $window.location.toString().split("/").pop();
@@ -968,6 +969,7 @@ apps.controller("preview_players" , [
       {
         try {
           $scope.slide_screens.slideTo(1);
+
         } catch (e) {
 
         }
@@ -1048,6 +1050,7 @@ apps.controller("preview_players" , [
         });
 
         $scope.slide_screens.slideTo(1);
+
         $('.retake-this-quiz').children("span").html("Retake");
         $('.retake-this-quiz').children("i").removeClass('fa-spinner fa-spin')
         $('.retake-this-quiz').children("i").addClass('fa-repeat');
@@ -1680,7 +1683,9 @@ apps.controller("preview_players" , [
       $scope.in_app_editor = true ;
       $timeout( function(){$scope.$apply()} , 300 );
     }
-
+    $window.active_first_slider = () => {
+       $scope.slide_screens_action = true;
+    }
     $scope.window_navigation.on("load" , function (){
       if($window.parent.location != $window.location )
          {
@@ -1691,7 +1696,7 @@ apps.controller("preview_players" , [
                  speed : $scope.player_time_frame
                });
              }
-           $scope.slide_screens.slideNext();
-         }
+
+         }else $scope.slide_screens_action = true ;
     });
 }]);

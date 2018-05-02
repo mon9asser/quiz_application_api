@@ -33,7 +33,7 @@
       <div class="swiper-container">
         <div class="swiper-wrapper quiz-contents">
             <!-- Screen Slider -->
-            <div class="swiper-slide welcoming-screen-x">
+            <div ng:if="slide_screens_action == true" class="swiper-slide welcoming-screen-x">
                 <div ng:class="load_quiz_status_theme()" class="container screen-container">
                   <div>
                       <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
