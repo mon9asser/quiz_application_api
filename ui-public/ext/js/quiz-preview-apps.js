@@ -1690,8 +1690,8 @@ apps.controller("preview_players" , [
                $scope.slide_screens = new Swiper('.swiper-container' , {
                  speed : $scope.player_time_frame
                });
-             } 
-           $scope.slide_screens.slideTo(1);
+             }
+           $scope.slide_screens.slideNext();
          }
     });
 }]);
