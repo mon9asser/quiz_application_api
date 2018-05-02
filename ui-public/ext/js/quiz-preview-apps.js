@@ -94,7 +94,7 @@ apps.controller("preview_players" , [
       return is_right_question ;
     };
     $scope.player_time_frame = 300 ;
-    $scope.in_app_editor = false ; 
+    $scope.in_app_editor = false ;
     $scope.app_id              = $("#app-id").val();
     $scope.server_ip           = $("#server_ip").val();
     $scope.user_id             = $window.location.toString().split("/").pop();
@@ -968,7 +968,6 @@ apps.controller("preview_players" , [
       {
         try {
           $scope.slide_screens.slideTo(1);
-
         } catch (e) {
 
         }
@@ -1049,7 +1048,6 @@ apps.controller("preview_players" , [
         });
 
         $scope.slide_screens.slideTo(1);
-
         $('.retake-this-quiz').children("span").html("Retake");
         $('.retake-this-quiz').children("i").removeClass('fa-spinner fa-spin')
         $('.retake-this-quiz').children("i").addClass('fa-repeat');
@@ -1691,7 +1689,7 @@ apps.controller("preview_players" , [
              {
                $scope.slide_screens = new Swiper('.swiper-container' , {
                  speed : $scope.player_time_frame
-               });
+               }) ;
              }
 
          }
