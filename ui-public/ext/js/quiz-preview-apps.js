@@ -183,7 +183,8 @@ apps.controller("preview_players" , [
     };
     $window.slide_system = () => {
         $scope.slide_screens = new Swiper('.swiper-container' , {
-          speed : $scope.player_time_frame
+          speed : $scope.player_time_frame , 
+          slideTo : 1
         }) ;
         $scope.slide_screens.update();
         $scope.slide_screens.on('slideChange' , function (i){
@@ -1024,7 +1025,8 @@ apps.controller("preview_players" , [
         $scope.load_quiz_timer ();
         $scope.is_submitted = false ;
         $scope.slide_screens = new Swiper('.swiper-container' , {
-          speed : $scope.player_time_frame
+          speed : $scope.player_time_frame,
+          slideTo : 1
         }) ;
         $(".answer-container ul li").removeClass('selected_answer');
         $(".answer-container ul li").removeClass('right_answer');
@@ -1615,10 +1617,12 @@ apps.controller("preview_players" , [
     // => Fire after time
     $timeout(function () {
         $scope.slide_screens = new Swiper('.swiper-container' , {
-          speed : $scope.player_time_frame
+          speed : $scope.player_time_frame,
+          slideTo : 1
         }) ;
         $window.slide_screens = new Swiper('.swiper-container' , {
-          speed : $scope.player_time_frame
+          speed : $scope.player_time_frame,
+          slideTo : 1
         }) ;
         $scope.load_template_timer();
         $scope.slide_screens.on('slideChange' , function (i){
@@ -1671,7 +1675,8 @@ apps.controller("preview_players" , [
     $window.slide_to_question_in_index_number = (indexNumber) => {
        if($scope.slide_screens == undefined)
        {$scope.slide_screens =  new Swiper('.swiper-container' , {
-         speed : $scope.player_time_frame
+         speed : $scope.player_time_frame ,
+         slideTo : 1
        }) ;}
       $scope.slide_screens.slideTo(indexNumber);
       $scope.expand_the_current_iframe_object();
