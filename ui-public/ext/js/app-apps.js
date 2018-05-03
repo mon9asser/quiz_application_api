@@ -2411,6 +2411,20 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       $scope.iframe_access.slideToThisIndex($scope.questions_list.length + 2);
       $timeout(function(){ $scope.$apply() } , 300 );
     };
+
+    $scope.update_current_label = (text_name) => {
+      $scope.iframe_access.set_application_settings($scope.application_settings.settings);
+      var thisIndex ;
+      if(text_name == 'back') thisIndex = $scope.questions_list.length - 1;
+      if(text_name == 'finish') thisIndex =   $scope.questions_list.length ;
+      if(text_name == 'submt-quiz') thisIndex = $scope.questions_list.length +1 ;
+      if(text_name == 'score-text') thisIndex = $scope.questions_list.length + 2 ;
+      if(text_name == 'grade-text') thisIndex = $scope.questions_list.length + 2 ;
+
+      $scope.iframe_access.slideToThisIndex(thisIndex);
+      $timeout(function(){ $scope.$apply() } , 300 );
+    };
+
     $scope.randomize_all_questions =() => {
           var questionArgs ;
       if($scope.application_settings.settings.randomize_settings )
@@ -2433,7 +2447,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
 
     $timeout(function(){
-      
+
     } , 1300 );
 
 }]);

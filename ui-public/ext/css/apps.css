@@ -3103,3 +3103,34 @@ margin-bottom: 0px !important;
   position: relative;
   overflow: hidden;
 }
+.select-numbers {
+  width: auto;
+    display: inline-block;
+    position: relative;
+    margin: 0px auto;
+    /*margin-top: 15px;*/
+    padding: 3px;
+    background: transparent;
+    border: 1px dashed #dfdfdf;
+    color: #999;
+    font-weight: normal;
+}
+table.label-table {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin-top: 10px;
+}
+table.label-table tr {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  line-height: 2;
+  width: 100%;
+}
+
+table.label-table tbody .labels-options {
+  display: block;
+  position: relative;
+}

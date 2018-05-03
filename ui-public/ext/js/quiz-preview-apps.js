@@ -98,7 +98,14 @@ apps.controller("preview_players" , [
     $scope.app_id              = $("#app-id").val();
     $scope.server_ip           = $("#server_ip").val();
     $scope.user_id             = $window.location.toString().split("/").pop();
-    $scope.labels = ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
+    $scope.question_indexes = {
+      alphabetical : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ],
+      numberical : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50]
+    }
+    $scope.answer_indexes = {
+      alphabetical : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ],
+      numberical : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50]
+    }
     $scope.json_source         = $scope.server_ip + settings.json_source;
     // if( window.parent.location == window.location )
     $scope.__player_object     = null;
@@ -117,6 +124,7 @@ apps.controller("preview_players" , [
     };
 
     $scope.url_application = $scope.server_ip + "api/" + $scope.app_id +'/application/retrieve';
+
     $window.player_questions = (questions , sliderIndex) => {
       var newQuestion = questions[sliderIndex] ;
       $scope.slide_screens.noSwiping = true ;
@@ -1692,7 +1700,7 @@ apps.controller("preview_players" , [
                });
              }
 
-        
+
          }
     });
 }]);

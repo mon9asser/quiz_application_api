@@ -31,12 +31,13 @@
                                         <input ng:change="update_settings_in_view()" class="checkbox-toggle input-app-title" type="text" placeholder="App title" name="" ng:model="application_settings.questionnaire_title">
                                     </div>
                                   </div>
-                                   <div class="passing-grad-block">
-                                      <div class="checkbox-toggle">
-                                         <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.grade_settings.is_graded" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                                         <label class="labels-options" for="check-toggle-2">Passing Grade</label>
-                                      </div>
-                                   </div>
+                                  <div class="passing-grad-block">
+                                     <div class="checkbox-toggle">
+                                        <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.grade_settings.is_graded" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                                        <label class="labels-options" for="check-toggle-2">Passing Grade</label>
+                                     </div>
+                                  </div>
+
                                    <div class="form-group">
                                       <div class="input-group bootstrap-touchspin xbootstrap-touchspin">
                                          <span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
@@ -44,6 +45,45 @@
                                          <!-- <span class="input-group-addon bootstrap-touchspin-postfix">%</span> -->
                                       </div>
                                    </div>
+                                   <!--
+                                   +++++++++++++++++++++++++++++++++++++++++++
+                                    ==============>>> Question Labels
+                                   +++++++++++++++++++++++++++++++++++++++++++
+                                  -->
+                                  <div class="passing-grad-block">
+                                     <div class="checkbox-toggle">
+                                        <table class="label-table">
+                                          <tr>
+                                            <td>
+                                              Indexes
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <td>
+                                              <label class="labels-options" for="check-toggle-2">For questions</label>
+                                            </td>
+                                            <td>
+                                              <select ng:change="update_settings_in_view()" ng:model="application_settings.settings.indexes.questions" class="select-numbers">
+                                                  <option value="0">Numberical</option>
+                                                  <option value="1">Alphabetical</option>
+                                              </select>
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <td>
+                                              <label class="labels-options" for="check-toggle-2">For Answers</label>
+                                            </td>
+                                            <td>
+                                              <select ng:change="update_settings_in_view()" ng:model="application_settings.settings.indexes.answers" class="select-numbers">
+                                                  <option value="0">Numberical</option>
+                                                  <option value="1">Alphabetical</option>
+                                              </select>
+                                            </td>
+                                          </tr>
+                                        </table>
+                                     </div>
+                                  </div>
+
                                 </div>
                                 <div class="control-item-content-text">
                                    <div class="passing-grad-block">
@@ -179,20 +219,20 @@
                              </div>
                              <div class="control-item-content" >
                                 <div class="control-item-content-text">
-                                   <span class="screen-texts">Welcome Text</span>
+                                   <span class="screen-texts">Welcome Screen:</span>
                                    <textarea ng:change="update_settings_in_view()" ng:model="application_settings.settings.titles.title_start_with" id="editor-strt-txt" class="quiz-titlex screen-redactors-strt-txt">Writ start Quiz</textarea>
                                 </div>
                                 <div class="control-item-content-text">
-                                   <span class="screen-texts">Goodbye Text</span>
+                                   <span class="screen-texts">Goodbye Screen:</span>
                                    <!-- <input ng:change="update_settings_in_view()"  type="text" name="" value="" placeholder=""> -->
                                    <textarea ng:change="update_settings_in_view()" ng:model="application_settings.settings.titles.title_end_with" id="editor-end-txt" class="quiz-titlex screen-redactors-end-txt">You have successfully completed the this quizs</textarea>
                                 </div>
                                 <div class="control-item-content-text">
-                                   <span class="screen-texts">Quiz Pass text:</span>
+                                   <span class="screen-texts">Quiz Pass Screen:</span>
                                    <textarea ng:change="update_settings_in_view()" ng:model="application_settings.settings.titles.title_success_with" id="editor-scs-txt" class="quiz-titlex screen-redactors-scs-txt">You have passed this quiz</textarea>
                                 </div>
                                 <div class="control-item-content-text">
-                                   <span class="screen-texts">Quiz Fail text:</span>
+                                   <span class="screen-texts">Quiz Fail Screen:</span>
                                    <textarea ng:change="update_settings_in_view()" ng:model="application_settings.settings.titles.title_failed_with" id="editor-fld-txt" class="quiz-titlex screen-redactors-fld-txt">You have failed this quiz</textarea>
                                  </div>
 
@@ -223,6 +263,34 @@
                                    <span>Review Button</span>
                                    <input ng:change="update_labels_in_retk_menu_settings()" ng:model="application_settings.settings.label_btns.lbl_review_with" class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
                                 </div>
+
+
+
+
+
+                                <div class="control-item-content-text">
+                                   <span>Back Button</span>
+                                   <input ng:change="update_current_label('back')" ng:model="application_settings.settings.label_btns.lbl_back_with" class="quiz-titlex " type="text" name="" value="" placeholder="Back">
+                                </div>
+                                <div class="control-item-content-text">
+                                   <span>Finish Button</span>
+                                   <input ng:change="update_current_label('finish')" ng:model="application_settings.settings.label_btns.lbl_finish_with" class="quiz-titlex " type="text" name="" value="" placeholder="Finish">
+                                </div>
+                                <div class="control-item-content-text">
+                                   <span>Submit Quiz Button</span>
+                                   <input ng:change="update_current_label('submt-quiz')" ng:model="application_settings.settings.label_btns.lbl_submit_quiz_with" class="quiz-titlex " type="text" name="" value="" placeholder="Score Text">
+                                </div>
+                                <div class="control-item-content-text">
+                                   <span>Score Text</span>
+                                   <input ng:change="update_current_label('score-text')" ng:model="application_settings.settings.label_btns.lbl_score_with" class="quiz-titlex " type="text" name="" value="" placeholder="Grade Text">
+                                </div>
+                                <div class="control-item-content-text">
+                                   <span>Grade Text</span>
+                                   <input ng:change="update_current_label('grade-text')" ng:model="application_settings.settings.label_btns.lbl_grade_with" class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
+                                </div>
+
+
+
 
                              </div>
                           </li>

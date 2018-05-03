@@ -17,11 +17,20 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
              lbl_start_with:"Start" ,
              lbl_continue_with : "Continue" ,
              lbl_retake_with : "Retake" ,
-             lbl_review_with : "Review"
+             lbl_review_with : "Review" ,
+             lbl_back_with : "Back",
+             lbl_finish_with : "Finish",
+             lbl_submit_quiz_with : "Submit Quiz",
+             lbl_score_with :"Score",
+             lbl_grade_with :"Grade"
           } ,
          grade_settings : {
            is_graded : false ,
            value : 90
+         } ,
+         indexes : {
+           questions : 0 ,
+           answers : 1
          } ,
          time_settings : {
            is_with_time:false ,
