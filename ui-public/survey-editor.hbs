@@ -12,11 +12,10 @@
 <div style="position:relative; z-index:100;" ng:controller="apps-controller">
 
 <div class="side-left-bar">
-  <div class="question-data">
+  <div class="question-data" style="overflow:hidden; height:auto; max-height:3300px;">
 
     <!-- Question Types -->
      <ul id="qs-sortable" class="question-x">
-
        <li id="question-muliple-choices" ng:click="onclick_items('question-muliple-choices')" data-type="qst" data-question-type="0" question-data="partials/multi-choices.hbs">
            <span class="qs-type" title="Multiple Choices">
               <i class="icon-insert-template"></i>
@@ -58,21 +57,7 @@
         </span>
         <span class="titles">Free Texts</span>
        </li>
-
-
      </ul>
-
-      <!-- Messages -->
-      <!--
-       <ul id="msg-list" class="messages question-x">
-         <li>
-           <span class="titles">Welcome screen</span>
-         </li>
-         <li>
-           <span class="titles">End screen</span>
-         </li>
-       </ul>
-      -->
 
   </div>
 </div>
@@ -97,7 +82,7 @@
                 <!-- <a class="choices-right-add btn-danger btn setting-menu-handler" href="#">
                   <i class="fa fa-cog"></i>
                 </a> -->
- 							  <a class="choices-right-add btn-primary preview-button btn rm-margin" href="#">Preview Survey</a>
+ 							  <a class="choices-right-add btn-primary preview-button btn rm-margin" href="{{server_ip}}{{app._id}}/live_preview/{{user.id}}">Preview Survey</a>
   					 </div>
 					</div>
 	    </div>
@@ -121,7 +106,7 @@
                            <div class="drag-handler">
                              <i>...</i>
                            </div>
-                           <div  ng:click="edit_this_question(qs_value._id , $index )"  class="single-question-container">
+                           <div ng:click="edit_this_question(qs_value._id , $index )"  class="single-question-container">
                              <span class="qs-type" title="Multiple Choices">
                                <i ng:if="qs_value.question_type == 0" class="icon-insert-template iconn-x"></i>
                                <i ng:if="qs_value.question_type == 1" class="icon-image iconn-x"></i>
@@ -150,24 +135,36 @@
       <div class="right_part col-md-7 col-sm-6 col-xs-12">
         <!-- Switch to view or editor [Handler]-->
         <div class="switched-button switch-mode">
-           <span class="swMode">
-             <!-- Handel this by js -->
-             On <span class="action-case"> {> editor_mode <} </span>
-           </span>
-           <div class="mode-chs-x">
-               <input type="checkbox" class="slide-mode" ng:model="create_quiz.template_mode" id="mode-chox-option" name="check" /> <!--  checked -->
-               <label  ng:click="change_mode()" for="mode-chox-option"></label>
-               <span class="image-on mode-option-x"></span>
-           </div>
+             <div ng:hide="activated_screens" class="input-switch">
+                  <label>
+                     <i class="fa fa-paperclip"></i>
+                     <span ng:bind="activated_screen_name"></span>
+                  </label>
+             </div>
+             <div ng:show="activated_screens" class="input-switch">
+               <label for="switch-editor">Edit</label>
+               <input type="checkbox" id="switch-editor" ng:model="switching_editor_preview_value" ng:change="switching_editor_preview()" class="input" />
+               <label for="switch-editor" class="switch"></label>
+               <label for="switch-editor">Preview</label>
+             </div>
         </div>
 
 
         <!-- Edit Template && Preview Template  -->
         <div class="question-editor swiper-container">
-            <div  ng:hide="true" style="position:relative;">
-               {{> preview app = app }}
-            </div>
-            <div ng:show="true"><!-- template_mode -->
+            <!-- Preview Page -->
+            <div class="preview-container swiper-slide" style="position:relative;">
+                {{> preview app = app }}
+                <!-- Loading edditor -->
+                <div class="loader-container">
+                   <div class="loader">
+                     <span>{</span><span>}</span>
+                     <span class="loadin-editor">Loading Preview</span>
+                   </div>
+                </div>
+              </div>
+            <!-- Editor Page -->
+            <div class="editor-container swiper-slide" style="position:relative; "><!-- template_mode -->
                {{> editor app = app }}
                <!-- Loading edditor -->
                <div class="loader-container">
@@ -177,7 +174,6 @@
                   </div>
                </div>
             </div>
-
         </div>
 
       </div>

@@ -382,6 +382,8 @@ apps.controller("preview_players" , [
         if(question_type == 0 ) classes = 'question_type_texts';
         if(question_type == 1 ) classes = 'question_type_media';
         if(question_type == 2 ) classes = 'question_type_boolean';
+        if(question_type == 3 ) classes = 'question_type_rating_scale';
+        if(question_type == 4 ) classes = 'question_type_fre_tex';
       return classes;
     };
     $scope.load_qs_theme = (question_type) => {
@@ -389,6 +391,8 @@ apps.controller("preview_players" , [
         if(question_type == 0 ) classes = 'question_type_texts_qs_brd';
         if(question_type == 1 ) classes = 'question_type_media_qs_brd';
         if(question_type == 2 ) classes = 'question_type_boolean_qs_brd';
+        if(question_type == 3 ) classes = 'question_type_rating_scale_qs_brd';
+        if(question_type == 4 ) classes = 'question_type_fre_tex_qs_brd';
       return classes;
     };
     $scope.load_slide_theme = (question_type) => {
@@ -396,6 +400,8 @@ apps.controller("preview_players" , [
       if(question_type == 0 ) classes = 'question_type_texts_bg';
       if(question_type == 1 ) classes = 'question_type_media_bg';
       if(question_type == 2 ) classes = 'question_type_boolean_bg';
+      if(question_type == 3 ) classes = 'question_type_rating_scale_bg';
+      if(question_type == 4 ) classes = 'question_type_fre_text_bg';
       return classes;
     };
     $scope.load_border_styles = (question_type) => {
@@ -403,8 +409,20 @@ apps.controller("preview_players" , [
       if(question_type == 0 ) classes = 'question_type_texts_brd';
       if(question_type == 1 ) classes = 'question_type_media_brd';
       if(question_type == 2 ) classes = 'question_type_boolean_brd';
+      if(question_type == 3 ) classes = 'question_type_rating_scale_brd';
+      if(question_type == 4 ) classes = 'question_type_fre_tex_brd';
       return classes;
     };
+    $scope.load_qs_note_theme =  (question_type) => {
+      var classes = '';
+      if(question_type == 0 ) classes = 'question_type_texts_colr';
+      if(question_type == 1 ) classes = 'question_type_media_colr';
+      if(question_type == 2 ) classes = 'question_type_boolean_colr';
+      if(question_type == 3 ) classes = 'question_type_rating_sacle_colr';
+      if(question_type == 4 ) classes = 'question_type_fre_tex_colr';
+      return classes;
+    };
+
     $scope.go_to_next_slider = (current_index , val = null) => {
       try {
         // if( window.parent.location == window.location )
@@ -421,13 +439,7 @@ apps.controller("preview_players" , [
       var this_input = $("input#cross_iframe_qs_index_value").val();
       $scope.slide_screens.slideTo(this_input);
     };
-    $scope.load_qs_note_theme =  (question_type) => {
-      var classes = '';
-      if(question_type == 0 ) classes = 'question_type_texts_colr';
-      if(question_type == 1 ) classes = 'question_type_media_colr';
-      if(question_type == 2 ) classes = 'question_type_boolean_colr';
-      return classes;
-    };
+
     $scope.load_case_many_answer_option =  (question_type , is_single_choice) => {
       var classes = '';
          if((question_type == 0 || question_type == 1 ) && is_single_choice == false )

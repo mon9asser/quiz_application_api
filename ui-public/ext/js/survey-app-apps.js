@@ -107,7 +107,7 @@ apps.filter('math_around_it' , [
 //=============================================
 // => Controllers
 //=============================================
-apps.controller("players" , [
+apps.controller("survey" , [
   '$scope' , '$rootScope' , '$timeout' , '$http' , 'settings' , '$window',
   ( $scope, $rootScope, $timeout , $http , settings , $window ) => {
 
@@ -202,6 +202,7 @@ apps.controller("players" , [
          // => Question Numbers
          var question_pro = $('.current-question');
          question_pro.html($scope.__player_object.questions.length);
+         thi
          // => Question Progress
          $scope.slide_screens_index($scope.__player_object.questions.length);
        }
@@ -267,7 +268,7 @@ apps.controller("players" , [
 
              // => Storing data into array
              $scope.store_the_current_time();
-            //  $scope.time__calculation_compilation(true);
+            //  $scope.time__calculation_compilation(true); 
              $scope.load_quiz_timer();
       }
      };
@@ -641,13 +642,12 @@ apps.controller("players" , [
                     if(attendeeInfo.report_attendees == undefined )
                       attendeeInfo.report_attendees = new Object();
 
-                      attendeeInfo.report_attendees.created_at = new Date();
-                      attendeeInfo.report_attendees.updated_at = new Date();
+                      attendeeInfo.report_attendees.created_at = new Date()
+                      attendeeInfo.report_attendees.updated_at = new Date()
                       attendeeInfo.report_attendees.attendee_id = $scope.user_id;
                       attendeeInfo.report_attendees.user_information = $scope.user_id;
                       attendeeInfo.report_attendees.is_completed = is_completed ;
                       attendeeInfo.report_attendees.passed_the_grade = isPassed ;
-                      if(attendeeInfo.report_attendees.survey_quiz_answers == undefined)
                       attendeeInfo.report_attendees.survey_quiz_answers = new Array();
                       attendeeInfo.report_attendees.results = new Object();
                       attendeeInfo.report_attendees.results['wrong_answers'] = wrong_questions;
@@ -789,8 +789,6 @@ apps.controller("players" , [
 
                        attendeeInfo.report_attendees.survey_quiz_answers[qsIndex_x] = question_obj_val ;
 
-                   }else {
-
                    }
                 }
               }else {
@@ -808,9 +806,7 @@ apps.controller("players" , [
        // => Move into attendee draft object
 
 
-       console.log({
-         this_draft_object : $scope.this_attendee_draft
-       });
+
        if($scope.is_submitted)
           $scope.fill_unsolved_question_counts();
          else

@@ -149,6 +149,8 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
         }
         // => Save id to set attendee_draft
         qtnrs.app_registry = qtner._id ;
+        qtnrs.app_report =   qtner._id ;
+
         qtnrs.save();
         res.send(qtner);
     }).catch((e) => {

@@ -38,11 +38,6 @@
                   <div>
                       <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
                       <div class="qusu-details text-right">
-                          <!-- <button ng:click="back_to_quizzes()" class="button-take-this" type="button" name="button">
-                              <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-                              Back
-                          </button> -->
-
                           <button ng:click="start_this_quiz()" class="button-take-this" type="button" name="button">
                               <i class="fa fa-sign-in" aria-hidden="true"></i>
                               {> __player_object.settings.label_btns.lbl_start_with <}
@@ -63,7 +58,9 @@
                         <span class="qs-icons">
                                 <i ng:if="obj_val.question_type == 0" class="icon-insert-template iconx-x"></i>
                                 <i ng:if="obj_val.question_type == 1" class="icon-image iconx-x"></i>
-                                <i ng:if="obj_val.question_type == 2" class="icon-check-circle iconx-x"></i>
+                                <i ng:if="obj_val.question_type == 2" class="iconx-x fa fa-star-o"></i>
+                                <i ng:if="obj_val.question_type == 3" class="iconx-x fa" ng:class="(obj_val.answers_format[0].ratscal_type == 0) ? 'fa-signal' :'fa-star-o' "></i>
+                                <i ng:if="obj_val.question_type == 4" class="iconx-x fa fa-text-width"></i>
                         </span>
                         <span ng:if="__player_object.settings.indexes.questions == 0 " class="qs-numericals">{> question_indexes.numberical[$index] <}</span>
                         <span ng:if="__player_object.settings.indexes.questions == 1 " class="qs-numericals">{> question_indexes.alphabetical[$index] | uppercase <}</span>

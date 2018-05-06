@@ -2195,7 +2195,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       if( this_question.question_type == 0 ){
 
         if(new__Answer != null ){
-          (new__Answer);
+          // (new__Answer);
 
 
           var answer_ui_list = $($scope.iframe_object).find('ul#question_'+$scope.question_id);
@@ -2298,6 +2298,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
         if(question == undefined) return false;
 
         if( model_type == 0 ){ // Question
+          $scope.unsaved_question = true ;
           // ==> Storing Data
           var question_data = $R("#editor-quest-data" , "source.getCode");
           question.question_body = question_data ;
@@ -2305,6 +2306,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           $scope.iframe_access.change_data_in_answer_view ($scope.question_id  , 0 , $scope.question_id , questionIndex  , question_data );
         }
         if( model_type == 1 ){ // Description
+          $scope.unsaved_question = true ;
           // ==> Storing Data
           var question_description = $R("#editor-desc-data" , "source.getCode");
           question.question_description = question_description;
@@ -2312,6 +2314,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           $scope.iframe_access.change_data_in_answer_view ($scope.question_id  , 1 , $scope.question_id , questionIndex  , question_description );
         }
         if( model_type == 2 ){ // Welcome Screen
+          $scope.unsaved_question = true ;
           // ==> Storing Data
           var app_setting_strt_message = $R("#editor-strt-txt" , "source.getCode");
           $scope.application_settings.settings.titles.title_start_with = app_setting_strt_message ;
@@ -2320,6 +2323,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           $scope.iframe_access.set_application_settings($scope.application_settings.settings);
         }
         if( model_type == 3 ){ // GoodBye Screen
+          $scope.unsaved_question = true ;
           // ==> Storing Data
           var app_setting_end_message = $R("#editor-end-txt" , "source.getCode");
           $scope.application_settings.settings.titles.title_end_with = app_setting_end_message ;
@@ -2328,6 +2332,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           $scope.iframe_access.set_application_settings($scope.application_settings.settings);
         }
         if( model_type == 4 ){ // Success Screen
+          $scope.unsaved_question = true ;
           // ==> Storing Data
           var app_setting_scs_message = $R("#editor-scs-txt" , "source.getCode");
           $scope.application_settings.settings.titles.title_success_with = app_setting_scs_message ;
@@ -2378,12 +2383,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       });
 
     };
-    // $timeout(function(){
-    //   $("input").on("change , input" , function (){
-    //     $scope.iframe_access.set_application_settings($scope.application_settings.settings);
-    //   });
-    //
-    // } , 1000);
+
     $scope.update_settings_in_view = ()=> {
       $scope.iframe_access.set_application_settings($scope.application_settings.settings);
     }

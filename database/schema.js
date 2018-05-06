@@ -370,6 +370,7 @@ var Questionnaire_questions = {
     type : [
       {
         _id :                     { type : mongoose.Schema.ObjectId } ,
+
         created_at :              { type : Date     } ,
         updated_at:               { type : Date     } ,
         question_body:            { type : String   } ,
@@ -394,8 +395,10 @@ var questionnaireDataTypes = {
    updatedAt : {  type : Date   },
    settings :  Questionnaire_settings  ,
    questions : Questionnaire_questions ,
-   app_registry : { type : String , ref : "attendee_drafts" }
+   app_registry : { type : String , ref : "attendee_drafts" } ,
+   app_report : { type: String  , ref : "reports" }
 };
+// => mongoose.Schema.Types.ObjectId
 
 
 /*

@@ -1040,16 +1040,40 @@
         }
       </pre>
       <p>
-        # ==> Case this search by date and pagination
+        # ==> Retrieve all attendees without any arguments
+      </p>
+      <pre class="prettyprint code_json" style="padding: 6px 11px;">
+        {
+          you dont need to pass anything here
+        }
+      </pre>
+      <p>
+        # ==> Question flag
+      </p>
+      <pre class="prettyprint code_json" style="padding: 6px 11px;">
+        {
+          "questions" : true // => it will return all questions else will not return any qs
+        }
+      </pre>
+      <p>
+        # ==> Case sorting it from date ---- to date ----
       </p>
       <pre class="prettyprint code_json" style="padding: 6px 11px;">
         {
           "date":{
             "date_from": ---,
             "date_to": ---
-          } ,
+          }
+        }
+      </pre>
+      <p>
+        # ==> Case sorting it by pagination
+      </p>
+      <pre class="prettyprint code_json" style="padding: 6px 11px;">
+        {
           "pagination":{
-            "page_number" : --- , "records_per_page" : ---
+            "page_number": ---,
+            "records_per_page": ---
           }
         }
       </pre>
