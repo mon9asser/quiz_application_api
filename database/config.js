@@ -32,9 +32,10 @@ var notes = {
                    Permission_Warning : { Warning : "You couldn't able to access this api ! because you dont have a permission !" }
                  },
   "Errors"     : {
-                   Error_Application_Verify : {
-                    "Authentication_Failed":"API keys not verified"
-                  } ,
+                  //  Error_Application_Verify : {
+                  //   "Authentication_Failed":"API keys not verified"
+                  // } ,
+                   Error_Application_Verify : "Your Application keys not verified ! to use our API please create 'api keys'" ,
                    Error_Doesnt_exists : function (data) {
                      return `This '${data}' does not exists`;
                    },
@@ -86,7 +87,14 @@ var notes = {
                       return `These ${data} aren't Updated because there are no data !`;
                     } ,
                     Stylesheet_Enough : {"Message":"Be inform that , We have added only 11 attributes from your data as a maximum for each time"}
-                  }
+                  } ,
+  "notifications" : {
+      catch_errors : ( error ) => { return  { status_code : 0 , message :"failed" , data : error } } ,
+      catch_fields : ( requiredFields ) => { return  { status_code : 0 , message :"failed" , data : requiredFields } } ,
+      authentication_failed : (  ) => { return  { status_code : 0 , message :"failed" , data : "Your Application keys not verified ! to use our API please create 'api keys" } } ,
+      permission_denied : (  ) => {  return { status_code : 0 , message :"failed" , data: "You don't have a permission to access this api !"} } ,
+      success_calling : ( object ) => { return { status_code : 1 , message :"success" , data: object }  }
+  }
 };
 
 // => Default Settings to init the app when user create !!

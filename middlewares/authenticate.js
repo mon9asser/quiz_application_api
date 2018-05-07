@@ -96,32 +96,6 @@ var verify_token_user_type = function(req,res,next){
       });
 };
 
-var verify_api_keys_user_apis = function (req , res , next )   {
-  if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
-     return new Promise((resolve, reject) => {
-       res.status(401).send(notes.Errors.Error_Application_Verify);
-    });
-   }
-
-  var api_keys = req.header("X-api-keys");
-  var app_name = req.header("X-api-app-name");
-  apk.verify_api_keys(api_keys , app_name ).then((apk_key)=>{
-
-    if(!apk_key || apk_key == null || apk_key == ''){
-      return new Promise((resolve , reject)=>{
-        res.send({"Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'"});
-      });
-    }
-
-    if(apk_key.length != 0){
-      next();
-    }
-
-  }).catch((error)=>{
-    res.status(404).send(error);
-  });
-
-}
 
 
 
@@ -527,14 +501,6 @@ var authenticate_keys_with_curr_status  =   function (req , res , next )   {
 //
 // };
 
-
-
-
-
-
-
-
-
 var api_key_report_auth = function (req ,res ,next){
   if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
      return new Promise((resolve, reject) => {
@@ -622,5 +588,54 @@ var verify_access_tokens_admin_user = function (req  , res  , next ){
   });
 
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ========================================================
+// ============>>> Updates +++
+// ========================================================
+
+var verify_api_keys_user_apis = function (req , res , next )   {
+
+      if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
+             return new Promise((resolve, reject) => {
+               res.status(401).send(notes.notifications.authentication_failed());
+            });
+      }
+
+      var api_keys = req.header("X-api-keys");
+      var app_name = req.header("X-api-app-name");
+      apk.verify_api_keys(api_keys , app_name ).then((apk_key)=>{
+
+        if(!apk_key || apk_key == null || apk_key == ''){
+          return new Promise((resolve , reject)=>{
+              res.send(notes.notifications.authentication_failed());
+            });
+        }
+
+        if(apk_key.length != 0){
+            next();
+        }
+
+      }).catch((error)=>{
+            res.status(404).send(notes.notifications.catch_errors(error));
+      });
+
+}
 
 module.exports = { auth_api_keys_only , authenticate_keys_with_curr_status , verify_access_tokens_admin_user , api_key_report_auth , auth_verify_generated_tokens, auth_verify_api_keys_tokens , generate_tokens, auth_verify_api_keys ,  verify_api_keys_user_apis , authByToken  , build_session , verify_session , verify_token_user_type } ;
