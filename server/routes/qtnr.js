@@ -3851,35 +3851,35 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
 
   // this user should be a creator user !
  if (userType != 1) {
-      return new Promise((resolve, reject) => { 
-         res.status(401).send(notes.Warnings.Permission_Warning);
+      return new Promise((resolve, reject) => {
+         res.status(401).send( notes.notifications.permission_denied());
      });
  }
 
    qtnr.findOne({ _id:app_id } , (err , docs)=>{
      if(!docs || err ) {
        return new Promise((resolve, reject)=>{
-          res.status(404).send(notes.Errors.Error_Doesnt_exists("Application"));
+          res.status(404).send(notes.notifications.catch_fields(notes.Errors.Error_Doesnt_exists("Application")));
        });
      }
    }).then( ( qtnairsDocument) => {
 
        if (!qtnairsDocument){
          return new Promise((resolve, reject)=>{
-            res.status(404).send(notes.Errors.Error_Doesnt_exists("Application"));
+            res.status(404).send(notes.notifications.catch_fields(notes.Errors.Error_Doesnt_exists("Application")));
          });
        }
 
        if(qtnairsDocument.creator_id != user.id){
          return new Promise((resolve , reject)=>{
-           res.send(notes.Warnings.Permission_Warning);
+           res.status(401).send( notes.notifications.permission_denied());
          });
        }
 
        var questionIndex = _.findIndex(qtnairsDocument.questions , {"id":question_id});
        if(questionIndex == -1 ){
          return new Promise((resolve, reject)=>{
-            res.status(404).send(notes.Errors.Error_Doesnt_exists("Question"));
+            res.status(404).send(notes.notifications.catch_fields(notes.Errors.Error_Doesnt_exists("Question")));
          });
        }
 
@@ -3927,7 +3927,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
 
                      if(req.file_status != "undefine" && req.file_status == false){
                          return new Promise((resolve , reject)=>{
-                           res.send(notes.Errors.Error_file_extension)
+                           res.send(notes.notifications.catch_fields ( notes.Errors.Error_file_extension ))
                          });
                      }
                      if(req.body.media_src != null || req.file != null){
@@ -4051,7 +4051,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                }
                if((req.file == '' || req.file == null) && req.body.media_src == null ){
                     return new Promise((resolve , reject) => {
-                      res.send(notes.Messages.Required_Message("media_src"));
+                      res.send(notes.notifications.catch_fields (notes.Messages.Required_Message("media_src")));
                     });
                 }
                if(req.body.media_src != null || req.file != null){
@@ -4138,7 +4138,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                 required_fields[boolean_type.length] = "boolean_type"
 
               if(required_fields.length != 0){
-                res.send(notes.Messages.Required_Message(required_fields));
+                  res.send(notes.notifications.catch_fields (notes.Messages.Required_Message(required_fields)));
               }
 
 
@@ -4192,7 +4192,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
 
                    if(qtnairsDocument.app_type != 0 ){
                      return new Promise((resolve , reject)=>{
-                       res.send({"Message":"That's not Survey !"});
+                       res.send(notes.notifications.catch_fields("That's not Survey !" ));
                      });
                    }
                    var required_scale = new Array();
@@ -4205,7 +4205,8 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                     if(required_scale.length != 0 )
                     {
                         return new Promise((resolve , reject)=>{
-                            res.send(notes.Messages.Required_Message(required_scale));
+                          res.send(notes.notifications.catch_fields(notes.Messages.Required_Message(required_scale) ));
+                            // res.send(notes.Messages.Required_Message(required_scale));
                         })
                     }
                         question_answers["_id"] = mongoose.Types.ObjectId();
@@ -4228,7 +4229,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
           case 4 :
               if(qtnairsDocument.app_type != 0 ){
                  return new Promise((resolve , reject)=>{
-                    res.send({"Message":"That's not Survey !"});
+                    res.send(notes.notifications.catch_fields("That's not Survey !" ));
                  });
               }
           question_answers["_id"] = mongoose.Types.ObjectId();
@@ -4244,7 +4245,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
                if(req.body.is_correct == null )
                {
                    return new Promise(( resolve , reject ) => {
-                     res.send(notes.Messages.Required_Message("is_correct"));
+                     res.send(notes.notifications.catch_fields(notes.Messages.Required_Message('is_correct') ));
                    });
                }
             }
@@ -4261,7 +4262,8 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
 
               if(!req.body.answer_id || req.body.answer_id == null ){
                 return new Promise((resolve , reject)=>{
-                    res.send(notes.Messages.Required_Message("answer_id"))
+                    // res.send(notes.Messages.Required_Message("answer_id"));
+                    res.send(notes.notifications.catch_fields(notes.Messages.Required_Message('answer_id') ));
                 });
               }
               var answer_id = req.body.answer_id ;
@@ -4278,7 +4280,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
               }
               if(foundAnswer == false){
                 return new Promise((resolve , reject)=>{
-                    res.send(notes.Errors.Error_Doesnt_exists("Answer"));
+                    res.send(notes.notifications.catch_fields(notes.Messages.Error_Doesnt_exists('Answer') ));
                 });
               }
 
@@ -4300,7 +4302,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
 
                 if(req.file_status != "undefine" && req.file_status == false){
                   return new Promise((resolve , reject)=>{
-                   res.send(notes.Errors.Error_file_extension)
+                   res.send(notes.notifications.catch_fields(notes.Errors.Error_file_extension));
                   });
                 }
                 if(req.body.media_src != null || req.file != null){
@@ -4402,7 +4404,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
 
                 if(req.file_status != "undefine" && req.file_status == false){
                   return new Promise((resolve , reject)=>{
-                   res.send(notes.Errors.Error_file_extension)
+                   res.send(notes.notifications.catch_fields(notes.Errors.Error_file_extension));
                   });
                 }
                 if(req.body.media_src != null || req.file != null){
@@ -4523,7 +4525,8 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
         {
               if(!req.body.answer_id || req.body.answer_id == null ){
                 return new Promise((resolve , reject)=>{
-                    res.send(notes.Messages.Required_Message("answer_id"))
+                    // res.send(notes.Messages.Required_Message("answer_id"));
+                    res.send(notes.notifications.catch_fields(notes.Messages.Required_Message("answer_id")));
                 });
               }
               var answer_id = req.body.answer_id ;
@@ -4541,7 +4544,7 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
 
               if(foundAnswer == false){
                 return new Promise((resolve , reject)=>{
-                    res.send(notes.Errors.Error_Doesnt_exists("Answer"));
+                    res.send(notes.notifications.catch_fields(notes.Messages.Error_Doesnt_exists("Answer")));
                 });
               }
               // Delete image related this media part
@@ -4579,24 +4582,20 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_an
 
       qtnairsDocument.markModified("questions");
       qtnairsDocument.save().then(()=>{
-        res.send(questionnaire_results);
+        res.send(notes.notifications.success_calling(questionnaire_results));
       }).catch((err)=>{
         return new Promise((resolve , reject )=>{
-          res.status(404).send({"error" :notes.Errors.General_Error.error , "details":err.message});
+          res.send(notes.notifications.catch_errors ( err ));
         });
       });
 
    }).catch((err)=>{
      return new Promise((resolve, reject)=>{
-        res.status(404).send({"error" :notes.Errors.General_Error.error , "details":err.message});
+        res.send(notes.notifications.catch_errors ( err ));
      });
    });
 
 });
-
-
-
-
 
 
 
@@ -4678,6 +4677,27 @@ qtnrRouters.post("/:app_id/application/:objects" , auth_verify_api_keys , (req ,
           });
        });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ==> populate for attendee draft
 qtnrRouters.get("/:app_id/application/:objects" , auth_api_keys_only , (req ,res )=>{
       var objects= req.params.objects ;
