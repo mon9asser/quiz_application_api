@@ -64,7 +64,7 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
 
      };
   $scope.json_apk_file = $scope.server_ip + "ext/json/json-keys.json";
-  $scope.api_url =  $scope.server_ip + "api/create" ;
+  $scope.api_url =  $scope.server_ip + "api/create/v1.1" ;
   $scope.api_url_delete =  $scope.server_ip + "api/delete" ;
 
   $scope.application_fields = new Array();

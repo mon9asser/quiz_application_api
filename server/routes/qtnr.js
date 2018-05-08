@@ -88,7 +88,7 @@ var qtnrRouters = express.Router();
 qtnrRouters.use(build_session);
 
 
- 
+
 qtnrRouters.post("/create/v1.1", auth_verify_api_keys_tokens ,  (req, res) => {
   var user = req.verified_user;
   var userType = req.is_creator;
@@ -2449,7 +2449,7 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
     if( appt >= 2  || appt < 0 ||  !_.isInteger(appt)){
        return new Promise((resolve , reject)=>{
         // //console.log(required);
-        res.status(404).send(notes.notifications.catch_errors(notes.Errors.Error_Doesnt_exists("Application Type")));
+        res.status(404).send(notes.notifications.catch_doesnt_existing_data("Application Type"));
       });
     }
     // Builde And Init Default !

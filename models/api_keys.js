@@ -1,5 +1,5 @@
 
-const { mongoose } = require("../database/connx"); 
+const { mongoose } = require("../database/connx");
 const { MongoClient , ObjectID } = require("mongodb");
 const { clientServersDataType } = require("../database/schema");
 const { config , apis } = require("../database/config");
@@ -36,7 +36,6 @@ apikeySchema.statics.verify_api_keys = function (apiKey , appName){
 
   }
   if( verified_keys == null){
-
     return Promise.reject({"Authentication_Failed" : "API keys not verified"});
     return false;
   }

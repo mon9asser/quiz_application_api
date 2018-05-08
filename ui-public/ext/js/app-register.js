@@ -4,7 +4,7 @@
 apps.controller("register-app" , ["$rootScope" , "$http" , "$scope" , function ($rootScope , $http , $scope){
   $scope.server_ip = $("#serverIp").val() ;
   $scope.json_apk_file = $scope.server_ip + "ext/json/json-keys.json";
-  $scope.api_url = $scope.server_ip + "api/users/create";
+  $scope.api_url = $scope.server_ip + "api/users/create/v1.1";
   $scope.register_access = $('#signup_user');
 
 

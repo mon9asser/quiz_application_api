@@ -4,7 +4,7 @@
 apps.controller("login-app" , ["$rootScope" , "$http" , "$scope" , function ($rootScope , $http , $scope){
   $scope.server_ip = $("#serverIp").val() ;
   $scope.json_apk_file = $scope.server_ip + "ext/json/json-keys.json";
-  $scope.api_url = $scope.server_ip + "api/users/login";
+  $scope.api_url = $scope.server_ip + "api/users/login/v1.1";
   $scope.login_access = $('#login_user');
   $scope.access = {
     email    : null ,

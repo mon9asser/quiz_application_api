@@ -1047,6 +1047,688 @@ rptRouters.delete("/:app_id/report/clear" , api_key_report_auth , (req , res) =>
 // });
 
 
+rptRouters.post([ "/:creator_id/brief/report/v1.1" , "/:creator_id/brief/:app_type/report" ] , api_key_report_auth , ( req , res ) => {
+  var creator_id = req.params.creator_id;
+  var report_type = req.params.report_type;
+  var queries = new Object();
+  queries["creator_id"] = creator_id;
+  if(req.body.pagination != null ){
+        if(req.body.pagination == null || ! req.body.pagination) {
+            return new Promise((resolve,reject) => {
+               res.status(400).send(notes.Messages.Required_Message("`pagination` Object"));
+            });
+          }
+        var obj_pagination = new Array();
+        if(req.body.pagination.page_number == null )
+            obj_pagination[obj_pagination.length]='page_number';
+        if(req.body.pagination.records_per_page == null )
+            obj_pagination[obj_pagination.length]='records_per_page';
+        if(obj_pagination.length != 0 ){
+            return new Promise((resolve,reject) => {
+              res.status(400).send(notes.Messages.Required_Message(obj_pagination));
+            });
+         }
+   }
+
+  // Sorting By Date
+  if (req.body.date) {
+    if (req.body.date.date_from != null && req.body.date.date_to != null) {
+       var query_range = new Object();
+           query_range = {
+                   "$gte": new Date(req.body.date.date_from),
+                   "$lt": new Date(req.body.date.date_to)
+           }
+          queries["createdAt"] = query_range;
+      }
+  }
+
+   // Sorting if it by app_type
+  if ( req.params.app_type ){
+     if(req.params.app_type != 'quiz' && req.params.app_type != 'survey'){
+       return new Promise((resolve,reject)=>{
+         res.status(404).send(notes.notifications.show_app_types());
+      //  res.status(400).send({"Error":"This app is wrong it should be `quiz` Or `survey`"});
+     });
+   }
+      queries["app_type"] = (req.params.app_type == 'quiz') ? 1 : 0;
+  }
+  if(req.body.pagination != null ){
+    var page_number = req.body.pagination.page_number;
+    var pages = req.body.pagination.records_per_page;
+  }
+    qtnr.find(queries).populate('app_report').exec(function(error, creatorQuestionnaires) {
+      if( error || ! creatorQuestionnaires || creatorQuestionnaires.length == 0) {
+        return new Promise((resolve , reject)=>{
+          res.status(404).send(notes.notifications.show_app_access());
+        });
+      }
+       // ==> Build brief report
+       var reports = creatorQuestionnaires ;
+       var brief_reports = new Array();
+       for (var i = 0; i < reports.length; i++) {
+         var brfReport = new Object();
+         var documentObject  = reports[i];
+         // ==> Calculations
+         var total_passed , total_is_completed , total_is_completed_count ;
+         if(documentObject.app_report != null )
+         total_passed = _.countBy(documentObject.app_report.attendees, {'passed_the_grade': true});
+         else     total_passed = 0
+
+         if(documentObject.app_report != null )
+          total_is_completed = _.countBy(documentObject.app_report.attendees, {'is_completed': true});
+          else total_is_completed = 0;
+
+         if(documentObject.app_report != null )
+           total_is_completed_count = _.countBy(documentObject.app_report.attendees, 'results.correct_answers');
+           else total_is_completed_count = 0
+
+
+         brfReport['app_id'] = documentObject._id ;
+         brfReport['app_name'] = documentObject.questionnaire_title ;
+         brfReport['app_type']= ( documentObject.app_type  == 1) ? "Quiz" : "Survey";
+         brfReport['total_questions'] = documentObject.questions.length
+          if(documentObject.app_report != null )
+         brfReport['total_attendees'] = documentObject.app_report.attendees.length;
+         else  brfReport['total_attendees'] =  0
+
+         if(documentObject.app_type == 1)
+         brfReport['total_passed']= (total_passed.true != null )? total_passed.true : 0 ;
+         if(documentObject.app_type == 1)
+         brfReport['total_completed']= (total_is_completed.true != null )? total_is_completed.true : 0 ;
+          if(documentObject.app_report != null )
+         brfReport['history']= documentObject.app_report.history;
+         else
+         brfReport['history'] = "No histories meet your selected criteria !" ;
+         brief_reports.push(brfReport);
+       }
+
+       if(req.body.pagination != null ){
+           // ==> Build Paginations and anther options
+           if (!_.isNumber(page_number)) page_number = 0;
+           if(!_.isNumber(pages)) pages = config.default_records_per_page ;
+
+           if(page_number == 1 || page_number < 0) page_number = 0 ;
+           if(page_number != 0 ) page_number = page_number - 1 ;
+           if(pages == 0 || pages < 0 ) pages = config.default_records_per_page;
+
+           var brief_reports = _.chunk(brief_reports, pages);
+           if(page_number > (brief_reports.length - 1)) page_number = brief_reports.length - 1;
+           brf_rports = brief_reports[page_number] ;
+      }
+
+      if(req.body.pagination == null )
+        brf_rports = brief_reports ;
+
+        // ==> Send list right now
+       res.send(notes.notifications.success_calling(brf_rports));
+    });
+
+});
+rptRouters.post("/:app_id/detailed/report/v1.1", api_key_report_auth ,( req , res ) => {
+  var app_id = req.params.app_id ;
+  qtnr.findOne({_id : app_id}).populate('app_report').exec(function(error, creatorQuestionnaires) {
+
+    usr.find().then((usrDoc) => {
+      if(!usrDoc) return false ;
+      var usrObject = usrDoc ; // ==> All users array
+
+      if(error || ! creatorQuestionnaires ){
+        return new Promise((resolve, reject) => {
+          res.send("Application doesn't exists !");
+        });
+      }
+      var detailed_report = creatorQuestionnaires ;
+
+      var dtls_rpt = new Object();
+      dtls_rpt['app_name'] = detailed_report.questionnaire_title;
+      dtls_rpt['app_id'] = detailed_report._id;
+      dtls_rpt['total_questions'] = detailed_report.questions.length ;
+
+
+
+      if(req.body.attendee_id == null ){
+
+              if(dtls_rpt.attendees == undefined )
+              dtls_rpt['attendees'] = new Array() ;
+
+              var rptAttendee =  detailed_report.app_report.attendees;
+
+              for (var i = 0; i < rptAttendee.length; i++) {
+                var attedee_repo = rptAttendee[i];
+                var attendee_object = new Object ();
+                  // ==> Build questions
+                    attendee_object['attendee_id']      = attedee_repo.attendee_id
+                    attendee_object['email']            = (usrObject.find(x => x._id == attedee_repo.attendee_id ) != undefined ) ? usrObject.find(x => x._id == attedee_repo.attendee_id ).email : 0 ;
+                    attendee_object['name']             = (usrObject.find(x => x._id == attedee_repo.attendee_id ) != undefined ) ? usrObject.find(x => x._id == attedee_repo.attendee_id ).name : 0 ;
+                    // attendee_object['total_questions']  = detailed_report.questions.length
+                    // attendee_object['pass_mark']     =
+
+                    if(creatorQuestionnaires.app_type == 1)
+                    attendee_object['correct_answers']  = attedee_repo.results.correct_answers
+                    if(creatorQuestionnaires.app_type == 1)
+                    attendee_object['wrong_answers']    = attedee_repo.results.wrong_answers
+                    if(creatorQuestionnaires.app_type == 1)
+                    attendee_object['status']           = detailed_report.app_report.attendee_details.find(x => x.attendee_id == attedee_repo.attendee_id).status ;
+                    if(creatorQuestionnaires.app_type == 1)
+                    attendee_object['score']            = detailed_report.app_report.attendee_details.find(x => x.attendee_id == attedee_repo.attendee_id).score ;
+                    attendee_object['completed_status'] = detailed_report.app_report.attendee_details.find(x => x.attendee_id == attedee_repo.attendee_id).completed_status ;
+                    attendee_object['created_at']       = detailed_report.app_report.attendee_details.find(x => x.attendee_id == attedee_repo.attendee_id).created_at ;
+                    attendee_object['completed_date']   =  detailed_report.app_report.attendee_details.find(x => x.attendee_id == attedee_repo.attendee_id).completed_date ;
+
+
+                    // ==> Question Flag
+                    if( req.body.questions && req.body.questions == true )
+                      {
+                          attendee_object['questions'] = new Array();
+                          var attendee_id = attedee_repo.attendee_id ;
+                          var rptAttendee =  detailed_report.app_report.attendees;
+                          var rptAttendeeDetails =  detailed_report.app_report.attendee_details;
+
+                          var this_attendee = rptAttendee.find(x => x.attendee_id == attendee_id);
+                          var this_attendee_details = rptAttendeeDetails.find(x => x.attendee_id == attendee_id);
+                          var questions_list = this_attendee.survey_quiz_answers ;
+
+
+
+                          for ( var iqs = 0; iqs < questions_list.length; iqs++ ){
+                              var obj_ques = questions_list[iqs];
+                              var question_id = obj_ques.questions.question_id;;
+                              var question_document = creatorQuestionnaires.questions.find(x => x._id == question_id);
+                              // res.send(creatorQuestionnaires.questions[req.body.index]);
+                              // return false ;
+
+
+                              var question_object = new Object();
+                              // ==> Question data
+                              // => 1 - media type if found it
+                              if( question_document.media_question != undefined && question_document.media_question != null ) {
+                                 question_object['question_media'] = new Object();
+                                 if(question_document.media_question.media_type == 0 ) { // => Images
+                                   question_object['question_media']['media_type_string'] = 'image';
+                                   question_object['question_media']['media_type'] =  question_document.media_question.media_type ;
+                                   question_object['question_media']['media_field'] =  question_document.media_question.media_field ;
+                                   question_object['question_media']['media_name'] = question_document.media_question.media_name ;
+
+                                  }
+                                 if(question_document.media_question.media_type == 1 ){ //=> Videos
+
+                                     if(question_document.media_question.video_type == 0 ) // => youtube
+                                      {
+                                        question_object['question_media']['media_type_string'] = 'youtube';
+                                        question_object['question_media']['media_type'] =  question_document.media_question.media_type ;
+                                        question_object['question_media']['media_field'] =  question_document.media_question.media_field ;
+                                        question_object['question_media']['video_type']  =  question_document.media_question.video_type ;
+                                        question_object['question_media']['video_id']  =  question_document.media_question.video_id ;
+                                        question_object['question_media']['video_embed_url']  =  question_document.media_question.video_source ;
+                                      }
+                                     if(question_document.media_question.video_type == 1 ) // => vimeo
+                                      {
+                                        question_object['question_media']['media_type_string'] = 'vimeo';
+                                        question_object['question_media']['media_type'] =  question_document.media_question.media_type ;
+                                        question_object['question_media']['media_field'] =  question_document.media_question.media_field ;
+                                        question_object['question_media']['video_type']  =  question_document.media_question.video_type ;
+                                        question_object['question_media']['video_id']  =  question_document.media_question.video_id ;
+                                        question_object['question_media']['video_embed_url']  =  question_document.media_question.video_source ;
+                                      }
+                                     if(question_document.media_question.video_type == 2 ) // => mp4
+                                      {
+                                        question_object['question_media']['media_type_string'] = 'mp4';
+                                        question_object['question_media']['media_type'] =  question_document.media_question.media_type ;
+                                        question_object['question_media']['video_embed_url'] = {
+                                          mp4 :  question_document.media_question.media_field + '.mp4' ,
+                                          ogg :  question_document.media_question.media_field + '.ogg'
+                                        }
+                                        question_object['question_media']['video_type']  =  question_document.media_question.video_type ;
+                                      }
+                                 }
+                              }
+                              // => 2 question data
+                              question_object['question_id']  = obj_ques.questions.question_id
+                              question_object['question_type'] = obj_ques.questions.question_type ;
+                              question_object['question_body'] = striptags(question_document.question_body).replace("&nbsp;",'');
+                              question_object['attendee_answers'] = new Array();
+                              // question_object['is_correct'] = '';
+
+                              var answerIds = obj_ques.answers.answer_id // => arrays
+                              for (var ians = 0; ians < answerIds.length; ians++) {
+
+                                var answer_id = answerIds[ians];
+
+                                var answer_document = question_document.answers_format.find( x => x._id == answer_id );
+
+                                if(answer_document != undefined){
+                                  var answers_object = new Object();
+                                  answers_object['answer_id'] = answer_document._id ;
+                                  if(creatorQuestionnaires.app_type == 1)
+                                  answers_object['is_correct'] = answer_document.is_correct ;
+
+                                  if( obj_ques.questions.question_type == 0 ){
+                                    // 1 => Media
+                                    if(answer_document.media_optional != undefined ){
+                                      media_object = answer_document.media_optional ;
+
+                                      if(answers_object.answer_media == undefined )
+                                        answers_object.answer_media = new Object();
+
+                                      if(media_object.media_type == 0 ){
+                                        answers_object['answer_media']['media_type_string'] =  "image" ;
+                                        answers_object['answer_media']['media_type']        = media_object.media_type
+                                        answers_object['answer_media']['media_field']       = media_object.media_src
+                                        answers_object['answer_media']['media_name']        = media_object.media_name
+                                      }
+
+
+                                      if(media_object.media_type == 1 ){
+
+                                          if(media_object.video_type == 0 ){
+                                              answers_object['answer_media']['media_type'] =  media_object.media_type
+                                              answers_object['answer_media']['media_field'] = media_object.media_src
+                                              answers_object['answer_media']['media_type_string']="youtube" ;
+                                              answers_object['answer_media']['video_type'] = media_object.video_type
+                                              answers_object['answer_media']['video_id'] = media_object.video_id;
+                                              answers_object['answer_media']['video_embed_url'] = media_object.embed_path;
+                                          }
+
+                                          if(media_object.video_type == 1 ){
+                                            answers_object['answer_media']['media_type'] =  media_object.media_type
+                                            answers_object['answer_media']['media_field'] = media_object.media_src
+                                            answers_object['answer_media']['media_type_string']="youtube" ;
+                                            answers_object['answer_media']['video_type'] = media_object.video_type
+                                            answers_object['answer_media']['video_id'] = media_object.video_id;
+                                            answers_object['answer_media']['video_embed_url'] = media_object.embed_path;
+                                          }
+
+                                          if(media_object.video_type == 2 ){
+                                            answers_object['media_type'] =  media_object.media_type ;
+                                            answers_object['video_embed_url'] = {
+                                                  mp4 :  media_object.mp4_option.mp4_url ,
+                                                  ogg :  media_object.mp4_option.ogg_url
+                                            }
+                                            answers_object['media_type_string'] = 'mp4';
+                                            answers_object['video_type']  =  media_object.video_type ;
+                                          }
+                                      }
+                                    }
+                                    // 2 => Texts
+                                    // ==> Case answer object
+                                    answers_object['answer_value'] =striptags( answer_document.value ).replace("&nbsp;",'');
+
+                                  }
+
+
+                                  if(obj_ques.questions.question_type == 1 ){
+                                      // ==> Case media is found
+                                      if ( answer_document.media_type != undefined ){ // answer_document.media_type
+                                          if( answer_document.media_type == 0 ){ // => Images
+                                            answers_object['media_type_string'] = "image" ;
+                                            answers_object['media_type'] = answer_document.media_type
+                                            answers_object['media_field'] = answer_document.media_src;
+                                            answers_object['media_name'] = answer_document.media_name; ;
+                                          }
+                                          if( answer_document.media_type == 1 ) { // => Video
+                                              if(answer_document.video_type == 0 ){ // => yt
+                                                answers_object['media_type'] = answer_document.media_type
+                                                answers_object['media_field'] = answer_document.media_src;
+                                                answers_object['media_type_string'] = "vimeo" ;
+                                                answers_object['video_type'] = answer_document.video_type;
+                                                answers_object['video_id']= answer_document.video_id;
+                                                answers_object['video_embed_url']= answer_document.embed_path
+                                              }
+                                              if(answer_document.video_type == 1 ){ // vim
+                                                answers_object['media_type'] = answer_document.media_type
+                                                answers_object['media_field'] = answer_document.media_src;
+                                                answers_object['media_type_string'] = "vimeo" ;
+                                                answers_object['video_type'] = answer_document.video_type;
+                                                answers_object['video_id']= answer_document.video_id;
+                                                answers_object['video_embed_url']= answer_document.embed_path;
+                                              }
+                                              if(answer_document.video_type == 2 ){ // mp4
+                                                answers_object['media_type'] =  answer_document.media_type ;
+                                                answers_object['video_embed_url'] = {
+                                                  mp4 :  answer_document.mp4_option.mp4_url ,
+                                                  ogg :  answer_document.mp4_option.ogg_url
+                                                }
+                                                answers_object['media_type_string'] = 'mp4';
+                                                answers_object['video_type']  =  answer_document.video_type ;
+                                              }
+                                          }
+                                      }
+                                  }
+                                  if(obj_ques.questions.question_type == 2 ){
+                                    answers_object['boolean_type'] = answer_document.boolean_type
+                                    answers_object['boolean_value'] = answer_document.boolean_value
+                                  }
+                                  if(obj_ques.questions.question_type == 3 ){
+                                        if(answer_document.ratscal_type == 0 ) // => scale value
+                                        {
+                                          answers_object['question_type_string'] = "scale";
+                                          answers_object['started_at']   =  answer_document.started_at;
+                                          answers_object['ended_at']     =  answer_document.ended_at;
+                                          answers_object['show_labels']  =  answer_document.show_labels;
+                                          answers_object['centered_at']  =  answer_document.centered_at;
+                                        }else { // => rating value
+                                          answers_object['question_type_string'] = "rating";
+                                        }
+                                        answers_object['answer_value']   =  answer_document.step_numbers;
+                                        answers_object['question_type'] =  answer_document.ratscal_type;
+                                  }
+                                  if(obj_ques.questions.question_type == 4 ){
+                                    var report_answer_object = obj_ques.answers.answer_body['answer_id_'+ answerIds ];
+                                    answers_object['answer_value'] = report_answer_object.answer_body.free_text_value ;
+                                  }
+                                }
+                                question_object['attendee_answers'].push(answers_object)
+                              }
+
+                              // console.log(question_object);
+                              attendee_object['questions'].push(question_object);
+                          }
+
+
+                      }
+                    // ==> Sorting From To date
+                    if( req.body.date != null ){
+                      if( req.body.date.date_from == null  || req.body.date.date_to == null  ){
+                        return  new Promise((resolve, reject) => {
+                            res.send({
+                                error : "`date_from` && `date_to` are required ! in side date object"
+                            })
+                        });
+                        return false ;
+                      }
+
+                      // ==> Sorting by date
+                      var from = new Date(req.body.date.date_from);
+                      var to = new Date(req.body.date.date_to);
+                      var date_passed = new Date(attendee_object.completed_date);
+                      if (date_passed >= from && date_passed <= to) {
+                        dtls_rpt['attendees'].push(attendee_object);
+                      }
+                    }
+                    else
+                    dtls_rpt['attendees'].push(attendee_object);
+
+
+              }
+      }else {
+
+          dtls_rpt['attendees'] = new Object();
+          var attendee_id = req.body.attendee_id ;
+          var rptAttendee =  detailed_report.app_report.attendees;
+          var rptAttendeeDetails =  detailed_report.app_report.attendee_details;
+          if(rptAttendee.findIndex(x => x.attendee_id == attendee_id) != -1 ){
+              this_attendee = rptAttendee.find(x => x.attendee_id == attendee_id);
+              this_attendee_details = rptAttendeeDetails.find(x => x.attendee_id == attendee_id);
+
+              dtls_rpt['attendees'] = {
+                 'attendee_id'      :  attendee_id ,
+                 'email'            :  (usrObject.find(x => x._id == attendee_id ) != undefined ) ? usrObject.find(x => x._id == attendee_id ).email : 0  ,
+                 'name'             :  (usrObject.find(x => x._id == attendee_id ) != undefined ) ? usrObject.find(x => x._id == attendee_id ).name : 0  ,
+                 'correct_answers'  :  this_attendee.results.correct_answers ,
+                 'wrong_answers'    :  this_attendee.results.wrong_answers ,
+                 'status'           :  this_attendee_details.status ,
+                 'created_at'       :  this_attendee_details.created_at ,
+                 'completed_date'   :  this_attendee_details.completed_date
+              };
+
+              // ==> Question flag
+              if( req.body.questions && req.body.questions == true )
+                  {
+                    dtls_rpt['attendees']['questions'] = new Array();
+                    var questions_list = this_attendee.survey_quiz_answers ;
+                    for (var iqs = 0; iqs < questions_list.length; iqs++){
+                        var obj_ques = questions_list[iqs];
+                        var question_id = obj_ques.questions.question_id;;
+                        var question_document = creatorQuestionnaires.questions.find(x => x._id == question_id);
+                        // res.send(creatorQuestionnaires.questions[req.body.index]);
+                        // return false ;
+                        var question_object = new Object();
+                        // ==> Question data
+                        // => 1 - media type if found it
+                        if( question_document.media_question != undefined && question_document.media_question != null ) {
+                           question_object['question_media'] = new Object();
+                           if(question_document.media_question.media_type == 0 ) { // => Images
+                             question_object['question_media']['media_type_string'] = 'image';
+                             question_object['question_media']['media_type'] =  question_document.media_question.media_type ;
+                             question_object['question_media']['media_field'] =  question_document.media_question.media_field ;
+                             question_object['question_media']['media_name'] = question_document.media_question.media_name ;
+                           }
+                           if(question_document.media_question.media_type == 1 ){ //=> Videos
+                               if(question_document.media_question.video_type == 0 ) // => youtube
+                                {
+                                  question_object['question_media']['media_type_string'] = 'youtube';
+                                  question_object['question_media']['media_type'] =  question_document.media_question.media_type ;
+                                  question_object['question_media']['media_field'] =  question_document.media_question.media_field ;
+                                  question_object['question_media']['video_type']  =  question_document.media_question.video_type ;
+                                  question_object['question_media']['video_id']  =  question_document.media_question.video_id ;
+                                  question_object['question_media']['video_embed_url']  =  question_document.media_question.video_source ;
+                                }
+                               if(question_document.media_question.video_type == 1 ) // => vimeo
+                                {
+                                  question_object['question_media']['media_type_string'] = 'vimeo';
+                                  question_object['question_media']['media_type'] =  question_document.media_question.media_type ;
+                                  question_object['question_media']['media_field'] =  question_document.media_question.media_field ;
+                                  question_object['question_media']['video_type']  =  question_document.media_question.video_type ;
+                                  question_object['question_media']['video_id']  =  question_document.media_question.video_id ;
+                                  question_object['question_media']['video_embed_url']  =  question_document.media_question.video_source ;
+                                }
+                               if(question_document.media_question.video_type == 2 ) // => mp4
+                                {
+                                  question_object['question_media']['media_type_string'] = 'mp4';
+                                  question_object['question_media']['media_type'] =  question_document.media_question.media_type ;
+                                  question_object['question_media']['video_embed_url'] = {
+                                    mp4 :  question_document.media_question.media_field + '.mp4' ,
+                                    ogg :  question_document.media_question.media_field + '.ogg'
+                                  }
+                                  question_object['question_media']['video_type']  =  question_document.media_question.video_type ;
+                                }
+                           }
+                        }
+                        // => 2 question data
+                        question_object['question_id']  = obj_ques.questions.question_id
+                        question_object['question_type'] = obj_ques.questions.question_type ;
+                        question_object['question_body'] = striptags(question_document.question_body).replace("&nbsp;",'');
+                        question_object['attendee_answers'] = new Array();
+                        // question_object['is_correct'] = '';
+
+                        var answerIds = obj_ques.answers.answer_id // => arrays
+                        for (var i = 0; i < answerIds.length; i++) {
+
+                          var answer_id = answerIds[i];
+                          var answer_document = question_document.answers_format.find( x => x._id == answer_id );
+                          if(answer_document != undefined){
+                            var answers_object = new Object();
+                            answers_object['answer_id'] = answer_document._id ;
+                            if(creatorQuestionnaires.app_type == 1)
+                            answers_object['is_correct'] = answer_document.is_correct ;
+                            if(obj_ques.questions.question_type == 0 ){
+                              // 1 => Media
+                              if(answer_document.media_optional != undefined ){
+
+                                media_object = answer_document.media_optional ;
+
+                                if(answers_object.answer_media == undefined )
+                                  answers_object.answer_media = new Object();
+
+                                if(media_object.media_type == 0 ){
+                                  answers_object['answer_media']['media_type_string'] =  "image" ;
+                                  answers_object['answer_media']['media_type']        = media_object.media_type
+                                  answers_object['answer_media']['media_field']       = media_object.media_src
+                                  answers_object['answer_media']['media_name']        = media_object.media_name
+                                }
+                                if(media_object.media_type == 1 ){
+
+                                    if(media_object.video_type == 0 ){
+                                        answers_object['answer_media']['media_type'] =  media_object.media_type
+                                        answers_object['answer_media']['media_field'] = media_object.media_src
+                                        answers_object['answer_media']['media_type_string']="youtube" ;
+                                        answers_object['answer_media']['video_type'] = media_object.video_type
+                                        answers_object['answer_media']['video_id'] = media_object.video_id;
+                                        answers_object['answer_media']['video_embed_url'] = media_object.embed_path;
+                                    }
+
+                                    if(media_object.video_type == 1 ){
+                                      answers_object['answer_media']['media_type'] =  media_object.media_type
+                                      answers_object['answer_media']['media_field'] = media_object.media_src
+                                      answers_object['answer_media']['media_type_string']="youtube" ;
+                                      answers_object['answer_media']['video_type'] = media_object.video_type
+                                      answers_object['answer_media']['video_id'] = media_object.video_id;
+                                      answers_object['answer_media']['video_embed_url'] = media_object.embed_path;
+                                    }
+
+                                    if(media_object.video_type == 2 ){
+                                      answers_object['media_type'] =  media_object.media_type ;
+                                      answers_object['video_embed_url'] = {
+                                            mp4 :  media_object.mp4_option.mp4_url ,
+                                            ogg :  media_object.mp4_option.ogg_url
+                                      }
+                                      answers_object['media_type_string'] = 'mp4';
+                                      answers_object['video_type']  =  media_object.video_type ;
+                                    }
+                                }
+                              }
+
+                              // ==> Case answer object
+                              answers_object['answer_value'] = striptags( answer_document.value ).replace("&nbsp;",'');
+
+                            }
+
+
+                            if(obj_ques.questions.question_type == 1 ){
+                                // ==> Case media is found
+                                if ( answer_document.media_type != undefined ){ // answer_document.media_type
+                                    if( answer_document.media_type == 0 ){ // => Images
+                                      answers_object['media_type_string'] = "image" ;
+                                      answers_object['media_type'] = answer_document.media_type
+                                      answers_object['media_field'] = answer_document.media_src;
+                                      answers_object['media_name'] = answer_document.media_name; ;
+                                    }
+                                    if( answer_document.media_type == 1 ) { // => Video
+                                        if(answer_document.video_type == 0 ){ // => yt
+                                          answers_object['media_type'] = answer_document.media_type
+                                          answers_object['media_field'] = answer_document.media_src;
+                                          answers_object['media_type_string'] = "vimeo" ;
+                                          answers_object['video_type'] = answer_document.video_type;
+                                          answers_object['video_id']= answer_document.video_id;
+                                          answers_object['video_embed_url']= answer_document.embed_path
+                                        }
+                                        if(answer_document.video_type == 1 ){ // vim
+                                          answers_object['media_type'] = answer_document.media_type
+                                          answers_object['media_field'] = answer_document.media_src;
+                                          answers_object['media_type_string'] = "vimeo" ;
+                                          answers_object['video_type'] = answer_document.video_type;
+                                          answers_object['video_id']= answer_document.video_id;
+                                          answers_object['video_embed_url']= answer_document.embed_path;
+                                        }
+                                        if(answer_document.video_type == 2 ){ // mp4
+                                          answers_object['media_type'] =  answer_document.media_type ;
+                                          answers_object['video_embed_url'] = {
+                                            mp4 :  answer_document.mp4_option.mp4_url ,
+                                            ogg :  answer_document.mp4_option.ogg_url
+                                          }
+                                          answers_object['media_type_string'] = 'mp4';
+                                          answers_object['video_type']  =  answer_document.video_type ;
+                                        }
+                                    }
+                                }
+
+
+                            }
+                            if(obj_ques.questions.question_type == 2 ){
+                              answers_object['boolean_type'] = answer_document.boolean_type
+                              answers_object['boolean_value'] = answer_document.boolean_value
+                            }
+                            if(obj_ques.questions.question_type == 3 ){}
+                            if(obj_ques.questions.question_type == 4 ){}
+                          }
+                          question_object['attendee_answers'].push(answers_object)
+                        }
+
+                        // console.log(question_object);
+                        dtls_rpt['attendees']['questions'].push(question_object)
+                    }
+                  }
+
+          }
+      }
+
+
+      // ==> Pagination (options)
+      if( req.body.pagination != null && req.body.attendee_id == null  ) {
+          if( req.body.pagination.page_number == null || req.body.pagination.records_per_page == null ){
+            return new  Promise( (resolve, reject) => {
+                res.send({
+                  error : "`page_number` && `records_per_page` are required !"
+                });
+                return false ;
+            });
+          }
+
+          var all_attendees = dtls_rpt.attendees ;
+          var page_number = req.body.pagination.page_number ;
+          var pages = req.body.pagination.records_per_page ;
+          // ==> Build Paginations and anther options
+          if (!_.isNumber(page_number)) page_number = 0;
+          if(!_.isNumber(pages)) pages = config.default_records_per_page ;
+
+          if(page_number == 1 || page_number < 0) page_number = 0 ;
+          if(page_number != 0 ) page_number = page_number - 1 ;
+          if(pages == 0 || pages < 0 ) pages = config.default_records_per_page;
+
+          var detail_reports = _.chunk(all_attendees, pages);
+          if(page_number > (detail_reports.length - 1)) page_number = detail_reports.length - 1;
+          brf_rports = detail_reports[page_number] ;
+          dtls_rpt.attendees = brf_rports
+      }
+
+      res.send( dtls_rpt );
+    }).catch((err)=>{ // => end usr catch
+      res.send(err)
+    });
+  });
+});
+rptRouters.post("/:app_id/statistics/report/v1.1" , api_key_report_auth , (req , res)=>{
+  var report_type = req.params.app_id;
+  rpt.findOne({"questionnaire_id":report_type}).populate("questionnaire_info").populate("attendees.user_information").exec((error, reportDocument) => {
+
+    if( error || !reportDocument ){
+      return new Promise((resolve,reject)=>{
+        res.send({"Error":notes.Errors.Error_Doesnt_exists("Application")});
+      });
+    }
+    if(reportDocument.questionnaire_info.app_type != 0 ){
+      return new Promise((resolve,reject)=>{
+        res.send({"Warning":"This App should be a survey type to show you statistics data"});
+      });
+    }
+    var statistics_report = new Object();
+    statistics_report["survey_id"] = reportDocument.questionnaire_info._id;
+    statistics_report["survey_name"] = reportDocument.questionnaire_info.questionnaire_title;
+    statistics_report["total_attendees"] = reportDocument.attendees.length;
+    var statistics = reportDocument.statistics;
+    var questions_answers = new Array();
+    for (var i = 0; i < statistics.length; i++) {
+         var qs_object = new Object();
+          qs_object['question_id'] = statistics[i].question_id;
+          qs_object['question'] = statistics[i].question_body;
+          qs_object['count_of_attendees'] = statistics[i].attendee_info.length;
+          qs_object['answers'] = new Array();
+          var answer_args = statistics[i].question_answers
+          for (var xi = 0; xi < answer_args.length; xi++) {
+            var answer_argument = new Object();
+            answer_argument['answer_id'] = answer_args[xi].answer_id;
+            answer_argument['answer_body'] = answer_args[xi].answer_body;
+            answer_argument['attendee_raw_count'] = answer_args[xi].attendee_raw_count ;
+            answer_argument['attendee_percentage_count'] = answer_args[xi].attendee_percentage_count ;
+            qs_object['answers'].push(answer_argument);
+          } // end forloop xi
+          questions_answers.push(qs_object);
+       } // end forloop
+       statistics_report["questions"] = questions_answers;
+
+    res.send(statistics_report);
+  });
+});
 
 
 rptRouters.patch("/:app_id/clear/report/:attendee_id" , (req,res) => {
@@ -1503,7 +2185,7 @@ rptRouters.post([ "/:creator_id/brief/report" , "/:creator_id/brief/:app_type/re
   if ( req.params.app_type ){
      if(req.params.app_type != 'quiz' && req.params.app_type != 'survey'){
        return new Promise((resolve,reject)=>{
-         res.status(404).send(notes.notifications.catch_errors("This app is wrong it should be `quiz` Or `survey`"));
+         res.status(404).send(notes.notifications.show_app_types());
       //  res.status(400).send({"Error":"This app is wrong it should be `quiz` Or `survey`"});
      });
    }
@@ -1516,15 +2198,28 @@ rptRouters.post([ "/:creator_id/brief/report" , "/:creator_id/brief/:app_type/re
     qtnr.find(queries).populate('app_report').exec(function(error, creatorQuestionnaires) {
       if( error || ! creatorQuestionnaires || creatorQuestionnaires.length == 0) {
         return new Promise((resolve , reject)=>{
-          res.status(404).send(notes.notifications.catch_errors("This creator has no applications !"));
+          res.status(404).send(notes.notifications.show_app_access());
         });
       }
        // ==> Build brief report
        var reports = creatorQuestionnaires ;
        var brief_reports = new Array();
+
        for (var i = 0; i < reports.length; i++) {
          var brfReport = new Object();
          var documentObject  = reports[i];
+
+         //================================================================================
+          //  var appli_type ;
+          //  if( documentObject.app_type  == 1 ){ // => Quiz
+          //    appli_type = "quiz";
+          //  }else{ // => Survey
+          //    appli_type = "survey";
+          //  }
+         //================================================================================
+
+
+
          // ==> Calculations
          var total_passed , total_is_completed , total_is_completed_count ;
          if(documentObject.app_report != null )
@@ -1538,6 +2233,8 @@ rptRouters.post([ "/:creator_id/brief/report" , "/:creator_id/brief/:app_type/re
          if(documentObject.app_report != null )
            total_is_completed_count = _.countBy(documentObject.app_report.attendees, 'results.correct_answers');
            else total_is_completed_count = 0
+
+
 
          brfReport['app_id'] = documentObject._id ;
          brfReport['app_name'] = documentObject.questionnaire_title ;
@@ -1558,7 +2255,7 @@ rptRouters.post([ "/:creator_id/brief/report" , "/:creator_id/brief/:app_type/re
          brief_reports.push(brfReport);
        }
 
-       if(req.body.pagination != null ){
+       if( req.body.pagination != null ){ 
            // ==> Build Paginations and anther options
            if (!_.isNumber(page_number)) page_number = 0;
            if(!_.isNumber(pages)) pages = config.default_records_per_page ;

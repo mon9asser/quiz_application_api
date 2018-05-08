@@ -205,36 +205,7 @@ var generate_tokens = function (req,res,next){
 //
 // };
 
-var api_key_report_auth = function (req ,res ,next){
-  if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
-     return new Promise((resolve, reject) => {
-       res.status(401).send(notes.Errors.Error_Application_Verify);
-    });
-   }
- var api_keys = req.header("X-api-keys");
- var app_name = req.header("X-api-app-name");
- apk.verify_api_keys(api_keys , app_name ).then((apk_key)=>{
 
-   if(!apk_key || apk_key == null || apk_key == ''){
-     return new Promise((resolve , reject)=>{
-       res.send({"Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'"});
-     });
-   }
-
-   if(apk_key.length == 0){
-       return new Promise((resolve,reject)=>{
-           res.send({"Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'"});
-       });
-    }
-
-    next();
- }).catch((error)=>{
-   return new Promise((resolve , reject)=>{
-     res.send({"Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'"});
-   });
- });
-
-};
 
 
 var verify_access_tokens_admin_user = function (req  , res  , next ){
@@ -301,43 +272,70 @@ var verify_access_tokens_admin_user = function (req  , res  , next ){
 
 
 
-
-
-
 // ========================================================
 // ============>>> Updates +++
 // ========================================================
-var verify_api_keys_user_apis = function (req , res , next )   {
+var api_key_report_auth = function (req ,res ,next){
+  if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
+     return new Promise((resolve, reject) => {
+       res.status(401).send(notes.notifications.authentication_failed());
+    });
+   }
+ var api_keys = req.header("X-api-keys");
+ var app_name = req.header("X-api-app-name");
+ apk.verify_api_keys(api_keys , app_name ).then((apk_key)=>{
+
+   if(!apk_key || apk_key == null || apk_key == ''){
+     return new Promise((resolve , reject)=>{
+       res.send({"Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'"});
+     });
+   }
+
+   if(apk_key.length == 0){
+       return new Promise((resolve,reject)=>{
+           res.send({"Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'"});
+       });
+    }
+
+    next();
+ }).catch((error)=>{
+   return new Promise((resolve , reject)=>{
+     res.send({"Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'"});
+   });
+ });
+
+};
+var verify_api_keys_user_apis = function (req , res , next ){
 
       if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
-             return new Promise((resolve, reject) => {
-               res.status(401).send(notes.notifications.authentication_failed());
-            });
+          return new Promise((resolve, reject) => {
+             res.status(401).send(notes.notifications.authentication_failed());
+          });
       }
 
       var api_keys = req.header("X-api-keys");
       var app_name = req.header("X-api-app-name");
       apk.verify_api_keys(api_keys , app_name ).then((apk_key)=>{
 
-        if(!apk_key || apk_key == null || apk_key == ''){
-          return new Promise((resolve , reject)=>{
-              res.send(notes.notifications.authentication_failed());
-            });
-        }
+      if(!apk_key || apk_key == null || apk_key == ''){
+        return new Promise((resolve , reject)=>{
+            res.send(notes.notifications.authentication_failed('email'));
+        });
+      }
 
-        if(apk_key.length != 0){
+      if(apk_key.length != 0){
             next();
-        }
+      }
 
       }).catch((error)=>{
-            res.status(404).send(notes.notifications.catch_errors(error));
+            res.status(404).send(notes.notifications.catch_promise(error));
       });
 
 }
-var auth_verify_api_keys_tokens  =   function (req , res , next )   {
+var auth_verify_api_keys_tokens  =   function (req , res , next ){
   if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
      return new Promise((resolve, reject) => {
-       res.status(401).send(notes.notifications.authentication_failed(notes.Errors.Error_Application_Verify));
+       res.status(401).send(notes.notifications.authentication_failed());
     });
    }
   var api_keys = req.header("X-api-keys");
@@ -353,7 +351,7 @@ var auth_verify_api_keys_tokens  =   function (req , res , next )   {
       // ==> Verify current user status ( 0 1) => user type
       if( req.body.creator_id == null  ){
         return new Promise((resolve , reject)=>{
-          res.status(404).send(notes.notifications.catch_fields(notes.Messages.Required_Message("creator_id")));
+           res.status(404).send(notes.notifications.catch_doesnt_existing_data("creator_id"));
          });
       }
 
@@ -361,7 +359,7 @@ var auth_verify_api_keys_tokens  =   function (req , res , next )   {
      usr.findOne({_id:creator_id} , (error , user)=>{
        if(!user || error ){
          return new Promise((resolve , reject)=>{
-           res.status(404).send(notes.notifications.catch_errors(notes.Errors.Error_Doesnt_exists("Creator")));
+           res.status(404).send(notes.notifications.catch_doesnt_existing_data("Creator"));
          });
        }
         if(config.session_access == true){
@@ -398,9 +396,15 @@ var auth_verify_api_keys_tokens  =   function (req , res , next )   {
      }) ;
     }
   }).catch((error)=>{
-    res.status(404).send(notes.notifications.catch_errors(error));
+    res.status(404).send(notes.notifications.catch_promise(error));
   });
 }
+
+
+
+// ========================================================
+// ============>>> Updates +++
+// ========================================================
 var auth_verify_generated_tokens  =   function (req , res , next )   {
   if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
      return new Promise((resolve, reject) => {
