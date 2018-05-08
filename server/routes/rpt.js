@@ -1176,9 +1176,6 @@ rptRouters.post("/:app_id/report_collection/:user_id" , (req , res) => {
 });
 
 
-
-
-
 //===========================================|
 //=======>>> Deprecated reports
 //===========================================|
@@ -1463,9 +1460,7 @@ rptRouters.post("/:app_id/detailed/report/deprecated", api_key_report_auth ,( re
     }
   });
 });
-
-
-
+ 
 //===========================================|
 // ==> Updates
 //===========================================|
@@ -2155,5 +2150,5 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
 
 
 module.exports = {
-    rptRouters 
+    rptRouters
 };

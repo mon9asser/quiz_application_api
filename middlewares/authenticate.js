@@ -107,222 +107,6 @@ var generate_tokens = function (req,res,next){
   }
   next();
 };
-var auth_verify_api_keys_tokens  =   function (req , res , next )   {
-  if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
-     return new Promise((resolve, reject) => {
-       res.status(401).send(notes.Errors.Error_Application_Verify);
-    });
-   }
-  var api_keys = req.header("X-api-keys");
-  var app_name = req.header("X-api-app-name");
-  apk.verify_api_keys(api_keys , app_name ).then((apk_key)=>{
-
-    if(!apk_key || apk_key == null || apk_key == ''){
-      return new Promise((resolve , reject)=>{
-        res.send({"Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'"});
-      });
-    }
-    if(apk_key.length != 0){
-      // ==> Verify current user status ( 0 1) => user type
-      if( req.body.creator_id == null  ){
-        return new Promise((resolve , reject)=>{
-          res.send({
-            "Required" : notes.Messages.Required_Message("creator_id")
-          });
-        });
-      }
-
-     var creator_id = req.body.creator_id;
-     usr.findOne({_id:creator_id} , (error , user)=>{
-       if(!user || error ){
-         return new Promise((resolve , reject)=>{
-           res.send({"Error":notes.Errors.Error_Doesnt_exists("Creator")});
-         });
-       }
-        if(config.session_access == true){
-          if(!req.session.userInfo)
-            {
-              return new Promise((resolve, reject) => {
-                return res.redirect("/logout")   ;
-              });
-            }
-        }
-
-        if(!user){
-          return new Promise((resolve, reject) => {
-              res.status(401).send(notes.Warnings.Permission_Warning);
-          });
-        }
-
-        req.verified_user = user ;
-        req.is_creator  =  user.is_creator ;
-
-        var date_now = new Date();
-        // Generate an expire tokens
-        var generated_token   ;
-        try {
-          generated_token = jwt.sign({ _id: user._id.toHexString() ,  date_made :date_now } ,config.secretCode)
-        } catch (e) {
-          return Promise.reject(e);
-        }
-
-
-        user.tokens = generated_token ;
-        user.save();
-        next();
-     }) ;
-    }
-  }).catch((error)=>{
-    res.status(404).send(error);
-  });
-
-}
-
-var auth_verify_generated_tokens  =   function (req , res , next )   {
-  if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
-     return new Promise((resolve, reject) => {
-       res.status(401).send(notes.Errors.Error_Application_Verify);
-    });
-   }
-
-   if(!req.header("X-app-token")){
-      return new Promise((resolve, reject) => {
-        res.status(401).send({"Warning":"Unverified app token !!"});
-     });
-  }
-
-  var api_keys  = req.header("X-api-keys");
-  var app_name  = req.header("X-api-app-name");
-  var app_token = req.header("X-app-token");
-  apk.verify_api_keys(api_keys , app_name ).then((apk_key)=>{
-
-    if(!apk_key || apk_key == null || apk_key == ''){
-      return new Promise((resolve , reject)=>{
-        res.send({"Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'"});
-      });
-    }
-    if(apk_key.length != 0){
-      // ==> Verify current user status ( 0 1) => user type
-      if( req.body.creator_id == null  ){
-        return new Promise((resolve , reject)=>{
-          res.send({"Required" : notes.Messages.Required_Message("creator_id")});
-        });
-      }
-
-     var creator_id = req.body.creator_id;
-     usr.findOne({_id:creator_id} , (error , user)=>{
-       if(!user || error ){
-         return new Promise((resolve , reject)=>{
-           res.send({"Error":notes.Errors.Error_Doesnt_exists("Creator")});
-         });
-       } // _id: user._id.toHexString() ,  date_made :date_now } ,config.secretCode)
-       // Verify Token
-        var decoded ;
-       try {
-         decoded = jwt.verify( app_token , config.secretCode );
-       } catch (e) {
-         return new Promise((resolve, reject) => {
-           res.status(401).send({"Error":"Undefined Token !!"});
-        });
-       }
-
-        // Verify this token
-        var tokenDate = new Date(decoded.date_made);
-        var currDate = new Date();
-        var timeDiff =  currDate.getTime() - tokenDate.getTime() ;
-        var hours = _.ceil(timeDiff / (1000 * 3600));
-        console.log(hours);
-        if(hours > config.default_records_per_page){
-          return new Promise((resolve , reject)=>{
-            res.send({"Warning": "Token is expired !!"})
-          });
-        }
-        //   var days =  timeDiff / (1000 * 3600 * 24) ;
-        // ==> End Verified token here !!
-        if(config.session_access == true){
-          if(!req.session.userInfo)
-            {
-              return new Promise((resolve, reject) => {
-                return res.redirect("/logout")   ;
-              });
-            }
-        }
-
-        if(!user){
-          return new Promise((resolve, reject) => {
-              res.status(401).send(notes.Warnings.Permission_Warning);
-          });
-        }
-
-        req.verified_user = user ;
-        req.is_creator  =  user.is_creator ;
-
-        next();
-     }) ;
-    }
-  }).catch((error)=>{
-    res.status(404).send(error);
-  });
-
-}
-//----------------------------------------------------------
-var auth_verify_api_keys  =   function (req , res , next )   {
-  if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
-     return new Promise((resolve, reject) => {
-       res.status(401).send(notes.Errors.Error_Application_Verify);
-    });
-   }
-  var api_keys = req.header("X-api-keys");
-  var app_name = req.header("X-api-app-name");
-  apk.verify_api_keys(api_keys , app_name ).then((apk_key)=>{
-
-    if(!apk_key || apk_key == null || apk_key == ''){
-      return new Promise((resolve , reject)=>{
-        res.send({"Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'"});
-      });
-    }
-    if(apk_key.length != 0){
-      // ==> Verify current user status ( 0 1) => user type
-      if( req.body.creator_id == null  ){
-        return new Promise((resolve , reject)=>{
-          res.send({"Required" :notes.Messages.Required_Message("creator_id")});
-        });
-      }
-
-     var creator_id = req.body.creator_id;
-     usr.findOne({_id:creator_id} , (error , user)=>{
-       if(!user || error ){
-         return new Promise((resolve , reject)=>{
-           res.send({"Error":notes.Errors.Error_Doesnt_exists("Creator")});
-         });
-       }
-        if(config.session_access == true){
-          if(!req.session.userInfo)
-            {
-              return new Promise((resolve, reject) => {
-                return res.redirect("/logout")   ;
-              });
-            }
-        }
-
-        if(!user){
-          return new Promise((resolve, reject) => {
-              res.status(401).send(notes.Warnings.Permission_Warning);
-          });
-        }
-
-        req.verified_user = user ;
-        req.is_creator  =  user.is_creator ;
-
-        next();
-     }) ;
-    }
-  }).catch((error)=>{
-    res.status(404).send(error);
-  });
-
-}
-//-------------------------------------------------
 
 
 
@@ -352,88 +136,8 @@ var auth_verify_api_keys  =   function (req , res , next )   {
 
 
 
-var auth_api_keys_only  =   function (req , res , next )   {
 
-  if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
-     return new Promise((resolve, reject) => {
-       res.status(401).send(notes.Errors.Error_Application_Verify);
-    });
-   }
-  var api_keys = req.header("X-api-keys");
-  var app_name = req.header("X-api-app-name");
-  apk.verify_api_keys(api_keys , app_name ).then((apk_key)=>{
 
-    if(!apk_key || apk_key == null || apk_key == ''){
-      return new Promise((resolve , reject)=>{
-        res.send({"Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'"});
-      });
-    }
-    if(apk_key.length == 0){
-      res.send({"Authentication_Failed" : "You don't have an api keys , please create api keys "});
-    }
-
-    next();
-  }).catch((error)=>{
-    res.status(404).send(error);
-  });
-
-}
-var authenticate_keys_with_curr_status  =   function (req , res , next )   {
-  if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
-     return new Promise((resolve, reject) => {
-       res.status(401).send(notes.Errors.Error_Application_Verify);
-    });
-   }
-  var api_keys = req.header("X-api-keys");
-  var app_name = req.header("X-api-app-name");
-  apk.verify_api_keys(api_keys , app_name ).then((apk_key)=>{
-
-    if(!apk_key || apk_key == null || apk_key == ''){
-      return new Promise((resolve , reject)=>{
-        res.send({"Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'"});
-      });
-    }
-    if(apk_key.length != 0){
-      // ==> Verify current user status ( 0 1) => user type
-      if( req.params.uid == null  ){
-        return new Promise((resolve , reject)=>{
-          res.send({"Required" :notes.Messages.Required_Message("creator_id")});
-        });
-      }
-
-     var creator_id = req.params.uid;
-     usr.findOne({_id:creator_id} , (error , user)=>{
-       if(!user || error ){
-         return new Promise((resolve , reject)=>{
-           res.send({"Error":notes.Errors.Error_Doesnt_exists("User")});
-         });
-       }
-        if(config.session_access == true){
-          if(!req.session.userInfo)
-            {
-              return new Promise((resolve, reject) => {
-                return res.redirect("/logout")   ;
-              });
-            }
-        }
-
-        if(!user){
-          return new Promise((resolve, reject) => {
-              res.status(401).send(notes.Warnings.Permission_Warning);
-          });
-        }
-
-        req.verified_user = user ;
-        req.is_creator  =  user.is_creator ;
-
-        next();
-     }) ;
-    }
-  }).catch((error)=>{
-    res.status(404).send(error);
-  });
-
-}
 // var api_key_reprot_auth = function (req ,res ,next){
 //   if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
 //      return new Promise((resolve, reject) => {
@@ -600,16 +304,9 @@ var verify_access_tokens_admin_user = function (req  , res  , next ){
 
 
 
-
-
-
-
-
-
 // ========================================================
 // ============>>> Updates +++
 // ========================================================
-
 var verify_api_keys_user_apis = function (req , res , next )   {
 
       if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
@@ -637,5 +334,297 @@ var verify_api_keys_user_apis = function (req , res , next )   {
       });
 
 }
+var auth_verify_api_keys_tokens  =   function (req , res , next )   {
+  if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
+     return new Promise((resolve, reject) => {
+       res.status(401).send(notes.notifications.authentication_failed(notes.Errors.Error_Application_Verify));
+    });
+   }
+  var api_keys = req.header("X-api-keys");
+  var app_name = req.header("X-api-app-name");
+  apk.verify_api_keys(api_keys , app_name ).then((apk_key)=>{
 
+    if(!apk_key || apk_key == null || apk_key == ''){
+      return new Promise((resolve , reject)=>{
+        res.send(notes.notifications.permission_denied());
+      });
+    }
+    if(apk_key.length != 0){
+      // ==> Verify current user status ( 0 1) => user type
+      if( req.body.creator_id == null  ){
+        return new Promise((resolve , reject)=>{
+          res.status(404).send(notes.notifications.catch_fields(notes.Messages.Required_Message("creator_id")));
+         });
+      }
+
+     var creator_id = req.body.creator_id;
+     usr.findOne({_id:creator_id} , (error , user)=>{
+       if(!user || error ){
+         return new Promise((resolve , reject)=>{
+           res.status(404).send(notes.notifications.catch_errors(notes.Errors.Error_Doesnt_exists("Creator")));
+         });
+       }
+        if(config.session_access == true){
+          if(!req.session.userInfo)
+            {
+              return new Promise((resolve, reject) => {
+                return res.redirect("/logout")   ;
+              });
+            }
+        }
+
+        if(!user){
+          return new Promise((resolve, reject) => {
+              res.send(notes.notifications.permission_denied());
+          });
+        }
+
+        req.verified_user = user ;
+        req.is_creator  =  user.is_creator ;
+
+        var date_now = new Date();
+        // Generate an expire tokens
+        var generated_token   ;
+        try {
+          generated_token = jwt.sign({ _id: user._id.toHexString() ,  date_made :date_now } ,config.secretCode)
+        } catch (e) {
+          return Promise.reject(e);
+        }
+
+
+        user.tokens = generated_token ;
+        user.save();
+        next();
+     }) ;
+    }
+  }).catch((error)=>{
+    res.status(404).send(notes.notifications.catch_errors(error));
+  });
+}
+var auth_verify_generated_tokens  =   function (req , res , next )   {
+  if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
+     return new Promise((resolve, reject) => {
+       res.status(404).send(notes.notifications.catch_errors(notes.Errors.Error_Application_Verify));
+    });
+   }
+
+   if(!req.header("X-app-token")){
+      return new Promise((resolve, reject) => {
+        res.status(404).send(notes.notifications.catch_errors("Unverified app token !!"));
+     });
+  }
+
+  var api_keys  = req.header("X-api-keys");
+  var app_name  = req.header("X-api-app-name");
+  var app_token = req.header("X-app-token");
+  apk.verify_api_keys(api_keys , app_name ).then((apk_key)=>{
+
+    if(!apk_key || apk_key == null || apk_key == ''){
+      return new Promise((resolve , reject)=>{
+        res.send(notes.notifications.permission_denied());
+      });
+    }
+    if(apk_key.length != 0){
+      // ==> Verify current user status ( 0 1) => user type
+      if( req.body.creator_id == null  ){
+        return new Promise((resolve , reject)=>{
+          // res.send({"Required" : notes.Messages.Required_Message("creator_id")});
+          res.status(404).send(notes.notifications.catch_fields(notes.Messages.Required_Message("creator_id")));
+        });
+      }
+
+     var creator_id = req.body.creator_id;
+     usr.findOne({_id:creator_id} , (error , user)=>{
+       if(!user || error ){
+         return new Promise((resolve , reject)=>{
+           res.status(404).send(notes.notifications.catch_errors(notes.Errors.Error_Doesnt_exists("Creator")));
+         });
+       } // _id: user._id.toHexString() ,  date_made :date_now } ,config.secretCode)
+       // Verify Token
+        var decoded ;
+       try {
+         decoded = jwt.verify( app_token , config.secretCode );
+       } catch (e) {
+         return new Promise((resolve, reject) => {
+           res.status(404).send(notes.notifications.catch_errors("Unverified app token !!"));
+        });
+       }
+
+        // Verify this token
+        var tokenDate = new Date(decoded.date_made);
+        var currDate = new Date();
+        var timeDiff =  currDate.getTime() - tokenDate.getTime() ;
+        var hours = _.ceil(timeDiff / (1000 * 3600));
+        console.log(hours);
+        if(hours > config.default_records_per_page){
+          return new Promise((resolve , reject)=>{
+            res.status(404).send(notes.notifications.catch_errors("Token is expired"));
+          });
+        }
+        //   var days =  timeDiff / (1000 * 3600 * 24) ;
+        // ==> End Verified token here !!
+        if(config.session_access == true){
+          if(!req.session.userInfo)
+            {
+              return new Promise((resolve, reject) => {
+                return res.redirect("/logout")   ;
+              });
+            }
+        }
+
+        if(!user){
+          return new Promise((resolve, reject) => {
+              res.send(notes.notifications.permission_denied());
+          });
+        }
+
+        req.verified_user = user ;
+        req.is_creator  =  user.is_creator ;
+
+        next();
+     }) ;
+    }
+  }).catch((error)=>{
+    res.status(404).send(notes.notifications.catch_errors(error));
+  });
+
+}
+var auth_verify_api_keys  =   function (req , res , next )   {
+  if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
+     return new Promise((resolve, reject) => {
+       res.status(404).send(notes.notifications.catch_errors(notes.Errors.Error_Application_Verify));
+    });
+   }
+  var api_keys = req.header("X-api-keys");
+  var app_name = req.header("X-api-app-name");
+  apk.verify_api_keys(api_keys , app_name ).then((apk_key)=>{
+
+    if(!apk_key || apk_key == null || apk_key == ''){
+      return new Promise((resolve , reject)=>{
+        res.send({"Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'"});
+      });
+    }
+    if(apk_key.length != 0){
+      // ==> Verify current user status ( 0 1) => user type
+      if( req.body.creator_id == null  ){
+        return new Promise((resolve , reject)=>{
+          res.status(404).send(notes.notifications.catch_errors(notes.Errors.Error_Doesnt_exists("creator_id")));
+        });
+      }
+
+     var creator_id = req.body.creator_id;
+     usr.findOne({_id:creator_id} , (error , user)=>{
+       if(!user || error ){
+         return new Promise((resolve , reject)=>{
+           res.status(404).send(notes.notifications.catch_errors(notes.Errors.Error_Doesnt_exists("Creator")));
+         });
+       }
+        if(config.session_access == true){
+          if(!req.session.userInfo)
+            {
+              return new Promise((resolve, reject) => {
+                return res.redirect("/logout")   ;
+              });
+            }
+        }
+
+        if(!user){
+          return new Promise((resolve, reject) => {
+              res.send(notes.notifications.permission_denied());
+          });
+        }
+
+        req.verified_user = user ;
+        req.is_creator  =  user.is_creator ;
+
+        next();
+     }) ;
+    }
+  }).catch((error)=>{
+    res.status(404).send(notes.notifications.catch_errors(error));
+  });
+
+}
+var auth_api_keys_only  =   function (req , res , next )   {
+
+  if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
+     return new Promise((resolve, reject) => {
+       res.status(404).send(notes.notifications.catch_errors(notes.Errors.Error_Application_Verify));
+    });
+   }
+  var api_keys = req.header("X-api-keys");
+  var app_name = req.header("X-api-app-name");
+  apk.verify_api_keys(api_keys , app_name ).then((apk_key)=>{
+
+    if(!apk_key || apk_key == null || apk_key == ''){
+      return new Promise((resolve , reject)=>{
+        res.send(notes.notifications.permission_denied());
+      });
+    }
+    if(apk_key.length == 0){
+      res.send(notes.notifications.permission_denied());
+    }
+
+    next();
+  }).catch((error)=>{
+    res.status(404).send(notes.notifications.catch_errors(error));
+  });
+
+}
+var authenticate_keys_with_curr_status  =   function (req , res , next )   {
+  if(!req.header("X-api-keys") || !req.header("X-api-app-name")){
+     return new Promise((resolve, reject) => {
+       res.status(404).send(notes.notifications.catch_errors(notes.Errors.Error_Application_Verify));
+    });
+   }
+  var api_keys = req.header("X-api-keys");
+  var app_name = req.header("X-api-app-name");
+  apk.verify_api_keys(api_keys , app_name ).then((apk_key)=>{
+
+    if(!apk_key || apk_key == null || apk_key == ''){
+      return new Promise((resolve , reject)=>{
+        res.send(notes.notifications.permission_denied());
+      });
+    }
+    if(apk_key.length != 0){
+      // ==> Verify current user status ( 0 1) => user type
+      if( req.params.uid == null  ){
+        return new Promise((resolve , reject)=>{
+          res.status(404).send(notes.notifications.catch_fields(notes.Messages.Required_Message("creator_id")));
+        });
+      }
+
+     var creator_id = req.params.uid;
+     usr.findOne({_id:creator_id} , (error , user)=>{
+       if(!user || error ){
+         return new Promise((resolve , reject)=>{
+           res.status(404).send(notes.notifications.catch_errors(notes.Errors.Error_Doesnt_exists("User")));
+         });
+       }
+        if(config.session_access == true){
+          if(!req.session.userInfo)
+            {
+              return new Promise((resolve, reject) => {
+                return res.redirect("/logout")   ;
+              });
+            }
+        }
+
+        if(!user){
+          return new Promise((resolve, reject) => {
+              res.send(notes.notifications.permission_denied());
+          });
+        }
+
+        req.verified_user = user ;
+        req.is_creator  =  user.is_creator ;
+
+        next();
+     }) ;
+    }
+  }).catch((error)=>{
+    res.status(404).send(notes.notifications.catch_errors(error));
+  });
+
+}
 module.exports = { auth_api_keys_only , authenticate_keys_with_curr_status , verify_access_tokens_admin_user , api_key_report_auth , auth_verify_generated_tokens, auth_verify_api_keys_tokens , generate_tokens, auth_verify_api_keys ,  verify_api_keys_user_apis , authByToken  , build_session , verify_session , verify_token_user_type } ;
