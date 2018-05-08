@@ -2255,7 +2255,7 @@ rptRouters.post([ "/:creator_id/brief/report" , "/:creator_id/brief/:app_type/re
          brief_reports.push(brfReport);
        }
 
-       if( req.body.pagination != null ){ 
+       if( req.body.pagination != null ){
            // ==> Build Paginations and anther options
            if (!_.isNumber(page_number)) page_number = 0;
            if(!_.isNumber(pages)) pages = config.default_records_per_page ;

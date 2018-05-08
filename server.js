@@ -13,7 +13,7 @@ const {drftRouter} = require("./server/routes/drft");
 const {infceRouter} = require("./server/routes/infce");
 const {usr} = require("./models/users");
 const cors= require('cors');
-  
+
 const app = express();
 // const exphbs  = require('express-handlebars'); // => Deprecated !!
 
@@ -23,6 +23,7 @@ app.engine('hbs', hbs.express4({
 }));
 // app.use(express.static(path.join(__dirname, 'ui-public')));
 app.use(express.static(path.join(__dirname, 'ui-public')));
+// emitter.setMaxListeners();
 // app.use( express.static(__dirname +'/ui-public') );
 app.set('view engine', 'hbs');
 app.set('views',  __dirname +'/ui-public');

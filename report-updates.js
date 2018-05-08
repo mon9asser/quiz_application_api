@@ -16,11 +16,12 @@
 			survey:
 				{
 					total:3 /*total surveys..*/,
-					total_attendees:23
-				}
+					total_attendees:23 ,
 					items:[
 						 	// ------------------------
 						]
+				}
+					
 		}
 }
 // a. Pagination data
@@ -31,8 +32,8 @@
 	// The above should contains total quiz/survey and totalAttendees  (no need to consider paging details)
 	data:{
 		 paging: { 
-					 items :200
-					 item_per_page:200,
+					 items :200 // => total of items
+					 item_per_page:200, // total items per page 
 					 total_items:2000,
 					 page_index:1,
 					 total_pages:10
