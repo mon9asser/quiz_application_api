@@ -1460,7 +1460,7 @@ rptRouters.post("/:app_id/detailed/report/deprecated", api_key_report_auth ,( re
     }
   });
 });
- 
+
 //===========================================|
 // ==> Updates
 //===========================================|
@@ -1503,7 +1503,8 @@ rptRouters.post([ "/:creator_id/brief/report" , "/:creator_id/brief/:app_type/re
   if ( req.params.app_type ){
      if(req.params.app_type != 'quiz' && req.params.app_type != 'survey'){
        return new Promise((resolve,reject)=>{
-       res.status(400).send({"Error":"This app is wrong it should be `quiz` Or `survey`"});
+         res.status(404).send(notes.notifications.catch_errors("This app is wrong it should be `quiz` Or `survey`"));
+      //  res.status(400).send({"Error":"This app is wrong it should be `quiz` Or `survey`"});
      });
    }
       queries["app_type"] = (req.params.app_type == 'quiz') ? 1 : 0;
@@ -1515,9 +1516,7 @@ rptRouters.post([ "/:creator_id/brief/report" , "/:creator_id/brief/:app_type/re
     qtnr.find(queries).populate('app_report').exec(function(error, creatorQuestionnaires) {
       if( error || ! creatorQuestionnaires || creatorQuestionnaires.length == 0) {
         return new Promise((resolve , reject)=>{
-                   res.send({
-                     Error : "This creator has no applications !"
-                   });
+          res.status(404).send(notes.notifications.catch_errors("This creator has no applications !"));
         });
       }
        // ==> Build brief report
@@ -1577,7 +1576,7 @@ rptRouters.post([ "/:creator_id/brief/report" , "/:creator_id/brief/:app_type/re
         brf_rports = brief_reports ;
 
         // ==> Send list right now
-       res.send(brf_rports);
+       res.send(notes.notifications.success_calling(brf_rports));
     });
 
 });
