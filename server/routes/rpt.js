@@ -2970,7 +2970,7 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
       res.send(notes.notifications.success_calling( dtls_rpt) );
 
     }).catch((err)=>{ // => end usr catch
-      res.send(err)
+      res.send(notes.notifications.catch_errors(err))
     });
   });
 });
@@ -2980,12 +2980,12 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
 
     if( error || !reportDocument ){
       return new Promise((resolve,reject)=>{
-        res.send({"Error":notes.Errors.Error_Doesnt_exists("Application")});
+        res.send(notes.notifications.catch_doesnt_existing_data("Application"));
       });
     }
     if(reportDocument.questionnaire_info.app_type != 0 ){
       return new Promise((resolve,reject)=>{
-        res.send({"Warning":"This App should be a survey type to show you statistics data"});
+        res.send(notes.notifications.survey_failed());
       });
     }
     var statistics_report = new Object();
@@ -3027,7 +3027,7 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
        } // end forloop
        statistics_report.questions = questions_answers;
 
-    res.send(statistics_report);
+    res.send(notes.notifications.success_calling(statistics_report));
   });
 });
 

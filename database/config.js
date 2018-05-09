@@ -103,6 +103,7 @@ var notes = {
       // catch_errors : ( erx ) => { return  { status_code : 0 , message :"failed" , error : { "error" : erx } } } ,
       // success_calling : ( object ) => { return { status_code : 1 , message :"success" , data: object }  }
       authentication_failed : (  ) => { return  { status_code : 0 , message :"failed" , error : { "message" : "Your Application keys not verified ! to use our API please create 'api keys'" } } } ,
+      survey_failed : (  ) => { return { status_code : 0  , message : "failed" , error : { "message":"This App should be a survey type to show you statistics data" }} } ,
       permission_denied : (  ) => {  return { status_code : 0 , message :"failed" , error: { "message" : "You don't have a permission to access this api !" } } } ,
       catch_fields : ( requiredFields ) => { return  { status_code : 0 , message :"failed" , error : { "message" : requiredFields } } } ,
       catch_promise : ( error ) => {return  { status_code : 0 , message :"message" , error } } ,
