@@ -33,8 +33,8 @@
 	data:{
 		 paging: { 
 					 items :200 // => total of items
-					 item_per_page:200, // total items per page 
-					 total_items:2000,
+					 item_per_page:200, // total items per page  
+					 total_items:2000, // => 
 					 page_index:1,
 					 total_pages:10
 				 }
@@ -49,7 +49,25 @@
 
 
 
-
+var app_manager = {
+           paging : {
+              items : 0 ,
+              item_per_page: 0 ,
+              total_items : 0,
+              page_index : 0,
+              total_pages : 0 ,
+           } ,
+           quiz : {
+              total : 0 ,
+              total_attendees : 0 ,
+              items : new Array ()
+           },
+           survey : {
+             total : 0 ,
+             total_attendees : 0 ,
+             items : new Array ()
+           }
+  };
 
 
 // =================================================================================
@@ -119,9 +137,9 @@ Data:{
 	overview:
 			{
 				total_attendees:23 ,
-				started:10,
-				not_started:3,
-				completed:10,
+				started:10, // ==> registered to online report but but didnt in offline report
+				not_started:3, // ==> registered the quiz only
+				completed:10, // ==> registered to offline report
 			}
 	,
 	questions:[
@@ -133,5 +151,32 @@ Data:{
 
 // No needs of pagination for statics
 
-		
+		/*
+	started_attendees
+	not_started_attendees
+	completed_quiz
+	total_attendee_objects
+		*/
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  

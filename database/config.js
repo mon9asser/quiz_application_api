@@ -89,18 +89,31 @@ var notes = {
                     Stylesheet_Enough : {"Message":"Be inform that , We have added only 11 attributes from your data as a maximum for each time"}
                   } ,
   "notifications" : {
-      authentication_failed : (  ) => { return  { status_code : 0 , message :"failed" , error : { "Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'" } } } ,
-      permission_denied : (  ) => {  return { status_code : 0 , message :"failed" , error: { "Permission_Denied" : "You don't have a permission to access this api !" } } } ,
-      catch_fields : ( requiredFields ) => { return  { status_code : 0 , message :"failed" , error : { "Required_Fields" : requiredFields } } } ,
-      catch_promise : ( error ) => {return  { status_code : 0 , message :"failed" , error } } ,
-      catch_existing_data : ( field ) => { return  { status_code : 0 , message :"failed" , error : { "Existing_Data" : "This `"+field+"` already exists !"} } } ,
-      catch_doesnt_existing_data : ( field ) => { return  { status_code : 0 , message :"failed" , error : { "Existing_Data" : "This `"+field+"` dones not exists !"} } } ,
-      password_authentication_failed : (  ) => { return  { status_code : 0 , message :"failed" , error : { "Authentication_Failed" : "Wrong Password ! , please try again" } } } ,
+      // authentication_failed : (  ) => { return  { status_code : 0 , message :"failed" , error : { "Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'" } } } ,
+      // permission_denied : (  ) => {  return { status_code : 0 , message :"failed" , error: { "Permission_Denied" : "You don't have a permission to access this api !" } } } ,
+      // catch_fields : ( requiredFields ) => { return  { status_code : 0 , message :"failed" , error : { "Required_Fields" : requiredFields } } } ,
+      // catch_promise : ( error ) => {return  { status_code : 0 , message :"failed" , error } } ,
+      // catch_existing_data : ( field ) => { return  { status_code : 0 , message :"failed" , error : { "Existing_Data" : "This `"+field+"` already exists !"} } } ,
+      // catch_doesnt_existing_data : ( field ) => { return  { status_code : 0 , message :"failed" , error : { "Existing_Data" : "This `"+field+"` dones not exists !"} } } ,
+      // password_authentication_failed : (  ) => { return  { status_code : 0 , message :"failed" , error : { "Authentication_Failed" : "Wrong Password ! , please try again" } } } ,
+      // show_authentication_failed : ( object ) => { return  { status_code : 0 , message :"failed" , error : object } } ,
+      // show_app_access : (  ) => { return  { status_code : 0 , message :"failed" , error : { "Existing_Data":"This creator has no applications !" } } } ,
+      // show_app_types : (  ) => {  return  { status_code : 0 , message :"failed" , error : {  "Unfound_Request" : "This app is wrong it should be `quiz` Or `survey`"} } }  ,
+      //
+      // catch_errors : ( erx ) => { return  { status_code : 0 , message :"failed" , error : { "error" : erx } } } ,
+      // success_calling : ( object ) => { return { status_code : 1 , message :"success" , data: object }  }
+      authentication_failed : (  ) => { return  { status_code : 0 , message :"failed" , error : { "message" : "Your Application keys not verified ! to use our API please create 'api keys'" } } } ,
+      permission_denied : (  ) => {  return { status_code : 0 , message :"failed" , error: { "message" : "You don't have a permission to access this api !" } } } ,
+      catch_fields : ( requiredFields ) => { return  { status_code : 0 , message :"failed" , error : { "message" : requiredFields } } } ,
+      catch_promise : ( error ) => {return  { status_code : 0 , message :"message" , error } } ,
+      catch_existing_data : ( field ) => { return  { status_code : 0 , message :"failed" , error : { "message" : "This `"+field+"` already exists !"} } } ,
+      catch_doesnt_existing_data : ( field ) => { return  { status_code : 0 , message :"failed" , error : { "message" : "This `"+field+"` dones not exists !"} } } ,
+      password_authentication_failed : (  ) => { return  { status_code : 0 , message :"failed" , error : { "message" : "Wrong Password ! , please try again" } } } ,
       show_authentication_failed : ( object ) => { return  { status_code : 0 , message :"failed" , error : object } } ,
-      show_app_access : (  ) => { return  { status_code : 0 , message :"failed" , error : { "Existing_Data":"This creator has no applications !" } } } ,
-      show_app_types : (  ) => {  return  { status_code : 0 , message :"failed" , error : {  "Unfound_Request" : "This app is wrong it should be `quiz` Or `survey`"} } }  ,
+      show_app_access : (  ) => { return  { status_code : 0 , message :"failed" , error : { "message":"This creator has no applications !" } } } ,
+      show_app_types : (  ) => {  return  { status_code : 0 , message :"failed" , error : {  "message" : "This app is wrong it should be `quiz` Or `survey`"} } }  ,
 
-      catch_errors : ( erx ) => { return  { status_code : 0 , message :"failed" , error : { "error" : erx } } } ,
+      catch_errors : ( erx ) => { return  { status_code : 0 , message :"failed" , error : { "message" : erx } } } ,
       success_calling : ( object ) => { return { status_code : 1 , message :"success" , data: object }  }
   }
 };

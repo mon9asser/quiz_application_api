@@ -287,20 +287,20 @@ var api_key_report_auth = function (req ,res ,next){
 
    if(!apk_key || apk_key == null || apk_key == ''){
      return new Promise((resolve , reject)=>{
-       res.send({"Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'"});
+      res.status(401).send(notes.notifications.authentication_failed());
      });
    }
 
    if(apk_key.length == 0){
        return new Promise((resolve,reject)=>{
-           res.send({"Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'"});
+           res.status(401).send(notes.notifications.authentication_failed());
        });
     }
 
     next();
  }).catch((error)=>{
    return new Promise((resolve , reject)=>{
-     res.send({"Authentication_Failed" : "Your Application keys not verified ! to use our API please create 'api keys'"});
+    res.status(401).send(notes.notifications.authentication_failed());
    });
  });
 

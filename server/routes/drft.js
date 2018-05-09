@@ -226,6 +226,14 @@ drftRouter.post("/:app_id/attendee_collection/:user_id" , (req , res) => {
       if(!draftDoc){
         var drf = new drft(attendee_draft);
         drf.save().then((respData)=>{
+
+          qtnr.findById({_id :app_id }, function (err, doc) {
+            if (err) console.log(err);
+            doc.att__draft = respData._id;
+            doc.save();
+          });
+
+
           res.send(respData);
         }).catch((err)=>{
           res.send({error : err});
@@ -241,8 +249,26 @@ drftRouter.post("/:app_id/attendee_collection/:user_id" , (req , res) => {
             draftDoc.att_draft.push(received_attendee_data);
           }
         }
+
         draftDoc.markModified('att_draft');
         draftDoc.save().then((respData)=>{
+
+          qtnr.findById({_id :app_id }, function (err, doc) {
+            if (err) console.log(err);
+            doc.att__draft = respData._id;
+            doc.save();
+          });
+
+          // qtnr.findOne({_id : app_id }).then((questionnaireData)=>{
+          //   questionnaireData.att__draft = draftDoc._id
+          //   questionnaireData.save().then((svd)=>{
+          //     console.log("++++++++++++++++++++++++++++++++++++++++++++++++++");
+          //     console.log(svd);
+          //   }).catch((err)=>{
+          //     console.log({Err: err});
+          //   });
+          // });
+
           res.send(respData);
         }).catch((err)=>{
           res.send({error : err});

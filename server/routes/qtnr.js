@@ -129,8 +129,8 @@ qtnrRouters.post("/create/v1.1", auth_verify_api_keys_tokens ,  (req, res) => {
     req.body.questions = [];
     req.body.creator_id = user.id;
     req.body.theme_style = [];
-
-    var body = _.pick(req.body, ['creator_id', 'app_type', 'questionnaire_title', 'description', 'createdAt', 'updatedAt', 'settings', 'questions','theme_style']);
+    req.body.att__draft = undefined ;
+    var body = _.pick(req.body, ['creator_id', 'app_type', 'questionnaire_title', 'description', 'createdAt', 'updatedAt', 'settings', 'questions','theme_style' , 'att__draft']);
 
     var qtnrs = new qtnr(body);
     qtnrs.save().then((qtner) => {
@@ -2459,8 +2459,8 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
     req.body.questions = [];
     req.body.creator_id = user.id;
     req.body.theme_style = [];
-
-    var body = _.pick(req.body, ['creator_id', 'app_type', 'questionnaire_title', 'description', 'createdAt', 'updatedAt', 'settings', 'questions','theme_style']);
+    req.body.att__draft = undefined ;
+    var body = _.pick(req.body, ['creator_id', 'app_type', 'questionnaire_title', 'description', 'createdAt', 'updatedAt', 'settings', 'questions','theme_style','att__draft']);
 
     var qtnrs = new qtnr(body);
     qtnrs.save().then((qtner) => {

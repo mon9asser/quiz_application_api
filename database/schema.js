@@ -395,6 +395,7 @@ var questionnaireDataTypes = {
    updatedAt : {  type : Date   },
    settings :  Questionnaire_settings  ,
    questions : Questionnaire_questions ,
+   att__draft :  { type : String , ref : "attendee_drafts" } ,
    app_registry : { type : String , ref : "attendee_drafts" } ,
    app_report : { type: String  , ref : "reports" }
 };

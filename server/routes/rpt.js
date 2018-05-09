@@ -57,6 +57,11 @@ var date_made = function() {
     var year = dateObj.getUTCFullYear();
     return newdate = year + "/" + month + "/" + day;
 };
+Array.prototype.find_reported_attendees = function (attendee_draft) {
+    return this.filter(function (i) {
+      return attendee_draft.findIndex(x => x.attendee_id == i.user_id) === -1;
+    });
+};
 // rptRouters.use(bodyParser.json());
 // rptRouters.use(bodyParser.urlencoded({
 //     extended: false
@@ -2007,6 +2012,37 @@ rptRouters.post("/:app_id/detailed/report/deprecated", api_key_report_auth ,( re
     // Get Spesific User
     // Get All Users for this app by date
     if(req.body.attendee_id != null){
+
+      var rptAttendee =  detailed_report.app_report.attendees;
+      var online_report =  detailed_report.att__draft.att_draft;
+      var unreported = online_report.find_reported_attendees(rptAttendee);
+
+      var started_and_not = _.countBy( unreported , { report_attendees : Object() });
+
+      var total_attendee_objects = online_report.length ;
+      var started_attendees = (started_and_not.true == undefined ) ? 0 :  started_and_not.true; ;
+      var not_started_attendees = (started_and_not.false == undefined ) ? 0 :  started_and_not.false;
+      var completed_quiz = rptAttendee.length ;
+
+
+
+      dtls_rpt.overview.total_attendees = total_attendee_objects
+      dtls_rpt.overview.started = started_attendees
+      dtls_rpt.overview.not_started = not_started_attendees
+      dtls_rpt.overview.completed = completed_quiz
+
+      var count_passed = _.countBy(creatorQuestionnaires.att__draft.att_draft , {'report_attendees.passed_the_grade': true} )
+
+      if(creatorQuestionnaires.app_type == 1 ){
+        dtls_rpt.overview.passed = ( count_passed.true == undefined) ? 0 : count_passed.true ;
+        dtls_rpt.overview.failed = ( count_passed.false == undefined) ? 0 : count_passed.false ;
+      }
+
+
+
+
+
+
       var attendee_id = req.body.attendee_id;
       var attendeeIndex = _.findIndex(rptDocs.attendee_details , {attendee_id:attendee_id} );
       var attendeeIndexObj = _.findIndex(rptDocs.attendees , {attendee_id:attendee_id} );
@@ -2146,7 +2182,8 @@ rptRouters.post("/:app_id/detailed/report/deprecated", api_key_report_auth ,( re
 //===========================================|
 // ==> Updates
 //===========================================|
-rptRouters.post([ "/:creator_id/brief/report" , "/:creator_id/brief/:app_type/report" ] , api_key_report_auth , ( req , res ) => {
+// , "/:creator_id/brief/:app_type/report"
+rptRouters.post([ "/:creator_id/brief/report" ] , api_key_report_auth , ( req , res ) => {
   var creator_id = req.params.creator_id;
   var report_type = req.params.report_type;
   var queries = new Object();
@@ -2154,7 +2191,7 @@ rptRouters.post([ "/:creator_id/brief/report" , "/:creator_id/brief/:app_type/re
   if(req.body.pagination != null ){
         if(req.body.pagination == null || ! req.body.pagination) {
             return new Promise((resolve,reject) => {
-               res.status(400).send(notes.Messages.Required_Message("`pagination` Object"));
+               res.status(400).send(notes.notifications.catch_fields(notes.Messages.Required_Message("`pagination` Object")));
             });
           }
         var obj_pagination = new Array();
@@ -2164,7 +2201,7 @@ rptRouters.post([ "/:creator_id/brief/report" , "/:creator_id/brief/:app_type/re
             obj_pagination[obj_pagination.length]='records_per_page';
         if(obj_pagination.length != 0 ){
             return new Promise((resolve,reject) => {
-              res.status(400).send(notes.Messages.Required_Message(obj_pagination));
+              res.status(400).send(notes.notifications.catch_fields(notes.Messages.Required_Message(obj_pagination)));
             });
          }
    }
@@ -2204,6 +2241,21 @@ rptRouters.post([ "/:creator_id/brief/report" , "/:creator_id/brief/:app_type/re
        // ==> Build brief report
        var reports = creatorQuestionnaires ;
        var brief_reports = new Array();
+
+
+       var app_manager = {
+           quiz : {
+              total : 0 ,
+              total_attendees : 0 ,
+              items : new Array ()
+           },
+           survey : {
+             total : 0 ,
+             total_attendees : 0 ,
+             items : new Array ()
+           }
+       };
+
 
        for (var i = 0; i < reports.length; i++) {
          var brfReport = new Object();
@@ -2252,8 +2304,30 @@ rptRouters.post([ "/:creator_id/brief/report" , "/:creator_id/brief/:app_type/re
          brfReport['history']= documentObject.app_report.history;
          else
          brfReport['history'] = "No histories meet your selected criteria !" ;
+
+         // ====================>>> Quizzes ans survey
+         if( documentObject.app_type  == 1 ){ // => Quizzes
+            app_manager.quiz.items.push(brfReport);
+            app_manager.quiz.total_attendees += (documentObject.app_report != null ) ? documentObject.app_report.attendees.length : 0
+
+         }
+
+         if( documentObject.app_type  == 0 ){ // => Survey
+           app_manager.survey.items.push(brfReport);
+           app_manager.survey.total_attendees += (documentObject.app_report != null ) ? documentObject.app_report.attendees.length : 0
+         }
+
          brief_reports.push(brfReport);
        }
+
+       // ==> Store count of apps
+       if(app_manager.quiz.items.length != 0 )
+         app_manager.quiz.total = app_manager.quiz.items.length;
+
+      if(app_manager.survey.items.length != 0 )
+           app_manager.survey.total = app_manager.survey.items.length
+
+
 
        if( req.body.pagination != null ){
            // ==> Build Paginations and anther options
@@ -2267,19 +2341,34 @@ rptRouters.post([ "/:creator_id/brief/report" , "/:creator_id/brief/:app_type/re
            var brief_reports = _.chunk(brief_reports, pages);
            if(page_number > (brief_reports.length - 1)) page_number = brief_reports.length - 1;
            brf_rports = brief_reports[page_number] ;
+
+           // ==> Store Pagination
+           var paging = {
+              items : brief_reports ,
+              item_per_page: pages ,
+              total_items : creatorQuestionnaires.length ,
+              page_index : page_number,
+              total_pages :brief_reports.length ,
+           } ;
+
+           if(app_manager.paging == undefined )
+           app_manager.paging = paging ;
       }
 
-      if(req.body.pagination == null )
-        brf_rports = brief_reports ;
+      // if(req.body.pagination == null )
+      //   brf_rports = brief_reports ;
 
         // ==> Send list right now
-       res.send(notes.notifications.success_calling(brf_rports));
+       res.send(notes.notifications.success_calling(app_manager));
     });
 
 });
 rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) => {
   var app_id = req.params.app_id ;
-  qtnr.findOne({_id : app_id}).populate('app_report').exec(function(error, creatorQuestionnaires) {
+  qtnr.findOne({_id : app_id}).populate('app_report').populate('att__draft').exec(function(error, creatorQuestionnaires) {
+
+
+
 
     usr.find().then((usrDoc) => {
       if(!usrDoc) return false ;
@@ -2287,26 +2376,76 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
       if(error || ! creatorQuestionnaires ){
         return new Promise((resolve, reject) => {
-          res.send("Application doesn't exists !");
+          res.send(notes.notifications.catch_doesnt_existing_data("Application"));
         });
       }
       var detailed_report = creatorQuestionnaires ;
 
+
+
+
+      // var unreported = online_report.find_reported_attendees(rptAttendee);
+      //
+      // var started_and_not = _.countBy( unreported , { report_attendees : Object() });
+      //
+      // var total_attendee_objects = online_report.length ;
+      // var started_attendees = (started_and_not.true == undefined ) ? 0 :  started_and_not.true; ;
+      // var not_started_attendees = (started_and_not.false == undefined ) ? 0 :  started_and_not.false;
+      // var completed_quiz = rptAttendee.length ;
+
+
+
       var dtls_rpt = new Object();
-      dtls_rpt['app_name'] = detailed_report.questionnaire_title;
-      dtls_rpt['app_id'] = detailed_report._id;
-      dtls_rpt['total_questions'] = detailed_report.questions.length ;
+      if(dtls_rpt.overview == undefined )
+        dtls_rpt.overview =  new Object()
+
+      if(dtls_rpt.app_nfo == undefined )
+      dtls_rpt.app_nfo = new Object();
+      dtls_rpt['app_nfo']['app_name'] = detailed_report.questionnaire_title;
+      dtls_rpt['app_nfo']['app_id'] = detailed_report._id;
+      dtls_rpt['app_nfo']['total_questions'] = detailed_report.questions.length ;
+      dtls_rpt['app_nfo']['pass_grad'] = detailed_report.settings.grade_settings.value;
+
+      if( req.body.pagination != null && req.body.attendee_id == null  ) {
+        if(dtls_rpt['paging'] == undefined )
+           dtls_rpt['paging'] = new Object ();
+      }
 
 
+      if(dtls_rpt.items == undefined)
+      dtls_rpt.items = new Object();
 
       if(req.body.attendee_id == null ){
 
-              if(dtls_rpt.attendees == undefined )
-              dtls_rpt['attendees'] = new Array() ;
+          if(dtls_rpt.app_nfo.attendees == undefined )
+          dtls_rpt['items']['attendees'] = new Array() ;
 
-              var rptAttendee =  detailed_report.app_report.attendees;
+          var rptAttendee =  detailed_report.app_report.attendees;
+          var online_report =  detailed_report.att__draft.att_draft;
+          var unreported = online_report.find_reported_attendees(rptAttendee);
 
-              for (var i = 0; i < rptAttendee.length; i++) {
+          var started_and_not = _.countBy( unreported , { report_attendees : Object() });
+
+          var total_attendee_objects = online_report.length ;
+          var started_attendees = (started_and_not.true == undefined ) ? 0 :  started_and_not.true; ;
+          var not_started_attendees = (started_and_not.false == undefined ) ? 0 :  started_and_not.false;
+          var completed_quiz = rptAttendee.length ;
+
+
+
+          dtls_rpt.overview.total_attendees = total_attendee_objects
+          dtls_rpt.overview.started = started_attendees
+          dtls_rpt.overview.not_started = not_started_attendees
+          dtls_rpt.overview.completed = completed_quiz
+
+          var count_passed = _.countBy(creatorQuestionnaires.att__draft.att_draft , {'report_attendees.passed_the_grade': true} )
+
+          if(creatorQuestionnaires.app_type == 1 ){
+            dtls_rpt.overview.passed = ( count_passed.true == undefined) ? 0 : count_passed.true ;
+            dtls_rpt.overview.failed = ( count_passed.false == undefined) ? 0 : count_passed.false ;
+          }
+          /// =====> Get All attendees
+          for (var i = 0; i < rptAttendee.length; i++){
                 var attedee_repo = rptAttendee[i];
                 var attendee_object = new Object ();
                   // ==> Build questions
@@ -2543,9 +2682,7 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
                     if( req.body.date != null ){
                       if( req.body.date.date_from == null  || req.body.date.date_to == null  ){
                         return  new Promise((resolve, reject) => {
-                            res.send({
-                                error : "`date_from` && `date_to` are required ! in side date object"
-                            })
+                            res.send(notes.notifications.catch_fields("`date_from` && `date_to` are required ! in side date object"));
                         });
                         return false ;
                       }
@@ -2555,17 +2692,45 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
                       var to = new Date(req.body.date.date_to);
                       var date_passed = new Date(attendee_object.completed_date);
                       if (date_passed >= from && date_passed <= to) {
-                        dtls_rpt['attendees'].push(attendee_object);
+                        dtls_rpt['items']['attendees'].push(attendee_object);
                       }
                     }
                     else
-                    dtls_rpt['attendees'].push(attendee_object);
-
-
+                    dtls_rpt['items']['attendees'].push(attendee_object);
               }
+
       }else {
 
-          dtls_rpt['attendees'] = new Object();
+        var rptAttendee =  detailed_report.app_report.attendees;
+        var online_report =  detailed_report.att__draft.att_draft;
+        var unreported = online_report.find_reported_attendees(rptAttendee);
+
+        var started_and_not = _.countBy( unreported , { report_attendees : Object() });
+
+        var total_attendee_objects = online_report.length ;
+        var started_attendees = (started_and_not.true == undefined ) ? 0 :  started_and_not.true; ;
+        var not_started_attendees = (started_and_not.false == undefined ) ? 0 :  started_and_not.false;
+        var completed_quiz = rptAttendee.length ;
+
+
+
+        dtls_rpt.overview.total_attendees = total_attendee_objects
+        dtls_rpt.overview.started = started_attendees
+        dtls_rpt.overview.not_started = not_started_attendees
+        dtls_rpt.overview.completed = completed_quiz
+
+        var count_passed = _.countBy(creatorQuestionnaires.att__draft.att_draft , {'report_attendees.passed_the_grade': true} )
+
+        if(creatorQuestionnaires.app_type == 1 ){
+          dtls_rpt.overview.passed = ( count_passed.true == undefined) ? 0 : count_passed.true ;
+          dtls_rpt.overview.failed = ( count_passed.false == undefined) ? 0 : count_passed.false ;
+        }
+
+
+
+
+
+          dtls_rpt['items']['attendees'] = new Object();
           var attendee_id = req.body.attendee_id ;
           var rptAttendee =  detailed_report.app_report.attendees;
           var rptAttendeeDetails =  detailed_report.app_report.attendee_details;
@@ -2573,7 +2738,7 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
               this_attendee = rptAttendee.find(x => x.attendee_id == attendee_id);
               this_attendee_details = rptAttendeeDetails.find(x => x.attendee_id == attendee_id);
 
-              dtls_rpt['attendees'] = {
+              dtls_rpt['items']['attendees'] = {
                  'attendee_id'      :  attendee_id ,
                  'email'            :  (usrObject.find(x => x._id == attendee_id ) != undefined ) ? usrObject.find(x => x._id == attendee_id ).email : 0  ,
                  'name'             :  (usrObject.find(x => x._id == attendee_id ) != undefined ) ? usrObject.find(x => x._id == attendee_id ).name : 0  ,
@@ -2587,7 +2752,7 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
               // ==> Question flag
               if( req.body.questions && req.body.questions == true )
                   {
-                    dtls_rpt['attendees']['questions'] = new Array();
+                    dtls_rpt['items']['attendees']['questions'] = new Array();
                     var questions_list = this_attendee.survey_quiz_answers ;
                     for (var iqs = 0; iqs < questions_list.length; iqs++){
                         var obj_ques = questions_list[iqs];
@@ -2758,7 +2923,7 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
                         }
 
                         // console.log(question_object);
-                        dtls_rpt['attendees']['questions'].push(question_object)
+                        dtls_rpt.items['attendees']['questions'].push(question_object)
                     }
                   }
 
@@ -2768,16 +2933,17 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
       // ==> Pagination (options)
       if( req.body.pagination != null && req.body.attendee_id == null  ) {
+
           if( req.body.pagination.page_number == null || req.body.pagination.records_per_page == null ){
             return new  Promise( (resolve, reject) => {
-                res.send({
-                  error : "`page_number` && `records_per_page` are required !"
-                });
+
+                res.send(notes.notifications.catch_fields ("`page_number` && `records_per_page` are required !"))
+
                 return false ;
             });
           }
 
-          var all_attendees = dtls_rpt.attendees ;
+          var all_attendees = dtls_rpt.items.attendees ;
           var page_number = req.body.pagination.page_number ;
           var pages = req.body.pagination.records_per_page ;
           // ==> Build Paginations and anther options
@@ -2790,11 +2956,19 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
           var detail_reports = _.chunk(all_attendees, pages);
           if(page_number > (detail_reports.length - 1)) page_number = detail_reports.length - 1;
-          brf_rports = detail_reports[page_number] ;
-          dtls_rpt.attendees = brf_rports
+          delts_rports = detail_reports[page_number] ;
+
+          dtls_rpt.items.attendees = detail_reports;
+          dtls_rpt.paging['items'] = detail_reports.length ;
+          dtls_rpt.paging['item_per_page'] = pages ;
+          dtls_rpt.paging['total_items'] =all_attendees.length;
+          dtls_rpt.paging['page_index'] = page_number ;
+          dtls_rpt.paging['total_pages'] = detail_reports.length ;
+
       }
 
-      res.send( dtls_rpt );
+      res.send(notes.notifications.success_calling( dtls_rpt) );
+
     }).catch((err)=>{ // => end usr catch
       res.send(err)
     });
@@ -2815,9 +2989,23 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
       });
     }
     var statistics_report = new Object();
-    statistics_report["survey_id"] = reportDocument.questionnaire_info._id;
-    statistics_report["survey_name"] = reportDocument.questionnaire_info.questionnaire_title;
-    statistics_report["total_attendees"] = reportDocument.attendees.length;
+
+
+    if(statistics_report.app_nfo == undefined)  statistics_report.app_nfo = new Object();
+    if(statistics_report.overview  == undefined) statistics_report.overview = new Object();
+    if(statistics_report.questions  == undefined) statistics_report.questions = new Array();
+
+    statistics_report.app_nfo["survey_id"] = reportDocument.questionnaire_info._id;
+    statistics_report.app_nfo["survey_name"] = reportDocument.questionnaire_info.questionnaire_title;
+    statistics_report.app_nfo["total_questions"] = reportDocument.questionnaire_info.questions.length;
+
+
+
+    statistics_report.overview["total_attendees"] = reportDocument.attendees.length;
+    statistics_report.overview["started"] = 0 // => this prop is inProgress
+    statistics_report.overview["not_started"] = 0 // => this prop is inProgress
+    statistics_report.overview["completed"] = reportDocument.attendees.length;
+
     var statistics = reportDocument.statistics;
     var questions_answers = new Array();
     for (var i = 0; i < statistics.length; i++) {
@@ -2837,7 +3025,7 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
           } // end forloop xi
           questions_answers.push(qs_object);
        } // end forloop
-       statistics_report["questions"] = questions_answers;
+       statistics_report.questions = questions_answers;
 
     res.send(statistics_report);
   });
