@@ -215,66 +215,77 @@ drftRouter.post("/:app_id/attendee_collection/:user_id" , (req , res) => {
 
   var attendee_id = req.params.user_id;
   var app_id = req.params.app_id ;
+
   if(req.body.attendee_draft == null){
     new Promise(function(resolve, reject) {
       res.status(404).send("attendee_draft unfound !");
       return false ;
     });
   }
+
   drft.findOne({ "application_id":app_id } , ( err , draftDoc ) => {
-
-      if(!draftDoc){
-        var drf = new drft(attendee_draft);
-        drf.save().then((respData)=>{
-
-          qtnr.findById({_id :app_id }, function (err, doc) {
+   if( draftDoc == null  || !draftDoc ){
+      var drf = new drft(attendee_draft);
+      drf.save().then((respData)=>{
+        qtnr.findById({_id :app_id }, function (err, doc) {
             if (err) console.log(err);
             doc.att__draft = respData._id;
             doc.save();
-          });
-
-
-          res.send(respData);
-        }).catch((err)=>{
-          res.send({error : err});
         });
-      }else {
-          console.log("Found it");
-        if(attendee_draft.att_draft != undefined){
-          var this_attendee_index = draftDoc.att_draft.findIndex(x => x.user_id == attendee_id);
-          var received_attendee_data = attendee_draft.att_draft.find(x => x.user_id == attendee_id);
-          if(this_attendee_index != -1){
-            draftDoc.att_draft[this_attendee_index] = received_attendee_data
-          }else {
-            draftDoc.att_draft.push(received_attendee_data);
-          }
-        }
 
-        draftDoc.markModified('att_draft');
-        draftDoc.save().then((respData)=>{
+        res.send(respData);
+      }).catch((err)=>{
+        res.send({error : err});
+      });
+   }else {
+     if(attendee_draft.att_draft != undefined ){
+         var this_attendee_index = draftDoc.att_draft.findIndex(x => x.user_id == attendee_id);
+         var received_attendee_data = attendee_draft.att_draft.find(x => x.user_id == attendee_id);
+         if(this_attendee_index != -1){
+           draftDoc.att_draft[this_attendee_index] = received_attendee_data
+         }else {
+           draftDoc.att_draft.push(received_attendee_data);
+         }
+       }
 
-          qtnr.findById({_id :app_id }, function (err, doc) {
-            if (err) console.log(err);
-            doc.att__draft = respData._id;
-            doc.save();
-          });
+       draftDoc.markModified('att_draft');
+       draftDoc.save().then((respData)=>{
 
-          // qtnr.findOne({_id : app_id }).then((questionnaireData)=>{
-          //   questionnaireData.att__draft = draftDoc._id
-          //   questionnaireData.save().then((svd)=>{
-          //     console.log("++++++++++++++++++++++++++++++++++++++++++++++++++");
-          //     console.log(svd);
-          //   }).catch((err)=>{
-          //     console.log({Err: err});
-          //   });
-          // });
+         qtnr.findById({_id :app_id }, function (err, doc) {
+           if (err) console.log(err);
+           doc.att__draft = respData._id;
+           doc.save();
+         });
 
-          res.send(respData);
-        }).catch((err)=>{
-          res.send({error : err});
-        });
-      }
+         res.send(respData);
+       }).catch((err)=>{
+         res.send({error : err});
+       });
+   }
+
+       setTimeout(function (){
+         if(draftDoc != null ){
+           if( req.body.statistics != null ){
+
+               if(draftDoc.statistics == undefined)
+                 draftDoc.statistics = new Array();
+
+                 draftDoc.statistics = req.body.statistics ;
+                 draftDoc.markModified('statistics');
+                 draftDoc.save();
+             }
+         }
+       }, 800);
+
+  }).catch((error)=> {
+    console.log(error);
   });
+
+
+
+
+
+
 
 });
 

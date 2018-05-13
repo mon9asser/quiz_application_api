@@ -2217,7 +2217,7 @@ ul.question-data > li[data-type="qst"] {
   width: 100%;
 }
 .preview-button {
-    background-color: #00a8ff; 
+    background-color: #00a8ff;
     border:1px dashed #046394;
     /*margin-right: 50px !important;*/
     margin-right: 120px !important;
@@ -3133,4 +3133,11 @@ table.label-table tr {
 table.label-table tbody .labels-options {
   display: block;
   position: relative;
+}
+
+.iconx-x-survey {
+  display: inline-block;
+  vertical-align: middle;
+  overflow: hidden;
+  margin-top: 5px; 
 }

@@ -967,6 +967,19 @@
   background: #bdbad8 !important;
 }
 
+
+
+
+
+
+.survey-player-questions {
+    background: #fbfafa !important;
+    box-shadow: 0px 0px 5px 0px #eee !important;
+    border-left: 5px solid #bdbad8;
+    color: #333;
+
+}
+
 /* ======================>> 2 */
 .quiz_is_expired {
   background: #fbfafa !important;
@@ -1051,4 +1064,56 @@
   width: 97%;
   display: inline-table;
   /*display: none;*/
+}
+
+
+
+
+
+
+
+
+
+.survey-block {
+  display: block;
+  position: relative;
+  width: 98.4%;
+  margin: 15px 0px;
+  min-height: 50px;
+  max-height: auto;
+  /*background: red;*/
+}
+.block-of-fre-txts {
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+.block-of-fre-txts > textarea , .block-of-fre-txts > textarea:focus , .block-of-fre-txts > textarea:hover , .block-of-fre-txts > textarea:active  {
+  outline: none;
+  display: block;
+  position: relative;
+  width: 100%;
+  padding: 15px;
+  border: 1px dashed #eee;
+  resize: none;
+  height: 200px;
+  font-size: 15px;
+  color: #999;
+  border-radius: 10px;
+}
+/* ========================> Theme Color */
+.question_type__colr {
+  color:  #c17c7e;
+}
+.survey-player-questions {
+  border-left: 5px solid #c17c7e;
+}
+.default_theme_texts_bg , .survey-player-questions button {
+  background: #c17c7e;
+}
+.default_theme_brd {
+  border-left-color: #c17c7e;
+}
+.load_qs_theme {
+  border-color: #c17c7e;
 }

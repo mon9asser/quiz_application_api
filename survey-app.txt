@@ -1,0 +1,43 @@
+ 
+
+delete these properties in survey 
+==================================
+- att_draft > report_attendees > passed_the_grade => DONE
+- att_draft > report_attendees > results => DONE
+- att_draft > report_questions > right_questions => DONE
+- att_draft > report_questions > wrong_questions => DONE
+- att_draft > report_attendee_details > correct_answers => DONE
+- att_draft > report_attendee_details > wrong_answers => DONE
+- att_draft > report_attendee_details > pass_mark => DONE
+- att_draft > report_attendee_details > score => DONE
+- att_draft > report_attendee_details > status => DONE
+
+
+Save new data into the followings ( Survey only ) 
+==================================
+- att_draft > questions_data { question_id }
+- att_draft > report_attendees > survey_quiz_answers { question_id }
+
+
+Add new properties ( Survey only ) 
+==================================
+- statistics => Array
+	= question_id
+	= question_body
+	= attendee_count
+	= question_answers => Array 
+		A - answer_id
+		B - answer_body ( Consider 5 types of questions )
+		C - attendee_percentage_count
+		D - attendee_raw_count
+		E - answer_attendees => array ({"attendee_id"})
+	= attendee_info => Array ("attendee_id")
+
+
+
+
+
+We have to save statistics into "attendee_collection" attendee draft !
+
+
+	

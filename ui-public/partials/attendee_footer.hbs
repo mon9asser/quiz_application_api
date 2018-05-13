@@ -1,4 +1,7 @@
 
+
+
+
     <!-- Swiper slider -->
     <script src="{{ server_ip }}ext/frameworks/js/swiper.min.js"></script>
     <!-- <script src="{{ server_ip }}ext/frameworks/slick/slick.js"></script> -->
@@ -7,6 +10,7 @@
     <!-- App ( attendee => quizzes or surveys) list -->
     <script ng:if="page_name == 'quizzes'" src="{{ server_ip }}ext/js/quiz-app-quizzes.js"></script>
     <!-- Quiz or Survey Players -->
-    <script ng:if="page_name == 'api'" src="{{ server_ip }}ext/js/quiz-app-apps.js" charset="utf-8"></script>
-  </body> 
+    <script ng:if="page_name == 'api' && {{ app.app_type }} == 1 " src="{{ server_ip }}ext/js/quiz-app-apps.js" charset="utf-8"></script>
+    <script ng:if="page_name == 'api' && {{ app.app_type }} == 0 " src="{{ server_ip }}ext/js/survey-app-apps.js" charset="utf-8"></script>
+  </body>
 </html>

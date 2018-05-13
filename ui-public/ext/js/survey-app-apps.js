@@ -1,30 +1,38 @@
 //=============================================
 // => Javasctipt code lines
 //=============================================
-Array.prototype.find_unsolved_questions = function (questions_list) {
-    return this.filter(function (i) {
-      return questions_list.findIndex(x => x.question_id == i._id) === -1;
-    });
-};
+// Array.prototype.find_unsolved_questions = function (questions_list) {
+//     return this.filter(function (i) {
+//       return questions_list.findIndex(x => x.question_id == i._id) === -1;
+//     });
+// };
 
-Array.prototype.is_correct_question = function (correct_answers) {
-  return this.filter(function(i){
-    return correct_answers.findIndex (x => x._id == i.answer_id);
-  });
-}
+// Array.prototype.is_correct_question = function (correct_answers) {
+//   return this.filter(function(i){
+//     return correct_answers.findIndex (x => x._id == i.answer_id);
+//   });
+// }
+
 // a => correct answers
 // b => solved answer
 var question_status = function (a, b) {
-  var correct_answers = a.map( function(x){ return x._id; } );
-  var solved_answers = b.map( function(x){ return x.answer_id; } );
-  var is_right_question =  (solved_answers.sort().join('') == correct_answers.sort().join(''));
-  return is_right_question ;
+  // var correct_answers = a.map( function(x){ return x._id; } );
+  // var solved_answers = b.map( function(x){ return x.answer_id; } );
+  // var is_right_question =  (solved_answers.sort().join('') == correct_answers.sort().join(''));
+  // return is_right_question ;
 }
 
 //=============================================
 // => Filters
 //=============================================
 
+apps.filter('transfeer_into_json' , [
+  function (){
+    return function (obj){
+       return JSON.stringify(obj);
+    };
+  }
+]);
 apps.filter('set_source_link' , [
   ()=>{
       return function (link_source){
@@ -268,7 +276,7 @@ apps.controller("survey" , [
 
              // => Storing data into array
              $scope.store_the_current_time();
-            //  $scope.time__calculation_compilation(true); 
+            //  $scope.time__calculation_compilation(true);
              $scope.load_quiz_timer();
       }
      };
@@ -534,287 +542,293 @@ apps.controller("survey" , [
           var answer_object_index = answers_array.findIndex(x => x.answer_id == answer_id);
           if( answer_object_index != -1 ){
             var selected_answer = answers_array[answer_object_index];
-            if($scope.__player_object.settings.show_results_per_qs){ // => true
-              // =>> check if show the right answer option is true
-              if(selected_answer.is_correct){
-                classes += ' right_answer';
-              }else {
-                classes += ' wrong_answer';
-              }
-            } else classes += ' selected_answer';
+            classes += ' selected_answer';
+            // if($scope.__player_object.settings.show_results_per_qs){ // => true
+            //   // =>> check if show the right answer option is true
+            //   if(selected_answer.is_correct){
+            //     classes += ' right_answer';
+            //   }else {
+            //     classes += ' wrong_answer';
+            //   }
+            // } else classes += ' selected_answer';
           }
         }
       }
 
       return classes ;
     }
+    $scope.store_into_attendee_draft = ( object , is_single = null ) => {
+      var application_object = new Object();
+      if (  $scope.attendee_draft != null && $scope.attendee_draft.application_id != undefined) {
+        var findAttendeeIndex = $scope.attendee_draft.att_draft.findIndex(x => x.user_id == object.user_id);
+        var findAttendee = $scope.attendee_draft.att_draft.find(x => x.user_id == object.user_id);
+        if(findAttendeeIndex != - 1){
+          var attendeeInfo = $scope.attendee_draft.att_draft[findAttendeeIndex];
+          if(attendeeInfo.questions_data == undefined )
+          attendeeInfo.questions_data = new Array();
+          var findQuestionIndex = attendeeInfo.questions_data.findIndex(x => x.question_id == object.question_id);
+          var findQuestion = attendeeInfo.questions_data.find(x => x.question_id == object.question_id);
+          if(findQuestionIndex == -1){ // ==> Didn't find this attendee
+              attendeeInfo.questions_data.push({
+                question_id : object.question_id ,
+                question_index : $scope.slide_screens.activeIndex - 1,
+                question_type : object.question.question_type,
+                question_text : object.question.question_body,
+                answer_ids : new Array({answer_id : object.answer_id , /*is_correct : object.is_correct , */ answer_object : object.answer , answer_index : object.answer_index }) ,
+                // => correct_answers : object.question.answers_format.filter(x => x.is_correct == true) ,
+                updated_date : new Date()
+              });
+
+              if(attendeeInfo.report_questions == undefined)
+              attendeeInfo.report_questions = new Object();
+
+              if(attendeeInfo.report_questions.all_questions == undefined )
+                attendeeInfo.report_questions.all_questions = new Array();
+
+                attendeeInfo.report_questions.all_questions.push(object.question_id);
 
 
+              var answerIndexVal = object.question.answers_format.findIndex(x => x._id == object.answer_id );
+              if(answerIndexVal != -1 ){
+                 answerObject = object.question.answers_format.find(x => x._id == object.answer_id );
+               }
 
-      $scope.store_into_attendee_draft = (object , is_single = null) => {
+               if(attendeeInfo.report_attendee_details == undefined )
+                 attendeeInfo.report_attendee_details = new Object();
 
-        var application_object = new Object();
-        if (  $scope.attendee_draft != null && $scope.attendee_draft.application_id != undefined)
-          { // ==> attendee_draft is not empty
-              var findAttendeeIndex = $scope.attendee_draft.att_draft.findIndex(x => x.user_id == object.user_id);
-              var findAttendee = $scope.attendee_draft.att_draft.find(x => x.user_id == object.user_id);
-              if(findAttendeeIndex != - 1){
-                // ==> Attendee Object [FOUND]
-                var attendeeInfo = $scope.attendee_draft.att_draft[findAttendeeIndex];
-                if(attendeeInfo.questions_data == undefined )
-                attendeeInfo.questions_data = new Array();
-                var findQuestionIndex = attendeeInfo.questions_data.findIndex(x => x.question_id == object.question_id);
-                var findQuestion = attendeeInfo.questions_data.find(x => x.question_id == object.question_id);
-                if(findQuestionIndex == -1){
+                 // ==> Calculations
+                 if( $scope.__player_object.settings  == undefined || $scope.__player_object.settings == null )
+                   alert("Something went wrong !")
 
-                  // ==> Question UNFOUND
-                  attendeeInfo.questions_data.push({
-                    question_id : object.question_id ,
-                    question_index : $scope.slide_screens.activeIndex - 1,
-                    question_type : object.question.question_type,
-                    question_text : object.question.question_body,
-                    answer_ids : new Array({answer_id : object.answer_id , is_correct : object.is_correct , answer_object : object.answer , answer_index : object.answer_index }) ,
-                    correct_answers : object.question.answers_format.filter(x => x.is_correct == true) ,
-                    updated_date : new Date()
-                  });
+               var app_grade_value = parseInt($scope.__player_object.settings.grade_settings.value);
+               var total_app_questions = parseInt($scope.__player_object.questions.length);
+               var is_completed = ( total_app_questions == attendeeInfo.questions_data.length ) ? true : false ;
 
+               attendeeInfo.is_completed = is_completed ;
+               attendeeInfo.report_attendee_details.attendee_id = $scope.user_id ;
+               attendeeInfo.report_attendee_details.attendee_information = $scope.user_id ;
+               attendeeInfo.report_attendee_details.total_questions = attendeeInfo.questions_data.length ;
 
-                  // ==============================>> Report Questions ( all_questions , right_questions , wrong_questions )
-                  if(attendeeInfo.report_questions == undefined)
-                  attendeeInfo.report_questions = new Object();
+               attendeeInfo.report_attendee_details.completed_status= is_completed;
+               attendeeInfo.report_attendee_details.created_at= new Date();
+               attendeeInfo.report_attendee_details.completed_date= new Date();
 
-                  if(attendeeInfo.report_questions.all_questions == undefined )
-                    attendeeInfo.report_questions.all_questions = new Array();
-                    // ==> Store the questions here plz
-                    attendeeInfo.report_questions.all_questions.push(object.question_id);
+               if(attendeeInfo.report_attendees == undefined )
+                 attendeeInfo.report_attendees = new Object();
 
+                 attendeeInfo.report_attendees.created_at = new Date()
+                 attendeeInfo.report_attendees.updated_at = new Date()
+                 attendeeInfo.report_attendees.attendee_id = $scope.user_id;
+                 attendeeInfo.report_attendees.user_information = $scope.user_id;
+                 attendeeInfo.report_attendees.is_completed = is_completed ;
+                 attendeeInfo.report_attendees.survey_quiz_answers = new Array();
 
-                  // ==> store correct answers that solved
-                  if(attendeeInfo.report_questions.right_questions == undefined )
-                    attendeeInfo.report_questions.right_questions = new Array();
-
-                  // ==> store wrong answers that solved
-                  if(attendeeInfo.report_questions.wrong_questions == undefined )
-                    attendeeInfo.report_questions.wrong_questions = new Array();
-
-
-                  var answerIndexVal = object.question.answers_format.findIndex(x => x._id == object.answer_id );
-                  if(answerIndexVal != -1 ){
-                    answerObject = object.question.answers_format.find(x => x._id == object.answer_id );
-
-                    if( answerObject.is_correct == true )
-                      attendeeInfo.report_questions.right_questions.push(object.question_id) ;
-                    else
-                      attendeeInfo.report_questions.wrong_questions.push(object.question_id) ;
-
-                  }
-
-                  // ==============================>> Report attendee_details
-                  if(attendeeInfo.report_attendee_details == undefined )
-                    attendeeInfo.report_attendee_details = new Object();
-
-                    // ==> Calculations
-                    if( $scope.__player_object.settings  == undefined || $scope.__player_object.settings == null )
-                      alert("Something went wrong !")
-
-                    var app_grade_value = parseInt($scope.__player_object.settings.grade_settings.value);
-                    var total_app_questions = parseInt($scope.__player_object.questions.length);
-                    var correct_questions = parseInt(attendeeInfo.report_questions.right_questions.length);
-                    var wrong_questions  = parseInt(attendeeInfo.report_questions.wrong_questions.length);
-                    var percentage = Math.round(correct_questions * 100 ) / total_app_questions ;
-                    var isPassed = ( percentage >= app_grade_value )? true : false ;
-                    var is_completed = ( total_app_questions == attendeeInfo.questions_data.length ) ? true : false ;
-
-                    attendeeInfo.is_completed = is_completed ;
-                    attendeeInfo.report_attendee_details.attendee_id = $scope.user_id ;
-                    attendeeInfo.report_attendee_details.attendee_information = $scope.user_id ;
-                    attendeeInfo.report_attendee_details.total_questions = attendeeInfo.questions_data.length ;
-                    attendeeInfo.report_attendee_details.pass_mark = isPassed ,
-                    attendeeInfo.report_attendee_details.correct_answers =  correct_questions ,
-                    attendeeInfo.report_attendee_details.wrong_answers = wrong_questions ;
-                    attendeeInfo.report_attendee_details.status= (isPassed == true ) ? "Passed": "Failed";
-                    attendeeInfo.report_attendee_details.score= percentage;
-                    attendeeInfo.report_attendee_details.completed_status= is_completed;
-                    attendeeInfo.report_attendee_details.created_at= new Date();
-                    attendeeInfo.report_attendee_details.completed_date= new Date();
-
-                    // ==============================>> Report report_attendees
-                    if(attendeeInfo.report_attendees == undefined )
-                      attendeeInfo.report_attendees = new Object();
-
-                      attendeeInfo.report_attendees.created_at = new Date()
-                      attendeeInfo.report_attendees.updated_at = new Date()
-                      attendeeInfo.report_attendees.attendee_id = $scope.user_id;
-                      attendeeInfo.report_attendees.user_information = $scope.user_id;
-                      attendeeInfo.report_attendees.is_completed = is_completed ;
-                      attendeeInfo.report_attendees.passed_the_grade = isPassed ;
-                      attendeeInfo.report_attendees.survey_quiz_answers = new Array();
-                      attendeeInfo.report_attendees.results = new Object();
-                      attendeeInfo.report_attendees.results['wrong_answers'] = wrong_questions;
-                      attendeeInfo.report_attendees.results['correct_answers'] = correct_questions ;
-                      attendeeInfo.report_attendees.results['count_of_questions'] = attendeeInfo.questions_data.length ;
-                      attendeeInfo.report_attendees.results['result'] = new Object();
-                      attendeeInfo.report_attendees.results['result']['percentage_value'] = percentage;
-                      attendeeInfo.report_attendees.results['result']['raw_value'] = correct_questions ;
-                      attendeeInfo.report_attendees.survey_quiz_answers.push({
-                        question_id :  object.question_id  ,
-                        questions : {
-                          question_id : object.question_id,
-                          question_body :object.question.question_body ,
-                          question_type : object.question.question_type
-                        } ,
-                        answers : {
-                          answer_id : new Array (object.answer_id) ,
-                          answer_body :  new Object() ,
-                          is_correct : object.is_correct
-                        }
-                      });
-                      attendeeInfo.report_attendees.survey_quiz_answers[attendeeInfo.report_attendees.survey_quiz_answers.length - 1 ].
-                      answers.answer_body["answer_id_"+object.answer_id] = {
-                               answer_id : object.answer_id ,
-                               answer_body : object.answer ,
-                               is_correct : object.is_correct
-                       }
-
-                      // console.log(attendeeInfo);
-                }else {
-                  // ==> Question FOUND ==> Update here !
-                   var findAnswer = findQuestion.answer_ids.find(x => x.answer_id == object.answer_id);
-                   var findAnswerIndex = findQuestion.answer_ids.findIndex(x => x.answer_id == object.answer_id);
-                   if(findAnswerIndex == -1 ){
-                     findQuestion.answer_ids.push({
-                        answer_id : object.answer_id , is_correct : object.is_correct , answer_object : object.answer , answer_index : object.answer_index
-                      });
-                   }else{
-                     findQuestion.answer_ids.splice(findAnswerIndex, 1);
+                 attendeeInfo.report_attendees.survey_quiz_answers.push({
+                   question_id :  object.question_id  ,
+                   questions : {
+                     question_id : object.question_id,
+                     question_body :object.question.question_body ,
+                     question_type : object.question.question_type
+                   } ,
+                   answers : {
+                     answer_id : new Array (object.answer_id) ,
+                     answer_body :  new Object()
+                     // , is_correct : object.is_correct
                    }
-
-
-                   var app_correct_answers =  findQuestion.correct_answers
-                   var attendee_solved_answers =  findQuestion.answer_ids
-
-                   var isCorrect =  question_status (app_correct_answers , attendee_solved_answers);
-
-                   if(findQuestion.answer_ids.length != 0){
-                           var all_report_questions_index = attendeeInfo.report_questions.all_questions.findIndex(x => x == object.question_id);
-                           if(all_report_questions_index != -1 ){
-
-                             var wrong_exists =  attendeeInfo.report_questions.wrong_questions.findIndex(x => x == object.question_id);
-                             var right_exists =  attendeeInfo.report_questions.right_questions.findIndex(x => x == object.question_id);
-
-                             if(isCorrect == false ){
-                               if( wrong_exists == -1 )  // add  here
-                                 attendeeInfo.report_questions.wrong_questions.push(object.question_id);
-
-                               if(right_exists != -1 )  // delete it from here
-                                 attendeeInfo.report_questions.right_questions.splice(right_exists , 1 );
-                             }else {
-                               if(right_exists == -1 )  // add  here
-                                  attendeeInfo.report_questions.right_questions.push(object.question_id);
-
-                               if( wrong_exists != -1 ){ // delete it from here
-                                  attendeeInfo.report_questions.wrong_questions.splice(wrong_exists , 1);
-                               }
-                             }
-                           } // => End all questions
-                    }else if(findQuestion.answer_ids.length == 0){
-                     var qsIndex_all = attendeeInfo.report_questions.all_questions.findIndex( x => x == object.question_id);
-                     var qsIndex_wrong = attendeeInfo.report_questions.wrong_questions.findIndex(x => x == object.question_id);
-                     var qsIndex_right = attendeeInfo.report_questions.right_questions.findIndex(x => x == object.question_id);
-
-                     if(qsIndex_wrong != -1)
-                     attendeeInfo.report_questions.wrong_questions.splice(qsIndex_wrong , 1);
-
-                     if(qsIndex_right != -1)
-                     attendeeInfo.report_questions.right_questions.splice(qsIndex_right , 1);
-
-                     if(qsIndex_all != -1)
-                     attendeeInfo.report_questions.all_questions.splice(qsIndex_all , 1);
-                   } // End store answer question
+                 });
+              attendeeInfo.report_attendees.survey_quiz_answers[attendeeInfo.report_attendees.survey_quiz_answers.length - 1 ].
+              answers.answer_body["answer_id_"+object.answer_id] = {
+                       answer_id : object.answer_id ,
+                       answer_body : object.answer
+                      //  , is_correct : object.is_correct
+               }
 
 
 
-                   var app_grade_value = parseInt($scope.__player_object.settings.grade_settings.value);
-                   var total_app_questions = parseInt($scope.__player_object.questions.length);
-                   var correct_questions = parseInt(attendeeInfo.report_questions.right_questions.length);
-                   var wrong_questions  = parseInt(attendeeInfo.report_questions.wrong_questions.length);
-                   var percentage = Math.round(correct_questions * 100 ) / total_app_questions ;
-                   var isPassed = ( percentage >= app_grade_value )? true : false ;
-                   var is_completed = ( total_app_questions == attendeeInfo.questions_data.length ) ? true : false ;
-
-                   attendeeInfo.is_completed = is_completed ;
-                   attendeeInfo.report_attendee_details.total_questions = attendeeInfo.questions_data.length ;
-                   attendeeInfo.report_attendee_details.pass_mark = isPassed ,
-                   attendeeInfo.report_attendee_details.correct_answers =  correct_questions ,
-                   attendeeInfo.report_attendee_details.wrong_answers = wrong_questions ;
-                   attendeeInfo.report_attendee_details.status= (isPassed == true ) ? "Passed": "Failed";
-                   attendeeInfo.report_attendee_details.score= percentage;
-                   attendeeInfo.report_attendee_details.completed_status= is_completed;
-                   attendeeInfo.report_attendee_details.completed_date= new Date();
-
-
-                   attendeeInfo.report_attendees.updated_at = new Date()
-                   attendeeInfo.report_attendees.attendee_id = $scope.user_id;
-                   attendeeInfo.report_attendees.user_information = $scope.user_id;
-                   attendeeInfo.report_attendees.is_completed = is_completed ;
-                   attendeeInfo.report_attendees.passed_the_grade = isPassed ;
-
-                   attendeeInfo.report_attendees.results['wrong_answers'] = wrong_questions;
-                   attendeeInfo.report_attendees.results['correct_answers'] = correct_questions ;
-                   attendeeInfo.report_attendees.results['count_of_questions'] = attendeeInfo.questions_data.length ;
-                   attendeeInfo.report_attendees.results['result']['percentage_value'] = percentage;
-                   attendeeInfo.report_attendees.results['result']['raw_value'] = correct_questions ;
-                   var qsIndex_x = attendeeInfo.report_attendees.survey_quiz_answers.findIndex(x => x.question_id == object.question_id);
-                   var question_obj_val ;
-                   if(qsIndex_x != -1 ){
-                      question_obj_val = {
-                        question_id :  object.question_id  ,
-                        questions : {
-                          question_id : object.question_id,
-                          question_body :object.question.question_body ,
-                          question_type : object.question.question_type
-                        } ,
-                        answers : {
-                          answer_id : new Array (object.answer_id) ,
-                          answer_body :  new Object() ,
-                          is_correct : object.is_correct
-                        }
-                      }; // end question object
-
-                       question_obj_val.answers.answer_body["answer_id_"+object.answer_id] = {
-                               answer_id : object.answer_id ,
-                               answer_body : object.answer ,
-                               is_correct : object.is_correct
-                       }
-
-                       attendeeInfo.report_attendees.survey_quiz_answers[qsIndex_x] = question_obj_val ;
-
-                   }
-                }
+          } else { // ==>  this attendee is Found
+              var findAnswer = findQuestion.answer_ids.find(x => x.answer_id == object.answer_id);
+              var findAnswerIndex = findQuestion.answer_ids.findIndex(x => x.answer_id == object.answer_id);
+              if(findAnswerIndex == -1 ){
+                findQuestion.answer_ids.push({
+                   answer_id : object.answer_id /*, is_correct : object.is_correct*/ , answer_object : object.answer , answer_index : object.answer_index
+                 });
               }else {
-                // ==> Attenee Object [UNFOUND]
-
+                  findQuestion.answer_ids.splice(findAnswerIndex, 1);
               }
-          }else {
-            // ==> attendee_draft is empty
 
-          }
+              var app_correct_answers =  findQuestion.correct_answers
+              var attendee_solved_answers =  findQuestion.answer_ids
+
+              var isCorrect =  question_status (app_correct_answers , attendee_solved_answers);
+
+               if(findQuestion.answer_ids.length == 0){
+                  var qsIndex_all = attendeeInfo.report_questions.all_questions.findIndex( x => x == object.question_id);
+                  // var qsIndex_wrong = attendeeInfo.report_questions.wrong_questions.findIndex(x => x == object.question_id);
+                  // var qsIndex_right = attendeeInfo.report_questions.right_questions.findIndex(x => x == object.question_id);
+
+                  if(qsIndex_all != -1)
+                  attendeeInfo.report_questions.all_questions.splice(qsIndex_all , 1);
+                } // End store answer question
+                // var app_grade_value = parseInt($scope.__player_object.settings.grade_settings.value);
+                var total_app_questions = parseInt($scope.__player_object.questions.length);
+                // var correct_questions = parseInt(attendeeInfo.report_questions.right_questions.length);
+                // var   wrong_questions  = parseInt(attendeeInfo.report_questions.wrong_questions.length);
+                // var percentage = Math.round(correct_questions * 100 ) / total_app_questions ;
+                // var isPassed = ( percentage >= app_grade_value )? true : false ;
+                var is_completed = ( total_app_questions == attendeeInfo.questions_data.length ) ? true : false ;
+
+                attendeeInfo.is_completed = is_completed ;
+                attendeeInfo.report_attendee_details.total_questions = attendeeInfo.questions_data.length ;
+                // attendeeInfo.report_attendee_details.pass_mark = isPassed ,
+                // attendeeInfo.report_attendee_details.correct_answers =  correct_questions ,
+                // attendeeInfo.report_attendee_details.wrong_answers = wrong_questions ;
+                // attendeeInfo.report_attendee_details.status= (isPassed == true ) ? "Passed": "Failed";
+                // attendeeInfo.report_attendee_details.score= percentage;
+                attendeeInfo.report_attendee_details.completed_status= is_completed;
+                attendeeInfo.report_attendee_details.completed_date= new Date();
 
 
-       $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id) ;
-       // => When Select answer is happened
-       // => Move into attendee draft object
+                attendeeInfo.report_attendees.updated_at = new Date()
+                attendeeInfo.report_attendees.attendee_id = $scope.user_id;
+                attendeeInfo.report_attendees.user_information = $scope.user_id;
+                attendeeInfo.report_attendees.is_completed = is_completed ;
+                // attendeeInfo.report_attendees.passed_the_grade = isPassed ;
+
+                // attendeeInfo.report_attendees.results['wrong_answers'] = wrong_questions;
+                // attendeeInfo.report_attendees.results['correct_answers'] = correct_questions ;
+                // attendeeInfo.report_attendees.results['count_of_questions'] = attendeeInfo.questions_data.length ;
+                // attendeeInfo.report_attendees.results['result']['percentage_value'] = percentage;
+                // attendeeInfo.report_attendees.results['result']['raw_value'] = correct_questions ;
+                var qsIndex_x = attendeeInfo.report_attendees.survey_quiz_answers.findIndex(x => x.question_id == object.question_id);
+                var question_obj_val ;
+                if(qsIndex_x != -1 ){
+                   question_obj_val = {
+                     question_id :  object.question_id  ,
+                     questions : {
+                       question_id : object.question_id,
+                       question_body :object.question.question_body ,
+                       question_type : object.question.question_type
+                     } ,
+                     answers : {
+                       answer_id : new Array (object.answer_id) ,
+                       answer_body :  new Object()
+                        // , is_correct : object.is_correct
+                     }
+                   }; // end question object
+
+                    question_obj_val.answers.answer_body["answer_id_"+object.answer_id] = {
+                            answer_id : object.answer_id ,
+                            answer_body : object.answer
+                            // , is_correct : object.is_correct
+                    }
+
+                    attendeeInfo.report_attendees.survey_quiz_answers[qsIndex_x] = question_obj_val ;
+                }
 
 
 
-       if($scope.is_submitted)
-          $scope.fill_unsolved_question_counts();
-         else
-         $('.warning_case').css({display:'none'});
+          } // => End else
+        } // => End find Attendee index
 
-       $timeout( function () {
-         $scope.attendee_draft_collection();
-       }, 1000);
+
+
+      }
+
+
+
+
+
+      // =========================================================+ Start Statistics
+      if($scope.attendee_draft.statistics == undefined)
+      $scope.attendee_draft.statistics = new Array();
+
+      var question_stisc_index = $scope.attendee_draft.statistics.findIndex(x => x.question_id == object.question_id );
+      if( question_stisc_index == -1 ){ // =>  not found it
+        // alert("ADD NEW");
+          var answer_valux ;
+          if(object.question.question_type == 0 ) answer_valux = object.answer.value;
+          if(object.question.question_type == 1 ) answer_valux  = ( object.answer.media_src == $scope.server_ip + "img/media-icon.png") ? "No Media here !" : object.answer.media_src;
+          if(object.question.question_type == 2 ) answer_valux  = object.answer.boolean_value;
+          if(object.question.question_type == 3 ) answer_valux  = object.answer.rating_scale_value;
+          if(object.question.question_type == 4 ) answer_valux  = object.answer.free_text_value;
+
+        var question_s_obj = {
+          question_id : object.question_id ,
+          question_body : object.question.question_body ,
+          attendee_count : 1 ,
+          question_answers : new Array({
+            answer_id: object.answer_id,
+            answer_body : answer_valux ,
+            attendee_percentage_count : 100,
+            attendee_raw_count : 1,
+            answer_attendees : new Array ({attendee_id : $scope.user_id})
+          }) ,
+          attendee_info : new Array({
+            attendee_id : $scope.user_id
+          })
+        };
+        $scope.attendee_draft.statistics.push(question_s_obj);
+      }else { // => found it
+        var target_question = $scope.attendee_draft.statistics[question_stisc_index] ;
+        // alert("UPDATE THE CURRENT");
+
+        var answerEx = target_question.question_answers.findIndex(x => x.answer_id == object.answer_id);
+        if(answerEx == -1 ){ // => answer not found
+          var answerObjx = {
+            answer_id: object.answer_id,
+            answer_body : answer_valux ,
+            attendee_percentage_count : 100,
+            attendee_raw_count : 1,
+            answer_attendees : new Array ({attendee_id : $scope.user_id})
+          };
+          // => Push answer into question
+          target_question.question_answers.push(answerObjx);
+        }else {
+
+           var questionAr = $scope.attendee_draft.statistics.find(x => x.question_id);
+           if(questionAr != undefined ){
+
+             var answerAttEx = questionAr.question_answers.find(x => x.answer_id == object.answer_id);
+             if( answerAttEx !=  undefined ){
+               var user_exists = answerAttEx.answer_attendees.find(x => x.attendee_id == $scope.user_id );
+               if(user_exists == undefined)
+               answerAttEx.answer_attendees.push({  attendee_id : $scope.user_id });
+             }
+
+           }
+
+        }
+
+        var attendeeEx = target_question.attendee_info.findIndex(x => x.attendee_id == $scope.user_id);
+        if(attendeeEx == -1 ) target_question.attendee_info.push({attendee_id : $scope.user_id});
+        target_question.attendee_count =target_question.attendee_info.length ;
+      }
+
+
+      // ==> Answer
+      var question__object = $scope.attendee_draft.statistics.find(x => x.question_id == object.question_id);
+      if( question__object != undefined ){
+        var answer__object = question__object.question_answers;
+        question__object.attendee_count = question__object.attendee_info.length;
+
+        for (var indexAnswer = 0; indexAnswer < answer__object.length; indexAnswer++) {
+            var thisAnswer = answer__object[indexAnswer];
+            thisAnswer.attendee_percentage_count = Math.round(thisAnswer.answer_attendees.length * 100 / question__object.attendee_info.length);
+            thisAnswer.attendee_raw_count = thisAnswer.answer_attendees.length;
+        }
+      }
+
+    // =========================================================+ End Statistics
+      $scope.this_attendee_draft = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id) ;
+      if($scope.is_submitted)
+         $scope.fill_unsolved_question_counts();
+        else
+        $('.warning_case').css({display:'none'});
+
+
+        $timeout( function () {
+          $scope.attendee_draft_collection();
+        }, 4500);
     };
     // ==> Select answer scenario !!
     $scope.select_this_answer = ( questionId , answerId , question , answer , app_id , user_id , is_correct = null , answerIndex) => {
@@ -843,16 +857,14 @@ apps.controller("survey" , [
         answer: answer ,
         app_id : app_id ,
         user_id : user_id ,
-        is_correct : is_correct ,
+        // is_correct : is_correct ,
         answer_index : answerIndex
     };
 
-
-
-          //---------------------------------------------------------------
-          // ==============>> Multiple Choices ( Texts Or Media )
-          //---------------------------------------------------------------
-          if( question.question_type == 0 || question.question_type == 1 )
+    //---------------------------------------------------------------
+    // ==============>> Multiple Choices ( Texts Or Media )
+    //---------------------------------------------------------------
+    if( question.question_type == 0 || question.question_type == 1 )
               {
                   if( is_single_choice_setting ){ // 1 - case this question has single answer
                                   // =====> Single Answer
@@ -897,18 +909,18 @@ apps.controller("survey" , [
                                     var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
                                     if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
                                       // =>> Show The correct
-                                      this_answer.addClass('right_answer');
+                                      // this_answer.addClass('right_answer');
                                     }else {
                                       // => show wrong answer
-                                      this_answer.addClass('wrong_answer');
+                                      // this_answer.addClass('wrong_answer');
                                       // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
-                                      answer_iu_list.each(function (i){
-                                        var currentAnswer = $(this);
-                                        var answers_inBackend = question.answers_format[i].is_correct ;
-                                        if(answers_inBackend){
-                                          currentAnswer.addClass('right_answer');
-                                        }
-                                      });
+                                      // answer_iu_list.each(function (i){
+                                      //   var currentAnswer = $(this);
+                                      //   var answers_inBackend = question.answers_format[i].is_correct ;
+                                      //   if(answers_inBackend){
+                                      //     currentAnswer.addClass('right_answer');
+                                      //   }
+                                      // });
                                     }
                                     // => Angular backend ( attendee_draft  ) do this ---> don't allow attendee change the selected answer
                                     // => Mongo status => move the data into mongo ( attendee draft )
@@ -948,18 +960,18 @@ apps.controller("survey" , [
                                     var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
                                     if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
                                       // =>> Show The correct
-                                      this_answer.addClass('right_answer');
+                                      // this_answer.addClass('right_answer');
                                     }else {
                                       // => Show wrong answer
-                                      this_answer.addClass('wrong_answer');
+                                      // this_answer.addClass('wrong_answer');
                                       // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
-                                      answer_iu_list.each(function (i){
-                                        var currentAnswer = $(this);
-                                        var answers_inBackend = question.answers_format[i].is_correct ;
-                                        if(answers_inBackend){
-                                          currentAnswer.addClass('right_answer');
-                                        }
-                                      });
+                                      // answer_iu_list.each(function (i){
+                                      //   var currentAnswer = $(this);
+                                      //   var answers_inBackend = question.answers_format[i].is_correct ;
+                                      //   if(answers_inBackend){
+                                      //     currentAnswer.addClass('right_answer');
+                                      //   }
+                                      // });
                                     }
 
 
@@ -1016,21 +1028,21 @@ apps.controller("survey" , [
 
                                   // => Show the correct answers ( Case all correct answers are selected ) without wrong style
                                   var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
-                                  if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
-                                    // =>> Show The correct
-                                    this_answer.addClass('right_answer');
-                                  }else {
-                                    // => show wrong answer
-                                    this_answer.addClass('wrong_answer');
-                                    // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
-                                    answer_iu_list.each(function (i){
-                                      var currentAnswer = $(this);
-                                      var answers_inBackend = question.answers_format[i].is_correct ;
-                                      if(answers_inBackend){
-                                        currentAnswer.addClass('right_answer');
-                                      }
-                                    });
-                                  }
+                                  // if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                                  //   // =>> Show The correct
+                                  //   this_answer.addClass('right_answer');
+                                  // }else {
+                                  //   // => show wrong answer
+                                  //   this_answer.addClass('wrong_answer');
+                                  //   // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                                  //   answer_iu_list.each(function (i){
+                                  //     var currentAnswer = $(this);
+                                  //     var answers_inBackend = question.answers_format[i].is_correct ;
+                                  //     if(answers_inBackend){
+                                  //       currentAnswer.addClass('right_answer');
+                                  //     }
+                                  //   });
+                                  // }
                                   // => Angular backend ( attendee_draft  ) do this ---> dont allow attendee change the selected answer only add new answer !
                                   // => Mongo status => move the data into mongo ( attendee draft )
                                   $scope.store_into_attendee_draft( stored_object , false );
@@ -1069,21 +1081,21 @@ apps.controller("survey" , [
                                     else this_answer.removeClass('selected_answer animated shake');
 
                                     var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
-                                    if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
-                                      // =>> Show The correct
-                                      this_answer.addClass('right_answer');
-                                    }else {
-                                      // => show wrong answer
-                                      this_answer.addClass('wrong_answer');
-                                      // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
-                                      answer_iu_list.each(function (i){
-                                        var currentAnswer = $(this);
-                                        var answers_inBackend = question.answers_format[i].is_correct ;
-                                        if(answers_inBackend){
-                                          currentAnswer.addClass('right_answer');
-                                        }
-                                      });
-                                    }
+                                    // if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                                    //   // =>> Show The correct
+                                    //   this_answer.addClass('right_answer');
+                                    // }else {
+                                    //   // => show wrong answer
+                                    //   this_answer.addClass('wrong_answer');
+                                    //   // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                                    //   answer_iu_list.each(function (i){
+                                    //     var currentAnswer = $(this);
+                                    //     var answers_inBackend = question.answers_format[i].is_correct ;
+                                    //     if(answers_inBackend){
+                                    //       currentAnswer.addClass('right_answer');
+                                    //     }
+                                    //   });
+                                    // }
                                   // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the selected answer Or add new answer !
                                   // => Mongo status => move the data into mongo ( attendee draft )
                                   $scope.store_into_attendee_draft( stored_object , false );
@@ -1108,21 +1120,21 @@ apps.controller("survey" , [
 
                  // => show the correct answer here
                  var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
-                 if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
-                   // =>> Show The correct
-                   this_answer.addClass('right_answer');
-                 }else {
-                   // => show wrong answer
-                   this_answer.addClass('wrong_answer');
-                   // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
-                   answer_iu_list.each(function (i){
-                     var currentAnswer = $(this);
-                     var answers_inBackend = question.answers_format[i].is_correct ;
-                     if(answers_inBackend){
-                       currentAnswer.addClass('right_answer');
-                     }
-                   });
-                 }
+                //  if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                //    // =>> Show The correct
+                //    this_answer.addClass('right_answer');
+                //  }else {
+                //    // => show wrong answer
+                //    this_answer.addClass('wrong_answer');
+                //    // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                //    answer_iu_list.each(function (i){
+                //      var currentAnswer = $(this);
+                //      var answers_inBackend = question.answers_format[i].is_correct ;
+                //      if(answers_inBackend){
+                //        currentAnswer.addClass('right_answer');
+                //      }
+                //    });
+                //  }
 
                  var has_wrong_answer = false ;
                  answer_iu_list.each(function(i){
@@ -1149,22 +1161,22 @@ apps.controller("survey" , [
                  if(has_wrong_answer) return false ;
                  // => Show the correct answer if selected is wrong show the wrong style + right style ( answer )
                      // if user select the correct answer only need to show the right style in the selected answer
-                     var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
-                     if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
-                       // =>> Show The correct
-                       this_answer.addClass('right_answer');
-                     }else {
-                       // => show wrong answer
-                       this_answer.addClass('wrong_answer');
-                       // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
-                       answer_iu_list.each(function (i){
-                         var currentAnswer = $(this);
-                         var answers_inBackend = question.answers_format[i].is_correct ;
-                         if(answers_inBackend){
-                           currentAnswer.addClass('right_answer');
-                         }
-                       });
-                     }
+                    //  var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                    //  if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                    //    // =>> Show The correct
+                    //    this_answer.addClass('right_answer');
+                    //  }else {
+                    //    // => show wrong answer
+                    //    this_answer.addClass('wrong_answer');
+                    //    // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                    //    answer_iu_list.each(function (i){
+                    //      var currentAnswer = $(this);
+                    //      var answers_inBackend = question.answers_format[i].is_correct ;
+                    //      if(answers_inBackend){
+                    //        currentAnswer.addClass('right_answer');
+                    //      }
+                    //    });
+                    //  }
 
                  // => Angular backend ( attendee_draft  ) do this ---> don't allow attendee change the selected answer
                  // => Mongo status => move the data into mongo ( attendee draft )
@@ -1343,6 +1355,7 @@ apps.controller("survey" , [
      }
    }
    $scope.attendee_draft_collection = function (){
+
       if($scope.attendee_draft != null && $scope.attendee_draft != undefined && $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id) != -1 ){
         var dataObject = new Object() ;
         if($scope.attendee_draft != null )
@@ -1356,12 +1369,14 @@ apps.controller("survey" , [
              // increase performace in express server nodejs
           }
 
+
+
          // if(($scope.question_count_at_promise != parseInt($scope.__player_object.questions.length)) && $scope.is_review  == false ){
-            console.log(" This Question is reviewed !! ====>=> " + $scope.question_count_at_promise);
+            // console.log(" This Question is reviewed !! ====>=> " + $scope.question_count_at_promise);
             $http({
               url : $scope.url_attendee_draft_collecation ,
               method: "POST",
-              data : { attendee_draft : dataObject } ,
+              data : { attendee_draft : dataObject , statistics :  $scope.attendee_draft.statistics } ,
               headers : {
                 "Content-Type": "application/json"
               } ,
@@ -1491,7 +1506,7 @@ apps.controller("survey" , [
       var me = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
 
       var solved_questions = me.questions_data ;
-      var unsolved = app_questions.find_unsolved_questions(solved_questions);
+      // var unsolved = app_questions.find_unsolved_questions(solved_questions);
 
       if(unsolved != undefined && unsolved.length >= 1) {
         var thisIndex = app_questions.findIndex(x => x._id == unsolved[0]._id );
@@ -1524,7 +1539,7 @@ apps.controller("survey" , [
         var attendee = $scope.attendee_draft.att_draft.find (x => x.user_id == $scope.user_id) ;
         var all_questions = $scope.__player_object.questions;
         var solved_questions = attendee.questions_data;
-        var unsolved_questions = all_questions.find_unsolved_questions(solved_questions);
+        // var unsolved_questions = all_questions.find_unsolved_questions(solved_questions);
 
         if(unsolved_questions && unsolved_questions.length != 0 ) {
           $('.warning_case').html(unsolved_questions.length + " question(s) isn't attended click here to attend ");
@@ -1571,16 +1586,16 @@ apps.controller("survey" , [
       var me = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
 
       var solved_questions = me.questions_data ;
-      var unsolved = app_questions.find_unsolved_questions(solved_questions);
-      if(unsolved && unsolved.length > 0 ){
-          var target_slider = unsolved[0]._id;
-          var target_slider_index = app_questions.findIndex(x => x._id == target_slider)
-          try {
-            $scope.slide_screens.slideTo(target_slider_index + 1);
-          } catch (e) {
-
-          }
-      }
+      // var unsolved = app_questions.find_unsolved_questions(solved_questions);
+      // if(unsolved && unsolved.length > 0 ){
+      //     var target_slider = unsolved[0]._id;
+      //     var target_slider_index = app_questions.findIndex(x => x._id == target_slider)
+      //     try {
+      //       $scope.slide_screens.slideTo(target_slider_index + 1);
+      //     } catch (e) {
+      //
+      //     }
+      // }
     };
 
     // $scope.freez_the_quiz_right_now = () => {
@@ -1667,9 +1682,9 @@ apps.controller("survey" , [
 
                 $scope.progress__calculation_compilation();
                 // store results
-                $('.resultx-x-counts').html($scope.__report_object.correct_answers);
+                // $('.resultx-x-counts').html($scope.__report_object.correct_answers);
                 $('.resultx-x-all').html($scope.__report_object.total_questions);
-                $('.resultx-x-grade').html($scope.__report_object.score + '%');
+                // $('.resultx-x-grade').html($scope.__report_object.score + '%');
 
                 // freez the slider right now
                 $scope.freez_the_quiz_right_now();
@@ -1696,7 +1711,7 @@ apps.controller("survey" , [
         var attendee = $scope.attendee_draft.att_draft.find (x => x.user_id == $scope.user_id) ;
         var all_questions = $scope.__player_object.questions;
         var solved_questions = attendee.questions_data;
-        var unsolved_questions = all_questions.find_unsolved_questions(solved_questions);
+        // var unsolved_questions = all_questions.find_unsolved_questions(solved_questions);
 
         if(unsolved_questions && unsolved_questions.length != 0 ) {
           $('.warning_case').html(unsolved_questions.length + " question(s) isn't attended click here to attend ");
@@ -1708,7 +1723,15 @@ apps.controller("survey" , [
         return true ;
     };
 
-
+    $scope.free_texts_question_type_changes = (question_id) => {
+      if($scope.attendee_draft != null && $scope.attendee_draft.att_draft != undefined){
+         var userIndex =  $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id);
+         if( userIndex != -1 ){
+           var attendee = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+           console.log(attendee);
+         }
+      }
+    }
     $scope.set_image_background = (image_sourc , set_server = null)=>{
       var set_server_ip = $scope.server_ip
       if(set_server != null )

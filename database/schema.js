@@ -491,7 +491,8 @@ var attendeeDraftDataTypes = {
     questionnaire_info : {type : String , ref : 'questionnaire'} ,
     // application : {type : Object } , // => application ( Quiz - survey => object )
     creation_date : {type : Date } ,
-    att_draft : {type : []}
+    att_draft : {type : []} ,
+    statistics : {type : []}
 };
  var clientServersDataType = {
       _id :{ type:mongoose.Schema.ObjectId } ,
