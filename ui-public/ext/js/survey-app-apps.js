@@ -25,6 +25,20 @@ var question_status = function (a, b) {
 //=============================================
 // => Filters
 //=============================================
+apps.filter('show_chars' , [
+  function(){
+    return function(chars){
+      return chars ;
+    }
+  }
+]);
+apps.filter('build_arrguments' , [
+  function(){
+    return function (number){
+      return [0,1,2,3,4] ;
+    }
+  }
+])
 
 apps.filter('transfeer_into_json' , [
   function (){
@@ -115,11 +129,14 @@ apps.filter('math_around_it' , [
 //=============================================
 // => Controllers
 //=============================================
+
+
 apps.controller("survey" , [
   '$scope' , '$rootScope' , '$timeout' , '$http' , 'settings' , '$window',
   ( $scope, $rootScope, $timeout , $http , settings , $window ) => {
 
     // ====> Scope Variables
+     $scope.rating_scale_elements = [];
      $scope.quiz_time_status_is_counting = true ;
      $scope.show_submitter_button = false ;
      $scope.is_submitted = false ;
@@ -144,6 +161,7 @@ apps.controller("survey" , [
      $scope.application_data_object = null ;
      $scope.user_id = $("#userId").val();
      $scope.application_id = $("#appId").val();
+     $scope.rating_scale_block = $('ul.rating_scale_block');
      $scope.key_headers = null ;
      $scope.server_ip = settings.server_ip ;
      $scope.json_source = settings.server_ip + settings.json_source;
@@ -176,7 +194,73 @@ apps.controller("survey" , [
          }
        }
      }
+     $scope.select_rating_scale__ = function ( index , type , question_id = null  , answer_id = null , question_type = null ){
+         var thisElement = index ;
 
+
+         if(type == 1 ) { // ==> Rating
+             var highlighted_stars = $('.fa-star').length ;
+             if($('.start-o').children("li").eq(index).children("span").children("i").hasClass("fa-star")){
+                if((highlighted_stars - 1 ) == index){
+                  $(".start-o li").each(function(i){
+                    $(this).children("span").children("i").removeClass("fa-star");
+                    $(this).children("span").children("i").addClass("fa-star-o");
+                  });
+                }else {
+                  $(".start-o li").each(function(i){
+                     if($(this).children("span").children("i").hasClass('fa-star')){
+                         $(this).children("span").children("i").removeClass('fa-star');
+                         $(this).children("span").children("i").addClass("fa-star-o");
+                     }
+                     if(i <= thisElement){
+                         $(this).children("span").children("i").removeClass("fa-star-o");
+                          $(this).children("span").children("i").addClass('fa-star');
+                      }
+                  });
+                }
+             }else {
+               $(".start-o li").each(function(i){
+                 if(i <= thisElement){
+                   $(this).children("span").children("i").removeClass("fa-star-o");
+                   $(this).children("span").children("i").addClass("fa-star");
+                 }
+               });
+             }
+          }
+          if( type == 0 ) { // ==> Scale .scalet-o li span
+             if($('.scalet-o').children("li").eq(index).children("span").hasClass("highlighted_scale")){
+               $('.scalet-o').children("li").eq(index).children("span").removeClass("highlighted_scale");
+             }else {
+               $('.scalet-o').children("li").each(function (){
+                 $(this).children("span").removeClass("highlighted_scale");
+               });
+               $('.scalet-o').children("li").eq(index).children("span").addClass("highlighted_scale");
+             }
+          }
+
+          //==> Fill Object of answer with solved question
+          // ==> Rating Scale value ; index
+          if($scope.attendee_draft != undefined && $scope.attendee_draft.att_draft != undefined){
+            var this_User = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+            if(this_User != undefined ){
+                var question_objk = $scope.__player_object.questions.find(x => x._id == question_id);
+                // console.log({___ : $scope.__player_object.questions , __ : question_id});
+                // console.log(question_objk);
+                var stored_object = {
+                    question_id : question_id ,
+                    answer_id : answer_id ,
+                    question : question_objk ,
+                    answer: question_objk.answers_format[0] ,
+                    app_id : $scope.application_id ,
+                    user_id : $scope.user_id ,
+                    value_object : index
+                };
+                $scope.store_into_attendee_draft( stored_object , false );
+            }
+          }
+
+         return false;
+      };
      $scope.time__calculation_compilation = (is_final = null) => {
 
        if($scope.__player_object.settings.time_settings.is_with_time){
@@ -210,7 +294,7 @@ apps.controller("survey" , [
          // => Question Numbers
          var question_pro = $('.current-question');
          question_pro.html($scope.__player_object.questions.length);
-         thi
+        //  thi
          // => Question Progress
          $scope.slide_screens_index($scope.__player_object.questions.length);
        }
@@ -358,11 +442,31 @@ apps.controller("survey" , [
          $scope.unfreez_the_quiz_right_now();
          // => Set event handler
          $scope.slide_screens.on('slideChange' , function (i){
+
            $scope.touch_move++;
            var lengther = $(this);
            var current_index = lengther[0].activeIndex ;
            if(current_index >= $scope.__player_object.questions.length)
               current_index = $scope.__player_object.questions.length ;
+
+
+              // => check about question index
+              var question_s= $scope.__player_object.questions;
+              if( current_index < ( question_s.length ) && current_index != 0 ){
+
+                var target_question = $scope.__player_object.questions[current_index-1];
+                if( target_question.question_type == 3 ){
+                  var ques_rat_scal_type = target_question.answers_format[0].ratscal_type;
+                  var steps = target_question.answers_format[0].step_numbers;
+                  $scope.rating_scale_elements = [];
+                  for (var i = 0; i < steps; i++) {
+                      $scope.rating_scale_elements.push({"val": i});
+                  }
+                  $timeout(function (){$scope.$apply();} , 350);
+                }
+
+              }
+
          $scope.curren_question_slide = parseInt(current_index) ;
            // => Store current index
           $scope.curren_question_slide = current_index ;
@@ -441,11 +545,30 @@ apps.controller("survey" , [
           $scope.slide_screens.slideTo(1);
           // => Set event handler
           $scope.slide_screens.on('slideChange' , function (i){
+
             $scope.touch_move++;
             var lengther = $(this);
             var current_index = lengther[0].activeIndex ;
             if(current_index >= $scope.__player_object.questions.length)
                current_index = $scope.__player_object.questions.length ;
+
+               // => check about question index
+               var question_s= $scope.__player_object.questions;
+               if( current_index < ( question_s.length ) && current_index != 0 ){
+
+                 var target_question = $scope.__player_object.questions[current_index-1];
+                 if( target_question.question_type == 3 ){
+                   var ques_rat_scal_type = target_question.answers_format[0].ratscal_type;
+                   var steps = target_question.answers_format[0].step_numbers;
+                   $scope.rating_scale_elements = [];
+                   for (var i = 0; i < steps; i++) {
+                       $scope.rating_scale_elements.push({"val": i});
+                   }
+
+                   $timeout(function (){$scope.$apply();} , 350);
+                 }
+               }
+
           $scope.curren_question_slide = parseInt(current_index) ;
             // => Store current index
            $scope.curren_question_slide = current_index ;
@@ -739,6 +862,9 @@ apps.controller("survey" , [
 
 
       // =========================================================+ Start Statistics
+
+
+      if(object)
       if($scope.attendee_draft.statistics == undefined)
       $scope.attendee_draft.statistics = new Array();
 
@@ -749,8 +875,8 @@ apps.controller("survey" , [
           if(object.question.question_type == 0 ) answer_valux = object.answer.value;
           if(object.question.question_type == 1 ) answer_valux  = ( object.answer.media_src == $scope.server_ip + "img/media-icon.png") ? "No Media here !" : object.answer.media_src;
           if(object.question.question_type == 2 ) answer_valux  = object.answer.boolean_value;
-          if(object.question.question_type == 3 ) answer_valux  = object.answer.rating_scale_value;
-          if(object.question.question_type == 4 ) answer_valux  = object.answer.free_text_value;
+          if(object.question.question_type == 3 ) answer_valux  = object.value_object;
+          if(object.question.question_type == 4 ) answer_valux  = object.value_object;
 
         var question_s_obj = {
           question_id : object.question_id ,
@@ -774,6 +900,7 @@ apps.controller("survey" , [
 
         var answerEx = target_question.question_answers.findIndex(x => x.answer_id == object.answer_id);
         if(answerEx == -1 ){ // => answer not found
+
           var answerObjx = {
             answer_id: object.answer_id,
             answer_body : answer_valux ,
@@ -783,21 +910,36 @@ apps.controller("survey" , [
           };
           // => Push answer into question
           target_question.question_answers.push(answerObjx);
-        }else {
+        }else { // => answer is found
 
-           var questionAr = $scope.attendee_draft.statistics.find(x => x.question_id);
+           var questionAr = $scope.attendee_draft.statistics.find( x => x.question_id );
+
            if(questionAr != undefined ){
 
-             var answerAttEx = questionAr.question_answers.find(x => x.answer_id == object.answer_id);
-             if( answerAttEx !=  undefined ){
-               var user_exists = answerAttEx.answer_attendees.find(x => x.attendee_id == $scope.user_id );
-               if(user_exists == undefined)
-               answerAttEx.answer_attendees.push({  attendee_id : $scope.user_id });
-             }
-
+                var answerAttEx = questionAr.question_answers.find(x => x.answer_id == object.answer_id);
+                if( answerAttEx !=  undefined ){
+                     var user_exists = answerAttEx.answer_attendees.find(x => x.attendee_id == $scope.user_id );
+                     console.log({ user_exists : user_exists });
+                     if( user_exists == undefined )
+                      {
+                        answerAttEx.answer_attendees.push({  attendee_id : $scope.user_id });
+                      }
+                }else {
+                      console.log(" ==>>>>>>> There is an issue here !");
+                      var answerObjx = {
+                        answer_id: object.answer_id,
+                        answer_body : answer_valux ,
+                        attendee_percentage_count : 100,
+                        attendee_raw_count : 1,
+                        answer_attendees : new Array ({attendee_id : $scope.user_id})
+                      };
+                    questionAr.question_answers.push(answerObjx);
+                }
+           }else {
+             console.log("questionAr didnt save ... ");
            }
 
-        }
+        } // => End
 
         var attendeeEx = target_question.attendee_info.findIndex(x => x.attendee_id == $scope.user_id);
         if(attendeeEx == -1 ) target_question.attendee_info.push({attendee_id : $scope.user_id});
@@ -811,7 +953,7 @@ apps.controller("survey" , [
         var answer__object = question__object.question_answers;
         question__object.attendee_count = question__object.attendee_info.length;
 
-        for (var indexAnswer = 0; indexAnswer < answer__object.length; indexAnswer++) {
+        for ( var indexAnswer = 0; indexAnswer < answer__object.length; indexAnswer++ ){
             var thisAnswer = answer__object[indexAnswer];
             thisAnswer.attendee_percentage_count = Math.round(thisAnswer.answer_attendees.length * 100 / question__object.attendee_info.length);
             thisAnswer.attendee_raw_count = thisAnswer.answer_attendees.length;
@@ -831,7 +973,7 @@ apps.controller("survey" , [
         }, 4500);
     };
     // ==> Select answer scenario !!
-    $scope.select_this_answer = ( questionId , answerId , question , answer , app_id , user_id , is_correct = null , answerIndex) => {
+    $scope.select_this_answer = ( questionId = null , answerId = null , question = null , answer = null , app_id  = null , user_id  = null , is_correct = null , answerIndex = null) => {
 
   // ==> Consider the followings :-
   // => Make sure from require qs option
@@ -1227,6 +1369,9 @@ apps.controller("survey" , [
              }
           } // => End true/false question
 
+
+
+
    };  // ==> End Select answer
     $scope.load_case_many_answer_option = (question_type , is_single_choice ) => {
           var classes = '';
@@ -1340,15 +1485,23 @@ apps.controller("survey" , [
             dataObject.att_draft.push(  $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id));
             // increase performace in express server nodejs
          }
+
+         var leor_object = new Object();
+         if($scope.__player_object.app_type == 0 ) {
+           leor_object['statistics'] = ( $scope.attendee_draft.statistics == undefined ) ? null : $scope.attendee_draft.statistics ;
+         }
+
+         leor_object['attendee_draft'] = dataObject;
+
          $http({
            url : $scope.url_report_collecation ,
            method: "POST",
-           data : { attendee_draft : dataObject } ,
+           data : leor_object ,
            headers : {
              "Content-Type": "application/json"
            } ,
          }).then(function(reData){
-           console.log(reData);
+          //  console.log(reData);
          } , function (err){
            console.log(err);
          });
@@ -1383,7 +1536,7 @@ apps.controller("survey" , [
             }).then(function(respData){
               try {
                 var object_collection = respData.data ;
-                console.log(object_collection);
+                // console.log(object_collection);
 
                 var this_attendee_index = object_collection.att_draft.findIndex(x => x.user_id == $scope.user_id) ;
                 if(this_attendee_index != -1){
@@ -1713,12 +1866,13 @@ apps.controller("survey" , [
         var solved_questions = attendee.questions_data;
         // var unsolved_questions = all_questions.find_unsolved_questions(solved_questions);
 
-        if(unsolved_questions && unsolved_questions.length != 0 ) {
-          $('.warning_case').html(unsolved_questions.length + " question(s) isn't attended click here to attend ");
-          $(".warning_case").css({display:'block'})
-          return false;
-        } else   $(".warning_case").css({display:'none'});
-
+        if( $scope.__player_object.app_type == 1 ){
+          if(unsolved_questions && unsolved_questions.length != 0 ) {
+            $('.warning_case').html(unsolved_questions.length + " question(s) isn't attended click here to attend ");
+            $(".warning_case").css({display:'block'})
+            return false;
+          } else   $(".warning_case").css({display:'none'});
+        }
 
         return true ;
     };
@@ -1728,7 +1882,7 @@ apps.controller("survey" , [
          var userIndex =  $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id);
          if( userIndex != -1 ){
            var attendee = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
-           console.log(attendee);
+          //  console.log(attendee);
          }
       }
     }
@@ -1770,9 +1924,29 @@ apps.controller("survey" , [
 
         $scope.slide_screens.on('slideChange' , function (i){
 
+
           $scope.touch_move++;
           var lengther = $(this);
           var current_index = lengther[0].activeIndex ;
+
+          // => check about question index
+          var question_s= $scope.__player_object.questions;
+          if( current_index < ( question_s.length ) && current_index != 0 ){
+
+            var target_question = $scope.__player_object.questions[current_index-1];
+            if( target_question.question_type == 3 ){
+              var ques_rat_scal_type = target_question.answers_format[0].ratscal_type;
+              var steps = target_question.answers_format[0].step_numbers;
+              $scope.rating_scale_elements = [];
+              for (var i = 0; i < steps; i++) {
+                  $scope.rating_scale_elements.push({"val": i});
+              }
+
+              $timeout(function (){$scope.$apply();} , 350);
+            }
+          }
+
+
 
           if(current_index >= $scope.__player_object.questions.length)
              current_index = $scope.__player_object.questions.length ;

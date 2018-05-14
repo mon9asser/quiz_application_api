@@ -1805,6 +1805,12 @@ rptRouters.post("/:app_id/report_collection/:user_id" , (req , res) => {
         rptObject['creator_id'] = attendee_obka.impr_application_object.creator_id ;
         rptObject['created_at'] = new Date();
         rptObject['updated_at'] = new Date();
+
+        // ==> Statistics Arrays
+        if(req.body.statistics != null ){
+            rptObject.statistics = req.body.statistics;
+        }
+
         var reporting = new rpt(rptObject);
         reporting.save().then((rptgObject)=>{
           // ==> Update questionnaire with report
@@ -1842,6 +1848,13 @@ rptRouters.post("/:app_id/report_collection/:user_id" , (req , res) => {
             date_made :  date_made().toString()  ,
             attendee_counts : 1
           });
+
+          // ==> Statistics Arrays
+          if(req.body.statistics != null ){
+            if( reptDoc.statistics == undefined )
+            reptDoc.statistics = [];
+            reptDoc.statistics = req.body.statistics;
+          }
 
          reptDoc.markModified("attendees");
          reptDoc.save().then((rptgObject)=>{
@@ -3008,7 +3021,7 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
 
     var statistics = reportDocument.statistics;
     var questions_answers = new Array();
-    for (var i = 0; i < statistics.length; i++) {
+    for ( var i = 0; i < statistics.length; i++ ){
          var qs_object = new Object();
           qs_object['question_id'] = statistics[i].question_id;
           qs_object['question'] = statistics[i].question_body;

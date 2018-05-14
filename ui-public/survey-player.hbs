@@ -42,6 +42,9 @@
            </div>
          </div>
 
+
+
+
          <!--  Questions  -->
          <div class="swiper-slide" data:ng:repeat="(obj_key , obj_val) in __player_object.questions">
            <div class="container screen-container survey-player-questions">
@@ -139,10 +142,49 @@
                 <div class="answer-container survey-block" ng:if="obj_val.question_type >= 3">
 
                   <div ng:if="(obj_val.question_type == 3) && (obj_val.answers_format[0].ratscal_type == 0)" class="block-of-scale">
-                    <!-- Case it 3 => Scale -->
+                      <!-- Case it 3 => Scale -->
+                      <div class="survey-answer">
+                          <!-- Rating Case -->
+                          <div class=""> <!--  -->
+
+                            <!-- Scale -->
+                            <center>
+                              <div class="scale-optn" ng:if="obj_val.answers_format[0].ratscal_type == 0 ">
+                                <ul ng:init="rating_scale_elements" class="scalet-o" >
+                                  <li data-index='0' ng:repeat="(key_ , val_) in rating_scale_elements">
+                                    <span ng:click="select_rating_scale__($index , 0 , obj_val._id , obj_val.answers_format[0]._id , obj_val.question_type )">
+                                        {> $index + 1 <}
+                                    </span>
+                                  </li>
+                                </ul>
+                                <div class="clearFix"></div>
+
+                                <div class="block-labels text-center"  ng:show="obj_val.answers_format[0].show_labels == true">
+                                  <span class="first-lbl">
+                                    {>obj_val.answers_format[0].started_at | show_chars<}
+                                  </span>
+                                  <span class="second-lbl">
+                                    {>obj_val.answers_format[0].centered_at | show_chars <}
+                                  </span>
+                                  <span class="third-lbl">
+                                    {>obj_val.answers_format[0].ended_at | show_chars <}
+                                  </span>
+                                </div>
+                              </div>
+                            </center>
+                          </div>
+                        </div>
                   </div>
                   <div ng:if="(obj_val.question_type == 3) && (obj_val.answers_format[0].ratscal_type == 1)" class="block-of-ratings">
-                    <!-- Case it 3 => Rating -->
+                    <!-- Ratings  -->
+                    <ul class="start-o rating_scale_block">
+                      <!--  Ratings  -->
+                      <li data-index='0' ng:repeat="(ratingscale_keys , ratingscale_vale) in rating_scale_elements track by $index">
+                        <span ng:click="select_rating_scale__($index , 1 , obj_val._id , obj_val.answers_format[0]._id , obj_val.question_type )" href="#">
+                            <i class="fa fa-star-o"></i>
+                        </span>
+                      </li>
+                    </ul>
                   </div>
                   <div ng:if="obj_val.question_type == 4" class="block-of-fre-txts">
                     <!-- Case it 4 => Free texts -->
@@ -175,6 +217,27 @@
            </div>
          </div>
 
+         <!--  Submit Question into report   -->
+         <div class="swiper-slide">
+             <!-- Ending screen contents  -->
+             <div class="container screen-container about-quiz">
+                   <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_end_with | trust_this_html_values"></div>
+                   <!--  Warning Case-->
+                   <div class="warning_case" style="background: tomato;" ng:class="load_slide_theme(obj_val.question_type)" ng:click="go_to_not_attended_question()"></div>
+                   <!-- Question buttons  -->
+                   <div class="qusu-details ques-questions text-right">
+                       <button ng:click="back_to_prev_slider()" class="button-take-this" type="button" name="button">
+                         <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                         Back
+                       </button>
+                       <button data:ng:click="submit_quiz_into_report()" class="button-take-this submi_the_quiz_handler" type="button" name="button">
+                         <i class="fa fa-arrow-right fac-icon-submit" aria-hidden="true"></i>
+                         <span>Submit Survey</span>
+                       </button>
+                  </div>
+             </div>
+             <!-- End Ending screen contents  -->
+         </div>
 
       </div>
     </div>
