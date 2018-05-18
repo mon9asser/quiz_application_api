@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html  ng:app="applications" ng:controller="attendee-controller">
+<html style="height:100%"  ng:app="applications" ng:controller="attendee-controller" ng:controller="preview_players"><!--  -->
   <head>
+
     <meta charset="utf-8">
     <title></title>
 
@@ -14,21 +15,29 @@
     <link href="{{ server_ip }}ext/frameworks/css/font-awesome.css" rel="stylesheet">
     <link href="{{ server_ip }}ext/frameworks/css/animate.css" rel="stylesheet">
     <link href="{{ server_ip }}ext/frameworks/css/swiper.css" rel="stylesheet">
-    <!--  >>>>>Custom css -->
+    <link href="{{ server_ip }}ext/frameworks/css/spectrum.css" rel="stylesheet">
 
+
+    <!--  >>>>> Custom css -->
     <link rel="stylesheet" href="{{ server_ip }}ext/css/default-player.css">
     <link rel="stylesheet" href="{{ server_ip }}ext/css/default-themes.css">
-    <!-- <link href="{{ server_ip }}ext/frameworks/css/redactor.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" id="stylesheet-editor-css">
 
-    <!-- scripts --> 
+
+
+
+    <!-- scripts -->
     <!--
     ==========================>>>>>> Public
     -->
     <script src="{{ server_ip }}ext/frameworks/js/jquery.min.js" charset="utf-8"></script>
     <script src="{{ server_ip }}ext/frameworks/js/bootstrap.min.js"></script>
     <script src="{{ server_ip }}ext/frameworks/js/angular.min.js"></script>
+    <script src="{{ server_ip }}ext/frameworks/js/spectrum.js"></script>
+    
   </head>
-  <body>
+  <body style="height:100%">
+
     <!-- User Id -->
     <input type="hidden" id="server_ip" name="" value="{{server_ip}}">
     <input type="hidden" id="user_id" name="" value="{{user.id}}">

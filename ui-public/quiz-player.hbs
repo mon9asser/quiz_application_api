@@ -8,7 +8,7 @@
          <div class="cssload-square-blend"></div>
       </div>
    </div>
-
+   <div class="preview_player_container-cont-selected player_opg_editor" style="height:100%;">
    <div class="container-fluid-x" data:ng:controller="players">
 
      <!-- Expiry date -->
@@ -42,7 +42,7 @@
           <!--  rouly-expired-text -->
            <div class="swiper-wrapper quiz-contents">
                <div class="swiper-slide welcoming-screen-x">
-                 <div ng:class="load_quiz_status_theme()" class="container screen-container">
+                 <div ng:class="load_quiz_status_theme()" class="container screen-container screen_opg_editor">
 
                        <!-- Welcoming message ( Welcoming ) -->
                        <div ng:show="(quiz_status == 0)? true : false">
@@ -126,12 +126,12 @@
                </div>
                <!-- Questions -->
                <div class="swiper-slide" data:ng:repeat="(obj_key , obj_val) in __player_object.questions">
-                 <div class="container screen-container" data:ng:class="get_slide_styles(obj_val.question_type)">
+                 <div class="container screen-container question_opg_editor_block" data:ng:class="get_slide_styles(obj_val.question_type)">
                     <!-- Question container -->
                      <div class="question-container">
                           <!-- Question body -->
                           <!-- <div class="question-body" data:ng:bind:html="obj_val.question_body | trust_this_html_values"></div> -->
-                          <div ng:class="load_qs_theme(obj_val.question_type)" class="question-body">
+                          <div ng:class="load_qs_theme(obj_val.question_type)" class="question-body question_opg_editor">
                             <span ng:class="load_slide_theme(obj_val.question_type)" class="label-question">
                               <span class="qs-icons">
                                 <i ng:if="obj_val.question_type == 0" class="icon-insert-template iconx-x"></i>
@@ -161,7 +161,7 @@
                             <!-- Quiz Questions -->
                             <ul id="question_{>obj_val._id<}" ng:class="load_case_many_answer_option(obj_val.question_type , obj_val.answer_settings.single_choice)" class="question-list" ng:if="obj_val.question_type <= 2"> <!-- Question id , answer id  -->
                               <li
-                                class="answer_{>ansvalue._id<}"
+                                class="answer_{>ansvalue._id<} answer_opg_editor"
                                 data:ng:class="classes_for_this_answer(obj_val.answer_settings , obj_val._id , ansvalue._id)"
                                 data:ng:click="select_this_answer(obj_val._id , ansvalue._id , obj_val , ansvalue , __player_object._id , '{{user.id}}' , ansvalue.is_correct , $index)"
                                 data:ng:repeat="(anskey , ansvalue) in obj_val.answers_format">
@@ -265,7 +265,7 @@
                <!-- Godbye screen  -->
                <div class="swiper-slide">
                    <!-- Ending screen contents  -->
-                   <div class="container screen-container about-quiz">
+                   <div class="container screen-container about-quiz screen_opg_editor">
                          <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_end_with | trust_this_html_values"></div>
                          <!--  Warning Case-->
                          <div class="warning_case" style="background: tomato;" ng:class="load_slide_theme(obj_val.question_type)" ng:click="go_to_not_attended_question()"></div>
@@ -286,7 +286,7 @@
                <!-- Result screen  -->
                <div class="swiper-slide welcoming-screen-x">
                    <!-- Result screen contents  -->
-                   <div ng:class="(is_resume == null)?'about-quiz':'result-slide'" class="container screen-container"> <!-- label-question -->
+                   <div ng:class="(is_resume == null)?'about-quiz':'result-slide'" class="container screen-container screen_opg_editor"> <!-- label-question -->
                        <div>
                             <!-- Case successed in quiz  -->
                               <div ng:if="__report_object.status != 'Failed'" class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_success_with | trust_this_html_values"></div>
@@ -319,10 +319,9 @@
                    </div>
                    <!-- End Result screen contents  -->
                </div>
-
-
            </div>
         </div>
 
+      </div>
    </div>
 {{> attendee_footer }}

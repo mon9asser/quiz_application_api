@@ -1,0 +1,277 @@
+background-property
+
+border-width-property
+border-type-property
+border-color-property
+
+color-property
+
+
+font-family-property
+font-size-property
+font-type-property
+
+
+
+
+================================= >> Player Background
+Background 
+Font Family
+Font Size
+Font Type
+
+
+
+
+
+
+bg-property-block
+brd-property-block
+clr-property-block
+fnsize-property-block
+fnfmil-property-block
+fntypo-property-block
+
+
+
+
+
+
+
+
+background-property-block
+border-property-block
+color-property-block
+font-family-property-block
+font-size-property-block
+font-type-property-block
+
+
+
+
+
+
+
+
+
+
+
+
+
+.background-property-block , 
+.border-property-block , 
+.color-property-block ,
+.font-family-property-block , 
+.font-size-property-block , 
+.font-type-property-block
+
+
+$('ul li.background-property-block').css({display : 'block'});
+$('ul li.border-property-block').css({display : 'block'});
+$('ul li.color-property-block').css({display : 'block'});
+$('ul li.font-family-property-block').css({display : 'block'});
+$('ul li.font-size-property-block').css({display : 'block'});
+$('ul li.font-type-property-block').css({display : 'block'});
+
+
+
+.background-property-block , .border-property-block , .color-property-block , .font-family-property-block , .font-size-property-block , .font-type-property-block
+
+
+0 ==> Player Page 
+1 ==> Screens 
+2 ==> Question Box 
+3 ==> Answer Box 
+4 ==> Time Models 
+5 ==> Progress-bar Models
+
+
+
+>>>>>>> question_typeco_object
+
+
+
+window.app_editor.block_status
+window.app_editor.these_elements
+
+preview_player_container -cont-selected
+
+
+.theme-clr-block{
+	background:#c17c7e;
+}
+
+
+
+
+
+
+
+body
+question-slide
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+preview_player_container-cont-selected => Page ( Body )
+screen-ending-starting => Screens
+question_typeco_object => question_box
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+0 ==> Player Page 
+1 ==> Screens 
+2 ==> Question Box 
+3 ==> Answer Box 
+4 ==> Time Models 
+5 ==> Progress-bar Models
+
+
+
+===============================>> { Classes } =>> UI Classes 
+player_opg_editor ==> Player page ( Body ) ==> ( UI => DONE )
+screen_opg_editor ==> Welcome Screens ==> ( UI => DONE )
+question_opg_editor ==> Question Texts  ==> ( UI => DONE )
+question_opg_editor_block ==> Question Block  ==> ( UI => DONE )
+answer_opg_editor ==> Answer Texts  ==> ( UI => DONE )
+answer_opg_editor_block ==> Answer Block   ==> ( UI => Canceled ! )
+time_block ==> Time styles
+progress_block ==> progess styles 
+time_model_opg_editor ==> Time Models
+progress_model_opg_editor ==> Progress Models
+===================================================
+
+
+||---->>
+
+
+===============================>> { Attributes } =>> Css attr
+background-property-block 
+border-property-block 
+color-property-block 
+font-family-property-block
+font-size-property-block 
+font-type-property-block
+===================================================
+0 Player Page 
+1 Screens 
+2 Slide Box
+3 Question Box
+4 Answer Box
+---END HERE
+5 Time Models
+6 Progress-bar Models
+
+
+
+player_opg_editor ----  0 Player Page
+- Background
+- Font Family
+screen_opg_editor ---- 1 Screens
+- Background
+- Border
+question_opg_editor_block --- 2 Slide Box
+- Background
+- Border
+question_opg_editor ---- 3 Question Box
+- Background
+- Border
+- Font Family
+- Font Size
+- Font Type
+- color 
+- Numbering
+answer_opg_editor --- 4 Answer Box
+- Border
+- Font Family
+- Font Size
+- Font Type
+- color 
+- Numbering
+
+
+
+
+
+
+
+background-property-block =>
+background-property
+
+color-property-block =>
+color-property
+
+numbering-property-block => 
+numbering-property
+
+font-family-property-block => 
+font-family-property
+
+font-size-property-block => 
+font-size-property
+
+font-type-property-block => 
+font-type-property
+
+border-property-block =>
+border-color-property
+border-width-property-left
+border-type-property-left
+
+border-width-property-right
+border-type-property-right
+
+border-width-property-bottom
+border-type-property-bottom
+
+border-width-property-top
+border-type-property-top
+
+
+
+
+
+
+
+
+
+
+
+
+
+	    
+
+
+
+

@@ -104,7 +104,7 @@
       font-size: 18px;
       background: #fff;
       /* Center slide text vertically */
-      display: -webkit-box;
+    ebkit-box;
       display: -ms-flexbox;
       display: -webkit-flex;
       display: flex;
@@ -723,9 +723,9 @@
   width: 0%;
   position: relative;
 
-   -webkit-transition: width 0.2s linear ;
-  transition: width 0.2s linear ;
-  -moz-transition: width 0.2s linear  ;
+  -webkit-transition: width 0.2s linear;
+  transition: width 0.2s linear;
+  -moz-transition: width 0.2s linear;
 }
 .tool-obj{
   /*display: none;*/
@@ -765,6 +765,9 @@
 }
 .grade-score h5 {
   color: #999;
+}
+#preview_player_container-cont-selected {
+  height:  100%;
 }
 
 /*-------------------------------*/
@@ -1200,8 +1203,93 @@
  .scalet-o li:last-child span  {
    border-right: 1px solid #c17c7e;
  }
+.stylesheet-inputs{
+  width: 2px;
+  float: right !important;
+}
+.editor-block span {
+  /*margin-right: 70px;*/
+}
+.editor-block > .sp-replacer {
+  float: right;
+}
+
+.editor-block {
+    display: block;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    /*padding: 0px 17px;*/
+    /*margin-top: 25px;*/
+}
+.button-blocks {
+  position: absolute;
+    bottom: 0px;
+    margin-bottom: 10px;
+    width: 95%;
+    text-align: right;
+}
+.element-name , .element-name code {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  margin: 0px auto;
+}
+.theme-block > button {
+  display: block;
+  position: relative;
+  width: 95%;
+  margin: 0px auto;
+  margin: 25px auto;;
+}
+code {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    margin: 0px auto;
+    line-height: 2;
+    padding-top: 7px;
+    padding-left: 10px;
+    border-radius: 0px;
+}
+.border-act-pxv {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin: 10px auto 0px auto;
+  height:auto;
+}
+.lesan {
+  height: 12px;
+  width: 3px;
+  background: #e3ddd8;
+  position: absolute;
+  /* top: -2px; */
+  z-index: 1;
+  margin-top: -15px;
+}
+.lesan-2 {
+    left: 50%;
+}
+.lesan-3 {
+    right: 21px;
+}
+input[type='range']{
+  z-index: 10;
+position: relative;
+}
+select.select-current-element , select.select-current-element:focus , select.select-current-element:active , select.select-current-element:hover {
+  display: inline-block;
+  position: relative;
+  background: transparent ;
+  border: 0px dashed #eee ;
+  padding: 5px;
+  outline: none;
+}
 
 
+/* margin-right: 70px; */
 /* ========================> Theme Color */
 .question_type__colr {
   color:  #c17c7e;

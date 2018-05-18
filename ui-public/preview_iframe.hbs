@@ -1,15 +1,45 @@
+
+
 {{> attendee_preview_head }}
-<!-- <<<<<<< HEAD -->
-<style media="screen">
-  html , body {
-    overflow: hidden;
-  }
-</style>
- <div id="preview_player_container" class="container-fluid-x preview_player_container" ng:controller="preview_players">
+
+
+
+
+ <!--
+   =============================================================================
+   ========================>>> Stylesheet !
+   =============================================================================
+  -->
+
+  <!-- <<<<<<< HEAD -->
+ <style media="screen">
+    html , body {
+      overflow: hidden;
+    }
+ </style>
+
+
+
+
+
+ <!--
+ =============================================================================
+ ========================>>> Preview Work !
+ =============================================================================
+-->
+<div ng:controller="preview_players">
+
+
+{{> stylesheet_menu }}
+<div class="preview_player_container-cont-selected player_opg_editor" style="height:100%;">
+
+
+  <div id="preview_player_container" class="container-fluid-x preview_player_container">
+
+
 
    <input id="cross_iframe_qs_index_value" type="hidden" id="the-target-slide-index" name="" value="1" />
    <button style="display:none;" id="cross_iframe_qs_index_button" ng:click="slide_to_question_cross_iframe()" type="button" name="button">Go To INDEX </button>
-
 
       <div class="quizapp-tools" ng:if="__player_object.settings.time_settings.is_with_time == true || __player_object.settings.progression_bar.is_available == true">
         <!-- ++++++++++++ +++++++++++++ -->
@@ -33,8 +63,8 @@
       <div class="swiper-container">
         <div class="swiper-wrapper quiz-contents">
             <!-- Screen Slider -->
-            <div class="swiper-slide welcoming-screen-x">
-                <div ng:class="load_quiz_status_theme()" class="container screen-container">
+            <div  class="swiper-slide welcoming-screen-x">
+                <div data-selected-block ="question-slide" ng:class="load_quiz_status_theme()" class="container screen-container screen-ending-starting screen_opg_editor">
                   <div>
                       <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
                       <div class="qusu-details text-right">
@@ -49,28 +79,27 @@
             <!-- End Screen Slider -->
             <!-- Start Questions -->
             <div class="swiper-slide" data:ng:repeat="(obj_key , obj_val) in __player_object.questions">
-               <div class="container screen-container" data:ng:class="get_slide_styles(obj_val.question_type)">
-
+               <div data-selected-block ="question-slide" class="container screen-container survey-player-questions question_typeco_object question_opg_editor_block">
                  <!-- Question Container -->
                  <div class="question-container">
-                   <div ng:class="load_qs_theme(obj_val.question_type)" class="question-body">
-                      <span ng:class="load_slide_theme(obj_val.question_type)" class="label-question">
+                   <div class="question-body load_qs_theme question_opg_editor">
+                      <span class="label-question default_theme_texts_bg">
                         <span class="qs-icons">
-                                <i ng:if="obj_val.question_type == 0" class="icon-insert-template iconx-x"></i>
-                                <i ng:if="obj_val.question_type == 1" class="icon-image iconx-x"></i>
-                                <i ng:if="obj_val.question_type == 2" class="iconx-x fa fa-star-o"></i>
-                                <i ng:if="obj_val.question_type == 3" class="iconx-x fa" ng:class="(obj_val.answers_format[0].ratscal_type == 0) ? 'fa-signal' :'fa-star-o' "></i>
-                                <i ng:if="obj_val.question_type == 4" class="iconx-x fa fa-text-width"></i>
+                            <i ng:if="obj_val.question_type == 0" class="icon-insert-template iconx-x"></i>
+                            <i ng:if="obj_val.question_type == 1" class="icon-image iconx-x"></i>
+                            <i ng:if="obj_val.question_type == 2" class="iconx-x fa fa-star-o"></i>
+                            <i ng:if="obj_val.question_type == 3" class="iconx-x fa" ng:class="(obj_val.answers_format[0].ratscal_type == 0) ? 'fa-signal' :'fa-star-o' "></i>
+                            <i ng:if="obj_val.question_type == 4" class="iconx-x fa fa-text-width"></i>
                         </span>
                         <span ng:if="__player_object.settings.indexes.questions == 0 " class="qs-numericals">{> question_indexes.numberical[$index] <}</span>
                         <span ng:if="__player_object.settings.indexes.questions == 1 " class="qs-numericals">{> question_indexes.alphabetical[$index] | uppercase <}</span>
-                        <div class="arrow-right" ng:class="load_border_styles(obj_val.question_type)"></div>
+                        <div class="arrow-right default_theme_brd"></div>
                       </span>
                       <span data:ng:bind:html="obj_val.question_body | trust_this_html_values" class="question-body-text"></span>
-                      <span class="required_option" ng:class="load_qs_note_theme(obj_val.question_type)" ng:if="obj_val.answer_settings.is_required == true"> Required </span>
+                      <span class="required_option question_type__colr" ng:if="obj_val.answer_settings.is_required == true"> Required </span>
                    </div>
                    <div ng:if="(obj_val.question_type == 0 || obj_val.question_type == 1 ) && obj_val.answer_settings.single_choice == false" class="notes">
-                       <span ng:class="load_qs_note_theme(obj_val.question_type)"> There're many correct choices , You've to select them  to pass this question </span>
+                       <span class="question_type__colr"> There're many correct choices , You've to select them  to pass this question </span>
                    </div>
                    <div data:ng:if="obj_val.media_question != null" class="question-media" ng:class="(obj_val.answer_settings.super_size)? 'super-size':''">
                       <!-- Case : image type  -->
@@ -88,7 +117,7 @@
                             <!-- Quiz Questions -->
                             <ul id="question_{>obj_val._id<}" ng:class="load_case_many_answer_option(obj_val.question_type , obj_val.answer_settings.single_choice)" class="question-list question-list-preview-quta" ng:if="obj_val.question_type <= 2"> <!-- Question id , answer id  -->
                               <li
-                                class="answer_{>ansvalue._id<}"
+                                class="answer_{>ansvalue._id<} answer_opg_editor"
                                 data:ng:class="classes_for_this_answer(obj_val.answer_settings , obj_val._id , ansvalue._id)"
                                 data:ng:click="select_this_answer(obj_val._id , ansvalue._id , obj_val , ansvalue , __player_object._id , '{{user.id}}' , ansvalue.is_correct , $index)"
                                 data:ng:repeat="(anskey , ansvalue) in obj_val.answers_format">
@@ -169,11 +198,11 @@
                             <!-- Case it 4 => Free texts -->
                   </div>
                   <!-- End Answer container -->
-                  <div ng:if="__player_object.settings.auto_slide == true && obj_val.question_type <= 2 && obj_val.answer_settings.single_choice == true" class="question_notes" ng:class="load_qs_note_theme(obj_val.question_type)">
+                  <div ng:if="__player_object.settings.auto_slide == true && obj_val.question_type <= 2 && obj_val.answer_settings.single_choice == true" class="question_notes question_type__colr">
                         <span class="fa fa-info-circle"></span>
                         <span>Note : When you solve  this question the next one will come directly after few moments </span>
                   </div>
-                  <div class="warning_case" ng:class="load_slide_theme(obj_val.question_type)" ng:click="go_to_not_attended_question()"></div>
+                  <div class="warning_case default_theme_texts_bg" ng:click="go_to_not_attended_question()"></div>
                   <div ng:if ="__player_object.settings.navigation_btns == true" class="qusu-details ques-questions text-right">
                       <button ng:click="back_to_prev_slider()" class="button-take-this" ng:class="load_slide_theme(obj_val.question_type)" type="button" name="button">
                             <i class="fa fa-angle-double-left" aria-hidden="true"></i>
@@ -192,9 +221,9 @@
 
 
         <!-- Godbye screen  -->
-        <div class="swiper-slide">
+        <div  class="swiper-slide">
             <!-- Ending screen contents  -->
-            <div class="container screen-container about-quiz">
+            <div data-selected-block ="question-slide" class="screen_opg_editor container screen-container about-quiz screen-ending-starting">
                   <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_end_with | trust_this_html_values"></div>
                   <!--  Warning Case-->
                   <div class="warning_case" style="background: tomato;" ng:class="load_slide_theme(obj_val.question_type)" ng:click="go_to_not_attended_question()"></div>
@@ -217,10 +246,8 @@
 
         <div class="swiper-slide welcoming-screen-x">
             <!-- Result screen contents  -->
-            <div ng:class="(is_resume == null)?'about-quiz':'result-slide'" class="container screen-container"> <!-- label-question -->
+            <div data-selected-block ="question-slide"  ng:class="(is_resume == null)?'about-quiz':'result-slide'" class="container screen-container screen-ending-starting screen_opg_editor"> <!-- label-question -->
                 <div>
-
-
                        <!-- Case successed in quiz  -->
                        <div ng:if="in_app_editor || this_attendee_draft.att_draft[0].report_attendee_details.status != 'Failed'" class="description-body redactor-styles title_success_with" ng:bind:html="__player_object.settings.titles.title_success_with | trust_this_html_values"></div>
 
@@ -258,10 +285,27 @@
             <!-- End Result screen contents  -->
         </div>
 
-
-
       </div>
       </div>
 
+</div>
+</div>
 
 {{> attendee_preview_footer }}
+
+
+
+
+<script type="text/javascript">
+     // href="{{ server_ip }}ext/css/app-editor.css"
+
+    if( window.location == window.parent.location ){
+        // ==> Loading Css Files
+        var stylesheet_css = document.getElementById("stylesheet-editor-css");
+        stylesheet_css.href = "{{ server_ip }}ext/css/app-editor.css";
+        // ==> Loading Js Files
+        // var stylesheet_js = document.getElementById("stylesheet-editor-js");
+        // stylesheet_js.src = "{{ server_ip }}ext/js/app-editor.js";
+    }
+
+</script>

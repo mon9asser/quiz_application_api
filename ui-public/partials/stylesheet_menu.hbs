@@ -1,0 +1,455 @@
+
+<style media="screen">
+  select.select-box , select.select-box:hover , select.select-box:focus , select.select-box:active{
+    background: transparent;
+    outline: none;
+    border: 1px solid #eee;
+    padding: 5px 7px;
+    font-size: 12px;
+    color: #999;
+  }
+  .stylesheet-menu{
+    display: block;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    width: 300px;
+    background: #f9f9f9;
+    /* border-right: 5px solid #c17c7e; */
+    border-right: 1px dashed #a52a2ab0;
+    /* border-right: 5px solid #c17c7e; */
+    transition: all 0.2s linear;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+  }
+  .menu-container{
+    display: block;
+    position: relative;
+  }
+  body{
+    margin-left: 300px;
+    transition: all 0.2s linear;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+  }
+  .close-open-css{
+    display: block;
+    position: relative;
+    position: absolute;
+    color: #33333387;
+    width: 35px;
+    height: 30px;
+    /* top: 50%; */
+    background: #f9f9f9;
+    font-size: 18px;
+    right: -35px;
+    text-align: center;
+    border-radius: 0px 2px 2px 0px;
+    cursor: pointer;
+    z-index: 2000;
+    /* padding-left: 8px; */
+    top: 45%;
+  }
+
+  .close-open-css > i {
+    margin-top: 5px;
+    display: block;
+    cursor: pointer;
+    color: brown;
+  }
+  ul.theme-options {
+    list-style: none;
+    padding: 10px 10px;
+    margin: 0px;
+    height: 100%;
+    display: inline-block;
+    top: 0px;
+    bottom: 0px;
+    position: fixed;
+    background: transparent;
+    /*background: #c17c7e;*/
+  }
+  ul.theme-options li {
+    list-style: none;
+    display: block;
+  }
+  .style-editor {
+    display: block;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 20px 10px 15px 10px;
+    margin: 0px;
+  }
+  .style-editor ul {
+    display: block;
+    position: relative;
+    list-style: none;
+    padding: 25px 0px 8px 0px;
+  }
+  .style-editor ul li {
+    display: block;
+    text-align: left;
+    padding-left: 15px;
+    font-size: 15px;
+    border-bottom: 1px solid #f4f5f9;
+    padding-bottom: 13px;
+  }
+   .style-editor ul li i {
+      vertical-align: baseline;
+   }
+   .style-editor ul li span , .style-editor ul li i {
+      color: #33333387;
+    }
+    .editor-block {
+      display: block;
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      /*padding: 0px 17px;*/
+    }
+    .editor-block span , .editor-block i {
+      color: #33333387;
+    }
+    .player-background , .player-background:focus , .player-background:hover
+      {
+        width: 90%;
+        display: block;
+        position: relative;
+        overflow: hidden;
+        margin: 13px auto;
+        display: block;
+        border: 1px solid #eee;
+        outline: none;
+      }
+      .style-data {
+        display: block;
+        position: relative;
+        overflow: hidden;
+        padding: 0px;
+        margin:0px;
+        display: block;
+        list-style: none;
+      }
+      .style-data li {
+        border-bottom: 1px dashed brown;
+        width: 86%;
+        display: block;
+        margin: 10px auto;
+        padding: 15px 0px;
+        overflow: hidden;
+      }
+      .style-data li span {
+        float: left;
+        line-height: 2;
+        /* margin-bottom: 10px; */
+        font-weight: bold;
+        font-size: 13px;
+        color: brown;
+      }
+      .headline-x > i {
+        font-size: 18px;
+	      margin-right: 3px;
+    	  vertical-align: middle;
+        color: #999;
+      }
+      .headline-x > span {
+        font-size: 18px;
+        color: #999;
+      }
+      ul.font-type{
+        display: block;
+        position: relative;
+        overflow: hidden;
+        padding: 0px;
+        margin: 0px;
+        list-style: none;
+        text-align: center;
+        width: 100%;
+        margin-top: 5px;
+        font-size: 12px;
+                margin-top: 10px;
+      }
+      ul.font-type li {
+        display: inline;
+        list-style: none;
+        margin: 0px;
+        padding: 0px;
+        text-align: center;
+        border: 0px;
+        /* border: 1px solid #ddd; */
+        color: #999;
+
+      }
+      ul.font-type li:last-child {
+        float: right;
+        width: auto;
+
+      }
+      ul.font-type li:first-child {
+        float: left;
+        text-align: left;
+        width: auto;
+
+      }
+
+      ul.font-type li font:after {
+
+      }
+
+ input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: goldenrod;
+    margin-top: -4px;
+}
+
+.numberings {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px dashed #eee;
+  margin-top: 10px;
+}
+.numberings li {
+  /*display: block;*/
+  position: relative;
+  border:0px;
+  padding: 0px;
+  margin:0px;
+  /*display: inline-block;*/
+  display: inline;
+  border-right: 1px dashed #eee;
+  padding-right: 5px;
+
+}
+.numberings li:last-child{
+  border: 0px;
+}
+input , input:hover , input:active , input:focus{
+  outline: none;
+}
+
+  .style-data{
+    max-height: 500px;
+    overflow-y: auto;
+  }
+</style>
+
+
+
+
+<div class="stylesheet-menu">
+  <div class="close-open-css">
+    <i class="fa fa-close"></i>
+  </div>
+  <div class="menu-container">
+
+    <div class="style-editor headline-x">
+      <i class="fa fa-edit"></i>
+      <span>Style</span>
+    </div>
+    <div class="editor-block element-name">
+        <code>
+          Block : (
+          <select ng:change="block_selector()" ng:model="editor_page" id="select-current-element" class="select-current-element">
+            <option value="0">Player Page</option>
+            <option value="1">Screens</option>
+            <option value="2">Slide Box</option>
+            <option value="3">Question Box</option>
+            <option value="4">Answer Box</option>
+            <option value="5">Time Models</option>
+            <option value="6">Progress-bar Models</option>
+          </select> )
+        </code>
+    </div>
+
+    <div class="theme-block">
+        <ul class="style-data">
+          <li class="text-right background-property-block">
+            <span>Background</span>
+            <input  type="text" class="stylesheet-inputs style-object background-property">
+          </li>
+          <li class="text-right border-property-block">
+            <div class="border-actx" style="margin-bottom: 15px;">
+                <span>Border</span>
+                <input type="text" class="stylesheet-inputs style-object border-color-property" />
+            </div>
+
+
+            <!-- Left Borders -->
+            <div  class="border-actx">
+                <span> - Left : </span>
+                <select name="" class="select-box border-width-property-left">
+                  <option value="">None</option>
+                  <option value="">1px</option>
+                  <option value="">2px</option>
+                  <option value="">3px</option>
+                  <option value="">4px</option>
+                  <option value="">5px</option>
+                </select>
+                <select name="" class="select-box border-type-property-left">
+                  <option value="">Solid</option>
+                  <option value="">Dashed</option>
+                  <option value="">Dotted</option>
+                </select>
+
+            </div>
+
+            <!-- Right Borders -->
+            <div style="margin-top:5px;" class="border-actx">
+                <span> - Right : </span>
+                <select name="" class="select-box border-width-property-right">
+                  <option value="">None</option>
+                  <option value="">1px</option>
+                  <option value="">2px</option>
+                  <option value="">3px</option>
+                  <option value="">4px</option>
+                  <option value="">5px</option>
+                </select>
+                <select name="" class="select-box border-type-property-right">
+                  <option value="">Solid</option>
+                  <option value="">Dashed</option>
+                  <option value="">Dotted</option>
+                </select>
+
+            </div>
+
+            <!-- Bottom Borders -->
+            <div style="margin-top:5px;" class="border-actx">
+                <span> - Bottom : </span>
+                <select name="" class="select-box border-width-property-bottom">
+                  <option value="">None</option>
+                  <option value="">1px</option>
+                  <option value="">2px</option>
+                  <option value="">3px</option>
+                  <option value="">4px</option>
+                  <option value="">5px</option>
+                </select>
+                <select name="" class="select-box border-type-property-bottom">
+                  <option value="">Solid</option>
+                  <option value="">Dashed</option>
+                  <option value="">Dotted</option>
+                </select>
+
+            </div>
+
+            <!-- Top Borders -->
+            <div style="margin-top:5px;" class="border-actx">
+                <span> - Top : </span>
+                <select name="" class="select-box border-width-property-top">
+                  <option value="">None</option>
+                  <option value="">1px</option>
+                  <option value="">2px</option>
+                  <option value="">3px</option>
+                  <option value="">4px</option>
+                  <option value="">5px</option>
+                </select>
+                <select name="" class="select-box border-type-property-top">
+                  <option value="">Solid</option>
+                  <option value="">Dashed</option>
+                  <option value="">Dotted</option>
+                </select>
+
+            </div>
+
+
+
+          </li>
+          <li class="text-right color-property-block">
+            <span>Color</span>
+            <input type="text" class="stylesheet-inputs style-object color-property">
+          </li>
+          <li class="text-right numbering-property-block">
+            <span>Numbering</span> <input type="text" class="stylesheet-inputs style-object numbering-property">
+
+            <!-- <div class="border-actx text-right">
+              <font style="color: #999; float:left; line-height:2.2;"> - Question Models </font>
+
+              <ul class="numberings text-left">
+                <li>
+                  <span class="label-question default_theme_texts_bg">
+                       <span class="qs-icons">
+                           I
+                       </span>
+
+                       <div class="arrow-right default_theme_brd"></div>
+                   </span>
+                </li>
+                <li>
+                  <i title="Model 2"></i>
+                </li>
+                <li>
+                  <i title="Model 3"></i>
+                </li>
+              </ul>
+            </div>
+            <div class="border-actx text-right">
+              <font style="color: #999; float:left; line-height:2.2;"> - Answer Models </font>
+              <input type="text" class="stylesheet-inputs style-object color-property">
+              <ul class="numberings">
+                <li>
+
+                </li>
+                <li>
+                  <i title="Model 2"></i>
+                </li>
+                <li>
+                  <i title="Model 3"></i>
+                </li>
+              </ul>
+            </div> -->
+          </li>
+          <li class="text-right font-family-property-block">
+            <span>Font Family</span>
+            <select name="" class="select-box font-family-property">
+              <option value="">Open sans</option>
+              <option value="">petit formal script</option>
+              <option value="">Roboto</option>
+              <option value="">pt sans</option>
+              <option value="">Sans-serif</option>
+              <option value="">Numan</option>
+              <option value="">Tahoma</option>
+              <option value="">Arial</option>
+            </select>
+          </li>
+          <li class="text-right font-size-property-block">
+            <span>Font Size</span>
+            <input type="range" max="30" min="12" name="" value="" class="font-size-property">
+            <div class="lesan-1 lesan"></div>
+            <div class="lesan-3 lesan"></div>
+            <ul class="font-type">
+              <li><font>12px</font></li>
+              <!-- <li><font>Semi-Bold</font></li> -->
+              <li><font>30px</font></li>
+            </ul>
+          </li>
+          <li class="text-right font-type-property-block">
+            <span>Font Type</span>
+            <input type="range" max="3" min="1" name="" value="" class="font-type-property">
+            <div class="lesan-1 lesan"></div>
+            <div class="lesan-2 lesan"></div>
+            <div class="lesan-3 lesan"></div>
+            <ul class="font-type">
+              <li><font>Regular</font></li>
+              <li><font>Semi-Bold</font></li>
+              <li><font>Boldest</font></li>
+            </ul>
+          </li>
+        </ul>
+    </div>
+  </div>
+
+  <div class="clearFix"></div>
+  <div class="theme-block">
+    <button type="button" class="btn btn-danger">Apply Changes</button>
+  </div>
+</div>

@@ -7,6 +7,7 @@ Array.prototype.find_unsolved_questions = function (questions_list) {
     });
 };
 
+
 //=============================================
 // => Filters
 //=============================================
@@ -95,8 +96,11 @@ apps.controller("preview_players" , [
     };
     $scope.player_time_frame = 300 ;
     $scope.in_app_editor = false ;
+    $scope.editor_page = "0";
+    $scope.quiz_preview_app    = $('.stylesheet-menu');
     $scope.app_id              = $("#app-id").val();
     $scope.server_ip           = $("#server_ip").val();
+    $scope.spurcum_plugin      = $('.style-object');
     $scope.user_id             = $window.location.toString().split("/").pop();
     $scope.question_indexes = {
       alphabetical : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ],
@@ -1521,7 +1525,7 @@ apps.controller("preview_players" , [
                     var there = $(this);
                    if(there.hasClass('wrong_answer') || there.hasClass('right_answer')) has_wrong_answer = true ;
                   });
-                  if(has_wrong_answer) return false ;
+                  if(has_wrong_answer) return false;
                   // => Show the correct answer if selected is wrong show the wrong style + right style ( answer )
                       // if user select the correct answer only need to show the right style in the selected answer
                       var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
@@ -1605,7 +1609,6 @@ apps.controller("preview_players" , [
        $(".warning_case").css({display:'block'})
        return false;
      }
-
 
        var attendeeIndex = $scope.this_attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) ;
        var attendee = $scope.this_attendee_draft.att_draft.find (x => x.user_id == $scope.user_id) ;
@@ -1702,6 +1705,50 @@ apps.controller("preview_players" , [
     }
 
     $scope.window_navigation.on("load" , function (){
+
+      // var script_style = $('.editor-stylesheet');
+      // script_style.each(function(){
+      //   var outsource_files = $(this).attr('data-type') ;
+      //   if(window.parent.location == window.location){
+      //       if(outsource_files == 'css') $(this).attr('href', $scope.server_ip + 'ext/css/app-editor.css' );
+      //       if(outsource_files == 'js')  $(this).attr('src', $scope.server_ip + 'ext/js/app-editor.js' );
+      //   }
+      // });
+
+      $scope.spurcum_plugin.spectrum({
+              color: "#ECC",
+              flat: false,
+              showInput: true,
+              className: "full-spectrum",
+              showInitial: true,
+              showPalette: true,
+              showSelectionPalette: true,
+              maxPaletteSize: 10,
+              preferredFormat: "hex",
+              localStorageKey: "spectrum.demo" ,
+              palette: [
+                  ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
+                  "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
+                  ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+                  "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"],
+                  ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)",
+                  "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)",
+                  "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)",
+                  "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)",
+                  "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)",
+                  "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+                  "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+                  "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+                  "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)",
+                  "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
+              ]
+          });
+      if( $window.parent.location != $window.location ){
+          $scope.quiz_preview_app.css({"display" : "none"});
+          $('body').css({
+            marginLeft: "auto"
+          })
+       }
       if($window.parent.location != $window.location )
          {
            $scope.player_time_frame = 0 ;
@@ -1711,8 +1758,84 @@ apps.controller("preview_players" , [
                  speed : $scope.player_time_frame
                });
              }
-
-
          }
     });
+
+  // =======================================================
+  // =========>>>> Editor Work !
+  // =======================================================
+  $scope.stylesheet = {
+      current_selector : "player_opg_editor"  ,
+      old_selector : "player_opg_editor" ,
+      selector : function ( )  {
+            ($(this.old_selector).hasClass("outlined_blocks")) ? $(this.old_selector).removeClass("outlined_blocks"):'';
+             $(this.current_selector).addClass("outlined_blocks");
+      }   , // => Show Body By Default
+
+      // ==> All selector
+      selected_items : $(".player_opg_editor , .screen_opg_editor , .question_opg_editor , .question_opg_editor_block , .answer_opg_editor ") ,
+      // ==> ALl Properties
+      property_block : $(".background-property-block , .color-property-block , .numbering-property-block , .font-family-property-block , .font-size-property-block , .font-type-property-block , .border-property-block") ,
+
+      // ==> ALl Blocks in css
+      player_page :$(".background-property-block, .font-family-property-block") ,
+      screens :$(".background-property-block, .border-property-block") ,
+      slider_box : $(".background-property-block, .border-property-block") ,
+      question_box : $(".background-property-block,.border-property-block ,.font-family-property-block , .font-size-property-block , .font-type-property-block , .color-property-block , .numbering-property-block"),
+      answer_box : $(".border-property-block ,.font-family-property-block ,.font-size-property-block ,.font-type-property-block , .color-property-block ,  .numbering-property-block ") ,
+
+      // ==> Stored Array & objects
+      applied_stylesheets : new Array ()
+  };
+  $scope.block_selector = function () {
+    var elements_selected_before = $(".outlined_blocks");
+    $scope.stylesheet.property_block.css({display:"none"});
+
+    if( elements_selected_before.length ){
+       elements_selected_before.removeClass('outlined_blocks');
+       $scope.stylesheet.old_selector = elements_selected_before.prop('className').split(" ").pop();
+       if($scope.stylesheet.old_selector == 'ng_block')
+         {
+           var thisElement = elements_selected_before.prop('className').split(" ");
+           $scope.stylesheet.old_selector = thisElement[thisElement.length - 2];
+         }
+    }
+
+    if($scope.editor_page == 0 ){// => Player Page
+      $scope.stylesheet.current_selector = "body";
+      $scope.stylesheet.player_page.css({display:"block"});
+    }
+    if($scope.editor_page == 1 ){//=> Screens
+      $scope.stylesheet.current_selector = "screen_opg_editor";
+      $scope.stylesheet.screens.css({display:"block"});
+
+      if($scope.slide_screens != null && $scope.slide_screens != undefined)
+      $scope.slide_screens.slideTo(0);
+    }
+    if($scope.editor_page == 2 ){//=> Slide Box
+      $scope.stylesheet.current_selector = "question_opg_editor_block";
+      $scope.stylesheet.slider_box.css({display:"block"});
+
+      if($scope.slide_screens != null && $scope.slide_screens != undefined)
+      $scope.slide_screens.slideTo(1);
+    }
+    if($scope.editor_page == 3 ){//=> Question Box
+      $scope.stylesheet.current_selector = "question_opg_editor";
+      $scope.stylesheet.question_box.css({display:"block"});
+
+      if($scope.slide_screens != null && $scope.slide_screens != undefined)
+      $scope.slide_screens.slideTo(1);
+    }
+    if($scope.editor_page == 4 ){//=> Answer Box
+      $scope.stylesheet.current_selector = "answer_opg_editor";
+      $scope.stylesheet.answer_box.css({display:"block"})
+
+      if($scope.slide_screens != null && $scope.slide_screens != undefined)
+      $scope.slide_screens.slideTo(1);
+    }
+
+   // ==> Excute
+   $('.'+$scope.stylesheet.current_selector).addClass("outlined_blocks");
+
+  };
 }]);
