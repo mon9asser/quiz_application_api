@@ -16,7 +16,7 @@
  .outlined_blocks {
    outline: 3px solid blue;
    margin: 5px;
-   border: 5px solid transparent;
+   /*border: 5px solid transparent;*/
  }
 
  .shape-1 {

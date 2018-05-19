@@ -1764,6 +1764,9 @@ apps.controller("preview_players" , [
   // =======================================================
   // =========>>>> Editor Work !
   // =======================================================
+  // ==> Loading Current styles
+
+
   $scope.stylesheet = {
       current_selector : "player_opg_editor"  ,
       old_selector : "player_opg_editor" ,
@@ -1787,7 +1790,10 @@ apps.controller("preview_players" , [
       // ==> Stored Array & objects
       applied_stylesheets : new Array ()
   };
-  $scope.block_selector = function () {
+  $scope.stylcheet_properties = () => {
+
+  };
+  $scope.block_selector =  () => {
     var elements_selected_before = $(".outlined_blocks");
     $scope.stylesheet.property_block.css({display:"none"});
 
@@ -1804,6 +1810,24 @@ apps.controller("preview_players" , [
     if($scope.editor_page == 0 ){// => Player Page
       $scope.stylesheet.current_selector = "body";
       $scope.stylesheet.player_page.css({display:"block"});
+
+      // ==> Loading Css Property
+        // => Background
+        var background = $($scope.stylesheet.current_selector).css("background-color");
+        // if( background != null )
+        //   $scope.background_property = background ;
+        if(background != null ){
+          $scope.background_property = background;
+          $(".background-property").spectrum({
+            color : background
+          });
+        }
+        // => Font Family
+        var font_family = $($scope.stylesheet.current_selector).css("font-family");
+        if(font_family != null ){ //=> "Helvetica Neue", Helvetica, Arial, sans-serif ( Default )
+          if(font_family.toLowerCase().includes("helvetica"))
+            $scope.font_family_property = "2";
+        }
     }
     if($scope.editor_page == 1 ){//=> Screens
       $scope.stylesheet.current_selector = "screen_opg_editor";
@@ -1811,6 +1835,24 @@ apps.controller("preview_players" , [
 
       if($scope.slide_screens != null && $scope.slide_screens != undefined)
       $scope.slide_screens.slideTo(0);
+
+      // => Background
+      var background = $($scope.stylesheet.current_selector).css("background");
+      if(background == undefined){
+        $(".background-property").spectrum({
+            color : $(".screen-container").css("background")
+        });
+      }else
+       {
+         $(".background-property").spectrum({
+           color : background
+         });
+       }
+
+
+        // => Border
+        var borders = $( '.'+ $scope.stylesheet.current_selector).css("border");
+        console.log(borders);
     }
     if($scope.editor_page == 2 ){//=> Slide Box
       $scope.stylesheet.current_selector = "question_opg_editor_block";
@@ -1818,6 +1860,11 @@ apps.controller("preview_players" , [
 
       if($scope.slide_screens != null && $scope.slide_screens != undefined)
       $scope.slide_screens.slideTo(1);
+
+
+      // => Border
+      var borders = $( '.'+ $scope.stylesheet.current_selector).css('border') ;
+      console.log(borders);
     }
     if($scope.editor_page == 3 ){//=> Question Box
       $scope.stylesheet.current_selector = "question_opg_editor";

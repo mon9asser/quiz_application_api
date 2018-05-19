@@ -227,38 +227,36 @@ answer_opg_editor --- 4 Answer Box
 
 
 background-property-block =>
-background-property
+background-property ( MODEL NAME : background_property ) 
 
 color-property-block =>
-color-property
+color-property ( MODEL NAME : color_property ) 
 
 numbering-property-block => 
-numbering-property
+numbering-property  ( MODEL NAME : numbering_property ) 
 
 font-family-property-block => 
-font-family-property
+font-family-property ( MODEL NAME : font_family_property )
 
 font-size-property-block => 
-font-size-property
+font-size-property  ( MODEL NAME : font_size_property )  
 
 font-type-property-block => 
-font-type-property
+font-type-property ( MODEL NAME : font_type_property ) 
 
 border-property-block =>
-border-color-property
-border-width-property-left
-border-type-property-left
+border-color-property ( MODEL NAME : border_color_property )
+border-width-property-left ( MODEL NAME : border_width_property_left ) 
+border-type-property-left ( MODEL NAME : border_type_property_left ) 
 
-border-width-property-right
-border-type-property-right
+border-width-property-right ( MODEL NAME : border_width_property_right )
+border-type-property-right ( MODEL NAME : border_type_property_right )  
 
-border-width-property-bottom
-border-type-property-bottom
+border-width-property-bottom ( MODEL NAME : border_width_property_bottom ) 
+border-type-property-bottom ( MODEL NAME : border_type_property_bottom )
 
-border-width-property-top
-border-type-property-top
-
-
+border-width-property-top ( MODEL NAME :  border_width_property_top )  
+border-type-property-top ( MODEL NAME : border_type_property_top )
 
 
 
@@ -266,6 +264,20 @@ border-type-property-top
 
 
 
+
+
+
+
+//=============> Font Family ( Names ) 
+0 => font_family_property
+1 => Open Sans Regular
+2 => Petit Formal Script
+3 => 'Helvetica Neue', Helvetica
+4 => RobotoRegular
+5 => PTSansRegular
+6 => Arial, sans-serif
+7 => NumbansRegular
+8 => Tahoma, sans-serif
 
 
 

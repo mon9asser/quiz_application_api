@@ -180,7 +180,6 @@
         border: 0px;
         /* border: 1px solid #ddd; */
         color: #999;
-
       }
       ul.font-type li:last-child {
         float: right;
@@ -191,9 +190,7 @@
         float: left;
         text-align: left;
         width: auto;
-
       }
-
       ul.font-type li font:after {
 
       }
@@ -276,19 +273,19 @@ input , input:hover , input:active , input:focus{
         <ul class="style-data">
           <li class="text-right background-property-block">
             <span>Background</span>
-            <input  type="text" class="stylesheet-inputs style-object background-property">
+            <input ng:change="stylcheet_properties()" ng:model="background_property"  type="text" class="stylesheet-inputs style-object background-property">
           </li>
           <li class="text-right border-property-block">
             <div class="border-actx" style="margin-bottom: 15px;">
                 <span>Border</span>
-                <input type="text" class="stylesheet-inputs style-object border-color-property" />
+                <input ng:model="border_color_property" ng:change="stylcheet_properties()" type="text" class="stylesheet-inputs style-object border-color-property" />
             </div>
 
 
             <!-- Left Borders -->
             <div  class="border-actx">
                 <span> - Left : </span>
-                <select name="" class="select-box border-width-property-left">
+                <select ng:model="border_width_property_left" ng:change="stylcheet_properties()" name="" class="select-box border-width-property-left">
                   <option value="">None</option>
                   <option value="">1px</option>
                   <option value="">2px</option>
@@ -296,18 +293,16 @@ input , input:hover , input:active , input:focus{
                   <option value="">4px</option>
                   <option value="">5px</option>
                 </select>
-                <select name="" class="select-box border-type-property-left">
+                <select ng:model="border_type_property_left" ng:change="stylcheet_properties()" name="" class="select-box border-type-property-left">
                   <option value="">Solid</option>
                   <option value="">Dashed</option>
                   <option value="">Dotted</option>
                 </select>
-
             </div>
-
             <!-- Right Borders -->
             <div style="margin-top:5px;" class="border-actx">
                 <span> - Right : </span>
-                <select name="" class="select-box border-width-property-right">
+                <select ng:model="border_width_property_right"  ng:change="stylcheet_properties()" name="" class="select-box border-width-property-right">
                   <option value="">None</option>
                   <option value="">1px</option>
                   <option value="">2px</option>
@@ -315,18 +310,17 @@ input , input:hover , input:active , input:focus{
                   <option value="">4px</option>
                   <option value="">5px</option>
                 </select>
-                <select name="" class="select-box border-type-property-right">
+                <select ng:model="border_type_property_right" ng:change="stylcheet_properties()" name="" class="select-box border-type-property-right">
                   <option value="">Solid</option>
                   <option value="">Dashed</option>
                   <option value="">Dotted</option>
                 </select>
-
             </div>
 
             <!-- Bottom Borders -->
             <div style="margin-top:5px;" class="border-actx">
                 <span> - Bottom : </span>
-                <select name="" class="select-box border-width-property-bottom">
+                <select ng:model="border_width_property_bottom" ng:change="stylcheet_properties()" name="" class="select-box border-width-property-bottom">
                   <option value="">None</option>
                   <option value="">1px</option>
                   <option value="">2px</option>
@@ -334,18 +328,16 @@ input , input:hover , input:active , input:focus{
                   <option value="">4px</option>
                   <option value="">5px</option>
                 </select>
-                <select name="" class="select-box border-type-property-bottom">
+                <select ng:model="border_type_property_bottom" ng:change="stylcheet_properties()" name="" class="select-box border-type-property-bottom">
                   <option value="">Solid</option>
                   <option value="">Dashed</option>
                   <option value="">Dotted</option>
                 </select>
-
             </div>
-
             <!-- Top Borders -->
             <div style="margin-top:5px;" class="border-actx">
                 <span> - Top : </span>
-                <select name="" class="select-box border-width-property-top">
+                <select ng:model="border_width_property_top" ng:change="stylcheet_properties()" name="" class="select-box border-width-property-top">
                   <option value="">None</option>
                   <option value="">1px</option>
                   <option value="">2px</option>
@@ -353,23 +345,20 @@ input , input:hover , input:active , input:focus{
                   <option value="">4px</option>
                   <option value="">5px</option>
                 </select>
-                <select name="" class="select-box border-type-property-top">
+                <select ng:model="border_type_property_top" ng:change="stylcheet_properties()" name="" class="select-box border-type-property-top">
                   <option value="">Solid</option>
                   <option value="">Dashed</option>
                   <option value="">Dotted</option>
                 </select>
-
             </div>
-
-
-
           </li>
           <li class="text-right color-property-block">
             <span>Color</span>
-            <input type="text" class="stylesheet-inputs style-object color-property">
+            <input ng:model="color_property" ng:change="stylcheet_properties()" type="text" class="stylesheet-inputs style-object color-property">
           </li>
           <li class="text-right numbering-property-block">
-            <span>Numbering</span> <input type="text" class="stylesheet-inputs style-object numbering-property">
+            <span>Numbering</span>
+            <input ng:model="numbering_property" ng:change="stylcheet_properties()" type="text" class="stylesheet-inputs style-object numbering-property">
 
             <!-- <div class="border-actx text-right">
               <font style="color: #999; float:left; line-height:2.2;"> - Question Models </font>
@@ -410,20 +399,20 @@ input , input:hover , input:active , input:focus{
           </li>
           <li class="text-right font-family-property-block">
             <span>Font Family</span>
-            <select name="" class="select-box font-family-property">
-              <option value="">Open sans</option>
-              <option value="">petit formal script</option>
-              <option value="">Roboto</option>
-              <option value="">pt sans</option>
-              <option value="">Sans-serif</option>
-              <option value="">Numan</option>
-              <option value="">Tahoma</option>
-              <option value="">Arial</option>
+            <select ng:model="font_family_property" ng:change="stylcheet_properties()" name="" class="select-box font-family-property">
+              <option value="0">Open sans</option>
+              <option value="1">petit formal script</option>
+              <option value="2">Helvetica Neue</option>
+              <option value="3">Roboto</option>
+              <option value="4">pt sans</option>
+              <option value="5">Arial</option>
+              <option value="6">Numan</option>
+              <option value="7">Tahoma</option>
             </select>
           </li>
           <li class="text-right font-size-property-block">
             <span>Font Size</span>
-            <input type="range" max="30" min="12" name="" value="" class="font-size-property">
+            <input ng:model="font_size_property" ng:change="stylcheet_properties()" type="range" max="30" min="12" name="" value="" class="font-size-property">
             <div class="lesan-1 lesan"></div>
             <div class="lesan-3 lesan"></div>
             <ul class="font-type">
@@ -434,7 +423,7 @@ input , input:hover , input:active , input:focus{
           </li>
           <li class="text-right font-type-property-block">
             <span>Font Type</span>
-            <input type="range" max="3" min="1" name="" value="" class="font-type-property">
+            <input ng:model="font_type_property" ng:change="stylcheet_properties()" type="range" max="3" min="1" name="" value="" class="font-type-property">
             <div class="lesan-1 lesan"></div>
             <div class="lesan-2 lesan"></div>
             <div class="lesan-3 lesan"></div>
