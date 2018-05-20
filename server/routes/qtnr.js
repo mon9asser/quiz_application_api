@@ -2429,8 +2429,69 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
     }
 
     var required = new Array()
-    if(  req.body.app_settings== null  )
-      required[required.length]='app_settings';
+    if(  req.body.app_settings == null  )
+      {
+
+        req.body.app_settings = {
+               titles :
+                 {
+                   title_start_with : "Write Starting Text"  ,
+                   title_end_with: "Write Ending Text" ,
+                   title_success_with : " Success quiz Text" ,
+                   title_failed_with : "Quiz Failed Text"
+                 } ,
+               label_btns : {
+                   lbl_start_with:"Start" ,
+                   lbl_continue_with : "Continue" ,
+                   lbl_retake_with : "Retake" ,
+                   lbl_review_with : "Review" ,
+                   lbl_back_with : "Back",
+                   lbl_finish_with : "Finish",
+                   lbl_submit_quiz_with : "Submit Quiz",
+                   lbl_score_with :"Score",
+                   lbl_grade_with :"Grade"
+                } ,
+               grade_settings : {
+                 is_graded : false ,
+                 value : 90
+               } ,
+               indexes : {
+                 questions : 0 ,
+                 answers : 1
+               } ,
+               time_settings : {
+                 is_with_time:false ,
+                 value : "30" ,
+                 timer_type : false ,
+                 timer_layout : 0 ,
+                 hours : 0 ,
+                 minutes : 29 ,
+                 seconds : 59
+               },
+               progression_bar : {
+                 is_available:false ,
+                 progression_bar_layout:0
+               } ,
+               expiration : {
+                 is_set : false  ,
+                 through_time : 3 , // => it will be per day
+                 title : "This quiz will expire after"
+               } ,
+              //  theme_style : [] ,
+               randomize_settings : false ,
+               step_type : false ,
+               auto_slide : false ,
+               allow_touch_move : false ,
+               show_results_per_qs : false ,
+               retake_setting : false ,
+               navigation_btns : true ,
+               review_setting : false ,
+               createdAt : new Date() ,
+               updatedAt : new Date ()
+
+           }
+
+      }
 
     if(req.body.app_type == null  )
        required[required.length]='app_type';

@@ -95,6 +95,34 @@ apps.controller("preview_players" , [
       return is_right_question ;
     };
     $scope.player_time_frame = 300 ;
+    $scope.spectrum_property = {
+            color: "#ECC",
+            flat: false,
+            showInput: true,
+            className: "full-spectrum",
+            showInitial: true,
+            showPalette: true,
+            showSelectionPalette: true,
+            maxPaletteSize: 10,
+            preferredFormat: "hex",
+            localStorageKey: "spectrum.demo" ,
+            palette: [
+                ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
+                "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
+                ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+                "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"],
+                ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)",
+                "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)",
+                "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)",
+                "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)",
+                "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)",
+                "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+                "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+                "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+                "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)",
+                "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
+            ]
+        };
     $scope.in_app_editor = false ;
     $scope.editor_page = "0";
     $scope.quiz_preview_app    = $('.stylesheet-menu');
@@ -1715,34 +1743,7 @@ apps.controller("preview_players" , [
       //   }
       // });
 
-      $scope.spurcum_plugin.spectrum({
-              color: "#ECC",
-              flat: false,
-              showInput: true,
-              className: "full-spectrum",
-              showInitial: true,
-              showPalette: true,
-              showSelectionPalette: true,
-              maxPaletteSize: 10,
-              preferredFormat: "hex",
-              localStorageKey: "spectrum.demo" ,
-              palette: [
-                  ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
-                  "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
-                  ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
-                  "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"],
-                  ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)",
-                  "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)",
-                  "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)",
-                  "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)",
-                  "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)",
-                  "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
-                  "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
-                  "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
-                  "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)",
-                  "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
-              ]
-          });
+      $scope.spurcum_plugin.spectrum($scope.spectrum_property);
       if( $window.parent.location != $window.location ){
           $scope.quiz_preview_app.css({"display" : "none"});
           $('body').css({
@@ -1811,23 +1812,6 @@ apps.controller("preview_players" , [
       $scope.stylesheet.current_selector = "body";
       $scope.stylesheet.player_page.css({display:"block"});
 
-      // ==> Loading Css Property
-        // => Background
-        var background = $($scope.stylesheet.current_selector).css("background-color");
-        // if( background != null )
-        //   $scope.background_property = background ;
-        if(background != null ){
-          $scope.background_property = background;
-          $(".background-property").spectrum({
-            color : background
-          });
-        }
-        // => Font Family
-        var font_family = $($scope.stylesheet.current_selector).css("font-family");
-        if(font_family != null ){ //=> "Helvetica Neue", Helvetica, Arial, sans-serif ( Default )
-          if(font_family.toLowerCase().includes("helvetica"))
-            $scope.font_family_property = "2";
-        }
     }
     if($scope.editor_page == 1 ){//=> Screens
       $scope.stylesheet.current_selector = "screen_opg_editor";
@@ -1836,23 +1820,6 @@ apps.controller("preview_players" , [
       if($scope.slide_screens != null && $scope.slide_screens != undefined)
       $scope.slide_screens.slideTo(0);
 
-      // => Background
-      var background = $($scope.stylesheet.current_selector).css("background");
-      if(background == undefined){
-        $(".background-property").spectrum({
-            color : $(".screen-container").css("background")
-        });
-      }else
-       {
-         $(".background-property").spectrum({
-           color : background
-         });
-       }
-
-
-        // => Border
-        var borders = $( '.'+ $scope.stylesheet.current_selector).css("border");
-        console.log(borders);
     }
     if($scope.editor_page == 2 ){//=> Slide Box
       $scope.stylesheet.current_selector = "question_opg_editor_block";
@@ -1884,5 +1851,220 @@ apps.controller("preview_players" , [
    // ==> Excute
    $('.'+$scope.stylesheet.current_selector).addClass("outlined_blocks");
 
+  };
+
+
+  $scope.apply_stylesheets = (property) => { // data-property
+    if(property == 'background'){
+      var background = $scope.background_property ;
+
+      if( $scope.stylesheet.current_selector == 'body' ){
+        $("body").css("background" , background );
+      }
+
+      if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("background" , background );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+        $('.'+$scope.stylesheet.current_selector).css("background" , background );
+
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("background" , background );
+      }
+
+    }
+    if(property == 'border-color'){
+      if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-color" , $scope.border_color_property );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-color" , $scope.border_color_property );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-color" , $scope.border_color_property );
+      }
+      if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+        $('.'+$scope.stylesheet.current_selector).css("border-color" , $scope.border_color_property );
+      }
+
+      $scope.border_color_property
+    }
+    if(property == 'border-left-width'){
+      // alert($scope.border_width_property_left);
+      // alert($scope.border_width_property_left);
+      if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-left-width" , $scope.border_width_property_left );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-left-width" , $scope.border_width_property_left );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-left-width" , $scope.border_width_property_left );
+      }
+      if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+        $('.'+$scope.stylesheet.current_selector).css("border-left-width" , $scope.border_width_property_left );
+      }
+    }
+    if(property == 'border-left-style'){
+      //  alert($scope.border_type_property_left);
+      if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-left-style" , $scope.border_type_property_left );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-left-style" , $scope.border_type_property_left );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-left-style" , $scope.border_type_property_left );
+      }
+      if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+        $('.'+$scope.stylesheet.current_selector).css("border-left-style" , $scope.border_type_property_left );
+      }
+    }
+    if(property == 'border-right-width'){
+      $scope.border_width_property_right
+      if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-right-width" , $scope.border_width_property_right );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-right-width" , $scope.border_width_property_right );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-right-width" , $scope.border_width_property_right );
+      }
+      if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+        $('.'+$scope.stylesheet.current_selector).css("border-right-width" , $scope.border_width_property_right );
+      }
+    }
+    if(property == 'border-right-style'){
+      $scope.border_type_property_right
+      if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-right-style" , $scope.border_type_property_right );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-right-style" , $scope.border_type_property_right );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-right-style" , $scope.border_type_property_right );
+      }
+      if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+        $('.'+$scope.stylesheet.current_selector).css("border-right-style" , $scope.border_type_property_right );
+      }
+    }
+    if(property == 'border-bottom-width'){
+      $scope.border_width_property_bottom
+      if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-bottom-width" , $scope.border_width_property_bottom );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-bottom-width" , $scope.border_width_property_bottom );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-bottom-width" , $scope.border_width_property_bottom );
+      }
+      if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+        $('.'+$scope.stylesheet.current_selector).css("border-bottom-width" , $scope.border_width_property_bottom );
+      }
+    }
+    if(property == 'border-bottom-style'){
+      $scope.border_type_property_bottom
+      if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-bottom-style" , $scope.border_type_property_bottom );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-bottom-style" , $scope.border_type_property_bottom );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-bottom-style" , $scope.border_type_property_bottom );
+      }
+      if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+        $('.'+$scope.stylesheet.current_selector).css("border-bottom-style" , $scope.border_type_property_bottom );
+      }
+    }
+    if(property == 'border-top-width'){
+      $scope.border_width_property_top
+      if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-top-width" , $scope.border_width_property_top );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-top-width" , $scope.border_width_property_top );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-top-width" , $scope.border_width_property_top );
+      }
+      if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+        $('.'+$scope.stylesheet.current_selector).css("border-top-width" , $scope.border_width_property_top );
+      }
+    }
+    if(property == 'border-top-style'){
+      $scope.border_type_property_top
+      if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-top-style" , $scope.border_type_property_top );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-top-style" , $scope.border_type_property_top );
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css("border-top-style" , $scope.border_type_property_top );
+      }
+      if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+        $('.'+$scope.stylesheet.current_selector).css("border-top-style" , $scope.border_type_property_top );
+      }
+    }
+    if(property == 'color'){
+      $scope.color_property
+      if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css('color' , $scope.color_property);
+      }
+      if( $scope.stylesheet.current_selector == 'answer_opg_editor' ){
+        $('.'+$scope.stylesheet.current_selector).css('color' , $scope.color_property);
+      }
+    }
+    if(property == 'font-family'){
+
+      if( $scope.stylesheet.current_selector == 'body' ){
+        $("."+$scope.stylesheet.current_selector).css("font-family" , $scope.font_family_property)
+      }
+      if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+        $("."+$scope.stylesheet.current_selector).css("font-family"  , $scope.font_family_property )
+      }
+      if( $scope.stylesheet.current_selector == 'answer_opg_editor' ){
+        $("."+$scope.stylesheet.current_selector).css("font-family"  , $scope.font_family_property)
+      }
+
+    }
+    if(property == 'font-size'){
+      $scope.font_size_property
+
+      if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+        $(".qs-numericals , ."+$scope.stylesheet.current_selector).css("font-size"  , $scope.font_size_property + 'px')
+
+      }
+      if( $scope.stylesheet.current_selector == 'answer_opg_editor' ){
+        $("."+$scope.stylesheet.current_selector + " .text-values , .answer-contents .labels").css("font-size"  , $scope.font_size_property + 'px')
+      }
+    }
+    if(property == 'font-weight'){
+      $scope.font_type_property
+      if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+        $(".qs-numericals , ."+ $scope.stylesheet.current_selector).css("font-weight"  , $scope.font_type_property );
+
+      }
+      if( $scope.stylesheet.current_selector == 'answer_opg_editor' ){
+        $("."+$scope.stylesheet.current_selector + " .text-values , .answer-contents .labels").css("font-weight"  , $scope.font_type_property  );
+      }
+    }
+    if(property == 'numbering'){
+      if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+        $(".default_theme_texts_bg").css("background" , $scope.numbering_property );
+        $(".default_theme_brd").css("border-left-color" , $scope.numbering_property );
+      }
+
+      if( $scope.stylesheet.current_selector == 'answer_opg_editor' ){
+        $(".labels").css("background" , $scope.numbering_property );
+        // $(".default_theme_brd").css("border-left-color" , $scope.numbering_property );
+      }
+
+    }
   };
 }]);

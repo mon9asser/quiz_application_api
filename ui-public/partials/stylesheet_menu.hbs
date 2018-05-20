@@ -273,92 +273,92 @@ input , input:hover , input:active , input:focus{
         <ul class="style-data">
           <li class="text-right background-property-block">
             <span>Background</span>
-            <input ng:change="stylcheet_properties()" ng:model="background_property"  type="text" class="stylesheet-inputs style-object background-property">
+            <input ng:change="apply_stylesheets('background')" ng:model="background_property"  type="text" class="stylesheet-inputs style-object background-property">
           </li>
           <li class="text-right border-property-block">
             <div class="border-actx" style="margin-bottom: 15px;">
                 <span>Border</span>
-                <input ng:model="border_color_property" ng:change="stylcheet_properties()" type="text" class="stylesheet-inputs style-object border-color-property" />
+                <input ng:model="border_color_property" ng:change="apply_stylesheets('border-color')" type="text" class="stylesheet-inputs style-object border-color-property" />
             </div>
 
 
             <!-- Left Borders -->
             <div  class="border-actx">
                 <span> - Left : </span>
-                <select ng:model="border_width_property_left" ng:change="stylcheet_properties()" name="" class="select-box border-width-property-left">
-                  <option value="">None</option>
-                  <option value="">1px</option>
-                  <option value="">2px</option>
-                  <option value="">3px</option>
-                  <option value="">4px</option>
-                  <option value="">5px</option>
+                <select ng:model="border_width_property_left" ng:change="apply_stylesheets('border-left-width')" name="" class="select-box border-width-property-left">
+                  <option value="0px">None</option>
+                  <option value="1px">1px</option>
+                  <option value="2px">2px</option>
+                  <option value="3px">3px</option>
+                  <option value="4px">4px</option>
+                  <option value="5px">5px</option>
                 </select>
-                <select ng:model="border_type_property_left" ng:change="stylcheet_properties()" name="" class="select-box border-type-property-left">
-                  <option value="">Solid</option>
-                  <option value="">Dashed</option>
-                  <option value="">Dotted</option>
+                <select ng:model="border_type_property_left" ng:change="apply_stylesheets('border-left-style')" name="" class="select-box border-type-property-left">
+                  <option value="solid">Solid</option>
+                  <option value="dashed">Dashed</option>
+                  <option value="dotted">Dotted</option>
                 </select>
             </div>
             <!-- Right Borders -->
             <div style="margin-top:5px;" class="border-actx">
                 <span> - Right : </span>
-                <select ng:model="border_width_property_right"  ng:change="stylcheet_properties()" name="" class="select-box border-width-property-right">
-                  <option value="">None</option>
-                  <option value="">1px</option>
-                  <option value="">2px</option>
-                  <option value="">3px</option>
-                  <option value="">4px</option>
-                  <option value="">5px</option>
+                <select ng:model="border_width_property_right"  ng:change="apply_stylesheets('border-right-width')" name="" class="select-box border-width-property-right">
+                  <option value="0px">None</option>
+                  <option value="1px">1px</option>
+                  <option value="2px">2px</option>
+                  <option value="3px">3px</option>
+                  <option value="4px">4px</option>
+                  <option value="5px">5px</option>
                 </select>
-                <select ng:model="border_type_property_right" ng:change="stylcheet_properties()" name="" class="select-box border-type-property-right">
-                  <option value="">Solid</option>
-                  <option value="">Dashed</option>
-                  <option value="">Dotted</option>
+                <select ng:model="border_type_property_right" ng:change="apply_stylesheets('border-right-style')" name="" class="select-box border-type-property-right">
+                  <option value="solid">Solid</option>
+                  <option value="dashed">Dashed</option>
+                  <option value="dotted">Dotted</option>
                 </select>
             </div>
 
             <!-- Bottom Borders -->
             <div style="margin-top:5px;" class="border-actx">
                 <span> - Bottom : </span>
-                <select ng:model="border_width_property_bottom" ng:change="stylcheet_properties()" name="" class="select-box border-width-property-bottom">
-                  <option value="">None</option>
-                  <option value="">1px</option>
-                  <option value="">2px</option>
-                  <option value="">3px</option>
-                  <option value="">4px</option>
-                  <option value="">5px</option>
+                <select ng:model="border_width_property_bottom" ng:change="apply_stylesheets('border-bottom-width')" name="" class="select-box border-width-property-bottom">
+                  <option value="0px">None</option>
+                  <option value="1px">1px</option>
+                  <option value="2px">2px</option>
+                  <option value="3px">3px</option>
+                  <option value="4px">4px</option>
+                  <option value="5px">5px</option>
                 </select>
-                <select ng:model="border_type_property_bottom" ng:change="stylcheet_properties()" name="" class="select-box border-type-property-bottom">
-                  <option value="">Solid</option>
-                  <option value="">Dashed</option>
-                  <option value="">Dotted</option>
+                <select ng:model="border_type_property_bottom" ng:change="apply_stylesheets('border-bottom-style')" name="" class="select-box border-type-property-bottom">
+                  <option value="solid">Solid</option>
+                  <option value="dashed">Dashed</option>
+                  <option value="dotted">Dotted</option>
                 </select>
             </div>
             <!-- Top Borders -->
             <div style="margin-top:5px;" class="border-actx">
                 <span> - Top : </span>
-                <select ng:model="border_width_property_top" ng:change="stylcheet_properties()" name="" class="select-box border-width-property-top">
-                  <option value="">None</option>
-                  <option value="">1px</option>
-                  <option value="">2px</option>
-                  <option value="">3px</option>
-                  <option value="">4px</option>
-                  <option value="">5px</option>
+                <select ng:model="border_width_property_top" ng:change="apply_stylesheets('border-top-width')" name="" class="select-box border-width-property-top">
+                  <option value="0px">None</option>
+                  <option value="1px">1px</option>
+                  <option value="2px">2px</option>
+                  <option value="3px">3px</option>
+                  <option value="4px">4px</option>
+                  <option value="5px">5px</option>
                 </select>
-                <select ng:model="border_type_property_top" ng:change="stylcheet_properties()" name="" class="select-box border-type-property-top">
-                  <option value="">Solid</option>
-                  <option value="">Dashed</option>
-                  <option value="">Dotted</option>
+                <select ng:model="border_type_property_top" ng:change="apply_stylesheets('border-top-style')" name="" class="select-box border-type-property-top">
+                  <option value="solid">Solid</option>
+                  <option value="dashed">Dashed</option>
+                  <option value="dotted">Dotted</option>
                 </select>
             </div>
           </li>
           <li class="text-right color-property-block">
             <span>Color</span>
-            <input ng:model="color_property" ng:change="stylcheet_properties()" type="text" class="stylesheet-inputs style-object color-property">
+            <input ng:model="color_property" ng:change="apply_stylesheets('color')" type="text" class="stylesheet-inputs style-object color-property">
           </li>
           <li class="text-right numbering-property-block">
             <span>Numbering</span>
-            <input ng:model="numbering_property" ng:change="stylcheet_properties()" type="text" class="stylesheet-inputs style-object numbering-property">
+            <input ng:model="numbering_property" ng:change="apply_stylesheets('numbering')" type="text" class="stylesheet-inputs style-object numbering-property">
 
             <!-- <div class="border-actx text-right">
               <font style="color: #999; float:left; line-height:2.2;"> - Question Models </font>
@@ -399,20 +399,21 @@ input , input:hover , input:active , input:focus{
           </li>
           <li class="text-right font-family-property-block">
             <span>Font Family</span>
-            <select ng:model="font_family_property" ng:change="stylcheet_properties()" name="" class="select-box font-family-property">
-              <option value="0">Open sans</option>
-              <option value="1">petit formal script</option>
-              <option value="2">Helvetica Neue</option>
-              <option value="3">Roboto</option>
-              <option value="4">pt sans</option>
-              <option value="5">Arial</option>
-              <option value="6">Numan</option>
-              <option value="7">Tahoma</option>
+            <select ng:model="font_family_property" ng:change="apply_stylesheets('font-family')" name="" class="select-box font-family-property">
+              <option value="Open Sans Regular">Open sans</option>
+              <option value="Petit Formal Script">petit formal script</option>
+              <option value="'Helvetica Neue', Helvetica">Helvetica Neue</option>
+              <option value="RobotoRegular">Roboto</option>
+              <option value="PTSansRegular">pt sans</option>
+              <option value="Arial">Arial</option>
+              <option value="NumbansRegular">Numan</option>
+              <option value="Tahoma">Tahoma</option>
+              <option value="sans,serif">Sans Serif</option>
             </select>
           </li>
           <li class="text-right font-size-property-block">
             <span>Font Size</span>
-            <input ng:model="font_size_property" ng:change="stylcheet_properties()" type="range" max="30" min="12" name="" value="" class="font-size-property">
+            <input ng:model="font_size_property" ng:change="apply_stylesheets('font-size')" type="range" max="30" min="12" name="" value="" class="font-size-property">
             <div class="lesan-1 lesan"></div>
             <div class="lesan-3 lesan"></div>
             <ul class="font-type">
@@ -422,14 +423,14 @@ input , input:hover , input:active , input:focus{
             </ul>
           </li>
           <li class="text-right font-type-property-block">
-            <span>Font Type</span>
-            <input ng:model="font_type_property" ng:change="stylcheet_properties()" type="range" max="3" min="1" name="" value="" class="font-type-property">
+            <span>Font Type</span> 
+            <input ng:model="font_type_property" ng:change="apply_stylesheets('font-weight')" type="range" max="700" min="200" name="" value="" class="font-type-property">
             <div class="lesan-1 lesan"></div>
             <div class="lesan-2 lesan"></div>
             <div class="lesan-3 lesan"></div>
             <ul class="font-type">
               <li><font>Regular</font></li>
-              <li><font>Semi-Bold</font></li>
+              <!-- <li><font>Semi-Bold</font></li> -->
               <li><font>Boldest</font></li>
             </ul>
           </li>

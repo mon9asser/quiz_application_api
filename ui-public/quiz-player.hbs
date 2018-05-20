@@ -301,7 +301,7 @@
                                   <h3>Your score : {> this_attendee_draft.report_attendee_details.correct_answers  + "/" + __player_object.questions.length <}</h3>
                                 </div>
                                 <div class="quiz-grade grade-score text-center">
-                                  <h5>Pass grade : {> this_attendee_draft.report_attendee_details.score <}%</h5>
+                                  <h5>Pass grade : {> this_attendee_draft.report_attendee_details.score | math_around_it <}%</h5>
                                 </div>
                               </div>
                               <!-- Question buttons  -->
