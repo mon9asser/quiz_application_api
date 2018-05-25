@@ -146,6 +146,17 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
     // document.getElementById('iframe').contentWindow.angular.element(document.body).scope();
     // ==> Vars in scope $R
+    // ==> Stylesheet Work
+    $scope.player_elements = null ;
+    $scope.defined_elements = {
+      fonts : 'span , p , font , b , strong , h1 , h2 , h3 , h4 , h5 , h6' ,
+      buttons : ['.select_button'] ,
+      font_elements : ['.select_texts' , '.select_numbers' , '.select_icons'] ,
+      background_elements : ['.select_box' , '.select_box_brd'] ,
+      border_elements : ['.select_brd'] ,
+      general_elements : ['.select_box_data']
+    };
+    // ==> Editor Work
     $scope.this_iframe = $("iframe#live-preview-iframe");
     $scope.first_load = 0;
     $scope.activated_screen_name = null;
@@ -2442,12 +2453,142 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     $scope.this_iframe.load(function() {
       // this.style.height =
       var iframeObject = this.contentWindow.document.body.offsetHeight
-      console.log({'.preview_player_container':  iframeObject });
+      $scope.player_elements = this.contentWindow.document.body ;
+
+      var iframe_element = $($scope.player_elements);
+
     });
 
-
+    $scope.hover_select_are_box = (this_el) => {
+      // alert();
+      this_el.css({outline : '3px solid blue' , padding : '5px'})
+    }
+    $scope.unhover_select_are_box = (this_el) => {
+      // alert();
+      this_el.css({outline : '0px solid blue' , padding : '0px'})
+    }
     $timeout(function(){
 
     } , 1300 );
+
+
+    $scope.editor_page = "0";
+    // ===> Calling stylesheet Editor
+    $scope.block_selector = () => {
+      console.log( $($scope.iframe_access.document).find('.welcome-screens') );
+      $("#welcome-screens,#goodbye-screens,#result-screens ,#question-screens").css({display:'none' });
+
+      //  $scope.editor_page
+      if($scope.editor_page == 0 ){ // => Welcome Screen
+        $("#welcome-screens").css("display","block");
+         // ==> Slide To Target Element
+         $scope.iframe_access.slide_to_question_in_index_number(0);
+         // ==> outline it
+        //  $scope.iframe_object.find(".welcome-screens").css({outline : "3px solid red"});
+         $scope.iframe_access.show_selecter_line ( "csd" , 0 );
+        //  $scope.iframe_object.find(); container screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd
+
+      }
+      if($scope.editor_page == 1 ){ // => GoodBye Screen
+        $("#goodbye-screens").css("display","block");
+        // ==> Slide To Target Element
+        // ==> outline it
+      }
+      if($scope.editor_page == 2 ){ // => Result Screen
+        $("#result-screens").css("display","block");
+        // ==> Slide To Target Element
+        // ==> outline it
+      }
+      if($scope.editor_page == 3 ){ // => Question Screen
+        $("#question-screens").css("display","block");
+        // ==> Slide To Target Element
+        // ==> outline it
+      }
+      if($scope.editor_page == 4 ){ // => Time - progress Screen
+
+      }
+    };
+
+    $scope.show_selected_element = (element_in_block) => {
+      var _e = element_in_block ;
+      var _b = $scope.editor_page;
+
+      if( _b == 0 ){ //=> Welcome Screen
+        if(_e == 'box'){
+          // ==> Slide To This screen
+          // ==> Show Element in Box
+        }
+        if(_e == 'screen-text'){
+
+        }
+        if(_e == 'button'){
+
+        }
+      }
+      if( _b == 1 ){ //=> GoodBye Screen
+        if(_e == 'box'){
+
+        }
+        if(_e == 'screen-text'){
+
+        }
+        if(_e == 'button'){
+
+        }
+      }
+      if( _b == 2 ){ //=> Result Screen
+        if(_e == 'box'){
+
+        }
+        if(_e == 'screen-text'){
+
+        }
+        if(_e == 'score-text'){
+
+        }
+        if(_e == 'grade-text'){
+
+        }
+      }
+      if( _b == 3 ){ //=> Question Screens
+        if(_e == 'box'){
+
+        }
+        if(_e == 'question-text'){
+
+        }
+        if(_e == 'question-text'){
+
+        }
+        if(_e == 'button'){
+
+        }
+      }
+      if( _b == 4 ){ //=> Quiz Time & Progress bar
+
+      }
+    };
+
+    $('ul.css_properties li .property-name').on('click' , function(){
+       var currentElement = $(this);
+       var target_block_property = currentElement.next(".property-blocks") ;
+       var all_block_elements = $('ul.css_properties li').children(".property-blocks");
+
+       $('ul.css_properties li').each(function(){
+         var block_element = $(this);
+
+         if( block_element.children(".property-blocks").css("display") == "block" && target_block_property.css('display') == 'none' ){
+           block_element.children(".property-blocks").css("display" , "none");
+         }
+       });
+
+       if(target_block_property.css('display') == 'block' )
+        target_block_property.css('display' , 'none');
+        else
+          target_block_property.css('display' , 'block');
+
+
+
+    });
 
 }]);

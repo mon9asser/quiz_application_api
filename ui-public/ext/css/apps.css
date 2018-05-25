@@ -3141,3 +3141,231 @@ table.label-table tbody .labels-options {
   overflow: hidden;
   margin-top: 5px;
 }
+
+ .stylesheet-object {
+   display: block;
+   position: relative;
+   overflow: hidden;
+   width: 85%;
+   margin: 0px auto;
+   border-bottom: 1px dashed #eee;
+   line-height: 1.9;
+ }
+.stylesheet-object input[type='text'] , .stylesheet-object select{
+  float: right;
+}
+ .stylesheet-object span {
+   margin-top: 15px;
+   display: inline-block;
+ }
+.stylesheet-object input[type='text'] {
+  width: 2px;
+}
+.stylesheet-object input[type='range']{
+      margin-top: 21px;
+}
+.stylesheet-object select{
+  background: transparent;
+  border: 1px dashed #eee;
+  padding: 5px;
+  margin-top: 17px;
+}
+.stylesheet-object select:last-child{
+  margin-right: 10px;
+}
+.border-actx {
+  position: relative;
+  overflow: hidden;
+  padding: 0px;
+  display: block;
+  width: 90%;
+  float: right;
+}
+.border-actx > span {
+  float: left;
+  display: inline-block;
+  color: #cac7c7;
+}
+.time-models{
+  display: inline-block;
+  background: transparent;
+  border: 1px solid #eee;
+  padding: 5px;
+}
+
+.stylesheet-properties-ul-block > li > .property-name {
+  display: block;
+  padding: 0px;
+  /*border-top: 1px dashed #eee;*/
+}
+.stylesheet-properties-ul-block > li:first-child > .property-name{
+  border-top: 0px dashed transparent;
+}
+.stylesheet-properties-ul-block {
+  display: none;
+}
+
+
+/* ===================+>>>> CSS Editor */
+.select_texts {
+  outline : 3px solid blue';
+  padding:5px ;
+}
+
+.select-current-element {
+    background: transparent;
+    border: 1px solid #eee;
+    padding: 5px;
+    float: right;
+}
+
+.stylesheet-properties-ul-block {
+  display: block;
+  position: relative;
+  width: 80%;
+  padding: 0px;
+  margin: 0px auto;
+  list-style: none;
+  margin-top: 15px;
+}
+.stylesheet-properties-ul-block li .property-name {
+  color: #999;
+}
+.stylesheet-properties-ul-block li .property-blocks{
+  width: 97%;
+  margin: 15px auto;
+  border-left: 6px solid #f1f0f0;
+  padding-left: 15px;
+  display: block;
+  overflow: hidden;
+}
+.stylesheet-properties-ul-block li .property-blocks > .prop-item {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  padding: 10px 0px;
+}
+.stylesheet-properties-ul-block li .property-blocks > .prop-item > span {
+  float: left;
+  color: #cac7c7;
+  font-weight: normal;
+}
+.stylesheet-properties-ul-block li .property-blocks > .prop-item > input[type='text'] {
+  width: 2px;
+}
+.stylesheet-properties-ul-block li .property-blocks > .prop-item > input[type='range'] {
+    margin-top: 10px;
+  }
+ .stylesheet-properties-ul-block li .property-blocks > .prop-item > select {
+   background: 0px;
+   border: 1px solid #eee;
+   padding: 2px 3px;
+   color: #cac7c7;
+ }
+.border-list, .button-lists {
+  display: block;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  margin: 0px auto;
+}
+.border-list , .button-lists {
+  margin-top: 10px;
+}
+.button-lists >  .button-actx {
+  position: relative;
+  overflow: hidden;
+  padding: 0px;
+  display: block;
+  width: 90%;
+  float: right;
+  margin-top: 15px !important;
+}
+.border-list > .border-actx {
+  position: relative;
+  overflow: hidden;
+  padding: 0px;
+  display: block;
+  width: 90%;
+  float: right;
+  margin-top: 15px !important;
+}
+.border-list > .border-actx:first-child {
+  margin-top: 5px !important;
+}
+.border-list > .border-actx > span {
+  float: left;
+  color: #cac7c7;
+  font-weight: normal;
+}
+.border-list > .border-actx > input {
+  border: 1px solid #eee ;
+  padding: 2px 3px;
+  color: #cac7c7;
+}
+.select-box {
+    background: #fff;
+    border: 1px solid #eee;
+    padding: 2px 3px;
+    color: #cac7c7;
+}
+.button-name {
+  display: block;
+  position: relative;
+  width: 100%;
+  display: block;
+  position: relative;
+}
+
+.button-containers {
+  width: 95%;
+  float: right;
+  display: block;
+  overflow: hidden;
+}
+.btn-porperties {
+  display: block;
+  position: relative;
+  width: 85%;
+}
+.button-containers > .btn-porperties:last-child {
+  padding-bottom: 10px;
+}
+.button-containers span {
+  display: block;
+  position: relative;
+  float: left;
+  margin-top: 10px;
+}
+.button-containers span {
+  font-weight: normal;
+  color: #cac7c7;
+}
+.btn-porperties {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    width: 90%;
+    font-weight: normal;
+    color: #cac7c7;
+    float: right;
+}
+.btn-porperties input[type='text'] {
+  margin-top: 7px;
+  width: 2px;
+}
+.stylesheet-properties-ul-block > li > .property-blocks {
+  display: none;
+}
+.collapsed_properties {
+  border-bottom: 1px dashed #eee;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+}
+
+#welcome-screens , #goodbye-screens , #result-screens , #question-screens {
+  display: none;
+}
+.border-actx > span {
+  font-weight: normal;
+}

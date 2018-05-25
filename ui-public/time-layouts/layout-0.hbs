@@ -1,7 +1,7 @@
 <!-- Time Template 0  -->
 
      <span class="time-tracker">
-       <span class="time-status">
+       <span class="time-status select_texts" ng:mouseover="show_hovred_element('select_texts')">
          <!-- <span class="fa fa-clock-o"></span> -->
           <b>
             Time remaining :
@@ -10,7 +10,7 @@
             We don't know what does time format !
             is it minutes or hours ! ?
           -->
-          <time class="hrs-timer time-obj">
+          <time class="hrs-timer time-obj select_numbers">
             <span ng:if="__player_object.settings.time_settings.timer_type == true" class="hr">{>__player_object.settings.time_settings.hours<}</span><span ng:if="__player_object.settings.time_settings.timer_type == true">:</span><span class="min">{>__player_object.settings.time_settings.minutes<}</span>:<span class="sec">{>__player_object.settings.time_settings.seconds<}</span>
           </time>
 

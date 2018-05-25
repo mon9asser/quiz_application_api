@@ -95,6 +95,12 @@ apps.controller("preview_players" , [
       return is_right_question ;
     };
     $scope.player_time_frame = 300 ;
+
+
+
+
+
+
     $scope.spectrum_property = {
             color: "#ECC",
             flat: false,
@@ -1771,7 +1777,7 @@ apps.controller("preview_players" , [
   $scope.stylesheet = {
       current_selector : "player_opg_editor"  ,
       old_selector : "player_opg_editor" ,
-      selector : function ( )  {
+      selector : function ( ){
             ($(this.old_selector).hasClass("outlined_blocks")) ? $(this.old_selector).removeClass("outlined_blocks"):'';
              $(this.current_selector).addClass("outlined_blocks");
       }   , // => Show Body By Default
@@ -1811,7 +1817,6 @@ apps.controller("preview_players" , [
     if($scope.editor_page == 0 ){// => Player Page
       $scope.stylesheet.current_selector = "body";
       $scope.stylesheet.player_page.css({display:"block"});
-
     }
     if($scope.editor_page == 1 ){//=> Screens
       $scope.stylesheet.current_selector = "screen_opg_editor";
@@ -2064,7 +2069,26 @@ apps.controller("preview_players" , [
         $(".labels").css("background" , $scope.numbering_property );
         // $(".default_theme_brd").css("border-left-color" , $scope.numbering_property );
       }
-
     }
   };
+
+
+  $scope.show_hovred_element = (classNameO) => {};
+  $scope.show_selecter_line = (element , on_slide ) => {
+
+  };
+  $scope.window_navigation.on('load' , function (){
+    if($window.parent.location != $window.location){
+
+        $scope.select_numbers = $(".select_numbers");
+        $scope.select_box = $(".select_box");
+        $scope.select_box_brd = $(".select_box_brd");
+        $scope.select_button = $(".select_button");
+        $scope.select_box_data = $(".select_box_data");
+        $scope.select_brd = $(".select_brd");
+
+    }
+  });
+
+
 }]);

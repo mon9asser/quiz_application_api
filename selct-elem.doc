@@ -1,0 +1,306 @@
+welcome-screens
+Submit-screens
+Result-screens
+question-screens
+
+
+
+
+
+Colors
+Backgrounds
+Numbering
+font-size
+font-family
+font-type
+time models
+
+
+
+
+property
+=========
+
+A ==> ALl Texts ( Color + fontSize + fontFamily + fontType )
+select_texts
+
+B ==> All Numbers  ( Color + fontSize + fontFamily + fontType )
+select_numbers
+
+C ==> All Backgrounds ( Background )
+select_box
+
+D ==> All Borders ( Background + Borders)
+select_box_brd
+
+E ==> All buttons  ( Color + fontSize + fontFamily + fontType + Background + Borders )
+select_button
+
+F ==> General Box  ( Color + fontSize + fontFamily + fontType + Background + Borders )
+select_box_data
+
+G ==> All Borders ( Borders)
+select_brd
+
+
+
+
+
+
+
+
+
+
+welcome-screens
+goodbye-screens
+result-screens
+question-screens
+
+
+
+//================================================
+//=========>>> Welcome Screen
+//================================================
+BACKGROUND :=>
+welcome_background_screen_box
+
+BORDERS :=>
+welcome_border_color_screen_box
+left => welcome_border_left_width_screen_box
+	welcome_border_left_style_screen_box
+right => welcome_border_right_width_screen_box
+	welcome_border_right_style_screen_box
+top => welcome_border_top_width_screen_box
+	welcome_border_top_style_screen_box
+bottom => welcome_border_bottom_width_screen_box
+	welcome_border_bottom_style_screen_box
+
+COLOR :=>
+screen_text_color_welcome_screen
+
+FONT SIZE :=>
+screen_text_font_size_welcome_screen
+
+FONT STYLE :=>
+screen_text_font_style_welcome_screen
+
+FONT FAMILy :=>
+screen_text_font_family_welcome_screen
+
+BUTTONS :=>
+background :=> button_background_screen_welcome
+Color :=> button_color_screen_welcome
+fontSize => button_font_size_screen_welcome
+ 
+
+//================================================
+//=========>>> Goodbye Screen
+//================================================
+BACGROUND :=>
+goodbye_background_screen_box
+goodbye_border_color_screen_box
+Left => goodbye_border_width_left_screen_box
+	goodbye_border_style_left_screen_box
+right => goodbye_border_width_right_screen_box
+	goodbye_border_style_right_screen_box
+Top => goodbye_border_width_top_screen_box
+	goodbye_border_style_top_screen_box
+Bottom => goodbye_border_width_bottom_screen_box 
+	goodbye_border_style_bottom_screen_box
+
+COLOR :=>
+screen_text_color_goodbye_screen
+
+FONT SIZE :=>
+screen_text_font_size_goodbye_screen
+
+FONT STYLE :=>
+screen_text_font_style_goodbye_screen
+
+FONT FAMILy :=>
+screen_text_font_family_goodbye_screen
+
+BUTTONS :=> 
+fontSize => button_buttons_font_size_screen_goodbye
+ 
+WARNING MESSAGE:=> 
+fontSzie => warning_text_font_size_screen_goodbye
+Background => warning_text_background_screen_box 
+color => warning_text_color_screen_goodbye
+
+BACK BUTTONS :=>  
+	background : back_button_background_screen_goodbye
+	color : back_button_color_screen_goodbye
+START BUTTONS :=>  
+	background : start_button_background_screen_goodbye
+	color : start_button_color_screen_goodbye
+
+
+//================================================
+//=========>>> Result Screen
+//================================================
+======> Result Text
+BACGROUND :=>
+result_background_screen_box
+result_border_color_screen_box
+Left => resule_border_width_left_screen_box
+	resule_border_style_left_screen_box
+right => resule_border_width_right_screen_box
+	resule_border_style_right_screen_box
+Top => resule_border_width_top_screen_box
+	resule_border_style_top_screen_box
+Bottom => resule_border_width_bottom_screen_box 
+	resule_border_style_bottom_screen_box
+
+COLOR :=>
+screen_text_color_result_screen
+
+FONT SIZE :=>
+screen_text_font_size_result_screen
+
+FONT STYLE :=>
+screen_text_font_style_result_screen
+
+FONT FAMILY => 
+screen_text_font_family_result_screen
+
+
+======> Score Text 
+color => score_result_text_color
+fontSize => score_result_text_font_size
+fontStyle => score_result_text_font_style
+fontFamily => score_result_text_font_family
+
+======> Grade Text
+color => grade_result_text_color
+fontSize => grade_result_text_font_size
+fontStyle => grade_result_text_font_style
+fontFamily => grade_result_text_font_family
+
+
+=======> Button 
+fSize => button_buttons_font_size_screen_result
+ -REVIEW
+	bground => review_button_background_screen_result
+	color => review_button_color_screen_result
+ - RETAKE 
+	bground => retake_button_background_screen_result
+	color => retake_button_color_screen_result
+
+
+//================================================
+//=========>>> Question Screen
+//================================================
+Background :=> 
+question_screen_background
+Border : => 
+question_screen_border_color
+Left => question_border_width_left_screen_box
+	question_border_style_left_screen_box
+right => question_border_width_right_screen_box
+	question_border_style_right_screen_box
+Top => question_border_width_top_screen_box
+	question_border_style_top_screen_box
+Bottom => question_border_width_bottom_screen_box 
+	question_border_style_bottom_screen_box
+
+COLOR :=>
+screen_text_color_question_screen
+
+FONT STYLE :=>
+screen_text_font_style_question_screen
+
+FONT SIZE => 
+screen_text_font_size_question_screen
+
+FONT FAMILY
+screen_text_font_family_question_screen
+
+Border : => 
+question_text_screen_border_color
+Left => question_text_border_width_left_screen_box
+	question_text_border_style_left_screen_box
+right => question_text_border_width_right_screen_box
+	question_text_border_style_right_screen_box
+Top => question_text_border_width_top_screen_box
+	question_text_border_style_top_screen_box
+Bottom => question_text_border_width_bottom_screen_box 
+	question_text_border_style_bottom_screen_box
+
+
+=========>>> Numbering
+background => question_screen_numbering_background
+color => question_screen_numbering_color
+fontSize => question_screen_numbering_font_size
+
+=========>>> Required 
+fSize => question_screen_font_size_required_text
+fcolor => question_screen_color_required_text
+
+=========>>> Warning Text
+fsize => question_screen_warning_text
+color => question_screen_warning_color
+background => question_screen_warning_background
+
+=========>>> Answer
+Background => answer_screen_background
+color => answer_screen_color
+fontSize => answer_screen_font_size
+fontStyle => answer_screen_font_style
+fontFamily => answer_screen_font_family
+=>>> Numbering
+Background => answer_screen_background_numbering
+color => answer_screen_color_numbering
+fontSize => answer_screen_font_size_numbering
+=>>> buttons
+fontSize => question_screen_font_size_button
+Buttons ==> 
+	BACK +++
+	Background => back_question_button_background
+	color => back_question_button_color
+	Continue +++
+	Background => continue_question_button_background
+	color => continue_question_button_color
+
+=>>> selected answer
+bground => answer_select_screen_background
+fcolor => answer_select_screen_color
+border color => answer_select_screen_border
+
+==>>> correct answer 
+bground => correct_select_screen_background
+color => correct_select_screen_color
+borderColor => correct_select_screen_border
+
+==>>> wrong answer 
+bground => wrong_select_screen_background
+color => wrong_select_screen_color
+border => wrong_select_screen_border 
+
+
+
+screen box ===> box
+message text ===> screen-text
+Buttons ===> button
+Score Text ===> score-text
+Grade Text ===> grade-text
+Question Text ===> question-text
+Answer Text ====> answer-text
+ 
+
+
+
+
+//============================================================================
+//=================>>>>> Do An Action
+//============================================================================
+Selector			Stylesheet
+ 
+welcom-screen-block   <===>    box-welcome-screen
+button =>
+ button-of-welcome-screen
+
+
+
+ng:change="apply_these_stylesheet()"
+

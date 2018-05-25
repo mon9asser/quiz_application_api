@@ -196,7 +196,10 @@
 }
 .answer-container ul li {
   padding: 8px;
-  border: 1px dashed #ececec;
+  /*border: 1px dashed #ececec;*/
+  border-style: dashed;
+  border-color: #ececec;
+  border-width: 1px;
   margin: 3px;
   text-align: left;
   /*box-shadow: 0px 0px 1px 0px #eee;*/
@@ -458,25 +461,25 @@
 }
 /* =====================>>>>> Wrong Answers */
 .wrong_answer {
-  background: #d91e1805;
-  border: #D91E18 1px solid !important;
+  border-width: 1px;
+  border-style: solid;
 }
 .wrong_answer > .answer-contents > label.labels {
-  background: #D91E18;
-  color: #fff;
+  /*background: #D91E18;*/
+  /*color: #fff;*/
   border: none;
 }
 .wrong_answer > .answer-contents > .answer-results-wrong{
-  color: #D91E18;
+  /*color: #D91E18;*/
   display: inline-block;
 }
 .wrong_answer > .answer-contents > .text-values {
-  color: #D91E18;
+  color: #D91E18; 
 }
 /* =====================>>>>> correct (right) Answers */
 .right_answer {
-  background: aliceblue;
-  border: #1E824C 1px solid !important;
+  border-width: 1px;
+  border-style: solid;
 }
 .right_answer > .answer-contents > label.labels {
   background: #1E824C;
@@ -575,9 +578,7 @@
   border-left-color: chocolate;
 }
 /* border qs color */
-.question_type_texts_qs_brd{
-  border-color: #c17c7e;
-}
+
 .question_type_media_qs_brd {
   border-color: #2ca0c1;
 }
@@ -1048,14 +1049,6 @@
   /*display: none;*/
 }
 
-
-
-
-
-
-
-
-
 .survey-block {
   display: block;
   position: relative;
@@ -1124,11 +1117,6 @@
    color: #c17c7e;
    cursor: pointer;
  }
-
-
-
-
-
 
  .scalet-o li {
    display: inline-block;
@@ -1317,4 +1305,28 @@ select.select-current-element , select.select-current-element:focus , select.sel
 }
 .selected_answer:hover {
   background: #c17c7e;
+}
+.outlined-block-selector {
+  display: block;
+  position: absolute;
+  overflow: hidden;
+  outline: 3px solid red;
+}
+
+.player-body-screen {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  display: block;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.player-block {
+  z-index: 2000;
+}
+.answer-block-selector {
+
 }
