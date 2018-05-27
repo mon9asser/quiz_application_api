@@ -2738,6 +2738,20 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
 
     }
+    $scope.change_this_answer_value_of_numbering = ( block_vals )=> {
+      if( block_vals == 'answer_screen_background_numbering' ) {
+        // alert($($scope.iframe_object).find( '.answer-container' ).children('ul').children('li').children('.answer-contents').children('label.labels').css("background"));
+        $($scope.iframe_object).find( '.answer-container' ).children('ul').children('li').children('.answer-contents').children('label.labels').css("background" , $scope.answer_screen_background_numbering );
+       }
+      if( block_vals == 'answer_screen_color_numbering') {
+          $($scope.iframe_object).find( '.answer-container' ).children('ul').children('li').children('.answer-contents').children('label.labels').css({ 'color' : $scope.answer_screen_color_numbering   });
+       }
+      if( block_vals == 'answer_screen_font_size_numbering' ){
+        $($scope.iframe_object).find( '.answer-container' ).children('ul').children('li').children('.answer-contents').children('label.labels').css({ 'font-size' : $scope.answer_screen_font_size_numbering   });
+       }
+    }
+
+
     $scope.apply_these_stylesheet = () => {
         if($scope.current_element == null ) return false;
         var _b = $scope.editor_page;
@@ -2838,18 +2852,30 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           // if ( $scope.question_screen_warning_color != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
           // if ( $scope.question_screen_warning_background != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
           // alert($scope.current_elemen);
-          if ( $scope.answer_screen_background != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
-          if ( $scope.answer_screen_color != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
-          if ( $scope.answer_screen_font_size != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
-          if ( $scope.answer_screen_font_style != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
-          if ( $scope.answer_screen_font_family != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+           // .answer-text-box-area
+          if ( $scope.answer_screen_background != undefined && $scope.current_element == ".answer-text-box-area" ) {
+            $($scope.iframe_object).find( '.question-answer-row-select-blk' ).css({ 'background' : $scope.answer_screen_background });
+          }
+          if ( $scope.answer_screen_color != undefined && $scope.current_element == ".answer-text-box-area" ) {
+            $($scope.iframe_object).find(  $scope.current_element ).css({ 'color' : $scope.answer_screen_color });
+          }
+          if ( $scope.answer_screen_font_size != undefined && $scope.current_element == ".answer-text-box-area" ) {
+            $($scope.iframe_object).find(  $scope.current_element ).css({ 'font-size' : $scope.answer_screen_font_size });
+          }
+          if ( $scope.answer_screen_font_style != undefined && $scope.current_element == ".answer-text-box-area" ) {
+            $($scope.iframe_object).find(  $scope.current_element ).css({ 'font-weight' : $scope.answer_screen_font_style });
+          }
+          if ( $scope.answer_screen_font_family != undefined && $scope.current_element == ".answer-text-box-area" ) {
+              $($scope.iframe_object).find(  $scope.current_element ).css({ 'font-family' : $scope.answer_screen_font_style });
+           }
 
-          if ( $scope.answer_screen_background_numbering != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
-          if ( $scope.answer_screen_color_numbering != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
-          if ( $scope.answer_screen_font_size_numbering != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          // alert($scope.current_element);
+
+          // if ( $scope.answer_screen_background_numbering != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          // if ( $scope.answer_screen_color_numbering != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          // if ( $scope.answer_screen_font_size_numbering != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
 
           if ( $scope.question_screen_font_size_button != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
-
           if ( $scope.answer_select_screen_background != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
           if ( $scope.answer_select_screen_color != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
           if ( $scope.answer_select_screen_border != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
