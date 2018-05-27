@@ -31,16 +31,13 @@
 <div ng:controller="preview_players" class="player-block">
 
 
-<!--   stylesheet_menu   -->
 <div class="preview_player_container-cont-selected player_opg_editor player-block" >
-
-
   <div id="preview_player_container" class="container-fluid-x preview_player_container">
 
    <input id="cross_iframe_qs_index_value" type="hidden" id="the-target-slide-index" name="" value="1" />
    <!-- <button style="display:none;" id="cross_iframe_qs_index_button" ng:click="slide_to_question_cross_iframe()" type="button" name="button">Go To INDEX </button> -->
 
-      <div class="quizapp-tools player-block" ng:if="__player_object.settings.time_settings.is_with_time == true || __player_object.settings.progression_bar.is_available == true">
+      <div class="quizapp-tools player-block " ng:if="__player_object.settings.time_settings.is_with_time == true || __player_object.settings.progression_bar.is_available == true">
         <!-- ++++++++++++ +++++++++++++ -->
         <!-- Tool_options -->
         <!-- ++++++++++++ +++++++++++++ -->
@@ -48,16 +45,16 @@
            <div class="object-layouts">
              <div class="object-layouts-container dwidth-object select_box_brd">
                <!-- Time tracker -->
-               <div class="tracker" ng:include="time_tracker_layout()" ng:if="__player_object.settings.time_settings.is_with_time == true"></div>
+               <div style="width:100%;" class="tracker" ng:include="time_tracker_layout()" ng:if="__player_object.settings.time_settings.is_with_time == true"></div>
                <!-- progress_bar -->
-               <div class="progression_bar" ng:include="progression_layout()" ng:if="__player_object.settings.progression_bar.is_available == true"></div>
+               <!-- <div class="progression_bar" ng:include="progression_layout()" ng:if="__player_object.settings.progression_bar.is_available == true"></div> -->
              </div>
            </div>
         </div>
       </div>
       <div class="clearFix"></div>
       <!-- ++++++++++++++++++++++++++ -->
-      <!-- ---- Slide containers ---- -->
+      <!--  Slide containers  -->
       <!-- ++++++++++++++++++++++++++ -->
       <div class="swiper-container">
         <div class="swiper-wrapper quiz-contents">

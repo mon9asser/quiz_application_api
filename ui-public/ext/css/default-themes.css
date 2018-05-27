@@ -14,9 +14,154 @@ html , body {
   color: #fff;
 }
 
+.back-button-goodbye-screen-block ,
+.submit-button-goodbye-screen-block {
+    margin-top: 5px !important;
+    margin-left: 0px !important;
+    margin-right: 5px !important;
+}
+/*
+=============================================
+  Keyframes +++
+=============================================
+*/
 
+.outlined_object {
+  outline-style: solid;
+  outline-width: 0px;
+  /*outline-color: #025bff;*/
+  outline-color: #20fdb9;
+  /*background: rgba( 32, 253  ,185  ,0.1) !important;*/
+  /*outline-color:#025bff;*/
+  margin: 5px 0px;
+  animation: outlined_object  1s infinite alternate;
+}
+/*@-ms-keyframes outlined_object {
+  20% { outline-color:#20fdb924 ;}
+  40% { outline-color:#20fdb95e ;}
+  60% { outline-color:#20fdb9c9 ;}
+  80% { outline-color: #20fdb9 ;}
+}
+@-o-keyframes outlined_object {
+  20% { outline-color:#20fdb924 ;}
+  40% { outline-color:#20fdb95e ;}
+  60% { outline-color:#20fdb9c9 ;}
+  80% { outline-color: #20fdb9 ;}
+}
 
+@-webkit-keyframes outlined_object{
+  20% { outline-color:#20fdb924 ;}
+  40% { outline-color:#20fdb95e ;}
+  60% { outline-color:#20fdb9c9 ;}
+  80% { outline-color: #20fdb9 ;} }
+@-moz-keyframes outlined_object{
+  20% { outline-color:#20fdb924 ;}
+  40% { outline-color:#20fdb95e ;}
+  60% { outline-color:#20fdb9c9 ;}
+  80% { outline-color: #20fdb9 ;}}*/
+  @keyframes outlined_object  {
+    0%,50% { outline-width: 0px;}
+    0% {outline-width: 0px;}
+    100% {outline-width: 5px; }
+  }
 
+  #time-frame-pie {   width: 100px;   height: 100px;  position: relative; margin: 0px auto; }
+  .outer-shadow, .inner-shadow, #timer {   z-index: 6; position: absolute; width: 100%; height: 100%; border-radius: 100%; box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.2);  }
+  .inner-shadow {
+    top: 50%;
+    left: 50%;
+    width: 80px;
+    height: 80px;
+    margin-left: -40px;
+    margin-top: -40px;
+    border-radius: 100%;
+    background-color: #eee;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+    line-height: 13px;
+  }
+  #timer {
+    z-index: 1;
+    box-shadow: none;
+  }
+  .hold {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    clip: rect(0px, 100px, 100px, 50px);
+    -webkit-border-radius: 100%;
+    /*background-color: #ee4360;*/
+    background: #fff;
+  }
+  .pie, .dot span {
+    background-color: tomato ;
+  }
+  .pie {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-border-radius: 100%;
+    clip: rect(0px, 50px, 100px, 0px);
+    }
+   #left .pie {
+    z-index: 1;
+    -webkit-animation: left 4s linear both;
+    }
+    @-webkit-keyframes left {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(180deg);
+    }
+    }
+    #right {
+    z-index: 3;
+    -webkit-transform: rotate(180deg);
+    }
+    #right .pie {
+    -webkit-animation: right 4s linear both;
+    -webkit-animation-delay: 4s;
+    }
+    @-webkit-keyframes right {
+    0% {
+      -webkit-transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(180deg);
+    }
+    }
+    .dot {
+    z-index: 2;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 50%;
+    height: 10px;
+    margin-top: -5px;
+    -webkit-animation: dot 8s linear both;
+    -webkit-transform-origin: 0% 50%;
+    }
+   .dot span {
+    position: absolute;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+  }
+  @-webkit-keyframes dot {
+      0% {
+      -webkit-transform: rotate(-90deg);
+      }
+      50% {
+      -webkit-transform: rotate(90deg);
+      z-index: 4;
+      }
+     100% {
+      -webkit-transform: rotate(270deg);
+      z-index: 4;
+    }
+ }
 /* ========================================================== */
 /* ===>> Theme selectors */
 /* ========================================================== */

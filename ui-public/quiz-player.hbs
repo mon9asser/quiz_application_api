@@ -1,4 +1,9 @@
 {{> attendee_head }}
+  <div class="player-body-block player-body-screen"></div>
+
+
+
+
 
    <!-- Loading page  (BLANK) -->
    <div class="loading-player text-center">
@@ -8,7 +13,7 @@
          <div class="cssload-square-blend"></div>
       </div>
    </div>
-   <div class="preview_player_container-cont-selected player_opg_editor" style="height:100%;">
+   <div class="preview_player_container-cont-selected player_opg_editor player-block" style="height:100%;">
    <div class="container-fluid-x" data:ng:controller="players">
 
      <!-- Expiry date -->
@@ -19,10 +24,9 @@
           </div>
      </div>
 
-     <div class="quizapp-tools">
+     <div class="quizapp-tools player-block">
        <!-- Timer_option -->
        <div class="tool-obj">
-
           <div class="object-layouts" ng:if="__player_object.settings.time_settings.is_with_time == true || __player_object.settings.progression_bar.is_available == true">
             <div class="object-layouts-container">
               <!-- Time tracker -->
@@ -32,7 +36,6 @@
             </div>
           </div>
        </div>
-
      </div>
      <!--  slide_screens -->
      <div class="clearFix"></div>
@@ -42,17 +45,17 @@
           <!--  rouly-expired-text -->
            <div class="swiper-wrapper quiz-contents">
                <div class="swiper-slide welcoming-screen-x">
-                 <div ng:class="load_quiz_status_theme()" class="container screen-container screen_opg_editor">
+                 <div ng:class="load_quiz_status_theme()" class="container screen-container screen_opg_editor  welcome-screen-block box-welcome-screen">
 
                        <!-- Welcoming message ( Welcoming ) -->
                        <div ng:show="(quiz_status == 0)? true : false">
-                           <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
+                           <div class="description-body redactor-styles welcome-screen-text-block welcome-screen-text" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
                            <div class="qusu-details text-right">
-                               <button ng:click="back_to_quizzes()" class="button-take-this" type="button" name="button">
+                               <!-- <button ng:click="back_to_quizzes()" class="button-take-this" type="button" name="button">
                                    <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                                    Back
-                               </button>
-                               <button ng:click="start_this_quiz()" class="button-take-this" type="button" name="button">
+                               </button> -->
+                               <button ng:click="start_this_quiz()" class="button-take-this welcome-screen-button welcome-screen-button-block" type="button" name="button">
                                    <i class="fa fa-sign-in" aria-hidden="true"></i>
                                    {> __player_object.settings.label_btns.lbl_start_with <}
                                </button>
@@ -62,13 +65,13 @@
 
                        <!-- Warning message ( Expired warning ) -->
                        <div ng:show="(quiz_status == 1)? true : false">
-                           <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
+                           <div class="description-body redactor-styles welcome-screen-text-block welcome-screen-text" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
                            <div class="qusu-details text-center">
                              <div>
                                  {> is_resume.expire_message <} <span class="in-date">{> is_resume.through_date.after <}</span> day(s) in next <span class="in-date">{> is_resume.through_date.in | date <}</span>
                              </div>
                              <div class="qusu-details detls-resume-quiz text-right">
-                                <button ng:click="resume_quiz_next_unsolved_question()" class="button-take-this" type="button" name="button">
+                                <button ng:click="resume_quiz_next_unsolved_question()" class="button-take-this welcome-screen-button welcome-screen-button-block" type="button" name="button">
                                   <i class="fa fa-angle-right" aria-hidden="true"></i>
                                   Resume Quiz
                                 </button>
@@ -126,26 +129,26 @@
                </div>
                <!-- Questions -->
                <div class="swiper-slide" data:ng:repeat="(obj_key , obj_val) in __player_object.questions">
-                 <div class="container screen-container question_opg_editor_block" data:ng:class="get_slide_styles(obj_val.question_type)">
+                 <div class="container screen-container question_opg_editor_block question-screen-box" data:ng:class="get_slide_styles(obj_val.question_type)">
                     <!-- Question container -->
                      <div class="question-container">
                           <!-- Question body -->
                           <!-- <div class="question-body" data:ng:bind:html="obj_val.question_body | trust_this_html_values"></div> -->
-                          <div ng:class="load_qs_theme(obj_val.question_type)" class="question-body question_opg_editor">
-                            <span ng:class="load_slide_theme(obj_val.question_type)" class="label-question">
-                              <span class="qs-icons">
+                          <div ng:class="load_qs_theme(obj_val.question_type)" class="question-body question_opg_editor question-box-text">
+                            <span  class="label-question question-label-box">
+                              <!-- <span class="qs-icons">
                                 <i ng:if="obj_val.question_type == 0" class="icon-insert-template iconx-x"></i>
                                 <i ng:if="obj_val.question_type == 1" class="icon-image iconx-x"></i>
                                 <i ng:if="obj_val.question_type == 2" class="icon-check-circle iconx-x"></i>
-                              </span>
+                              </span> -->
                               <span class="qs-numericals">{> $index + 1 <}</span>
-                              <div class="arrow-right" ng:class="load_border_styles(obj_val.question_type)"></div>
+                              <div class="arrow-right question-label-box-brd" ng:class="load_border_styles(obj_val.question_type)"></div>
                             </span>
                             <span data:ng:bind:html="obj_val.question_body | trust_this_html_values" class="question-body-text"></span>
-                            <span class="required_option" ng:class="load_qs_note_theme(obj_val.question_type)" ng:if="obj_val.answer_settings.is_required == true"> Required </span>
+                            <span class="required_option question-text-required-text"  ng:if="obj_val.answer_settings.is_required == true"> Required </span>
                           </div>
-                          <div ng:if="(obj_val.question_type == 0 || obj_val.question_type == 1 ) && obj_val.answer_settings.single_choice == false" class="notes">
-                              <span ng:class="load_qs_note_theme(obj_val.question_type)"> There're many correct choices , You've to select them  to pass this question </span>
+                          <div ng:if="(obj_val.question_type == 0 || obj_val.question_type == 1 ) && obj_val.answer_settings.single_choice == false" class="notes question-warnning-box">
+                              <span> There're many correct choices , You've to select them  to pass this question </span>
                           </div>
                           <div data:ng:if="obj_val.media_question != null" class="question-media" ng:class="(obj_val.answer_settings.super_size)? 'super-size':''">
                             <!-- Case : image type  -->
@@ -238,44 +241,43 @@
                             <!-- Case it 4 => Free texts -->
                       </div>
                       <!-- ng:if="__player_object.settings.auto_slide == true"  -->
-                      <div ng:if="__player_object.settings.auto_slide == true && obj_val.question_type <= 2 && obj_val.answer_settings.single_choice == true" class="question_notes" ng:class="load_qs_note_theme(obj_val.question_type)">
+                      <div ng:if="__player_object.settings.auto_slide == true && obj_val.question_type <= 2 && obj_val.answer_settings.single_choice == true" class="question_notes answer-alarm-text answer-alarm-text-box" >
                         <span class="fa fa-info-circle"></span>
                         <span>Note : When you solve  this question the next one will come directly after few moments </span>
                       </div>
                       <!--  Warning Case-->
-                      <div class="warning_case" ng:class="load_slide_theme(obj_val.question_type)" ng:click="go_to_not_attended_question()"></div>
+                      <div class="warning_case question-label-block answer-alarm-text-box" ng:click="go_to_not_attended_question()"></div>
                       <!-- Question buttons  -->
 
                       <div ng:if ="__player_object.settings.navigation_btns == true" class="qusu-details ques-questions text-right">
-                         <button ng:click="back_to_prev_slider()" class="button-take-this" ng:class="load_slide_theme(obj_val.question_type)" type="button" name="button">
+                         <button ng:click="back_to_prev_slider()" class="button-take-this back-answer-question-button"  type="button" name="button">
                             <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                             Back
                           </button>
-                          <button ng:click="go_to_next_slider($index , true)" ng:class="load_slide_theme(obj_val.question_type)" class="button-take-this" type="button" name="button">
+                          <button ng:click="go_to_next_slider($index , true)"  class="button-take-this continue-answer-question-button-block" type="button" name="button">
                             <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                             <span ng:if="$index != (__player_object.questions.length - 1)">
                                {> __player_object.settings.label_btns.lbl_continue_with <}
                             </span>
                             <span ng:if="$index == (__player_object.questions.length - 1)">Finish</span>
                           </button>
-
                      </div>
                  </div>
                </div>
                <!-- Godbye screen  -->
                <div class="swiper-slide">
                    <!-- Ending screen contents  -->
-                   <div class="container screen-container about-quiz screen_opg_editor">
-                         <div class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_end_with | trust_this_html_values"></div>
+                   <div class="container screen-container about-quiz screen_opg_editor box-goodbye-screen">
+                         <div class="description-body redactor-styles goodbye-screen-text" ng:bind:html="__player_object.settings.titles.title_end_with | trust_this_html_values"></div>
                          <!--  Warning Case-->
-                         <div class="warning_case" style="background: tomato;" ng:class="load_slide_theme(obj_val.question_type)" ng:click="go_to_not_attended_question()"></div>
+                         <div class="warning_case goodbye-screen-warning-text" style="background: tomato;"   ng:click="go_to_not_attended_question()"></div>
                          <!-- Question buttons  -->
                          <div class="qusu-details ques-questions text-right">
-                             <button ng:click="back_to_prev_slider()" class="button-take-this" type="button" name="button">
+                             <button ng:click="back_to_prev_slider()" class="button-take-this back-button-goodbye-screen" type="button" name="button">
                                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                                Back
                              </button>
-                             <button data:ng:click="submit_quiz_into_report()" class="button-take-this submi_the_quiz_handler" type="button" name="button">
+                             <button data:ng:click="submit_quiz_into_report()" class="button-take-this submi_the_quiz_handler submit-button-goodbye-screen" type="button" name="button">
                                <i class="fa fa-arrow-right fac-icon-submit" aria-hidden="true"></i>
                                <span>Submit Quiz</span>
                              </button>
@@ -286,33 +288,35 @@
                <!-- Result screen  -->
                <div class="swiper-slide welcoming-screen-x">
                    <!-- Result screen contents  -->
-                   <div ng:class="(is_resume == null)?'about-quiz':'result-slide'" class="container screen-container screen_opg_editor"> <!-- label-question -->
+                   <div ng:class="(is_resume == null)?'about-quiz':'result-slide'" class="container screen-container screen_opg_editor box-result-screen"> <!-- label-question -->
                        <div>
                             <!-- Case successed in quiz  -->
-                              <div ng:if="__report_object.status != 'Failed'" class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_success_with | trust_this_html_values"></div>
+                              <div ng:if="__report_object.status != 'Failed'" class="description-body redactor-styles result-screen-text" ng:bind:html="__player_object.settings.titles.title_success_with | trust_this_html_values"></div>
                               <!-- Case failed in quiz  -->
-                              <div ng:if="__report_object.status == 'Failed'" class="description-body redactor-styles" ng:bind:html="__player_object.settings.titles.title_failed_with | trust_this_html_values"></div>
+                              <div ng:if="__report_object.status == 'Failed'" class="description-body redactor-styles result-screen-text" ng:bind:html="__player_object.settings.titles.title_failed_with | trust_this_html_values"></div>
                               <!-- The Grade  -->
                               <div class="quiz-grade">
                                 <!-- <div style="background: #f9f9f9;" class="grade_result_loder text-center">
                                   Loading results ..
                                 </div> -->
-                                <div class="quiz-grade grade-score text-center">
+                                <div class="quiz-grade grade-score text-center result-screen-score-text">
                                   <h3>Your score : {> this_attendee_draft.report_attendee_details.correct_answers  + "/" + __player_object.questions.length <}</h3>
                                 </div>
-                                <div class="quiz-grade grade-score text-center">
+                                <div class="quiz-grade grade-score text-center result-screen-grade-text">
                                   <h5>Pass grade : {> this_attendee_draft.report_attendee_details.score | math_around_it <}%</h5>
                                 </div>
                               </div>
                               <!-- Question buttons  -->
                               <div class="qusu-details text-right">
-                                  <button ng:if="__player_object.settings.review_setting == true" ng:click="review_all_resolved_question()" class="button-take-this" type="button" name="button">
+                                  <button ng:if="__player_object.settings.review_setting == true" ng:click="review_all_resolved_question()" class="button-take-this review-result-box" type="button" name="button">
                                     <i class="fa fa-reply-all" aria-hidden="true"></i>
                                     Review
                                   </button>
-                                   <button  ng:if="__player_object.settings.retake_setting == true" ng:click="retake_this_quiz()" class="button-take-this retake-this-quiz" type="button" name="button">
+                                   <button  ng:if="__player_object.settings.retake_setting == true" ng:click="retake_this_quiz()" class="button-take-this retake-this-quiz retake-result-box" type="button" name="button">
                                     <i class="fa fa-repeat" aria-hidden="true"></i>
-                                    <span>Retake</span>
+                                    <span>
+                                      Retake
+                                    </span>
                                   </button>
                              </div>
                       </div>

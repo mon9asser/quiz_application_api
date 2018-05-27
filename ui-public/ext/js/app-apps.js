@@ -147,7 +147,17 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     // document.getElementById('iframe').contentWindow.angular.element(document.body).scope();
     // ==> Vars in scope $R
     // ==> Stylesheet Work
-    $scope.player_elements = null ;
+    $scope.player_elements = null;
+    $scope.current_element = null;
+    $scope.stylesheet_object = new Array();
+    /*
+      {
+        class : {
+          properties : "color :000 , "
+        } ,
+      }
+    */
+
     $scope.defined_elements = {
       fonts : 'span , p , font , b , strong , h1 , h2 , h3 , h4 , h5 , h6' ,
       buttons : ['.select_button'] ,
@@ -238,6 +248,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       "file"       : null ,
       "link"       : null
       }
+
     $scope.application_settings = {
          questionnaire_title : null ,
          settings : {
@@ -258,7 +269,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
              is_graded : false ,
              value : 90
            } ,
-           time_settings : {
+           time_settings : { // time_progress_models
              is_with_time:false ,
              value : "30" ,
              timer_type : false ,
@@ -289,6 +300,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
            updatedAt : new Date ()
          }
             }
+    $scope.time_progress_models_changer = () => {
+      $scope.application_settings.settings.time_settings.timer_layout = $scope.time_progress_models;
+      $scope.application_settings.settings.progression_bar.progression_bar_layout = $scope.time_progress_models ;
+
+      $timeout(function(){ $scope.$apply() } , 350);
+    };
     $scope.question_settings = {
       is_required           : false ,
       single_choice  : false ,
@@ -353,6 +370,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                       else // => Default
                       settings_obj['settings']['titles']['title_start_with'] = $scope.application_settings.settings.titles.title_start_with;
 
+                      if ($scope.time_progress_models != null )
+                          settings_obj['settings']['time_settings']['timer_layout'] = $scope.time_progress_models
+                      else
+                        settings_obj['settings']['time_settings']['timer_layout'] =$scope.application_settings.settings.time_settings.timer_layout;
+
+
                       if(mongo_settings.titles.title_end_with != null )
                       settings_obj['settings']['titles']['title_end_with'] = mongo_settings.titles.title_end_with;
                       else // Default
@@ -414,6 +437,13 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                   }else // end grade setting
                   settings_obj['settings']['grade_settings'] = $scope.application_settings.settings.grade_settings;
 
+                  if(mongo_settings.time_settings != undefined && mongo_settings.time_settings.timer_layout != null)
+                  settings_obj['settings']['time_settings']['timer_layout'] = mongo_settings.time_settings.timer_layout;
+                  else // default
+                  settings_obj['settings']['time_settings']['timer_layout'] = $scope.application_settings.settings.timer_layout;
+                  console.log(mongo_settings);
+
+
                   if(mongo_settings.time_settings != null ){
                     //  settings_obj['settings']['time_settings'] = mongo_settings.time_settings ;
 
@@ -431,11 +461,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                     settings_obj['settings']['time_settings']['timer_type'] = mongo_settings.time_settings.timer_type ;
                     else // default
                     settings_obj['settings']['time_settings']['timer_type'] = $scope.application_settings.settings.timer_type;
-
-                    if(mongo_settings.time_settings.timer_layout != null)
-                    settings_obj['settings']['time_settings']['timer_layout'] = mongo_settings.time_settings.timer_layout;
-                    else // default
-                    settings_obj['settings']['time_settings']['timer_layout'] = $scope.application_settings.settings.timer_layout;
 
 
 
@@ -2207,8 +2232,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
         if(new__Answer != null ){
           // (new__Answer);
-
-
           var answer_ui_list = $($scope.iframe_object).find('ul#question_'+$scope.question_id);
 
           var this_question = $scope.questions_list.find(x => x._id == $scope.question_id);
@@ -2474,35 +2497,35 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
     $scope.editor_page = "0";
     // ===> Calling stylesheet Editor
-    $scope.block_selector = () => {
-      console.log( $($scope.iframe_access.document).find('.welcome-screens') );
-      $("#welcome-screens,#goodbye-screens,#result-screens ,#question-screens").css({display:'none' });
 
+    $scope.block_selector = () => {
+      $("#welcome-screens,#goodbye-screens,#result-screens ,#question-screens").css({display:'none' });
       //  $scope.editor_page
       if($scope.editor_page == 0 ){ // => Welcome Screen
         $("#welcome-screens").css("display","block");
          // ==> Slide To Target Element
          $scope.iframe_access.slide_to_question_in_index_number(0);
-         // ==> outline it
-        //  $scope.iframe_object.find(".welcome-screens").css({outline : "3px solid red"});
-         $scope.iframe_access.show_selecter_line ( "csd" , 0 );
-        //  $scope.iframe_object.find(); container screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd
-
+        $($scope.iframe_object).find(".welcome-screen-block").addClass("outlined_object");
       }
       if($scope.editor_page == 1 ){ // => GoodBye Screen
         $("#goodbye-screens").css("display","block");
         // ==> Slide To Target Element
-        // ==> outline it
+        $scope.iframe_access.slide_to_question_in_index_number($scope.questions_list.length + 1 );
+       $($scope.iframe_object).find(".goodbye-screen-block").addClass("outlined_object");
       }
       if($scope.editor_page == 2 ){ // => Result Screen
         $("#result-screens").css("display","block");
         // ==> Slide To Target Element
         // ==> outline it
+        $scope.iframe_access.slide_to_question_in_index_number($scope.questions_list.length + 2);
+       $($scope.iframe_object).find(".result-screen-block").addClass("outlined_object");
       }
       if($scope.editor_page == 3 ){ // => Question Screen
         $("#question-screens").css("display","block");
         // ==> Slide To Target Element
         // ==> outline it
+        $scope.iframe_access.slide_to_question_in_index_number(1);
+       $($scope.iframe_object).find(".question-screen-block").addClass("outlined_object");
       }
       if($scope.editor_page == 4 ){ // => Time - progress Screen
 
@@ -2513,60 +2536,105 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       var _e = element_in_block ;
       var _b = $scope.editor_page;
 
+      $($scope.iframe_object).find(".outlined_object").removeClass("outlined_object");
+
+
       if( _b == 0 ){ //=> Welcome Screen
+        $scope.iframe_access.slide_to_question_in_index_number(0);
+
+        if(_e == 'page-player'){
+            $scope.current_element = '.player-body-screen';
+            $($scope.iframe_object).find('.player-body-block').addClass("outlined_object");
+          }
         if(_e == 'box'){
-          // ==> Slide To This screen
-          // ==> Show Element in Box
+          $scope.current_element = '.box-welcome-screen';
+          $($scope.iframe_object).find('.welcome-screen-block').addClass("outlined_object");
         }
         if(_e == 'screen-text'){
-
+          $scope.current_element = '.welcome-screen-text';
+          $($scope.iframe_object).find('.welcome-screen-text-block').addClass("outlined_object");
         }
         if(_e == 'button'){
-
+          $scope.current_element = '.welcome-screen-button';
+          $($scope.iframe_object).find('.welcome-screen-button-block').addClass("outlined_object");
         }
       }
       if( _b == 1 ){ //=> GoodBye Screen
-        if(_e == 'box'){
+          $scope.iframe_access.slide_to_question_in_index_number($scope.questions_list.length + 1 );
+        // $scope.iframe_access.slide_to_question_in_index_number($scope.);
 
+        if( _e == 'box'){
+            $scope.current_element = '.box-goodbye-screen';
+            $($scope.iframe_object).find('.goodbye-screen-block').addClass("outlined_object");
         }
         if(_e == 'screen-text'){
-
+            $scope.current_element = '.goodbye-screen-text';
+            $($scope.iframe_object).find('.goodbye-screen-text-block').addClass("outlined_object");
+        }
+        if(_e == 'warning-text'){
+          $scope.current_element = '.goodbye-screen-warning-text';
+          $($scope.iframe_object).find('.goodbye-screen-text-warning-block').addClass("outlined_object");
         }
         if(_e == 'button'){
-
+           $scope.current_element = '.back-button-goodbye-screen , .submit-button-goodbye-screen';
+          // $($scope.iframe_object).find('.welcome-screen-text-block').addClass("outlined_object");
+          $($scope.iframe_object).find('.back-button-goodbye-screen-block').addClass("outlined_object");
+          $($scope.iframe_object).find('.submit-button-goodbye-screen-block').addClass("outlined_object");
         }
       }
       if( _b == 2 ){ //=> Result Screen
         if(_e == 'box'){
-
+          $scope.current_element = ".box-result-screen";
+          $($scope.iframe_object).find('.result-screen-block').addClass("outlined_object");
         }
         if(_e == 'screen-text'){
-
+          $scope.current_element = ".result-screen-text";
+          $($scope.iframe_object).find('.result-screen-text-block').addClass("outlined_object");
         }
         if(_e == 'score-text'){
-
+          $scope.current_element = ".result-screen-score-text";
+          $($scope.iframe_object).find('.result-screen-score-text-block').addClass("outlined_object");
         }
         if(_e == 'grade-text'){
-
+          $scope.current_element = ".result-screen-grade-text";
+          $($scope.iframe_object).find('.result-screen-grade-text-block').addClass("outlined_object");
+        }
+        if(_e == 'button'){
+          $scope.current_element = ".review-result-box , .retake-result-box";
+          $($scope.iframe_object).find('.retake-result-box-block , .review-result-box-block').addClass("outlined_object");
         }
       }
       if( _b == 3 ){ //=> Question Screens
-        if(_e == 'box'){
 
-        }
-        if(_e == 'question-text'){
-
-        }
-        if(_e == 'question-text'){
-
-        }
-        if(_e == 'button'){
-
-        }
+          if (_e == 'box'){
+            $scope.current_element = ".question-screen-box";
+            $($scope.iframe_object).find('.question-screen-block').addClass("outlined_object");
+          }
+          if (_e == 'question-text'){
+            $scope.current_element = ".question-box-text";
+            $($scope.iframe_object).find('.question-box-block').addClass("outlined_object");
+          }
+          if (_e == 'answer-text'){
+            $scope.current_element = ".answer-text-box-area";
+            $($scope.iframe_object).find('.answer-block-selector').addClass("outlined_object");
+          }
+          if (_e == 'required-text'){
+            $scope.current_element = ".question-text-required-text";
+            $($scope.iframe_object).find('.question-text-required-block').addClass("outlined_object");
+          }
+          if (_e == 'warning-text'){
+             $scope.current_element = ".question-label-box";
+            $($scope.iframe_object).find('.question-warnning-block').addClass("outlined_object");
+          }
+          if (_e == 'button'){
+            $scope.current_element = ".back-answer-question-button-block, .continue-answer-question-button";
+            $($scope.iframe_object).find('.back-answer-question-button-block, .continue-answer-question-button').addClass("outlined_object");
+          }
       }
       if( _b == 4 ){ //=> Quiz Time & Progress bar
 
       }
+
     };
 
     $('ul.css_properties li .property-name').on('click' , function(){
@@ -2586,9 +2654,435 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
         target_block_property.css('display' , 'none');
         else
           target_block_property.css('display' , 'block');
-
-
-
     });
+    $scope.spectrum_property = {
+            color: "#ECC",
+            flat: false,
+            showInput: true,
+            className: "full-spectrum",
+            showInitial: true,
+            showPalette: true,
+            showSelectionPalette: true,
+            maxPaletteSize: 10,
+            preferredFormat: "hex",
+            localStorageKey: "spectrum.demo" ,
+            palette: [
+                ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
+                "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
+                ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+                "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"],
+                ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)",
+                "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)",
+                "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)",
+                "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)",
+                "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)",
+                "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+                "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+                "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+                "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)",
+                "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
+            ]
+        };
 
+
+    $timeout(function(){
+      $(".color_picker").spectrum($scope.spectrum_property);
+    } , 3000 );
+
+    $scope.changed_buttons = (button_type) => {
+      var property_value = $scope[button_type] ;
+      $scope.current_element == ".back-button-goodbye-screen , .submit-button-goodbye-screen"
+
+      // => Group 1
+      if ( button_type == 'back_button_background_screen_goodbye' ){
+        $($scope.iframe_object).find('.back-button-goodbye-screen').css({background : property_value });
+       }
+      if ( button_type == 'back_button_color_screen_goodbye' ){
+        $($scope.iframe_object).find('.back-button-goodbye-screen').css({color : property_value });
+       }
+      if ( button_type == 'start_button_background_screen_goodbye' ){
+        $($scope.iframe_object).find('.submit-button-goodbye-screen').css({background : property_value });
+       }
+      if ( button_type == 'start_button_color_screen_goodbye' ){
+        $($scope.iframe_object).find('.submit-button-goodbye-screen').css({color : property_value });
+       }
+
+      // => Group 2
+      if ( button_type == 'review_button_background_screen_result' ){
+        $($scope.iframe_object).find('.review-result-box').css({background : property_value });
+      }
+      if ( button_type == 'review_button_color_screen_result' ){
+       $($scope.iframe_object).find('.review-result-box').css({color : property_value });
+      }
+      if ( button_type == 'retake_button_background_screen_result' ){
+       $($scope.iframe_object).find('.retake-result-box').css({background : property_value });
+      }
+      if ( button_type == 'retake_button_color_screen_result' ){
+       $($scope.iframe_object).find('.retake-result-box').css({color : property_value });
+      }
+
+      // => Group 3
+      if ( button_type == 'continue_question_button_color' ) {
+          $($scope.iframe_object).find('.back-answer-question-button').css({background : property_value });
+       }
+      if ( button_type == 'continue_question_button_background' ) {
+          $($scope.iframe_object).find('.back-answer-question-button').css({color : property_value });
+       }
+      if ( button_type == 'back_question_button_color' ) {
+          $($scope.iframe_object).find('.continue-answer-question-button-block').css({background : property_value });
+       }
+      if ( button_type == 'back_question_button_background' ) {
+          $($scope.iframe_object).find('.continue-answer-question-button-block').css({color : property_value });
+       }
+
+
+
+    }
+    $scope.apply_these_stylesheet = () => {
+        if($scope.current_element == null ) return false;
+        var _b = $scope.editor_page;
+
+        // ==> question screen
+        if( _b == 3 ){
+          if ( $scope.question_screen_background != undefined && $scope.current_element == ".question-screen-box" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ background : $scope.question_screen_background });
+           }
+          if ( $scope.question_screen_border_color != undefined && $scope.current_element == ".question-screen-box" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-color' : $scope.question_screen_border_color });
+           }
+          if ( $scope.question_border_width_left_screen_box != undefined && $scope.current_element == ".question-screen-box" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-left-width' : $scope.question_border_width_left_screen_box });
+           }
+          if ( $scope.question_border_style_left_screen_box != undefined && $scope.current_element == ".question-screen-box" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-left-style' : $scope.question_border_style_left_screen_box });
+          }
+          if ( $scope.question_border_width_right_screen_box != undefined && $scope.current_element == ".question-screen-box" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-right-width' : $scope.question_border_width_right_screen_box });
+           }
+          if ( $scope.question_border_style_right_screen_box != undefined && $scope.current_element == ".question-screen-box" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-right-style' : $scope.question_border_style_right_screen_box });
+           }
+          if ( $scope.question_border_width_top_screen_box != undefined && $scope.current_element == ".question-screen-box" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-top-width' : $scope.question_border_width_top_screen_box });
+           }
+          if ( $scope.question_border_style_top_screen_box != undefined && $scope.current_element == ".question-screen-box" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-top-style' : $scope.question_border_style_top_screen_box });
+           }
+          if ( $scope.question_border_width_bottom_screen_box != undefined && $scope.current_element == ".question-screen-box" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-bottom-width' : $scope.question_border_width_bottom_screen_box });
+          }
+          if ( $scope.question_border_style_bottom_screen_box != undefined && $scope.current_element == ".question-screen-box" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-bottom-style' : $scope.question_border_style_bottom_screen_box });
+          }
+
+          if ( $scope.screen_text_color_question_screen != undefined && $scope.current_element == ".question-box-text" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'color' : $scope.screen_text_color_question_screen });
+           }
+          if ( $scope.screen_text_font_style_question_screen != undefined && $scope.current_element == ".question-box-text" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'font-weight' : $scope.screen_text_font_style_question_screen });
+          }
+          if ( $scope.screen_text_font_size_question_screen != undefined && $scope.current_element == ".question-box-text" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.screen_text_font_size_question_screen });
+                $($scope.iframe_object).find( ".question-label-box-brd" ).css({ 'font-size' : $scope.screen_text_font_size_question_screen });
+          }
+          if ( $scope.screen_text_font_family_question_screen != undefined && $scope.current_element == ".question-box-text" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'font-family' : $scope.screen_text_font_family_question_screen });
+           }
+          if ( $scope.question_text_screen_border_color != undefined && $scope.current_element == ".question-box-text" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-color' : $scope.question_text_screen_border_color });
+          }
+          if ( $scope.question_text_border_width_left_screen_box != undefined && $scope.current_element == ".question-box-text" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-left-width' : $scope.question_text_border_width_left_screen_box });
+          }
+          if ( $scope.question_text_border_style_left_screen_box != undefined && $scope.current_element == ".question-box-text" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-left-style' : $scope.question_text_border_style_left_screen_box });
+          }
+          if ( $scope.question_text_border_width_right_screen_box != undefined && $scope.current_element == ".question-box-text" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-right-width' : $scope.question_text_border_width_right_screen_box });
+          }
+          if ( $scope.question_text_border_style_right_screen_box != undefined && $scope.current_element == ".question-box-text" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-right-style' : $scope.question_text_border_style_right_screen_box });
+          }
+          if ( $scope.question_text_border_width_top_screen_box != undefined && $scope.current_element == ".question-box-text" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-top-width' : $scope.question_text_border_width_top_screen_box });
+           }
+          if ( $scope.question_text_border_style_top_screen_box != undefined && $scope.current_element == ".question-box-text" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-top-style' : $scope.question_text_border_style_top_screen_box });
+          }
+          if ( $scope.question_text_border_width_bottom_screen_box != undefined && $scope.current_element == ".question-box-text" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-bottom-width' : $scope.question_text_border_width_bottom_screen_box });
+          }
+          if ( $scope.question_text_border_style_bottom_screen_box != undefined && $scope.current_element == ".question-box-text" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'border-bottom-style' : $scope.question_text_border_style_bottom_screen_box });
+          }
+
+          if ( $scope.question_screen_numbering_background != undefined && $scope.current_element == ".question-box-text" ) {
+            $($scope.iframe_object).find( ".question-label-box" ).css({ 'background' : $scope.question_screen_numbering_background });
+            $($scope.iframe_object).find( ".question-label-box-brd" ).css({ 'border-left-color' : $scope.question_screen_numbering_background });
+           }
+          if ( $scope.question_screen_numbering_color != undefined && $scope.current_element == ".question-box-text" ) {
+            $($scope.iframe_object).find( ".question-label-box").css({ 'color' : $scope.question_screen_numbering_color });
+           }
+          if ( $scope.question_screen_numbering_font_size != undefined && $scope.current_element == ".question-box-text" ) {
+            $($scope.iframe_object).find( ".question-label-box" ).css({ 'font-size' : $scope.question_screen_numbering_font_size });
+           }
+
+          if ( $scope.question_screen_font_size_required_text != undefined && $scope.current_element == ".question-text-required-text" ) {
+            $($scope.iframe_object).find(  $scope.current_element ).css({ 'font-size' : $scope.question_screen_font_size_required_text });
+          }
+          if ( $scope.question_screen_color_required_text != undefined && $scope.current_element == ".question-text-required-text" ) {
+            $($scope.iframe_object).find(  $scope.current_element ).css({ 'color' : $scope.question_screen_color_required_text });
+           }
+
+          // if ( $scope.question_screen_warning_text != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          // if ( $scope.question_screen_warning_color != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          // if ( $scope.question_screen_warning_background != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          // alert($scope.current_elemen);
+          if ( $scope.answer_screen_background != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          if ( $scope.answer_screen_color != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          if ( $scope.answer_screen_font_size != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          if ( $scope.answer_screen_font_style != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          if ( $scope.answer_screen_font_family != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+
+          if ( $scope.answer_screen_background_numbering != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          if ( $scope.answer_screen_color_numbering != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          if ( $scope.answer_screen_font_size_numbering != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+
+          if ( $scope.question_screen_font_size_button != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+
+          if ( $scope.answer_select_screen_background != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          if ( $scope.answer_select_screen_color != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          if ( $scope.answer_select_screen_border != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+
+          if ( $scope.correct_select_screen_background != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          if ( $scope.correct_select_screen_color != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          if ( $scope.orrect_select_screen_border != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+
+          if ( $scope.wrong_select_screen_background != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          if ( $scope.wrong_select_screen_color != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+          if ( $scope.wrong_select_screen_border != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
+
+
+        }
+        // ==> result screen
+        if( _b == 2 ){
+          if ( $scope.result_background_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
+              $($scope.iframe_object).find( $scope.current_element ).css({ background : $scope.result_background_screen_box });
+          }
+          if ( $scope.result_border_color_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'border-color' : $scope.result_border_color_screen_box });
+           }
+          if ( $scope.resule_border_width_left_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
+              $($scope.iframe_object).find( $scope.current_element ).css({ 'border-left-width' : $scope.resule_border_width_left_screen_box });
+           }
+          if ( $scope.resule_border_style_left_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
+              $($scope.iframe_object).find( $scope.current_element ).css({ 'border-left-style' : $scope.resule_border_style_left_screen_box });
+          }
+          if ( $scope.resule_border_width_right_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
+              $($scope.iframe_object).find( $scope.current_element ).css({ 'border-right-width' : $scope.resule_border_width_right_screen_box });
+          }
+          if ( $scope.resule_border_style_right_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
+              $($scope.iframe_object).find( $scope.current_element ).css({ 'border-right-style' : $scope.resule_border_style_right_screen_box });
+          }
+          if ( $scope.resule_border_width_top_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
+              $($scope.iframe_object).find( $scope.current_element ).css({ 'border-top-width' : $scope.resule_border_width_top_screen_box });
+          }
+          if ( $scope.resule_border_style_top_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
+              $($scope.iframe_object).find( $scope.current_element ).css({ 'border-top-style' : $scope.resule_border_style_top_screen_box });
+           }
+          if ( $scope.resule_border_width_bottom_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
+              $($scope.iframe_object).find( $scope.current_element ).css({ 'border-bottom-width' : $scope.resule_border_width_bottom_screen_box });
+           }
+          if ( $scope.resule_border_style_bottom_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
+              $($scope.iframe_object).find( $scope.current_element ).css({ 'border-bottom-style' : $scope.resule_border_style_bottom_screen_box });
+          }
+
+          if ( $scope.screen_text_color_result_screen != undefined && $scope.current_element == ".result-screen-text" ) {
+              $($scope.iframe_object).find( $scope.current_element ).css({ 'color' : $scope.screen_text_color_result_screen });
+           }
+          if ( $scope.screen_text_font_size_result_screen != undefined && $scope.current_element == ".result-screen-text" ) {
+              $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.screen_text_font_size_result_screen });
+          }
+          if ( $scope.screen_text_font_style_result_screen != undefined && $scope.current_element == ".result-screen-text" ) {
+              $($scope.iframe_object).find( $scope.current_element ).css({ 'font-weight' : $scope.screen_text_font_style_result_screen });
+          }
+          if ( $scope.screen_text_font_family_result_screen != undefined && $scope.current_element == ".result-screen-text" ) {
+              $($scope.iframe_object).find( $scope.current_element ).css({ 'font-family' : $scope.screen_text_font_family_result_screen });
+           }
+
+          if ( $scope.score_result_text_color != undefined && $scope.current_element == ".result-screen-score-text" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'color' : $scope.score_result_text_color });
+           }
+          if ( $scope.score_result_text_font_size != undefined && $scope.current_element == ".result-screen-score-text" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.score_result_text_font_size });
+           }
+          if ( $scope.score_result_text_font_style != undefined && $scope.current_element == ".result-screen-score-text" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-weight' : $scope.score_result_text_font_style });
+           }
+          if ( $scope.score_result_text_font_family != undefined && $scope.current_element == ".result-screen-score-text" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-family' : $scope.score_result_text_font_family });
+           }
+
+          if ( $scope.grade_result_text_color != undefined && $scope.current_element == ".result-screen-grade-text" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'color' : $scope.grade_result_text_color });
+           }
+          if ( $scope.grade_result_text_font_size != undefined && $scope.current_element == ".result-screen-grade-text" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.grade_result_text_font_size });
+           }
+          if ( $scope.grade_result_text_font_style != undefined && $scope.current_element == ".result-screen-grade-text" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-weight' : $scope.grade_result_text_font_style });
+           }
+          if ( $scope.grade_result_text_font_family != undefined && $scope.current_element == ".result-screen-grade-text" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-family' : $scope.grade_result_text_font_family });
+          }
+
+          if ( $scope.button_buttons_font_size_screen_result != undefined && $scope.current_element == ".review-result-box , .retake-result-box" ) {
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.button_buttons_font_size_screen_result });
+          }
+         }
+        // ==> Goodby screen
+        if( _b == 1 ){
+            if ( $scope.page_player_background != undefined && $scope.current_element == ".page_player_background") {
+              $($scope.iframe_object).find(  $scope.current_element ).css({ background : $scope.page_player_background });
+            }
+          if ( $scope.goodbye_background_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ background : $scope.goodbye_background_screen_box });
+           }
+          if ( $scope.goodbye_border_color_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'border-color' : $scope.goodbye_border_color_screen_box });
+           }
+          if ( $scope.goodbye_border_width_left_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'border-left-width' : $scope.goodbye_border_width_left_screen_box });
+           }
+          if ( $scope.goodbye_border_style_left_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'border-left-style' : $scope.goodbye_border_style_left_screen_box });
+           }
+          if ( $scope.goodbye_border_width_right_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'border-right-width' : $scope.goodbye_border_width_right_screen_box });
+           }
+          if ( $scope.goodbye_border_style_right_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
+              $($scope.iframe_object).find( $scope.current_element ).css({ 'border-right-style' : $scope.goodbye_border_style_right_screen_box });
+            }
+          if ( $scope.goodbye_border_width_top_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'border-top-width' : $scope.goodbye_border_width_top_screen_box });
+           }
+          if ( $scope.goodbye_border_style_top_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'border-top-style' : $scope.goodbye_border_style_top_screen_box });
+           }
+          if ( $scope.goodbye_border_width_bottom_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'border-bottom-width' : $scope.goodbye_border_width_bottom_screen_box });
+           }
+          if ( $scope.goodbye_border_style_bottom_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'border-bottom-style' : $scope.goodbye_border_style_bottom_screen_box });
+           }
+
+          if ( $scope.screen_text_color_goodbye_screen != undefined && $scope.current_element == ".goodbye-screen-text") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'color' : $scope.screen_text_color_goodbye_screen });
+           }
+          if ( $scope.screen_text_font_size_goodbye_screen != undefined && $scope.current_element == ".goodbye-screen-text") {
+              $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.screen_text_font_size_goodbye_screen });
+           }
+          if ( $scope.screen_text_font_style_goodbye_screen != undefined && $scope.current_element == ".goodbye-screen-text") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-weight' : $scope.screen_text_font_style_goodbye_screen });
+           }
+          if ( $scope.screen_text_font_family_goodbye_screen != undefined && $scope.current_element == ".goodbye-screen-text") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-family' : $scope.screen_text_font_family_goodbye_screen });
+           }
+
+          if ( $scope.button_buttons_font_size_screen_goodbye != undefined && $scope.current_element == ".back-button-goodbye-screen , .submit-button-goodbye-screen") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.button_buttons_font_size_screen_goodbye });
+           }
+
+          if ( $scope.warning_text_font_size_screen_goodbye != undefined && $scope.current_element == ".goodbye-screen-warning-text") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.warning_text_font_size_screen_goodbye });
+           }
+          if ( $scope.warning_text_background_screen_box != undefined && $scope.current_element == ".goodbye-screen-warning-text") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'background' : $scope.warning_text_background_screen_box });
+           }
+          if ( $scope.warning_text_color_screen_goodbye != undefined && $scope.current_element == ".goodbye-screen-warning-text") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'color' : $scope.warning_text_color_screen_goodbye });
+           }
+
+          if ( $scope.back_button_background_screen_goodbye != undefined && $scope.current_element == ".back-button-goodbye-screen , .submit-button-goodbye-screen") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'background' : $scope.back_button_background_screen_goodbye });
+           }
+          if ( $scope.back_button_color_screen_goodbye != undefined && $scope.current_element == ".back-button-goodbye-screen , .submit-button-goodbye-screen") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'color' : $scope.back_button_color_screen_goodbye });
+           }
+
+          if ( $scope.start_button_background_screen_goodbye != undefined && $scope.current_element == ".back-button-goodbye-screen , .submit-button-goodbye-screen") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'background' : $scope.start_button_background_screen_goodbye });
+           }
+          if ( $scope.start_button_color_screen_goodbye   != undefined && $scope.current_element == ".back-button-goodbye-screen , .submit-button-goodbye-screen") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'color' : $scope.start_button_color_screen_goodbye });
+           }
+        }
+        //  ===> Welcome Screen
+        if( _b == 0 ){
+          var attributes = "";
+          if($scope.current_element == ".player-body-screen"){
+              $($scope.iframe_object).find( $scope.current_element ).css({ background : $scope.page_player_background });
+          }
+          if ( $scope.welcome_background_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ background : $scope.welcome_background_screen_box });
+          }
+          if ( $scope.welcome_border_color_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ borderColor : $scope.welcome_border_color_screen_box });
+          }
+          if ( $scope.welcome_border_left_width_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
+            // alert($scope.welcome_border_left_width_screen_box)
+            $($scope.iframe_object).find( $scope.current_element ).css({ "border-left-width" : $scope.welcome_border_left_width_screen_box });
+           }
+          if ( $scope.welcome_border_left_style_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ "border-left-style" : $scope.welcome_border_left_style_screen_box });
+           }
+          if ( $scope.welcome_border_right_width_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ "border-right-width" : $scope.welcome_border_right_width_screen_box });
+          }
+          if ( $scope.welcome_border_right_style_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ "border-right-style" : $scope.welcome_border_right_style_screen_box });
+           }
+          if ( $scope.welcome_border_top_width_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ "border-top-width" : $scope.welcome_border_top_width_screen_box });
+           }
+          if ( $scope.welcome_border_top_style_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ "border-top-style" : $scope.welcome_border_top_style_screen_box });
+           }
+          if ( $scope.welcome_border_bottom_width_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
+              $($scope.iframe_object).find( $scope.current_element ).css({ "border-bottom-width" : $scope.welcome_border_bottom_width_screen_box });
+           }
+          if ( $scope.welcome_border_bottom_style_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ "border-bottom-style" : $scope.welcome_border_bottom_style_screen_box });
+           }
+
+
+
+
+
+          if ( $scope.screen_text_color_welcome_screen != undefined && $scope.current_element == ".welcome-screen-text" ) {
+              $($scope.iframe_object).find( $scope.current_element ).css({ "color" : $scope.screen_text_color_welcome_screen });
+          }
+          if ( $scope.screen_text_font_size_welcome_screen != undefined && $scope.current_element == ".welcome-screen-text" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ "font-size" : $scope.screen_text_font_size_welcome_screen });
+          }
+          if ( $scope.screen_text_font_style_welcome_screen != undefined  && $scope.current_element == ".welcome-screen-text") {
+            $($scope.iframe_object).find( $scope.current_element ).css({ "font-weight" : $scope.screen_text_font_style_welcome_screen });
+          }
+          if ( $scope.screen_text_font_family_welcome_screen != undefined && $scope.current_element == ".welcome-screen-text" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ "font-family" : $scope.screen_text_font_family_welcome_screen });
+           }
+
+
+
+          if ( $scope.button_background_screen_welcome != undefined && $scope.current_element == ".welcome-screen-button" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ "background" : $scope.button_background_screen_welcome });
+            }
+          if ( $scope.button_color_screen_welcome != undefined && $scope.current_element == ".welcome-screen-button" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ "color" : $scope.button_color_screen_welcome });
+           }
+          if ( $scope.button_font_size_screen_welcome != undefined && $scope.current_element == ".welcome-screen-button" ) {
+            $($scope.iframe_object).find( $scope.current_element ).css({ "font-size" : $scope.button_font_size_screen_welcome });
+          }
+        }
+    };
 }]);

@@ -474,7 +474,7 @@
   display: inline-block;
 }
 .wrong_answer > .answer-contents > .text-values {
-  color: #D91E18; 
+  color: #D91E18;
 }
 /* =====================>>>>> correct (right) Answers */
 .right_answer {
@@ -1264,9 +1264,9 @@ select.select-current-element , select.select-current-element:focus , select.sel
 .survey-player-questions {
   border-left: 5px solid #c17c7e;
 }
-.default_theme_texts_bg , .survey-player-questions button {
+/*.default_theme_texts_bg , .survey-player-questions button {
   background: #c17c7e;
-}
+}*/
 .default_theme_brd {
   border-left-color: #c17c7e;
 }
@@ -1327,6 +1327,10 @@ select.select-current-element , select.select-current-element:focus , select.sel
 .player-block {
   z-index: 2000;
 }
-.answer-block-selector {
 
+.qusu-details > button {
+    margin-top: 5px;
+    border-radius: unset;
+    margin-left: 3px;
+    margin-right: 4px;
 }
