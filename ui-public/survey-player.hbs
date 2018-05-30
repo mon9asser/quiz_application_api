@@ -194,9 +194,8 @@
                   </div>
                   <div ng:if="obj_val.question_type == 4" class="block-of-fre-txts">
                     <!-- Case it 4 => Free texts -->
-                    <textarea ng:change="free_texts_question_type_changes(obj_val._id)" ng:model="obj_val.answers_format[0].free_text_value" class="free-text-values" placeholder="Write your answer here !"></textarea>
+                    <textarea ng:change="free_texts_question_type_changes(obj_val._id , obj_val)" ng:model="obj_val.answers_format[0].free_text_value" class="free-text-values" placeholder="Write your answer here !"></textarea>
                   </div>
-
                   <!-- obj_val.answers_format[0].ratscal_type  -->
                 </div>
               </div>
@@ -214,7 +213,12 @@
                     <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                     Back
                 </button>
-                <button ng:click="go_to_next_slider($index , true)" class="button-take-this continue-answer-question-button-block" type="button" name="button">
+                <button ng:if="obj_val.question_type == 4" ng:click="save_and_go_to_next_slider($index , obj_val , obj_val._id )" class="button-take-this continue-answer-question-button-block" type="button" name="button">
+                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                    <span ng:if="$index != (__player_object.questions.length - 1)">Continue</span>
+                    <span ng:if="$index == (__player_object.questions.length - 1)">Finish</span>
+                </button>
+                <button ng:if="obj_val.question_type != 4" ng:click="go_to_next_slider($index , true)" class="button-take-this continue-answer-question-button-block" type="button" name="button">
                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                     <span ng:if="$index != (__player_object.questions.length - 1)">Continue</span>
                     <span ng:if="$index == (__player_object.questions.length - 1)">Finish</span>

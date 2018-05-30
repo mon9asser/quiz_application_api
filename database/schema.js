@@ -491,6 +491,7 @@ var attendeeDraftDataTypes = {
     questionnaire_info : {type : String , ref : 'questionnaire'} ,
     // application : {type : Object } , // => application ( Quiz - survey => object )
     creation_date : {type : Date } ,
+    overview : { type :  {}  } ,
     att_draft : {type : []} ,
     statistics : {type : []}
 };

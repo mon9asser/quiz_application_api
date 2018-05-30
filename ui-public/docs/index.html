@@ -952,12 +952,20 @@
 
       <h3 id="reports"> Reports</h3>
       <ul>
-        <li><b class="api-title">Attend Quiz or Survey api</b></li>
+        <li><strike><b class="api-title">Attend Quiz or Survey api</b></strike></li>
       </ul>
-      <pre class="prettyprint" style="padding: 6px 11px;">['POST'] => http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/report/add</pre>
+
+
+      <pre class="prettyprint" style="padding: 6px 11px;">['POST'] => <strike> http://34.215.133.182/api/<span class="pass-highlighted">{:app_id}</span>/report/add </strike> => Deprecated ! </pre>
+      <p>
+        We're using an online report to store bulk data into main report also to allow us calculate started and not started attendees , you can use it using ui template
+      </p>
+      <strike>
       <p>
         To attend the existing quiz or survey
       </p>
+      </strike>
+      <strike>
       <pre class="prettyprint code_json" style="padding: 6px 11px;">
         {
             "attendee_id":"", // user that take this quiz
@@ -978,7 +986,7 @@
         }
       </pre>
 
-
+    </strike>
 
 
 

@@ -35,7 +35,7 @@ usrRouters.post("/users/create/v1.1" , verify_api_keys_user_apis , (req,res)=> {
             body.password = hash ;
           }
       //var compare = bcrypt.compareSync("666666", hash);
-
+      
       usr.find({email:body.email} , (error , resData)=>{
         if (!resData || error )
         {

@@ -62,6 +62,13 @@ Array.prototype.find_reported_attendees = function (attendee_draft) {
       return attendee_draft.findIndex(x => x.attendee_id == i.user_id) === -1;
     });
 };
+
+Array.prototype.find_reported_attendees_objec = function (attendee_draft) {
+    return this.filter(function (i) {
+      return attendee_draft.findIndex( x => x.attendee_id == i.user_id ) === -1;
+    });
+};
+
 // rptRouters.use(bodyParser.json());
 // rptRouters.use(bodyParser.urlencoded({
 //     extended: false
@@ -266,10 +273,6 @@ rptRouters.post("/:app_id/add/attended/quiz" ,api_key_report_auth , (req , res)=
               this_attendee.updated_at = new Date();
 
             }
-
-
-
-
 
 
 
@@ -2378,67 +2381,74 @@ rptRouters.post([ "/:creator_id/brief/report" ] , api_key_report_auth , ( req , 
     });
 
 });
+
+
 rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)=>{
-  var report_type = req.params.app_id;
-  rpt.findOne({"questionnaire_id":report_type}).populate("questionnaire_info").populate("attendees.user_information").exec((error, reportDocument) => {
-
-    if( error || !reportDocument ){
-      return new Promise((resolve,reject)=>{
-        res.send(notes.notifications.catch_doesnt_existing_data("Application"));
-      });
-    }
-    if(reportDocument.questionnaire_info.app_type != 0 ){
-      return new Promise((resolve,reject)=>{
-        res.send(notes.notifications.survey_failed());
-      });
-    }
-    var statistics_report = new Object();
+  var app_id = req.params.app_id;
+  drft.findOne({"application_id":app_id}).populate("questionnaire_info").then((reportDocument)=>{
+    rpt.findOne({'questionnaire_id': app_id }).then((rbt_document)=>{
+      var offline_report = rbt_document;
 
 
-    if(statistics_report.app_nfo == undefined)  statistics_report.app_nfo = new Object();
-    if(statistics_report.overview  == undefined) statistics_report.overview = new Object();
-    if(statistics_report.questions  == undefined) statistics_report.questions = new Array();
+      if(!reportDocument ){
+        return new Promise((resolve,reject)=>{
+          res.send(notes.notifications.catch_doesnt_existing_data("Application"));
+        });
+      }
 
-    statistics_report.app_nfo["survey_id"] = reportDocument.questionnaire_info._id;
-    statistics_report.app_nfo["survey_name"] = reportDocument.questionnaire_info.questionnaire_title;
-    statistics_report.app_nfo["total_questions"] = reportDocument.questionnaire_info.questions.length;
+      if(reportDocument.questionnaire_info.app_type != 0 ){
+        return new Promise((resolve,reject)=>{
+          res.send(notes.notifications.survey_failed());
+        });
+      }
+      
+      var statistics_report = new Object();
+
+      if(statistics_report.app_nfo == undefined)  statistics_report.app_nfo = new Object();
+      if(statistics_report.overview  == undefined) statistics_report.overview = new Object();
+      if(statistics_report.questions  == undefined) statistics_report.questions = new Array();
 
 
 
-    statistics_report.overview["total_attendees"] = reportDocument.attendees.length;
-    statistics_report.overview["started"] = 0 // => this prop is inProgress
-    statistics_report.overview["not_started"] = 0 // => this prop is inProgress
-    statistics_report.overview["completed"] = reportDocument.attendees.length;
+      statistics_report.app_nfo["survey_id"] = reportDocument.questionnaire_info._id;
+      statistics_report.app_nfo["survey_name"] = reportDocument.questionnaire_info.questionnaire_title;
+      statistics_report.app_nfo["total_questions"] = reportDocument.questionnaire_info.questions.length;
 
-    var statistics = reportDocument.statistics;
-    var questions_answers = new Array();
-    for ( var i = 0; i < statistics.length; i++ ){
-         var qs_object = new Object();
-          qs_object['question_id'] = statistics[i].question_id;
-          qs_object['question'] = statistics[i].question_body;
-          qs_object['count_of_attendees'] = statistics[i].attendee_info.length;
-          qs_object['answers'] = new Array();
-          var answer_args = statistics[i].question_answers
-          for (var xi = 0; xi < answer_args.length; xi++) {
-            var answer_argument = new Object();
-            answer_argument['answer_id'] = answer_args[xi].answer_id;
-            answer_argument['answer_body'] = answer_args[xi].answer_body;
-            answer_argument['attendee_raw_count'] = answer_args[xi].attendee_raw_count ;
-            answer_argument['attendee_percentage_count'] = answer_args[xi].attendee_percentage_count ;
-            qs_object['answers'].push(answer_argument);
-          } // end forloop xi
-          questions_answers.push(qs_object);
-       } // end forloop
-       statistics_report.questions = questions_answers;
+      var an_offline_report =  offline_report.attendees;
+      var an_online_report = reportDocument.att_draft;
+      var unreported = an_online_report.find_reported_attendees(an_offline_report);
 
-    res.send(notes.notifications.success_calling(statistics_report));
+      var started_and_not = _.countBy( unreported , { report_attendees : Object() });
+
+      var total_attendee_objects = an_online_report.length ;
+      var started_attendees = (started_and_not.true == undefined ) ? 0 :  started_and_not.true; ;
+      var not_started_attendees = ( started_and_not.false == undefined ) ? 0 :  started_and_not.false;
+      var completed_quiz = an_offline_report.length ;
+
+      statistics_report.overview["total_attendees"] = reportDocument.att_draft.length;
+      statistics_report.overview["started"] = started_attendees;
+      statistics_report.overview["not_started"] = not_started_attendees // => this prop is inProgress
+      statistics_report.overview["completed"] = completed_quiz;
+
+      var statistics = reportDocument.statistics;
+      /*
+      template will not take time
+      */
+
+      for ( var i = 0; i < statistics.length; i++ ){
+        var qs_object = new Object();
+        qs_object['question_id'] = statistics[i].question_id;
+        qs_object['question'] = statistics[i].question_body;
+        qs_object['count_of_attendees'] = statistics[i].attendee_count;
+        qs_object['answers'] =  _.map( statistics[i].question_answers , _.partialRight(_.pick, ['answer_id','answer_body','attendee_percentage_count','attendee_raw_count']));
+        statistics_report.questions.push(qs_object);
+      }
+
+      res.send(statistics_report);
+
+    });
   });
 });
-
-
-
-
-
 
 
 

@@ -60,10 +60,7 @@ reportSchema.methods.detailed_report = function (attendeeId , app_id , qtnrObj){
     });
   }
 
-
-
-
-    if(app_object.app_type == 1){
+  if(app_object.app_type == 1){
         var exam_status ;
         if(attendeeInfo.results.result.percentage_value   >= app_object.settings.grade_settings.value)
           exam_status = "Passed";
