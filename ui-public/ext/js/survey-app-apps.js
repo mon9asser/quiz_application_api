@@ -830,6 +830,7 @@ apps.controller("survey" , [
           if(current_user_data.report_questions == undefined ) current_user_data.report_questions = new Object();
           if(current_user_data.report_attendee_details == undefined ) current_user_data.report_attendee_details = new Object();
           if(current_user_data.report_attendees == undefined ) current_user_data.report_attendees = new Object();
+          if(current_user_data.attendee_questions == undefined ) current_user_data.attendee_questions = new Array();
 
           // [ A ] ==>  questions_data
            var questions_data_exists = current_user_data.questions_data.findIndex(x => x.question_id == question_object.question_id );
@@ -905,6 +906,36 @@ apps.controller("survey" , [
           if(current_user_data.report_attendee_details.completed_date == undefined )
           current_user_data.report_attendee_details['completed_date'] = new Date();
           current_user_data.report_attendee_details['completed_date'] = new Date();
+
+          // [ - ] ==> Build attendee question
+          if(current_user_data.attendee_questions == undefined ) current_user_data.attendee_questions = new Array();
+          var thisquestion_exists = current_user_data.attendee_questions.findIndex(x => x.question_id == question_object.question_id);
+          if(thisquestion_exists == -1 ){
+              current_user_data.attendee_questions.push({
+                question_id : question_object.question_id ,
+                question_type : question_object.question_type ,
+                question_text : $("<p>"+question_object.question_text+"</p>").text(),
+                attendee_answers : new Array({
+                  answer_id : question_object.question_answers.answer_id ,
+                  answer_value : $("<p>"+question_object.question_answers.answer_value+"</p>").text() ,
+                  answer_object : question_object.question_answers.answer_object
+                })
+              });
+          }else {
+            var target__question = current_user_data.attendee_questions[thisquestion_exists];
+            var this_answer_exs = target__question.attendee_answers.findIndex(x => x.answer_id ==  question_object.question_answers.answer_id );
+            if( this_answer_exs == -1 ){
+              target__question.attendee_answers.push({
+                answer_id : question_object.question_answers.answer_id ,
+                answer_value : $("<p>"+question_object.question_answers.answer_value+"</p>").text() ,
+                answer_object : question_object.question_answers.answer_object
+              });
+            }else {
+              target__question.attendee_answers[this_answer_exs].answer_id  =  question_object.question_answers.answer_id ,
+              target__question.attendee_answers[this_answer_exs].answer_value  =   $("<p>"+question_object.question_answers.answer_value+"</p>").text()
+              target__question.attendee_answers[this_answer_exs].answer_object = question_object.question_answers.answer_object
+            }
+          }
 
           // [ D ] ==>  report_attendees
           if( current_user_data.report_attendees == undefined ) current_user_data.report_attendees = new Object();

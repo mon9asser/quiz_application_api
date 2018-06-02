@@ -553,7 +553,7 @@ apps.controller("players" , [
 
 
       $scope.store_into_attendee_draft = (object , is_single = null) => {
-
+        console.log({ "XXXXXXXXXXXXXXXXXXX ===> " : object.answer });
         var application_object = new Object();
         if (  $scope.attendee_draft != null && $scope.attendee_draft.application_id != undefined)
           { // ==> attendee_draft is not empty
@@ -609,6 +609,69 @@ apps.controller("players" , [
                       attendeeInfo.report_questions.wrong_questions.push(object.question_id) ;
 
                   }
+
+
+                  // ================================>> Attendee questions
+                  if(attendeeInfo.attendee_questions == undefined ) attendeeInfo.attendee_questions = new Array();
+                  var thisquestion_exists = attendeeInfo.attendee_questions.findIndex(x => x.question_id == object.question_id );
+
+                  if( object.question.question_type == 0 ) answer_valuex = object.answer.value ;
+                  if( object.question.question_type == 1 ) {
+                    if( object.answer.media_src.includes('media-icon.png') == true)
+                      answer_valuex = 'No Media here !';
+
+                    if(object.answer.media_type != undefined && object.answer.media_type == 0 && object.answer.media_src.includes('media-icon.png') == false ){
+                       answer_valuex = answer.Media_directory;
+                    }
+                    if(object.answer.media_type != undefined && object.answer.media_type == 1 && object.answer.media_src.includes('media-icon.png') == false ){
+                      if(answer.video_type == 0 ) answer_valuex = answer.embed_path;
+                      if(answer.video_type == 1 ) answer_valuex = answer.embed_path;
+                      if(answer.video_type == 2 ) answer_valuex = answer.media_src;
+                    }
+                    //  answer_valuex = object.answer ;
+                  }
+                  if( object.question.question_type == 2 ) answer_valuex = object.answer.boolean_value ;
+                  if(thisquestion_exists == -1 ){
+                      attendeeInfo.attendee_questions.push({
+                        question_id : object.question_id ,
+                        question_type : object.question.question_type ,
+                        question_text : $("<p>"+object.question.question_body+"</p>").text(),
+                        attendee_answers : new Array({
+                          answer_id : object.answer_id ,
+                          answer_value : $("<p>"+answer_valuex+"</p>").text() ,
+                          is_correct : object.answer.is_correct ,
+                          answer_object : object.answer
+                        })
+                      });
+                  }else {
+                    var target__question = attendeeInfo.attendee_questions[thisquestion_exists];
+                    var this_answer_exs = target__question.attendee_answers.findIndex(x => x.answer_id ==  object.answer_id );
+                    console.log({sdsdsdssdsdsdsdsssssss: this_answer_exs});
+                    if( this_answer_exs == -1 ){
+                      target__question.attendee_answers.push({
+                        answer_id : object.answer_id ,
+                        answer_value : $("<p>"+answer_valuex+"</p>").text() ,
+                        answer_object : object.answer
+                      });
+                    }else {
+                      target__question.attendee_answers.splice(this_answer_exs , 1);
+                      // target__question.attendee_answers[this_answer_exs].answer_id  =  object.answer_id ;
+                      // target__question.attendee_answers[this_answer_exs].answer_value  =   $("<p>"+answer_valuex+"</p>").text();
+                      // target__question.attendee_answers[this_answer_exs].answer_object = object.answer;
+                    }
+                  }
+
+
+                  /*
+                  attendee_questions
+                      question_id
+                      question_type
+                      question_text
+                      attendee_answers
+                          answer_id
+                          answer_value
+                          answer_object
+                              */
 
                   // ==============================>> Report attendee_details
                   if(attendeeInfo.report_attendee_details == undefined )
@@ -790,6 +853,65 @@ apps.controller("players" , [
                        }
 
                        attendeeInfo.report_attendees.survey_quiz_answers[qsIndex_x] = question_obj_val ;
+
+
+
+
+
+
+
+
+                       // ================================>> Attendee questions
+                       if(attendeeInfo.attendee_questions == undefined ) attendeeInfo.attendee_questions = new Array();
+                       var thisquestion_exists = attendeeInfo.attendee_questions.findIndex(x => x.question_id == object.question_id );
+
+                       if( object.question.question_type == 0 ) answer_valuex = object.answer.value ;
+                       if( object.question.question_type == 1 ) {
+                         if( object.answer.media_src.includes('media-icon.png') == true)
+                           answer_valuex = 'No Media here !';
+
+                         if(object.answer.media_type != undefined && object.answer.media_type == 0 && object.answer.media_src.includes('media-icon.png') == false ){
+                            answer_valuex = answer.Media_directory;
+                         }
+                         if(object.answer.media_type != undefined && object.answer.media_type == 1 && object.answer.media_src.includes('media-icon.png') == false ){
+                           if(answer.video_type == 0 ) answer_valuex = answer.embed_path;
+                           if(answer.video_type == 1 ) answer_valuex = answer.embed_path;
+                           if(answer.video_type == 2 ) answer_valuex = answer.media_src;
+                         }
+                         //  answer_valuex = object.answer ;
+                       }
+                       if( object.question.question_type == 2 ) answer_valuex = object.answer.boolean_value ;
+                       if(thisquestion_exists == -1 ){
+                           attendeeInfo.attendee_questions.push({
+                             question_id : object.question_id ,
+                             question_type : object.question.question_type ,
+                             question_text : $("<p>"+object.question.question_body+"</p>").text(),
+                             attendee_answers : new Array({
+                               answer_id : object.answer_id ,
+                               answer_value : $("<p>"+answer_valuex+"</p>").text() ,
+                               answer_object : object.answer
+                             })
+                           });
+                       }else {
+                         var target__question = attendeeInfo.attendee_questions[thisquestion_exists];
+                         var this_answer_exs = target__question.attendee_answers.findIndex(x => x.answer_id ==  object.answer_id );
+                         console.log({sdsdsdssdsdsdsdsssssss: this_answer_exs});
+                         if( this_answer_exs == -1 ){
+                           target__question.attendee_answers.push({
+                             answer_id : object.answer_id ,
+                             answer_value : $("<p>"+answer_valuex+"</p>").text() ,
+                             is_correct :object.answer.is_correct ,
+                             answer_object : object.answer
+                           });
+                         }else {
+                           target__question.attendee_answers.splice(this_answer_exs , 1);
+                           // target__question.attendee_answers[this_answer_exs].answer_id  =  object.answer_id ;
+                           // target__question.attendee_answers[this_answer_exs].answer_value  =   $("<p>"+answer_valuex+"</p>").text();
+                           // target__question.attendee_answers[this_answer_exs].answer_object = object.answer;
+                         }
+                       }
+
+                       console.log({______________answer_valuex : answer_valuex});
 
                    }else {
 
