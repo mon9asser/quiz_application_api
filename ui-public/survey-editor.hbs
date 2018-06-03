@@ -21,7 +21,6 @@
 <div style="position:relative; z-index:100;" ng:controller="apps-controller">
   <div class="side-left-bar">
      <div class="question-data" style="overflow:hidden; height:auto; max-height:3300px;">
-
        <!-- Question Types -->
         <ul id="qs-sortable" class="question-x">
           <li id="question-muliple-choices" ng:click="onclick_items('question-muliple-choices')" data-type="qst" data-question-type="0" question-data="partials/multi-choices.hbs">
@@ -66,12 +65,39 @@
            <span class="titles">Free Texts</span>
           </li>
         </ul>
-
      </div>
   </div>
 
 
-  
+  <div class="Quizontainer-fluid update-rows">
+    <!-- Title of application -->
+    <div class="container-fluid">
+  			<div class="row">
+  					<div class="col-md-12">
+  						 <div class="area-qs-ch quiz-titles">
+                 <!-- Start Text Loader -->
+                 <div class="text-loader">
+                     <span></span>
+                     <span></span>
+                 </div>
+                 <!-- End Text Loader -->
+  							  <span class="questionnaire-title">
+                    <!-- Quiz Name -->
+                     <span>
+                       {> application_settings.questionnaire_title <}
+                     </span>
+                  </span>
+                  <!-- <a class="choices-right-add btn-danger btn setting-menu-handler" href="#">
+                    <i class="fa fa-cog"></i>
+                  </a> -->
+   							  <a class="choices-right-add btn-primary preview-button btn rm-margin" href="{{server_ip}}{{app._id}}/live_preview/{{user.id}}">Preview Survey</a>
+    					 </div>
+  					</div>
+  	    </div>
+  	</div>
+    
+  </div>
+
 </div>
 
 
