@@ -137,7 +137,50 @@
     						</ul>
     				</div>
           </div>
-          
+          <div class="right_part col-md-7 col-sm-6 col-xs-12">
+              <!-- Switch to view or editor [Handler]-->
+              <div class="switched-button switch-mode">
+                   <div ng:hide="activated_screens" class="input-switch">
+                        <label>
+                           <i class="fa fa-paperclip"></i>
+                           <span ng:bind="activated_screen_name"></span>
+                        </label>
+                   </div>
+                   <div ng:show="activated_screens" class="input-switch">
+                     <label for="switch-editor">Edit</label>
+                     <input type="checkbox" id="switch-editor" ng:model="switching_editor_preview_value" ng:change="switching_editor_preview()" class="input" />
+                     <label for="switch-editor" class="switch"></label>
+                     <label for="switch-editor">Preview</label>
+                   </div>
+              </div>
+
+
+              <!-- Edit Template && Preview Template  -->
+              <div class="question-editor swiper-container">
+                  <!-- Preview Page -->
+                  <div class="preview-container swiper-slide" style="position:relative;">
+                      {{> preview app = app }}
+                      <!-- Loading edditor -->
+                      <div class="loader-container">
+                         <div class="loader">
+                           <span>{</span><span>}</span>
+                           <span class="loadin-editor">Loading Preview</span>
+                         </div>
+                      </div>
+                    </div>
+                  <!-- Editor Page -->
+                  <div class="editor-container swiper-slide" style="position:relative; "><!-- template_mode -->
+                     {{> editor app = app }}
+                     <!-- Loading edditor -->
+                     <div class="loader-container">
+                        <div class="loader">
+                          <span>{</span><span>}</span>
+                          <span class="loadin-editor">Loading Editor</span>
+                        </div>
+                     </div>
+                  </div>
+              </div>
+          </div>
       </div>
     </div>
 
