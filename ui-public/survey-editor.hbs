@@ -95,9 +95,53 @@
   					</div>
   	    </div>
   	</div>
-    
-  </div>
+    <div class="container-fluid row-x-body">
+      <div class="row">
+        <div class="left_part col-md-5 col-sm-6 col-xs-12">
 
+              <div class="question-data qsdragged-list qs-dropped background_drag_drop">
+                <div class="loading-data">
+                    <div class="data-loader">Loading...</div>
+                </div>
+                <!-- End Text Loader -->
+    						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
+
+                   <li class="question-li-x qs-{>qs_value._id<}" id="questoin_tag_{>qs_value._id<}" data-index="{>$index<}" data-question-id="{>qs_value._id<}" ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " ng:repeat="(qs_key , qs_value) in questions_list track by $index">
+                         <div class="question-part">
+                             <div class="qs-type quesiontlist_iconx">
+                               <div class="drag-handler">
+                                 <i>...</i>
+                               </div>
+                               <div ng:click="edit_this_question(qs_value._id , $index )"  class="single-question-container">
+                                 <span class="qs-type" title="Multiple Choices">
+                                   <i ng:if="qs_value.question_type == 0" class="icon-insert-template iconn-x"></i>
+                                   <i ng:if="qs_value.question_type == 1" class="icon-image iconn-x"></i>
+                                   <i ng:if="qs_value.question_type == 2" class="icon-check-circle iconn-x"></i>
+                                   <i ng:if="qs_value.question_type == 3" class="fa iconn-x" ng:class="(qs_value.answers_format[0].ratscal_type == 0) ? 'fa-signal' :'fa-star-o' "></i> <!-- signal -->
+                                   <i ng:if="qs_value.question_type == 4" class="fa fa-text-width iconn-x"></i>
+                                 </span>
+                                 <!-- Append question title here ! -->
+                                 <span class="qs-body">
+                                   {> qs_value.question_body | this_chars_only <}
+                                 </span>
+                               </div>
+                             </div>
+                         </div>
+                    </li>
+
+                    <div ng:if="questions_list.length == 0" class="qs-status">
+                        <h2>
+                          Drag drop questions here !
+                        </h2>
+                    </div>
+    						</ul>
+    				</div>
+          </div>
+          
+      </div>
+    </div>
+
+  </div>
 </div>
 
 
