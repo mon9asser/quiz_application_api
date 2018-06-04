@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html ng:app="applications" ng:controller="page-controller">
+  <head>
+    <meta charset="utf-8">
+    <title>Api</title>
+
+    
+
+    <!-- Css -->
+    <link href="{{ server_ip }}ext/frameworks/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ server_ip }}ext/frameworks/css/redactor.min.css" rel="stylesheet">
+    <link href="{{ server_ip }}ext/frameworks/css/font-awesome.css" rel="stylesheet">
+    <link href="{{ server_ip }}ext/frameworks/css/animate.css" rel="stylesheet">
+    <link href="{{ server_ip }}ext/frameworks/css/swiper.css" rel="stylesheet">
+
+
+    <!--
+      ++++++++++++++++++++++++++++++++
+       ++ Basics js frameworks
+      ++++++++++++++++++++++++++++++++
+    -->
+    <!-- JS {Frameworks}-->
+    <!-- public -->
+    <script src="{{ server_ip }}ext/frameworks/js/jquery.min.js" charset="utf-8"></script>
+    <script src="{{ server_ip }}ext/frameworks/js/angular.min.js" ng:if="page_name=='api'" charset="utf-8"></script>
+
+
+    <!-- Jquery pack -->
+    <script ng:if="page_name=='api'" src="{{ server_ip }}ext/frameworks/js/jquery.pack.js" charset="utf-8"></script>
+
+    <!-- text Selection -->
+    <script ng:if="page_name=='api'" src="{{ server_ip }}ext/js/app-selection.js" charset="utf-8"></script>
+
+    <link href="{{ server_ip }}ext/frameworks/slick/slick.css" rel="stylesheet">
+    
+
+    <link href="{{ server_ip }}ext/frameworks/css/spectrum.css" rel="stylesheet">
+    <script src="{{ server_ip }}ext/frameworks/js/spectrum.js"></script>
+      
+      <!-- <link rel="stylesheet" href="{{ server_ip }}ext/frameworks/css/fontawesome-stars.css"> -->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="{{ server_ip }}ext/frameworks/js/html5shiv.min.js"></script>
+      <script src="{{ server_ip }}ext/frameworks/js/respond.min.js"></script>
+    <![endif]-->
+
+    <!--
+      ++++++++++++++++++++++++++++++++
+       ++ Styles
+      +++++++++ng:app="applications" ng:controller="page-controller"+++++++++page_name++++++++++++++
+    -->
+    <!-- Login css -->
+    <link ng:if="page_name=='login'" href="{{ server_ip }}ext/css/login.css" rel="stylesheet">
+    <!-- Register Css -->
+    <link ng:if="page_name=='register'" href="{{ server_ip }}ext/css/register.css" rel="stylesheet">
+    <!-- My questionnaires -->
+    <link ng:if="page_name=='questionnaires'" href="{{ server_ip }}ext/css/questionnaire.css" rel="stylesheet">
+    <!-- Edit applications -->
+    <link ng:if="page_name=='api'" href="{{ server_ip }}ext/css/apps.css" rel="stylesheet">
+    <!-- Api Key Creation -->
+    <link ng:if="page_name=='create_app'" href="{{ server_ip }}ext/css/api-key.css" rel="stylesheet">
+
+  </head>
+  <body >
+    <!-- Required Values -->
+    <input id="userId" type="hidden" name="" value="{{user.id}}">
+    <input id="userEmail" type="hidden" name="" value="{{user.email}}">
+    <input id="userName" type="hidden" name="" value="{{user.name}}">
+    <input id="userToken" type="hidden" name="" value="{{user.token}}">
+    <input id="serverIp" type="hidden" name="" value="{{ server_ip }}">
+    <input id="applicationId" type="hidden" name="" value="{{app._id}}">
+    <input id="applicationType" type="hidden" name="" value="{{app.app_type}}">
