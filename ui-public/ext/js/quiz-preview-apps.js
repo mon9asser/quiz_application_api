@@ -1681,6 +1681,10 @@ apps.controller("preview_players" , [
               $scope.touch_move++;
               var lengther = $(this);
               var current_index = lengther[0].activeIndex ;
+              console.log({
+                length : $scope.__player_object.questions.length ,
+                questions : $scope.__player_object.questions
+              });
               if(current_index >= $scope.__player_object.questions.length)
                  current_index = $scope.__player_object.questions.length ;
 
