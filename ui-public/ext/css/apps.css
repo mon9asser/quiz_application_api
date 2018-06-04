@@ -99,6 +99,7 @@ body {
 .qsdragged-list {
     background: #fff;
     margin: 0px !important;
+    overflow-x: hidden;
 }
 .qs-dropped {
     /*background: #fff;*/
