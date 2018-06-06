@@ -30,7 +30,7 @@ apps.controller('list-apps' , [
 
      $scope.user_id = $("#userId").val();
      $scope.json_source = settings.server_ip + settings.json_source;
-     $scope.__applications = null ;
+     $scope.__applications = [] ;
      $scope.__reports = null ;
 
      // ==> Functionalities
@@ -46,6 +46,7 @@ apps.controller('list-apps' , [
            }
          }).then(function (resps){
            $scope.__applications = resps.data ;
+           console.log($scope.__applications);
          } , function (err){
               console.log(err);
          });
