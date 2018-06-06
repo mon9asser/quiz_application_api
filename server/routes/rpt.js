@@ -2409,8 +2409,8 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
 
           var offline_report = rbt_document;
           if(!reportDocument ){
-              return new Promise((resolve,reject)=>{
-                res.send(notes.notifications.catch_doesnt_existing_data("Application"));
+              return new Promise( ( resolve , reject ) => {
+                res.send(notes.notifications.catch_errors("No attendee found"));
               });
             }
           if(reportDocument.questionnaire_info.app_type != 0 ){

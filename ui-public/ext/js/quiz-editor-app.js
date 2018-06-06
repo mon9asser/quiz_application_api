@@ -30,7 +30,7 @@ apps.controller("page-controller" , [
      $scope.application = new Object();
      $scope.api_keys = new Object();
      $scope.unique_items = new Object();
-
+     $scope.question = null ;
      /* => Selectors */
 
 
@@ -49,6 +49,7 @@ apps.controller("page-controller" , [
        }).then(function( app_data ){
          /* => Application Object*/
          $scope.application = app_data.data;
+         $scope.question = ( app_data.data.questions.length > 0) ? app_data.data.questions[0] : null ;
          console.log( $scope.application);
        } , function(error){
          console.log(error);
@@ -65,10 +66,24 @@ apps.controller("page-controller" , [
        });
      }
      $scope.edit_this_question = ( question_id , index ) => {
-       alert( question_id + ' == ' + index)
+       var question_index = $scope.application.questions.findIndex(x => x._id == question_id );
+       if(question_index != -1){
+         // ==> Question Object
+         $scope.question =  $scope.application.questions[question_index];
+         // ==> Mark current question with highlighted-question class
+         $scope.highlight_this_question();
+       }
      }
-     $scope.highlight_this_question = ( newIndex , itemEl = null ) => {
+     $scope.highlight_this_question = () => { // .highlighted-question
+         var question_list = $("#docQuestions");
+      //  var question = $('#questoin_tag_' + );
+      //  console.log(question_list.children(question));
+      var question_index = $scope.application.questions.findIndex(x => x._id == $scope.question._id);
+      question_list.children("li").removeClass('highlighted-question');
+      if(question_index != -1)
+        question_list.children("li").eq(question_index).addClass('highlighted-question');
 
+      //  question_list.children(question).addClass('highlighted-question');
      }
      $scope.drop_question_into_list = (evt) => {
        var itemEl = evt.item;
@@ -85,10 +100,9 @@ apps.controller("page-controller" , [
          // => Givines with attributes
          var html_built_in = $("#docQuestions").find(evt.item);
          var item_type = html_built_in.attr("data-type");
-         var question_type = html_built_in.attr("data-question-type");
+         var question_type = $(evt.item).attr("data-question-type");
          var question_id = html_built_in.attr("data-question-id");
 
-         alert(question_type);
          // => Question Data
          var question_data = new Object();
          question_data['_id'] = $scope.unique_items.mongoose_id;
@@ -124,17 +138,22 @@ apps.controller("page-controller" , [
          if( question_type == 4 ) {
            alert("inProgress");
          }
-
          // ==> Storing question object into application
          question_data.answers_format.push(answer_data);
          if( $scope.application.questions == undefined ) $scope.application['questions'] = new Array();
+         if( $scope.application.questions == undefined ) $scope.application['stored_questions'] = new Array();
 
          // ==> Add to question list
          $scope.application.questions.push(question_data);
+         $scope.application.stored_questions.push(question_data);
+
+
+         // ==> Storing object
+         $scope.question = question_data ;
 
          // ==> Setup question lists => $scope.question_creation_uri
          $scope.storing_questions_into_db();
-         console.log(question_data);
+
        } , 100);
      }
      $scope.storing_questions_into_db = () => {
@@ -142,12 +161,12 @@ apps.controller("page-controller" , [
          url: $scope.question_creation_uri ,
          method : "PATCH",
          data : {
-           "sorted_question": $scope.application.questions ,
+           "sorted_question": $scope.application.questions , 
            "creator_id":$scope.user_id
          },
          headers : $scope.api_keys
        }).then(function( provider ){
-         $scope.highlight_this_question ( newIndex , itemEl );
+             $scope.highlight_this_question ();
        } , function(){});
      };
      $scope.sorting_items = () => {
@@ -177,6 +196,8 @@ apps.controller("page-controller" , [
               // => Remove Highlighting
               var html_built_in = $("#docQuestions").find(evt.item);
               html_built_in.remove();
+
+              console.log($scope.question);
            },
            onMove  : (evt) => {
               // => Build Quztion ui list
@@ -200,17 +221,19 @@ apps.controller("page-controller" , [
           animation: 250 ,
           handle: '.drag-handler' ,
           onStart : () => {}  ,
-          onEnd   : (evt) => {
+          onEnd   : ( evt ) => {
             alert();
             var itemEl = evt.item;
             var newIndex = evt.newIndex;
             var oldIndex = evt.oldIndex;
+            // current question
+            var newPosition = $scope.question;
             // remove old index
-            $scope.application.questions.splice(oldIndex, 1);
+            $scope.application.questions.splice( oldIndex , 1 );
             // relocate new position
-            $scope.application.questions.splice( newIndex ,0,  newPosition );
+            $scope.application.questions.splice( newIndex , 0 ,  newPosition );
             // Save it into our database
-             $scope.storing_questions_into_db();
+            $scope.storing_questions_into_db();
           }
         });
      };
@@ -228,8 +251,13 @@ apps.controller("page-controller" , [
          $scope.sorting_items();
        } , 100);
      }
-     $scope.onclick_items = (elementId)=>{
-       alert("Add New Question !");
+     $scope.onclick_items = (question_type , id)=>{
+
+        var evt = {
+            item :  $("#"+id),
+            newIndex :  ( $("#docQuestions li" ).length > 0 ) ? $("#docQuestions li" ).length  : 0
+        };
+      $scope.drop_question_into_list(evt)
      }
 
 
