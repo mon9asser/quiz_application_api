@@ -37,6 +37,7 @@ apps.controller('list-apps' , [
      // ==>> Load all applications into angular object
      $scope.load_attendee_application = function (){
        $.getJSON( $scope.json_source , function (keys_object){
+         alert( settings.server_ip + 'api/applications/list');
          $http({
            url : settings.server_ip + 'api/applications/list' ,
            type : "GET" ,
@@ -45,6 +46,7 @@ apps.controller('list-apps' , [
              "X-api-app-name": keys_object.APP_NAME
            }
          }).then(function (resps){
+           console.log(resps);
            $scope.__applications = resps.data ;
            console.log($scope.__applications);
          } , function (err){
