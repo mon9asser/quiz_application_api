@@ -1563,8 +1563,21 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
         var obj_2_id = $scope.mongoose_answer_id.toString()+'12f' ;
         if(questionType == 0 ){ answer_obj['value'] = 'Answer 1'; }
         if(questionType == 1 ){ answer_obj['media_type'] = 0 ;  answer_obj['media_src'] = $scope.server_ip + "img/media-icon.png"; }
-        if(questionType == 2 ){ answer_obj['boolean_type'] = "true/false"; answer_obj['boolean_value'] = false; new_question.answers_format.push({ '_id': obj_2_id ,'creator_id' : $scope.user_id ,'is_correct' : true ,'boolean_type' : "true/false" ,'boolean_value': true });}
-        if(questionType == 3 ){ var rating_scale = $(evt.item).attr("data-asnwer-type") ; answer_obj['ratscal_type'] = rating_scale ;answer_obj['step_numbers'] = 5 ; if(rating_scale == 0 ){ answer_obj['show_labels'] = false ;answer_obj['started_at'] = "Left label" ;answer_obj['centered_at'] = "Center label" ; answer_obj['ended_at'] = "Right label" ; } }
+        if(questionType == 2 ){
+         answer_obj['boolean_type'] = "true/false"; 
+         answer_obj['boolean_value'] = false;
+          new_question.answers_format.push({ '_id': obj_2_id ,'creator_id' : $scope.user_id ,'is_correct' : true ,'boolean_type' : "true/false" ,'boolean_value': true });}
+        if(questionType == 3 ){ 
+          var rating_scale = $(evt.item).attr("data-asnwer-type") ; 
+          answer_obj['ratscal_type'] = rating_scale ;
+          answer_obj['step_numbers'] = 5 ; 
+              if(rating_scale == 0 ){ 
+                  answer_obj['show_labels'] = false ;
+                  answer_obj['started_at'] = "Left label" ;
+                  answer_obj['centered_at'] = "Center label" ; 
+                  answer_obj['ended_at'] = "Right label" ; 
+                } 
+          }
         if(questionType == 4 ){ new_question.answer_settings.answer_char_max = 500 ;  }
         new_question.answers_format.push(answer_obj);
         if($scope.mongoose_id == null ){
@@ -1614,6 +1627,26 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
 
     };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
     $scope.edit_this_question = ( qs_id  , qsCurrIndex , nextIndex = null ) => {
       var currentQuestion = $scope.questions_list.find(x => x._id == qs_id);
       if(currentQuestion != undefined){
@@ -2172,6 +2205,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
               },function(err){
                 //(err);
             });
+
+
+
+
+
+
+
+
            var qsLength = $("#docQuestions").children("li").length ;
            if(qsLength == 0 ){
              $("#docQuestions").css({

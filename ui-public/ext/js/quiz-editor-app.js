@@ -1,19 +1,219 @@
 var apps = angular.module("app-quiz" , []);
+apps.config([
+  "$interpolateProvider" , "$qProvider" ,
+  function($interpolateProvider , $qProvider) {
+      $interpolateProvider.startSymbol('{>');
+      $interpolateProvider.endSymbol('<}');
+      $qProvider.errorOnUnhandledRejections(false);
+  }
+]);
+apps.filter('strip_html_tags' , [() => {
+  return (specs) => {
+    var html_element = $("<span>" + specs +"</span>");
+    var text_values = html_element.text();
+    var char_counts = 35 ;
+    var dotted = '';
+    if(text_values.length > char_counts ) dotted = '...'
+    var chars = text_values.substring( 0 , char_counts );
+    return chars + ' ' + dotted ;
+  };
+}]);
 apps.controller("page-controller" , [
-  "$scope", "$timeout" ,
-   ( $scope , $timeout ) => {
+  "$scope", "$timeout" , "$http",
+   ( $scope , $timeout , $http) => {
      // ==> Start Application From Here !
 
      /* => Variables */
+     $scope.user_id = $("#userId").val();
      $scope.server_ip = $("#serverIp").val();
+     $scope.app_id = $("#applicationId").val(); ;
+     $scope.application = new Object();
      $scope.api_keys = new Object();
+     $scope.unique_items = new Object();
+
+     /* => Selectors */
+
 
      /* => API urls */
      $scope.json_apk_file  = $scope.server_ip + "ext/json/json-keys.json";
-
-
+     $scope.application_data_api_uri = $scope.server_ip + "api/"+$scope.app_id+"/application/retrieve" ;
+     $scope.uniqu_id_api_uri = $scope.server_ip + "api/generate/new/data";
+     $scope.question_creation_uri = $scope.server_ip + "api/" + $scope.app_id + "/question/creation";
 
      /* => functionalities */
+     $scope.loading_application_data = () => {
+       $http({
+         method : "GET" ,
+         url    : $scope.application_data_api_uri ,
+         headers : $scope.api_keys
+       }).then(function( app_data ){
+         /* => Application Object*/
+         $scope.application = app_data.data;
+         console.log( $scope.application);
+       } , function(error){
+         console.log(error);
+       });
+     }
+     $scope.generate_unique_ids = () => {
+       $http({
+          url : $scope.uniqu_id_api_uri ,
+          method : "GET"
+       }).then(function( provider ){
+         $scope.unique_items['mongoose_id'] = provider.data.id;
+         $scope.unique_items['mongoose_answer_id'] = provider.data.id_1;
+         $scope.unique_items['mongoose_date'] = provider.data.date;
+       });
+     }
+     $scope.edit_this_question = ( question_id , index ) => {
+       alert( question_id + ' == ' + index)
+     }
+     $scope.highlight_this_question = ( newIndex , itemEl = null ) => {
+
+     }
+     $scope.drop_question_into_list = (evt) => {
+       var itemEl = evt.item;
+       var newIndex = evt.newIndex;
+       var oldIndex = evt.oldIndex;
+
+       // => Generate Ids
+       $scope.generate_unique_ids();
+       // => Html Values
+       $("#docQuestions").css({background : "transparent"});
+
+       // => Build default data of question
+       $timeout(function(){
+         // => Givines with attributes
+         var html_built_in = $("#docQuestions").find(evt.item);
+         var item_type = html_built_in.attr("data-type");
+         var question_type = html_built_in.attr("data-question-type");
+         var question_id = html_built_in.attr("data-question-id");
+
+         alert(question_type);
+         // => Question Data
+         var question_data = new Object();
+         question_data['_id'] = $scope.unique_items.mongoose_id;
+         question_data['question_type']= question_type ;
+         question_data['question_body']= "Add your question here !";
+         question_data['enable_description']= false;
+         question_data['created_at'] = $scope.unique_items.mongoose_date;
+         question_data['answer_settings']= new Object();
+         question_data['answers_format']= new Array();
+         // => Answer Data
+         var another_answer_id = $scope.unique_items.mongoose_answer_id + '15fc'
+         var answer_data = new Object();
+         if($scope.application != null && $scope.application.app_type == 1 )
+         answer_data['is_correct'] = false ;
+         answer_data['_id'] =  $scope.unique_items.mongoose_answer_id;
+
+         // => Build default answers according to question type
+         if( question_type == 0 ) answer_data['value'] = "Answer 1";
+         if( question_type == 1 ) { answer_data['media_type'] = 0; answer_data['media_src'] =  $scope.server_ip + "img/media-icon.png"; }
+         if( question_type == 2 ) {
+             answer_data['boolean_type']= "true/false" ;
+             answer_data['boolean_value'] = false;
+             question_data.answers_format.push({
+               _id: another_answer_id,
+               is_correct : true ,
+               boolean_type : "true/false",
+               boolean_value : true
+             });
+         }
+         if( question_type == 3 ) {
+           alert("inProgress");
+         }
+         if( question_type == 4 ) {
+           alert("inProgress");
+         }
+
+         // ==> Storing question object into application
+         question_data.answers_format.push(answer_data);
+         if( $scope.application.questions == undefined ) $scope.application['questions'] = new Array();
+
+         // ==> Add to question list
+         $scope.application.questions.push(question_data);
+
+         // ==> Setup question lists => $scope.question_creation_uri
+         $scope.storing_questions_into_db();
+         console.log(question_data);
+       } , 100);
+     }
+     $scope.storing_questions_into_db = () => {
+       $http({
+         url: $scope.question_creation_uri ,
+         method : "PATCH",
+         data : {
+           "sorted_question": $scope.application.questions ,
+           "creator_id":$scope.user_id
+         },
+         headers : $scope.api_keys
+       }).then(function( provider ){
+         $scope.highlight_this_question ( newIndex , itemEl );
+       } , function(){});
+     };
+     $scope.sorting_items = () => {
+        Sortable.create( document.getElementById("qs-sortable") , {
+           sort: false,
+           disabled: false,
+           animation: 180 ,
+           group : {
+             name: "question-list",
+             pull: "clone",
+             revertClone: false
+           } ,
+           onStart : () => {
+             // => Generate new Ids
+             $scope.generate_unique_ids();
+             // => Highlighting question place
+             var qsLength = $("#docQuestions").children("li").length ;
+             if(qsLength == 0 ){
+               $("#docQuestions").css({ minHeight:"20px" , background:"ghostwhite" });
+             }
+           },
+           onEnd   : (evt) => {
+              // => Drop question into question list
+              $scope.generate_unique_ids();
+              // => Drop question into question list
+              $scope.drop_question_into_list(evt);
+              // => Remove Highlighting
+              var html_built_in = $("#docQuestions").find(evt.item);
+              html_built_in.remove();
+           },
+           onMove  : (evt) => {
+              // => Build Quztion ui list
+              var dragged = evt.dragged;
+              var draggedRect = evt.draggedRect;
+              var related = evt.related;
+              var relatedRect = evt.relatedRect;
+              var ParentID = $(dragged).parent().prop("id");
+              var ParentEl = $(dragged).parent();
+              if(ParentID == "qs-sortable") {
+                ParentEl.find(dragged).html("");
+                ParentEl.find(dragged).addClass("animated wobble");
+                ParentEl.find(dragged).css({ minHeight : '40px' , background : "ghostwhite" });
+              }
+           }
+        });
+        Sortable.create( document.getElementById("docQuestions") , {
+          group: "question-list" ,
+          ghostClass: 'shadow_element' ,
+          disabled: false ,
+          animation: 250 ,
+          handle: '.drag-handler' ,
+          onStart : () => {}  ,
+          onEnd   : (evt) => {
+            alert();
+            var itemEl = evt.item;
+            var newIndex = evt.newIndex;
+            var oldIndex = evt.oldIndex;
+            // remove old index
+            $scope.application.questions.splice(oldIndex, 1);
+            // relocate new position
+            $scope.application.questions.splice( newIndex ,0,  newPosition );
+            // Save it into our database
+             $scope.storing_questions_into_db();
+          }
+        });
+     };
      $scope.init = () => {
 
        // ==> Load APi Keys
@@ -24,7 +224,8 @@ apps.controller("page-controller" , [
 
        // ==> Do an actions here
        $timeout(function(){
-         console.log($scope.api_keys);
+         $scope.loading_application_data();
+         $scope.sorting_items();
        } , 100);
      }
      $scope.onclick_items = (elementId)=>{

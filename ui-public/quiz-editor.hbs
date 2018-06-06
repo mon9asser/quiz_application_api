@@ -82,7 +82,7 @@
                 <span class="questionnaire-title">
                   <!-- Quiz Name -->
                    <span>
-                     {> application_settings.questionnaire_title <}
+                     {> application.questionnaire_title <}
                    </span>
                 </span>
                 <a class="choices-right-add btn-primary preview-button btn rm-margin" href="{{server_ip}}{{app._id}}/live_preview/{{user.id}}">Preview Quiz</a>
@@ -97,7 +97,7 @@
               <div class="left_part col-md-5 col-sm-6 col-xs-12">
                   <div class="question-data qsdragged-list qs-dropped background_drag_drop">
                     <ul id="docQuestions" class="dropped-qs dropped-qs-2">
-                      <li class="question-li-x qs-{>qs_value._id<}" id="questoin_tag_{>qs_value._id<}" data-index="{>$index<}" data-question-id="{>qs_value._id<}" ng:class="(deleted_question_id == qs_value._id) ? 'animated  zoomOut':'' " ng:repeat="(qs_key , qs_value) in questions_list track by $index">
+                      <li ng:if="application.questions.length != 0 && qs_value.question_type != undefined" id="questoin_tag_{>qs_value._id<}" data-question-id="{>qs_value._id<}" ng:repeat="( qs_key , qs_value ) in application.questions track by $index">
                           <div class="question-part">
                               <div class="qs-type quesiontlist_iconx">
                                 <div class="drag-handler">
@@ -108,12 +108,15 @@
                                     <i ng:if="qs_value.question_type == 0" class="icon-insert-template"></i>
                                     <i ng:if="qs_value.question_type == 1" class="icon-image"></i>
                                     <i ng:if="qs_value.question_type == 2" class="icon-check-circle"></i>
+                                    <i ng:if="qs_value.question_type == 3" class="icon-check-circle"></i>
+                                    <i ng:if="qs_value.question_type == 4" class="icon-check-circle"></i>
                                   </span>
+                                  <span class="qs-body" ng-bind="qs_value.question_body | strip_html_tags "></span>
                                 </div>
                               </div>
                           </div>
                       </li>
-                      <div ng:if="questions_list.length == 0" class="qs-status">
+                      <div ng:if="application.questions.length == 0" class="qs-status">
                           <h2>
                            Drag drop questions here !
                           </h2>
