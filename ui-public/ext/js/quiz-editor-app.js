@@ -141,11 +141,11 @@ apps.controller("page-controller" , [
          // ==> Storing question object into application
          question_data.answers_format.push(answer_data);
          if( $scope.application.questions == undefined ) $scope.application['questions'] = new Array();
-         if( $scope.application.questions == undefined ) $scope.application['stored_questions'] = new Array();
+        //  if( $scope.application.questions == undefined ) $scope.application['stored_questions'] = new Array();
 
          // ==> Add to question list
          $scope.application.questions.push(question_data);
-         $scope.application.stored_questions.push(question_data);
+        //  $scope.application.stored_questions.push(question_data);
 
 
          // ==> Storing object
@@ -161,7 +161,7 @@ apps.controller("page-controller" , [
          url: $scope.question_creation_uri ,
          method : "PATCH",
          data : {
-           "sorted_question": $scope.application.questions , 
+           "sorted_question": $scope.application.questions ,
            "creator_id":$scope.user_id
          },
          headers : $scope.api_keys
