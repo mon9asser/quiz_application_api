@@ -36,8 +36,11 @@ apps.controller('list-apps' , [
      // ==> Functionalities
      // ==>> Load all applications into angular object
      $scope.load_attendee_application = function (){
+
+       alert( settings.server_ip + 'api/applications/list');
+       alert($scope.json_source);
        $.getJSON( $scope.json_source , function (keys_object){
-         alert( settings.server_ip + 'api/applications/list');
+
          $http({
            url : settings.server_ip + 'api/applications/list' ,
            type : "GET" ,
