@@ -18,7 +18,7 @@ apps.controller("page-controller",[ "$scope" , "$rootScope" , function( $scope ,
 apps.factory("settings" , [
   function (){
      var applications = {
-        server_ip : (window.location.toString().includes('localhost')) ? "http://localhost:9000/" : "http://34.215.133.182/" ,
+        server_ip : (window.location.toString().includes('localhost')) ? "http://localhost:9000/" : "http://http://54.187.251.111/" ,
         json_source : "ext/json/json-keys.json" ,
         server_url : window.location.toString() ,
         page_name : window.location.pathname.replace(/^\/([^\/]*).*$/, '$1')
