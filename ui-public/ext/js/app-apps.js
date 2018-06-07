@@ -3100,6 +3100,36 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
     // ==> Chagne and get the target element ( Current Selector )
     $scope.block_selector = () => {
+       $("#welcome-screens,#goodbye-screens,#result-screens ,#question-screens").css({display:'none' });
+       //  $scope.editor_page
+       if($scope.editor_page == 0 ){ // => Welcome Screen
+         $("#welcome-screens").css("display","block");
+          // ==> Slide To Target Element
+          $scope.iframe_access.slide_to_question_in_index_number(0);
+         $($scope.iframe_object).find(".welcome-screen-block").addClass("outlined_object");
+       }
+       if($scope.editor_page == 1 ){ // => GoodBye Screen
+         $("#goodbye-screens").css("display","block");
+         // ==> Slide To Target Element
+         $scope.iframe_access.slide_to_question_in_index_number($scope.questions_list.length + 1 );
+        $($scope.iframe_object).find(".goodbye-screen-block").addClass("outlined_object");
+       }
+       if($scope.editor_page == 2 ){ // => Result Screen
+         $("#result-screens").css("display","block");
+         // ==> Slide To Target Element
+         // ==> outline it
+         $scope.iframe_access.slide_to_question_in_index_number($scope.questions_list.length + 2);
+        $($scope.iframe_object).find(".result-screen-block").addClass("outlined_object");
+       }
+       if($scope.editor_page == 3 ){ // => Question Screen
+         $("#question-screens").css("display","block");
+         // ==> Slide To Target Element
+         // ==> outline it
+         $scope.iframe_access.slide_to_question_in_index_number(1);
+        $($scope.iframe_object).find(".question-screen-block").addClass("outlined_object");
+       }
+       if($scope.editor_page == 4 ){ // => Time - progress Screen
 
-    }
+       }
+     };
 }]);
