@@ -200,8 +200,6 @@ apps.controller("page-controller" , [
                 // => Remove Highlighting
                 var html_built_in = $("#docQuestions").find(evt.item);
                 html_built_in.remove();
-
-                console.log(  $scope.unique_items.mongoose_answer_id );
               } , 500 );
            },
            onMove  : (evt) => {
