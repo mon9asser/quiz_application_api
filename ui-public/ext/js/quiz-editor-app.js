@@ -93,6 +93,13 @@ apps.controller("page-controller" , [
 
        // => Generate Ids
        $scope.generate_unique_ids();
+       $timeout(function(){
+         console.log(" 100 =============> " +  $scope.unique_items.mongoose_id);
+       } , 100);
+
+       $timeout(function(){
+         console.log(" 500 =============> " +  $scope.unique_items.mongoose_id);
+       } , 500);
        // => Html Values
        $("#docQuestions").css({background : "transparent"});
 
@@ -103,7 +110,7 @@ apps.controller("page-controller" , [
          var item_type = html_built_in.attr("data-type");
          var question_type = $(evt.item).attr("data-question-type");
          var question_id = html_built_in.attr("data-question-id");
-         console.log(" ================>> " + $scope.unique_items.mongoose_id);
+
          // => Question Data
          var question_data = new Object();
          question_data['_id'] = $scope.unique_items.mongoose_id;
@@ -155,7 +162,7 @@ apps.controller("page-controller" , [
          // ==> Setup question lists => $scope.question_creation_uri
          $scope.storing_questions_into_db();
 
-       } , 200);
+       } , 100);
      }
      $scope.storing_questions_into_db = () => {
        $http({
