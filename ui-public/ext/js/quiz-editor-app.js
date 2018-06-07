@@ -56,6 +56,7 @@ apps.controller("page-controller" , [
        });
      }
      $scope.generate_unique_ids = () => {
+       alert($scope.uniqu_id_api_uri);
        $http({
           url : $scope.uniqu_id_api_uri ,
           method : "GET"
@@ -64,6 +65,8 @@ apps.controller("page-controller" , [
          $scope.unique_items['mongoose_id'] = provider.data.id;
          $scope.unique_items['mongoose_answer_id'] = provider.data.id_1;
          $scope.unique_items['mongoose_date'] = provider.data.date;
+       } , function(err){
+         console.log({err : err});
        });
      }
      $scope.edit_this_question = ( question_id , index ) => {
