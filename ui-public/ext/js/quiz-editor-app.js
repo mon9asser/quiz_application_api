@@ -250,7 +250,7 @@ apps.controller("page-controller" , [
        $timeout(function(){
          $scope.loading_application_data();
          $scope.sorting_items();
-       } , 100);
+       } , 200);
      }
      $scope.onclick_items = (question_type , id)=>{
 
