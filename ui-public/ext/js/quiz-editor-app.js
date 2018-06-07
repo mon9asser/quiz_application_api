@@ -102,7 +102,7 @@ apps.controller("page-controller" , [
          var item_type = html_built_in.attr("data-type");
          var question_type = $(evt.item).attr("data-question-type");
          var question_id = html_built_in.attr("data-question-id");
-
+         console.log(" ================>> " + $scope.unique_items.mongoose_id);
          // => Question Data
          var question_data = new Object();
          question_data['_id'] = $scope.unique_items.mongoose_id;
@@ -154,7 +154,7 @@ apps.controller("page-controller" , [
          // ==> Setup question lists => $scope.question_creation_uri
          $scope.storing_questions_into_db();
 
-       } , 100);
+       } , 200);
      }
      $scope.storing_questions_into_db = () => {
        $http({
