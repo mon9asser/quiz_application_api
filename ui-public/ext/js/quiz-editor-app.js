@@ -94,15 +94,7 @@ apps.controller("page-controller" , [
        var newIndex = evt.newIndex;
        var oldIndex = evt.oldIndex;
 
-       // => Generate Ids
-       $scope.generate_unique_ids();
-       $timeout(function(){
-         console.log(" 100 =============> " +  $scope.unique_items.mongoose_id);
-       } , 100);
 
-       $timeout(function(){
-         console.log(" 500 =============> " +  $scope.unique_items.mongoose_id);
-       } , 500);
        // => Html Values
        $("#docQuestions").css({background : "transparent"});
 
@@ -202,13 +194,15 @@ apps.controller("page-controller" , [
            onEnd   : (evt) => {
               // => Drop question into question list
               $scope.generate_unique_ids();
-              // => Drop question into question list
-              $scope.drop_question_into_list(evt);
-              // => Remove Highlighting
-              var html_built_in = $("#docQuestions").find(evt.item);
-              html_built_in.remove();
+              $timeout(function(){
+                // => Drop question into question list
+                $scope.drop_question_into_list(evt);
+                // => Remove Highlighting
+                var html_built_in = $("#docQuestions").find(evt.item);
+                html_built_in.remove();
 
-              console.log($scope.question);
+                console.log($scope.question);
+              } , 300 );
            },
            onMove  : (evt) => {
               // => Build Quztion ui list
