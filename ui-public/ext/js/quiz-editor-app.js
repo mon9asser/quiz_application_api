@@ -201,8 +201,8 @@ apps.controller("page-controller" , [
                 var html_built_in = $("#docQuestions").find(evt.item);
                 html_built_in.remove();
 
-                console.log($scope.question);
-              } , 300 );
+                console.log(  $scope.unique_items.mongoose_answer_id );
+              } , 500 );
            },
            onMove  : (evt) => {
               // => Build Quztion ui list
