@@ -97,7 +97,7 @@
               <div class="left_part col-md-5 col-sm-6 col-xs-12">
                   <div class="question-data qsdragged-list qs-dropped background_drag_drop">
                     <ul id="docQuestions" class="dropped-qs dropped-qs-2">
-                      <li ng:if="application.questions.length != 0 && qs_value.question_type != undefined" id="questoin_tag_{>qs_value._id<}" data-question-id="{>qs_value._id<}" ng:repeat="( qs_key , qs_value ) in application.questions track by $index">
+                      <li ng:if="application.questions.length != 0" id="questoin_tag_{>qs_value._id<}" data-question-id="{>qs_value._id<}" ng:repeat="( qs_key , qs_value ) in application.questions track by $index">
                           <div class="question-part">
                               <div class="qs-type quesiontlist_iconx">
                                 <div class="drag-handler">
