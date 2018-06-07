@@ -60,6 +60,7 @@ apps.controller("page-controller" , [
           url : $scope.uniqu_id_api_uri ,
           method : "GET"
        }).then(function( provider ){
+         console.log({provider : provider.data});
          $scope.unique_items['mongoose_id'] = provider.data.id;
          $scope.unique_items['mongoose_answer_id'] = provider.data.id_1;
          $scope.unique_items['mongoose_date'] = provider.data.date;
