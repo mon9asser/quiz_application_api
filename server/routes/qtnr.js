@@ -2419,6 +2419,12 @@ qtnrRouters.get("/applications/list" , auth_api_keys_only , (req , res )=>{
 
 // ===========================================> New Versions
 // /-*--------------------------------------------------------------------
+qtnrRouters.post("/:app_id/stylesheet/add/files" , (req, res) => {
+  var stylesheet = req.body.styles;
+  res.send ({
+    style__sheet  : stylesheet
+  });
+});
 qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
   var user = req.verified_user;
   var userType = req.is_creator;

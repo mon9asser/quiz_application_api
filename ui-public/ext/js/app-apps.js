@@ -441,7 +441,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                   settings_obj['settings']['time_settings']['timer_layout'] = mongo_settings.time_settings.timer_layout;
                   else // default
                   settings_obj['settings']['time_settings']['timer_layout'] = $scope.application_settings.settings.timer_layout;
-                  console.log(mongo_settings);
+                  // console.log(mongo_settings);
 
 
                   if(mongo_settings.time_settings != null ){
@@ -1787,7 +1787,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
               ($scope.questions_list[0]);
               if($scope.questions_list[0] != null && $scope.questions_list != null && $scope.questions_list.length > 0){
                 var first_question = $scope.questions_list[0];
-                console.log(first_question._id);
+                // console.log(first_question._id);
                 $scope.edit_this_question  ( first_question._id  , 0 ) ;
               }
 
@@ -2112,7 +2112,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
          $scope.question_id = $(itemEl).attr("data-question-id");
          var question_sor = $scope.questions_list.find($scope.callback_index);
-         console.log($scope.question_id);
+        //  console.log($scope.question_id);
          $scope.edit_this_question ( $scope.question_id  , newIndex ) ;
 
          $scope.highlighted_question_and_show_data (newIndex , itemEl);
@@ -2466,7 +2466,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
         else
           questionArgs =  $scope.questions_list = question_data_object ;
 
-          console.log({question_data_object : question_data_object});
+          // console.log({question_data_object : question_data_object});
           $scope.iframe_access.set_application_settings($scope.application_settings.settings);
           $scope.iframe_access.randomize_all_questions(questionArgs);
     }
@@ -2483,11 +2483,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     });
 
     $scope.hover_select_are_box = (this_el) => {
-      // alert();
+      // // alert();
       this_el.css({outline : '3px solid blue' , padding : '5px'})
     }
     $scope.unhover_select_are_box = (this_el) => {
-      // alert();
+      // // alert();
       this_el.css({outline : '0px solid blue' , padding : '0px'})
     }
     $timeout(function(){
@@ -2708,19 +2708,21 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     }
     $scope.change_this_answer_value_of_numbering = ( block_vals )=> {
       if( block_vals == 'answer_screen_background_numbering' ) {
-        // alert($($scope.iframe_object).find( '.answer-container' ).children('ul').children('li').children('.answer-contents').children('label.labels').css("background"));
+        // // alert($($scope.iframe_object).find( '.answer-container' ).children('ul').children('li').children('.answer-contents').children('label.labels').css("background"));
         $($scope.iframe_object).find( '.answer-container' ).children('ul').children('li').children('.answer-contents').children('label.labels').css("background" , $scope.answer_screen_background_numbering );
        }
       if( block_vals == 'answer_screen_color_numbering') {
           $($scope.iframe_object).find( '.answer-container' ).children('ul').children('li').children('.answer-contents').children('label.labels').css({ 'color' : $scope.answer_screen_color_numbering   });
        }
       if( block_vals == 'answer_screen_font_size_numbering' ){
-        $($scope.iframe_object).find( '.answer-container' ).children('ul').children('li').children('.answer-contents').children('label.labels').css({ 'font-size' : $scope.answer_screen_font_size_numbering   });
+        $($scope.iframe_object).find( '.answer-container' ).children('ul').children('li').children('.answer-contents').children('label.labels').css({ 'font-size' : $scope.answer_screen_font_size_numbering  +'px' });
        }
     }
 
-
+    $scope.stored_stylesheet = [];
     $scope.apply_these_stylesheet = () => {
+        var propert_objects = new Object();
+
         if($scope.current_element == null ) return false;
         var _b = $scope.editor_page;
 
@@ -2728,116 +2730,184 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
         if( _b == 3 ){
           if ( $scope.question_screen_background != undefined && $scope.current_element == ".question-screen-box" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ background : $scope.question_screen_background });
+                propert_objects['property_name'] = 'background';
+                propert_objects['property_value'] = $scope.question_screen_background ;
            }
           if ( $scope.question_screen_border_color != undefined && $scope.current_element == ".question-screen-box" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-color' : $scope.question_screen_border_color });
+                propert_objects['property_name'] = 'border-color';
+                propert_objects['property_value'] = $scope.question_screen_border_color ;
            }
           if ( $scope.question_border_width_left_screen_box != undefined && $scope.current_element == ".question-screen-box" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-left-width' : $scope.question_border_width_left_screen_box });
+                propert_objects['property_name'] = 'border-left-width';
+                propert_objects['property_value'] = $scope.question_border_width_left_screen_box ;
            }
           if ( $scope.question_border_style_left_screen_box != undefined && $scope.current_element == ".question-screen-box" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-left-style' : $scope.question_border_style_left_screen_box });
+                propert_objects['property_name'] = 'border-left-style';
+                propert_objects['property_value'] = $scope.question_border_style_left_screen_box ;
           }
           if ( $scope.question_border_width_right_screen_box != undefined && $scope.current_element == ".question-screen-box" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-right-width' : $scope.question_border_width_right_screen_box });
+                propert_objects['property_name'] = 'border-right-width';
+                propert_objects['property_value'] = $scope.question_border_width_right_screen_box ;
            }
           if ( $scope.question_border_style_right_screen_box != undefined && $scope.current_element == ".question-screen-box" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-right-style' : $scope.question_border_style_right_screen_box });
+                propert_objects['property_name'] = 'border-right-style';
+                propert_objects['property_value'] = $scope.question_border_style_right_screen_box ;
            }
           if ( $scope.question_border_width_top_screen_box != undefined && $scope.current_element == ".question-screen-box" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-top-width' : $scope.question_border_width_top_screen_box });
+                propert_objects['property_name'] = 'border-top-width';
+                propert_objects['property_value'] = $scope.question_border_width_top_screen_box ;
            }
           if ( $scope.question_border_style_top_screen_box != undefined && $scope.current_element == ".question-screen-box" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-top-style' : $scope.question_border_style_top_screen_box });
+                propert_objects['property_name'] = 'border-top-style';
+                propert_objects['property_value'] = $scope.question_border_style_top_screen_box ;
            }
           if ( $scope.question_border_width_bottom_screen_box != undefined && $scope.current_element == ".question-screen-box" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-bottom-width' : $scope.question_border_width_bottom_screen_box });
+                propert_objects['property_name'] = 'border-bottom-width';
+                propert_objects['property_value'] = $scope.question_border_width_bottom_screen_box ;
           }
           if ( $scope.question_border_style_bottom_screen_box != undefined && $scope.current_element == ".question-screen-box" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-bottom-style' : $scope.question_border_style_bottom_screen_box });
+                propert_objects['property_name'] = 'border-bottom-style';
+                propert_objects['property_value'] = $scope.question_border_style_bottom_screen_box ;
           }
 
           if ( $scope.screen_text_color_question_screen != undefined && $scope.current_element == ".question-box-text" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'color' : $scope.screen_text_color_question_screen });
+                propert_objects['property_name'] = 'color';
+                propert_objects['property_value'] = $scope.screen_text_color_question_screen ;
            }
           if ( $scope.screen_text_font_style_question_screen != undefined && $scope.current_element == ".question-box-text" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'font-weight' : $scope.screen_text_font_style_question_screen });
+                propert_objects['property_name'] = 'font-weight';
+                propert_objects['property_value'] = $scope.screen_text_font_style_question_screen ;
           }
           if ( $scope.screen_text_font_size_question_screen != undefined && $scope.current_element == ".question-box-text" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.screen_text_font_size_question_screen });
                 $($scope.iframe_object).find( ".question-label-box-brd" ).css({ 'font-size' : $scope.screen_text_font_size_question_screen });
+                propert_objects['property_name'] = 'font-size';
+                propert_objects['property_value'] = $scope.screen_text_font_size_question_screen ;
           }
           if ( $scope.screen_text_font_family_question_screen != undefined && $scope.current_element == ".question-box-text" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'font-family' : $scope.screen_text_font_family_question_screen });
+                propert_objects['property_name'] = 'font-family';
+                propert_objects['property_value'] = $scope.screen_text_font_family_question_screen ;
            }
           if ( $scope.question_text_screen_border_color != undefined && $scope.current_element == ".question-box-text" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-color' : $scope.question_text_screen_border_color });
+                propert_objects['property_name'] = 'border-color';
+                propert_objects['property_value'] = $scope.question_text_screen_border_color ;
           }
           if ( $scope.question_text_border_width_left_screen_box != undefined && $scope.current_element == ".question-box-text" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-left-width' : $scope.question_text_border_width_left_screen_box });
+                propert_objects['property_name'] = 'border-left-width';
+                propert_objects['property_value'] = $scope.question_text_border_width_left_screen_box ;
           }
           if ( $scope.question_text_border_style_left_screen_box != undefined && $scope.current_element == ".question-box-text" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-left-style' : $scope.question_text_border_style_left_screen_box });
+                propert_objects['property_name'] = 'border-left-style';
+                propert_objects['property_value'] = $scope.question_text_border_style_left_screen_box ;
           }
           if ( $scope.question_text_border_width_right_screen_box != undefined && $scope.current_element == ".question-box-text" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-right-width' : $scope.question_text_border_width_right_screen_box });
+                propert_objects['property_name'] = 'border-right-width';
+                propert_objects['property_value'] = $scope.question_text_border_width_right_screen_box ;
           }
           if ( $scope.question_text_border_style_right_screen_box != undefined && $scope.current_element == ".question-box-text" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-right-style' : $scope.question_text_border_style_right_screen_box });
+                propert_objects['property_name'] = 'border-right-style';
+                propert_objects['property_value'] = $scope.question_text_border_style_right_screen_box
           }
           if ( $scope.question_text_border_width_top_screen_box != undefined && $scope.current_element == ".question-box-text" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-top-width' : $scope.question_text_border_width_top_screen_box });
+                propert_objects['property_name'] = 'border-top-width';
+                propert_objects['property_value'] = $scope.question_text_border_width_top_screen_box
            }
           if ( $scope.question_text_border_style_top_screen_box != undefined && $scope.current_element == ".question-box-text" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-top-style' : $scope.question_text_border_style_top_screen_box });
+                propert_objects['property_name'] = 'border-top-style';
+                propert_objects['property_value'] = $scope.question_text_border_style_top_screen_box
           }
           if ( $scope.question_text_border_width_bottom_screen_box != undefined && $scope.current_element == ".question-box-text" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-bottom-width' : $scope.question_text_border_width_bottom_screen_box });
+                propert_objects['property_name'] = 'border-bottom-width';
+                propert_objects['property_value'] = $scope.question_text_border_width_bottom_screen_box
           }
           if ( $scope.question_text_border_style_bottom_screen_box != undefined && $scope.current_element == ".question-box-text" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'border-bottom-style' : $scope.question_text_border_style_bottom_screen_box });
+                propert_objects['property_name'] = 'border-bottom-style';
+                propert_objects['property_value'] = $scope.question_text_border_style_bottom_screen_box
           }
 
           if ( $scope.question_screen_numbering_background != undefined && $scope.current_element == ".question-box-text" ) {
             $($scope.iframe_object).find( ".question-label-box" ).css({ 'background' : $scope.question_screen_numbering_background });
             $($scope.iframe_object).find( ".question-label-box-brd" ).css({ 'border-left-color' : $scope.question_screen_numbering_background });
+            propert_objects['property_name'] = 'background';
+            propert_objects['property_value'] = $scope.question_screen_numbering_background;
+            propert_objects['property_name1'] = 'border-left-color';
+            propert_objects['property_value1'] = $scope.question_screen_numbering_background;
            }
           if ( $scope.question_screen_numbering_color != undefined && $scope.current_element == ".question-box-text" ) {
             $($scope.iframe_object).find( ".question-label-box").css({ 'color' : $scope.question_screen_numbering_color });
+            propert_objects['property_name'] = 'color';
+            propert_objects['property_value'] = $scope.question_screen_numbering_color;
            }
           if ( $scope.question_screen_numbering_font_size != undefined && $scope.current_element == ".question-box-text" ) {
             $($scope.iframe_object).find( ".question-label-box" ).css({ 'font-size' : $scope.question_screen_numbering_font_size });
+            propert_objects['property_name'] = 'font-size';
+            propert_objects['property_value'] = $scope.question_screen_numbering_font_size;
            }
 
           if ( $scope.question_screen_font_size_required_text != undefined && $scope.current_element == ".question-text-required-text" ) {
             $($scope.iframe_object).find(  $scope.current_element ).css({ 'font-size' : $scope.question_screen_font_size_required_text });
+            propert_objects['property_name'] = 'font-size';
+            propert_objects['property_value'] = $scope.question_screen_font_size_required_text;
           }
           if ( $scope.question_screen_color_required_text != undefined && $scope.current_element == ".question-text-required-text" ) {
             $($scope.iframe_object).find(  $scope.current_element ).css({ 'color' : $scope.question_screen_color_required_text });
+            propert_objects['property_name'] = 'color';
+            propert_objects['property_value'] = $scope.question_screen_color_required_text;
            }
 
           // if ( $scope.question_screen_warning_text != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
           // if ( $scope.question_screen_warning_color != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
           // if ( $scope.question_screen_warning_background != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
-          // alert($scope.current_elemen);
+          // // alert($scope.current_elemen);
            // .answer-text-box-area
           if ( $scope.answer_screen_background != undefined && $scope.current_element == ".answer-text-box-area" ) {
             $($scope.iframe_object).find( '.question-answer-row-select-blk' ).css({ 'background' : $scope.answer_screen_background });
+            propert_objects['property_name'] = 'background';
+            propert_objects['property_value'] = $scope.answer_screen_background;
           }
           if ( $scope.answer_screen_color != undefined && $scope.current_element == ".answer-text-box-area" ) {
             $($scope.iframe_object).find(  $scope.current_element ).css({ 'color' : $scope.answer_screen_color });
+            propert_objects['property_name'] = 'color';
+            propert_objects['property_value'] = $scope.answer_screen_color;
           }
           if ( $scope.answer_screen_font_size != undefined && $scope.current_element == ".answer-text-box-area" ) {
             $($scope.iframe_object).find(  $scope.current_element ).css({ 'font-size' : $scope.answer_screen_font_size });
+            propert_objects['property_name'] = 'font-size';
+            propert_objects['property_value'] = $scope.answer_screen_font_size;
           }
           if ( $scope.answer_screen_font_style != undefined && $scope.current_element == ".answer-text-box-area" ) {
             $($scope.iframe_object).find(  $scope.current_element ).css({ 'font-weight' : $scope.answer_screen_font_style });
+            propert_objects['property_name'] = 'font-weight';
+            propert_objects['property_value'] = $scope.answer_screen_font_style;
           }
           if ( $scope.answer_screen_font_family != undefined && $scope.current_element == ".answer-text-box-area" ) {
               $($scope.iframe_object).find(  $scope.current_element ).css({ 'font-family' : $scope.answer_screen_font_style });
+              propert_objects['property_name'] = 'font-family';
+              propert_objects['property_value'] = $scope.answer_screen_font_family;
            }
 
-          // alert($scope.current_element);
+          // // alert($scope.current_element);
 
           // if ( $scope.answer_screen_background_numbering != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
           // if ( $scope.answer_screen_color_numbering != undefined && $scope.current_element == "xxxxxxxxxxxxxxxxx" ) { }
@@ -2862,153 +2932,245 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
         if( _b == 2 ){
           if ( $scope.result_background_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
               $($scope.iframe_object).find( $scope.current_element ).css({ background : $scope.result_background_screen_box });
+              propert_objects['property_name'] = 'background';
+              propert_objects['property_value'] = $scope.result_background_screen_box;
           }
           if ( $scope.result_border_color_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'border-color' : $scope.result_border_color_screen_box });
+            propert_objects['property_name'] = 'border-color';
+            propert_objects['property_value'] = $scope.result_border_color_screen_box;
            }
           if ( $scope.resule_border_width_left_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
               $($scope.iframe_object).find( $scope.current_element ).css({ 'border-left-width' : $scope.resule_border_width_left_screen_box });
+              propert_objects['property_name'] = 'border-left-width';
+              propert_objects['property_value'] = $scope.resule_border_width_left_screen_box;
            }
           if ( $scope.resule_border_style_left_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
               $($scope.iframe_object).find( $scope.current_element ).css({ 'border-left-style' : $scope.resule_border_style_left_screen_box });
+              propert_objects['property_name'] = 'border-left-style';
+              propert_objects['property_value'] = $scope.resule_border_style_left_screen_box;
           }
           if ( $scope.resule_border_width_right_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
               $($scope.iframe_object).find( $scope.current_element ).css({ 'border-right-width' : $scope.resule_border_width_right_screen_box });
+              propert_objects['property_name'] = 'border-right-width';
+              propert_objects['property_value'] = $scope.resule_border_width_right_screen_box;
           }
           if ( $scope.resule_border_style_right_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
               $($scope.iframe_object).find( $scope.current_element ).css({ 'border-right-style' : $scope.resule_border_style_right_screen_box });
+              propert_objects['property_name'] = 'border-right-style';
+              propert_objects['property_value'] = $scope.resule_border_style_right_screen_box;
           }
           if ( $scope.resule_border_width_top_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
               $($scope.iframe_object).find( $scope.current_element ).css({ 'border-top-width' : $scope.resule_border_width_top_screen_box });
+              propert_objects['property_name'] = 'border-top-width';
+              propert_objects['property_value'] = $scope.resule_border_width_top_screen_box;
           }
           if ( $scope.resule_border_style_top_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
               $($scope.iframe_object).find( $scope.current_element ).css({ 'border-top-style' : $scope.resule_border_style_top_screen_box });
+              propert_objects['property_name'] = 'border-top-style';
+              propert_objects['property_value'] = $scope.resule_border_style_top_screen_box;
            }
           if ( $scope.resule_border_width_bottom_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
               $($scope.iframe_object).find( $scope.current_element ).css({ 'border-bottom-width' : $scope.resule_border_width_bottom_screen_box });
+              propert_objects['property_name'] = 'border-bottom-width';
+              propert_objects['property_value'] = $scope.resule_border_width_bottom_screen_box;
            }
           if ( $scope.resule_border_style_bottom_screen_box != undefined && $scope.current_element == ".box-result-screen" ) {
               $($scope.iframe_object).find( $scope.current_element ).css({ 'border-bottom-style' : $scope.resule_border_style_bottom_screen_box });
+              propert_objects['property_name'] = 'border-bottom-style';
+              propert_objects['property_value'] = $scope.resule_border_style_bottom_screen_box;
           }
 
           if ( $scope.screen_text_color_result_screen != undefined && $scope.current_element == ".result-screen-text" ) {
               $($scope.iframe_object).find( $scope.current_element ).css({ 'color' : $scope.screen_text_color_result_screen });
+              propert_objects['property_name'] = 'color';
+              propert_objects['property_value'] = $scope.screen_text_color_result_screen;
            }
           if ( $scope.screen_text_font_size_result_screen != undefined && $scope.current_element == ".result-screen-text" ) {
               $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.screen_text_font_size_result_screen });
+              propert_objects['property_name'] = 'font-size';
+              propert_objects['property_value'] = $scope.screen_text_font_size_result_screen;
           }
           if ( $scope.screen_text_font_style_result_screen != undefined && $scope.current_element == ".result-screen-text" ) {
               $($scope.iframe_object).find( $scope.current_element ).css({ 'font-weight' : $scope.screen_text_font_style_result_screen });
+              propert_objects['property_name'] = 'font-weight';
+              propert_objects['property_value'] = $scope.screen_text_font_style_result_screen;
           }
           if ( $scope.screen_text_font_family_result_screen != undefined && $scope.current_element == ".result-screen-text" ) {
               $($scope.iframe_object).find( $scope.current_element ).css({ 'font-family' : $scope.screen_text_font_family_result_screen });
+              propert_objects['property_name'] = 'font-family';
+              propert_objects['property_value'] = $scope.screen_text_font_family_result_screen;
            }
 
           if ( $scope.score_result_text_color != undefined && $scope.current_element == ".result-screen-score-text" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'color' : $scope.score_result_text_color });
+            propert_objects['property_name'] = 'color';
+            propert_objects['property_value'] = $scope.score_result_text_color;
            }
           if ( $scope.score_result_text_font_size != undefined && $scope.current_element == ".result-screen-score-text" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.score_result_text_font_size });
+            propert_objects['property_name'] = 'font-size';
+            propert_objects['property_value'] = $scope.score_result_text_font_size;
            }
           if ( $scope.score_result_text_font_style != undefined && $scope.current_element == ".result-screen-score-text" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'font-weight' : $scope.score_result_text_font_style });
+            propert_objects['property_name'] = 'font-weight';
+            propert_objects['property_value'] = $scope.score_result_text_font_style;
            }
           if ( $scope.score_result_text_font_family != undefined && $scope.current_element == ".result-screen-score-text" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'font-family' : $scope.score_result_text_font_family });
+            propert_objects['property_name'] = 'font-family';
+            propert_objects['property_value'] = $scope.score_result_text_font_family;
            }
 
           if ( $scope.grade_result_text_color != undefined && $scope.current_element == ".result-screen-grade-text" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'color' : $scope.grade_result_text_color });
+            propert_objects['property_name'] = 'color';
+            propert_objects['property_value'] = $scope.grade_result_text_color;
            }
           if ( $scope.grade_result_text_font_size != undefined && $scope.current_element == ".result-screen-grade-text" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.grade_result_text_font_size });
+            propert_objects['property_name'] = 'font-size';
+            propert_objects['property_value'] = $scope.grade_result_text_font_size;
            }
           if ( $scope.grade_result_text_font_style != undefined && $scope.current_element == ".result-screen-grade-text" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'font-weight' : $scope.grade_result_text_font_style });
+            propert_objects['property_name'] = 'font-weight';
+            propert_objects['property_value'] = $scope.grade_result_text_font_style;
            }
           if ( $scope.grade_result_text_font_family != undefined && $scope.current_element == ".result-screen-grade-text" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'font-family' : $scope.grade_result_text_font_family });
+            propert_objects['property_name'] = 'font-family';
+            propert_objects['property_value'] = $scope.grade_result_text_font_family;
           }
 
           if ( $scope.button_buttons_font_size_screen_result != undefined && $scope.current_element == ".review-result-box , .retake-result-box" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.button_buttons_font_size_screen_result });
+                propert_objects['property_name'] = 'font-size';
+                propert_objects['property_value'] = $scope.button_buttons_font_size_screen_result;
           }
          }
         // ==> Goodby screen
         if( _b == 1 ){
             if ( $scope.page_player_background != undefined && $scope.current_element == ".page_player_background") {
               $($scope.iframe_object).find(  $scope.current_element ).css({ background : $scope.page_player_background });
+              propert_objects['property_name'] = 'background';
+              propert_objects['property_value'] = $scope.page_player_background;
             }
           if ( $scope.goodbye_background_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
             $($scope.iframe_object).find( $scope.current_element ).css({ background : $scope.goodbye_background_screen_box });
+            propert_objects['property_name'] = 'background';
+            propert_objects['property_value'] = $scope.goodbye_background_screen_box;
            }
           if ( $scope.goodbye_border_color_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'border-color' : $scope.goodbye_border_color_screen_box });
+            propert_objects['property_name'] = 'border-color';
+            propert_objects['property_value'] = $scope.goodbye_border_color_screen_box;
            }
           if ( $scope.goodbye_border_width_left_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'border-left-width' : $scope.goodbye_border_width_left_screen_box });
+            propert_objects['property_name'] = 'border-left-width';
+            propert_objects['property_value'] = $scope.goodbye_border_width_left_screen_box;
            }
           if ( $scope.goodbye_border_style_left_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'border-left-style' : $scope.goodbye_border_style_left_screen_box });
+            propert_objects['property_name'] = 'border-left-style';
+            propert_objects['property_value'] = $scope.goodbye_border_style_left_screen_box;
            }
           if ( $scope.goodbye_border_width_right_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'border-right-width' : $scope.goodbye_border_width_right_screen_box });
+            propert_objects['property_name'] = 'border-right-width';
+            propert_objects['property_value'] = $scope.goodbye_border_width_right_screen_box;
            }
           if ( $scope.goodbye_border_style_right_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
               $($scope.iframe_object).find( $scope.current_element ).css({ 'border-right-style' : $scope.goodbye_border_style_right_screen_box });
+              propert_objects['property_name'] = 'border-right-style';
+              propert_objects['property_value'] = $scope.goodbye_border_style_right_screen_box;
             }
           if ( $scope.goodbye_border_width_top_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'border-top-width' : $scope.goodbye_border_width_top_screen_box });
+            propert_objects['property_name'] = 'border-top-width';
+            propert_objects['property_value'] = $scope.goodbye_border_width_top_screen_box;
            }
           if ( $scope.goodbye_border_style_top_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'border-top-style' : $scope.goodbye_border_style_top_screen_box });
+            propert_objects['property_name'] = 'border-top-style';
+            propert_objects['property_value'] = $scope.goodbye_border_style_top_screen_box;
            }
           if ( $scope.goodbye_border_width_bottom_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'border-bottom-width' : $scope.goodbye_border_width_bottom_screen_box });
+            propert_objects['property_name'] = 'border-bottom-width';
+            propert_objects['property_value'] = $scope.goodbye_border_width_bottom_screen_box;
            }
           if ( $scope.goodbye_border_style_bottom_screen_box != undefined && $scope.current_element == ".box-goodbye-screen") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'border-bottom-style' : $scope.goodbye_border_style_bottom_screen_box });
+            propert_objects['property_name'] = 'border-bottom-style';
+            propert_objects['property_value'] = $scope.goodbye_border_style_bottom_screen_box;
            }
 
           if ( $scope.screen_text_color_goodbye_screen != undefined && $scope.current_element == ".goodbye-screen-text") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'color' : $scope.screen_text_color_goodbye_screen });
+            propert_objects['property_name'] = 'color';
+            propert_objects['property_value'] = $scope.screen_text_color_goodbye_screen;
            }
           if ( $scope.screen_text_font_size_goodbye_screen != undefined && $scope.current_element == ".goodbye-screen-text") {
               $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.screen_text_font_size_goodbye_screen });
+              propert_objects['property_name'] = 'font-size';
+              propert_objects['property_value'] = $scope.screen_text_font_size_goodbye_screen;
            }
           if ( $scope.screen_text_font_style_goodbye_screen != undefined && $scope.current_element == ".goodbye-screen-text") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'font-weight' : $scope.screen_text_font_style_goodbye_screen });
+            propert_objects['property_name'] = 'font-weight';
+            propert_objects['property_value'] = $scope.screen_text_font_style_goodbye_screen;
            }
           if ( $scope.screen_text_font_family_goodbye_screen != undefined && $scope.current_element == ".goodbye-screen-text") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'font-family' : $scope.screen_text_font_family_goodbye_screen });
+            propert_objects['property_name'] = 'font-family';
+            propert_objects['property_value'] = $scope.screen_text_font_family_goodbye_screen;
            }
 
           if ( $scope.button_buttons_font_size_screen_goodbye != undefined && $scope.current_element == ".back-button-goodbye-screen , .submit-button-goodbye-screen") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.button_buttons_font_size_screen_goodbye });
+            propert_objects['property_name'] = 'font-size';
+            propert_objects['property_value'] = $scope.button_buttons_font_size_screen_goodbye;
            }
 
           if ( $scope.warning_text_font_size_screen_goodbye != undefined && $scope.current_element == ".goodbye-screen-warning-text") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.warning_text_font_size_screen_goodbye });
+            propert_objects['property_name'] = 'font-size';
+            propert_objects['property_value'] = $scope.warning_text_font_size_screen_goodbye;
            }
           if ( $scope.warning_text_background_screen_box != undefined && $scope.current_element == ".goodbye-screen-warning-text") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'background' : $scope.warning_text_background_screen_box });
+            propert_objects['property_name'] = 'background';
+            propert_objects['property_value'] = $scope.warning_text_background_screen_box;
            }
           if ( $scope.warning_text_color_screen_goodbye != undefined && $scope.current_element == ".goodbye-screen-warning-text") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'color' : $scope.warning_text_color_screen_goodbye });
+            propert_objects['property_name'] = 'color';
+            propert_objects['property_value'] = $scope.warning_text_color_screen_goodbye;
            }
 
           if ( $scope.back_button_background_screen_goodbye != undefined && $scope.current_element == ".back-button-goodbye-screen , .submit-button-goodbye-screen") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'background' : $scope.back_button_background_screen_goodbye });
+            propert_objects['property_name'] = 'background';
+            propert_objects['property_value'] = $scope.back_button_background_screen_goodbye;
            }
           if ( $scope.back_button_color_screen_goodbye != undefined && $scope.current_element == ".back-button-goodbye-screen , .submit-button-goodbye-screen") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'color' : $scope.back_button_color_screen_goodbye });
+            propert_objects['property_name'] = 'color';
+            propert_objects['property_value'] = $scope.back_button_color_screen_goodbye;
            }
 
           if ( $scope.start_button_background_screen_goodbye != undefined && $scope.current_element == ".back-button-goodbye-screen , .submit-button-goodbye-screen") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'background' : $scope.start_button_background_screen_goodbye });
+            propert_objects['property_name'] = 'background';
+            propert_objects['property_value'] = $scope.start_button_background_screen_goodbye;
            }
           if ( $scope.start_button_color_screen_goodbye   != undefined && $scope.current_element == ".back-button-goodbye-screen , .submit-button-goodbye-screen") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'color' : $scope.start_button_color_screen_goodbye });
+            propert_objects['property_name'] = 'color';
+            propert_objects['property_value'] = $scope.start_button_color_screen_goodbye;
            }
         }
         //  ===> Welcome Screen
@@ -3016,37 +3178,69 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           var attributes = "";
           if($scope.current_element == ".player-body-screen"){
               $($scope.iframe_object).find( $scope.current_element ).css({ background : $scope.page_player_background });
+              propert_objects['property_name'] = 'background';
+              propert_objects['property_value'] = $scope.page_player_background ;
           }
           if ( $scope.welcome_background_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ background : $scope.welcome_background_screen_box });
+
+            propert_objects['property_name'] = 'background';
+            propert_objects['property_value'] = $scope.welcome_background_screen_box ;
           }
           if ( $scope.welcome_border_color_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ borderColor : $scope.welcome_border_color_screen_box });
+
+            propert_objects['property_name'] = 'border-color';
+            propert_objects['property_value'] = $scope.welcome_border_color_screen_box ;
           }
           if ( $scope.welcome_border_left_width_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
-            // alert($scope.welcome_border_left_width_screen_box)
+            // // alert($scope.welcome_border_left_width_screen_box)
             $($scope.iframe_object).find( $scope.current_element ).css({ "border-left-width" : $scope.welcome_border_left_width_screen_box });
+
+            propert_objects['property_name'] = 'border-left-width';
+            propert_objects['property_value'] = $scope.welcome_border_left_width_screen_box ;
            }
           if ( $scope.welcome_border_left_style_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ "border-left-style" : $scope.welcome_border_left_style_screen_box });
+
+            propert_objects['property_name'] = 'border-left-style';
+            propert_objects['property_value'] = $scope.welcome_border_left_style_screen_box ;
            }
           if ( $scope.welcome_border_right_width_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ "border-right-width" : $scope.welcome_border_right_width_screen_box });
+
+            propert_objects['property_name'] = 'border-right-width';
+            propert_objects['property_value'] = $scope.welcome_border_right_width_screen_box ;
           }
           if ( $scope.welcome_border_right_style_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ "border-right-style" : $scope.welcome_border_right_style_screen_box });
+
+            propert_objects['property_name'] = 'border-right-style';
+            propert_objects['property_value'] = $scope.welcome_border_right_style_screen_box ;
            }
           if ( $scope.welcome_border_top_width_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ "border-top-width" : $scope.welcome_border_top_width_screen_box });
+
+            propert_objects['property_name'] = 'border-top-width';
+            propert_objects['property_value'] = $scope.welcome_border_top_width_screen_box ;
            }
           if ( $scope.welcome_border_top_style_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ "border-top-style" : $scope.welcome_border_top_style_screen_box });
+
+            propert_objects['property_name'] = 'border-top-style';
+            propert_objects['property_value'] = $scope.welcome_border_top_style_screen_box ;
            }
           if ( $scope.welcome_border_bottom_width_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
               $($scope.iframe_object).find( $scope.current_element ).css({ "border-bottom-width" : $scope.welcome_border_bottom_width_screen_box });
+
+              propert_objects['property_name'] = 'border-bottom-width';
+              propert_objects['property_value'] = $scope.welcome_border_bottom_width_screen_box ;
            }
           if ( $scope.welcome_border_bottom_style_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ "border-bottom-style" : $scope.welcome_border_bottom_style_screen_box });
+
+            propert_objects['property_name'] = 'border-bottom-style';
+            propert_objects['property_value'] = $scope.welcome_border_bottom_style_screen_box ;
            }
 
 
@@ -3055,29 +3249,89 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
           if ( $scope.screen_text_color_welcome_screen != undefined && $scope.current_element == ".welcome-screen-text" ) {
               $($scope.iframe_object).find( $scope.current_element ).css({ "color" : $scope.screen_text_color_welcome_screen });
+
+              propert_objects['property_name'] = 'color';
+              propert_objects['property_value'] = $scope.screen_text_color_welcome_screen ;
           }
           if ( $scope.screen_text_font_size_welcome_screen != undefined && $scope.current_element == ".welcome-screen-text" ) {
-            $($scope.iframe_object).find( $scope.current_element ).css({ "font-size" : $scope.screen_text_font_size_welcome_screen });
+            $($scope.iframe_object).find( $scope.current_element ).css({ "font-size" : $scope.screen_text_font_size_welcome_screen +'px' });
+
+            propert_objects['property_name'] = 'font-size';
+            propert_objects['property_value'] = $scope.screen_text_font_size_welcome_screen ;
           }
           if ( $scope.screen_text_font_style_welcome_screen != undefined  && $scope.current_element == ".welcome-screen-text") {
             $($scope.iframe_object).find( $scope.current_element ).css({ "font-weight" : $scope.screen_text_font_style_welcome_screen });
+
+            propert_objects['property_name'] = 'font-weight';
+            propert_objects['property_value'] = $scope.screen_text_font_style_welcome_screen ;
           }
           if ( $scope.screen_text_font_family_welcome_screen != undefined && $scope.current_element == ".welcome-screen-text" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ "font-family" : $scope.screen_text_font_family_welcome_screen });
+
+            propert_objects['property_name'] = 'font-family';
+            propert_objects['property_value'] = $scope.screen_text_font_family_welcome_screen ;
            }
 
 
 
           if ( $scope.button_background_screen_welcome != undefined && $scope.current_element == ".welcome-screen-button" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ "background" : $scope.button_background_screen_welcome });
+
+            propert_objects['property_name'] = 'background';
+            propert_objects['property_value'] = $scope.button_background_screen_welcome ;
             }
           if ( $scope.button_color_screen_welcome != undefined && $scope.current_element == ".welcome-screen-button" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ "color" : $scope.button_color_screen_welcome });
+
+            propert_objects['property_name'] = 'color';
+            propert_objects['property_value'] = $scope.button_color_screen_welcome ;
            }
           if ( $scope.button_font_size_screen_welcome != undefined && $scope.current_element == ".welcome-screen-button" ) {
-            $($scope.iframe_object).find( $scope.current_element ).css({ "font-size" : $scope.button_font_size_screen_welcome });
+            $($scope.iframe_object).find( $scope.current_element ).css({ "font-size" : $scope.button_font_size_screen_welcome +'px'});
+
+            propert_objects['property_name'] = 'font-size';
+            propert_objects['property_value'] = $scope.button_font_size_screen_welcome ;
           }
         }
+
+
+
+        // ====================================================================================
+
+        var class_name_index =  $scope.stored_stylesheet.findIndex(x => x.class_name == $scope.current_element );
+        if( class_name_index == -1 ){
+          $scope.stored_stylesheet.push({
+            class_name : $scope.current_element ,
+            properties : new Array (propert_objects)
+          });
+        }else {
+          // alert(propert_objects.property_name);
+          if(propert_objects.property_name != undefined ){
+            // alert()
+            var element_index = $scope.stored_stylesheet[class_name_index].properties.findIndex(x => x.property_name == propert_objects.property_name );
+            if ( element_index == -1 ){
+               $scope.stored_stylesheet[class_name_index].properties.push({
+                 property_name :  propert_objects.property_name ,
+                 property_value : propert_objects.property_value
+               })
+            }else {
+              $scope.stored_stylesheet[class_name_index].properties[element_index].property_name =  propert_objects.property_name;
+              $scope.stored_stylesheet[class_name_index].properties[element_index].property_value = propert_objects.property_value;
+            }
+          }
+        }
+
+        $http({
+          url : $scope.server_ip + "api/" + $scope.app_id + "/stylesheet/add/files" ,
+          method : "POST",
+          data : {
+            styles : $scope.stored_stylesheet
+          }
+        }).then(function(provider){
+          console.log(provider.data);
+        } , function(error){
+          console.log(error);
+        });
     };
 
 
@@ -3099,6 +3353,376 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
 
     // ==> Chagne and get the target element ( Current Selector )
+    // =======================================================
+   // =========>>>> Editor Work !
+   // =======================================================
+   // ==> Loading Current styles
+
+
+   $scope.stylesheet = {
+       current_selector : "player_opg_editor"  ,
+       old_selector : "player_opg_editor" ,
+       selector : function ( ){
+             ($(this.old_selector).hasClass("outlined_blocks")) ? $(this.old_selector).removeClass("outlined_blocks"):'';
+              $(this.current_selector).addClass("outlined_blocks");
+       }   , // => Show Body By Default
+
+       // ==> All selector
+       selected_items : $(".player_opg_editor , .screen_opg_editor , .question_opg_editor , .question_opg_editor_block , .answer_opg_editor ") ,
+       // ==> ALl Properties
+       property_block : $(".background-property-block , .color-property-block , .numbering-property-block , .font-family-property-block , .font-size-property-block , .font-type-property-block , .border-property-block") ,
+
+       // ==> ALl Blocks in css
+       player_page :$(".background-property-block, .font-family-property-block") ,
+       screens :$(".background-property-block, .border-property-block") ,
+       slider_box : $(".background-property-block, .border-property-block") ,
+       question_box : $(".background-property-block,.border-property-block ,.font-family-property-block , .font-size-property-block , .font-type-property-block , .color-property-block , .numbering-property-block"),
+       answer_box : $(".border-property-block ,.font-family-property-block ,.font-size-property-block ,.font-type-property-block , .color-property-block ,  .numbering-property-block ") ,
+
+       // ==> Stored Array & objects
+       applied_stylesheets : new Array ()
+   };
+   $scope.stylcheet_properties = () => {
+
+   };
+   $scope.block_selector =  () => {
+     var elements_selected_before = $(".outlined_blocks");
+     $scope.stylesheet.property_block.css({display:"none"});
+
+     if( elements_selected_before.length ){
+        elements_selected_before.removeClass('outlined_blocks');
+        $scope.stylesheet.old_selector = elements_selected_before.prop('className').split(" ").pop();
+        if($scope.stylesheet.old_selector == 'ng_block')
+          {
+            var thisElement = elements_selected_before.prop('className').split(" ");
+            $scope.stylesheet.old_selector = thisElement[thisElement.length - 2];
+          }
+     }
+
+     if($scope.editor_page == 0 ){// => Player Page
+       $scope.stylesheet.current_selector = "body";
+       $scope.stylesheet.player_page.css({display:"block"});
+     }
+     if($scope.editor_page == 1 ){//=> Screens
+       $scope.stylesheet.current_selector = "screen_opg_editor";
+       $scope.stylesheet.screens.css({display:"block"});
+
+       if($scope.slide_screens != null && $scope.slide_screens != undefined)
+       $scope.slide_screens.slideTo(0);
+
+     }
+     if($scope.editor_page == 2 ){//=> Slide Box
+       $scope.stylesheet.current_selector = "question_opg_editor_block";
+       $scope.stylesheet.slider_box.css({display:"block"});
+
+       if($scope.slide_screens != null && $scope.slide_screens != undefined)
+       $scope.slide_screens.slideTo(1);
+
+
+       // => Border
+       var borders = $( '.'+ $scope.stylesheet.current_selector).css('border') ;
+      //  console.log(borders);
+     }
+     if($scope.editor_page == 3 ){//=> Question Box
+       $scope.stylesheet.current_selector = "question_opg_editor";
+       $scope.stylesheet.question_box.css({display:"block"});
+
+       if($scope.slide_screens != null && $scope.slide_screens != undefined)
+       $scope.slide_screens.slideTo(1);
+     }
+     if($scope.editor_page == 4 ){//=> Answer Box
+       $scope.stylesheet.current_selector = "answer_opg_editor";
+       $scope.stylesheet.answer_box.css({display:"block"})
+
+       if($scope.slide_screens != null && $scope.slide_screens != undefined)
+       $scope.slide_screens.slideTo(1);
+     }
+
+    // ==> Excute
+    $('.'+$scope.stylesheet.current_selector).addClass("outlined_blocks");
+
+   };
+
+   $scope.stylesheet_storage = [] ;
+   $scope.apply_stylesheets = (property) => { // data-property
+    //  var   stylesheet_object_data = new Object();
+
+     if(property == 'background'){
+       var background = $scope.background_property ;
+
+       if( $scope.stylesheet.current_selector == 'body' ){
+         $("body").css("background" , background );
+         // stylesheet_object_data["background"] = background ;
+       }
+
+       if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("background" , background );
+         // stylesheet_object_data["background"] = background ;
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+         $('.'+$scope.stylesheet.current_selector).css("background" , background );
+         // stylesheet_object_data["background"] = background ;
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("background" , background );
+         // stylesheet_object_data["background"] = background ;
+       }
+
+     }
+     if(property == 'border-color'){
+       if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-color" , $scope.border_color_property );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-color" , $scope.border_color_property );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-color" , $scope.border_color_property );
+       }
+       if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+         $('.'+$scope.stylesheet.current_selector).css("border-color" , $scope.border_color_property );
+       }
+
+       // stylesheet_object_data["border-color"] = $scope.border_color_property ;
+     }
+     if(property == 'border-left-width'){
+       // // alert($scope.border_width_property_left);
+       // // alert($scope.border_width_property_left);
+       if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-left-width" , $scope.border_width_property_left );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-left-width" , $scope.border_width_property_left );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-left-width" , $scope.border_width_property_left );
+       }
+       if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+         $('.'+$scope.stylesheet.current_selector).css("border-left-width" , $scope.border_width_property_left );
+       }
+
+        // stylesheet_object_data["border-left-width"] = $scope.border_width_property_left;
+     }
+     if(property == 'border-left-style'){
+       //  // alert($scope.border_type_property_left);
+       if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-left-style" , $scope.border_type_property_left );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-left-style" , $scope.border_type_property_left );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-left-style" , $scope.border_type_property_left );
+       }
+       if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+         $('.'+$scope.stylesheet.current_selector).css("border-left-style" , $scope.border_type_property_left );
+       }
+       // stylesheet_object_data["border-left-style"] = $scope.border_type_property_left;
+     }
+     if(property == 'border-right-width'){
+       $scope.border_width_property_right
+       if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-right-width" , $scope.border_width_property_right );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-right-width" , $scope.border_width_property_right );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-right-width" , $scope.border_width_property_right );
+       }
+       if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+         $('.'+$scope.stylesheet.current_selector).css("border-right-width" , $scope.border_width_property_right );
+       }
+       // stylesheet_object_data["border-right-width"] = $scope.border_width_property_right;
+     }
+     if(property == 'border-right-style'){
+       $scope.border_type_property_right
+       if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-right-style" , $scope.border_type_property_right );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-right-style" , $scope.border_type_property_right );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-right-style" , $scope.border_type_property_right );
+       }
+       if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+         $('.'+$scope.stylesheet.current_selector).css("border-right-style" , $scope.border_type_property_right );
+       }
+       // stylesheet_object_data["border-right-style"] = $scope.border_type_property_right;
+     }
+     if(property == 'border-bottom-width'){
+       $scope.border_width_property_bottom
+       if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-bottom-width" , $scope.border_width_property_bottom );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-bottom-width" , $scope.border_width_property_bottom );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-bottom-width" , $scope.border_width_property_bottom );
+       }
+       if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+         $('.'+$scope.stylesheet.current_selector).css("border-bottom-width" , $scope.border_width_property_bottom );
+       }
+       // stylesheet_object_data["border-bottom-width"] = $scope.border_width_property_bottom;
+     }
+     if(property == 'border-bottom-style'){
+       $scope.border_type_property_bottom
+       if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-bottom-style" , $scope.border_type_property_bottom );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-bottom-style" , $scope.border_type_property_bottom );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-bottom-style" , $scope.border_type_property_bottom );
+       }
+       if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+         $('.'+$scope.stylesheet.current_selector).css("border-bottom-style" , $scope.border_type_property_bottom );
+       }
+       // stylesheet_object_data["border-bottom-style"] = $scope.border_type_property_bottom;
+     }
+     if(property == 'border-top-width'){
+       $scope.border_width_property_top
+       if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-top-width" , $scope.border_width_property_top );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-top-width" , $scope.border_width_property_top );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-top-width" , $scope.border_width_property_top );
+       }
+       if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+         $('.'+$scope.stylesheet.current_selector).css("border-top-width" , $scope.border_width_property_top );
+       }
+       // stylesheet_object_data["border-top-width"] = $scope.border_width_property_top;
+     }
+     if(property == 'border-top-style'){
+       $scope.border_type_property_top
+       if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-top-style" , $scope.border_type_property_top );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-top-style" , $scope.border_type_property_top );
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css("border-top-style" , $scope.border_type_property_top );
+       }
+       if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+         $('.'+$scope.stylesheet.current_selector).css("border-top-style" , $scope.border_type_property_top );
+       }
+       // stylesheet_object_data["border-top-style"] = $scope.border_type_property_top;
+     }
+     if(property == 'color'){
+       $scope.color_property
+       if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css('color' , $scope.color_property);
+       }
+       if( $scope.stylesheet.current_selector == 'answer_opg_editor' ){
+         $('.'+$scope.stylesheet.current_selector).css('color' , $scope.color_property);
+       }
+       // stylesheet_object_data["color"] = $scope.color_property;
+     }
+     if(property == 'font-family'){
+
+       if( $scope.stylesheet.current_selector == 'body' ){
+         $("."+$scope.stylesheet.current_selector).css("font-family" , $scope.font_family_property)
+       }
+       if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+         $("."+$scope.stylesheet.current_selector).css("font-family"  , $scope.font_family_property )
+       }
+       if( $scope.stylesheet.current_selector == 'answer_opg_editor' ){
+         $("."+$scope.stylesheet.current_selector).css("font-family"  , $scope.font_family_property)
+       }
+        // stylesheet_object_data["font-family"] = $scope.font_family_property;
+     }
+     if(property == 'font-size'){
+       $scope.font_size_property
+
+       if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+         $(".qs-numericals , ."+$scope.stylesheet.current_selector).css("font-size"  , $scope.font_size_property + 'px')
+
+       }
+       if( $scope.stylesheet.current_selector == 'answer_opg_editor' ){
+         $("."+$scope.stylesheet.current_selector + " .text-values , .answer-contents .labels").css("font-size"  , $scope.font_size_property + 'px')
+       }
+       // stylesheet_object_data["font-size"] = $scope.font_size_property + 'px';
+     }
+     if(property == 'font-weight'){
+       $scope.font_type_property
+       if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+         $(".qs-numericals , ."+ $scope.stylesheet.current_selector).css("font-weight"  , $scope.font_type_property );
+
+       }
+       if( $scope.stylesheet.current_selector == 'answer_opg_editor' ){
+         $("."+$scope.stylesheet.current_selector + " .text-values , .answer-contents .labels").css("font-weight"  , $scope.font_type_property  );
+       }
+       // stylesheet_object_data["font-weight"] = $scope.font_type_property;
+     }
+     if(property == 'numbering'){
+       if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+         $(".default_theme_texts_bg").css("background" , $scope.numbering_property );
+         $(".default_theme_brd").css("border-left-color" , $scope.numbering_property );
+         // stylesheet_object_data["background"] = $scope.numbering_property;
+         // stylesheet_object_data["border-left-color"] = $scope.numbering_property;
+       }
+
+       if( $scope.stylesheet.current_selector == 'answer_opg_editor' ){
+         $(".labels").css("background" , $scope.numbering_property );
+         // stylesheet_object_data["background"] = $scope.numbering_property;
+         // $(".default_theme_brd").css("border-left-color" , $scope.numbering_property );
+       }
+     }
+
+     // alert();
+    //  console.log({ // stylesheet_object_data : // stylesheet_object_data });
+   };
+
+
+   $scope.show_hovred_element = (classNameO) => {};
+   $scope.show_selecter_line = (element , on_slide ) => {
+
+   };
+   $scope.window_navigation.on('load' , function (){
+     if($window.parent.location != $window.location){
+
+         $scope.select_numbers = $(".select_numbers");
+         $scope.select_box = $(".select_box");
+         $scope.select_box_brd = $(".select_box_brd");
+         $scope.select_button = $(".select_button");
+         $scope.select_box_data = $(".select_box_data");
+         $scope.select_brd = $(".select_brd");
+
+     }
+   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     $scope.block_selector = () => {
        $("#welcome-screens,#goodbye-screens,#result-screens ,#question-screens").css({display:'none' });
        //  $scope.editor_page
@@ -3132,4 +3756,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
        }
      };
+
+
+
 }]);
