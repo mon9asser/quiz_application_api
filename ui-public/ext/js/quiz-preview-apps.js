@@ -95,11 +95,15 @@ apps.controller("preview_players" , [
       return is_right_question ;
     };
     $scope.player_time_frame = 300 ;
+    $scope.rating_scale_elements = []
 
 
-
-
-
+    $window.fill_rating_scale_values = (numbers) => {
+      $scope.rating_scale_elements = new Array();
+      for (var i = 0; i < numbers ; i++) {
+        $scope.rating_scale_elements.push({number : i});
+      }
+    }
 
     $scope.spectrum_property = {
             color: "#ECC",
@@ -668,6 +672,8 @@ apps.controller("preview_players" , [
           }).then(function(resp){
 
             $scope.__player_object = resp.data ;
+            $scope.stylesheet_order = $scope.__player_object.stylesheet_properties;
+
             console.log({
               Player : $scope.__player_object
             });
@@ -1769,7 +1775,7 @@ apps.controller("preview_players" , [
          }
     });
 
-   
+
 
 
 }]);

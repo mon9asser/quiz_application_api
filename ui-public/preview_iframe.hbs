@@ -19,8 +19,9 @@
  </style>
 
 
+<style id="media_stylesheet" media="screen">
 
-
+</style>
 
  <!--
  =============================================================================
@@ -192,6 +193,58 @@
                             <!-- question_type > 2 -->
                             <!-- Case it 3 => scale rating -->
                             <!-- Case it 4 => Free texts -->
+
+                        <div class="answer-container survey-block" ng:if="obj_val.question_type >= 3">
+                            <div ng:if="(obj_val.question_type == 3) && (obj_val.answers_format[0].ratscal_type == 0)" class="block-of-scale">
+                               <div class="survey-answer">
+                                 <div class="">
+                                   <center>
+                                     <div class="scale-optn" ng:if="obj_val.answers_format[0].ratscal_type == 0 ">
+                                       <ul ng:init="rating_scale_elements" class="scalet-o ul_scal_{>obj_val._id<}" >
+                                         <li data-index='0' ng:repeat="(key_ , val_) in rating_scale_elements"> <!-- index , class_name , answer_id , question_id , rs_type -->
+                                           <span class="scale_value_{>obj_val.answers_format[0]._id<}" ng:click="select_this_rating_value( $index , 'scale_value_'+obj_val.answers_format[0]._id  , obj_val.answers_format[0]._id , obj_val._id , obj_val.answers_format[0].ratscal_type )">
+                                               {> $index + 1 <}
+                                           </span>
+                                         </li>
+                                       </ul>
+                                       <div class="clearFix"></div>
+                                        <div class="block-labels text-center"  ng:show="obj_val.answers_format[0].show_labels == true">
+                                          <span class="first-lbl">
+                                            {>obj_val.answers_format[0].started_at <}
+                                          </span>
+                                          <span class="second-lbl">
+                                            {>obj_val.answers_format[0].centered_at <}
+                                          </span>
+                                          <span class="third-lbl">
+                                            {>obj_val.answers_format[0].ended_at <}
+                                          </span>
+                                        </div>
+                                     </div>
+                                   </center>
+                                 </div>
+                               </div>
+                            </div>
+
+                            <div ng:if="(obj_val.question_type == 3) && (obj_val.answers_format[0].ratscal_type == 1)" class="block-of-ratings">
+                              <!-- Ratings  -->
+                              <ul class="start-o rating_scale_block">
+                                <!--  Ratings  -->
+                                <li data-index='0' ng:repeat="(ratingscale_keys , ratingscale_vale) in rating_scale_elements track by $index">
+                                  <span ng:click="select_rating_scale__($index , 1 , obj_val._id , obj_val.answers_format[0]._id , obj_val.question_type )" href="#">
+                                      <i class="fa fa-star-o"></i>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+
+
+
+                            <div ng:if="obj_val.question_type == 4" class="block-of-fre-txts">
+                              <!-- Case it 4 => Free texts -->
+                              <textarea ng:change="free_texts_question_type_changes(obj_val._id , obj_val)" ng:model="obj_val.answers_format[0].free_text_value" class="free-text-values" placeholder="Write your answer here !"></textarea>
+                            </div>
+
+                        </div>
                   </div>
                   <!-- End Answer container -->
                   <div ng:if="__player_object.settings.auto_slide == true && obj_val.question_type <= 2 && obj_val.answer_settings.single_choice == true" class="question_notes question_type__colr select_box_brd answer-alarm-text answer-alarm-text-box">

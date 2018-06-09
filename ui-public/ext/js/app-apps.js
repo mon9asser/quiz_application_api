@@ -177,6 +177,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     $scope.rating_scale_elements = [] ;
     $scope.rating_values = null ;
     $scope.questions_list = null ;
+    $scope.stylesheet_order = null ;
     $scope.window_navigation = $(window);
     $scope.generated_media_box_handler = $(".box-data");
     $scope.close_iconx = $(".setting-iconx");
@@ -348,6 +349,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
                 // Questions
                 $scope.questions_list = resp.data.questions;
+                $scope.stylesheet_order =   ( resp.data.stylesheet_properties != undefined ) ?  resp.data.stylesheet_properties :  "body:{}" ;
                 question_data_object  = resp.data.questions;
                 // Stylesheets
                 $scope.application_stylesheet =  resp.data.theme_style;
@@ -1646,10 +1648,15 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
        $scope.quest_media_parts = currentQuestion.media_question ;
        $scope.asnwers = currentQuestion.answers_format;
        if($scope.question_type == 3 ){
+          $scope.iframe_access.fill_rating_scale_values($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
+       }
+
+       if($scope.question_type == 3 ){
         $timeout(function (){
           if( $("#docQuestions").children('li').length <= 1  )
           $scope.questionIndex = 0;
           $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
+          $scope.iframe_access.fill_rating_scale_values(5);
         } , 50 );
        }
        $scope.question_settings = {
@@ -2073,6 +2080,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       $scope.style_of_answers = ($scope.question_settings.choice_style ) ? "Two columns per row" : "One column per row";
       } , 1500 );
       $scope.change_rating_scale_value = function (val , is_changed = null){
+
+        $scope.iframe_access.fill_rating_scale_values($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
+
         if(is_changed != null && is_changed == true ){
           $scope.unsaved_question = true ;
         }
@@ -2791,9 +2801,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           }
           if ( $scope.screen_text_font_size_question_screen != undefined && $scope.current_element == ".question-box-text" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.screen_text_font_size_question_screen });
-                $($scope.iframe_object).find( ".question-label-box-brd" ).css({ 'font-size' : $scope.screen_text_font_size_question_screen });
+                $($scope.iframe_object).find( ".question-label-box-brd" ).css({ 'font-size' : $scope.screen_text_font_size_question_screen + 'px' });
                 propert_objects['property_name'] = 'font-size';
-                propert_objects['property_value'] = $scope.screen_text_font_size_question_screen ;
+                propert_objects['property_value'] = $scope.screen_text_font_size_question_screen + 'px' ;
           }
           if ( $scope.screen_text_font_family_question_screen != undefined && $scope.current_element == ".question-box-text" ) {
                 $($scope.iframe_object).find( $scope.current_element ).css({ 'font-family' : $scope.screen_text_font_family_question_screen });
@@ -2860,15 +2870,15 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
             propert_objects['property_value'] = $scope.question_screen_numbering_color;
            }
           if ( $scope.question_screen_numbering_font_size != undefined && $scope.current_element == ".question-box-text" ) {
-            $($scope.iframe_object).find( ".question-label-box" ).css({ 'font-size' : $scope.question_screen_numbering_font_size });
+            $($scope.iframe_object).find( ".question-label-box" ).css({ 'font-size' : $scope.question_screen_numbering_font_size + 'px' });
             propert_objects['property_name'] = 'font-size';
-            propert_objects['property_value'] = $scope.question_screen_numbering_font_size;
+            propert_objects['property_value'] = $scope.question_screen_numbering_font_size + 'px';
            }
 
           if ( $scope.question_screen_font_size_required_text != undefined && $scope.current_element == ".question-text-required-text" ) {
-            $($scope.iframe_object).find(  $scope.current_element ).css({ 'font-size' : $scope.question_screen_font_size_required_text });
+            $($scope.iframe_object).find(  $scope.current_element ).css({ 'font-size' : $scope.question_screen_font_size_required_text + 'px' });
             propert_objects['property_name'] = 'font-size';
-            propert_objects['property_value'] = $scope.question_screen_font_size_required_text;
+            propert_objects['property_value'] = $scope.question_screen_font_size_required_text + 'px';
           }
           if ( $scope.question_screen_color_required_text != undefined && $scope.current_element == ".question-text-required-text" ) {
             $($scope.iframe_object).find(  $scope.current_element ).css({ 'color' : $scope.question_screen_color_required_text });
@@ -2892,9 +2902,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
             propert_objects['property_value'] = $scope.answer_screen_color;
           }
           if ( $scope.answer_screen_font_size != undefined && $scope.current_element == ".answer-text-box-area" ) {
-            $($scope.iframe_object).find(  $scope.current_element ).css({ 'font-size' : $scope.answer_screen_font_size });
+            $($scope.iframe_object).find(  $scope.current_element ).css({ 'font-size' : $scope.answer_screen_font_size + 'px' });
             propert_objects['property_name'] = 'font-size';
-            propert_objects['property_value'] = $scope.answer_screen_font_size;
+            propert_objects['property_value'] = $scope.answer_screen_font_size + 'px';
           }
           if ( $scope.answer_screen_font_style != undefined && $scope.current_element == ".answer-text-box-area" ) {
             $($scope.iframe_object).find(  $scope.current_element ).css({ 'font-weight' : $scope.answer_screen_font_style });
@@ -2987,9 +2997,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
               propert_objects['property_value'] = $scope.screen_text_color_result_screen;
            }
           if ( $scope.screen_text_font_size_result_screen != undefined && $scope.current_element == ".result-screen-text" ) {
-              $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.screen_text_font_size_result_screen });
+              $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.screen_text_font_size_result_screen + 'px' });
               propert_objects['property_name'] = 'font-size';
-              propert_objects['property_value'] = $scope.screen_text_font_size_result_screen;
+              propert_objects['property_value'] = $scope.screen_text_font_size_result_screen + 'px';
           }
           if ( $scope.screen_text_font_style_result_screen != undefined && $scope.current_element == ".result-screen-text" ) {
               $($scope.iframe_object).find( $scope.current_element ).css({ 'font-weight' : $scope.screen_text_font_style_result_screen });
@@ -3008,9 +3018,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
             propert_objects['property_value'] = $scope.score_result_text_color;
            }
           if ( $scope.score_result_text_font_size != undefined && $scope.current_element == ".result-screen-score-text" ) {
-            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.score_result_text_font_size });
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.score_result_text_font_size  + 'px'});
             propert_objects['property_name'] = 'font-size';
-            propert_objects['property_value'] = $scope.score_result_text_font_size;
+            propert_objects['property_value'] = $scope.score_result_text_font_size + 'px';
            }
           if ( $scope.score_result_text_font_style != undefined && $scope.current_element == ".result-screen-score-text" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'font-weight' : $scope.score_result_text_font_style });
@@ -3029,9 +3039,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
             propert_objects['property_value'] = $scope.grade_result_text_color;
            }
           if ( $scope.grade_result_text_font_size != undefined && $scope.current_element == ".result-screen-grade-text" ) {
-            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.grade_result_text_font_size });
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.grade_result_text_font_size + 'px' });
             propert_objects['property_name'] = 'font-size';
-            propert_objects['property_value'] = $scope.grade_result_text_font_size;
+            propert_objects['property_value'] = $scope.grade_result_text_font_size + 'px';
            }
           if ( $scope.grade_result_text_font_style != undefined && $scope.current_element == ".result-screen-grade-text" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'font-weight' : $scope.grade_result_text_font_style });
@@ -3045,9 +3055,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           }
 
           if ( $scope.button_buttons_font_size_screen_result != undefined && $scope.current_element == ".review-result-box , .retake-result-box" ) {
-                $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.button_buttons_font_size_screen_result });
+                $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.button_buttons_font_size_screen_result + 'px' });
                 propert_objects['property_name'] = 'font-size';
-                propert_objects['property_value'] = $scope.button_buttons_font_size_screen_result;
+                propert_objects['property_value'] = $scope.button_buttons_font_size_screen_result + 'px';
           }
          }
         // ==> Goodby screen
@@ -3114,9 +3124,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
             propert_objects['property_value'] = $scope.screen_text_color_goodbye_screen;
            }
           if ( $scope.screen_text_font_size_goodbye_screen != undefined && $scope.current_element == ".goodbye-screen-text") {
-              $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.screen_text_font_size_goodbye_screen });
+              $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.screen_text_font_size_goodbye_screen + 'px' });
               propert_objects['property_name'] = 'font-size';
-              propert_objects['property_value'] = $scope.screen_text_font_size_goodbye_screen;
+              propert_objects['property_value'] = $scope.screen_text_font_size_goodbye_screen + 'px';
            }
           if ( $scope.screen_text_font_style_goodbye_screen != undefined && $scope.current_element == ".goodbye-screen-text") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'font-weight' : $scope.screen_text_font_style_goodbye_screen });
@@ -3130,15 +3140,15 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
            }
 
           if ( $scope.button_buttons_font_size_screen_goodbye != undefined && $scope.current_element == ".back-button-goodbye-screen , .submit-button-goodbye-screen") {
-            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.button_buttons_font_size_screen_goodbye });
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.button_buttons_font_size_screen_goodbye+ 'px' });
             propert_objects['property_name'] = 'font-size';
-            propert_objects['property_value'] = $scope.button_buttons_font_size_screen_goodbye;
+            propert_objects['property_value'] = $scope.button_buttons_font_size_screen_goodbye + 'px';
            }
 
           if ( $scope.warning_text_font_size_screen_goodbye != undefined && $scope.current_element == ".goodbye-screen-warning-text") {
-            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.warning_text_font_size_screen_goodbye });
+            $($scope.iframe_object).find( $scope.current_element ).css({ 'font-size' : $scope.warning_text_font_size_screen_goodbye + 'px' });
             propert_objects['property_name'] = 'font-size';
-            propert_objects['property_value'] = $scope.warning_text_font_size_screen_goodbye;
+            propert_objects['property_value'] = $scope.warning_text_font_size_screen_goodbye + 'px';
            }
           if ( $scope.warning_text_background_screen_box != undefined && $scope.current_element == ".goodbye-screen-warning-text") {
             $($scope.iframe_object).find( $scope.current_element ).css({ 'background' : $scope.warning_text_background_screen_box });
@@ -3187,6 +3197,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
             propert_objects['property_name'] = 'background';
             propert_objects['property_value'] = $scope.welcome_background_screen_box ;
           }
+          //  alert($scope.welcome_border_color_screen_box );
           if ( $scope.welcome_border_color_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
             $($scope.iframe_object).find( $scope.current_element ).css({ borderColor : $scope.welcome_border_color_screen_box });
 
@@ -3196,7 +3207,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           if ( $scope.welcome_border_left_width_screen_box != undefined && $scope.current_element == ".box-welcome-screen" ) {
             // // alert($scope.welcome_border_left_width_screen_box)
             $($scope.iframe_object).find( $scope.current_element ).css({ "border-left-width" : $scope.welcome_border_left_width_screen_box });
-
+            alert($scope.welcome_border_left_width_screen_box);
             propert_objects['property_name'] = 'border-left-width';
             propert_objects['property_value'] = $scope.welcome_border_left_width_screen_box ;
            }
@@ -3257,7 +3268,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
             $($scope.iframe_object).find( $scope.current_element ).css({ "font-size" : $scope.screen_text_font_size_welcome_screen +'px' });
 
             propert_objects['property_name'] = 'font-size';
-            propert_objects['property_value'] = $scope.screen_text_font_size_welcome_screen ;
+            propert_objects['property_value'] = $scope.screen_text_font_size_welcome_screen  + 'px';
           }
           if ( $scope.screen_text_font_style_welcome_screen != undefined  && $scope.current_element == ".welcome-screen-text") {
             $($scope.iframe_object).find( $scope.current_element ).css({ "font-weight" : $scope.screen_text_font_style_welcome_screen });
@@ -3290,14 +3301,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
             $($scope.iframe_object).find( $scope.current_element ).css({ "font-size" : $scope.button_font_size_screen_welcome +'px'});
 
             propert_objects['property_name'] = 'font-size';
-            propert_objects['property_value'] = $scope.button_font_size_screen_welcome ;
+            propert_objects['property_value'] = $scope.button_font_size_screen_welcome + 'px' ;
           }
         }
 
 
 
         // ====================================================================================
-
+        alert(propert_objects.property_name + " : " + propert_objects.property_value )
         var class_name_index =  $scope.stored_stylesheet.findIndex(x => x.class_name == $scope.current_element );
         if( class_name_index == -1 ){
           $scope.stored_stylesheet.push({
@@ -3756,7 +3767,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
        }
      };
-
 
 
 }]);

@@ -2420,10 +2420,72 @@ qtnrRouters.get("/applications/list" , auth_api_keys_only , (req , res )=>{
 // ===========================================> New Versions
 // /-*--------------------------------------------------------------------
 qtnrRouters.post("/:app_id/stylesheet/add/files" , (req, res) => {
+
   var stylesheet = req.body.styles;
-  res.send ({
-    style__sheet  : stylesheet
+  qtnr.findOne({ _id :req.params.app_id }).then(( provider )=>{
+
+
+
+
+
+    var properties ='' ;
+    for ( var i = 0; i < stylesheet.length; i++ ){
+      var classes = stylesheet[i] ;
+      properties += classes.class_name + " { ";
+      for (var ix = 0; ix < classes.properties.length; ix++) {
+        var property = classes.properties[ix] ;
+        properties += property.property_name + ":" + property.property_value + "; " ;
+        // \n
+      }
+      properties += "}\n";
+    }
+
+    provider.theme_style = stylesheet ;
+    if(provider.stylesheet_properties == undefined )
+    provider.stylesheet_properties = '';
+
+    provider.stylesheet_properties = properties
+
+
+
+    var file_dir = "ui-public/themes/"+"stylesheet_of_app_" + provider._id + ".css" ;
+
+    if (fs.existsSync(file_dir)) {
+      fs.unlink(file_dir, (err) => {
+        if (err) throw err;
+      });
+    }
+
+
+    fs.appendFile(file_dir  , properties , (err) => {
+        if (err) throw err;
+          //console.log('The "data to append" was appended to file!');
+    });
+
+    // var style_codes = _.find(stylesheets.theme_style , {'file_name':stylesheet['file_name']} );
+    // res.send({ "File_directory" : config.server_ip+"themes/"+style_codes.file_name , "Stylesheet_code":style_codes})
+
+
+
+
+    provider.markModified('theme_style');
+    provider.save().then((success)=>{
+      res.send({ success : success });
+    }).catch((error) => {
+      res.send({ error : error })
+    });
+
+   }).catch((error)=>{
+    return new Promise((resolve , reject )=>{
+      res.send(error);
+      return false ;
+    })
   });
+
+  // res.send ({
+  //   style__sheet  : stylesheet
+  // });
+
 });
 qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
   var user = req.verified_user;

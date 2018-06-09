@@ -35,7 +35,7 @@
                                     <option data-target="welcome-screens" value="0">Welcome Screen</option>
                                     <option data-target="goodbye-screens" value="1">GoodBye Screen</option>
                                     <option data-target="result-screens" value="2">Result Screen</option> <!-- Case it quiz only -->
-                                    
+
                                     <option data-target="question-screens" value="3">Questions</option>
                                     <!-- <option data-target="time-progress-box" value="4">Quiz Time & Progress bar</option>
                                     <option data-target="player-page" value="5">Player Page</option> -->
@@ -68,7 +68,7 @@
                                    <!-- Font size  -->
                                    <div class="prop-item">
                                      <span>Border</span>
-                                     <input class="color_picker" ng:model="welcome_border_color_screen_box" type="text" name="" value="">
+                                     <input class="color_picker" ng:model="welcome_border_color_screen_box" ng:change="apply_these_stylesheet()" type="text" name="" value="">
                                      <div class="border-list">
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Left : </span>

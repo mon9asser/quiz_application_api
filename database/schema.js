@@ -389,6 +389,7 @@ var questionnaireDataTypes = {
    creator_id : { type : String , required : true ,  trim : true  ,  ref : "users" } ,
    app_type : {  type : String ,  required : true  } ,
    theme_style : { type:[] } ,
+   stylesheet_properties : { type : String } , 
    description : { type : String ,  trim : true ,  },
    questionnaire_title : {  type : String ,  required :true ,  trim : true },
    createdAt : { type : Date } ,

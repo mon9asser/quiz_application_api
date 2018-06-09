@@ -314,7 +314,7 @@ apps.controller("players" , [
         url : $scope.url_attendee_report
       }).then(function(resp){
         $scope.__report_object = resp.data ;
-        // console.log($scope.__report_object);
+          console.log({"ppppppppppppppppppp":$scope.__report_object});
 
       } , function(res){
         console.log(res);
@@ -1432,7 +1432,7 @@ apps.controller("players" , [
        $scope.attendee_draft_collection();
        // => Move results into rebort
        $scope.report_quiz_collection();
-
+      //  $scope.load_attendee_report(); issue => here
        $timeout(function(){
          $scope.slide_screens.slideNext();
          $('.submi_the_quiz_handler').children('i').removeClass('fa-spinner fa-spin');
@@ -1996,8 +1996,6 @@ apps.controller("players" , [
       $('.loading-player').fadeOut();
     } , 2000);
 
-
-
-
+    
   } // => end controller functionality
 ]);
