@@ -1292,9 +1292,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       // var redactor_fld_text = $R(".screen-redactors-fld-txt", "source.getCode");
       // $scope.application_settings.settings.titles.title_failed_with = redactor_fld_text ;
 
-      var saving_settings = $(".saving-settings-changes");
-      saving_settings.html("<span class='saving_option'></span> Saving Changes");
-      saving_settings.css("padding-left","40px");
+    var saving_settings = $(".saving-settings-changes");
+    saving_settings.html("<span class='saving_option'></span> Saving Changes");
+    saving_settings.css("padding-left","40px");
 
         // $scope.api_url_app_settings
         // $scope.application_settings
@@ -3348,21 +3348,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // ==> Chagne and get the target element ( Current Selector )
     // =======================================================
    // =========>>>> Editor Work !
@@ -3769,4 +3754,484 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
      };
 
 
+
+
+
+     $scope.apply_those_changes_right_now = function ( class_name , property_name , property_value ){
+       console.log(class_name +" => " +property_name + " : " + property_value);
+     };
+     //==================================================>>>>>>
+     //===============>>>>>> ADD Functions for onChange
+     //==================================================>>>>>>
+     $scope.page_player_background_func = function( ) {
+        $($scope.iframe_object).find($scope.current_element , 'body').css({  background : $scope.page_player_background  });
+        $scope.apply_those_changes_right_now($scope.current_element + ' , body' , 'background' , $scope.page_player_background );
+     };
+     $scope.welcome_background_screen_box_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.welcome_background_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.welcome_background_screen_box );
+     }
+     $scope.welcome_border_color_screen_box_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-color' : $scope.welcome_border_color_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-color' , $scope.welcome_border_color_screen_box );
+     }
+     $scope.welcome_border_left_width_screen_box_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-left-width' : $scope.welcome_border_left_width_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-left-width' , $scope.welcome_border_left_width_screen_box );
+     }
+     $scope.welcome_border_left_style_screen_box_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-left-style' : $scope.welcome_border_left_style_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-left-style' , $scope.welcome_border_left_style_screen_box );
+     }
+     $scope.welcome_border_right_width_screen_box_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-right-width' : $scope.welcome_border_right_width_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-right-width' , $scope.welcome_border_right_width_screen_box );
+     }
+     $scope.welcome_border_right_style_screen_box_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-right-style' : $scope.welcome_border_right_style_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-right-style' , $scope.welcome_border_right_style_screen_box );
+     }
+     $scope.welcome_border_top_width_screen_box_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-top-width' : $scope.welcome_border_top_width_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-top-width' , $scope.welcome_border_top_width_screen_box );
+     }
+     $scope.welcome_border_top_style_screen_box_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-top-style' : $scope.welcome_border_top_style_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-top-style' , $scope.welcome_border_top_style_screen_box );
+     }
+     $scope.welcome_border_bottom_width_screen_box_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-bottom-width' : $scope.welcome_border_bottom_width_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-width' , $scope.welcome_border_bottom_width_screen_box );
+     }
+     $scope.welcome_border_bottom_style_screen_box_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-bottom-style' : $scope.welcome_border_bottom_style_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-style' , $scope.welcome_border_bottom_style_screen_box );
+     }
+     $scope.screen_text_color_welcome_screen_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.screen_text_color_welcome_screen  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.screen_text_color_welcome_screen );
+     }
+     $scope.screen_text_font_size_welcome_screen_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.screen_text_font_size_welcome_screen + 'px'  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.screen_text_font_size_welcome_screen  + 'px');
+     }
+     $scope.screen_text_font_style_welcome_screen_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-weight' : $scope.screen_text_font_style_welcome_screen  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.screen_text_font_style_welcome_screen );
+     }
+     $scope.screen_text_font_family_welcome_screen_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-family' : $scope.screen_text_font_family_welcome_screen  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.screen_text_font_family_welcome_screen );
+     }
+     $scope.button_background_screen_welcome_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.button_background_screen_welcome  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.button_background_screen_welcome );
+     }
+     $scope.button_color_screen_welcome_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.button_color_screen_welcome  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.button_color_screen_welcome );
+     }
+     $scope.button_font_size_screen_welcome_func = function(){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.button_font_size_screen_welcome + 'px' });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.button_font_size_screen_welcome + 'px');
+     }
+     $scope.goodbye_background_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.goodbye_background_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.goodbye_background_screen_box  );
+     }
+     $scope.goodbye_border_color_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-color' : $scope.goodbye_border_color_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-color' , $scope.goodbye_border_color_screen_box  );
+     }
+     $scope.goodbye_border_width_left_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-left-width' : $scope.goodbye_border_width_left_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-left-width' , $scope.goodbye_border_width_left_screen_box  );
+     }
+     $scope.goodbye_border_style_left_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-left-style' : $scope.goodbye_border_style_left_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-left-style' , $scope.goodbye_border_style_left_screen_box  );
+     }
+     $scope.goodbye_border_width_right_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-right-width' : $scope.goodbye_border_width_right_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-right-width' , $scope.goodbye_border_width_right_screen_box  );
+     }
+     $scope.goodbye_border_style_right_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-right-style' : $scope.goodbye_border_style_right_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-right-style' , $scope.goodbye_border_style_right_screen_box  );
+     }
+     $scope.goodbye_border_width_top_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-top-width' : $scope.goodbye_border_width_top_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-top-width' , $scope.goodbye_border_width_top_screen_box  );
+     }
+     $scope.goodbye_border_style_top_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-top-style' : $scope.goodbye_border_style_top_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-top-style' , $scope.goodbye_border_style_top_screen_box  );
+     }
+     $scope.goodbye_border_width_bottom_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-bottom-width' : $scope.goodbye_border_width_bottom_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-width' , $scope.goodbye_border_width_bottom_screen_box  );
+     }
+     $scope.goodbye_border_style_bottom_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-bottom-style' : $scope.goodbye_border_style_bottom_screen_box  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-style' , $scope.goodbye_border_style_bottom_screen_box  );
+     }
+     $scope.screen_text_color_goodbye_screen_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.screen_text_color_goodbye_screen  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.screen_text_color_goodbye_screen  );
+     }
+     $scope.screen_text_font_size_goodbye_screen_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.screen_text_font_size_goodbye_screen +'px'  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.screen_text_font_size_goodbye_screen +'px'  );
+     }
+     $scope.screen_text_font_style_goodbye_screen_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-weight' : $scope.screen_text_font_style_goodbye_screen });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.screen_text_font_style_goodbye_screen  );
+     }
+     $scope.screen_text_font_family_goodbye_screen_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-family' : $scope.screen_text_font_family_goodbye_screen });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.screen_text_font_family_goodbye_screen  );
+     }
+     $scope.warning_text_font_size_screen_goodbye_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.warning_text_font_size_screen_goodbye+'px' });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.warning_text_font_size_screen_goodbye +'px' );
+     }
+     $scope.warning_text_color_screen_goodbye_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.warning_text_color_screen_goodbye });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.warning_text_color_screen_goodbye );
+     }
+     $scope.warning_text_background_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.warning_text_background_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.warning_text_background_screen_box );
+     }
+     $scope.button_buttons_font_size_screen_goodbye_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.button_buttons_font_size_screen_goodbye +'px'});
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.button_buttons_font_size_screen_goodbye +'px' );
+     }
+     $scope.result_background_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.result_background_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.result_background_screen_box );
+     }
+     $scope.result_border_color_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-color' : $scope.result_border_color_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-color' , $scope.result_border_color_screen_box );
+     }
+     $scope.question_text_screen_border_color_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-color' : $scope.question_text_screen_border_color});
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-color' , $scope.question_text_screen_border_color );
+     };
+     $scope.resule_border_width_left_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-left-width' : $scope.resule_border_width_left_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-left-width' , $scope.resule_border_width_left_screen_box );
+     }
+     $scope.resule_border_style_left_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-left-style' : $scope.resule_border_style_left_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-left-style' , $scope.resule_border_style_left_screen_box );
+     }
+     $scope.resule_border_width_right_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-right-width' : $scope.resule_border_width_right_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-right-width' , $scope.resule_border_width_right_screen_box );
+     }
+     $scope.resule_border_style_right_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-right-style' : $scope.resule_border_style_right_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-right-style' , $scope.resule_border_style_right_screen_box );
+     }
+     $scope.resule_border_width_top_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-top-width' : $scope.resule_border_width_top_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-top-width' , $scope.resule_border_width_top_screen_box );
+     }
+     $scope.resule_border_style_top_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-top-style' : $scope.resule_border_style_top_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-top-style' , $scope.resule_border_style_top_screen_box );
+     }
+     $scope.resule_border_width_bottom_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-bottom-width' : $scope.resule_border_width_bottom_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-width' , $scope.resule_border_width_bottom_screen_box );
+     }
+     $scope.resule_border_style_bottom_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-bottom-style' : $scope.resule_border_style_bottom_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-style' , $scope.resule_border_style_bottom_screen_box );
+     }
+     $scope.screen_text_color_result_screen_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.screen_text_color_result_screen });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.screen_text_color_result_screen );
+     }
+     $scope.screen_text_font_size_result_screen_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.screen_text_font_size_result_screen + 'px'});
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.screen_text_font_size_result_screen + 'px');
+     }
+     $scope.screen_text_font_style_result_screen_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-weight' : $scope.screen_text_font_style_result_screen });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.screen_text_font_style_result_screen );
+     }
+     $scope.screen_text_font_family_result_screen_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-family' : $scope.screen_text_font_family_result_screen });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.screen_text_font_family_result_screen );
+     }
+     $scope.score_result_text_color_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.score_result_text_color });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.score_result_text_color );
+     }
+     $scope.score_result_text_font_size_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.score_result_text_font_size + 'px' });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.score_result_text_font_size + 'px' );
+     }
+     $scope.score_result_text_font_style_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-weight' : $scope.score_result_text_font_style });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.score_result_text_font_style  );
+     }
+     $scope.score_result_text_font_family_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-family' : $scope.score_result_text_font_family });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.score_result_text_font_family  );
+     }
+     $scope.grade_result_text_color_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.grade_result_text_color });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.grade_result_text_color  );
+     }
+     $scope.grade_result_text_font_size_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.grade_result_text_font_size +'px' });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.grade_result_text_font_size +'px'  );
+     }
+     $scope.grade_result_text_font_style_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-weight' : $scope.grade_result_text_font_style });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.grade_result_text_font_style  );
+     }
+     $scope.grade_result_text_font_family_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-family' : $scope.grade_result_text_font_family });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.grade_result_text_font_family  );
+     }
+     $scope.button_buttons_font_size_screen_result_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.button_buttons_font_size_screen_result +'px'});
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.button_buttons_font_size_screen_result +'px'  );
+     }
+     $scope.question_screen_background_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.question_screen_background });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.question_screen_background  );
+     }
+     $scope.question_border_width_left_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-left-width' : $scope.question_border_width_left_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-left-width' , $scope.question_border_width_left_screen_box  );
+     }
+     $scope.question_border_style_left_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-left-style' : $scope.question_border_style_left_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-left-style' , $scope.question_border_style_left_screen_box  );
+     }
+     $scope.question_border_width_right_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-right-width' : $scope.question_border_width_right_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-right-width' , $scope.question_border_width_right_screen_box  );
+     }
+     $scope.question_border_style_right_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-right-style' : $scope.question_border_style_right_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-right-style' , $scope.question_border_style_right_screen_box  );
+     }
+     $scope.question_border_width_top_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-top-width' : $scope.question_border_width_top_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-top-width' , $scope.question_border_width_top_screen_box  );
+     }
+     $scope.question_border_style_top_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-top-style' : $scope.question_border_style_top_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-top-style' , $scope.question_border_style_top_screen_box  );
+     }
+     $scope.question_border_width_bottom_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-bottom-width' : $scope.question_border_width_bottom_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-width' , $scope.question_border_width_bottom_screen_box  );
+     }
+     $scope.question_border_style_bottom_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-bottom-style' : $scope.question_border_style_bottom_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-style' , $scope.question_border_style_bottom_screen_box  );
+     }
+     $scope.screen_text_color_question_screen_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.screen_text_color_question_screen });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.screen_text_color_question_screen  );
+     }
+     $scope.screen_text_font_size_question_screen_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.screen_text_font_size_question_screen +'px'});
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.screen_text_font_size_question_screen +'px'  );
+     }
+     $scope.screen_text_font_style_question_screen_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-weight' : $scope.screen_text_font_style_question_screen });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.screen_text_font_style_question_screen  );
+     }
+     $scope.screen_text_font_family_question_screen_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-family' : $scope.screen_text_font_family_question_screen });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.screen_text_font_family_question_screen  );
+     }
+     $scope.question_text_border_width_left_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-left-width' : $scope.question_text_border_width_left_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-left-width' , $scope.question_text_border_width_left_screen_box  );
+     }
+     $scope.question_text_border_style_left_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-left-style' : $scope.question_text_border_style_left_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-left-style' , $scope.question_text_border_style_left_screen_box  );
+     }
+     $scope.question_text_border_width_right_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-right-width' : $scope.question_text_border_width_right_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-right-width' , $scope.question_text_border_width_right_screen_box  );
+     }
+     $scope.question_text_border_style_right_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-right-style' : $scope.question_text_border_style_right_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-right-style' , $scope.question_text_border_style_right_screen_box  );
+     }
+     $scope.question_text_border_width_top_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-top-width' : $scope.question_text_border_width_top_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-top-width' , $scope.question_text_border_width_top_screen_box  );
+     }
+     $scope.question_text_border_style_top_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-top-style' : $scope.question_text_border_style_top_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-top-style' , $scope.question_text_border_style_top_screen_box  );
+     }
+     $scope.question_text_border_width_bottom_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-bottom-width' : $scope.question_text_border_width_bottom_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-width' , $scope.question_text_border_width_bottom_screen_box  );
+     }
+     $scope.question_text_border_style_bottom_screen_box_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-bottom-style' : $scope.question_text_border_style_bottom_screen_box });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-style' , $scope.question_text_border_style_bottom_screen_box  );
+     }
+     $scope.question_screen_numbering_background_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.question_screen_numbering_background });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.question_screen_numbering_background  );
+
+       $($scope.iframe_object).find($scope.current_element).css({  'border-left-color' : $scope.question_screen_numbering_background });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-left-color' , $scope.question_screen_numbering_background  );
+     }
+     $scope.question_screen_numbering_color_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.question_screen_numbering_color });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.question_screen_numbering_color  );
+     }
+     $scope.answer_screen_background_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.answer_screen_background });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.answer_screen_background  );
+     }
+     $scope.answer_screen_color_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.answer_screen_color });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.answer_screen_color  );
+     }
+     $scope.answer_screen_font_size_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.answer_screen_font_size +'px'});
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.answer_screen_font_size +'px' );
+     }
+     $scope.answer_screen_font_style_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-weight' : $scope.answer_screen_font_style });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.answer_screen_font_style  );
+     }
+     $scope.answer_screen_font_family_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-family' : $scope.answer_screen_font_family });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.answer_screen_font_family  );
+     }
+     $scope.answer_select_screen_background_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.answer_select_screen_background });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.answer_select_screen_background  );
+     }
+     $scope.answer_select_screen_color_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.answer_select_screen_color });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.answer_select_screen_color  );
+     }
+     $scope.answer_select_screen_border_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-color' : $scope.answer_select_screen_border });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-color' , $scope.answer_select_screen_border  );
+     }
+     $scope.correct_select_screen_background_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.correct_select_screen_background });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.correct_select_screen_background  );
+     }
+     $scope.correct_select_screen_color_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.correct_select_screen_color });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.correct_select_screen_color  );
+     }
+     $scope.wrong_select_screen_background_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.wrong_select_screen_background });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.wrong_select_screen_background  );
+     }
+     $scope.wrong_select_screen_color_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.wrong_select_screen_color });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.wrong_select_screen_color  );
+     }
+     $scope.wrong_select_screen_border_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'border-color' : $scope.wrong_select_screen_border });
+       $scope.apply_those_changes_right_now($scope.current_element , 'border-color' , $scope.wrong_select_screen_border  );
+     }
+     $scope.question_screen_font_size_required_text_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.question_screen_font_size_required_text + 'px'  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.question_screen_font_size_required_text + 'px'  );
+     }
+     $scope.question_screen_color_required_text_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.question_screen_color_required_text   });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.question_screen_color_required_text   );
+     }
+     $scope.question_screen_warning_text_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.question_screen_warning_text + 'px'  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.question_screen_warning_text  + 'px' );
+     }
+     $scope.question_screen_warning_color_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.question_screen_warning_color  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.question_screen_warning_color  );
+     }
+     $scope.question_screen_warning_background_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.question_screen_warning_background  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.question_screen_warning_background  );
+     }
+     $scope.back_button_background_screen_goodbye_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.back_button_background_screen_goodbye  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.back_button_background_screen_goodbye  );
+     }
+     $scope.back_button_color_screen_goodbye_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.back_button_color_screen_goodbye  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.back_button_color_screen_goodbye  );
+     }
+     $scope.start_button_background_screen_goodbye_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.start_button_background_screen_goodbye  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.start_button_background_screen_goodbye  );
+     }
+     $scope.start_button_color_screen_goodbye_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.start_button_color_screen_goodbye  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.start_button_color_screen_goodbye  );
+     }
+     $scope.review_button_background_screen_result_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.review_button_background_screen_result  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.review_button_background_screen_result  );
+     }
+     $scope.review_button_color_screen_result_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.review_button_color_screen_result  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.review_button_color_screen_result  );
+     }
+     $scope.retake_button_background_screen_result_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.retake_button_background_screen_result  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.retake_button_background_screen_result  );
+     }
+     $scope.retake_button_color_screen_result_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.retake_button_color_screen_result  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.retake_button_color_screen_result  );
+     }
+     $scope.answer_screen_background_numbering_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.answer_screen_background_numbering  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.answer_screen_background_numbering  );
+     }
+     $scope.answer_screen_color_numbering_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.answer_screen_color_numbering  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.answer_screen_color_numbering  );
+     }
+     $scope.answer_screen_font_size_numbering_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.answer_screen_font_size_numbering +'px' });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.answer_screen_font_size_numbering +'px'  );
+     }
+     $scope.question_screen_warning_text_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.question_screen_warning_text +'px' });
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.question_screen_warning_text +'px'  );
+     }
+     $scope.back_question_button_background_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.back_question_button_background  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.back_question_button_background  );
+     }
+     $scope.back_question_button_color_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.back_question_button_color  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.back_question_button_color  );
+     }
+     $scope.continue_question_button_background_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.continue_question_button_background  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.continue_question_button_background  );
+     }
+     $scope.continue_question_button_color_func = function (){
+       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.continue_question_button_color  });
+       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.continue_question_button_color  );
+     }
 }]);

@@ -50,7 +50,7 @@
                                  <div class="property-blocks text-right">
                                    <div class="prop-item">
                                      <span>Background</span>
-                                     <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="page_player_background" type="text" name="" value="">
+                                     <input ng:change="page_player_background_func()" class="color_picker" ng:model="page_player_background" type="text" name="" value="">
                                    </div>
                                  </div>
                                </li>
@@ -63,16 +63,16 @@
                                    <!-- Colors  -->
                                    <div class="prop-item">
                                      <span>Background</span>
-                                     <input class="color_picker" ng:model="welcome_background_screen_box" ng:change="apply_these_stylesheet()" type="text" name="" value="">
+                                     <input class="color_picker" ng:model="welcome_background_screen_box" ng:change="welcome_background_screen_box_func()" type="text" name="" value="">
                                    </div>
                                    <!-- Font size  -->
                                    <div class="prop-item">
                                      <span>Border</span>
-                                     <input class="color_picker" ng:model="welcome_border_color_screen_box" ng:change="apply_these_stylesheet()" type="text" name="" value="">
+                                     <input class="color_picker" ng:model="welcome_border_color_screen_box" ng:change="welcome_border_color_screen_box_func()" type="text" name="" value="">
                                      <div class="border-list">
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Left : </span>
-                                           <select ng:model="welcome_border_left_width_screen_box" ng:change="apply_these_stylesheet()" name="" class="select-box border-width-property-top">
+                                           <select ng:model="welcome_border_left_width_screen_box" ng:change="welcome_border_left_width_screen_box_func()" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -80,7 +80,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:model="welcome_border_left_style_screen_box" ng:change="apply_these_stylesheet()" name="" class="select-box border-type-property-top">
+                                           <select ng:model="welcome_border_left_style_screen_box" ng:change="welcome_border_left_style_screen_box_func()" name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -89,7 +89,7 @@
 
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Right : </span>
-                                           <select ng:model="welcome_border_right_width_screen_box" ng:change="apply_these_stylesheet()" name="" class="select-box border-width-property-top">
+                                           <select ng:model="welcome_border_right_width_screen_box" ng:change="welcome_border_right_width_screen_box_func()" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -97,7 +97,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:model="welcome_border_right_style_screen_box" ng:change="apply_these_stylesheet()"  name="" class="select-box border-type-property-top">
+                                           <select ng:model="welcome_border_right_style_screen_box" ng:change="welcome_border_right_style_screen_box_func()"  name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -106,7 +106,7 @@
 
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Top : </span>
-                                           <select ng:model="welcome_border_top_width_screen_box" ng:change="apply_these_stylesheet()" name="" class="select-box border-width-property-top">
+                                           <select ng:model="welcome_border_top_width_screen_box" ng:change="welcome_border_top_width_screen_box_func()" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -114,7 +114,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:model="welcome_border_top_style_screen_box" ng:change="apply_these_stylesheet()" name="" class="select-box border-type-property-top">
+                                           <select ng:model="welcome_border_top_style_screen_box" ng:change="welcome_border_top_style_screen_box_func()" name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -123,7 +123,7 @@
 
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Bottom : </span>
-                                           <select ng:model="welcome_border_bottom_width_screen_box" ng:change="apply_these_stylesheet()" name="" class="select-box border-width-property-top">
+                                           <select ng:model="welcome_border_bottom_width_screen_box" ng:change="welcome_border_bottom_width_screen_box_func()" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -131,7 +131,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:model="welcome_border_bottom_style_screen_box" ng:change="apply_these_stylesheet()" name="" class="select-box border-type-property-top">
+                                           <select ng:model="welcome_border_bottom_style_screen_box" ng:change="welcome_border_bottom_style_screen_box_func()" name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -149,17 +149,17 @@
                                    <!-- Colors  -->
                                    <div class="prop-item">
                                      <span>Color</span>
-                                     <input class="color_picker" ng:model="screen_text_color_welcome_screen" ng:change="apply_these_stylesheet()" type="text" name="" value="">
+                                     <input class="color_picker" ng:model="screen_text_color_welcome_screen" ng:change="screen_text_color_welcome_screen_func()" type="text" name="" value="">
                                    </div>
                                    <!-- Font size  -->
                                    <div class="prop-item">
                                      <span>Font Size</span>
-                                     <input ng:model="screen_text_font_size_welcome_screen" ng:change="apply_these_stylesheet()" type="range" name="" value="">
+                                     <input ng:model="screen_text_font_size_welcome_screen" ng:change="screen_text_font_size_welcome_screen_func()" type="range" name="" value="">
                                    </div>
                                    <!-- Font style  -->
                                    <div class="prop-item">
                                      <span>Font Style</span>
-                                     <select ng:change="apply_these_stylesheet()" ng:model="screen_text_font_style_welcome_screen" class="" name="">
+                                     <select ng:change="screen_text_font_style_welcome_screen_func()" ng:model="screen_text_font_style_welcome_screen" class="" name="">
                                         <option value="">Regular</option>
                                         <option value="">Bold</option>
                                      </select>
@@ -167,7 +167,7 @@
                                    <!-- Font Family  -->
                                    <div class="prop-item">
                                      <span>Font Family</span>
-                                     <select ng:change="apply_these_stylesheet()" ng:model="screen_text_font_family_welcome_screen" class="" name="">
+                                     <select ng:change="screen_text_font_family_welcome_screen_func()" ng:model="screen_text_font_family_welcome_screen" class="" name="">
                                         <option value="">Arial</option>
                                         <option value="">Tahoma</option>
                                      </select>
@@ -182,17 +182,17 @@
                                    <!-- Colors  -->
                                    <div class="prop-item">
                                      <span>Background</span>
-                                     <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="button_background_screen_welcome" type="text" name="" value="">
+                                     <input ng:change="button_background_screen_welcome_func()" class="color_picker" ng:model="button_background_screen_welcome" type="text" name="" value="">
                                    </div>
                                    <!-- Colors  -->
                                    <div class="prop-item">
                                      <span>Color</span>
-                                     <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="button_color_screen_welcome" type="text" name="" value="">
+                                     <input ng:change="button_color_screen_welcome_func()" class="color_picker" ng:model="button_color_screen_welcome" type="text" name="" value="">
                                    </div>
                                    <!-- Font size  -->
                                    <div class="prop-item">
                                      <span>Font Size</span>
-                                     <input ng:change="apply_these_stylesheet()" ng:model="button_font_size_screen_welcome" type="range" name="" value="">
+                                     <input ng:change="button_font_size_screen_welcome_func()" ng:model="button_font_size_screen_welcome" type="range" name="" value="">
                                    </div>
                                  </div>
                                </li>
@@ -208,16 +208,16 @@
                                    <!-- Colors  -->
                                    <div class="prop-item">
                                      <span>Background</span>
-                                     <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="goodbye_background_screen_box" type="text" name="" value="">
+                                     <input ng:change="goodbye_background_screen_box_func()" class="color_picker" ng:model="goodbye_background_screen_box" type="text" name="" value="">
                                    </div>
                                    <!-- Font size  -->
                                    <div class="prop-item">
                                      <span>Border</span>
-                                     <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="goodbye_border_color_screen_box" type="text" name="" value="">
+                                     <input ng:change="goodbye_border_color_screen_box_func()" class="color_picker" ng:model="goodbye_border_color_screen_box" type="text" name="" value="">
                                      <div class="border-list">
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Left : </span>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="goodbye_border_width_left_screen_box" name="" class="select-box border-width-property-top">
+                                           <select ng:change="goodbye_border_width_left_screen_box_func()" ng:model="goodbye_border_width_left_screen_box" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -225,7 +225,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="goodbye_border_style_left_screen_box" name="" class="select-box border-type-property-top">
+                                           <select ng:change="goodbye_border_style_left_screen_box_func()" ng:model="goodbye_border_style_left_screen_box" name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -234,7 +234,7 @@
 
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Right : </span>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="goodbye_border_width_right_screen_box" name="" class="select-box border-width-property-top">
+                                           <select ng:change="goodbye_border_width_right_screen_box_func()" ng:model="goodbye_border_width_right_screen_box" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -242,7 +242,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="goodbye_border_style_right_screen_box" name="" class="select-box border-type-property-top">
+                                           <select ng:change="goodbye_border_style_right_screen_box_func()" ng:model="goodbye_border_style_right_screen_box" name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -251,7 +251,7 @@
 
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Top : </span>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="goodbye_border_width_top_screen_box" name="" class="select-box border-width-property-top">
+                                           <select ng:change="goodbye_border_width_top_screen_box_func()" ng:model="goodbye_border_width_top_screen_box" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -259,7 +259,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="goodbye_border_style_top_screen_box" name="" class="select-box border-type-property-top">
+                                           <select ng:change="goodbye_border_style_top_screen_box_func()" ng:model="goodbye_border_style_top_screen_box" name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -268,7 +268,7 @@
 
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Bottom : </span>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="goodbye_border_width_bottom_screen_box" name="" class="select-box border-width-property-top">
+                                           <select ng:change="goodbye_border_width_bottom_screen_box_func()" ng:model="goodbye_border_width_bottom_screen_box" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -276,7 +276,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="goodbye_border_style_bottom_screen_box" name="" class="select-box border-type-property-top">
+                                           <select ng:change="goodbye_border_style_bottom_screen_box_func()" ng:model="goodbye_border_style_bottom_screen_box" name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -294,17 +294,17 @@
                                    <!-- Colors  -->
                                    <div class="prop-item">
                                      <span>Color</span>
-                                     <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="screen_text_color_goodbye_screen" type="text" name="" value="">
+                                     <input ng:change="screen_text_color_goodbye_screen_func()" class="color_picker" ng:model="screen_text_color_goodbye_screen" type="text" name="" value="">
                                    </div>
                                    <!-- Font size  -->
                                    <div class="prop-item">
                                      <span>Font Size</span>
-                                     <input ng:change="apply_these_stylesheet()" ng:model='screen_text_font_size_goodbye_screen' type="range" name="" value="">
+                                     <input ng:change="screen_text_font_size_goodbye_screen_func()" ng:model='screen_text_font_size_goodbye_screen' type="range" name="" value="">
                                    </div>
                                    <!-- Font style  -->
                                    <div class="prop-item">
                                      <span>Font Style</span>
-                                     <select ng:change="apply_these_stylesheet()" ng:model="screen_text_font_style_goodbye_screen" class="" name="">
+                                     <select ng:change="screen_text_font_style_goodbye_screen_func()" ng:model="screen_text_font_style_goodbye_screen" class="" name="">
                                         <option value="">Regular</option>
                                         <option value="">Bold</option>
                                      </select>
@@ -312,7 +312,7 @@
                                    <!-- Font Family  -->
                                    <div class="prop-item">
                                      <span>Font Family</span>
-                                     <select ng:change="apply_these_stylesheet()" ng:model="screen_text_font_family_goodbye_screen" class="" name="">
+                                     <select ng:change="screen_text_font_family_goodbye_screen_func()" ng:model="screen_text_font_family_goodbye_screen" class="" name="">
                                         <option value="">Arial</option>
                                         <option value="">Tahoma</option>
                                      </select>
@@ -326,15 +326,15 @@
                                  <div class="property-blocks text-right">
                                    <div class="prop-item">
                                      <span>Font Size</span>
-                                     <input ng:change="apply_these_stylesheet()" ng:model="warning_text_font_size_screen_goodbye" type="range" name="" value="">
+                                     <input ng:change="warning_text_font_size_screen_goodbye_func()" ng:model="warning_text_font_size_screen_goodbye" type="range" name="" value="">
                                     </div>
                                     <div class="prop-item">
                                      <span>Color</span>
-                                    <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="warning_text_color_screen_goodbye" type="text" name="" value="">
+                                    <input ng:change="warning_text_color_screen_goodbye_func()" class="color_picker" ng:model="warning_text_color_screen_goodbye" type="text" name="" value="">
                                     </div>
                                     <div class="prop-item">
                                       <span>Background</span>
-                                      <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="warning_text_background_screen_box" type="text" name="" value="">
+                                      <input ng:change="warning_text_background_screen_box_func()" class="color_picker" ng:model="warning_text_background_screen_box" type="text" name="" value="">
                                     </div>
                                  </div>
                                </li>
@@ -346,29 +346,29 @@
                                    <!-- Font size  -->
                                    <div class="prop-item">
                                      <span>Font Size</span>
-                                     <input ng:change="apply_these_stylesheet()" ng:model="button_buttons_font_size_screen_goodbye" type="range" name="" value="">
+                                     <input ng:change="button_buttons_font_size_screen_goodbye_func()" ng:model="button_buttons_font_size_screen_goodbye" type="range" name="" value="">
                                     </div>
                                     <div class="button-name">
                                       <div class="button-containers">
                                         <span>Back Button</span>
                                         <div class="btn-porperties">
                                           <span>Background</span>
-                                          <input ng:change="changed_buttons('back_button_background_screen_goodbye')" class="color_picker" ng:model="back_button_background_screen_goodbye" type="text" name="" value="">
+                                          <input ng:change="back_button_background_screen_goodbye_func()" class="color_picker" ng:model="back_button_background_screen_goodbye" type="text" name="" value="">
                                         </div>
                                         <div class="btn-porperties">
                                           <span>Color</span>
-                                          <input ng:change="changed_buttons('back_button_color_screen_goodbye')" class="color_picker" ng:model="back_button_color_screen_goodbye" type="text" name="" value="">
+                                          <input ng:change="back_button_color_screen_goodbye_func()" class="color_picker" ng:model="back_button_color_screen_goodbye" type="text" name="" value="">
                                         </div>
                                       </div>
                                       <div class="button-containers">
                                         <span>Start Button</span>
                                         <div class="btn-porperties">
                                           <span>Background</span>
-                                          <input ng:change="changed_buttons('start_button_background_screen_goodbye')" class="color_picker" ng:model="start_button_background_screen_goodbye" type="text" name="" value="">
+                                          <input ng:change="start_button_background_screen_goodbye_func()" class="color_picker" ng:model="start_button_background_screen_goodbye" type="text" name="" value="">
                                         </div>
                                         <div class="btn-porperties">
                                           <span>Color</span>
-                                          <input ng:change="changed_buttons('start_button_color_screen_goodbye')" class="color_picker" ng:model="start_button_color_screen_goodbye" type="text" name="" value="">
+                                          <input ng:change="start_button_color_screen_goodbye_func()" class="color_picker" ng:model="start_button_color_screen_goodbye" type="text" name="" value="">
                                         </div>
                                       </div>
                                     </div>
@@ -388,16 +388,16 @@
                                    <!-- Colors  -->
                                    <div class="prop-item">
                                      <span>Background</span>
-                                     <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="result_background_screen_box" type="text" name="" value="">
+                                     <input ng:change="result_background_screen_box_func()" class="color_picker" ng:model="result_background_screen_box" type="text" name="" value="">
                                    </div>
                                    <!-- Font size  -->
                                    <div class="prop-item">
                                      <span>Border</span>
-                                     <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="result_border_color_screen_box" type="text" name="" value="">
+                                     <input ng:change="result_border_color_screen_box_func()" class="color_picker" ng:model="result_border_color_screen_box" type="text" name="" value="">
                                      <div class="border-list">
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Left : </span>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="resule_border_width_left_screen_box" name="" class="select-box border-width-property-top">
+                                           <select ng:change="resule_border_width_left_screen_box_func()" ng:model="resule_border_width_left_screen_box" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -405,7 +405,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="resule_border_style_left_screen_box" name="" class="select-box border-type-property-top">
+                                           <select ng:change="resule_border_style_left_screen_box_func()" ng:model="resule_border_style_left_screen_box" name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -414,7 +414,7 @@
 
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Right : </span>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="resule_border_width_right_screen_box" name="" class="select-box border-width-property-top">
+                                           <select ng:change="resule_border_width_right_screen_box_func()" ng:model="resule_border_width_right_screen_box" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -422,7 +422,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="resule_border_style_right_screen_box" name="" class="select-box border-type-property-top">
+                                           <select ng:change="resule_border_style_right_screen_box_func()" ng:model="resule_border_style_right_screen_box" name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -431,7 +431,7 @@
 
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Top : </span>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="resule_border_width_top_screen_box" name="" class="select-box border-width-property-top">
+                                           <select ng:change="resule_border_width_top_screen_box_func()" ng:model="resule_border_width_top_screen_box" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -439,7 +439,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="resule_border_style_top_screen_box" name="" class="select-box border-type-property-top">
+                                           <select ng:change="resule_border_style_top_screen_box_func()" ng:model="resule_border_style_top_screen_box" name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -448,7 +448,7 @@
 
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Bottom : </span>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="resule_border_width_bottom_screen_box" name="" class="select-box border-width-property-top">
+                                           <select ng:change="resule_border_width_bottom_screen_box_func()" ng:model="resule_border_width_bottom_screen_box" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -456,7 +456,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="resule_border_style_bottom_screen_box" name="" class="select-box border-type-property-top">
+                                           <select ng:change="resule_border_style_bottom_screen_box_func()" ng:model="resule_border_style_bottom_screen_box" name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -474,17 +474,17 @@
                                    <!-- Colors  -->
                                    <div class="prop-item">
                                      <span>Color</span>
-                                     <input class="color_picker" ng:change="apply_these_stylesheet()" ng:model="screen_text_color_result_screen" type="text" name="" value="">
+                                     <input class="color_picker" ng:change="screen_text_color_result_screen_func()" ng:model="screen_text_color_result_screen" type="text" name="" value="">
                                    </div>
                                    <!-- Font size  -->
                                    <div class="prop-item">
                                      <span>Font Size</span>
-                                     <input ng:change="apply_these_stylesheet()" ng:model="screen_text_font_size_result_screen" type="range" name="" value="">
+                                     <input ng:change="screen_text_font_size_result_screen_func()" ng:model="screen_text_font_size_result_screen" type="range" name="" value="">
                                    </div>
                                    <!-- Font style  -->
                                    <div class="prop-item">
                                      <span>Font Style</span>
-                                     <select ng:change="apply_these_stylesheet()" ng:model="screen_text_font_style_result_screen" class="" name="">
+                                     <select ng:change="screen_text_font_style_result_screen_func()" ng:model="screen_text_font_style_result_screen" class="" name="">
                                         <option value="">Regular</option>
                                         <option value="">Bold</option>
                                      </select>
@@ -492,7 +492,7 @@
                                    <!-- Font Family  -->
                                    <div class="prop-item">
                                      <span>Font Family</span>
-                                     <select ng:change="apply_these_stylesheet()" ng:model="screen_text_font_family_result_screen" class="" name="">
+                                     <select ng:change="screen_text_font_family_result_screen_func()" ng:model="screen_text_font_family_result_screen" class="" name="">
                                         <option value="">Arial</option>
                                         <option value="">Tahoma</option>
                                      </select>
@@ -507,17 +507,17 @@
                                    <!-- Colors  -->
                                    <div class="prop-item">
                                      <span>Color</span>
-                                     <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="score_result_text_color" type="text" name="" value="">
+                                     <input ng:change="score_result_text_color_func()" class="color_picker" ng:model="score_result_text_color" type="text" name="" value="">
                                    </div>
                                    <!-- Font size  -->
                                    <div class="prop-item">
                                      <span>Font Size</span>
-                                     <input ng:change="apply_these_stylesheet()" ng:model="score_result_text_font_size" type="range" name="" value="">
+                                     <input ng:change="score_result_text_font_size_func()" ng:model="score_result_text_font_size" type="range" name="" value="">
                                    </div>
                                    <!-- Font style  -->
                                    <div class="prop-item">
                                      <span>Font Style</span>
-                                     <select ng:change="apply_these_stylesheet()" ng:model="score_result_text_font_style" class="" name="">
+                                     <select ng:change="score_result_text_font_style_func()" ng:model="score_result_text_font_style" class="" name="">
                                         <option value="">Regular</option>
                                         <option value="">Bold</option>
                                      </select>
@@ -525,7 +525,7 @@
                                    <!-- Font Family  -->
                                    <div class="prop-item">
                                      <span>Font Family</span>
-                                     <select ng:change="apply_these_stylesheet()" ng:model="score_result_text_font_family" class="" name="">
+                                     <select ng:change="score_result_text_font_family_func()" ng:model="score_result_text_font_family" class="" name="">
                                         <option value="">Arial</option>
                                         <option value="">Tahoma</option>
                                      </select>
@@ -540,18 +540,18 @@
                                    <!-- Colors  -->
                                    <div class="prop-item">
                                      <span>Color</span>
-                                     <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="grade_result_text_color" type="text" name="" value="">
+                                     <input ng:change="grade_result_text_color_func()" class="color_picker" ng:model="grade_result_text_color" type="text" name="" value="">
                                    </div>
                                    <!-- Font size  -->
                                    <div class="prop-item">
                                      <span>Font Size</span>
-                                     <input ng:change="apply_these_stylesheet()" ng:model="grade_result_text_font_size" type="range" name="" value="">
+                                     <input ng:change="grade_result_text_font_size_func()" ng:model="grade_result_text_font_size" type="range" name="" value="">
                                    </div>
 
                                    <!-- Font style  -->
                                    <div class="prop-item">
                                      <span>Font Style</span>
-                                     <select ng:change="apply_these_stylesheet()" ng:model="grade_result_text_font_style" class="" name="">
+                                     <select ng:change="grade_result_text_font_style_func()" ng:model="grade_result_text_font_style" class="" name="">
                                         <option value="">Regular</option>
                                         <option value="">Bold</option>
                                      </select>
@@ -559,7 +559,7 @@
                                    <!-- Font Family  -->
                                    <div class="prop-item">
                                      <span>Font Family</span>
-                                     <select ng:change="apply_these_stylesheet()" ng:model="grade_result_text_font_family" class="" name="">
+                                     <select ng:change="grade_result_text_font_family_func()" ng:model="grade_result_text_font_family" class="" name="">
                                         <option value="">Arial</option>
                                         <option value="">Tahoma</option>
                                      </select>
@@ -574,29 +574,29 @@
                                    <!-- Font size  -->
                                    <div class="prop-item">
                                      <span>Font Size</span>
-                                     <input ng:change="apply_these_stylesheet()" ng:model="button_buttons_font_size_screen_result" type="range" name="" value="">
+                                     <input ng:change="button_buttons_font_size_screen_result_func()" ng:model="button_buttons_font_size_screen_result" type="range" name="" value="">
                                     </div>
                                     <div class="button-name">
                                       <div class="button-containers">
                                         <span>Review Button</span>
                                         <div class="btn-porperties">
                                           <span>Background</span>
-                                          <input ng:change="changed_buttons('review_button_background_screen_result')" class="color_picker" ng:model="review_button_background_screen_result" type="text" name="" value="">
+                                          <input ng:change="review_button_background_screen_result_func()" class="color_picker" ng:model="review_button_background_screen_result" type="text" name="" value="">
                                         </div>
                                         <div class="btn-porperties">
                                           <span>Color</span>
-                                          <input ng:change="changed_buttons('review_button_color_screen_result')" class="color_picker" ng:model="review_button_color_screen_result" type="text" name="" value="">
+                                          <input ng:change="review_button_color_screen_result_func()" class="color_picker" ng:model="review_button_color_screen_result" type="text" name="" value="">
                                         </div>
                                       </div>
                                       <div class="button-containers">
                                         <span>Retake Button</span>
                                         <div class="btn-porperties">
                                           <span>Background</span>
-                                          <input ng:change="changed_buttons('retake_button_background_screen_result')" class="color_picker" ng:model="retake_button_background_screen_result" type="text" name="" value="">
+                                          <input ng:change="retake_button_background_screen_result_func()" class="color_picker" ng:model="retake_button_background_screen_result" type="text" name="" value="">
                                         </div>
                                         <div class="btn-porperties">
                                           <span>Color</span>
-                                          <input ng:change="changed_buttons('retake_button_color_screen_result')" class="color_picker" ng:model="retake_button_color_screen_result" type="text" name="" value="">
+                                          <input ng:change="retake_button_color_screen_result_func()" class="color_picker" ng:model="retake_button_color_screen_result" type="text" name="" value="">
                                         </div>
                                       </div>
                                     </div>
@@ -615,7 +615,7 @@
                                    <!-- Background  -->
                                    <div class="prop-item">
                                      <span>Background</span>
-                                     <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="question_screen_background" type="text" name="" value="">
+                                     <input ng:change="question_screen_background_func()" class="color_picker" ng:model="question_screen_background" type="text" name="" value="">
                                    </div>
                                    <!-- Font size  -->
                                    <div class="prop-item">
@@ -624,7 +624,7 @@
                                      <div class="border-list">
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Left : </span>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="question_border_width_left_screen_box" name="" class="select-box border-width-property-top">
+                                           <select ng:change="question_border_width_left_screen_box_func()" ng:model="question_border_width_left_screen_box" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -632,7 +632,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="question_border_style_left_screen_box" name="" class="select-box border-type-property-top">
+                                           <select ng:change="question_border_style_left_screen_box_func()" ng:model="question_border_style_left_screen_box" name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -641,7 +641,7 @@
 
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Right : </span>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="question_border_width_right_screen_box" name="" class="select-box border-width-property-top">
+                                           <select ng:change="question_border_width_right_screen_box_func()" ng:model="question_border_width_right_screen_box" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -649,7 +649,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="question_border_style_right_screen_box" name="" class="select-box border-type-property-top">
+                                           <select ng:change="question_border_style_right_screen_box_func()" ng:model="question_border_style_right_screen_box" name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -658,7 +658,7 @@
 
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Top : </span>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="question_border_width_top_screen_box" name="" class="select-box border-width-property-top">
+                                           <select ng:change="question_border_width_top_screen_box_func()" ng:model="question_border_width_top_screen_box" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -666,7 +666,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="question_border_style_top_screen_box"  name="" class="select-box border-type-property-top">
+                                           <select ng:change="question_border_style_top_screen_box_func()" ng:model="question_border_style_top_screen_box"  name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -675,7 +675,7 @@
 
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Bottom : </span>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="question_border_width_bottom_screen_box" name="" class="select-box border-width-property-top">
+                                           <select ng:change="question_border_width_bottom_screen_box_func()" ng:model="question_border_width_bottom_screen_box" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -683,7 +683,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="question_border_style_bottom_screen_box"  name="" class="select-box border-type-property-top">
+                                           <select ng:change="question_border_style_bottom_screen_box_func()" ng:model="question_border_style_bottom_screen_box"  name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -701,17 +701,17 @@
                                      <!-- Colors  -->
                                      <div class="prop-item">
                                        <span>Color</span>
-                                       <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="screen_text_color_question_screen" type="text" name="" value="">
+                                       <input ng:change="screen_text_color_question_screen_func()" class="color_picker" ng:model="screen_text_color_question_screen" type="text" name="" value="">
                                      </div>
                                      <!-- Font size  -->
                                      <div class="prop-item">
                                        <span>Font Size</span>
-                                       <input ng:change="apply_these_stylesheet()" ng:model="screen_text_font_size_question_screen" type="range" name="" value="">
+                                       <input ng:change="screen_text_font_size_question_screen_func()" ng:model="screen_text_font_size_question_screen" type="range" name="" value="">
                                      </div>
                                      <!-- Font style  -->
                                      <div class="prop-item">
                                        <span>Font Style</span>
-                                       <select  ng:change="apply_these_stylesheet()" ng:model="screen_text_font_style_question_screen" class="" name="">
+                                       <select  ng:change="screen_text_font_style_question_screen_func()" ng:model="screen_text_font_style_question_screen" class="" name="">
                                           <option value="">Regular</option>
                                           <option value="">Bold</option>
                                        </select>
@@ -719,7 +719,7 @@
                                      <!-- Font Family  -->
                                      <div class="prop-item">
                                        <span>Font Family</span>
-                                       <select ng:change="apply_these_stylesheet()" ng:model="screen_text_font_family_question_screen" class="" name="">
+                                       <select ng:change="screen_text_font_family_question_screen_func()" ng:model="screen_text_font_family_question_screen" class="" name="">
                                           <option value="">Arial</option>
                                           <option value="">Tahoma</option>
                                        </select>
@@ -727,11 +727,11 @@
                                      <!-- Border -->
                                      <div class="prop-item">
                                        <span>Border</span>
-                                       <input class="color_picker" ng:model="question_text_screen_border_color" type="text" name="" value="">
+                                       <input class="color_picker" ng:change="question_text_screen_border_color_func()" ng:model="question_text_screen_border_color" type="text" name="" value="">
                                        <div class="border-list">
                                          <div style="margin-top:5px;" class="border-actx">
                                              <span> - Left : </span>
-                                             <select ng:change="apply_these_stylesheet()" ng:model="question_text_border_width_left_screen_box" name="" class="select-box border-width-property-top">
+                                             <select ng:change="question_text_border_width_left_screen_box_func()" ng:model="question_text_border_width_left_screen_box" name="" class="select-box border-width-property-top">
                                                <option value="0px">None</option>
                                                <option value="1px">1px</option>
                                                <option value="2px">2px</option>
@@ -739,7 +739,7 @@
                                                <option value="4px">4px</option>
                                                <option value="5px">5px</option>
                                              </select>
-                                             <select ng:change="apply_these_stylesheet()" ng:model="question_text_border_style_left_screen_box" name="" class="select-box border-type-property-top">
+                                             <select ng:change="question_text_border_style_left_screen_box_func()" ng:model="question_text_border_style_left_screen_box" name="" class="select-box border-type-property-top">
                                                <option value="solid">Solid</option>
                                                <option value="dashed">Dashed</option>
                                                <option value="dotted">Dotted</option>
@@ -748,7 +748,7 @@
                                        </div>
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Right : </span>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="question_text_border_width_right_screen_box" name="" class="select-box border-width-property-top">
+                                           <select ng:change="question_text_border_width_right_screen_box_func()" ng:model="question_text_border_width_right_screen_box" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -756,7 +756,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="question_text_border_style_right_screen_box" name="" class="select-box border-type-property-top">
+                                           <select ng:change="question_text_border_style_right_screen_box_func()" ng:model="question_text_border_style_right_screen_box" name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -764,7 +764,7 @@
                                        </div>
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Top : </span>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="question_text_border_width_top_screen_box" name="" class="select-box border-width-property-top">
+                                           <select ng:change="question_text_border_width_top_screen_box_func()" ng:model="question_text_border_width_top_screen_box" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -772,7 +772,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="question_text_border_style_top_screen_box" name="" class="select-box border-type-property-top">
+                                           <select ng:change="question_text_border_style_top_screen_box_func()" ng:model="question_text_border_style_top_screen_box" name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -780,7 +780,7 @@
                                        </div>
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Bottom : </span>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="question_text_border_width_bottom_screen_box" name="" class="select-box border-width-property-top">
+                                           <select ng:change="question_text_border_width_bottom_screen_box_func()" ng:model="question_text_border_width_bottom_screen_box" name="" class="select-box border-width-property-top">
                                              <option value="0px">None</option>
                                              <option value="1px">1px</option>
                                              <option value="2px">2px</option>
@@ -788,7 +788,7 @@
                                              <option value="4px">4px</option>
                                              <option value="5px">5px</option>
                                            </select>
-                                           <select ng:change="apply_these_stylesheet()" ng:model="question_text_border_style_bottom_screen_box" name="" class="select-box border-type-property-top">
+                                           <select ng:change="question_text_border_style_bottom_screen_box_func()" ng:model="question_text_border_style_bottom_screen_box" name="" class="select-box border-type-property-top">
                                              <option value="solid">Solid</option>
                                              <option value="dashed">Dashed</option>
                                              <option value="dotted">Dotted</option>
@@ -801,11 +801,11 @@
                                          <span>Numbering</span>
                                          <div class="btn-porperties">
                                            <span>Background</span>
-                                           <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="question_screen_numbering_background" type="text" name="" value="">
+                                           <input ng:change="question_screen_numbering_background_func()" class="color_picker" ng:model="question_screen_numbering_background" type="text" name="" value="">
                                          </div>
                                          <div class="btn-porperties">
                                            <span>Color</span>
-                                           <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="question_screen_numbering_color" type="text" name="" value="">
+                                           <input ng:change="question_screen_numbering_color_func()" class="color_picker" ng:model="question_screen_numbering_color" type="text" name="" value="">
                                          </div>
                                          <!-- <div class="btn-porperties">
                                            <span>Font Size</span>
@@ -823,22 +823,22 @@
                                      <!-- Colors  -->
                                      <div class="prop-item">
                                        <span>Background</span>
-                                       <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="answer_screen_background" type="text" name="" value="">
+                                       <input ng:change="answer_screen_background_func()" class="color_picker" ng:model="answer_screen_background" type="text" name="" value="">
                                      </div>
                                      <!-- Colors  -->
                                      <div class="prop-item">
                                        <span>Color</span>
-                                       <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="answer_screen_color" type="text" name="" value="">
+                                       <input ng:change="answer_screen_color_func()" class="color_picker" ng:model="answer_screen_color" type="text" name="" value="">
                                      </div>
                                      <!-- Font size  -->
                                      <div class="prop-item">
                                        <span>Font Size</span>
-                                       <input ng:change="apply_these_stylesheet()" ng:model="answer_screen_font_size" type="range" name="" value="">
+                                       <input ng:change="answer_screen_font_size_func()" ng:model="answer_screen_font_size" type="range" name="" value="">
                                      </div>
                                      <!-- Font style  -->
                                      <div class="prop-item">
                                        <span>Font Style</span>
-                                       <select ng:change="apply_these_stylesheet()" ng:model="answer_screen_font_style" class="" name="">
+                                       <select ng:change="answer_screen_font_style_func()" ng:model="answer_screen_font_style" class="" name="">
                                           <option value="">Regular</option>
                                           <option value="">Bold</option>
                                        </select>
@@ -846,7 +846,7 @@
                                      <!-- Font Family  -->
                                      <div class="prop-item">
                                        <span>Font Family</span>
-                                       <select ng:change="apply_these_stylesheet()" ng:model="answer_screen_font_family" class="" name="">
+                                       <select ng:change="answer_screen_font_family_func()" ng:model="answer_screen_font_family" class="" name="">
                                           <option value="">Arial</option>
                                           <option value="">Tahoma</option>
                                        </select>
@@ -857,15 +857,15 @@
                                          <span>Numbering</span>
                                          <div class="btn-porperties">
                                            <span>Background</span>
-                                           <input ng:change="change_this_answer_value_of_numbering('answer_screen_background_numbering')" class="color_picker" ng:model="answer_screen_background_numbering" type="text" name="" value="">
+                                           <input ng:change="answer_screen_background_numbering_func()" class="color_picker" ng:model="answer_screen_background_numbering" type="text" name="" value="">
                                          </div>
                                          <div class="btn-porperties">
                                            <span>Color</span>
-                                           <input ng:change="change_this_answer_value_of_numbering('answer_screen_color_numbering')" class="color_picker" ng:model="answer_screen_color_numbering" type="text" name="" value="">
+                                           <input ng:change="answer_screen_color_numbering_func()" class="color_picker" ng:model="answer_screen_color_numbering" type="text" name="" value="">
                                          </div>
                                          <div class="btn-porperties">
                                            <span>Font Size</span>
-                                           <input ng:change="change_this_answer_value_of_numbering('answer_screen_font_size_numbering')" ng:model="answer_screen_font_size_numbering" type="range" name="" value="" style="    margin-top: 19px;">
+                                           <input ng:change="answer_screen_font_size_numbering_func()" ng:model="answer_screen_font_size_numbering" type="range" name="" value="" style="    margin-top: 19px;">
                                          </div>
                                        </div>
                                      </div>
@@ -875,15 +875,15 @@
                                          <span>Selected answer</span>
                                          <div class="btn-porperties">
                                            <span>Background</span>
-                                           <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="answer_select_screen_background" type="text" name="" value="">
+                                           <input ng:change="answer_select_screen_background_func()" class="color_picker" ng:model="answer_select_screen_background" type="text" name="" value="">
                                          </div>
                                          <div class="btn-porperties">
                                            <span>Color</span>
-                                           <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="answer_select_screen_color" type="text" name="" value="">
+                                           <input ng:change="answer_select_screen_color_func()" class="color_picker" ng:model="answer_select_screen_color" type="text" name="" value="">
                                          </div>
                                          <div class="btn-porperties">
                                            <span>Border Color</span>
-                                           <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="answer_select_screen_border" type="text" name="" value="">
+                                           <input ng:change="answer_select_screen_border_func()" class="color_picker" ng:model="answer_select_screen_border" type="text" name="" value="">
                                          </div>
                                        </div>
                                      </div>
@@ -893,15 +893,15 @@
                                          <span>Correct answer</span>
                                          <div class="btn-porperties">
                                            <span>Background</span>
-                                           <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="correct_select_screen_background" type="text" name="" value="">
+                                           <input ng:change="correct_select_screen_background_func()" class="color_picker" ng:model="correct_select_screen_background" type="text" name="" value="">
                                          </div>
                                          <div class="btn-porperties">
                                            <span>Color</span>
-                                           <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="correct_select_screen_color" type="text" name="" value="">
+                                           <input ng:change="correct_select_screen_color_func()" class="color_picker" ng:model="correct_select_screen_color" type="text" name="" value="">
                                          </div>
                                          <div class="btn-porperties">
                                            <span>Border Color</span>
-                                           <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="correct_select_screen_border" type="text" name="" value="">
+                                           <input ng:change="correct_select_screen_border_func()" class="color_picker" ng:model="correct_select_screen_border" type="text" name="" value="">
                                          </div>
                                        </div>
                                      </div>
@@ -912,15 +912,15 @@
                                          <span>Wrong answer</span>
                                          <div class="btn-porperties">
                                            <span>Background</span>
-                                           <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="wrong_select_screen_background" type="text" name="" value="">
+                                           <input ng:change="wrong_select_screen_background_func()" class="color_picker" ng:model="wrong_select_screen_background" type="text" name="" value="">
                                          </div>
                                          <div class="btn-porperties">
                                            <span>Color</span>
-                                           <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="wrong_select_screen_color" type="text" name="" value="">
+                                           <input ng:change="wrong_select_screen_color_func()" class="color_picker" ng:model="wrong_select_screen_color" type="text" name="" value="">
                                          </div>
                                          <div class="btn-porperties">
                                            <span>Border Color</span>
-                                           <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="wrong_select_screen_border" type="text" name="" value="">
+                                           <input ng:change="wrong_select_screen_border_func()" class="color_picker" ng:model="wrong_select_screen_border" type="text" name="" value="">
                                          </div>
                                        </div>
                                      </div>
@@ -934,11 +934,11 @@
                                    <!-- Font size  -->
                                     <div class="prop-item">
                                      <span>Font Size</span>
-                                     <input ng:change="apply_these_stylesheet()" ng:model="question_screen_font_size_required_text" type="range" name="" value="">
+                                     <input ng:change="question_screen_font_size_required_text_func()" ng:model="question_screen_font_size_required_text" type="range" name="" value="">
                                     </div>
                                     <div class="prop-item">
                                      <span>Color</span>
-                                    <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="question_screen_color_required_text" type="text" name="" value="">
+                                    <input ng:change="question_screen_color_required_text_func()" class="color_picker" ng:model="question_screen_color_required_text" type="text" name="" value="">
                                     </div>
                                  </div>
                                </li>
@@ -950,15 +950,15 @@
                                    <!-- Font size  -->
                                     <div class="prop-item">
                                      <span>Font Size</span>
-                                     <input ng:change="apply_these_stylesheet()" ng:model="question_screen_warning_text" type="range" name="" value="">
+                                     <input ng:change="question_screen_warning_text_func()" ng:model="question_screen_warning_text" type="range" name="" value="">
                                     </div>
                                     <div class="prop-item">
                                      <span>Color</span>
-                                    <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="question_screen_warning_color" type="text" name="" value="">
+                                    <input ng:change="question_screen_warning_color_func()" class="color_picker" ng:model="question_screen_warning_color" type="text" name="" value="">
                                     </div>
                                     <div class="prop-item">
                                      <span>Background</span>
-                                     <input ng:change="apply_these_stylesheet()" class="color_picker" ng:model="question_screen_warning_background" type="text" name="" value="">
+                                     <input ng:change="question_screen_warning_background_func()" class="color_picker" ng:model="question_screen_warning_background" type="text" name="" value="">
                                     </div>
                                  </div>
                                </li>
@@ -977,22 +977,22 @@
                                         <span>Back Button</span>
                                         <div class="btn-porperties">
                                           <span>Background</span>
-                                          <input ng:change="changed_buttons('back_question_button_background')" class="color_picker" ng:model="back_question_button_background" type="text" name="" value="">
+                                          <input ng:change="back_question_button_background_func" class="color_picker" ng:model="back_question_button_background" type="text" name="" value="">
                                         </div>
                                         <div class="btn-porperties">
                                           <span>Color</span>
-                                          <input ng:change="changed_buttons('back_question_button_color')" class="color_picker" ng:model="back_question_button_color" type="text" name="" value="">
+                                          <input ng:change="back_question_button_color_func()" class="color_picker" ng:model="back_question_button_color" type="text" name="" value="">
                                         </div>
                                       </div>
                                       <div class="button-containers">
                                         <span>Continue Button</span>
                                         <div class="btn-porperties">
                                           <span>Background</span>
-                                          <input ng:change="changed_buttons('continue_question_button_background')" class="color_picker" ng:model="continue_question_button_background" type="text" name="" value="">
+                                          <input ng:change="continue_question_button_background_func()" class="color_picker" ng:model="continue_question_button_background" type="text" name="" value="">
                                         </div>
                                         <div class="btn-porperties">
                                           <span>Color</span>
-                                          <input ng:change="changed_buttons('continue_question_button_color')"   class="color_picker" ng:model="continue_question_button_color" type="text" name="" value="">
+                                          <input ng:change="continue_question_button_color_func()"   class="color_picker" ng:model="continue_question_button_color" type="text" name="" value="">
                                         </div>
                                       </div>
                                     </div>
