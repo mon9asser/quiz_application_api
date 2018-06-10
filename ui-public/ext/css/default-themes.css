@@ -358,4 +358,8 @@ ul li.wrong_answer > div > .no-media-here { color: #D91E18;}
 .scalet-o li span {     color: #c17c7e;   }
 .scalet-o li span {     background: #fbfafa   }
 .scalet-o li span { border-color: #c17c7e  }
-.scalet-o-selected { color: #fff;  background: #c17c7e } 
+.scalet-o-selected { color: #fff;  background: #c17c7e }
+
+.no-media-here {
+  font-size: 12px;
+}

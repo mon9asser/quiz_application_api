@@ -2902,9 +2902,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
             propert_objects['property_value'] = $scope.answer_screen_color;
           }
           if ( $scope.answer_screen_font_size != undefined && $scope.current_element == ".answer-text-box-area" ) {
-            $($scope.iframe_object).find(  $scope.current_element ).css({ 'font-size' : $scope.answer_screen_font_size + 'px' });
+            $($scope.iframe_object).find(  $scope.current_element ).css({ 'font-size' : $scope.answer_screen_font_size_x + 'px' });
             propert_objects['property_name'] = 'font-size';
-            propert_objects['property_value'] = $scope.answer_screen_font_size + 'px';
+            propert_objects['property_value'] = $scope.answer_screen_font_size_x + 'px';
           }
           if ( $scope.answer_screen_font_style != undefined && $scope.current_element == ".answer-text-box-area" ) {
             $($scope.iframe_object).find(  $scope.current_element ).css({ 'font-weight' : $scope.answer_screen_font_style });
@@ -3755,10 +3755,45 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
 
 
-
-
      $scope.apply_those_changes_right_now = function ( class_name , property_name , property_value ){
        console.log(class_name +" => " +property_name + " : " + property_value);
+       if(class_name != null ){
+        var class_name_index =  $scope.stored_stylesheet.findIndex(x => x.class_name == class_name );
+        if( class_name_index == -1 ){
+          $scope.stored_stylesheet.push({
+              class_name :class_name ,
+              properties : new Array ({
+                property_name : property_name ,
+                property_value : property_value
+              })
+          });
+        }else {
+          if(property_name != undefined){
+            var element_index = $scope.stored_stylesheet[class_name_index].properties.findIndex(x => x.property_name == property_name );
+            if ( element_index == -1 ){
+              $scope.stored_stylesheet[class_name_index].properties.push({
+                   property_name :  property_name ,
+                   property_value : property_value
+              })
+            }else {
+                $scope.stored_stylesheet[class_name_index].properties[element_index].property_name =  property_name;
+                $scope.stored_stylesheet[class_name_index].properties[element_index].property_value = property_value;
+            }
+          }
+        }
+
+        $http({
+        url : $scope.server_ip + "api/" + $scope.app_id + "/stylesheet/add/files" ,
+        method : "POST",
+        data : {
+            styles : $scope.stored_stylesheet
+        }
+        }).then(function(provider){
+          console.log(provider.data);
+          } , function(error){
+          console.log(error);
+        });
+        }
      };
      //==================================================>>>>>>
      //===============>>>>>> ADD Functions for onChange
@@ -4099,54 +4134,68 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
        $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.question_screen_numbering_color  );
      }
      $scope.answer_screen_background_func = function (){
+       $scope.current_element = "ul.question-list > li" ;
        $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.answer_screen_background });
        $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.answer_screen_background  );
      }
      $scope.answer_screen_color_func = function (){
+       $scope.current_element = "ul.question-list > li > div .text-values , ul.question-list > li > div > .no-media-here" ;
        $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.answer_screen_color });
        $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.answer_screen_color  );
      }
      $scope.answer_screen_font_size_func = function (){
-       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.answer_screen_font_size +'px'});
-       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.answer_screen_font_size +'px' );
+       $scope.current_element = "ul.question-list > li > div .text-values , ul.question-list > li > div > .no-media-here" ;
+       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.answer_screen_font_size_x +'px'});
+       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.answer_screen_font_size_x +'px' );
      }
      $scope.answer_screen_font_style_func = function (){
+       $scope.current_element = "ul.question-list > li > div .text-values , ul.question-list > li > div > .no-media-here" ;
        $($scope.iframe_object).find($scope.current_element).css({  'font-weight' : $scope.answer_screen_font_style });
        $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.answer_screen_font_style  );
      }
      $scope.answer_screen_font_family_func = function (){
+       $scope.current_element = "ul.question-list > li > div .text-values , ul.question-list > li > div > .no-media-here" ;
        $($scope.iframe_object).find($scope.current_element).css({  'font-family' : $scope.answer_screen_font_family });
        $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.answer_screen_font_family  );
      }
      $scope.answer_select_screen_background_func = function (){
+
+       $scope.current_element = "ul li.selected_answer, ul li.selected_answer:hover" ;
        $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.answer_select_screen_background });
        $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.answer_select_screen_background  );
      }
      $scope.answer_select_screen_color_func = function (){
+        $scope.current_element = "ul li.selected_answer , .selected_answer:hover" ;
        $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.answer_select_screen_color });
        $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.answer_select_screen_color  );
      }
      $scope.answer_select_screen_border_func = function (){
+       $scope.current_element = "ul li.selected_answer , ul li.selected_answer:hover" ;
        $($scope.iframe_object).find($scope.current_element).css({  'border-color' : $scope.answer_select_screen_border });
        $scope.apply_those_changes_right_now($scope.current_element , 'border-color' , $scope.answer_select_screen_border  );
      }
      $scope.correct_select_screen_background_func = function (){
+      $scope.current_element = "ul li.right_answer , ul li.right_answer:hover" ;
        $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.correct_select_screen_background });
        $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.correct_select_screen_background  );
      }
      $scope.correct_select_screen_color_func = function (){
+       $scope.current_element = "ul li.right_answer" ;
        $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.correct_select_screen_color });
        $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.correct_select_screen_color  );
      }
      $scope.wrong_select_screen_background_func = function (){
+        $scope.current_element = "ul li.wrong_answer , ul li.wrong_answer:hover" ;
        $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.wrong_select_screen_background });
        $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.wrong_select_screen_background  );
      }
      $scope.wrong_select_screen_color_func = function (){
+      $scope.current_element = "ul li.wrong_answer" ;
        $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.wrong_select_screen_color });
        $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.wrong_select_screen_color  );
      }
      $scope.wrong_select_screen_border_func = function (){
+       $scope.current_element = "ul li.wrong_answer" ;
        $($scope.iframe_object).find($scope.current_element).css({  'border-color' : $scope.wrong_select_screen_border });
        $scope.apply_those_changes_right_now($scope.current_element , 'border-color' , $scope.wrong_select_screen_border  );
      }
@@ -4203,14 +4252,17 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
        $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.retake_button_color_screen_result  );
      }
      $scope.answer_screen_background_numbering_func = function (){
+       $scope.current_element = "ul.question-list > li > div > .labels" ;
        $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.answer_screen_background_numbering  });
        $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.answer_screen_background_numbering  );
      }
      $scope.answer_screen_color_numbering_func = function (){
+       $scope.current_element = "ul.question-list > li > div > .labels" ;
        $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.answer_screen_color_numbering  });
        $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.answer_screen_color_numbering  );
      }
      $scope.answer_screen_font_size_numbering_func = function (){
+       $scope.current_element = "ul.question-list > li > div > .labels" ;
        $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.answer_screen_font_size_numbering +'px' });
        $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.answer_screen_font_size_numbering +'px'  );
      }
