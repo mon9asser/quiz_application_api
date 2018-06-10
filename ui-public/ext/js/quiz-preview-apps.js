@@ -97,7 +97,12 @@ apps.controller("preview_players" , [
     $scope.player_time_frame = 300 ;
     $scope.rating_scale_elements = []
 
-
+    $window.extend_iframe_width = ( __width__ ) => {
+      var window_iframe = $(".about-quiz, .screen-container , .question-screen-box");
+      window_iframe.each(function(){
+        $(this).css('width' ,  __width__ + '%' );
+      })
+    };
     $window.fill_rating_scale_values = (numbers) => {
       $scope.rating_scale_elements = new Array();
       for (var i = 0; i < numbers ; i++) {

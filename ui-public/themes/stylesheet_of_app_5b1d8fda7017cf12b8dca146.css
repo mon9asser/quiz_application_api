@@ -1,0 +1,5 @@
+.player-body-screen , body { background:#ffffff; }
+.box-welcome-screen { background:#ffe599; border-color:#f6b26b; border-left-width:0px; border-top-width:5px; border-bottom-width:5px; }
+.box-goodbye-screen { background:#fff2cc; border-color:#f6b26b; border-top-width:5px; border-bottom-width:5px; }
+.goodbye-screen-text { color:#dd7e6b; font-size:36px; }
+.back-button-goodbye-screen , .submit-button-goodbye-screen { background:#f6b26b; color:#fff2cc; }

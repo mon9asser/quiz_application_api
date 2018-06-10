@@ -349,6 +349,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
                 // Questions
                 $scope.questions_list = resp.data.questions;
+                $scope.stored_stylesheet =  (resp.data.theme_style != null ) ? resp.data.theme_style : new Array() ;
                 $scope.stylesheet_order =   ( resp.data.stylesheet_properties != undefined ) ?  resp.data.stylesheet_properties :  "body:{}" ;
                 question_data_object  = resp.data.questions;
                 // Stylesheets
@@ -2476,6 +2477,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
         else
           questionArgs =  $scope.questions_list = question_data_object ;
 
+
           // console.log({question_data_object : question_data_object});
           $scope.iframe_access.set_application_settings($scope.application_settings.settings);
           $scope.iframe_access.randomize_all_questions(questionArgs);
@@ -3795,6 +3797,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
         });
         }
      };
+
+     $timeout( function(){
+       $scope.iframe_access.extend_iframe_width(93);
+     } , 3000 );
      //==================================================>>>>>>
      //===============>>>>>> ADD Functions for onChange
      //==================================================>>>>>>
@@ -4138,21 +4144,21 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
        $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.answer_screen_background });
        $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.answer_screen_background  );
      }
-     $scope.answer_screen_color_func = function (){
-       $scope.current_element = "ul.question-list > li > div .text-values , ul.question-list > li > div > .no-media-here" ;
-       $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.answer_screen_color });
-       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.answer_screen_color  );
-     }
-     $scope.answer_screen_font_size_func = function (){
-       $scope.current_element = "ul.question-list > li > div .text-values , ul.question-list > li > div > .no-media-here" ;
-       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.answer_screen_font_size_x +'px'});
-       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.answer_screen_font_size_x +'px' );
-     }
-     $scope.answer_screen_font_style_func = function (){
-       $scope.current_element = "ul.question-list > li > div .text-values , ul.question-list > li > div > .no-media-here" ;
-       $($scope.iframe_object).find($scope.current_element).css({  'font-weight' : $scope.answer_screen_font_style });
-       $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.answer_screen_font_style  );
-     }
+    //  $scope.answer_screen_color_func = function (){
+    //    $scope.current_element = "ul.question-list > li > div .text-values , ul.question-list > li > div > .no-media-here" ;
+    //    $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.answer_screen_color });
+    //    $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.answer_screen_color  );
+    //  }
+    //  $scope.answer_screen_font_size_func = function (){
+    //    $scope.current_element = "ul.question-list > li > div .text-values , ul.question-list > li > div > .no-media-here" ;
+    //    $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.answer_screen_font_size_x +'px'});
+    //    $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.answer_screen_font_size_x +'px' );
+    //  }
+    //  $scope.answer_screen_font_style_func = function (){
+    //    $scope.current_element = "ul.question-list > li > div .text-values , ul.question-list > li > div > .no-media-here" ;
+    //    $($scope.iframe_object).find($scope.current_element).css({  'font-weight' : $scope.answer_screen_font_style });
+    //    $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.answer_screen_font_style  );
+    //  }
      $scope.answer_screen_font_family_func = function (){
        $scope.current_element = "ul.question-list > li > div .text-values , ul.question-list > li > div > .no-media-here" ;
        $($scope.iframe_object).find($scope.current_element).css({  'font-family' : $scope.answer_screen_font_family });
@@ -4261,11 +4267,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
        $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.answer_screen_color_numbering  });
        $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.answer_screen_color_numbering  );
      }
-     $scope.answer_screen_font_size_numbering_func = function (){
-       $scope.current_element = "ul.question-list > li > div > .labels" ;
-       $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.answer_screen_font_size_numbering +'px' });
-       $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.answer_screen_font_size_numbering +'px'  );
-     }
+    //  $scope.answer_screen_font_size_numbering_func = function (){
+    //    $scope.current_element = "ul.question-list > li > div > .labels" ;
+    //    $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.answer_screen_font_size_numbering +'px' });
+    //    $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.answer_screen_font_size_numbering +'px'  );
+    //  }
      $scope.question_screen_warning_text_func = function (){
        $($scope.iframe_object).find($scope.current_element).css({  'font-size' : $scope.question_screen_warning_text +'px' });
        $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.question_screen_warning_text +'px'  );

@@ -1,4 +1,9 @@
 {{> attendee_head }}
+
+<link href="{{ server_ip }}themes/stylesheet_of_app_{{ app._id }}.css" rel="stylesheet"></link>
+
+
+
   <div class="player-body-block player-body-screen"></div>
 
 
@@ -291,7 +296,7 @@
                               <div ng:if="__report_object.status != 'Failed'" class="description-body redactor-styles result-screen-text" ng:bind:html="__player_object.settings.titles.title_success_with | trust_this_html_values"></div>
                               <!-- Case failed in quiz  -->
                               <div ng:if="__report_object.status == 'Failed'" class="description-body redactor-styles result-screen-text" ng:bind:html="__player_object.settings.titles.title_failed_with | trust_this_html_values"></div>
-                             
+
                               <!-- The Grade  -->
                               <div class="quiz-grade">
                                 <!-- <div style="background: #f9f9f9;" class="grade_result_loder text-center">
