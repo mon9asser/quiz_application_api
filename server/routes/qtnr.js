@@ -176,7 +176,6 @@ qtnrRouters.delete("/:app_id/delete", auth_verify_api_keys_tokens , (req, res)=>
     if ( fs.existsSync(file_stylesheet)) {
       fs.unlink(file_stylesheet, (err) => {
         if (err) throw err;
-
       });
     }
 

@@ -137,3 +137,30 @@
   font-family: 'Petit Formal Script';
   src:url('../fonts/Petit_Formal_Script/PetitFormalScript-Regular.ttf') ;
 }
+
+
+
+
+
+
+@font-face {
+  font-family: 'coolvetica';
+  src:url('../fonts/coolvetica/coolvetica rg.ttf') ;
+}
+@font-face {
+  font-family: 'caliban';
+  src:url('../fonts/caliban/caliban.ttf') ;
+}
+@font-face {
+  font-family: 'aspergit';
+  src:url('../fonts/aspergit/Aspergit.otf') ;
+}
+@font-face {
+  font-family: 'arctik';
+  src:url('../fonts/arctik/arctik 1.ttf') ;
+}
+
+@font-face {
+  font-family: 'arcon';
+  src:url('../fonts/arcon/Arcon-Regular.otf') ;
+}
