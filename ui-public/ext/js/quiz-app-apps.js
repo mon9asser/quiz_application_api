@@ -1996,6 +1996,8 @@ apps.controller("players" , [
       $('.loading-player').fadeOut();
     } , 2000);
 
-    
+    try {
+      $("#stylesheet_link").attr("href" , $scope.server_ip + "themes/stylesheet_of_app_" + $scope.application_id +".css" );
+    }catch(e){}
   } // => end controller functionality
 ]);

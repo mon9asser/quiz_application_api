@@ -2178,7 +2178,7 @@ apps.controller("survey" , [
           answer_id : question.answers_format[0]._id ,
           question : question ,
           answer : $scope.answer_value , // => answer that in
-          app_id : $scope.app_id ,
+          app_id : $scope.application_id ,
           user_id : $scope.user_id,
           answer_index: $index
         };
@@ -2379,7 +2379,9 @@ apps.controller("survey" , [
     } , 2000);
 
 
-
+    try {
+      $("#stylesheet_link").attr("href" , $scope.server_ip + "themes/stylesheet_of_app_" + $scope.application_id +".css" );
+    } catch(e){}
 
   } // => end controller functionality
 ]);

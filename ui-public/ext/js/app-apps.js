@@ -140,6 +140,7 @@ apps.filter('trust_this_html_values' , [
     }
   }
 ]);
+ 
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$rootScope' , '$sce', ($scope , $http , $timeout , $window , $rootScope , $sce) => {
   try {
 

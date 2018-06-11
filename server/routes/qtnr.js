@@ -144,6 +144,14 @@ qtnrRouters.post("/create/v1.1", auth_verify_api_keys_tokens ,  (req, res) => {
         qtnrs.app_registry = qtner._id ;
         qtnrs.app_report =   qtner._id ;
 
+        // themes/stylesheet_of_app_
+        var file_stylesheet = "ui-public/themes/stylesheet_of_app_"+ qtner._id + '.css' ;
+        if (! fs.existsSync(file_stylesheet)) {
+          fs.appendFile( file_stylesheet , '' , ( err ) => {
+            if(err) console.log(err);
+          });
+        }
+
         qtnrs.save();
         res.send(qtner);
     }).catch((e) => {
@@ -160,6 +168,15 @@ qtnrRouters.delete("/:app_id/delete", auth_verify_api_keys_tokens , (req, res)=>
     if(!appDoc) {
       return new Promise((resolve , reject )=>{
         res.status(404).send(notes.Errors.Error_Doesnt_exists("Application"));
+      });
+    }
+
+    // themes/stylesheet_of_app_
+    var file_stylesheet = "ui-public/themes/stylesheet_of_app_"+ app_id + '.css' ;
+    if ( fs.existsSync(file_stylesheet)) {
+      fs.unlink(file_stylesheet, (err) => {
+        if (err) throw err;
+
       });
     }
 
@@ -2603,6 +2620,15 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
         // => Save id to set attendee_draft
         qtnrs.app_registry = qtner._id ;
         qtnrs.app_report =   qtner._id ;
+
+
+        // themes/stylesheet_of_app_
+        var file_stylesheet = "ui-public/themes/stylesheet_of_app_"+ qtner._id + '.css' ;
+        if (! fs.existsSync(file_stylesheet)) {
+          fs.appendFile( file_stylesheet , '' , ( err ) => {
+            if(err) console.log(err);
+          });
+        }
 
         qtnrs.save();
         res.send(notes.notifications.success_calling(qtner));

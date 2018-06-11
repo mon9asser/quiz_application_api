@@ -1782,5 +1782,7 @@ apps.controller("preview_players" , [
 
 
 
-
+    try {
+      $("#stylesheet_link").attr("href" , $scope.server_ip + "themes/stylesheet_of_app_" + $scope.app_id +".css" );
+    } catch (e) {}
 }]);
