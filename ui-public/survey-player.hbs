@@ -45,7 +45,7 @@
                     </button> -->
                     <button ng:click="start_this_quiz()" class="button-take-this welcome-screen-button welcome-screen-button-block" type="button" name="button">
                       <i class="fa fa-sign-in" aria-hidden="true"></i>
-                      Take this Survey
+                      {> __player_object.settings.label_btns.lbl_start_with <}
                     </button>
                   </div>
               </div>
@@ -207,7 +207,7 @@
               <!-- ng:if="__player_object.settings.auto_slide == true"  -->
               <div ng:if="__player_object.settings.auto_slide == true && obj_val.question_type <= 2 && obj_val.answer_settings.single_choice == true" class="question_notes question_type__colr">
                   <span class="fa fa-info-circle"></span>
-                  <span>Note : When you solve this question the next one will come directly after few moments </span>
+                  <span>   {> __player_object.settings.label_btns.when_you_solve <} </span>
               </div>
               <!--  Warning Case-->
               <div class="warning_case answer-alarm-text-box"  ng:click="go_to_not_attended_question()"></div>
@@ -215,17 +215,17 @@
               <div ng:if ="__player_object.settings.navigation_btns == true" class="qusu-details ques-questions text-right">
                 <button ng:click="back_to_prev_slider()" class="button-take-this back-answer-question-button" type="button" name="button">
                     <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-                    Back
+                    {> __player_object.settings.label_btns.when_you_solve <}
                 </button>
                 <button ng:if="obj_val.question_type == 4" ng:click="save_and_go_to_next_slider($index , obj_val , obj_val._id )" class="button-take-this continue-answer-question-button-block" type="button" name="button">
                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                    <span ng:if="$index != (__player_object.questions.length - 1)">Continue</span>
-                    <span ng:if="$index == (__player_object.questions.length - 1)">Finish</span>
+                    <span ng:if="$index != (__player_object.questions.length - 1)">  {> __player_object.settings.label_btns.lbl_continue_with <}</span>
+                    <span ng:if="$index == (__player_object.questions.length - 1)"> {> __player_object.settings.label_btns.lbl_finish_with <}</span>
                 </button>
                 <button ng:if="obj_val.question_type != 4" ng:click="go_to_next_slider($index , true)" class="button-take-this continue-answer-question-button-block" type="button" name="button">
                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                    <span ng:if="$index != (__player_object.questions.length - 1)">Continue</span>
-                    <span ng:if="$index == (__player_object.questions.length - 1)">Finish</span>
+                    <span ng:if="$index != (__player_object.questions.length - 1)"> {> __player_object.settings.label_btns.lbl_continue_with <}</span>
+                    <span ng:if="$index == (__player_object.questions.length - 1)">{> __player_object.settings.label_btns.lbl_finish_with <}</span>
                 </button>
               </div>
            </div>
@@ -242,11 +242,13 @@
                    <div class="qusu-details ques-questions text-right">
                        <button ng:click="back_to_prev_slider()" class="button-take-this back-button-goodbye-screen" type="button" name="button">
                          <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-                         Back
+                         {> __player_object.settings.label_btns.lbl_back_with <}
                        </button>
                        <button data:ng:click="submit_quiz_into_report()" class="button-take-this submi_the_quiz_handler submit-button-goodbye-screen" type="button" name="button">
                          <i class="fa fa-arrow-right fac-icon-submit" aria-hidden="true"></i>
-                         <span>Submit Survey</span>
+                         <span>
+                            {> __player_object.settings.label_btns.lbl_submit_quiz_with <}
+                         </span>
                        </button>
                   </div>
              </div>

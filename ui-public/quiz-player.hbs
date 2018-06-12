@@ -91,7 +91,7 @@
                              <div class="qusu-details detls-resume-quiz text-right">
                                <button ng:click="back_to_quizzes()" class="button-take-this" type="button" name="button">
                                  <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-                                 Back
+                                 {> __player_object.settings.label_btns.lbl_back_with <}
                               </button>
                              </div>
                            </div>
@@ -108,10 +108,10 @@
                          <div class="quiz-grade">
                            <!-- <div class="grade_result_loder"></div> -->
                            <div class="quiz-grade grade-score text-center">
-                             <h3>Your score : <span class="resultx-x-counts">{> __report_object.correct_answers <}</span>/<span class="resultx-x-all">{> __report_object.total_questions <}</span></h3>
+                             <h3>{> __player_object.settings.label_btns.lbl_score_with <} : <span class="resultx-x-counts">{> __report_object.correct_answers <}</span>/<span class="resultx-x-all">{> __report_object.total_questions <}</span></h3>
                            </div>
                            <div class="quiz-grade grade-score text-center">
-                             <h5>Grade : <span class="resultx-x-grade">{> __report_object.score | math_around_it <}%</span></h5>
+                             <h5>{> __player_object.settings.label_btns.lbl_grade_with <} : <span class="resultx-x-grade">{> __report_object.score | math_around_it <}%</span></h5>
                            </div>
                          </div>
                          <!-- Question buttons  -->
@@ -150,7 +150,7 @@
                             <span class="required_option question-text-required-text"  ng:if="obj_val.answer_settings.is_required == true"> Required </span>
                           </div>
                           <div ng:if="(obj_val.question_type == 0 || obj_val.question_type == 1 ) && obj_val.answer_settings.single_choice == false" class="notes question-warnning-box">
-                              <span> There're many correct choices , You've to select them  to pass this question </span>
+                              <span> {> __player_object.settings.label_btns.there_are_many_options <} </span>
                           </div>
                           <div data:ng:if="obj_val.media_question != null" class="question-media" ng:class="(obj_val.answer_settings.super_size)? 'super-size':''">
                             <!-- Case : image type  -->
@@ -245,7 +245,7 @@
                       <!-- ng:if="__player_object.settings.auto_slide == true"  -->
                       <div ng:if="__player_object.settings.auto_slide == true && obj_val.question_type <= 2 && obj_val.answer_settings.single_choice == true" class="question_notes answer-alarm-text answer-alarm-text-box" >
                         <span class="fa fa-info-circle"></span>
-                        <span>Note : When you solve  this question the next one will come directly after few moments </span>
+                        <span>{> __player_object.settings.label_btns.when_you_solve <} </span>
                       </div>
                       <!--  Warning Case-->
                       <div class="warning_case question-label-block answer-alarm-text-box" ng:click="go_to_not_attended_question()"></div>
@@ -254,14 +254,16 @@
                       <div ng:if ="__player_object.settings.navigation_btns == true" class="qusu-details ques-questions text-right">
                          <button ng:click="back_to_prev_slider()" class="button-take-this back-answer-question-button"  type="button" name="button">
                             <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-                            Back
+                            {> __player_object.settings.label_btns.lbl_back_with <}
                           </button>
                           <button ng:click="go_to_next_slider($index , true)"  class="button-take-this continue-answer-question-button-block" type="button" name="button">
                             <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                             <span ng:if="$index != (__player_object.questions.length - 1)">
                                {> __player_object.settings.label_btns.lbl_continue_with <}
                             </span>
-                            <span ng:if="$index == (__player_object.questions.length - 1)">Finish</span>
+                            <span ng:if="$index == (__player_object.questions.length - 1)">
+                              {> __player_object.settings.label_btns.lbl_finish_with <}
+                            </span>
                           </button>
                      </div>
                  </div>
@@ -277,11 +279,11 @@
                          <div class="qusu-details ques-questions text-right">
                              <button ng:click="back_to_prev_slider()" class="button-take-this back-button-goodbye-screen" type="button" name="button">
                                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-                               Back
+                               {> __player_object.settings.label_btns.lbl_back_with <}
                              </button>
                              <button data:ng:click="submit_quiz_into_report()" class="button-take-this submi_the_quiz_handler submit-button-goodbye-screen" type="button" name="button">
                                <i class="fa fa-arrow-right fac-icon-submit" aria-hidden="true"></i>
-                               <span>Submit Quiz</span>
+                               <span> {> __player_object.settings.label_btns.lbl_submit_quiz_with <}</span>
                              </button>
                         </div>
                    </div>
@@ -303,22 +305,22 @@
                                   Loading results ..
                                 </div> -->
                                 <div class="quiz-grade grade-score text-center result-screen-score-text">
-                                  <h3>Your score : {> this_attendee_draft.report_attendee_details.correct_answers  + "/" + __player_object.questions.length <}</h3>
+                                  <h3> {> __player_object.settings.label_btns.lbl_score_with <} : {> this_attendee_draft.report_attendee_details.correct_answers  + "/" + __player_object.questions.length <}</h3>
                                 </div>
                                 <div class="quiz-grade grade-score text-center result-screen-grade-text">
-                                  <h5>Pass grade : {> this_attendee_draft.report_attendee_details.score | math_around_it <}%</h5>
+                                  <h5>{> __player_object.settings.label_btns.lbl_grade_with <} : {> this_attendee_draft.report_attendee_details.score | math_around_it <}%</h5>
                                 </div>
                               </div>
                               <!-- Question buttons  -->
                               <div class="qusu-details text-right">
                                   <button ng:if="__player_object.settings.review_setting == true" ng:click="review_all_resolved_question()" class="button-take-this review-result-box" type="button" name="button">
                                     <i class="fa fa-reply-all" aria-hidden="true"></i>
-                                    Review
+                                    {> __player_object.settings.label_btns.lbl_review_with <}
                                   </button>
                                    <button  ng:if="__player_object.settings.retake_setting == true" ng:click="retake_this_quiz()" class="button-take-this retake-this-quiz retake-result-box" type="button" name="button">
                                     <i class="fa fa-repeat" aria-hidden="true"></i>
                                     <span>
-                                      Retake
+                                      {> __player_object.settings.label_btns.lbl_retake_with <}
                                     </span>
                                   </button>
                              </div>

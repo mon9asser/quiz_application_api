@@ -2533,7 +2533,11 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
                    lbl_finish_with : "Finish",
                    lbl_submit_quiz_with : "Submit Quiz",
                    lbl_score_with :"Score",
-                   lbl_grade_with :"Grade"
+                   lbl_grade_with :"Grade" ,
+                   didnot_yet:"You didn't solve any question , click here to attend" ,
+                   unsolved_question:"question(s) isn't attended click here to attend" ,
+                   when_you_solve : "When you solve this question the next one will come directly after few moments",
+                   there_are_many_options : "There're many correct choices , You've to select them  to pass this question"
                 } ,
                grade_settings : {
                  is_graded : false ,

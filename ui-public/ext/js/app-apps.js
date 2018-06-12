@@ -140,7 +140,7 @@ apps.filter('trust_this_html_values' , [
     }
   }
 ]);
- 
+
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$rootScope' , '$sce', ($scope , $http , $timeout , $window , $rootScope , $sce) => {
   try {
 
@@ -4221,10 +4221,15 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
      $scope.question_screen_warning_color_func = function (){
        $($scope.iframe_object).find($scope.current_element).css({  'color' : $scope.question_screen_warning_color  });
        $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.question_screen_warning_color  );
+
      }
      $scope.question_screen_warning_background_func = function (){
        $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.question_screen_warning_background  });
        $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.question_screen_warning_background  );
+       // => .question-label-box-brd
+       $($scope.iframe_object).find('.question-label-box-brd').css({  'border-left-color' : $scope.question_screen_warning_background  });
+       $scope.apply_those_changes_right_now('.question-label-box-brd' , 'border-left-color' , $scope.question_screen_warning_background  );
+
      }
      $scope.back_button_background_screen_goodbye_func = function (){
        $($scope.iframe_object).find($scope.current_element).css({  'background' : $scope.back_button_background_screen_goodbye  });
