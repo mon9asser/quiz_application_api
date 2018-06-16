@@ -1,8 +1,54 @@
 
 
-{{> attendee_preview_head }}
+ <!DOCTYPE html>
+<html style="height:100%"  ng:app="applications" ng:controller="attendee-controller" ng:controller="preview_players"><!--  -->
+  <head>
 
-<style media="screen" href="{}"></style>
+    <meta charset="utf-8">
+    <title></title>
+
+    <!-- Styles -->
+    <!--
+    ==========================>>>>>> Public
+    -->
+    <link href="{{ server_ip }}ext/frameworks/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ server_ip }}ext/frameworks/css/hover.css" rel="stylesheet">
+
+    <link href="{{ server_ip }}ext/frameworks/css/font-awesome.css" rel="stylesheet">
+    <link href="{{ server_ip }}ext/frameworks/css/animate.css" rel="stylesheet">
+    <link href="{{ server_ip }}ext/frameworks/css/swiper.css" rel="stylesheet">
+    <link href="{{ server_ip }}ext/frameworks/css/spectrum.css" rel="stylesheet">
+
+
+    <!--  >>>>> Custom css -->
+      <link rel="stylesheet" href="{{ server_ip }}ext/css/default-player.css">
+      <link rel="stylesheet" href="{{ server_ip }}ext/css/default-themes.css">
+      <link rel="stylesheet" id="stylesheet-editor-css">
+
+
+
+
+    <!-- scripts -->
+    <!--
+    ==========================>>>>>> Public
+    -->
+    <script src="{{ server_ip }}ext/frameworks/js/jquery.min.js" charset="utf-8"></script>
+    <script src="{{ server_ip }}ext/frameworks/js/bootstrap.min.js"></script>
+    <script src="{{ server_ip }}ext/frameworks/js/angular.min.js"></script>
+    <script src="{{ server_ip }}ext/frameworks/js/spectrum.js"></script>
+
+  </head>
+  <body style="height:100%">
+
+    <!-- User Id -->
+    <input type="hidden" id="server_ip" name="" value="{{server_ip}}">
+    <input type="hidden" id="user_id" name="" value="{{user.id}}">
+    <input type="hidden" id="app-id" name="" value="{{myApps._id}}">
+
+
+
+
+
   <!-- <link href="" rel="stylesheet"> -->
 
  <!--
@@ -329,11 +375,6 @@
             <!-- End Result screen contents  -->
         </div>
 
-
-
-
-
-
       </div>
       </div>
 
@@ -359,3 +400,17 @@
     }
 
 </script>
+
+
+
+
+
+    <!-- Swiper slider -->
+    <script src="{{ server_ip }}ext/frameworks/js/swiper.min.js"></script>
+    <!-- <script src="{{ server_ip }}ext/frameworks/slick/slick.js"></script> -->
+    <!-- The parent application -->
+    <script src="{{ server_ip }}ext/js/a-application.js"></script>
+    <!-- Quiz or Survey Players -->
+    <script src="{{ server_ip }}ext/js/quiz-preview-apps.js" charset="utf-8"></script>
+  </body>
+</html>

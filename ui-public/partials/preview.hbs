@@ -1,5 +1,38 @@
-<div class="builing_new_qs">
-  Building New Question ...
+<link rel="stylesheet" href="{{ server_ip }}ext/css/default-player.css">
+<link rel="stylesheet" href="{{ server_ip }}ext/css/default-themes.css">
+<link rel="stylesheet" id="stylesheet-editor-css">
+
+
+<!--  Input of these information then going to show the part of this page accorgin    -->
+<input type="hidden" id="server_ip" name="" value="{{server_ip}}">
+<input type="hidden" id="user_id" name="" value="{{user.id}}">
+<input type="hidden" id="app-id" name="" value="{{app._id}}">
+<style media="screen">
+    .preview-container { height: auto; }
+    .player-body-screen {
+      position: relative;
+      width: 100%;
+      height: auto;
+    }
+    .swiper-slide {    margin: 15px auto; }
+    .about-quiz , .screen-container { width: 95%; }
+
+</style>
+<!--  Page of player  -->
+<div class="player-body-block player-body-screen">
+  <div class="swiper-wrapper quiz-contents">
+    <div class="swiper-slide welcoming-screen-x">
+      <div data-selected-block="question-slide" ng:class="load_quiz_status_theme()" class="container screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-welcome-screen">
+         <div>
+             <div class="description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text">{> __player_object.settings.titles.title_start_with | trust_this_html_values <}</div>
+             <div class="qusu-details text-right">
+                <button ng:click="start_this_quiz()" class="button-take-this select_button welcome-screen-button-block welcome-screen-button" type="button" name="button">
+                    <i class="fa fa-sign-in" aria-hidden="true"></i>
+                      {> __player_object.settings.label_btns.lbl_start_with <}
+                    </button>
+             </div>
+         </div>
+      </div>
+    </div>
+  </div>
 </div>
-<iframe src='{{server_ip}}{{app._id}}/live_preview/{{user.id}}' id="live-preview-iframe"></iframe>
-<!-- <div render-iframely ng-bind-html="iframelyHtml"></div> -->

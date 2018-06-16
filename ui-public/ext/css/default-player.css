@@ -1185,7 +1185,7 @@
     display: block;
     position: relative;
     width: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
     /*padding: 0px 17px;*/
     /*margin-top: 25px;*/
 }
