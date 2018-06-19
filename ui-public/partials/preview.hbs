@@ -18,6 +18,11 @@
     .about-quiz , .screen-container { width: 95%; }
 
 </style>
+<!--
+---------------------------------------------------------
+=============================>>> Timer And Progress
+---------------------------------------------------------
+-->
 
  <!--
  ---------------------------------------------------------
@@ -69,7 +74,7 @@
 =============================>>> Result  Screen
 ---------------------------------------------------------
 -->
-  <div class="swiper-slide welcoming-screen-x" ng:if="screen_type == 1">
+<div class="swiper-slide welcoming-screen-x" ng:if="__player_object.app_type == 1 && screen_type == 1">
     <div data-selected-block ="question-slide"  ng:class="(is_resume == null)?'about-quiz':'result-slide'" class="container screen-container screen-ending-starting screen_opg_editor select_box_brd box-result-screen result-screen-block">
       <div>
         <div ng:if="in_app_editor || this_attendee_draft.att_draft[0].report_attendee_details.status != 'Failed'" class="description-body redactor-styles title_success_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="__player_object.settings.titles.title_success_with | trust_html"></div>
@@ -97,13 +102,13 @@
       </div>
   </div>
 </div>
+
 <!--
 ---------------------------------------------------------
 =============================>>> Question  Screen => {> question <}
 ---------------------------------------------------------
 -->
 <div class="swiper-slide" ng:if="screen_type == 0">
-  {> user <}
   <!-- Question Container -->
   <div data-selected-block ="question-slide" class="container screen-container survey-player-questions question_typeco_object question_opg_editor_block select_box_brd question-screen-block question-screen-box">
       <div class="question-body load_qs_theme question_opg_editor select_box_brd question-box-block question-box-text">
@@ -262,7 +267,7 @@
            </div>
            <div class="warning_case default_theme_texts_bg select_box_data warning-message-answer-box warning-message-answer question-label-box question-label-block" ng:click="go_to_not_attended_question()"></div>
            <div ng:if ="__player_object.settings.navigation_btns == true" class="qusu-details ques-questions text-right">
-               <button ng:click="go_to_previouse_slide()" class="button-take-this select_button back-answer-question-button back-answer-question-button-block" ng:class="load_slide_theme(question.question_type)" type="button" name="button">
+               <button ng:click="go_to_previouse_slide(question._id)" class="button-take-this select_button back-answer-question-button back-answer-question-button-block" ng:class="load_slide_theme(question.question_type)" type="button" name="button">
                      <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                      {> __player_object.settings.label_btns.lbl_back_with <}
                </button>

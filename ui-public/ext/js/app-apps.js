@@ -144,13 +144,26 @@ apps.filter('trust_this_html_values' , [
     }
   }
 ]);
-
+apps.filter('math_around_it' , [
+  '$sce' , function(){
+    return (round_p) => {
+      return ( Math.round(round_p) ) ? Math.round(round_p): 0  ;
+    }
+  }
+]);
 apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$rootScope' , '$sce', ($scope , $http , $timeout , $window , $rootScope , $sce) => {
   try {
 
 
     // document.getElementById('iframe').contentWindow.angular.element(document.body).scope();
     // ==> Vars in scope $R
+    // ==> Scope init
+    var question_status = function (a, b) {
+      var correct_answers = a.map( function(x){ return x._id; } );
+      var solved_answers = b.map( function(x){ return x.answer_id; } );
+      var is_right_question =  (solved_answers.sort().join('') == correct_answers.sort().join(''));
+      return is_right_question ;
+    };
     // ==> Stylesheet Work
     $scope.player_elements = null;
     $scope.current_element = null;
@@ -221,7 +234,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     $scope.sort_handler = document.getElementById("docQuestions");
     $scope.sortble_draggable_handler = document.getElementById("qs-sortable");
     $scope.expand_collapse_handler =   $(".app-settings li .control-item-header") ;
-    $scope.switching_editor_preview_value = true ;
+    $scope.switching_editor_preview_value = false ;
     $scope.style_of_answers = "Two columns per row"
     $scope.data_object   = null ;
     $scope.answer_object = null ;
@@ -1889,6 +1902,16 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
            currAttendee : $scope.this_attendee_draft
          });
     }   // ==> End the view array
+
+
+    $scope.go_to_this_question_data = (question_id  ) => {
+         var question_index = $scope.questions_list.findIndex(x => x._id == question_id );
+         if(question_index != -1 ){
+              $scope.question = $scope.questions_list[question_index];
+              $scope.index_value = question_index ;
+              $scope.screen_type = 0 ;
+         }
+    };
     $scope.select_this_answer = ( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex) => {
       var user_id = window.location.toString().split("/").pop();
       // ==> Register First Action
@@ -2315,7 +2338,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
    };
     $scope.submit_this_qusu = () => {
-      $scope.screen_type = 1 ;
+      if($scope.__player_object.app_type == 1 )
+        $scope.screen_type = 1 ;
     };
     $scope.back_to_first_question = () => {
       if($scope.questions_list.length != 0){
@@ -2355,14 +2379,66 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
          };
        }
     };
+    $scope.join_this_quiz = (at_this_array_only = null ) => {
+      if($scope.this_attendee_draft != null && $scope.this_attendee_draft.att_draft != undefined && $scope.this_attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) != -1)
+        return false ;
 
-    $scope.go_to_previouse_slide = () => {
+      if($scope.this_attendee_draft == null || $scope.this_attendee_draft.application_id == undefined){
+        $scope.this_attendee_draft = new Object();
+        $scope.this_attendee_draft['att_draft'] = new Array();
+        $scope.this_attendee_draft['application_id'] = $scope.app_id ;
+        $scope.this_attendee_draft['questionnaire_info'] = $scope.app_id ;
+      }
+
+        if($scope.this_attendee_draft.att_draft == undefined)
+          $scope.this_attendee_draft.att_draft = new Array();
+
+
+        var cuIndex = $scope.this_attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) ;
+        if(cuIndex == -1 ){
+          $scope.this_attendee_draft.att_draft.push({
+            'questions_data' : new Array() ,
+            'is_loaded':true ,
+            'start_expiration_time' : new Date() ,
+            'user_id' : $scope.user_id ,
+            'user_info':$scope.user_id ,
+            'is_completed':false ,
+            'impr_application_object':$scope.__player_object
+          });
+        }
+
+
+        // $scope.this_attendee_draft = $scope.this_attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+
+    };
+    $scope.start_this_quiz = () => {
+      $scope.join_this_quiz();
+      if( $scope.questions_list.length != 0 ){
+        $scope.index_value = 0 ;
+        $scope.question = $scope.questions_list[$scope.index_value];
+        $scope.edit_this_question($scope.question._id , $scope.index_value);
+      }
+    };
+    $scope.go_to_previouse_slide = (question_id) => {
       if(($scope.index_value - 1)  >= 0 )
         {
           $scope.index_value -- ;
           $scope.question = $scope.questions_list[$scope.index_value];
           $scope.edit_this_question($scope.question._id , $scope.index_value);
         }
+
+        var question_index = $scope.questions_list.findIndex(x => x._id == question_id );
+        if(question_index != -1 ){
+          if( 0 ==  question_index ) {
+            $scope.screen_type = 3 ;
+            $("#docQuestions").children("li").each(function (){
+               ( $(this).hasClass("highlighted-question")  ) ?
+               $(this).removeClass("highlighted-question")
+               : null
+            });
+          };
+        }
+
     };
 
     $scope.edit_this_question = ( qs_id  , qsCurrIndex , nextIndex = null ) => {
@@ -2428,7 +2504,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
        show_media_link.val('') ;
        show_media_link.css("display","none");
 
-
+       $scope.go_to_this_question_data(qs_id);
        if($scope.question_media == undefined || $scope.question_media == null) {
          var no_media = "<b class='no-media'>There is no media ! </b>";
          media_block.html(no_media);
@@ -3032,44 +3108,48 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
         });
       }
     };
+    $scope.swape_editor = () => {
+      $(".editor-container").css({
+        position: 'relative' ,
+        right: '0%'
+      });
+      $(".preview-container").css({
+        position: 'relative' ,
+        left: '-105%'
+      });
+        $('.question-editor , .question-preview').addClass('overflow_hidden');
+        $timeout(function () {
+            $('.question-editor , .question-preview').removeClass("overflow_hidden");
+        }, 400);
+      $timeout(function(){
+        $(".editor-container").css({display: 'block'});
+        $(".preview-container").css({display: 'none'});
 
+      } , 200 );
+    }
+    $scope.swape_view = () => {
+      $(".editor-container").css({
+        position: 'relative' ,
+        right: '-105%'
+      });
+      $(".preview-container").css({
+        position: 'relative' ,
+        left: '0%'
+      });
+
+      $timeout(function(){
+        $(".editor-container").css({display: 'none'});
+        $(".preview-container").css({display: 'block'});
+        $('.question-editor , .question-preview').removeClass("overflow_hidden");
+        $scope.update_settings_in_view();
+      } , 200 );
+    }
     $scope.switching_editor_preview = () => {
         if($scope.switching_editor_preview_value == false ) { // => Editor
-          $(".editor-container").css({
-            position: 'relative' ,
-            right: '0%'
-          });
-          $(".preview-container").css({
-            position: 'relative' ,
-            left: '-105%'
-          });
-            $('.question-editor , .question-preview').addClass('overflow_hidden');
-            $timeout(function () {
-                $('.question-editor , .question-preview').removeClass("overflow_hidden");
-            }, 400);
-          $timeout(function(){
-            $(".editor-container").css({display: 'block'});
-            $(".preview-container").css({display: 'none'});
-
-          } , 200 );
+          $scope.swape_editor();
         }else { // => Preview
-          $(".editor-container").css({
-            position: 'relative' ,
-            right: '-105%'
-          });
-          $(".preview-container").css({
-            position: 'relative' ,
-            left: '0%'
-          });
-
-          $timeout(function(){
-            $(".editor-container").css({display: 'none'});
-            $(".preview-container").css({display: 'block'});
-            $('.question-editor , .question-preview').removeClass("overflow_hidden");
-            $scope.update_settings_in_view();
-          } , 200 );
+          $scope.swape_view();
         }
-
         // alert($(".preview-container").css('display'));
     };
 
@@ -3093,7 +3173,121 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       //   //+++++ $scope.iframe_access.change_data_in_answer_view ( $scope.question_id  , is_question , $scope.question_id , questionIndex  , qs_data  );
       // } , 350 );
     };
+    $scope.change_data_in_answer_view = (question_id  , model_type = 0 , model_id = null , model_index = null  , model_value  = null  , media_data = null ) => {
+      var this_question_data = $scope.__player_object.questions.find(x => x._id == question_id);
+      var questionIndex = $scope.__player_object.questions.findIndex(x => x._id == question_id);
+      console.log(model_type);
+      if(model_type == 0){ // =>> Question
+          if(questionIndex != -1){
+            if(model_value != null)
+              $scope.__player_object.questions[questionIndex].question_body = model_value;
 
+            if(media_data != null ){
+              if($scope.__player_object.questions[questionIndex].media_question == undefined)
+              $scope.__player_object.questions[questionIndex].media_question  = new Object() ;
+              $scope.__player_object.questions[questionIndex].media_question = media_data ;
+            }
+          }
+      }else if (model_type == 1 ){ // =>> Description
+        if(questionIndex != -1){
+          if(model_value != null)
+            $scope.__player_object.questions[questionIndex].question_description = model_value;
+        }
+      }else if (model_type == 2 ){ // =>> Answer
+        if(questionIndex != -1){
+
+            var answerIndex = $scope.__player_object.questions[questionIndex].answers_format.findIndex( x => x._id ==  model_id );
+            if(answerIndex != -1 ){
+              if(model_value != null)
+              $scope.__player_object.questions[questionIndex].answers_format[answerIndex].value = model_value;
+
+              if(media_data != null ){
+                var question_object = $scope.__player_object.questions[questionIndex] ;
+                var thisAnswer = $scope.__player_object.questions[questionIndex].answers_format[answerIndex];
+
+
+                if(question_object.question_type == 0 ){
+                  // => Text optional with media optional
+                    thisAnswer.media_optional = media_data
+                }
+
+                if(question_object.question_type == 1 ){
+
+                  if( media_data.media_type == 0 ){
+                      if(thisAnswer.media_name == undefined )
+                        thisAnswer.media_name = null ;
+                      if(thisAnswer.media_src == undefined )
+                        thisAnswer.media_src = null ;
+                      if(thisAnswer.media_type == undefined )
+                        thisAnswer.media_type = null
+
+                      thisAnswer.media_name = media_data.media_name;
+                      thisAnswer.media_src= media_data.media_src;
+                      thisAnswer.media_type= media_data.media_type;
+                      thisAnswer.Media_directory = $scope.server_ip + media_data.media_src;
+                  }
+                  if( media_data.media_type == 1 ){
+                    if(thisAnswer.media_name == undefined )
+                    thisAnswer.media_name = null ;
+                    if(thisAnswer.media_src == undefined )
+                    thisAnswer.media_src = null ;
+                    if(thisAnswer.media_type == undefined )
+                    thisAnswer.media_type = null
+
+                    if(thisAnswer.Media_directory == undefined )
+                    thisAnswer.Media_directory = null
+                    if(thisAnswer.embed_path == undefined )
+                    thisAnswer.embed_path = null
+                    if(thisAnswer.video_id == undefined )
+                    thisAnswer.video_id = null
+                    if(thisAnswer.video_type == undefined )
+                    thisAnswer.video_video_typeid = null
+
+                    thisAnswer.Media_directory = media_data.Media_directory;
+                    thisAnswer.embed_path= media_data.embed_path;
+                    thisAnswer.video_id= media_data.video_id;
+                    thisAnswer.video_type= media_data.video_type;
+                    thisAnswer.media_name = media_data.media_name;
+                    thisAnswer.media_src= media_data.media_src;
+                    thisAnswer.media_type= media_data.media_type;
+                    thisAnswer.Media_directory =  media_data.media_src;
+
+                  }
+
+                }
+
+                  console.log({QUESTION_OBJECT__VF__TT : question_object});
+              }
+            }
+        }
+      }
+      $scope.$apply();
+
+      // ==> Expand the iframe according to content height !
+      if(window.location != window.parent.location){
+          $timeout(function (){
+            console.log(window.parent);
+          } , 1000 );
+      }
+    };
+    $scope.slide_to_question_in_index_number = (slideNumber) => {
+      $scope.screen_type = slideNumber ;
+    }
+    $scope.change_editor_model = () => {
+        $scope.in_app_editor = true ;
+    }
+    $scope.hide_this_access = (thisModel) => {
+      if(thisModel == 4 ) // => Success screen
+        {
+          $('.title_failed_with').css({display : 'none'});
+          $('.title_success_with').css({display : 'block'});
+        }
+      if(thisModel == 5 ) // => Failed screen
+        {
+          $('.title_failed_with').css({display : 'block'});
+          $('.title_success_with').css({display : 'none'});
+        }
+    };
     $scope.edit_model_data = (model_type) => {
       $timeout(function(){
         var question = $scope.questions_list.find(x => x._id == $scope.question_id);
@@ -3106,7 +3300,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           var question_data = $R("#editor-quest-data" , "source.getCode");
           question.question_body = question_data ;
           // ==> Show in View ui
-          //+++++ $scope.iframe_access.change_data_in_answer_view ($scope.question_id  , 0 , $scope.question_id , questionIndex  , question_data );
+          $scope.change_data_in_answer_view ($scope.question_id  , 0 , $scope.question_id , questionIndex  , question_data );
         }
         if( model_type == 1 ){ // Description
           $scope.unsaved_question = true ;
@@ -3114,7 +3308,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           var question_description = $R("#editor-desc-data" , "source.getCode");
           question.question_description = question_description;
           // ==> Show in View ui
-          //+++++ $scope.iframe_access.change_data_in_answer_view ($scope.question_id  , 1 , $scope.question_id , questionIndex  , question_description );
+          $scope.change_data_in_answer_view ($scope.question_id  , 1 , $scope.question_id , questionIndex  , question_description );
         }
         if( model_type == 2 ){ // Welcome Screen
           $scope.unsaved_question = true ;
@@ -3122,8 +3316,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           var app_setting_strt_message = $R("#editor-strt-txt" , "source.getCode");
           $scope.application_settings.settings.titles.title_start_with = app_setting_strt_message ;
           // ==> Slide to This screen
-          //+++++ $scope.iframe_access.slide_to_question_in_index_number(0);
-          //+++++ $scope.iframe_access.set_application_settings($scope.application_settings.settings);
+           $scope.slide_to_question_in_index_number(3);
+           $scope.set_application_settings($scope.application_settings.settings);
         }
         if( model_type == 3 ){ // GoodBye Screen
           $scope.unsaved_question = true ;
@@ -3131,8 +3325,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           var app_setting_end_message = $R("#editor-end-txt" , "source.getCode");
           $scope.application_settings.settings.titles.title_end_with = app_setting_end_message ;
           // ==> Slide to screen
-          //+++++ $scope.iframe_access.slide_to_question_in_index_number($scope.questions_list.length + 1);
-          //+++++ $scope.iframe_access.set_application_settings($scope.application_settings.settings);
+          $scope.slide_to_question_in_index_number(2);
+          $scope.set_application_settings($scope.application_settings.settings);
         }
         if( model_type == 4 ){ // Success Screen
           $scope.unsaved_question = true ;
@@ -3140,24 +3334,24 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           var app_setting_scs_message = $R("#editor-scs-txt" , "source.getCode");
           $scope.application_settings.settings.titles.title_success_with = app_setting_scs_message ;
           // ==> You're in editor
-          //+++++ $scope.iframe_access.change_editor_model();
+          $scope.change_editor_model();
           // ==> Hide success case it failed screen
-          //+++++ $scope.iframe_access.hide_this_access(model_type);
+          $scope.hide_this_access(model_type);
           // ==> slide to screen
-          //+++++ $scope.iframe_access.slide_to_question_in_index_number($scope.questions_list.length + 2);
-          //+++++ $scope.iframe_access.set_application_settings($scope.application_settings.settings);
+            $scope.slide_to_question_in_index_number(1);
+           $scope.set_application_settings($scope.application_settings.settings);
         }
         if( model_type == 5 ){ // Failed Screen
           // ==> Storing Data
           var app_setting_fld_message = $R("#editor-fld-txt" , "source.getCode");
           $scope.application_settings.settings.titles.title_failed_with = app_setting_fld_message ;
           // ==> You're in editor
-          //+++++ $scope.iframe_access.change_editor_model();
+           $scope.change_editor_model();
           // ==> Hide success case it failed screen
-          //+++++ $scope.iframe_access.hide_this_access(model_type);
+           $scope.hide_this_access(model_type);
           // ==> Slide to screen
-          //+++++ $scope.iframe_access.slide_to_question_in_index_number($scope.questions_list.length + 2);
-          //+++++ $scope.iframe_access.set_application_settings($scope.application_settings.settings);
+           $scope.slide_to_question_in_index_number(1);
+           $scope.set_application_settings($scope.application_settings.settings);
         }
         if( model_type > 5 ){ // Answers
           // ==> Storing Data
@@ -3168,7 +3362,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
             var answer_data = $R(".editor-all-ans-data" , "source.getCode");
             currentAnswer.value = answer_data[answerIndex];
             // ==> Show in View ui
-            //+++++ $scope.iframe_access.change_data_in_answer_view ( $scope.question_id  , 2 , currentAnswer._id , answerIndex  , currentAnswer.value );
+           $scope.change_data_in_answer_view ( $scope.question_id  , 2 , currentAnswer._id , answerIndex  , currentAnswer.value );
           }
         }
       } , 300);
@@ -4779,7 +4973,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
        $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.screen_text_font_family_result_screen );
      }
      $scope.score_result_text_color_func = function (){
-       //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.score_result_text_color });
+      $($scope.current_element).css({  'color' : $scope.score_result_text_color });
        $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.score_result_text_color );
      }
      $scope.score_result_text_font_size_func = function (){
@@ -4795,19 +4989,19 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
        $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.score_result_text_font_family  );
      }
      $scope.grade_result_text_color_func = function (){
-       //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.grade_result_text_color });
+       $($scope.current_element).css({  'color' : $scope.grade_result_text_color });
        $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.grade_result_text_color  );
      }
      $scope.grade_result_text_font_size_func = function (){
-       //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-size' : $scope.grade_result_text_font_size +'px' });
+       $($scope.current_element).css({  'font-size' : $scope.grade_result_text_font_size +'px' });
        $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.grade_result_text_font_size +'px'  );
      }
      $scope.grade_result_text_font_style_func = function (){
-       //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-weight' : $scope.grade_result_text_font_style });
+       $($scope.current_element).css({  'font-weight' : $scope.grade_result_text_font_style });
        $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.grade_result_text_font_style  );
      }
      $scope.grade_result_text_font_family_func = function (){
-       //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-family' : $scope.grade_result_text_font_family });
+       $($scope.current_element).css({  'font-family' : $scope.grade_result_text_font_family });
        $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.grade_result_text_font_family  );
      }
      $scope.button_buttons_font_size_screen_result_func = function (){
@@ -5075,5 +5269,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
      try {
        $scope.reload_stylesheet_data();
+       $scope.swape_editor();
      } catch (e) {}
 }]);

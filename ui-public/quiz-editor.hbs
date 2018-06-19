@@ -132,6 +132,10 @@
                 </div>
 						</ul>
 				</div>
+
+        <div style="width:100%; margin-top:10px; background:yellow; padding:5px;">
+          Time and progressBar ( Editor only ) : new issue still inProgress
+        </div>
       </div>
 
 
@@ -166,13 +170,13 @@
                <label  ng:click="change_mode()" for="mode-chox-option"></label>
                <span class="image-on mode-option-x"></span>
            </div> -->
-             <div ng:hide="activated_screens" class="input-switch">
+             <div  class="input-switch">
                   <label>
                      <i class="fa fa-paperclip"></i>
                      <span ng:bind="activated_screen_name"></span>
                   </label>
              </div>
-             <div ng:show="activated_screens" class="input-switch">
+             <div  class="input-switch">
                <label for="switch-editor">Edit</label>
                <input type="checkbox" id="switch-editor" ng:model="switching_editor_preview_value" ng:change="switching_editor_preview()" class="input" />
                <label for="switch-editor" class="switch"></label>

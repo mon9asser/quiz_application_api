@@ -3370,3 +3370,7 @@ table.label-table tbody .labels-options {
 .border-actx > span {
   font-weight: normal;
 }
+
+.highlighted-right-answers > div > .text-answers > textarea {
+  color: #fff;
+}
