@@ -7,6 +7,7 @@ apps.filter ("apply_html" , [
     }
   }
 ]);
+
 // ==> This filter to fix javascript issue ( that show in browser console )
 apps.filter("image_w_server" , [
   "$timeout" ,"$sce"  ,
@@ -165,6 +166,17 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       return is_right_question ;
     };
     // ==> Stylesheet Work
+    $scope.set_image_background = (image_sourc , set_server = null)=>{
+      var set_server_ip = $scope.server_ip
+      if(set_server != null )
+        set_server_ip = '';
+        // http://34.215.133.182/img/media-icon.png
+      if(image_sourc == set_server_ip+image_sourc)
+        set_server_ip = '';
+      return {
+        "background-image" : "url('"+set_server_ip+image_sourc+"')"
+      }
+    }
     $scope.player_elements = null;
     $scope.current_element = null;
     $scope.screen_type = 0;
@@ -920,7 +932,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                             show_media_link.css("display","none");
                             /*show media in ui*/
 
-                            if($scope.question_media == undefined || $scope.question_media == null) {
+                            if( $scope.question_media == undefined || $scope.question_media == null) {
                               var no_media = "<b class='no-media'>There is no media ! </b>"
                               media_block.html(no_media);
                             }else {
@@ -940,6 +952,8 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                                     media_block.find('div').css({
                                       "background-image":"url('"+$scope.server_ip + $scope.question_media.media_field +"')"
                                     });
+
+                                    // alert($scope.server_ip + $scope.question_media.media_field);
                                 }
                                 if($scope.question_media.media_type == 1 ) {
                                   media_block.html(iframe);
@@ -1394,14 +1408,15 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                      contentType: false         ,
                      data: $scope.data_object
                    }).then(function(success_data){
-
+                     console.log({success_data_success_data : success_data});
                      if($scope.model_type == 'questions'){
                       $scope.quest_media_parts = success_data.data.Question_details.media_question ;
                       $scope.question_id = success_data.data.Question_details._id;
                       var qsItem = $scope.questions_list.find($scope.callback_index);
                       var qsItemIndex = $scope.questions_list.findIndex($scope.callback_index);
                       qsItem.media_question =success_data.data.Question_details.media_question ;
-
+                      $scope.question_media = qsItem.media_question ;
+                      // console.log({VVVVVVVVVVVVV : $scope.question_media });
                       if(qsItemIndex == -1 ) return false ;
 
                       var media_objects = qsItem.media_question ;
@@ -4273,7 +4288,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
 
         // ====================================================================================
-        alert(propert_objects.property_name + " : " + propert_objects.property_value )
+        // alert(propert_objects.property_name + " : " + propert_objects.property_value )
         var class_name_index =  $scope.stored_stylesheet.findIndex(x => x.class_name == $scope.current_element );
         if( class_name_index == -1 ){
           $scope.stored_stylesheet.push({
