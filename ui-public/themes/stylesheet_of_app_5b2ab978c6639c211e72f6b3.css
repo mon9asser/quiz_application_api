@@ -1,0 +1,6 @@
+.player-body-screen { background:#fff2cc; }
+.box-result-screen { background:#ffffff; border-color:#4a86e8; border-left-width:5px; }
+.result-screen-text { font-size:28px; font-weight:100; font-family:sans-serif; }
+.result-screen-score-text { color:#434343; font-size:34px; font-weight:bold; font-family:sans-serif; }
+.result-screen-grade-text { font-size:17px; font-weight:100; font-family:sans-serif; color:#3d85c6; }
+.review-result-box , .retake-result-box { background:#cc4125; }

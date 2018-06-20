@@ -218,6 +218,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     $scope.questions_list = null ;
     $scope.__player_object = null ;
     $scope.stylesheet_order = null ;
+    $scope.default_bg_of_view = '';
     $scope.window_navigation = $(window);
     $scope.generated_media_box_handler = $(".box-data");
     $scope.close_iconx = $(".setting-iconx");
@@ -395,6 +396,16 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                 $scope.__player_object = resp.data ;
                 $scope.question = (resp.data.questions.length != 0 ) ? resp.data.questions[0] : {} ;
                 $scope.stored_stylesheet =  (resp.data.theme_style != null ) ? resp.data.theme_style : new Array() ;
+                if($scope.stored_stylesheet != null){
+                  var bg_view = "#fff";
+                   var bgAccess = $scope.stored_stylesheet.find(x => x.class_name == '.player-body-screen') ;
+                   if(bgAccess != undefined){
+                     var bg_data = bgAccess.properties.find(x => x.property_name == 'background');
+                     if(bg_data != undefined) bg_view = bg_data.property_value;
+                   }
+
+                  $scope.default_bg_of_view = { background : bg_view } ;
+                }
                 $scope.stylesheet_order =   ( resp.data.stylesheet_properties != undefined ) ?  resp.data.stylesheet_properties :  "body:{}" ;
                 question_data_object  = resp.data.questions;
                 // Stylesheets
@@ -898,6 +909,17 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     $scope.callback_answer_index = function (object){
       return object._id == $scope.answer_id ;
     };
+
+    $scope.sorting_arries = function (arr , propert_field){
+      var compare = (a,b) => {
+        if (a[propert_field] < b[propert_field])
+  		    return -1;
+  		  if (a[propert_field] > b[propert_field])
+  		    return 1;
+  		  return 0;
+      }
+      return arr.sort(compare);
+    }
     $scope.randomize_arries = function (array) {
         var currentIndex = array.length, temporaryValue, randomIndex;
         // While there remain elements to shuffle...
@@ -1123,15 +1145,34 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
         }
         return $scope.dragged_items(evt);
       };
-    $scope.unsaved_question_x = function (new_vals , for_this_setting = null ){
-        $scope.unsaved_question = true;
-        $scope.questions_list[$scope.questionIndex].answer_settings = $scope.question_settings;
+      $scope.unsaved_question_x = function (new_vals , for_this_setting = null ){
+          $scope.unsaved_question = true;
+          $scope.questions_list[$scope.questionIndex].answer_settings = $scope.question_settings;
 
-        // ==> Show it in preview
+          // ==> Show it in preview
 
-        var questionSettings = $scope.questions_list.find(x => x._id == $scope.question_id).answer_settings ;
-        //+++++ $scope.iframe_access.view_question_answer($scope.question_id , questionSettings);
-    };
+          var questionSettings = $scope.questions_list.find(x => x._id == $scope.question_id).answer_settings ;
+          //+++++ $scope.iframe_access.view_question_answer($scope.question_id , questionSettings);
+      };
+
+      $scope.randomize_option_change = function (new_vals , for_this_setting = null ){
+          $scope.unsaved_question = true;
+          $scope.questions_list[$scope.questionIndex].answer_settings = $scope.question_settings;
+          var questionSettings = $scope.questions_list.find(x => x._id == $scope.question_id).answer_settings ;
+
+          if(new_vals == true ){
+            // => Randomize
+            if($scope.questions_list[$scope.questionIndex].answers_format != undefined && $scope.questions_list[$scope.questionIndex].length != 0 ){
+              $scope.questions_list[$scope.questionIndex].answers_format = $scope.randomize_arries($scope.questions_list[$scope.questionIndex].answers_format);
+            }
+          }else {
+            // => ResrotIt
+            if($scope.questions_list[$scope.questionIndex].answers_format != undefined && $scope.questions_list[$scope.questionIndex].length != 0 ){
+              $scope.questions_list[$scope.questionIndex].answers_format = $scope.sorting_arries($scope.questions_list[$scope.questionIndex].answers_format , "_id");
+            }
+          }
+          //+++++ $scope.iframe_access.view_question_answer($scope.question_id , questionSettings);
+      };
 
 
 
@@ -1329,6 +1370,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       };
     $scope.application_save_settings = function (){
 
+      // => Check if there is an select border or not
+      var outlined_object = $(".outlined_object");
+      if(outlined_object.hasClass('outlined_object')) outlined_object.removeClass('outlined_object') ;
+      $("#welcome-screens,#goodbye-screens,#result-screens ,#question-screens").css({display:'none' });
       // var redactor_start_text = $R(".screen-redactors-strt-txt" , "source.getCode");
       // $scope.application_settings.settings.titles.title_start_with =redactor_start_text;
       // var redactor_end_text = $R(".screen-redactors-end-txt", "source.getCode");
@@ -3066,11 +3111,6 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
 
           } ,
         }); // end sortable draggable
-
-
-
-
-
       } catch (e) {}
 
 
@@ -3082,6 +3122,47 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           var answer_value = answer_xx[answer_index];
           //+++++ $scope.iframe_access.change_data_in_answer_view($scope.question_id , 2 , answer_id , answer_index , answer_value );
       }, 250);
+    };
+    $scope.classes_for_this_answer = ( quiz_settings , question_id , answer_id ) => {
+      var classes = '';
+      // => Two blocks per row or else
+      if(quiz_settings.choice_style)
+          classes += 'ng_inline_block';
+          else
+          classes += 'ng_block';
+
+      // => check if this is selected answer or not from attendee
+      if( $scope.this_attendee_draft != null && $scope.this_attendee_draft.user_id != undefined ){
+          var drft_question = $scope.this_attendee_draft.questions_data.find(x => x.question_id == question_id ) ;
+          if(drft_question != undefined ){
+            var drft_selected_answer = drft_question.answer_ids.findIndex(x => x.answer_id == answer_id );
+          if (drft_selected_answer != -1 ){ // => Add ( selected_answers )
+            classes += ' selected_answer'
+                }
+            }
+       }
+
+      // => Get Classes according to database
+      if($scope.this_attendee_draft != null && $scope.this_attendee_draft.questions_data != undefined ){
+        var thisQuestion = $scope.this_attendee_draft.questions_data.find(x => x.question_id == question_id) ;
+        if(thisQuestion != undefined) {
+          var answers_array = thisQuestion.answer_ids ;
+          var answer_object_index = answers_array.findIndex(x => x.answer_id == answer_id);
+          if( answer_object_index != -1 ){
+            var selected_answer = answers_array[answer_object_index];
+            if($scope.__player_object.settings.show_results_per_qs){ // => true
+              // =>> check if show the right answer option is true
+              if(selected_answer.is_correct){
+                classes += ' right_answer';
+              }else {
+                classes += ' wrong_answer';
+              }
+            } else classes += ' selected_answer';
+          }
+        }
+      }
+      // $timeout( function(){ $scope.$apply() } , 300 )
+      return classes ;
     };
     $scope.change_values_in_redactor_in_answers = (new__Answer = null ) => {
       var this_question = $scope.questions_list.find(x => x._id == $scope.question_id);
@@ -3124,6 +3205,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       }
     };
     $scope.swape_editor = () => {
+
       $(".editor-container").css({
         position: 'relative' ,
         right: '0%'
@@ -3141,6 +3223,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
         $(".preview-container").css({display: 'none'});
 
       } , 200 );
+
+
+      $('.swipper-container-block').css ({ 'background' : "#fff" } );
+
     }
     $scope.swape_view = () => {
       $(".editor-container").css({
@@ -3158,7 +3244,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
         $('.question-editor , .question-preview').removeClass("overflow_hidden");
         $scope.update_settings_in_view();
       } , 200 );
+
+      $timeout(function(){
+        if( $scope.switching_editor_preview_value == true )
+          $('.swipper-container-block').css ($scope.default_bg_of_view);
+      } , 400 );
+
     }
+   
     $scope.switching_editor_preview = () => {
         if($scope.switching_editor_preview_value == false ) { // => Editor
           $scope.swape_editor();
@@ -3447,16 +3540,12 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     };
 
     $scope.randomize_all_questions =() => {
-          var questionArgs ;
+
       if($scope.application_settings.settings.randomize_settings )
-          questionArgs =  $scope.randomize_arries ($scope.questions_list);
+          $scope.questions_list =  $scope.randomize_arries ($scope.questions_list);
         else
-          questionArgs =  $scope.questions_list = question_data_object ;
+          $scope.questions_list =  $scope.sorting_arries( $scope.questions_list , "_id");
 
-
-          // console.log({question_data_object : question_data_object});
-          //+++++ $scope.iframe_access.set_application_settings($scope.application_settings.settings);
-          //+++++ $scope.iframe_access.randomize_all_questions(questionArgs);
     }
     $scope.load_application_keys();
 
@@ -4784,8 +4873,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
      //===============>>>>>> ADD Functions for onChange
      //==================================================>>>>>>
      $scope.page_player_background_func = function( ) {
-        $($scope.iframe_object).find($scope.current_element , 'body').css({  background : $scope.page_player_background  });
-        $scope.apply_those_changes_right_now($scope.current_element + ' , body' , 'background' , $scope.page_player_background );
+        if($scope.switching_editor_preview_value == true )
+        $( ".swipper-container-block" ).css({  background : $scope.page_player_background  });
+        $scope.default_bg_of_view = {  background : $scope.page_player_background  } ;
+        $scope.apply_those_changes_right_now( $scope.current_element , 'background' , $scope.page_player_background );
      };
      $scope.welcome_background_screen_box_func = function(){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.welcome_background_screen_box  });

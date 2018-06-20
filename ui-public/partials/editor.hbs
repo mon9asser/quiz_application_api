@@ -293,7 +293,7 @@
                 <li class="randomize_qs" ng:if="questions_list[questionIndex].question_type == 0 || questions_list[questionIndex].question_type == 1 || questions_list[questionIndex].question_type == 2">
 
                    <div class="checkbox-toggle answer-settins">
-                      <input ng:change="unsaved_question_x(question_settings.is_randomized)" ng:model="question_settings.is_randomized" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                      <input ng:change="randomize_option_change(question_settings.is_randomized)" ng:model="question_settings.is_randomized" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
                       <span class="title-checkbox">Randomize</span>
                    </div>
                    <!-- <div class="input_wrapper">

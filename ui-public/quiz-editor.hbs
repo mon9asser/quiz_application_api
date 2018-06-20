@@ -5,6 +5,20 @@
 {{/if }}
 
 
+<style media="screen">
+  .editor-block {
+    width: 95% !important;
+    margin: 0px auto;
+  }
+  .buttons-container{
+    width: 100% !important;
+    padding: 0px !important;
+    display: block !important;
+    margin-top: 15px !important;
+    margin-bottom: 10px !important;
+  }
+</style>
+
 <!-- Redacor menu -->
 <!-- <div id="redactor-editor-menu" class="redactor-menu-x"></div> -->
 <!-- Loader -->
@@ -170,18 +184,25 @@
                <label  ng:click="change_mode()" for="mode-chox-option"></label>
                <span class="image-on mode-option-x"></span>
            </div> -->
-             <div  class="input-switch">
+             <!-- <div  class="input-switch">
                   <label>
                      <i class="fa fa-paperclip"></i>
                      <span ng:bind="activated_screen_name"></span>
                   </label>
+             </div> -->
+             <div  class="input-switch" ng:class="(screen_type != 0 ) ? 'display_editor_preview_option':'dontdisplay_editor_preview_option'">
+               <label ng:if="screen_type == 3">Welcome Screen</label>
+               <label ng:if="screen_type == 2">Goodbye Screen</label>
+               <label ng:if="screen_type == 1">Result Screeen</label>
              </div>
-             <div  class="input-switch">
-               <label for="switch-editor">Edit</label>
-               <input type="checkbox" id="switch-editor" ng:model="switching_editor_preview_value" ng:change="switching_editor_preview()" class="input" />
-               <label for="switch-editor" class="switch"></label>
-               <label for="switch-editor">Preview</label>
-             </div>
+
+             <div class="input-switch" ng:class="(screen_type == 0 ) ? 'display_editor_preview_option':'dontdisplay_editor_preview_option'">
+                 <label for="switch-editor">Edit</label>
+                 <input type="checkbox" id="switch-editor" ng:model="switching_editor_preview_value" ng:change="switching_editor_preview()" class="input" />
+                 <label for="switch-editor" class="switch"></label>
+                 <label for="switch-editor">Preview</label>
+            </div>
+
         </div>
 
 
