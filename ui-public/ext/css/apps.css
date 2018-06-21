@@ -3391,3 +3391,12 @@ table.label-table tbody .labels-options {
 .dontdisplay_editor_preview_option {
   display: none;
 }
+.x-change-mtop {
+  margin-top: 12px;
+}
+.x-font-famselectbox {
+  background: transparent;
+    padding: 3px;
+    border: 1px solid #ddd;
+    margin-top: 4px;
+}

@@ -1,0 +1,10 @@
+.text-values ,.no-media-here { font-size:21px; font-weight:100; font-family:arcon; color:#4a86e8; }
+ul.question-list > li > div > .labels { background:#e6b8af; }
+.answer-text-box-area { font-family:arcon; border-left-width:4px; border-left-style:dashed; }
+.answer-container ul li > .answer-contents > label.labels { background:#d0e0e3; color:#cc4125; font-size:17px; font-family:arcon; }
+.labels { border-color:#3c78d8; border-width:0px; border-style:solid; border-radius:20px; }
+.question-text-required-text { font-size:7px; color:#ffff00; }
+.question-label-box { font-size:15px; color:#ff9900; background:#274e13; }
+.question-label-box-brd { border-left-color:#274e13; }
+ul.question-list > li { background:#ffffff; }
+.answer-alarm-text-box { font-size:20px; color:#000000; background:#ff0000; }

@@ -3251,7 +3251,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       } , 400 );
 
     }
-   
+
     $scope.switching_editor_preview = () => {
         if($scope.switching_editor_preview_value == false ) { // => Editor
           $scope.swape_editor();
@@ -4450,63 +4450,66 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
    $scope.stylcheet_properties = () => {
 
    };
-   $scope.block_selector =  () => {
-     var elements_selected_before = $(".outlined_blocks");
-     $scope.stylesheet.property_block.css({display:"none"});
-
-     if( elements_selected_before.length ){
-        elements_selected_before.removeClass('outlined_blocks');
-        $scope.stylesheet.old_selector = elements_selected_before.prop('className').split(" ").pop();
-        if($scope.stylesheet.old_selector == 'ng_block')
-          {
-            var thisElement = elements_selected_before.prop('className').split(" ");
-            $scope.stylesheet.old_selector = thisElement[thisElement.length - 2];
-          }
-     }
-
-     if($scope.editor_page == 0 ){// => Player Page
-       $scope.stylesheet.current_selector = "body";
-       $scope.stylesheet.player_page.css({display:"block"});
-     }
-     if($scope.editor_page == 1 ){//=> Screens
-       $scope.stylesheet.current_selector = "screen_opg_editor";
-       $scope.stylesheet.screens.css({display:"block"});
-
-       if($scope.slide_screens != null && $scope.slide_screens != undefined)
-       $scope.slide_screens.slideTo(0);
-
-     }
-     if($scope.editor_page == 2 ){//=> Slide Box
-       $scope.stylesheet.current_selector = "question_opg_editor_block";
-       $scope.stylesheet.slider_box.css({display:"block"});
-
-       if($scope.slide_screens != null && $scope.slide_screens != undefined)
-       $scope.slide_screens.slideTo(1);
-
-
-       // => Border
-       var borders = $( '.'+ $scope.stylesheet.current_selector).css('border') ;
-      //  console.log(borders);
-     }
-     if($scope.editor_page == 3 ){//=> Question Box
-       $scope.stylesheet.current_selector = "question_opg_editor";
-       $scope.stylesheet.question_box.css({display:"block"});
-
-       if($scope.slide_screens != null && $scope.slide_screens != undefined)
-       $scope.slide_screens.slideTo(1);
-     }
-     if($scope.editor_page == 4 ){//=> Answer Box
-       $scope.stylesheet.current_selector = "answer_opg_editor";
-       $scope.stylesheet.answer_box.css({display:"block"})
-
-       if($scope.slide_screens != null && $scope.slide_screens != undefined)
-       $scope.slide_screens.slideTo(1);
-     }
-
-    // ==> Excute
-    $('.'+$scope.stylesheet.current_selector).addClass("outlined_blocks");
-
-   };
+  //  $scope.block_selector =  () => {
+  //
+  //    var elements_selected_before = $(".outlined_blocks");
+  //    $scope.stylesheet.property_block.css({display:"none"});
+   //
+  //    if( elements_selected_before.length ){
+  //       elements_selected_before.removeClass('outlined_blocks');
+  //       $scope.stylesheet.old_selector = elements_selected_before.prop('className').split(" ").pop();
+  //       if($scope.stylesheet.old_selector == 'ng_block')
+  //         {
+  //           var thisElement = elements_selected_before.prop('className').split(" ");
+  //           $scope.stylesheet.old_selector = thisElement[thisElement.length - 2];
+  //         }
+  //    }
+   //
+  //    if($scope.editor_page == 0 ){// => Player Page
+  //      $scope.stylesheet.current_selector = "body";
+  //      $scope.stylesheet.player_page.css({display:"block"});
+  //     //  $scope.screen_type = 3 ;
+  //    }
+  //    if($scope.editor_page == 1 ){//=> Screens
+  //     //  $scope.screen_type = 1 ;
+  //      $scope.stylesheet.current_selector = "screen_opg_editor";
+  //      $scope.stylesheet.screens.css({display:"block"});
+   //
+  //      if($scope.slide_screens != null && $scope.slide_screens != undefined)
+  //      $scope.slide_screens.slideTo(0);
+   //
+  //    }
+  //    if($scope.editor_page == 2 ){//=> Slide Box
+  //      $scope.stylesheet.current_selector = "question_opg_editor_block";
+  //      $scope.stylesheet.slider_box.css({display:"block"});
+   //
+  //      if($scope.slide_screens != null && $scope.slide_screens != undefined)
+  //      $scope.slide_screens.slideTo(1);
+   //
+   //
+  //      // => Border
+  //      var borders = $( '.'+ $scope.stylesheet.current_selector).css('border') ;
+  //     //  console.log(borders);
+  //    }
+  //    if($scope.editor_page == 3 ){//=> Question Box
+  //      $scope.stylesheet.current_selector = "question_opg_editor";
+  //      $scope.stylesheet.question_box.css({display:"block"});
+   //
+  //      if($scope.slide_screens != null && $scope.slide_screens != undefined)
+  //      $scope.slide_screens.slideTo(1);
+  //    }
+  //    if($scope.editor_page == 4 ){//=> Answer Box
+  //      $scope.stylesheet.current_selector = "answer_opg_editor";
+  //      $scope.stylesheet.answer_box.css({display:"block"})
+   //
+  //      if($scope.slide_screens != null && $scope.slide_screens != undefined)
+  //      $scope.slide_screens.slideTo(1);
+  //    }
+   //
+  //   // ==> Excute
+  //   $('.'+$scope.stylesheet.current_selector).addClass("outlined_blocks");
+   //
+  //  };
 
    $scope.stylesheet_storage = [] ;
    $scope.apply_stylesheets = (property) => { // data-property
@@ -4796,12 +4799,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
           // ==> Slide To Target Element
           //+++++ $scope.iframe_access.slide_to_question_in_index_number(0);
          $(".welcome-screen-block").addClass("outlined_object");
+         $scope.screen_type = 3
        }
        if($scope.editor_page == 1 ){ // => GoodBye Screen
          $("#goodbye-screens").css("display","block");
          // ==> Slide To Target Element
          //+++++ $scope.iframe_access.slide_to_question_in_index_number($scope.questions_list.length + 1 );
         $(".goodbye-screen-block").addClass("outlined_object");
+        $scope.screen_type = 2
        }
        if($scope.editor_page == 2 ){ // => Result Screen
          $("#result-screens").css("display","block");
@@ -4809,6 +4814,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
          // ==> outline it
          //+++++ $scope.iframe_access.slide_to_question_in_index_number($scope.questions_list.length + 2);
         $(".result-screen-block").addClass("outlined_object");
+        $scope.screen_type = 1
        }
        if($scope.editor_page == 3 ){ // => Question Screen
          $("#question-screens").css("display","block");
@@ -4816,6 +4822,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
          // ==> outline it
          //+++++ $scope.iframe_access.slide_to_question_in_index_number(1);
         $(".question-screen-block").addClass("outlined_object");
+        $scope.screen_type = 0
        }
        if($scope.editor_page == 4 ){ // => Time - progress Screen
 
@@ -4872,6 +4879,9 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
      //==================================================>>>>>>
      //===============>>>>>> ADD Functions for onChange
      //==================================================>>>>>>
+     $scope.question_screen_border_color_func = () => {
+        $scope.apply_those_changes_right_now( ".question-screen-box" , 'border-color' , $scope.question_screen_border_color );
+     };
      $scope.page_player_background_func = function( ) {
         if($scope.switching_editor_preview_value == true )
         $( ".swipper-container-block" ).css({  background : $scope.page_player_background  });
@@ -5200,20 +5210,57 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
      }
      $scope.question_screen_numbering_background_func = function (){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.question_screen_numbering_background });
-       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.question_screen_numbering_background  );
+       $scope.apply_those_changes_right_now( ".question-label-box" , 'background' , $scope.question_screen_numbering_background  );
 
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-left-color' : $scope.question_screen_numbering_background });
-       $scope.apply_those_changes_right_now($scope.current_element , 'border-left-color' , $scope.question_screen_numbering_background  );
+       $scope.apply_those_changes_right_now( ".question-label-box-brd , .question-label-box" , 'border-left-color' , $scope.question_screen_numbering_background   );
      }
      $scope.question_screen_numbering_color_func = function (){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.question_screen_numbering_color });
-       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.question_screen_numbering_color  );
+       $scope.apply_those_changes_right_now( ".question-label-box" , 'color' , $scope.question_screen_numbering_color  );
      }
      $scope.answer_screen_background_func = function (){
        $scope.current_element = "ul.question-list > li" ;
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.answer_screen_background });
        $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.answer_screen_background  );
      }
+     $scope.answer_row_colors_func = function () {
+       $scope.apply_those_changes_right_now( ".text-values ,.no-media-here" , 'color' , $scope.answer_row_colors  );
+     }
+     $scope.answer_row_font_size_func = function () {
+        $scope.apply_those_changes_right_now( ".text-values ,.no-media-here" , 'font-size' , $scope.answer_row_font_size + 'px'  );
+     }
+     $scope.answer_row_font_style_func = function () {
+        $scope.apply_those_changes_right_now( ".text-values ,.no-media-here" , 'font-weight' , $scope.answer_row_font_style );
+     }
+     $scope.answer_row_font_family_func = function () {
+        $scope.apply_those_changes_right_now( ".text-values ,.no-media-here" , 'font-family' , $scope.answer_row_font_family );
+     }
+     $scope.numbering_in_answer_background_func = function () {
+        $scope.apply_those_changes_right_now( ".answer-container ul li > .answer-contents > label.labels" , 'background' , $scope.numbering_in_answer_background );
+      }
+     $scope.numbering_in_answer_color_func = function () {
+        $scope.apply_those_changes_right_now( ".answer-container ul li > .answer-contents > label.labels" , 'color' , $scope.numbering_in_answer_color );
+      }
+     $scope.numbering_in_answer_font_size_func = function () {
+        $scope.apply_those_changes_right_now( ".answer-container ul li > .answer-contents > label.labels" , 'font-size' , $scope.numbering_in_answer_font_size + 'px' );
+      }
+     $scope.numbering_in_answer_font_family_func = function () {
+        $scope.apply_those_changes_right_now( ".answer-container ul li > .answer-contents > label.labels" , 'font-family' , $scope.numbering_in_answer_font_family );
+      }
+     $scope.numbering_in_answer_border_color_func = function () {
+        $scope.apply_those_changes_right_now( ".labels" , 'border-color' , $scope.numbering_in_answer_border_color );
+      }
+     $scope.numbering_in_answer_border_width_func = function () {
+        $scope.apply_those_changes_right_now( ".labels" , 'border-width' , $scope.numbering_in_answer_border_width );
+      }
+     $scope.numbering_in_answer_border_style_func = function () {
+        $scope.apply_those_changes_right_now( ".labels" , 'border-style' , $scope.numbering_in_answer_border_style );
+      }
+     $scope.numbering_in_answer_border_radius_func  = function () {
+        $scope.apply_those_changes_right_now( ".labels" , 'border-radius' , $scope.numbering_in_answer_border_radius + 'px' );
+      }
+
     //  $scope.answer_screen_color_func = function (){
     //    $scope.current_element = "ul.question-list > li > div .text-values , ul.question-list > li > div > .no-media-here" ;
     //    //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.answer_screen_color });
@@ -5292,45 +5339,59 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
        $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.question_screen_warning_color  );
 
      }
+
+     $scope.question_didnot_warning_text_font_size_func = function () {
+      //  $scope.question_didnot_warning_text_font_size
+       $scope.apply_those_changes_right_now( '.warning-message-answer' , 'font-size' , $scope.question_didnot_warning_text_font_size +'px !important'  );
+     }
+     $scope.question_didnot_warning_text_color_func = function () {
+      //  $scope.question_didnot_warning_text_color
+       $scope.apply_those_changes_right_now( '.warning-message-answer' , 'color' , $scope.question_didnot_warning_text_color +' !important'  );
+     }
+     $scope.question_didnot_warning_text_background_func = function () {
+      //  $scope.question_didnot_warning_text_background
+       $scope.apply_those_changes_right_now( '.warning-message-answer' , 'background' , $scope.question_didnot_warning_text_background + ' !important'  );
+     }
+
      $scope.question_screen_warning_background_func = function (){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.question_screen_warning_background  });
-       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.question_screen_warning_background  );
+      //  $scope.apply_those_changes_right_now( $scope.current_element , 'background' , $scope.question_screen_warning_background  );
        // => .question-label-box-brd
-       $($scope.iframe_object).find('.question-label-box-brd').css({  'border-left-color' : $scope.question_screen_warning_background  });
-       $scope.apply_those_changes_right_now('.question-label-box-brd' , 'border-left-color' , $scope.question_screen_warning_background  );
+      //  $($scope.iframe_object).find('.question-label-box-brd').css({  'border-left-color' : $scope.question_screen_warning_background  });
+      //  $scope.apply_those_changes_right_now('.question-label-box-brd' , 'border-left-color' , $scope.question_screen_warning_background  );
 
      }
      $scope.back_button_background_screen_goodbye_func = function (){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.back_button_background_screen_goodbye  });
-       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.back_button_background_screen_goodbye  );
+       $scope.apply_those_changes_right_now( ".back-button-goodbye-screen" , 'background' , $scope.back_button_background_screen_goodbye  );
      }
      $scope.back_button_color_screen_goodbye_func = function (){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.back_button_color_screen_goodbye  });
-       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.back_button_color_screen_goodbye  );
+       $scope.apply_those_changes_right_now( ".back-button-goodbye-screen" , 'color' , $scope.back_button_color_screen_goodbye  );
      }
      $scope.start_button_background_screen_goodbye_func = function (){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.start_button_background_screen_goodbye  });
-       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.start_button_background_screen_goodbye  );
+       $scope.apply_those_changes_right_now( ".submit-button-goodbye-screen" , 'background' , $scope.start_button_background_screen_goodbye  );
      }
      $scope.start_button_color_screen_goodbye_func = function (){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.start_button_color_screen_goodbye  });
-       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.start_button_color_screen_goodbye  );
+       $scope.apply_those_changes_right_now( ".submit-button-goodbye-screen" , 'color' , $scope.start_button_color_screen_goodbye  );
      }
      $scope.review_button_background_screen_result_func = function (){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.review_button_background_screen_result  });
-       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.review_button_background_screen_result  );
+       $scope.apply_those_changes_right_now( ".review-result-box" , 'background' , $scope.review_button_background_screen_result  );
      }
      $scope.review_button_color_screen_result_func = function (){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.review_button_color_screen_result  });
-       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.review_button_color_screen_result  );
+       $scope.apply_those_changes_right_now( ".review-result-box" , 'color' , $scope.review_button_color_screen_result  );
      }
      $scope.retake_button_background_screen_result_func = function (){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.retake_button_background_screen_result  });
-       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.retake_button_background_screen_result  );
+       $scope.apply_those_changes_right_now( ".retake-result-box" , 'background' , $scope.retake_button_background_screen_result  );
      }
      $scope.retake_button_color_screen_result_func = function (){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.retake_button_color_screen_result  });
-       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.retake_button_color_screen_result  );
+       $scope.apply_those_changes_right_now( ".retake-result-box" , 'color' , $scope.retake_button_color_screen_result  );
      }
      $scope.answer_screen_background_numbering_func = function (){
        $scope.current_element = "ul.question-list > li > div > .labels" ;
@@ -5351,21 +5412,21 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-size' : $scope.question_screen_warning_text +'px' });
        $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.question_screen_warning_text +'px'  );
      }
-     $scope.back_question_button_background_func = function (){
+     $scope.back_question_button_bg_action = function (){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.back_question_button_background  });
-       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.back_question_button_background  );
+       $scope.apply_those_changes_right_now( '.back-answer-question-button-block' , 'background' , $scope.back_question_button_background_v  );
      }
      $scope.back_question_button_color_func = function (){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.back_question_button_color  });
-       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.back_question_button_color  );
+       $scope.apply_those_changes_right_now( '.back-answer-question-button-block' , 'color' , $scope.back_question_button_color  );
      }
      $scope.continue_question_button_background_func = function (){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.continue_question_button_background  });
-       $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.continue_question_button_background  );
+       $scope.apply_those_changes_right_now( '.continue-answer-question-button' , 'background' , $scope.continue_question_button_background  );
      }
      $scope.continue_question_button_color_func = function (){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.continue_question_button_color  });
-       $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.continue_question_button_color  );
+       $scope.apply_those_changes_right_now( '.continue-answer-question-button' , 'color' , $scope.continue_question_button_color  );
      }
 
 

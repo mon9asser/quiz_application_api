@@ -30,7 +30,7 @@
                                    margin: 0px auto;
                                    margin-top: 25px;
                                ">
-                                  Block :-
+                                  Block
                                  <select ng:change="block_selector()" ng:model="editor_page" id="select-current-element" class="select-current-element">
                                     <option data-target="welcome-screens" value="0">Welcome Screen</option>
                                     <option data-target="goodbye-screens" value="1">GoodBye Screen</option>
@@ -665,7 +665,7 @@
                                    <!-- Font size  -->
                                    <div class="prop-item">
                                      <span>Border</span>
-                                     <input class="color_picker" ng:model="question_screen_border_color" type="text" name="" value="">
+                                     <input class="color_picker" ng:change="question_screen_border_color_func()" ng:model="question_screen_border_color" type="text" name="" value="">
                                      <div class="border-list">
                                        <div style="margin-top:5px;" class="border-actx">
                                            <span> - Left : </span>
@@ -882,17 +882,17 @@
                                      <!-- Colors  -->
                                      <div class="prop-item">
                                        <span>Color</span>
-                                       <input ng:change="answer_screen_color_func()" class="color_picker" ng:model="answer_screen_color" type="text" name="" value="">
+                                       <input ng:change="answer_row_colors_func()" class="color_picker" ng:model="answer_row_colors" type="text" name="" value="">
                                      </div>
                                      <!-- Font size  -->
                                      <div class="prop-item">
                                        <span>Font Size</span>
-                                       <input ng:change="answer_screen_font_size_func()" ng:model="answer_screen_font_size_x" type="range" name="" min="10" max="25" value="12">
+                                       <input ng:change="answer_row_font_size_func()" ng:model="answer_row_font_size" type="number" name="" min="10" max="25" value="12">
                                      </div>
                                      <!-- Font style  -->
                                      <div class="prop-item">
                                        <span>Font Style</span>
-                                       <select ng:change="answer_screen_font_style_func()" ng:model="answer_screen_font_style" class="" name="">
+                                       <select ng:change="answer_row_font_style_func()" ng:model="answer_row_font_style" class="" name="">
                                           <option value="100">Regular</option>
                                           <option value="bold">Bold</option>
                                        </select>
@@ -900,7 +900,7 @@
                                      <!-- Font Family  -->
                                      <div class="prop-item">
                                        <span>Font Family</span>
-                                       <select ng:change="answer_screen_font_family_func()" ng:model="answer_screen_font_family" class="" name="">
+                                       <select ng:change="answer_row_font_family_func()" ng:model="answer_row_font_family" class="" name="">
                                          <option value="Roboto Regular">Roboto</option>
                                          <option value="Open Sans">Open Sans</option>
                                          <option value="Numbans Regular">Numbans Regular</option>
@@ -918,18 +918,62 @@
                                      <div class="button-name">
                                        <div class="button-containers" style="width: 100%;">
                                          <span>Numbering</span>
-                                         <div class="btn-porperties">
+                                         <div class="btn-porperties x-change-mtop">
                                            <span>Background</span>
-                                           <input ng:change="answer_screen_background_numbering_func()" class="color_picker" ng:model="answer_screen_background_numbering" type="text" name="" value="">
+                                           <input ng:change="numbering_in_answer_background_func()" class="color_picker" ng:model="numbering_in_answer_background" type="text" name="" value="">
                                          </div>
-                                         <div class="btn-porperties">
+                                         <div class="btn-porperties x-change-mtop">
                                            <span>Color</span>
-                                           <input ng:change="answer_screen_color_numbering_func()" class="color_picker" ng:model="answer_screen_color_numbering" type="text" name="" value="">
+                                           <input ng:change="numbering_in_answer_color_func()" class="color_picker" ng:model="numbering_in_answer_color" type="text" name="" value="">
                                          </div>
-                                         <div class="btn-porperties">
+                                         <div class="btn-porperties x-change-mtop">
                                            <span>Font Size</span>
-                                           <input ng:change="answer_screen_font_size_numbering_func()" ng:model="answer_screen_font_size_numbering" type="range" name="" value="" style="    margin-top: 19px;">
+                                           <input ng:change="numbering_in_answer_font_size_func()" ng:model="numbering_in_answer_font_size" style="width:auto;" type="number" name="" value="" min="10" max="25">
                                          </div>
+                                         <div class="btn-porperties x-change-mtop">
+                                           <span>Font Family</span>
+                                           <select ng:change="numbering_in_answer_font_family_func()" ng:model="numbering_in_answer_font_family" class="x-font-famselectbox" name="">
+                                              <option value="Roboto Regular">Roboto</option>
+                                              <option value="Open Sans">Open Sans</option>
+                                              <option value="Numbans Regular">Numbans Regular</option>
+                                              <option value="Petit Formal Script">Petit Formal Script</option>
+                                              <option value="coolvetica">coolvetica</option>
+                                              <option value="caliban">caliban</option>
+                                              <option value="aspergit">aspergit</option>
+                                              <option value="arctik">arctik</option>
+                                              <option value="arcon">arcon</option>
+                                              <option value="Tahoma">Tahoma</option>
+                                              <option value="sans-serif">Sans Serif</option>
+                                          </select>
+                                         </div>
+                                         <div class="btn-porperties x-change-mtop">
+                                           <span>Border Color</span>
+                                           <input ng:change="numbering_in_answer_border_color_func()" class="color_picker" ng:model="numbering_in_answer_border_color" type="text" name="" value="">
+                                         </div>
+                                         <div class="btn-porperties x-change-mtop">
+                                           <span>Border Width</span>
+                                           <select ng:model="numbering_in_answer_border_width" ng:change="numbering_in_answer_border_width_func()" name="" class="select-box border-width-property-top">
+                                             <option value="0px">None</option>
+                                             <option value="1px">1px</option>
+                                             <option value="2px">2px</option>
+                                             <option value="3px">3px</option>
+                                             <option value="4px">4px</option>
+                                             <option value="5px">5px</option>
+                                           </select>
+                                         </div>
+                                         <div class="btn-porperties x-change-mtop">
+                                           <span>Border Style</span>
+                                           <select ng:change="numbering_in_answer_border_style_func()" ng:model="numbering_in_answer_border_style" name="" class="select-box border-type-property-top">
+                                             <option value="solid">Solid</option>
+                                             <option value="dashed">Dashed</option>
+                                             <option value="dotted">Dotted</option>
+                                           </select>
+                                         </div>
+                                         <div class="btn-porperties x-change-mtop">
+                                           <span>Border Radius</span>
+                                           <input ng:change="numbering_in_answer_border_radius_func()" ng:model="numbering_in_answer_border_radius" style="width:auto;" type="number" name="" value="" min="0" max="50">
+                                         </div>
+
                                        </div>
                                      </div>
                                      <!-- Select Answer  -->
@@ -1013,15 +1057,15 @@
                                    <!-- Font size  -->
                                     <div class="prop-item">
                                      <span>Font Size</span>
-                                     <input ng:change="question_screen_warning_text_func()" ng:model="question_screen_warning_text" type="range" name="" value="">
+                                     <input ng:change="question_didnot_warning_text_font_size_func()" ng:model="question_didnot_warning_text_font_size" style="width:auto;" min="12" max="25" type="number" name="" value="">
                                     </div>
                                     <div class="prop-item">
                                      <span>Color</span>
-                                    <input ng:change="question_screen_warning_color_func()" class="color_picker" ng:model="question_screen_warning_color" type="text" name="" value="">
+                                    <input ng:change="question_didnot_warning_text_color_func()" class="color_picker" ng:model="question_didnot_warning_text_color" type="text" name="" value="">
                                     </div>
                                     <div class="prop-item">
                                      <span>Background</span>
-                                     <input ng:change="question_screen_warning_background_func()" class="color_picker" ng:model="question_screen_warning_background" type="text" name="" value="">
+                                     <input ng:change="question_didnot_warning_text_background_func()" class="color_picker" ng:model="question_didnot_warning_text_background" type="text" name="" value="">
                                     </div>
                                  </div>
                                </li>
@@ -1040,7 +1084,7 @@
                                         <span>Back Button</span>
                                         <div class="btn-porperties">
                                           <span>Background</span>
-                                          <input ng:change="back_question_button_background_func" class="color_picker" ng:model="back_question_button_background" type="text" name="" value="">
+                                          <input ng:change="back_question_button_bg_action()" class="color_picker" ng:model="back_question_button_background_v" type="text" name="" value="">
                                         </div>
                                         <div class="btn-porperties">
                                           <span>Color</span>

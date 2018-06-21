@@ -261,24 +261,28 @@
 
 
           <!-- End Answer container -->
-           <div ng:if="__player_object.settings.auto_slide == true && question.question_type <= 2 && question.answer_settings.single_choice == true" class="question_notes question_type__colr select_box_brd answer-alarm-text answer-alarm-text-box">
-               <span class="fa fa-info-circle"></span>
-               <span class="select_texts ">Note : When you solve  this question the next one will come directly after few moments </span>
-           </div>
-           <div class="warning_case default_theme_texts_bg select_box_data warning-message-answer-box warning-message-answer question-label-box question-label-block" ng:click="go_to_not_attended_question()"></div>
-           <div ng:if ="__player_object.settings.navigation_btns == true" class="qusu-details ques-questions text-right">
-               <button ng:click="go_to_previouse_slide(question._id)" class="button-take-this select_button back-answer-question-button back-answer-question-button-block" ng:class="load_slide_theme(question.question_type)" type="button" name="button">
-                     <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-                     {> __player_object.settings.label_btns.lbl_back_with <}
-               </button>
-               <button ng:click="go_to_next_slide(question._id)" ng:class="load_slide_theme(question.question_type)" class="button-take-this select_button continue-answer-question-button continue-answer-question-button-block" type="button" name="button">
-                   <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                   <span ng:if="$index != (__player_object.questions.length - 1)">{> __player_object.settings.label_btns.lbl_continue_with <}</span>
-                   <span ng:if="$index == (__player_object.questions.length - 1)">{> __player_object.settings.label_btns.lbl_finish_with <}</span>
-               </button>
-           </div>
+
 
       </div>
+
+
+      <div ng:if="__player_object.settings.auto_slide == true && question.question_type <= 2 && question.answer_settings.single_choice == true" class="question_notes question_type__colr select_box_brd answer-alarm-text answer-alarm-text-box">
+          <span class="fa fa-info-circle"></span>
+          <span class="select_texts ">Note : When you solve  this question the next one will come directly after few moments </span>
+      </div>
+      <div class="warning_case default_theme_texts_bg select_box_data warning-message-answer-box warning-message-answer question-label-box question-label-block warning_case_didnot_solve_question" ng:click="go_to_not_attended_question()"></div>
+      <div ng:if ="__player_object.settings.navigation_btns == true" class="qusu-details ques-questions text-right">
+          <button ng:click="go_to_previouse_slide(question._id)" class="button-take-this select_button back-answer-question-button back-answer-question-button-block" ng:class="load_slide_theme(question.question_type)" type="button" name="button">
+                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                {> __player_object.settings.label_btns.lbl_back_with <}
+          </button>
+          <button ng:click="go_to_next_slide(question._id)" ng:class="load_slide_theme(question.question_type)" class="button-take-this select_button continue-answer-question-button continue-answer-question-button-block" type="button" name="button">
+              <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+              <span ng:if="$index != (__player_object.questions.length - 1)">{> __player_object.settings.label_btns.lbl_continue_with <}</span>
+              <span ng:if="$index == (__player_object.questions.length - 1)">{> __player_object.settings.label_btns.lbl_finish_with <}</span>
+          </button>
+      </div>
+
   </div>
   <!-- End Question Container -->
 
