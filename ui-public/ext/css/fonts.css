@@ -51,7 +51,10 @@
 }
 
 
-
+@font-face {
+  font-family: 'diogene_carre';
+  src:url('../fonts/diogene_carre1/Carre.ttf') ;
+}
 /*Roboto Family*/
 @font-face {
   font-family: 'RobotoBold';

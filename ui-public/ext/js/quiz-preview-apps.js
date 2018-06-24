@@ -76,6 +76,13 @@ apps.filter('trust_this_html_values' , [
     }
   }
 ]);
+apps.filter('length_it' , [
+  '$sce' , function(){
+    return (number) => {
+      return  number.toString().length;
+    }
+  }
+]);
 apps.filter('math_around_it' , [
   '$sce' , function(){
     return (round_p) => {
@@ -581,7 +588,7 @@ apps.controller("preview_players" , [
          var timeSettings = $scope.__player_object.settings.time_settings;
 
          if(timeSettings && timeSettings.is_with_time)
-            $scope.timer = setTimeout($scope.load_time_tracker , 1000);
+            $scope.timer = setTimeout( $scope.load_time_tracker , 1000);
        }
     }
     $scope.load_template_timer = () => {
@@ -604,9 +611,10 @@ apps.controller("preview_players" , [
             var sec  = $('.sec');
             var mins = $('.min');
             var hrs  = $('.hr');
+
             var is_hourly = $scope.__player_object.settings.time_settings.timer_type ;
             if(is_hourly){
-               if($scope.seconds == 0 && $scope.minutes == 0 && $scope.hours == 0)
+               if( $scope.seconds == 0 && $scope.minutes == 0 && $scope.hours == 0)
                   {
                     // $scope.do_an_action_with_closest_time();
                     return false ;
@@ -637,6 +645,7 @@ apps.controller("preview_players" , [
               hrs.html( ( $scope.hours < 10 ) ? '0'+$scope.hours : $scope.hours);
           }
           // Load time
+          $scope.$apply();
           $scope.load_quiz_timer();
       }
     }

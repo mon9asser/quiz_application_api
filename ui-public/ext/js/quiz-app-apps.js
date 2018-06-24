@@ -1536,6 +1536,8 @@ apps.controller("players" , [
 
         var cuIndex = $scope.attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) ;
         if(cuIndex == -1 ){
+          var all_seconds = parseInt( $scope.__player_object.settings.time_settings.hours * 60 * 60 ) + parseInt(  $scope.__player_object.settings.time_settings.minutes * 60  ) + parseInt($scope.__player_object.settings.time_settings.seconds )
+          $scope.__player_object.settings.time_settings.value = all_seconds ;
           $scope.attendee_draft.att_draft.push({
             'questions_data' : new Array() ,
             'is_loaded':true ,
@@ -1543,7 +1545,7 @@ apps.controller("players" , [
             'user_id' : $scope.user_id ,
             'user_info':$scope.user_id ,
             'is_completed':false ,
-            'impr_application_object':$scope.__player_object
+            'impr_application_object': $scope.__player_object
           });
         }
 

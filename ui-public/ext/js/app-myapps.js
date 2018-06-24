@@ -34,7 +34,7 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
          } ,
          time_settings : {
            is_with_time:false ,
-           value : "30" ,
+           value : 1799 ,
            timer_type : false ,
            timer_layout : 0 ,
            hours : 0 ,

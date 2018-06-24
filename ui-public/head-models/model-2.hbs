@@ -1,0 +1,151 @@
+<div class="quizapp-tools player-block " ng:if="__player_object.settings.time_settings.is_with_time == true || __player_object.settings.progression_bar.is_available == true">
+<style>
+  .object-layouts-container-layout-1 {
+    width: 63%;
+    margin: 0px auto;
+    padding: 20px;
+    height: auto;
+    font-size: 15px;
+    position: relative;
+    /* overflow: hidden; */
+    /*background: #f9f9f9;*/
+    margin: 15px auto 0px auto;
+    padding: 25px;
+    line-height: 2;
+    min-height: 108px;
+    /*box-shadow: 0px 0px 2px 0px #e9e9e9;
+     border-bottom: 1px dashed #999;
+     border: 1px solid #ddd;
+     border-radius: 15px;*/
+  }
+  .brogress_bar_model_1 {
+    display: block;
+    overflow: hidden;
+    width: 40%;
+    background: #fff;
+    height: 20px;
+    overflow: hidden;
+    margin-top: 10px;
+    position: relative;
+    border: 3px solid #fff;
+  }
+
+  .text_question_counts {
+    color: #c17c7e;
+    font-weight: bold;
+  }
+  .active-bar {
+    display: block;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    height: 100%;
+    left: 0px;
+    background: #c17c7e;
+    width: 20%;
+  }
+  .timeobjx {
+    display: block;
+    position: absolute;
+    height: auto;
+    top: 5%;
+    right: 20px;
+  }
+  .timeobjx > ul {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    list-style: none;
+  }
+  .timeobjx > ul li.hrs {
+     display: inline-block;
+      background: #c17c7e;
+      width: 70px;
+      height: 70px;
+      line-height: 50px;
+      border-radius: 35px;
+      vertical-align: baseline;
+      text-align: center;
+      border: 5px solid #fff;
+  }
+  .timeobjx > ul li.hrs > span {
+    display: block;
+    position: relative;
+    line-height: 1;
+
+    color: #fff
+  }
+  .timeobjx > ul li.hrs span:first-child {
+    font-family: "diogene_carre";
+  }
+  .timeobjx > ul li.hrs span:last-child {
+    color: #efe3e4;
+    margin-top: -3px;
+    font-size: 12px;
+  }
+
+  .timeobjx > ul li.dotted {
+    color: #c17c7e;
+    font-size: 50px;
+    margin-top: -7px;
+    display: inline-block;
+  }
+  .timeobjx > ul li span:first-child {
+    margin-top: 17px;
+    font-size: 20px;
+  }
+
+  @media only screen and (max-width: 650px){
+    .brogress_bar_model_1 {
+      width: 100%;
+    }
+    .object-layouts-container-layout-1 {
+      width: 100% !important;
+    }
+    .timeobjx {
+        display: block;
+        position: relative;
+        height: auto;
+        top: 15%;
+        right: 20px;
+        margin-top: 28px;
+        margin: 28px auto;
+        text-align: center;
+    }
+  }
+</style>
+<div class="tool-obj">
+  <div class="object-layouts">
+    <div class="object-layouts-container-layout-1 dwidth-object select_box_brd">
+       <!-- Progress bar with question number  -->
+       <!-- Question Number  -->
+       <span ng:if="__player_object.settings.progression_bar.is_available == true" class="progression-bar text_question_counts">
+         <span class="fa fa-sliders" style="margin-right:3px;"></span>  Question <span class="current-question">{>curren_question_slide<}</span> of {> __player_object.questions.length <}
+       </span>
+       <!-- Progress bar  -->
+       <div ng:if="__player_object.settings.progression_bar.is_available == true" class="brogress_bar_model_1">
+         <div class="active-bar progress-highlighted"></div>
+       </div>
+       <!-- Timer  -->
+       <div class="timeobjx" ng:if="__player_object.settings.time_settings.is_with_time == true">
+          <ul>
+            <li class="hrs" ng:if="__player_object.settings.time_settings.timer_type == true">
+              <span class="hr">{>__player_object.settings.time_settings.hours<}</span>
+              <span>hrs</span>
+            </li>
+            <li class="dotted" ng:if="__player_object.settings.time_settings.timer_type == true">:</li>
+            <li class="hrs">
+              <span class="min">{>__player_object.settings.time_settings.minutes<}</span>
+              <span>min</span>
+            </li>
+            <li class="dotted">:</li>
+            <li class="hrs">
+              <span class="sec">{>__player_object.settings.time_settings.seconds<}</span>
+              <span>sec</span>
+            </li>
+          </ul>
+       </div>
+    </div>
+  </div>
+</div>
+</div>

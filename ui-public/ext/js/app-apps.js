@@ -145,6 +145,15 @@ apps.filter('trust_this_html_values' , [
     }
   }
 ]);
+
+apps.filter('length_it' , [
+  '$sce' , function(){
+    return (number) => {
+      return number.toString().length;
+    }
+  }
+]);
+
 apps.filter('math_around_it' , [
   '$sce' , function(){
     return (round_p) => {
@@ -217,6 +226,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     $scope.rating_values = null ;
     $scope.questions_list = null ;
     $scope.__player_object = null ;
+
     $scope.stylesheet_order = null ;
     $scope.default_bg_of_view = '';
     $scope.window_navigation = $(window);
@@ -1387,6 +1397,11 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     saving_settings.html("<span class='saving_option'></span> Saving Changes");
     saving_settings.css("padding-left","40px");
 
+      var hrs  = ( $scope.application_settings.settings.time_settings.hours == null ) ? 0 : parseInt($scope.application_settings.settings.time_settings.hours) ;
+      var mins = ( $scope.application_settings.settings.time_settings.minutes == null ) ? 0 : parseInt( $scope.application_settings.settings.time_settings.minutes );
+      var secs = ( $scope.application_settings.settings.time_settings.seconds == null ) ? 0 : parseInt( $scope.application_settings.settings.time_settings.seconds );
+      $scope.application_settings.settings.time_settings.value = ( parseInt( hrs * 60 * 60 )  + parseInt( mins * 60 ) + parseInt( secs ) );
+
         // $scope.api_url_app_settings
         // $scope.application_settings
         $.getJSON( $scope.json_apk_file , function (api_key_data ){
@@ -1975,6 +1990,7 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
     $scope.select_this_answer = ( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex) => {
       var user_id = window.location.toString().split("/").pop();
       // ==> Register First Action
+
       if( $scope.this_attendee_draft == null )
             {
                $scope.this_attendee_draft = new Object();
@@ -1982,7 +1998,10 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
                $scope.this_attendee_draft['application_id'] = $scope.app_id;
                $scope.this_attendee_draft['questionnaire_info'] = $scope.app_id;
                var cuIndex = $scope.this_attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) ;
+
                   if(cuIndex == -1 ){
+                    var all_seconds = parseInt( $scope.__player_object.settings.time_settings.hours * 60 * 60 ) + parseInt(  $scope.__player_object.settings.time_settings.minutes * 60  ) + parseInt($scope.__player_object.settings.time_settings.seconds )
+                    $scope.__player_object.settings.time_settings.value = all_seconds ;
                     $scope.this_attendee_draft.att_draft.push({
                       'questions_data' : new Array() ,
                       'is_loaded':true ,
