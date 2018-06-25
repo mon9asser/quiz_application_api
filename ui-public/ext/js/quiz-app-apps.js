@@ -1558,6 +1558,23 @@ apps.controller("players" , [
         }
 
     };
+    $scope.time_progress = () => {
+      var dash_array = 628;
+      var all_seconds = parseInt( $scope.__player_object.settings.time_settings.value );
+
+      var current_seconds = $scope.seconds;
+      var current_minutes = $scope.minutes;
+      var current_hours = $scope.hours;
+
+      var used_time_by_secs = Math.round(current_minutes * 60 ) + Math.round( current_hours * 60 * 60 ) + current_seconds ;
+      if( all_seconds > used_time_by_secs ){
+        var pi_per_sec = dash_array / all_seconds ;
+        var stork = pi_per_sec * ( all_seconds - used_time_by_secs );
+        console.log(stork);
+        return { 'stroke-dashoffset' : stork }
+      }else
+        return '';
+    }
     $scope.start_this_quiz = () => {
       $scope.join_this_quiz();
 

@@ -25,7 +25,7 @@
           stroke-width: 15px;
           transition: stroke-dashoffset 0.7s;
           stroke-dasharray: 628 ;
-          stroke-dashoffset: 628 ; /* 800 */
+          stroke-dashoffset: 0 ; /* 800 */
           animation: dash 5s linear forwards;
         }
         /*@keyframes dash {
@@ -37,32 +37,75 @@
           font-size: 60px;
           font-family: sans-serif;
         }
+
         .time-data {
           font-size: 35px;
           font-family: "diogene_carre";
+          fill: #c17c7e;
         }
         .time-data-type {
           font-size: 25px;
           font-family: sans-serif;
+          fill: #c17c7e;
         }
+        .select_texts {
+          margin-top: 20px;
+          display: inline;
+        }
+       .text-question-number {
+         width: 100%;
+          display: block;
+          position: relative;
+          text-align: center;
+          margin-top: -1px;
+          color: #c17c7e;
+          font-family: roboto;
+       }
 </style>
 
-    <div class="circle text-center" ng:init="all_seconds_act = __player_object.settings.time_settings.value / 60 ">
+    <div class="circle text-center circle-act" ng:init="all_seconds_act = __player_object.settings.time_settings.value / 60 ">
+
+
+
 
       <svg width="120" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
          <g transform="translate(110,110)">
             <circle r="100" class="base-circle"/>
             <g transform="rotate(-90)">
-               <circle r="100" id="current-progress" class="current-progress"/>
+               <circle ng:style="time_progress()" r="100" id="current-progress" class="current-progress"/>
             </g>
+            <!--  transform="translate(-42,5)" => for mins -->
+            <!--  transform="translate(-63,5)" => for hours-->
 
-            <!-- <text ng:if=" ( (all_seconds_act | math_around_it) | length_it ) >= 3" transform="translate(-50,0)" class="time-data hr"></text>
+
+            <text ng:if="__player_object.settings.time_settings.timer_type != false " transform="translate(-65,5)" class="time-data hr">0</text>
+            <!-- <text ng:if="__player_object.settings.time_settings.timer_type != false" transform="translate(-65,5)" class="time-data hr">{> hours <}</text> -->
+
+            <text ng:if="__player_object.settings.time_settings.timer_type != false" transform="translate(-41,5)" class="time-data">:</text>
+            <text ng:if="__player_object.settings.time_settings.timer_type != false" transform="translate(-30,5)" class="time-data min">00</text>
+            <text ng:if="__player_object.settings.time_settings.timer_type != false" transform="translate(15,5)" class="time-data">:</text>
+            <text ng:if="__player_object.settings.time_settings.timer_type != false" transform="translate(25,5)" class="time-data sec">00</text>
+
+
+            <text ng:if="__player_object.settings.time_settings.timer_type == false" transform="translate(-42,5)" class="time-data min">00</text>
+            <text ng:if="__player_object.settings.time_settings.timer_type == false" transform="translate(2,5)" class="time-data">:</text>
+            <text ng:if="__player_object.settings.time_settings.timer_type == false" transform="translate(10,5)" class="time-data sec">00</text>
+
+
+            <!--
+            <text ng:if=" ( (all_seconds_act | math_around_it) | length_it ) >= 3" transform="translate(-50,0)" class="time-data hr"></text>
             <text ng:if=" ( (all_seconds_act | math_around_it) | length_it ) >= 3" transform="translate(25,0)" class="time-data min"></text>
 
             <text ng:if=" ( (all_seconds_act | math_around_it) | length_it ) < 3" transform="translate(-45,0)" class="time-data min"></text>
             <text ng:if=" ( (all_seconds_act | math_around_it) | length_it ) < 3" transform="translate(8,0)" class="time-data sec"></text> -->
-           <text transform="translate(-30,30)" class="time-data-type">mins</text>
+            <text transform="translate(-30,30)" class="time-data-type" ng:if="__player_object.settings.time_settings.timer_type == false || __player_object.settings.time_settings.hours == 0 || __player_object.settings.time_settings.hours == null ">mins</text>
+            <text transform="translate(-30,30)" class="time-data-type" ng:if="__player_object.settings.time_settings.timer_type != false && __player_object.settings.time_settings.hours > 0 ">hrs</text>
          </g>
       </svg>
+
     </div>
+
+    <span class="progression-bar select_texts question-countx text-question-number" ng:mouseover="show_hovred_element('select_texts' , this )">
+       Question <span class="current-question">{>curren_question_slide<}</span> of {> __player_object.questions.length <}
+    </span>
 </div>

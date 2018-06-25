@@ -11,6 +11,7 @@ Array.prototype.find_unsolved_questions = function (questions_list) {
 //=============================================
 // => Filters
 //=============================================
+
 apps.filter("set_iframe" , [
       "$timeout" ,"$sce" ,
   function (  $timeout , $sce){
@@ -83,6 +84,7 @@ apps.filter('length_it' , [
     }
   }
 ]);
+
 apps.filter('math_around_it' , [
   '$sce' , function(){
     return (round_p) => {
@@ -101,9 +103,26 @@ apps.controller("preview_players" , [
       var is_right_question =  (solved_answers.sort().join('') == correct_answers.sort().join(''));
       return is_right_question ;
     };
+
     $scope.player_time_frame = 300 ;
     $scope.rating_scale_elements = []
+    $scope.time_progress = () => {
+      var dash_array = 628;
+      var all_seconds = parseInt( $scope.__player_object.settings.time_settings.value );
 
+      var current_seconds = $scope.seconds;
+      var current_minutes = $scope.minutes;
+      var current_hours = $scope.hours;
+
+      var used_time_by_secs = Math.round(current_minutes * 60 ) + Math.round( current_hours * 60 * 60 ) + current_seconds ;
+      if( all_seconds > used_time_by_secs ){
+        var pi_per_sec = dash_array / all_seconds ;
+        var stork = pi_per_sec * ( all_seconds - used_time_by_secs );
+        console.log(stork);
+        return { 'stroke-dashoffset' : stork }
+      }else
+        return '';
+    }
     $window.extend_iframe_width = ( __width__ ) => {
       var window_iframe = $(".about-quiz, .screen-container , .question-screen-box");
       window_iframe.each(function(){
@@ -168,8 +187,8 @@ apps.controller("preview_players" , [
     $window.target_height = 50;
     $scope.window_navigation = $(window);
     // ==> Time  objects
-    $scope.seconds = 9 ;
-    $scope.minutes = 0;
+    $scope.seconds = 59 ;
+    $scope.minutes = 29;
     $scope.hours = 0 ;
     $scope.quiz_time_status_is_counting = true ;
     $scope.warning_at_time = {
@@ -642,7 +661,7 @@ apps.controller("preview_players" , [
           sec.html(($scope.seconds < 10 ) ? '0'+ $scope.seconds : $scope.seconds);
           mins.html(($scope.minutes < 10 ) ? '0'+$scope.minutes:$scope.minutes );
           if(is_hourly){
-              hrs.html( ( $scope.hours < 10 ) ? '0'+$scope.hours : $scope.hours);
+              hrs.html( ( $scope.hours < 10 ) ? ''+$scope.hours : $scope.hours);
           }
           // Load time
           $scope.$apply();

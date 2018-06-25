@@ -3516,7 +3516,14 @@ apps.controller("apps-controller" , ['$scope','$http' , '$timeout','$window','$r
       $scope.__player_object.settings = settings;
 
     };
-
+    $scope.change_time_type = () => {
+        if ( $scope.application_settings.settings.time_settings.timer_type == false )
+        $scope.application_settings.settings.time_settings.hours = 0 ;
+        $scope.set_application_settings($scope.application_settings.settings);
+    }
+    $scope.update_settings_in_view_with_hrs = () => {
+      $scope.set_application_settings($scope.application_settings.settings);
+    }
     $scope.update_settings_in_view = ()=> {
         $scope.set_application_settings($scope.application_settings.settings);
     }
