@@ -14,15 +14,19 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
              title_failed_with : "Quiz Failed Text"
            } ,
          label_btns : {
-             lbl_start_with:"Start" ,
-             lbl_continue_with : "Continue" ,
-             lbl_retake_with : "Retake" ,
-             lbl_review_with : "Review" ,
-             lbl_back_with : "Back",
-             lbl_finish_with : "Finish",
-             lbl_submit_quiz_with : "Submit Quiz",
-             lbl_score_with :"Score",
-             lbl_grade_with :"Grade"
+           lbl_start_with:"Start" ,
+           lbl_continue_with : "Continue" ,
+           lbl_retake_with : "Retake" ,
+           lbl_review_with : "Review" ,
+           lbl_back_with : "Back",
+           lbl_finish_with : "Finish",
+           lbl_submit_quiz_with : "Submit Quiz",
+           lbl_score_with :"Score",
+           lbl_grade_with :"Grade" ,
+           didnot_yet:"You didn't solve any question , click here to attend" ,
+           unsolved_question:"question(s) isn't attended click here to attend" ,
+           when_you_solve : "When you solve this question the next one will come directly after few moments",
+           there_are_many_options : "There're many correct choices , You've to select them  to pass this question"
           } ,
          grade_settings : {
            is_graded : false ,
@@ -36,11 +40,12 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
            is_with_time:false ,
            value : 1799 ,
            timer_type : false ,
-           timer_layout : 0 ,
+           timer_layout : 1 ,
            hours : 0 ,
            minutes : 29 ,
            seconds : 59
          },
+         enable_screens : true , 
          progression_bar : {
            is_available:false ,
            progression_bar_layout:0

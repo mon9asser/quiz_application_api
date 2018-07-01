@@ -1241,16 +1241,24 @@
                                    </div>
                                    <div class="passing-grad-block">
                                       <div class="checkbox-toggle">
+                                         <input ng:change="enable_screens()" ng:model="application_settings.settings.enable_screens" class="input-checkboxes switch_1" type="checkbox" id="enbscreen">
+                                         <label for="enbscreen" class="show-qs-pr labels-options">
+                                          Enable Goodbye and welcome Screens
+                                         </label>
+                                      </div>
+                                   </div>
+                                   <div class="passing-grad-block">
+                                      <div class="checkbox-toggle">
                                          <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.progression_bar.is_available" class="input-checkboxes switch_1" type="checkbox" id="Randomize-Progress">
                                          <label for="Randomize-Progress" class="show-qs-pr labels-options">
                                            Use Progress bar
                                          </label>
                                          <div class="labels-options" style="position:relative; float:right; cursor:pointer;">
                                             <!-- Models <i class="fa fa-caret-down"></i> -->
-                                            <select ng:change="time_progress_models_changer()" ng:model="time_progress_models" class="time-models" name="">
+                                            <!-- <select ng:change="time_progress_models_changer()" ng:model="time_progress_models" class="time-models" name="">
                                               <option value="0">Model 1</option>
                                               <option value="1">Model 2</option>
-                                            </select>
+                                            </select> -->
                                          </div>
                                       </div>
                                    </div>
@@ -1274,9 +1282,9 @@
                                          <div class="labels-options" style="position:relative; float:right; cursor:pointer;">
                                             <!-- Models <i class="fa fa-caret-down"></i> -->
                                             <select ng:change="time_progress_models_changer()" ng:model="time_progress_models" class="time-models" name="">
-                                              <option value="0">Model 1</option>
-                                              <option value="1">Model 2</option>
-                                              <!-- <option value="">Model 3</option> -->
+                                              <option value="1">Model 1</option>
+                                              <option value="2">Model 2</option>
+                                              <option value="3">Model 3</option>
                                             </select>
                                          </div>
 
@@ -1404,12 +1412,12 @@
                                 </div>
 
                                 <div class="control-item-content-text">
-                                   <span>Didn't solve question yet ( Warning Message ) </span>
+                                   <span>Warning Message when no questions has been attempted </span>
                                    <input ng:change="update_current_label('didnnot-yet')" ng:model="application_settings.settings.label_btns.didnot_yet" class="quiz-titlex " type="text" name="" value="" placeholder="Warning Message">
                                 </div>
 
                                 <div class="control-item-content-text">
-                                   <span>Unsolved questions ( Warning Message )</span>
+                                   <span>Unsolved questions </span>
                                    <input ng:change="update_current_label('unsolved-question')" ng:model="application_settings.settings.label_btns.unsolved_question" class="quiz-titlex " type="text" name="" value="" placeholder="Warning Message">
                                 </div>
 

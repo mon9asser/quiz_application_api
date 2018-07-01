@@ -147,9 +147,9 @@
 						</ul>
 				</div>
 
-        <div style="width:100%; margin-top:10px; background:yellow; padding:5px;">
+        <!-- <div style="width:100%; margin-top:10px; background:yellow; padding:5px;">
           Time and progressBar ( Editor only ) : new issue still inProgress
-        </div>
+        </div> -->
       </div>
 
 
@@ -246,9 +246,44 @@
 
 
 
+        <!--
+        ++++++++++++++++++++++++++++++++++++++++
+        Cropping Images
+        ++++++++++++++++++++++++++++++++++++++++
+       -->
+        <div class="masklayer">
+          <div class="box-data-cropping">
+              <div class="title">
+                <i class="fa fa-crop"></i>
+                <span>Image Cropping</span>
+              </div>
+              <div class="cropping-data">
+                 <img style="width: 100%;" id="cropping-image-act" ng:src="{>cropped_media_info.image_source<}" alt="">
+              </div>
+              <!-- <div class="all-preview">
+                <div class="preview-data-cropped prev-1 preview-crp">
 
+                </div>
+                <div class="preview-data-cropped prev-2 preview-crp">
 
+                </div>
+              </div> -->
 
+              <div class="btn-blocker">
+                <button class="btn btn-danger" ng:click="cancel_the_cropping()" type="button" name="button">
+                  Cancel
+                </button>
+                <button class="btn btn-primary" type="button" name="button" ng:click="save_cropped_images()">
+                  Save Changes
+                </button>
+              </div>
+          </div>
+        </div>
+        <!--
+        ++++++++++++++++++++++++++++++++++++++++
+        End Cropping Images
+        ++++++++++++++++++++++++++++++++++++++++
+       -->
 
 
 
@@ -283,6 +318,30 @@
 <!-- Issue Here -->
   {{> settings_menu }}
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 {{> bottom }}

@@ -16,20 +16,30 @@
     }
     .swiper-slide {    margin: 15px auto; }
     .about-quiz , .screen-container { width: 95%; }
-
+    .object-layouts-container-layout-1{
+          width: 100%;
+    }
 </style>
 <!--
 ---------------------------------------------------------
 =============================>>> Timer And Progress
 ---------------------------------------------------------
 -->
-
+   <div ng:include="loading_target_header"></div>
+   <style media="screen">
+   .object-layouts-container-layout-1  {
+         width: 100%;
+   }
+   .object-layouts-container {
+        width: 95%;
+    }
+   </style>
  <!--
  ---------------------------------------------------------
  =============================>>> Welcome Screen
  ---------------------------------------------------------
  -->
- <div class="swiper-wrapper quiz-contents" ng:if="screen_type == 3">
+ <div class="swiper-wrapper quiz-contents" ng:if="screen_type == 3 && application_settings.settings.enable_screens == true">
   <div class="swiper-slide welcoming-screen-x">
     <div data-selected-block="question-slide" ng:class="load_quiz_status_theme()" class="container screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-welcome-screen">
        <div>
@@ -50,7 +60,7 @@
 =============================>>> Ending Screen
 ---------------------------------------------------------
 -->
-  <div  class="swiper-slide" ng:if="screen_type == 2">
+  <div  class="swiper-slide" ng:if="screen_type == 2  && application_settings.settings.enable_screens == true">
     <div data-selected-block ="question-slide" class="screen_opg_editor container screen-container about-quiz screen-ending-starting select_box_brd goodbye-screen-block box-goodbye-screen">
         <div class="description-body redactor-styles select_texts goodbye-screen-text-block goodbye-screen-text" ng:bind:html="__player_object.settings.titles.title_end_with | trust_html"></div>
         <div class="warning_case select_box_data goodbye-screen-text-warning-block goodbye-screen-warning-text" ng:class="load_slide_theme(question.question_type)" ng:click="go_to_not_attended_question()"></div>
@@ -145,7 +155,8 @@
                           <div ng:if="question.question_type == 0" class="answer-contents">
                              <div ng:if="ansvalue.media_optional != null" class="media-options">
                                 <!--  image case  -->
-                                <div ng:if="ansvalue.media_optional.media_type == 0" ng:style="set_image_background(ansvalue.media_optional.media_src)"  class="image_case"></div>
+                                <!--  ng:style="set_image_background(ansvalue.media_optional.media_src)"  -->
+                                <div ng:if="ansvalue.media_optional.media_type == 0" ng:style="blob_background_data(ansvalue , question_settings.choice_style)"  class="image_case"></div>
                                 <!-- <div ng:if="ansvalue.media_optional.media_type == 0" style="background-image:url('{>server_ip+ansvalue.media_optional.media_src<}')"  class="image_case"></div> -->
                                 <!-- Video Cases -->
                                 <div ng-bind-html="ansvalue.media_optional | set_iframe" ng:if="ansvalue.media_optional.media_type == 1"  class="video_case">

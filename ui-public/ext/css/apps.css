@@ -1900,9 +1900,9 @@ iframe {
   position: relative;
   width: 100%;
   height: 140px;
-  background-position: center !important;
+  /*background-position: center !important;
   background-repeat: no-repeat !important;
-  background-size: cover !important;
+  background-size: cover !important;*/
 }
 .video_case {
   display: block;
@@ -3399,4 +3399,106 @@ table.label-table tbody .labels-options {
     padding: 3px;
     border: 1px solid #ddd;
     margin-top: 4px;
+}
+.crop-eent {
+  display: inline-block;
+  position: absolute;
+  left: 0px;
+  left: 15px;
+  top: 10px;
+  z-index: 3;
+  color: #eeeeee94;
+  border: 1px solid #eeeeee94;
+  padding: 5px 14px;
+  font-size: 12px;
+  border-radius: 5px;
+}
+.layer-image {
+  display: block;
+  position: absolute;
+  z-index: 2 ;
+  overflow: hidden;
+  background: rgba(0,0,0,0.5);
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  cursor: pointer;
+
+}
+.img-valx {
+    z-index: 1 ;
+    position: relative;
+}
+.masklayer {
+  display: none;
+  position: fixed;
+  overflow: hidden;
+  top: 0px;
+  bottom: 0px ;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.5);
+  z-index: 1000;
+}
+.box-data-cropping {
+  top: 10%;
+  position: absolute;
+  width: 40%;
+  height: auto;
+  margin: 0px auto;
+  left: 0px;
+  right: 0px;
+  overflow: hidden;
+  background: #fff;
+  padding-bottom: 15px;
+  border: 1px solid #dedede;
+}
+.box-data-cropping > .title {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background: #eee;
+  padding: 11px;
+  color: #999;
+  font-size: 16px;
+  font-family: robotoRegular;
+}
+.preview-data-cropped  {
+  height: 100px;
+  background: red;
+  height: 150px ;
+}
+.prev-1 {
+  width: 544px;
+}
+
+.prev-2 {
+  width: 261px;
+  margin-top: 5px;
+}
+.all-preview {
+  width: 544px;
+display: inline;
+float: right;
+margin-top: 5px;
+margin-right: 5px;
+}
+.cropping-data {
+  width: 97%;
+  display: inline;
+  height: auto;
+  /*float: left;*/
+  display: block;
+  margin: 10px auto;
+  position: relative;
+  overflow: hidden;
+}
+.btn-blocker {
+  width: 100%;
+  overflow: hidden;
+  padding: 0px 10px 0px 10px;
+  text-align: right;
 }

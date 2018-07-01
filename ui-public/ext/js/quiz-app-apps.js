@@ -496,6 +496,7 @@ apps.controller("players" , [
         // ==> Setup data
         $scope.application_data_object = resp.data ;
         $scope.__player_object = resp.data ;
+        $scope.loading_target_header = '/head-models/model-' +  $scope.__player_object.settings.time_settings.timer_layout + '.hbs' ;
 
         // Loading time
         if($scope.__player_object.settings != null ){

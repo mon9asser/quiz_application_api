@@ -2539,6 +2539,7 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
                    when_you_solve : "When you solve this question the next one will come directly after few moments",
                    there_are_many_options : "There're many correct choices , You've to select them  to pass this question"
                 } ,
+               enable_screens : true , 
                grade_settings : {
                  is_graded : false ,
                  value : 90

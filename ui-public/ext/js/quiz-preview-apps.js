@@ -526,6 +526,7 @@ apps.controller("preview_players" , [
           }
          return classes;
     };
+
     $scope.classes_for_this_answer = (quiz_settings , question_id , answer_id) => {
       var classes = '';
       // => Two blocks per row or else
@@ -706,6 +707,7 @@ apps.controller("preview_players" , [
 
             $scope.__player_object = resp.data ;
             $scope.stylesheet_order = $scope.__player_object.stylesheet_properties;
+            $scope.loading_target_header = '/head-models/model-' +  $scope.__player_object.settings.time_settings.timer_layout + '.hbs' ;
 
             console.log({
               Player : $scope.__player_object

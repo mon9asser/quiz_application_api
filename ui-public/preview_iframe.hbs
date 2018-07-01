@@ -81,7 +81,8 @@
    <!-- <button style="display:none;" id="cross_iframe_qs_index_button" ng:click="slide_to_question_cross_iframe()" type="button" name="button">Go To INDEX </button> -->
 
    <!-- <div ng:include="'/head-models/model-2.hbs'"> </div> -->
-   <div ng:include="'/head-models/model-2.hbs'"></div>
+
+   <div ng:include="loading_target_header"></div>
    <!-- <div ng:include="'/head-models/model-2.hbs'"> </div> -->
 
       <div class="clearFix"></div>
@@ -94,6 +95,7 @@
             <div class="swiper-slide welcoming-screen-x">
                 <div data-selected-block="question-slide" ng:class="load_quiz_status_theme()" class="container screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-welcome-screen">
                   <div>
+
                       <div class="description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text"  ng:mouseover="show_hovred_element('select_texts')" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
                       <div class="qusu-details text-right">
                           <button ng:click="start_this_quiz()" class="button-take-this select_button welcome-screen-button-block welcome-screen-button" type="button" name="button">
