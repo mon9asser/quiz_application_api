@@ -66,13 +66,14 @@
                         <div ng:if="question_type == 0" class="">
                            <ul class="answer-pt-controller">
 
-                             <li style="padding: 3px 8px;" ng:if="answer_value.media_optional.media_type == 0" title="Make it Correct Answer">
-                               <span ng:click="cropping_this_image_right_now(answer_value._id)" class="fa fa-crop"></span>
-                             </li>
+
 
                              <!-- is correct answer -->
                              <li ng:if="{{app.app_type }} == 1" ng:if="answer_value.is_correct == false" title="Make it Correct Answer">
                                <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
+                             </li>
+                             <li style="padding: 3px 8px;" ng:if="answer_value.media_optional.media_type == 0" title="Make it Correct Answer">
+                               <span ng:click="cropping_this_image_right_now(answer_value._id)" class="fa fa-crop"></span>
                              </li>
                              <!-- <li ng:if="{{app.app_type }} == 1" ng:if="answer_value.is_correct == true" title="Remove Correct Answer">
                                <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
@@ -113,11 +114,11 @@
                             <li  ng:if="{{app.app_type }} == 1"  title="Make it Correct Answer">
                               <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
                             </li>
-                            <li ng:if="answer_value.media_type != null && answer_value.media_type == 0">
-                              <span ng:click="cropping_this_image_right_now(answer_value._id)" class="fa fa-crop"></span>
-                            </li>
                             <li ng:click="show_media_uploader('answers' ,  answer_value._id)" title="Edit it with media">
                               <span class="fa fa-file-image-o edit-options-answer"></span>
+                            </li>
+                            <li ng:if="answer_value.media_type != null && answer_value.media_type == 0">
+                              <span ng:click="cropping_this_image_right_now(answer_value._id)" class="fa fa-crop"></span>
                             </li>
                             <li ng:click="question_answer_deletion(answer_value._id)" title="Delete this answer">
                               <span class="fa fa-trash"></span>

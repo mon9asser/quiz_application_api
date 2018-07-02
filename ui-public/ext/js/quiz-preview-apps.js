@@ -105,7 +105,37 @@ apps.controller("preview_players" , [
     };
 
     $scope.player_time_frame = 300 ;
-    $scope.rating_scale_elements = []
+    $scope.rating_scale_elements = [] ;
+    $scope.blob_background_data = ( answer_value , style_type ) => {
+      // server_ip+answer_value.media_optional.media_src
+      // alert($scope.server_ip + answer_value.media_optional.media_src);
+      var img_vlox_data ;
+
+      if(answer_value.coppied_data != undefined){
+
+        if( answer_value.coppied_data.column_style != undefined && style_type == true )
+        {
+          if( answer_value.coppied_data.column_style.blob_data != undefined)
+          img_vlox_data = answer_value.coppied_data.column_style.blob_data;
+          else
+          img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src ;
+
+        }
+        if(answer_value.coppied_data.rawly_style != undefined && style_type == false) {
+          if(answer_value.coppied_data.rawly_style.blob_data != undefined)
+          img_vlox_data = answer_value.coppied_data.rawly_style.blob_data;
+          else
+          img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src ;
+
+        }
+      }else {
+          img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src  ;
+      }
+      // alert(img_vlox_data);
+      return {
+        backgroundImage : 'url(' + img_vlox_data + ')'
+      }
+    };
     $scope.time_progress = () => {
       var dash_array = 628;
       var all_seconds = parseInt( $scope.__player_object.settings.time_settings.value );

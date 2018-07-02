@@ -160,6 +160,36 @@ apps.controller("players" , [
        number_1 : 0 ,
        number_2 : 0
      };
+     $scope.blob_background_data = ( answer_value , style_type ) => {
+       // server_ip+answer_value.media_optional.media_src
+       // alert($scope.server_ip + answer_value.media_optional.media_src);
+       // => Cropping Image ( DataBlob )
+       var img_vlox_data ;
+
+       if(answer_value.coppied_data != undefined){
+
+         if( answer_value.coppied_data.column_style != undefined && style_type == true )
+         {
+           if( answer_value.coppied_data.column_style.blob_data != undefined)
+           img_vlox_data = answer_value.coppied_data.column_style.blob_data;
+           else
+           img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src ;
+         }
+         if(answer_value.coppied_data.rawly_style != undefined && style_type == false) {
+           if(answer_value.coppied_data.rawly_style.blob_data != undefined)
+           img_vlox_data = answer_value.coppied_data.rawly_style.blob_data;
+           else
+           img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src ;
+
+         }
+       }else {
+           img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src  ;
+       }
+       // alert(img_vlox_data);
+       return {
+         backgroundImage : 'url(' + img_vlox_data + ')'
+       }
+     };
      $scope.load_template_timer = () => {
        if($scope.__player_object != undefined && $scope.__player_object != null ){
        var timeSettings = $scope.__player_object.settings.time_settings;

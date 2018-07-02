@@ -88,7 +88,7 @@
                         <div ng:if="obj_val.question_type == 0" class="answer-contents">
                           <div ng:if="ansvalue.media_optional != null" class="media-options">
                              <!--  image case  -->
-                             <div ng:if="ansvalue.media_optional.media_type == 0" ng:style="set_image_background(ansvalue.media_optional.media_src)"  class="image_case"></div>
+                             <div ng:if="ansvalue.media_optional.media_type == 0" ng:style="blob_background_data(ansvalue , obj_val.answer_settings.choice_style)"  class="image_case"></div>
                              <!-- <div ng:if="ansvalue.media_optional.media_type == 0" style="background-image:url('{>server_ip+ansvalue.media_optional.media_src<}')"  class="image_case"></div> -->
                              <!-- Video Cases -->
                              <div ng-bind-html="ansvalue.media_optional | set_iframe" ng:if="ansvalue.media_optional.media_type == 1"  class="video_case">
@@ -123,7 +123,7 @@
                              <div ng:if="ansvalue.Media_directory == null || ansvalue.Media_directory == undefined" class="image_case no-media-here">
                                No Media here !
                              </div>
-                             <div ng:if="ansvalue.media_type == 0 && ansvalue.Media_directory != null" ng:style="set_image_background(ansvalue.media_src )"  class="image_case"></div>
+                             <div ng:if="ansvalue.media_type == 0 && ansvalue.Media_directory != null" ng:style="blob_background_data(ansvalue , obj_val.answer_settings.choice_style)"  class="image_case"></div>
                              <!-- <div ng:if="ansvalue.media_type == null" style="background-image:url('{>ansvalue.media_src<}')"  class="image_case"></div> -->
                              <!--  Video Case  -->
                              <div ng-bind-html="ansvalue | set_iframe" ng:if="ansvalue.media_type == 1"  class="video_case">
@@ -207,7 +207,7 @@
               <!-- ng:if="__player_object.settings.auto_slide == true"  -->
               <div ng:if="__player_object.settings.auto_slide == true && obj_val.question_type <= 2 && obj_val.answer_settings.single_choice == true" class="question_notes question_type__colr">
                   <span class="fa fa-info-circle"></span>
-                  <span>   {> __player_object.settings.label_btns.when_you_solve <} </span>
+                  <span>{> __player_object.settings.label_btns.when_you_solve <} </span>
               </div>
               <!--  Warning Case-->
               <div class="warning_case answer-alarm-text-box"  ng:click="go_to_not_attended_question()"></div>
@@ -215,7 +215,7 @@
               <div ng:if ="__player_object.settings.navigation_btns == true" class="qusu-details ques-questions text-right">
                 <button ng:click="back_to_prev_slider()" class="button-take-this back-answer-question-button" type="button" name="button">
                     <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-                    {> __player_object.settings.label_btns.when_you_solve <}
+                    {> __player_object.settings.label_btns.lbl_back_with <}
                 </button>
                 <button ng:if="obj_val.question_type == 4" ng:click="save_and_go_to_next_slider($index , obj_val , obj_val._id )" class="button-take-this continue-answer-question-button-block" type="button" name="button">
                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>

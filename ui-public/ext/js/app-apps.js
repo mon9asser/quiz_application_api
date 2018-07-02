@@ -284,11 +284,10 @@ apps.controller("apps-controller" , [
     $scope.json_source = $scope.server_ip + "ext/json/json-keys.json";
     var question_data_object = null
     // ==> Objects in scope object
-    $scope.blob_background_data = ( answer_value , style_type )=> {
+    $scope.blob_background_data = ( answer_value , style_type ) => {
       // server_ip+answer_value.media_optional.media_src
       // alert($scope.server_ip + answer_value.media_optional.media_src);
       var img_vlox_data ;
-
       if(answer_value.coppied_data != undefined){
 
         if( answer_value.coppied_data.column_style != undefined && style_type == true )
@@ -309,7 +308,7 @@ apps.controller("apps-controller" , [
       }else {
           img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src  ;
       }
-       
+      // alert(img_vlox_data);
       return {
         backgroundImage : 'url(' + img_vlox_data + ')'
       }
@@ -350,9 +349,7 @@ apps.controller("apps-controller" , [
                ratio_size.height = 150;
              }
 
-
-
-            stylish = {
+             stylish = {
               'x':  $scope.cropped_media_info.x,
               'y':  $scope.cropped_media_info.y,
               'width':  $scope.cropped_media_info.width,
@@ -401,6 +398,16 @@ apps.controller("apps-controller" , [
           stylish.blob_data = blob_data ;
 
 
+          if(choose_style == true)
+            answer_obj.coppied_data.column_style.blob_data = blob_data;
+          else
+            answer_obj.coppied_data.rawly_style.blob_data = blob_data;
+
+
+          // var question_index = $scope.questions_list.findIndex(x => x._id == $scope.question_id );
+          // if( question_index != -1 ){
+          //   console.log($scope.questions_list[question_index]);
+          // }
 
           $scope.save_changes_in_angular_backend();
           $scope.cancel_the_cropping();

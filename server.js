@@ -21,6 +21,7 @@ const app = express();
 app.engine('hbs', hbs.express4({
   partialsDir: path.join(__dirname, 'ui-public/partials' )
 }));
+
 // app.use(express.static(path.join(__dirname, 'ui-public')));
 app.use(express.static(path.join(__dirname, 'ui-public')));
 // emitter.setMaxListeners();
@@ -30,8 +31,8 @@ app.set('views',  __dirname +'/ui-public');
 // app.use(express.json({limit: '50mb'}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false}));
-
-
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 hbs.registerHelper('server_ip', config.server_ip );
 
 
