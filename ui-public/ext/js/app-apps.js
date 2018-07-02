@@ -547,7 +547,8 @@ apps.controller("apps-controller" , [
            }
       }
       $scope.time_progress_models_changer = () => {
-        $scope.loading_target_header = '/head-models/model-' +  $scope.__player_object.settings.time_settings.timer_layout + '.hbs' ;
+      $scope.__player_object.settings.time_settings.timer_layout = $scope.time_progress_models ;
+      $scope.loading_target_header = '/head-models/model-' +  $scope.__player_object.settings.time_settings.timer_layout + '.hbs' ;
       $scope.application_settings.settings.time_settings.timer_layout = $scope.time_progress_models;
       // $scope.application_settings.settings.progression_bar.progression_bar_layout = $scope.time_progress_models ;
       $timeout(function(){ $scope.$apply() } , 350);
