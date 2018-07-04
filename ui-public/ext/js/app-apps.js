@@ -1631,9 +1631,9 @@ apps.controller("apps-controller" , [
                          var url ;
                          if($scope.model_type == 'questions')
                            url =  $scope.api_url_edit_question ;
-                           else
-                           url =$scope.api_url_edit_answer = $scope.server_ip + "api/"+$scope.app_id+"/question/"+$scope.question_id+"/answer/edit";
-
+                            else
+                              url = $scope.api_url_edit_answer = $scope.server_ip + "api/"+$scope.app_id+"/question/"+$scope.question_id+"/answer/edit";
+                           
                         $http({
                           method : "PATCH"           ,
                           url :  url                 ,

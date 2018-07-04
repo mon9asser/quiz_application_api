@@ -1514,23 +1514,22 @@ qtnrRouters.patch("/:app_id/question/:question_id/answer/media/edit" , question_
    }); // end document here !
 });
 // Answers
-qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_answer_images.single("media_src") ,  auth_verify_api_keys , (req , res)=>{
+qtnrRouters.patch("/:app_id/question/:question_id/answer/:process" , question_answer_images.single("media_src") ,  auth_verify_api_keys , (req , res) => {
   ///localhost:3000/api/5a1efcc61826bd398ecd4dee/question/5a1f0c5c0b6a6843735020b2/answer/create
   var processType= req.params.process ;
   var question_id = req.params.question_id;
   var user = req.verified_user;
   var userType = req.is_creator;
-
   var app_id = req.params.app_id ;
 
   // this user should be a creator user !
- if (userType != 1) {
-      return new Promise((resolve, reject) => {
-         res.status(401).send(notes.Warnings.Permission_Warning);
-     });
- }
+   if (userType != 1){
+        return new Promise((resolve, reject) => {
+           res.status(401).send(notes.Warnings.Permission_Warning);
+       });
+   }
 
-   qtnr.findOne({ _id:app_id } , (err , docs)=>{
+   qtnr.findOne({ _id:app_id } , ( err , docs )=>{
      if(!docs || err ) {
        return new Promise((resolve, reject)=>{
           res.status(404).send(notes.Errors.Error_Doesnt_exists("Application"));
@@ -2539,7 +2538,7 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
                    when_you_solve : "When you solve this question the next one will come directly after few moments",
                    there_are_many_options : "There're many correct choices , You've to select them  to pass this question"
                 } ,
-               enable_screens : true , 
+               enable_screens : true ,
                grade_settings : {
                  is_graded : false ,
                  value : 90
