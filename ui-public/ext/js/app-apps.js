@@ -288,6 +288,7 @@ apps.controller("apps-controller" , [
       // server_ip+answer_value.media_optional.media_src
       // alert($scope.server_ip + answer_value.media_optional.media_src);
       var img_vlox_data ;
+
       if(answer_value.coppied_data != undefined){
 
         if( answer_value.coppied_data.column_style != undefined && style_type == true )
@@ -308,7 +309,7 @@ apps.controller("apps-controller" , [
       }else {
           img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src  ;
       }
-      // alert(img_vlox_data);
+
       return {
         backgroundImage : 'url(' + img_vlox_data + ')'
       }
@@ -417,14 +418,14 @@ apps.controller("apps-controller" , [
     $scope.cancel_the_cropping = () => {
       $('.masklayer').fadeOut();
     }
-    $scope.excute_the_cropping = (qus_id , ans_id , question_object) => {
+    $scope.excute_the_cropping = (qus_id , ans_id , question_object ) => {
       // append the current image right now
-      console.log({
-        cropped_media_info : $scope.cropped_media_info
-      });
+      // console.log({
+      //   cropped_media_info : $scope.cropped_media_info
+      // });
 
-      var image_data = "<img style='width: 100%;'  id='img_cropping' src='"+$scope.cropped_media_info.image_source+"' />"
-      $(".cropping-data").html(image_data);
+      // var image_data = "<img style='width: 100%;'  id='img_cropping' src='"+$scope.cropped_media_info.image_source+"' />"
+      // $(".cropping-data").html(image_data);
 
       // rename it rihght now ans see what happen if it called
       var img_data = document.getElementById('img_cropping');
@@ -1209,9 +1210,23 @@ apps.controller("apps-controller" , [
                     if(target_answer.media_type == 0 ) {
                       media_block.html(image);
                       show_media_link.val($scope.server_ip + target_answer.media_src);
-                      media_block.find('div').css({
-                          "background-image":"url('"+$scope.server_ip + target_answer.media_src +"')"
-                      });
+                      // media_block.find('div').css({
+                      //     "background-image":"url('"+$scope.server_ip + target_answer.media_src +"')"
+                      // });
+
+                      var  image_iframe = "<img id='img_cropping' style='width:100%;' src='"+$scope.server_ip + target_answer.media_src+"' />"
+                      var preview_box = $(".media-x-preview");
+                      preview_box.html(image_iframe);
+
+                      var  question_object = $scope.questions_list.find(x => x._id == $scope.question_id );
+                      if(question_object != undefined)
+                        {
+                          $timeout(function(){
+                              $scope.excute_the_cropping( $scope.question_id ,$scope.answer_id , question_object );
+                          } , 300)
+                        }
+
+                      // =>> Calling cropper here
                     } // end image type
 
                     if(target_answer.media_type == 1 ) {
@@ -1239,10 +1254,24 @@ apps.controller("apps-controller" , [
                         }else {
                           if(target_answer.media_optional.media_type == 0  ) {
                             media_block.html(image);
-                            show_media_link.val($scope.server_ip + target_answer.media_optional.media_src);
-                            media_block.find('div').css({
-                                "background-image":"url('"+$scope.server_ip + target_answer.media_optional.media_src +"')"
-                            });
+                            show_media_link.val($scope.server_ip + target_answer.media_optional.media_src );
+                            console.log(target_answer.media_optional.media_src);
+                            var  image_iframe = "<img id='img_cropping' style='width:100%;' src='"+$scope.server_ip + target_answer.media_optional.media_src+"' />"
+                            var preview_box = $(".media-x-preview");
+                            preview_box.html(image_iframe);
+
+                            var  question_object = $scope.questions_list.find(x => x._id == $scope.question_id );
+                            if(question_object != undefined)
+                              {
+                                $timeout(function(){
+                                    $scope.excute_the_cropping( $scope.question_id ,$scope.answer_id , question_object );
+                                } , 300)
+                              }
+                            // media_block.find('div').css({
+                            //     "background-image":"url('"+$scope.server_ip + target_answer.media_optional.media_src +"')"
+                            // });
+                            // =>> Calling cropper here
+                            // alert( $scope.server_ip + target_answer.media_optional.media_src )
                           } // end image type
 
                           if(target_answer.media_optional.media_type == 1 ) {
@@ -1633,7 +1662,9 @@ apps.controller("apps-controller" , [
                            url =  $scope.api_url_edit_question ;
                             else
                               url = $scope.api_url_edit_answer = $scope.server_ip + "api/"+$scope.app_id+"/question/"+$scope.question_id+"/answer/edit";
-                           
+
+
+
                         $http({
                           method : "PATCH"           ,
                           url :  url                 ,
@@ -1667,6 +1698,7 @@ apps.controller("apps-controller" , [
                              //(target_question);
                              var target_answer = target_question.answers_format.find($scope.callback_answer_index);
                              //(target_answer);
+                             var required_obj = new Object();
                              if( target_question.question_type == 1 ){
                                    var answer_data = success_data.data ;
 
@@ -1686,7 +1718,8 @@ apps.controller("apps-controller" , [
                                      //("ANSWER DATA");
                                      //(answer_data);
                                      var media_obk_data = new Object();
-
+                                     required_obj['style'] = target_question.answer_settings.choice_style
+                                     required_obj['answer'] = answer_data;
                                      if(answer_data.media_type == 0) {
                                        // => Image Type
                                        media_obk_data['media_name'] = answer_data.media_name;
@@ -1719,13 +1752,20 @@ apps.controller("apps-controller" , [
                                    // Store it into scope object
                                    $scope.answer_media = target_answer.media_optional ;
 
+                                   required_obj['style'] = target_question.answer_settings.choice_style
+                                   required_obj['answer'] = target_answer;
+
                                    // ==>>> MEDIA_DATA+++++++++
                                    $timeout(function (){
                                      //+++++ $scope.iframe_access.change_data_in_answer_view ($scope.question_id  ,  2  , answer_data._id , null  , null  , answer_data.media_optional );
                                    },350);
 
                                }
-
+                               if ( target_question.question_type == 0 || target_question.question_type == 1 )
+                                  {
+                                    $scope.blob_background_data ( required_obj.answer , required_obj.style );
+                                    $scope.save_cropped_images();
+                                  }
                            }
 
                          $(".media-imgvid-uploader").fadeOut();
@@ -2963,7 +3003,14 @@ apps.controller("apps-controller" , [
               $scope.data_object.append("question_id" , $scope.question_id );
               $scope.data_object.append("answer_id" , $scope.answer_id );
               $scope.data_object.append("media_src" , $scope.file_object.file );
-
+              // =>> Calling cropper here
+              var  question_object = $scope.questions_list.find(x => x._id == $scope.question_id );
+              if(question_object != undefined)
+                {
+                  $timeout(function(){
+                      $scope.excute_the_cropping( $scope.question_id ,$scope.answer_id , question_object );
+                  } , 300)
+                }
             }
             // ===> Upload Image
             if($scope.file_object['file'] != null ) {
@@ -2982,7 +3029,8 @@ apps.controller("apps-controller" , [
                  }
 
                  // Preview Image
-                 var  image_iframe = "<div style='background:url("+image_src+")' class='emb-image-case public-media'></div>" ;
+                 //  var  image_iframe = "<div style='background:url("+image_src+")' class='emb-image-case public-media'></div>" ;
+                 var  image_iframe = "<img id='img_cropping' style='width:100%;' src='"+image_src+"' />"
                  var preview_box = $(".media-x-preview");
                  preview_box.html(image_iframe);
               };
