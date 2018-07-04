@@ -1636,6 +1636,10 @@ apps.controller("apps-controller" , [
 
 
      $scope.save_media_with = function ( type ) {
+
+       var html_loader = '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>';
+       $('.button_updates').html(html_loader);
+        
                    var headers = new Object();
                    if($scope.file_object.media_type == 0 ){
                         // ==> Header
@@ -1692,6 +1696,8 @@ apps.controller("apps-controller" , [
                                //+++++ $scope.iframe_access.change_data_in_answer_view ($scope.question_id  ,  0 , $scope.question_id , null  , null  , media_objects );
                              },350);
                            }else {
+                             // => Keep it loading
+
                              // --------------------------------------------
                              // 1 ===> Answers
                              // --------------------------------------------
@@ -1770,7 +1776,8 @@ apps.controller("apps-controller" , [
                                       // $scope.blob_background_data ( required_obj.answer , required_obj.style );
                                     }
                            }
-
+                         $(".button_updates").html("close");
+                         $(".mm-update").html("Save");
                          $(".media-imgvid-uploader").fadeOut();
                         } , function(error_data){
                              //(error_data);
