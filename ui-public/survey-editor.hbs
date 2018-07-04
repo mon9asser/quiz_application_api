@@ -153,22 +153,33 @@
           <div class="right_part col-md-7 col-sm-6 col-xs-12">
               <!-- Switch to view or editor [Handler]-->
               <div class="switched-button switch-mode">
-                   <!-- <div ng:hide="activated_screens" class="input-switch">
+                 <!-- <span class="swMode">
+                   On <span class="action-case"> {> editor_mode <} </span>
+                 </span> -->
+                 <!-- <div class="mode-chs-x">
+                     <input type="checkbox" class="slide-mode" ng:model="create_quiz.template_mode" id="mode-chox-option" name="check" />
+                     <label  ng:click="change_mode()" for="mode-chox-option"></label>
+                     <span class="image-on mode-option-x"></span>
+                 </div> -->
+                   <!-- <div  class="input-switch">
                         <label>
                            <i class="fa fa-paperclip"></i>
                            <span ng:bind="activated_screen_name"></span>
                         </label>
                    </div> -->
-                   <div  class="input-switch" ng:class="is_this_preview()">
-                     <label>Preview</label>
+                   <div  class="input-switch" ng:class="(screen_type != 0 ) ? 'display_editor_preview_option':'dontdisplay_editor_preview_option'">
+                     <label ng:if="screen_type == 3">Welcome Screen</label>
+                     <label ng:if="screen_type == 2">Goodbye Screen</label>
+                     <label ng:if="screen_type == 1">Result Screeen</label>
                    </div>
 
-                   <div class="input-switch" ng:class="is_this_preview()">
+                   <div class="input-switch" ng:class="(screen_type == 0 ) ? 'display_editor_preview_option':'dontdisplay_editor_preview_option'">
                        <label for="switch-editor">Edit</label>
                        <input type="checkbox" id="switch-editor" ng:model="switching_editor_preview_value" ng:change="switching_editor_preview()" class="input" />
                        <label for="switch-editor" class="switch"></label>
                        <label for="switch-editor">Preview</label>
                   </div>
+
               </div>
 
 
@@ -176,7 +187,7 @@
               <div class="question-editor swipper-container-block">
 
                   <!-- Preview Page -->
-                  <div class="preview-container swiper-slide" style="position:relative;">
+                  <div class="preview-container" style="position:relative;">
                       {{> preview app = app }}
                       <!-- Loading edditor -->
                       <!-- <div class="loader-container">
@@ -187,7 +198,7 @@
                       </div> -->
                     </div>
                   <!-- Editor Page -->
-                  <div class="editor-container swiper-slide" style="position:relative; "><!-- template_mode -->
+                  <div class="editor-container" style="position:relative; "><!-- template_mode -->
                      {{> editor app = app }}
                      <!-- Loading edditor -->
                      <div class="loader-container">

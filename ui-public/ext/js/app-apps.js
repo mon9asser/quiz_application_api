@@ -289,6 +289,7 @@ apps.controller("apps-controller" , [
       // alert($scope.server_ip + answer_value.media_optional.media_src);
       var img_vlox_data ;
 
+
       if(answer_value.coppied_data != undefined){
 
         if( answer_value.coppied_data.column_style != undefined && style_type == true )
@@ -309,7 +310,6 @@ apps.controller("apps-controller" , [
       }else {
           img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src  ;
       }
-
       return {
         backgroundImage : 'url(' + img_vlox_data + ')'
       }
@@ -359,6 +359,8 @@ apps.controller("apps-controller" , [
               'scaleX':  $scope.cropped_media_info.scaleX,
               'scaleY':  $scope.cropped_media_info.scaleY
             };
+
+
           }else {
 
             var choose_style = question_obj.answer_settings.choice_style ;
@@ -1255,8 +1257,8 @@ apps.controller("apps-controller" , [
                           if(target_answer.media_optional.media_type == 0  ) {
                             media_block.html(image);
                             show_media_link.val($scope.server_ip + target_answer.media_optional.media_src );
-                            console.log(target_answer.media_optional.media_src);
-                            var  image_iframe = "<img id='img_cropping' style='width:100%;' src='"+$scope.server_ip + target_answer.media_optional.media_src+"' />"
+
+                            var image_iframe = "<img id='img_cropping' style='width:100%;' src='"+$scope.server_ip + target_answer.media_optional.media_src+"' />"
                             var preview_box = $(".media-x-preview");
                             preview_box.html(image_iframe);
 
@@ -1755,17 +1757,18 @@ apps.controller("apps-controller" , [
                                    required_obj['style'] = target_question.answer_settings.choice_style
                                    required_obj['answer'] = target_answer;
 
-                                   // ==>>> MEDIA_DATA+++++++++
-                                   $timeout(function (){
-                                     //+++++ $scope.iframe_access.change_data_in_answer_view ($scope.question_id  ,  2  , answer_data._id , null  , null  , answer_data.media_optional );
-                                   },350);
+                                   //  ==>>> MEDIA_DATA+++++++++
+                                   //  $timeout(function (){
+                                   //    //+++++ $scope.iframe_access.change_data_in_answer_view ($scope.question_id  ,  2  , answer_data._id , null  , null  , answer_data.media_optional );
+                                   //  },350);
 
                                }
+
                                if ( target_question.question_type == 0 || target_question.question_type == 1 )
-                                  {
-                                    $scope.blob_background_data ( required_obj.answer , required_obj.style );
-                                    $scope.save_cropped_images();
-                                  }
+                                    {
+                                      $scope.save_cropped_images();
+                                      // $scope.blob_background_data ( required_obj.answer , required_obj.style );
+                                    }
                            }
 
                          $(".media-imgvid-uploader").fadeOut();
@@ -4409,7 +4412,14 @@ apps.controller("apps-controller" , [
     }
   });
 
-
+  $scope.first_load_css_part = () => {
+    $scope.editor_page = "0" ;
+    $("#welcome-screens").css("display","block");
+     // ==> Slide To Target Element
+     //+++++ $scope.iframe_access.slide_to_question_in_index_number(0);
+    $(".welcome-screen-block").addClass("outlined_object");
+    $scope.screen_type = 3
+  }
   $scope.block_selector = () => {
        $("#welcome-screens,#goodbye-screens,#result-screens ,#question-screens").css({display:'none' });
        //  $scope.editor_page
