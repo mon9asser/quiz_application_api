@@ -1134,18 +1134,17 @@
                                   </div>
                                   <div class="passing-grad-block">
                                      <div class="checkbox-toggle">
-                                        <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.grade_settings.is_graded" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                                        <label class="labels-options" for="check-toggle-2">Passing Grade</label>
+                                        <input style="margin-top: 11px;" ng:change="update_grade_settings()" ng:model="application_settings.settings.grade_settings.is_graded" type="checkbox" id="check-toggle-2xxxx" ng:checked='is_disabled' class="switch_1 input-checkboxes">
+                                        <label style="margin-top: 12px; margin-left: 15px;" class="labels-options" for="check-toggle-2xxxx">Passing Grade</label>
+                                        <input max="100" min="50" ng:change="update_settings_in_view()" ng:model="application_settings.settings.grade_settings.value" id="pass-grade-value" type="number" value="" name="demo1" class="form-control number-pass-grade" placeholder="Ex. 85%" ng:disabled="is_disabled_act" style="display: block;">
                                      </div>
                                   </div>
 
-                                   <div class="form-group">
+                                   <!-- <div class="form-group">
                                       <div class="input-group bootstrap-touchspin xbootstrap-touchspin">
                                          <span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-                                         <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.grade_settings.value" id="demo1" type="text" value="" name="demo1" class="form-control" placeholder="Ex. 85%" style="display: block;">
-                                         <!-- <span class="input-group-addon bootstrap-touchspin-postfix">%</span> -->
                                       </div>
-                                   </div>
+                                   </div> -->
                                    <!--
                                    +++++++++++++++++++++++++++++++++++++++++++
                                     ==============>>> Question Labels
@@ -1276,16 +1275,27 @@
                              <div class="control-item-content" >
                                 <div class="control-item-content-text">
                                    <div class="passing-grad-block">
-                                      <div class="checkbox-toggle">
+                                      <div class="checkbox-toggle" style="overflow:visible;">
                                          <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.time_settings.is_with_time" class="input-checkboxes switch_1" type="checkbox" id="check-Timer-2" checked="">
                                          <label class="labels-options" for="check-Timer-2">Require Timeframe</label>
                                          <div class="labels-options" style="position:relative; float:right; cursor:pointer;">
+                                            <div class="dropdown">
+                                              <span  data-toggle="dropdown" style="margin-top: -5px;">
+                                                Models
+                                                <!-- <span class="caret"></span> -->
+                                              </span>
+                                              <ul class="dropdown-menu mm-menulist">
+                                                <li ng:click="choose_time_model_(1)" style="background-image:url('{> server_ip + 'img/model-1.png' <}'); background-size:unset;"></li>
+                                                <li ng:click="choose_time_model_(2)" style="background-image:url('{> server_ip + 'img/model-2.png' <}')"></li>
+                                                <li ng:click="choose_time_model_(3)" style="background-image:url('{> server_ip + 'img/model-3.png' <}')"></li>
+                                              </ul>
+                                            </div>
                                             <!-- Models <i class="fa fa-caret-down"></i> -->
-                                            <select ng:change="time_progress_models_changer()" ng:model="time_progress_models" class="time-models" name="">
-                                              <option value="1">Model 1</option>
-                                              <option value="2">Model 2</option>
-                                              <option value="3">Model 3</option>
-                                            </select>
+                                              <!-- <select ng:change="time_progress_models_changer()" ng:model="time_progress_models" class="time-models" name="">
+                                                <option value="1">Model 1</option>
+                                                <option value="2">Model 2</option>
+                                                <option value="3">Model 3</option>
+                                              </select> -->
                                          </div>
 
                                       </div>

@@ -2575,8 +2575,11 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
                navigation_btns : true ,
                review_setting : false ,
                createdAt : new Date() ,
-               updatedAt : new Date ()
-
+               updatedAt : new Date () , 
+               indexes : {
+                 questions : '0' ,
+                 answers : '1'
+               }
            }
 
       }

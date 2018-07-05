@@ -280,6 +280,7 @@ apps.controller("apps-controller" , [
     $scope.slide_screens = null ;
     $scope.index_value = 0 ;
     $scope.cropper = null ;
+    $scope.is_disabled = false ;
     $scope.question = new Object();
     $scope.json_source = $scope.server_ip + "ext/json/json-keys.json";
     var question_data_object = null
@@ -546,9 +547,18 @@ apps.controller("apps-controller" , [
              navigation_btns : true ,
              review_setting : false ,
              createdAt : new Date() ,
-             updatedAt : new Date ()
+             updatedAt : new Date () ,
+             indexes : {
+               questions : '0' ,
+               answers : '1'
+             }
            }
       }
+      $scope.choose_time_model_ = ( time_model ) => {
+        $scope.time_progress_models = time_model ;
+        $scope.time_progress_models_changer();
+      }
+      $scope.is_disabled = $scope.application_settings.settings.grade_settings.is_graded ;
       $scope.time_progress_models_changer = () => {
       $scope.__player_object.settings.time_settings.timer_layout = $scope.time_progress_models ;
       $scope.loading_target_header = '/head-models/model-' +  $scope.__player_object.settings.time_settings.timer_layout + '.hbs' ;
@@ -836,7 +846,7 @@ apps.controller("apps-controller" , [
                     }
                     //====================-> End Settings
                     $scope.application_settings = settings_obj;
-
+                      $scope.is_disabled = $scope.application_settings.settings.grade_settings.is_graded ;
                   },function(err){
                });
           }); // End Json Data
@@ -1639,7 +1649,7 @@ apps.controller("apps-controller" , [
 
        var html_loader = '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>';
        $('.button_updates').html(html_loader);
-        
+
                    var headers = new Object();
                    if($scope.file_object.media_type == 0 ){
                         // ==> Header
@@ -2710,7 +2720,7 @@ apps.controller("apps-controller" , [
 
 
         // $scope.this_attendee_draft = $scope.this_attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
-          $scope.load_quiz_timer ();
+          $scope.load_quiz_timer();
     };
     $scope.enable_screens = () => {
       if($scope.application_settings.settings.enable_screens == false && $scope.screen_type != 0 )
@@ -2718,20 +2728,79 @@ apps.controller("apps-controller" , [
     }
     $scope.start_this_quiz = () => {
       $scope.join_this_quiz();
-      if( $scope.questions_list.length != 0 ){
-        $scope.index_value = 0 ;
-        $scope.question = $scope.questions_list[$scope.index_value];
-        $scope.edit_this_question($scope.question._id , $scope.index_value);
-      }
-
+        if( $scope.questions_list.length != 0 ){
+          $scope.index_value = 0 ;
+          $scope.question = $scope.questions_list[$scope.index_value];
+          $scope.edit_this_question($scope.question._id , $scope.index_value);
+        }
     };
-     $scope.load_time_tracker = () => {}
+
+    $scope.load_template_timer = () => {
+       console.log({
+         settings : $scope.__player_object
+       });
+       if($scope.__player_object != undefined && $scope.__player_object != null && $scope.__player_object.settings != undefined ){
+       var timeSettings = $scope.__player_object.settings.time_settings;
+
+         if(timeSettings && timeSettings != undefined || timeSettings.is_with_time){
+           $scope.seconds = timeSettings.seconds;
+           $scope.minutes = timeSettings.minutes ;
+           $scope.hours   = timeSettings.hours;
+
+         }
+       }
+     }
+    $scope.load_time_tracker  = () => {
+
+            var sec  = $('.sec');
+            var mins = $('.min');
+            var hrs  = $('.hr');
+
+            var is_hourly = $scope.__player_object.settings.time_settings.timer_type ;
+            if(is_hourly){
+               if( $scope.seconds == 0 && $scope.minutes == 0 && $scope.hours == 0)
+                  {
+                    // $scope.do_an_action_with_closest_time();
+                    return false ;
+                  }
+               }else {
+                  if( $scope.seconds == 0 && $scope.minutes == 0 )
+                      {
+                        // $scope.do_an_action_with_closest_time();
+                        return false ;
+                      }
+            }
+            $scope.seconds--;
+            if( $scope.seconds < 0 ){
+               $scope.seconds = 59;
+               $scope.minutes--;
+            }
+
+            if(is_hourly){
+                 if($scope.minutes < 00 && $scope.hours > 0 ) {
+                   $scope.minutes = 59;
+                   $scope.hours--;
+                 }
+            }
+
+          sec.html(($scope.seconds < 10 ) ? '0'+ $scope.seconds : $scope.seconds);
+          mins.html(($scope.minutes < 10 ) ? '0'+$scope.minutes:$scope.minutes );
+          if(is_hourly){
+              hrs.html( ( $scope.hours < 10 ) ? ''+$scope.hours : $scope.hours);
+          }
+          // Load time
+          $scope.$apply();
+          $scope.load_quiz_timer();
+
+    }
     $scope.load_quiz_timer = () => {
+
       if($scope.__player_object.settings != undefined ){
          var timeSettings = $scope.__player_object.settings.time_settings;
 
          if(timeSettings && timeSettings.is_with_time)
             $scope.timer = setTimeout( $scope.load_time_tracker , 1000);
+
        }
     }
     $scope.go_to_previouse_slide = (question_id) => {
@@ -3823,6 +3892,10 @@ apps.controller("apps-controller" , [
         $scope.application_settings.settings.time_settings.hours = 0 ;
         $scope.set_application_settings($scope.application_settings.settings);
     }
+    $scope.update_grade_settings = () => {
+       $scope.is_disabled_act = ! $scope.application_settings.settings.grade_settings.is_graded ;
+       $scope.set_application_settings($scope.application_settings.settings);
+    }
     $scope.update_settings_in_view_with_hrs = () => {
       $scope.set_application_settings($scope.application_settings.settings);
     }
@@ -3883,7 +3956,7 @@ apps.controller("apps-controller" , [
             headers : $scope.api_key_headers
           }).then(function(resp){
             $scope.__player_object = resp.data ;
-
+            $scope.load_template_timer();
           },function(err){ (err); });
       };
       $scope.load_application_keys = function (){
@@ -4919,7 +4992,7 @@ apps.controller("apps-controller" , [
         $scope.current_element = "ul li.selected_answer , .selected_answer:hover" ;
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.answer_select_screen_color });
        $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.answer_select_screen_color  );
-     }
+     } 
      $scope.answer_select_screen_border_func = function (){
        $scope.current_element = "ul li.selected_answer , ul li.selected_answer:hover" ;
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-color' : $scope.answer_select_screen_border });

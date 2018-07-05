@@ -45,7 +45,7 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
            minutes : 29 ,
            seconds : 59
          },
-         enable_screens : true , 
+         enable_screens : true ,
          progression_bar : {
            is_available:false ,
            progression_bar_layout:0
@@ -65,7 +65,11 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
          navigation_btns : true ,
          review_setting : false ,
          createdAt : new Date() ,
-         updatedAt : new Date ()
+         updatedAt : new Date () ,
+         indexes : {
+           questions : '0' ,
+           answers : '1'
+         }
 
      };
   $scope.json_apk_file = $scope.server_ip + "ext/json/json-keys.json";
