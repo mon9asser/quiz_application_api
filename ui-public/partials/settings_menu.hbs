@@ -55,6 +55,58 @@
                                  </div>
                                </li>
                                <li class="collapsed_properties">
+                                 <div class="property-name" ng:click="show_selected_element('page-player')">
+                                  progress bar
+                                 </div>
+                                 <div class="property-blocks text-right">
+                                   <div class="prop-item">
+                                     <span>Background</span>
+                                     <input ng:change="progress_bar_default_background_func()" class="color_picker" ng:model="progress_bar_default_background" type="text" name="" value="">
+                                   </div>
+                                   <div class="prop-item">
+                                     <span>Text Color</span>
+                                     <input ng:change="progress_bar_default_text_color_func()" class="color_picker" ng:model="progress_bar_default_text_color" type="text" name="" value="">
+                                   </div>
+                                   <div class="prop-item">
+                                     <span>Minutes Color</span>
+                                     <input ng:change="minute_color_word_func()" class="color_picker" ng:model="minute_color_word" type="text" name="" value="">
+                                   </div>
+                                   <div class="prop-item">
+                                     <span>Highlighted background</span>
+                                     <input ng:change="highlighted_background_func()" class="color_picker" ng:model="highlighted_background" type="text" name="" value="">
+                                   </div>
+                                   <div class="prop-item">
+                                     <span>Highlighted Borders</span>
+                                     <input ng:change="highlighted_borders_func()" class="color_picker" ng:model="highlighted_borders" type="text" name="" value="">
+                                   </div>
+                                 </div>
+                               </li>
+
+                               <li class="collapsed_properties">
+                                 <div class="property-name" ng:click="show_selected_element('page-player')">
+                                  Timer
+                                 </div>
+                                 <div class="property-blocks text-right">
+                                   <div class="prop-item">
+                                     <span>Text Color</span>
+                                     <input ng:change="timer_text_color_func()" class="color_picker" ng:model="timer_text_color" type="text" name="" value="">
+                                   </div>
+                                   <div class="prop-item">
+                                     <span>Minutes Color</span>
+                                     <input ng:change="minute_color_word_func()" class="color_picker" ng:model="minute_color_word" type="text" name="" value="">
+                                   </div>
+                                   <div class="prop-item">
+                                     <span>Highlighted background</span>
+                                     <input ng:change="highlighted_background_func()" class="color_picker" ng:model="highlighted_background" type="text" name="" value="">
+                                   </div>
+                                   <div class="prop-item">
+                                     <span>Highlighted Borders</span>
+                                     <input ng:change="highlighted_borders_func()" class="color_picker" ng:model="highlighted_borders" type="text" name="" value="">
+                                   </div>
+                                 </div>
+                               </li>
+
+                               <li class="collapsed_properties">
 
                                  <div class="property-name" ng:click="show_selected_element('box')">
                                   Screen Box

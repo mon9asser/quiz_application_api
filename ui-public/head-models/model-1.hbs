@@ -10,32 +10,30 @@
   </style>
   <div class="tool-obj">
      <div class="object-layouts">
-       <div class="object-layouts-container dwidth-object select_box_brd">
+       <div class="object-layouts-container dwidth-object select_box_brd box-welcome-screen">
          <!-- Time tracker -->
          <div style="width:100%;" class="tracker" ng:if="__player_object.settings.time_settings.is_with_time == true">
            <!-- Time Template 0  -->
             <span class="time-tracker" style="float:right;">
               <span class="time-status select_texts" ng:mouseover="show_hovred_element('select_texts')">
-              <b>
-                                        Time remaining :
-              </b>
-              <time class="hrs-timer time-obj select_numbers">
+
+              <time class="hrs-timer time-obj select_numbers timer-text-numbers">
                   <span ng:if="__player_object.settings.time_settings.timer_type == true" class="hr">{>__player_object.settings.time_settings.hours<}</span><span ng:if="__player_object.settings.time_settings.timer_type == true">:</span><span class="min">{>__player_object.settings.time_settings.minutes<}</span>:<span class="sec">{>__player_object.settings.time_settings.seconds<}</span>
               </time>
-              <span>
-                {> (__player_object.settings.time_settings.timer_type == 0 )? 'min(s)' : (hours <= 1 ) ?'min(s)' : 'hr(s)'<}
+              <span class="timer-text-type">
+                {> ( __player_object.settings.time_settings.timer_type == 0 ) ? 'min(s)' : (hours <= 1 ) ?'min(s)' : 'hr(s)'<}
               </span>
               </span>
             </span>
          </div>
          <!-- progress_bar -->
          <div class="progression_bar" ng:if="__player_object.settings.progression_bar.is_available == true">
-           <span class="progression-bar select_texts question-countx" ng:mouseover="show_hovred_element('select_texts' , this )">
+           <span class="progression-bar select_texts question-countx progress-bar-text" ng:mouseover="show_hovred_element('select_texts' , this )">
               Question <span class="current-question">{>curren_question_slide<}</span> of {> __player_object.questions.length <}
            </span>
 
-           <div class="progress-bar select_box">
-                <div class="progress-highlighted select_box"></div>
+           <div class="progress-bar select_box empty-progress-bar">
+                <div class="progress-highlighted select_box highlighted-frame-bar"></div>
            </div>
 
          </div>

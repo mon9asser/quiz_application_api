@@ -359,7 +359,50 @@ ul li.wrong_answer > div > .no-media-here { color: #D91E18;}
 .scalet-o li span {     background: #fbfafa   }
 .scalet-o li span { border-color: #c17c7e  }
 .scalet-o-selected { color: #fff;  background: #c17c7e }
-
+.timeobjx > ul li.hrs > span { color: #fff;}
 .no-media-here {
   font-size: 12px;
 }
+.brogress_bar_model_1
+ {
+   background: #fff;
+   border: 3px solid #fff;
+ }
+ .text_question_counts {
+   color: #c17c7e;
+ }
+ .timeobjx > ul li.hrs span:last-child {
+   color: #efe3e4;
+}
+.timeobjx > ul li.hrs {
+  background: #c17c7e;
+}
+.timeobjx > ul li.hrs {
+  border-width: 5px;
+  border-style: solid ;
+  border-color: #fff;
+}
+.active-bar {
+  background: #c17c7e;
+}
+.timeobjx > ul li.dotted {
+  color: #c17c7e;
+}
+.time-data {
+    fill: #c17c7e;
+  }
+  .text-question-number {
+    color: #c17c7e;
+  }
+  .time-data-type {
+    fill: #c17c7e;
+  }
+  .current-progress {
+    /*fill: none;*/
+    stroke: #c17c7e;
+  }
+  .base-circle {
+    /*fill: none;*/
+    stroke: #eee;
+    /*stroke-width: 5px;*/
+   }

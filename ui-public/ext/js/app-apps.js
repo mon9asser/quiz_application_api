@@ -4992,7 +4992,7 @@ apps.controller("apps-controller" , [
         $scope.current_element = "ul li.selected_answer , .selected_answer:hover" ;
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.answer_select_screen_color });
        $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.answer_select_screen_color  );
-     } 
+     }
      $scope.answer_select_screen_border_func = function (){
        $scope.current_element = "ul li.selected_answer , ul li.selected_answer:hover" ;
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-color' : $scope.answer_select_screen_border });
@@ -5128,6 +5128,55 @@ apps.controller("apps-controller" , [
      $scope.continue_question_button_color_func = function (){
        //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.continue_question_button_color  });
        $scope.apply_those_changes_right_now( '.continue-answer-question-button' , 'color' , $scope.continue_question_button_color  );
+     }
+
+     $scope.progress_bar_default_background_func = function (){
+       //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.continue_question_button_color  });
+       if( $scope.time_progress_models  == 3 )
+        {
+          $scope.apply_those_changes_right_now( '.base-circle' , 'stroke' , $scope.progress_bar_default_background  );
+
+        }
+       $scope.apply_those_changes_right_now( '.empty-progress-bar' , 'background' , $scope.progress_bar_default_background  );
+     }
+
+     $scope.progress_bar_default_text_color_func = function (){
+       //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.continue_question_button_color  });
+       $scope.apply_those_changes_right_now( '.progress-bar-text' , 'color' , $scope.progress_bar_default_text_color  );
+     }
+     $scope.timer_text_color_func = function (){
+       //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.continue_question_button_color  });
+
+       if( $scope.time_progress_models  == 3 )
+        {
+           $scope.apply_those_changes_right_now( '.timer-text-numbers , .time-data , .timeobjx > ul li.hrs > span' , 'fill' , $scope.timer_text_color  );
+        }
+        $scope.apply_those_changes_right_now( '.timer-text-numbers , .time-data , .timeobjx > ul li.hrs > span' , 'color' , $scope.timer_text_color  );
+
+     }
+     $scope.minute_color_word_func = function (){
+       //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.continue_question_button_color  });
+      //  alert($scope.__player_object.settings.time_settings.timer_layout);
+       if( $scope.time_progress_models  == 3 )
+        {
+
+          // $scope.apply_those_changes_right_now( '.timer-text-numbers , .timeobjx > ul li.hrs > span' , 'color' , $scope.timer_text_color  );
+            $scope.apply_those_changes_right_now( '.time-data-type' , 'fill' , $scope.minute_color_word  );
+        }
+       $scope.apply_those_changes_right_now( '.timer-text-type , .timeobjx > ul li.hrs span:last-child' , 'color' , $scope.minute_color_word  );
+     }
+     $scope.highlighted_background_func = function (){
+
+       //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.continue_question_button_color  });
+       if( $scope.__player_object.settings.time_settings.timer_layout   == 3 )
+        {
+          $scope.apply_those_changes_right_now( '.current-progress' , 'stroke' , $scope.highlighted_background  );
+        }
+       $scope.apply_those_changes_right_now( '.highlighted-frame-bar , .timeobjx > ul li.hrs' , 'background' , $scope.highlighted_background  );
+     }
+     $scope.highlighted_borders_func = function (){
+       //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.continue_question_button_color  });
+       $scope.apply_those_changes_right_now( '.border-frame-bar , .timeobjx > ul li.hrs' , 'border-color' , $scope.highlighted_borders  );
      }
 
 

@@ -22,26 +22,28 @@
     display: block;
     overflow: hidden;
     width: 40%;
-    background: #fff;
+
     height: 20px;
     overflow: hidden;
     margin-top: 10px;
     position: relative;
-    border: 3px solid #fff;
+
   }
 
   .text_question_counts {
-    color: #c17c7e;
+
     font-weight: bold;
   }
   .active-bar {
+        /*background: #c17c7e;*/
+
     display: block;
     position: absolute;
     top: 0px;
     bottom: 0px;
     height: 100%;
     left: 0px;
-    background: #c17c7e;
+
     width: 20%;
   }
   .timeobjx {
@@ -58,34 +60,33 @@
     list-style: none;
   }
   .timeobjx > ul li.hrs {
+    /*border: 5px solid #fff;*/
      display: inline-block;
-      background: #c17c7e;
+
       width: 70px;
       height: 70px;
       line-height: 50px;
       border-radius: 35px;
       vertical-align: baseline;
       text-align: center;
-      border: 5px solid #fff;
+
   }
   .timeobjx > ul li.hrs > span {
     display: block;
     position: relative;
     line-height: 1;
 
-    color: #fff
   }
   .timeobjx > ul li.hrs span:first-child {
     font-family: "diogene_carre";
   }
   .timeobjx > ul li.hrs span:last-child {
-    color: #efe3e4;
     margin-top: -3px;
     font-size: 12px;
   }
 
   .timeobjx > ul li.dotted {
-    color: #c17c7e;
+    /*color: #c17c7e;*/
     font-size: 50px;
     margin-top: -7px;
     display: inline-block;
@@ -119,29 +120,31 @@
     <div class="object-layouts-container-layout-1 dwidth-object select_box_brd">
        <!-- Progress bar with question number  -->
        <!-- Question Number  -->
-       <span ng:if="__player_object.settings.progression_bar.is_available == true" class="progression-bar text_question_counts">
-         <span class="fa fa-sliders" style="margin-right:3px;"></span>  Question <span class="current-question">{>curren_question_slide<}</span> of {> __player_object.questions.length <}
+       <span ng:if="__player_object.settings.progression_bar.is_available == true" class="progression-bar text_question_counts progress-bar-text">
+         <span class="fa fa-sliders progress-bar-text" style="margin-right:3px;"></span>
+         Question <span class="current-question progress-bar-text">{>curren_question_slide<}</span>
+         of {> __player_object.questions.length <}
        </span>
        <!-- Progress bar  -->
-       <div ng:if="__player_object.settings.progression_bar.is_available == true" class="brogress_bar_model_1">
-         <div class="active-bar progress-highlighted"></div>
+       <div ng:if="__player_object.settings.progression_bar.is_available == true" class="brogress_bar_model_1 empty-progress-bar  border-frame-bar">
+         <div class="active-bar progress-highlighted highlighted-frame-bar"></div>
        </div>
        <!-- Timer  -->
        <div class="timeobjx" ng:if="__player_object.settings.time_settings.is_with_time == true">
           <ul>
             <li class="hrs" ng:if="__player_object.settings.time_settings.timer_type == true">
-              <span class="hr">{>__player_object.settings.time_settings.hours<}</span>
-              <span>hrs</span>
+              <span class="hr timer-text-numbers">{>__player_object.settings.time_settings.hours<}</span>
+              <span class="timer-text-type">hrs</span>
             </li>
             <li class="dotted" ng:if="__player_object.settings.time_settings.timer_type == true">:</li>
             <li class="hrs">
-              <span class="min">{>__player_object.settings.time_settings.minutes<}</span>
-              <span>min</span>
+              <span class="min timer-text-numbers">{>__player_object.settings.time_settings.minutes<}</span>
+              <span class="timer-text-type">min</span>
             </li>
             <li class="dotted">:</li>
             <li class="hrs">
-              <span class="sec">{>__player_object.settings.time_settings.seconds<}</span>
-              <span>sec</span>
+              <span class="sec timer-text-numbers">{>__player_object.settings.time_settings.seconds<}</span>
+              <span class="timer-text-type">sec</span>
             </li>
           </ul>
        </div>

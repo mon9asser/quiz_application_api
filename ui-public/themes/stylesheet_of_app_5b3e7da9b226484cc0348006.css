@@ -1,0 +1,18 @@
+.box-welcome-screen { background:#ff9900; }
+.player-body-screen { background:#ead1dc; }
+.empty-progress-bar { background:#ead1dc; }
+.progress-bar-text { color:#00ff00; }
+.timer-text-type { color:#ffff00; }
+.highlighted-frame-bar { background:#00ff00; }
+.timer-text-numbers { color:#ffff00; }
+.border-frame-bar { border-color:#c27ba0; }
+.timeobjx > ul li.hrs > span { color:#0000ff; }
+.timeobjx > ul li.hrs span:last-child { color:#ffff00; }
+.highlighted-frame-bar , .timeobjx > ul li.hrs { background:#00ff00; }
+.timer-text-numbers , .timeobjx > ul li.hrs > span { color:#4a86e8; fill:#4a86e8; }
+.timer-text-type , .timeobjx > ul li.hrs span:last-child { color:#4a86e8; }
+.border-frame-bar , .timeobjx > ul li.hrs { border-color:#00ff00; }
+.time-data-type { fill:#4a86e8; }
+.timer-text-numbers , .time-data , .timeobjx > ul li.hrs > span { fill:#4a86e8; color:#4a86e8; }
+.current-progress { stroke:#00ffff; }
+.base-circle { stroke:#ead1dc; }

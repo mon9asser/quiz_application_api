@@ -16,12 +16,12 @@
        }
        .base-circle {
          fill: none;
-         stroke: #eee;
+         /*stroke: #eee;*/
          stroke-width: 5px;
         }
         .current-progress {
           fill: none;
-          stroke: #c17c7e;
+          /*stroke: #c17c7e;*/
           stroke-width: 15px;
           transition: stroke-dashoffset 0.7s;
           stroke-dasharray: 628 ;
@@ -39,26 +39,29 @@
         }
 
         .time-data {
+            /*fill: #c17c7e;*/
           font-size: 35px;
           font-family: "diogene_carre";
-          fill: #c17c7e;
+
         }
         .time-data-type {
+          /*fill: #c17c7e;*/
           font-size: 25px;
           font-family: sans-serif;
-          fill: #c17c7e;
+
         }
         .select_texts {
           margin-top: 20px;
           display: inline;
         }
        .text-question-number {
+
          width: 100%;
           display: block;
           position: relative;
           text-align: center;
           margin-top: -1px;
-          color: #c17c7e;
+
           font-family: roboto;
        }
 </style>
@@ -98,14 +101,14 @@
 
             <text ng:if=" ( (all_seconds_act | math_around_it) | length_it ) < 3" transform="translate(-45,0)" class="time-data min"></text>
             <text ng:if=" ( (all_seconds_act | math_around_it) | length_it ) < 3" transform="translate(8,0)" class="time-data sec"></text> -->
-            <text transform="translate(-30,30)" class="time-data-type" ng:if="__player_object.settings.time_settings.timer_type == false || __player_object.settings.time_settings.hours == 0 || __player_object.settings.time_settings.hours == null ">mins</text>
-            <text transform="translate(-30,30)" class="time-data-type" ng:if="__player_object.settings.time_settings.timer_type != false && __player_object.settings.time_settings.hours > 0 ">hrs</text>
+            <text transform="translate(-30,30)" class="time-data-type timer-text-type" ng:if="__player_object.settings.time_settings.timer_type == false || __player_object.settings.time_settings.hours == 0 || __player_object.settings.time_settings.hours == null ">mins</text>
+            <text transform="translate(-30,30)" class="time-data-type timer-text-type" ng:if="__player_object.settings.time_settings.timer_type != false && __player_object.settings.time_settings.hours > 0 ">hrs</text>
          </g>
       </svg>
 
     </div>
 
-    <span class="progression-bar select_texts question-countx text-question-number" ng:mouseover="show_hovred_element('select_texts' , this )">
-       Question <span class="current-question">{>curren_question_slide<}</span> of {> __player_object.questions.length <}
+    <span class="progression-bar select_texts question-countx text-question-number progress-bar-text" ng:mouseover="show_hovred_element('select_texts' , this )">
+       Question <span class="current-question progress-bar-text">{>curren_question_slide<}</span> <span class="progress-bar-text">of {> __player_object.questions.length <}</span>
     </span>
 </div>
