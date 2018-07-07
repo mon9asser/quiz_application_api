@@ -56,7 +56,7 @@
                                </li>
                                <li class="collapsed_properties">
                                  <div class="property-name" ng:click="show_selected_element('page-player')">
-                                  progress bar
+                                  Progress bar
                                  </div>
                                  <div class="property-blocks text-right">
                                    <div class="prop-item">
@@ -1333,13 +1333,13 @@
                                          <div class="labels-options" style="position:relative; float:right; cursor:pointer;">
                                             <div class="dropdown">
                                               <span  data-toggle="dropdown" style="margin-top: -5px;">
-                                                Models
+                                                Styles
                                                 <!-- <span class="caret"></span> -->
                                               </span>
                                               <ul class="dropdown-menu mm-menulist">
-                                                <li ng:click="choose_time_model_(1)" style="background-image:url('{> server_ip + 'img/model-1.png' <}'); background-size:unset;"></li>
-                                                <li ng:click="choose_time_model_(2)" style="background-image:url('{> server_ip + 'img/model-2.png' <}')"></li>
-                                                <li ng:click="choose_time_model_(3)" style="background-image:url('{> server_ip + 'img/model-3.png' <}')"></li>
+                                                <li ng:class="( __player_object.settings.time_settings.timer_layout == 1 ) ? 'selectd_style' :''" ng:click="choose_time_model_(1)" style="background-image:url('{> server_ip + 'img/model-1.png' <}'); background-size:unset;"></li>
+                                                <li ng:class="( __player_object.settings.time_settings.timer_layout == 2 ) ? 'selectd_style' :''" ng:click="choose_time_model_(2)" style="background-image:url('{> server_ip + 'img/model-2.png' <}')"></li>
+                                                <li ng:class="( __player_object.settings.time_settings.timer_layout == 3 ) ? 'selectd_style' :''"  ng:click="choose_time_model_(3)" style="background-image:url('{> server_ip + 'img/model-3.png' <}')"></li>
                                               </ul>
                                             </div>
                                             <!-- Models <i class="fa fa-caret-down"></i> -->
