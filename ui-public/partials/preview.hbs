@@ -127,6 +127,7 @@
 <div ng:if="screen_type == 0" class="keep-it-padding">
   <!-- Question Container -->
   <div data-selected-block ="question-slide" class="container screen-container survey-player-questions question_typeco_object question_opg_editor_block select_box_brd question-screen-block question-screen-box">
+    {>__player_object.settings.indexes<}
       <div class="question-body load_qs_theme question_opg_editor select_box_brd question-box-block question-box-text">
          <span class="label-question default_theme_texts_bg select_box_brd question-label-block question-label-box">
            <span ng:if="__player_object.settings.indexes.questions == 0 " class="qs-numericals select_numbers">{> question_indexes.numberical[index_value] <}</span>
