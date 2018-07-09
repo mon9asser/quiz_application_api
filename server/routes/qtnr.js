@@ -2512,10 +2512,8 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
     }
 
     var required = new Array()
-    if(  req.body.app_settings == null  )
-      {
-
-        req.body.app_settings = {
+    req.body.app_settings = new Object()
+    req.body.app_settings = {
                titles :
                  {
                    title_start_with : "Write Starting Text"  ,
@@ -2582,7 +2580,7 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
                }
            }
 
-      }
+
 
     if(req.body.app_type == null  )
        required[required.length]='app_type';
