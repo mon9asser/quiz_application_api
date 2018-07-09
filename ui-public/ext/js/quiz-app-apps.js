@@ -662,7 +662,10 @@ apps.controller("players" , [
                     //  answer_valuex = object.answer ;
                   }
                   if( object.question.question_type == 2 ) answer_valuex = object.answer.boolean_value ;
-                  if(thisquestion_exists == -1 ){
+                  if( thisquestion_exists == -1 ){
+
+
+
                       attendeeInfo.attendee_questions.push({
                         question_id : object.question_id ,
                         question_type : object.question.question_type ,
@@ -674,21 +677,24 @@ apps.controller("players" , [
                           answer_object : object.answer
                         })
                       });
+
                   }else {
                     var target__question = attendeeInfo.attendee_questions[thisquestion_exists];
                     var this_answer_exs = target__question.attendee_answers.findIndex(x => x.answer_id ==  object.answer_id );
-                    console.log({sdsdsdssdsdsdsdsssssss: this_answer_exs});
+
                     if( this_answer_exs == -1 ){
+
+                      if( object.question.answer_settings.single_choice == true )
+                          target__question.attendee_answers = new Array();
+
                       target__question.attendee_answers.push({
                         answer_id : object.answer_id ,
                         answer_value : $("<p>"+answer_valuex+"</p>").text() ,
                         answer_object : object.answer
                       });
                     }else {
-                      target__question.attendee_answers.splice(this_answer_exs , 1);
-                      // target__question.attendee_answers[this_answer_exs].answer_id  =  object.answer_id ;
-                      // target__question.attendee_answers[this_answer_exs].answer_value  =   $("<p>"+answer_valuex+"</p>").text();
-                      // target__question.attendee_answers[this_answer_exs].answer_object = object.answer;
+
+                      target__question.attendee_answers.splice( this_answer_exs , 1);
                     }
                   }
 
