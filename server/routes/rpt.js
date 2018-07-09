@@ -2591,6 +2591,9 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
           } // => End Attednee Id not found
 
 
+          res.send(an_online_rpt.attendee_questions);
+          return false ;
+
           // ==> Case All Attendees
           if ( req.body.attendee_id == null ) {
             for (var i = 0; i < online_report.length; i++) {
@@ -2630,9 +2633,7 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
                  if( req.body.questions != null && req.body.questions == true ){
                       if( an_online_rpt.attendee_questions != undefined || an_online_rpt.attendee_questions.length == 0){
-                      //  attendee_object['questions'] = an_online_rpt.attendee_questions
-                      res.send(an_online_rpt);
-                      return false ;
+                        attendee_object['questions'] = an_online_rpt.attendee_questions;
                       }else {
                         attendee_object['questions'] ="No questions meet your selected criteria"
                       }
