@@ -2646,6 +2646,8 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
                  if( req.body.questions != null && req.body.questions == true ){
                       if( an_online_rpt.attendee_questions != undefined || an_online_rpt.attendee_questions.length == 0){
+                        console.log(an_online_rpt.attendee_questions);
+                        console.log("====================================");
                         attendee_object['questions'] = an_online_rpt.attendee_questions;
                       }else {
                         attendee_object['questions'] ="No questions meet your selected criteria"
@@ -2674,8 +2676,7 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
                  }else
                 detailes_report.items.push(attendee_object);
 
-                console.log(attendee_object);
-                console.log('------------------------------------');
+
                 //detailes_report.items
             }
 
