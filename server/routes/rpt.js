@@ -2512,8 +2512,7 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
           detailes_report.overview['started'] = started_attendees;
           detailes_report.overview['not_started'] = not_started_attendees;
           detailes_report.overview['completed'] = completed_apps ;
-          res.send({started_not_started : started_not_started ,detailes_report });
-          return false ;
+
           if(req.body.pagination != null )
           detailes_report['paging'] = new Object();
 
@@ -2531,6 +2530,9 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
           detailes_report['app_info'] = new Object();
           detailes_report['items'] = new Object();
 
+          res.send({started_not_started : started_not_started ,detailes_report });
+          return false ;
+          
           if( req.body.attendee_id == null ) detailes_report.items = new Array();
           else detailes_report.items = new Object();
 
