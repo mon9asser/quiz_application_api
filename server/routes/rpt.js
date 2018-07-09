@@ -2597,9 +2597,7 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
           if ( req.body.attendee_id == null ) {
             for (var i = 0; i < online_report.length; i++) {
                 var an_online_rpt = online_report[i];
-                res.send(an_online_rpt.attendee_questions);
-                return false ;
-                
+                 
                 var attendee_object = new Object ();
                 var status_cases ;
                 var user_index = usrDoc.findIndex( x => x._id == an_online_rpt.user_id );
