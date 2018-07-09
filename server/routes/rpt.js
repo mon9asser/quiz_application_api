@@ -2715,12 +2715,11 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
             // ==============================>>>
 
           } // =>> End all atendees
-
-          res.send({ status_code : 1 , message: 'success'  ,  data : detailes_report });
+          res.send(all_attendees);
+          // res.send({ status_code : 1 , message: 'success'  ,  data : detailes_report });
     }).catch((er)=>{
       return new Promise((resolve, reject) => {
-        res.send( er );
-        // res.send(notes.notifications.catch_errors("An error occurred ! , try later"));
+          res.send(notes.notifications.catch_errors("An error occurred ! , try later"));
       });
     });
 
