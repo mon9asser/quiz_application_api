@@ -2699,7 +2699,7 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
           } // =>> End all atendees
 
-          res.send({ data : detailes_report });
+          res.send({ status_code : 1 , message: 'success'  ,  data : detailes_report });
     }).catch((er)=>{
       return new Promise((resolve, reject) => {
         res.send(notes.notifications.catch_errors("An error occurred ! , try later"));
