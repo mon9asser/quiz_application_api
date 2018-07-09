@@ -2654,8 +2654,7 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
 
 
-                 res.send({started_not_started : started_not_started ,detailes_report });
-                 return false ;
+
                  if( req.body.date != null ){
                    if( req.body.date.date_from == null  || req.body.date.date_to == null  ){
                      return  new Promise((resolve, reject) => {
@@ -2720,7 +2719,8 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
           res.send({ status_code : 1 , message: 'success'  ,  data : detailes_report });
     }).catch((er)=>{
       return new Promise((resolve, reject) => {
-        res.send(notes.notifications.catch_errors("An error occurred ! , try later"));
+        res.send( er );
+        // res.send(notes.notifications.catch_errors("An error occurred ! , try later"));
       });
     });
 
