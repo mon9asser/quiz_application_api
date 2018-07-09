@@ -2597,6 +2597,9 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
           if ( req.body.attendee_id == null ) {
             for (var i = 0; i < online_report.length; i++) {
                 var an_online_rpt = online_report[i];
+                res.send(an_online_rpt.attendee_questions);
+                return false ;
+                
                 var attendee_object = new Object ();
                 var status_cases ;
                 var user_index = usrDoc.findIndex( x => x._id == an_online_rpt.user_id );
@@ -2616,10 +2619,9 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
 
 
-                res.send(an_online_rpt.attendee_questions);
-                return false ;
 
-                
+
+
                 var is_completed_or = offline_report.findIndex(x => x.attendee_id == an_online_rpt.user_id) ;
                 attendee_object['attendee_id'] =  an_online_rpt.user_id ;
                 attendee_object['name'] = (user_index != -1) ? user_info.name: 'unkonwn';
