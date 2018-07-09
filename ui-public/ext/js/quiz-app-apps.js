@@ -696,10 +696,15 @@ apps.controller("players" , [
 
                       target__question.attendee_answers.splice( this_answer_exs , 1);
                     }
+
+
+                    console.log({
+                      '****************+******::-' : target__question.attendee_answers
+                    });
+
+                    
                   }
-                  console.log({
-                    '****************+******::-' : target__question.attendee_answers
-                  });
+
 
                   /*
                   attendee_questions
