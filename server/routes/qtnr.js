@@ -89,7 +89,7 @@ qtnrRouters.use(build_session);
 
 
 
-qtnrRouters.post("/create/v1.1/deprecated", auth_verify_api_keys_tokens ,  (req, res) => {
+qtnrRouters.post("/create/v1.1/dps", auth_verify_api_keys_tokens ,  (req, res) => {
   var user = req.verified_user;
   var userType = req.is_creator;
     if (userType != 1) {
@@ -2502,7 +2502,7 @@ qtnrRouters.post("/:app_id/stylesheet/add/files" , (req, res) => {
   // });
 
 });
-qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
+qtnrRouters.post("/create/dps", auth_verify_api_keys_tokens ,  (req, res) => {
   var user = req.verified_user;
   var userType = req.is_creator;
     if (userType != 1) {
