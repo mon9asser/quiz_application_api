@@ -696,7 +696,7 @@ apps.controller("players" , [
 
                       target__question.attendee_answers.splice( this_answer_exs , 1);
                     }
-
+                    console.log(target__question);
                   }
 
 
@@ -936,7 +936,7 @@ apps.controller("players" , [
                          console.log({sdsdsdssdsdsdsdsssssss: this_answer_exs});
                          if( this_answer_exs == -1 ){
 
-                           if(target__question.answer_settings.single_choice == true )
+                           if( target__question.answer_settings.single_choice == true )
                             target__question.attendee_answers = new Array();
 
                            target__question.attendee_answers.push({
@@ -951,6 +951,7 @@ apps.controller("players" , [
                            // target__question.attendee_answers[this_answer_exs].answer_value  =   $("<p>"+answer_valuex+"</p>").text();
                            // target__question.attendee_answers[this_answer_exs].answer_object = object.answer;
                          }
+                         console.log(target__question);
                        }
 
                        console.log({______________answer_valuex : answer_valuex});

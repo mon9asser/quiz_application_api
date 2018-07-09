@@ -2462,6 +2462,11 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
     });
 });
 
+
+
+
+
+
 rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) => {
 
   var app_id = req.params.app_id ;
@@ -2497,6 +2502,8 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
           var total_attendee_objects = online_report.length ;
           var started_attendees = (started_not_started.true == undefined ) ? 0 :  started_not_started.true;
+          res.send("Error after here !");
+          return false ;
           var not_started_attendees = (started_not_started.false == undefined ) ? 0 :  started_not_started.false;
           var completed_apps = offline_report.length ;
 
