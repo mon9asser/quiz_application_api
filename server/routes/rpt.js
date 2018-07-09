@@ -2653,6 +2653,8 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
                 attendee_object['completed_date'] = ( detailed_online_report != undefined ) ?  detailed_online_report.completed_date : "unkonwn date";
 
                  if( req.body.questions != null && req.body.questions == true ){
+                   console.log(an_online_rpt.attendee_questions);
+                   console.log('+++++++++++++++++++++++++++++++++++++++++++');
                       if( an_online_rpt.attendee_questions != undefined ){
                         if ( an_online_rpt.attendee_questions.length != 0 )
                         {
