@@ -684,7 +684,7 @@ apps.controller("players" , [
 
                     if( this_answer_exs == -1 ){
 
-                      if( object.question.answer_settings.single_choice == true )
+                      if( target__question.answer_settings.single_choice == true )
                           target__question.attendee_answers = new Array();
 
                       target__question.attendee_answers.push({
@@ -697,12 +697,6 @@ apps.controller("players" , [
                       target__question.attendee_answers.splice( this_answer_exs , 1);
                     }
 
-
-                    console.log({
-                      '****************+******::-' : target__question.attendee_answers
-                    });
-
-                    
                   }
 
 
@@ -941,6 +935,10 @@ apps.controller("players" , [
                          var this_answer_exs = target__question.attendee_answers.findIndex(x => x.answer_id ==  object.answer_id );
                          console.log({sdsdsdssdsdsdsdsssssss: this_answer_exs});
                          if( this_answer_exs == -1 ){
+
+                           if(target__question.answer_settings.single_choice == true )
+                            target__question.attendee_answers = new Array();
+
                            target__question.attendee_answers.push({
                              answer_id : object.answer_id ,
                              answer_value : $("<p>"+answer_valuex+"</p>").text() ,
