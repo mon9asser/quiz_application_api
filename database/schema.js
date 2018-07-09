@@ -50,133 +50,70 @@ var userDataTypes = {
   ++++++++++++++++++++++++++++++++++++++++++++++++
 */
 var Questionnaire_settings = {
-    type : {
-      titles : {
-        type : {
-                  title_start_with : {  /* Both ( Survey/quiz )  */
-                    type : String ,
-                    trim : true
-                  } ,
-                  title_end_with :{     /* Both ( Survey/quiz )  */
-                    type : String ,
-                    trim : true
-                  },
-                  title_success_with:{
-                    type : String ,
-                    trim : true
-                  },
-                  title_failed_with : {
-                    type : String ,
-                    trim : true
-                  }
-                }
-      } ,
-      step_type : { // False => Precentage Steps || true => Numerical
-        type: Boolean
-      } ,
-      grade_settings : {
-        type : {
-                    is_graded : {
-                      type:Boolean
-                    } ,
-                    value : {
-                      type:Number
-                    }
-                }
-      } ,
-      // quiz_status : {
-      //   type : [
-      //           {
-      //             attendee_id:{
-      //               type : String ,
-      //               trim : true
-      //             } ,
-      //             report_id : {
-      //               type : String ,
-      //               trim : true
-      //             } ,
-      //             stopped_at_time : {
-      //               type : String ,
-      //               trim : true
-      //             } ,
-      //             at_question_id : {
-      //               type : String ,
-      //               trim : true
-      //             }
-      //           }
-      //         ]
-      // } ,
-      review_setting : {
-        type : Boolean
-      } ,
-      retake_setting : {
-        type : Boolean
-      } ,
-      navigation_btns : {
-        type : Number
-      } ,
-      label_btns : {
-        type : {
-                lbl_start_with : {
-                  type : String ,
-                  trim:true
-                } ,
-                lbl_continue_with :{
-                  type : String ,
-                  trim:true
-                } ,
-                lbl_retake_with :{
-                  type : String ,
-                  trim:true
-                },
-                lbl_review_with:{
-                  type : String ,
-                  trim:true
-                }
-              }
-      } ,
-      randomize_settings : {
-           type : Boolean
-      } ,
-      time_settings : {
-        type : {
-
-                is_with_time : {
-                    type : Boolean
-                } ,
-                value : {
-                  type : String ,
-                  trim : true
-                } ,
-                timer_type :{
-                  type : Boolean ,
-                  trim : true
-                } ,
-                timer_layout : {
-                  type : Number
-                } ,
-                seconds : { type : Number } ,
-                minutes: { type : Number } ,
-                hours: { type : Number } ,
-              }
-      } ,
-      progression_bar : {
-        type :{
-               is_available : {
-                 type : Boolean
-               } ,
-               progression_bar_layout: {
-                 type : Number
-               }
-             }
-      }  ,
-      createdAt : {
-        type : Date
-      },
-      updatedAt : {
-        type : Date
-      }
+  titles : {
+    type  :{
+        title_start_with : { type : String , trim : true },
+        title_end_with: { type : String , trim : true },
+        title_success_with: { type : String , trim : true },
+        title_failed_with: { type : String , trim : true },
     }
+  },
+  label_btns :  { type : {
+      lbl_start_with : { type : String , trim : true } ,
+      lbl_continue_with  : { type : String , trim : true },
+      lbl_retake_with  : { type : String , trim : true },
+      lbl_review_with  : { type : String , trim : true },
+      lbl_back_with : { type : String , trim : true } ,
+      lbl_finish_with : { type : String , trim : true } ,
+      lbl_submit_quiz_with : { type : String , trim : true } ,
+      lbl_score_with  : { type : String , trim : true },
+      lbl_grade_with  : { type : String , trim : true },
+      didnot_yet : { type : String , trim : true } ,
+      unsolved_question : { type : String , trim : true } ,
+      when_you_solve : { type : String , trim : true } ,
+      there_are_many_options : { type : String , trim : true } ,
+    }
+  },
+  enable_screens : { type : Boolean },
+  grade_settings : { type : {
+      is_graded : { type : Boolean } ,
+      value :  { type : String , trim : true }
+    }
+  },
+  indexes : { type : {
+    questions : { type  : Number } ,
+    answers : { type  : Number }
+  } },
+  time_settings : {
+    type : {
+      is_with_time:{ type : Boolean  } ,
+      value : { type : Number  } ,
+      timer_type : { type :  Boolean } ,
+      timer_layout : { type :  Number }  ,
+      hours : { type : Number  } ,
+      minutes : { type :  Number } ,
+      seconds : { type : Number  }
+    }
+  },
+  progression_bar : { type : {
+    is_available : { type : Number } ,
+    progression_bar_layout : { type : Number }
+   } },
+  expiration : { type : {
+    is_set : { type :  Boolean } ,
+    through_time: { type : Number  } ,
+    title :  { type : String , trim : true }
+  } },
+  randomize_settings : { type : Boolean },
+  step_type : { type :  Boolean },
+  auto_slide : { type :  Boolean },
+  allow_touch_move : { type :  Boolean },
+  show_results_per_qs : { type :  Boolean },
+  retake_setting : { type :  Boolean },
+  navigation_btns : { type :  Boolean },
+  review_setting : { type : Boolean  },
+  createdAt : { type : Date },
+  updatedAt : { type :  Date }
 };
 var quiz_answer_types = {
   type : {
@@ -389,7 +326,7 @@ var questionnaireDataTypes = {
    creator_id : { type : String , required : true ,  trim : true  ,  ref : "users" } ,
    app_type : {  type : String ,  required : true  } ,
    theme_style : { type:[] } ,
-   stylesheet_properties : { type : String } , 
+   stylesheet_properties : { type : String } ,
    description : { type : String ,  trim : true ,  },
    questionnaire_title : {  type : String ,  required :true ,  trim : true },
    createdAt : { type : Date } ,

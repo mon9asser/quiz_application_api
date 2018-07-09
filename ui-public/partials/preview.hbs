@@ -40,12 +40,12 @@
     }
    </style>
 
- <!--
- ---------------------------------------------------------
- =============================>>> Welcome Screen
- ---------------------------------------------------------
+<!--
+---------------------------------------------------------
+=============================>>> Welcome Screen
+---------------------------------------------------------
  -->
- <div class="swiper-wrapper quiz-contents keep-it-padding" ng:if="screen_type == 3 && application_settings.settings.enable_screens == true">
+<div class="swiper-wrapper quiz-contents keep-it-padding" ng:if="screen_type == 3 && application_settings.settings.enable_screens == true">
   <div class="swiper-slide welcoming-screen-x">
     <div data-selected-block="question-slide" ng:class="load_quiz_status_theme()" class="container screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-welcome-screen">
        <div>
@@ -59,14 +59,14 @@
        </div>
     </div>
   </div>
-</div>
+  </div>
 
 <!--
 ---------------------------------------------------------
 =============================>>> Ending Screen
 ---------------------------------------------------------
 -->
-  <div  class="swiper-slide keep-it-padding" ng:if="screen_type == 2  && application_settings.settings.enable_screens == true">
+<div  class="swiper-slide keep-it-padding" ng:if="screen_type == 2  && application_settings.settings.enable_screens == true">
     <div data-selected-block ="question-slide" class="screen_opg_editor container screen-container about-quiz screen-ending-starting select_box_brd goodbye-screen-block box-goodbye-screen">
         <div class="description-body redactor-styles select_texts goodbye-screen-text-block goodbye-screen-text" ng:bind:html="__player_object.settings.titles.title_end_with | trust_html"></div>
         <div class="warning_case select_box_data goodbye-screen-text-warning-block goodbye-screen-warning-text" ng:class="load_slide_theme(question.question_type)" ng:click="go_to_not_attended_question()"></div>
@@ -83,7 +83,7 @@
             </button>
         </div>
     </div>
-</div>
+  </div>
 
 <!--
 ---------------------------------------------------------
@@ -116,8 +116,8 @@
               </button>
          </div>
       </div>
+    </div>
   </div>
-</div>
 
 <!--
 ---------------------------------------------------------
