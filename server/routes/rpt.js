@@ -2654,7 +2654,8 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
 
 
-
+                 res.send({started_not_started : started_not_started ,detailes_report });
+                 return false ;
                  if( req.body.date != null ){
                    if( req.body.date.date_from == null  || req.body.date.date_to == null  ){
                      return  new Promise((resolve, reject) => {
@@ -2702,9 +2703,8 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
                 if(page_number > (detail_reports.length - 1)) page_number = detail_reports.length - 1;
 
                 detail_rpts = detail_reports[page_number] ;
-                res.send({started_not_started : started_not_started ,detailes_report });
-                return false ;
-                
+
+
                 detailes_report.paging['items_count']    = detail_rpts.length ;
                 detailes_report.paging['item_per_page']  = pages ;
                 detailes_report.paging['total_items']    = all_attendees.length
