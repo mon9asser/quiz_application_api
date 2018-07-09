@@ -2591,8 +2591,7 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
           } // => End Attednee Id not found
 
 
-          res.send(an_online_rpt.attendee_questions);
-          return false ;
+
 
           // ==> Case All Attendees
           if ( req.body.attendee_id == null ) {
@@ -2615,6 +2614,12 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
                   }
                 }
 
+
+
+                res.send(an_online_rpt.attendee_questions);
+                return false ;
+
+                
                 var is_completed_or = offline_report.findIndex(x => x.attendee_id == an_online_rpt.user_id) ;
                 attendee_object['attendee_id'] =  an_online_rpt.user_id ;
                 attendee_object['name'] = (user_index != -1) ? user_info.name: 'unkonwn';
