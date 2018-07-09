@@ -2502,8 +2502,7 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
           var total_attendee_objects = online_report.length ;
           var started_attendees = (started_not_started.true == undefined ) ? 0 :  started_not_started.true;
-          res.send(started_not_started);
-          return false ;
+
           var not_started_attendees = (started_not_started.false == undefined ) ? 0 :  started_not_started.false;
           var completed_apps = offline_report.length ;
 
@@ -2513,7 +2512,8 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
           detailes_report.overview['started'] = started_attendees;
           detailes_report.overview['not_started'] = not_started_attendees;
           detailes_report.overview['completed'] = completed_apps ;
-
+          res.send({started_not_started : started_not_started ,detailes_report });
+          return false ;
           if(req.body.pagination != null )
           detailes_report['paging'] = new Object();
 
