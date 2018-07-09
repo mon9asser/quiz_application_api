@@ -2673,6 +2673,9 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
                         }
                  }else
                 detailes_report.items.push(attendee_object);
+
+                console.log(attendee_object);
+                console.log('------------------------------------');
                 //detailes_report.items
             }
 
@@ -2715,8 +2718,7 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
             // ==============================>>>
 
           } // =>> End all atendees
-          res.send(all_attendees);
-          // res.send({ status_code : 1 , message: 'success'  ,  data : detailes_report });
+            res.send({ status_code : 1 , message: 'success'  ,  data : detailes_report });
     }).catch((er)=>{
       return new Promise((resolve, reject) => {
           res.send(notes.notifications.catch_errors("An error occurred ! , try later"));
