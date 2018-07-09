@@ -2502,7 +2502,7 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
           var total_attendee_objects = online_report.length ;
           var started_attendees = (started_not_started.true == undefined ) ? 0 :  started_not_started.true;
-          res.send("Error after here !");
+          res.send(started_not_started);
           return false ;
           var not_started_attendees = (started_not_started.false == undefined ) ? 0 :  started_not_started.false;
           var completed_apps = offline_report.length ;
