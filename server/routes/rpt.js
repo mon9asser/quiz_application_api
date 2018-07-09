@@ -2530,9 +2530,8 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
           detailes_report['app_info'] = new Object();
           detailes_report['items'] = new Object();
 
-          res.send({started_not_started : started_not_started ,detailes_report });
-          return false ;
-          
+
+
           if( req.body.attendee_id == null ) detailes_report.items = new Array();
           else detailes_report.items = new Object();
 
@@ -2655,7 +2654,9 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
 
 
-
+                 res.send({started_not_started : started_not_started ,detailes_report });
+                 return false ;
+                 
                  if( req.body.date != null ){
                    if( req.body.date.date_from == null  || req.body.date.date_to == null  ){
                      return  new Promise((resolve, reject) => {
