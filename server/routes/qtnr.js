@@ -89,7 +89,7 @@ qtnrRouters.use(build_session);
 
 
 
-qtnrRouters.post("/create/v1.1", auth_verify_api_keys_tokens ,  (req, res) => {
+qtnrRouters.post("/create/v1.1/deprecated", auth_verify_api_keys_tokens ,  (req, res) => {
   var user = req.verified_user;
   var userType = req.is_creator;
     if (userType != 1) {
