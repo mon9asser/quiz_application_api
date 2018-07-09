@@ -2590,17 +2590,10 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
                if( req.body.questions != null && req.body.questions == true ){
                     if( an_online_report.attendee_questions != undefined  ){
                       if(an_online_report.attendee_questions.length != 0 )
-                      {
-
-                        detailes_report.items['questions'] = an_online_report.attendee_questions
-                      }
+                      detailes_report.items['questions'] = an_online_report.attendee_questions
                       else
-                      {
-                        detailes_report.items['questions'] ="No questions meet your selected criteria" ;
-                      }
-                    }else {
-                      detailes_report.items['questions'] ="No questions meet your selected criteria"
-                    }
+                      detailes_report.items['questions'] ="No questions meet your selected criteria" ;
+                    }else detailes_report.items['questions'] ="No questions meet your selected criteria"
                }
                 // => End questions
 
@@ -2653,26 +2646,13 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
                 attendee_object['completed_date'] = ( detailed_online_report != undefined ) ?  detailed_online_report.completed_date : "unkonwn date";
 
                  if( req.body.questions != null && req.body.questions == true ){
-                   console.log(an_online_rpt.attendee_questions);
-                   console.log('+++++++++++++++++++++++++++++++++++++++++++');
                       if( an_online_rpt.attendee_questions != undefined ){
                         if ( an_online_rpt.attendee_questions.length != 0 )
-                        {
-                          attendee_object['questions'] = an_online_rpt.attendee_questions;
-                          console.log("===============>>> avalialbe");
-                        }
+                        attendee_object['questions'] = an_online_rpt.attendee_questions;
                         else
-                        {
-                          attendee_object['questions'] = "No questions meet your selected criteria"
-                          console.log("===============>>>Not avalialbe");
-                        }
-                      }else {
-                        if ( an_online_rpt.attendee_questions.length == 0 )
-                        {
-                          attendee_object['questions'] = "No questions meet your selected criteria"
-                          console.log("===============>>>Not avalialbe");
-                        }
-                      }
+                        attendee_object['questions'] = "No questions meet your selected criteria"
+                      }else
+                       attendee_object['questions'] = "No questions meet your selected criteria"
                  }
 
 
