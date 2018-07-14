@@ -3412,7 +3412,7 @@ rptRouters.post(
             item_per_page : recodrs_per_page ,
             total_items : all_record_counts ,
             page_index : page_index ,
-            total_pages : page_number
+            total_pages : parseInt( all_record_counts / recodrs_per_page)
           }
           return app_manager ;
         }
