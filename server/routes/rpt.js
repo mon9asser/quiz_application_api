@@ -3377,7 +3377,8 @@ rptRouters.post(
               total_questions: applications.questions.length,
               total_attendees: 0,
               total_passed: (total_passed.true != null )? total_passed.true : 0  ,
-              total_completed: (total_completed.true != null )? total_completed.true : 0
+              total_completed: (total_completed.true != null )? total_completed.true : 0 ,
+              history : applications.app_report.history
           }
           // => Attendee counts without date range
           if( applications.att__draft != undefined && applications.att__draft.att_draft != null )
@@ -3396,7 +3397,7 @@ rptRouters.post(
           var all_record_counts  = app_manager.items.length ;
           // => some exceptions
 
-
+          var page_index = page_number ;
           if (!_.isNumber(page_number)) page_number = 0;
           if(!_.isNumber(recodrs_per_page)) recodrs_per_page = config.default_records_per_page ;
 
@@ -3406,8 +3407,14 @@ rptRouters.post(
 
           var paging = _.chunk(app_manager.items, recodrs_per_page);
           if(page_number > (all_record_counts - 1)) page_number = all_record_counts - 1;
-
-          return app_manager.items = paging[page_number] ;
+          app_manager.items = paging[page_number] ;
+          app_manager.paging = {
+            item_per_page : recodrs_per_page ,
+            total_items : all_record_counts ,
+            page_index : page_index ,
+            total_pages : page_number
+          }
+          return app_manager ;
         }
 
       };
@@ -3470,6 +3477,9 @@ rptRouters.post(
 
       // ==> case excuted paging
       app_manager['items'] = new Array();
+      if(req.body.pagination != null )
+      app_manager['paging'] = new Object();
+
       storing_items( creatorQuestionnaires  , app_manager , req.body.pagination , req.body.date );
       res.send(notes.notifications.success_calling(app_manager));
     });
