@@ -1587,8 +1587,8 @@ ul li:last-child.emails {
  /* ------------- Media options here --------------- */
  .box-overlay {
     background: rgba(247, 247, 247, 0.8);
-    position: fixed;
-    top: 0px;
+    position: absolute;
+    top: -20px;
     bottom: 0px;
     right: 0px;
     left: 0px;
@@ -1599,7 +1599,7 @@ ul li:last-child.emails {
 
 .box-data {
     display: block;
-    position: fixed;
+    position: absolute;
     left: 0;
     right: 0;
     background: #fff;
@@ -1610,7 +1610,7 @@ ul li:last-child.emails {
     border: 1px dashed #ddd;
     box-shadow: 0px 0px 5px 0px #ece7e3;
     color: #999;
-    top: 10%;
+    top: 2%;
     padding-bottom: 15px;
     display: block;
 

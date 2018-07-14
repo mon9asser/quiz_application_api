@@ -98,10 +98,14 @@
 
                       <div class="description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text"  ng:mouseover="show_hovred_element('select_texts')" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
                       <div class="qusu-details text-right">
-                          <button ng:click="start_this_quiz()" class="button-take-this select_button welcome-screen-button-block welcome-screen-button" type="button" name="button">
-                              <i class="fa fa-sign-in" aria-hidden="true"></i>
-                              {> __player_object.settings.label_btns.lbl_start_with <}
-                          </button>
+                        <button ng:click="back_to_editor_mode()" class="button-take-this select_button welcome-screen-button-block welcome-screen-button" type="button" name="button">
+                            <i class="fa fa-sign-in" aria-hidden="true"></i>
+                            {> __player_object.settings.label_btns.lbl_back_with <}
+                        </button>
+                        <button ng:click="start_this_quiz()" class="button-take-this select_button welcome-screen-button-block welcome-screen-button" type="button" name="button">
+                            <i class="fa fa-sign-in" aria-hidden="true"></i>
+                            {> __player_object.settings.label_btns.lbl_start_with <}
+                        </button>
                       </div>
                   </div>
                 </div>

@@ -316,11 +316,79 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
   </div>
 
 </div>
 
+
+
+
+<!-- Overlay box -- w -- edit media -->
+  <div class="box-overlay media-uploader media-imgvid-uploader">
+    <!--
+    ++++++++++++++++++++++++++++++++++++
+    Box Overlay
+    ++++++++++++++++++++++++++++++++++++
+    -->
+    <div class="box-data">
+      <div class="box-data-title">
+        <b>Media Uploader</b>
+      </div>
+      <div class="media-part-controller">
+        <input ng:change="media_is_changed()" ng:model="file_object.link" type="text" class="form-control media-inputs show_media_link" placeholder="Media Link">
+        <ul class="media-links">
+          <li>
+            <a class="video-handler" href="#">
+              Add Video
+            </a>
+          </li>
+          <li>
+            <input ng:change="media_is_changed()" ng:model="file_object.file" class="image-uploader-x" type="file" name="" value="">
+            <a class="image-handler" href="#">
+              Add Image
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="preview-media">
+        <div class="pre-title media-im-vid">
+          <span>Preview</span>
+        </div>
+        <div class="preview-media-part media-im-vid">
+          <div class="media-x-preview">
+            <!-- List media part here -->
+          </div>
+        </div>
+        <div class="preview-media-part butns-part">
+          <button ng:click="close_media_box()" class="button_updates btn btn-danger btn-close-media" type="button" name="button">
+            Close
+          </button>
+          <button ng:click="save_media_with('preview')" class="button_updates btn btn-primary mm-update" type="button" name="button">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 <!-- Settings Menu -->
 <!-- Issue Here -->
   {{> settings_menu }}

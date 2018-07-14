@@ -106,6 +106,9 @@ apps.controller("preview_players" , [
 
     $scope.player_time_frame = 300 ;
     $scope.rating_scale_elements = [] ;
+    $scope.back_to_editor_mode = () => {
+        window.history.back();
+    };
     $scope.blob_background_data = ( answer_value , style_type ) => {
       // server_ip+answer_value.media_optional.media_src
       // alert($scope.server_ip + answer_value.media_optional.media_src);

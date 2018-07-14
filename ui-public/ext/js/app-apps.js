@@ -168,6 +168,7 @@ apps.controller("apps-controller" , [
     $scope.close_media_box = () => {
       $(".media-imgvid-uploader").fadeOut();
     }
+
     $scope.set_image_background = (image_sourc , set_server = null)=>{
       var set_server_ip = $scope.server_ip
       if(set_server != null )
@@ -1652,14 +1653,19 @@ apps.controller("apps-controller" , [
      };
 
 
-
+     $scope.media_is_changed = () => {
+       $scope.is_changed_media = true;
+     };
      $scope.save_media_with = function ( type ) {
+
+        if($scope.file_object.file == null && $scope.file_object.link == null)
+        return false ;
 
        var html_loader = '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>';
        $('.button_updates').html(html_loader);
 
-                   var headers = new Object();
-                   if($scope.file_object.media_type == 0 ){
+       var headers = new Object();
+       if($scope.file_object.media_type == 0 ){
                         // ==> Header
                        $scope.headers["Content-Type"] = undefined ;
                         // ==> Show Progression bar for uploading image
