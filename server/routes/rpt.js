@@ -3393,27 +3393,28 @@ rptRouters.post(
         if( pagination != null ){
           // => some givens
           var page_number = req.body.pagination.page_number ;
-          var recodrs_per_page = req.body.pagination.records_per_page
+          var pages = req.body.pagination.records_per_page
           var all_record_counts  = app_manager.items.length ;
+          var all_posts = app_manager.items ;
           // => some exceptions
-
-          var page_index = page_number ;
           if (!_.isNumber(page_number)) page_number = 0;
-          if(!_.isNumber(recodrs_per_page)) recodrs_per_page = config.default_records_per_page ;
-
+          if(!_.isNumber(pages)) pages = config.default_records_per_page ;
           if(page_number == 1 || page_number < 0) page_number = 0 ;
           if(page_number != 0 ) page_number = page_number - 1 ;
-          if(recodrs_per_page == 0 || recodrs_per_page < 0 ) recodrs_per_page = config.default_records_per_page;
+          if(pages == 0 || pages < 0 ) pages = config.default_records_per_page;
 
-          var paging = _.chunk(app_manager.items, recodrs_per_page);
+          var paging = _.chunk(app_manager.items, pages);
           if(page_number > (all_record_counts - 1)) page_number = all_record_counts - 1;
+          console.log("page_number == " + page_number);
           app_manager.items = paging[page_number] ;
           app_manager.paging = {
-            item_per_page : recodrs_per_page ,
+            item_per_page : pages ,
             total_items : all_record_counts ,
-            page_index : page_index ,
-            total_pages : parseInt( all_record_counts / recodrs_per_page)
+            page_index : page_number ,
+            total_pages : paging.length
           }
+
+
           return app_manager ;
         }
 
