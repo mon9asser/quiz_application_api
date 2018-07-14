@@ -309,8 +309,16 @@ apps.controller("apps-controller" , [
 
         }
       }else {
-          img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src  ;
+        console.log( answer_value);
+        var with_medi_ob ;
+        if(answer_value.media_optional != undefined)
+        with_medi_ob = $scope.server_ip + answer_value.media_optional.media_src  ;
+        else
+        with_medi_ob =   answer_value.media_src  ;
+        img_vlox_data = with_medi_ob;
       }
+
+
       return {
         backgroundImage : 'url(' + img_vlox_data + ')'
       }

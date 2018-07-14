@@ -1055,7 +1055,7 @@ rptRouters.delete("/:app_id/report/clear" , api_key_report_auth , (req , res) =>
 // });
 
 
-rptRouters.post([ "/:creator_id/brief/report/v1.1" , "/:creator_id/brief/:app_type/report" ] , api_key_report_auth , ( req , res ) => {
+rptRouters.post([ "/:creator_id/brief/report/v1.1" , "/:creator_id/brief/:app_type/report/v1.1" ] , api_key_report_auth , ( req , res ) => {
   var creator_id = req.params.creator_id;
   var report_type = req.params.report_type;
   var queries = new Object();
@@ -2216,190 +2216,6 @@ var is_failed = (value) => {
   return value.passed_the_grade == false ;
 };
 
-rptRouters.post([ "/:creator_id/brief/report" ] , api_key_report_auth , ( req , res ) => {
-  var creator_id = req.params.creator_id;
-  var report_type = req.params.report_type;
-  var queries = new Object();
-  queries["creator_id"] = creator_id;
-  if(req.body.pagination != null ){
-        if(req.body.pagination == null || ! req.body.pagination) {
-            return new Promise((resolve,reject) => {
-               res.status(400).send(notes.notifications.catch_fields(notes.Messages.Required_Message("`pagination` Object")));
-            });
-          }
-        var obj_pagination = new Array();
-        if(req.body.pagination.page_number == null )
-            obj_pagination[obj_pagination.length]='page_number';
-        if(req.body.pagination.records_per_page == null )
-            obj_pagination[obj_pagination.length]='records_per_page';
-        if(obj_pagination.length != 0 ){
-            return new Promise((resolve,reject) => {
-              res.status(400).send(notes.notifications.catch_fields(notes.Messages.Required_Message(obj_pagination)));
-            });
-         }
-   }
-
-  // Sorting By Date
-  if (req.body.date) {
-    if (req.body.date.date_from != null && req.body.date.date_to != null) {
-       var query_range = new Object();
-           query_range = {
-                   "$gte": new Date(req.body.date.date_from),
-                   "$lt": new Date(req.body.date.date_to)
-           }
-          queries["createdAt"] = query_range;
-      }
-  }
-
-   // Sorting if it by app_type
-  if ( req.params.app_type ){
-     if(req.params.app_type != 'quiz' && req.params.app_type != 'survey'){
-       return new Promise((resolve,reject)=>{
-         res.status(404).send(notes.notifications.show_app_types());
-      //  res.status(400).send({"Error":"This app is wrong it should be `quiz` Or `survey`"});
-     });
-   }
-      queries["app_type"] = (req.params.app_type == 'quiz') ? 1 : 0;
-  }
-
-
-
-  if(req.body.pagination != null ){
-    var page_number = req.body.pagination.page_number;
-    var pages = req.body.pagination.records_per_page;
-  }
-
-    qtnr.find(queries).populate('app_report').exec(function(error, creatorQuestionnaires){
-      if( error || ! creatorQuestionnaires || creatorQuestionnaires.length == 0) {
-        return new Promise((resolve , reject)=>{
-          res.status(404).send(notes.notifications.show_app_access());
-        });
-      }
-       // ==> Build brief report
-       var reports = creatorQuestionnaires ;
-       var brief_reports = new Array();
-
-
-       var app_manager = {
-           quiz : {
-              total : 0 ,
-              total_attendees : 0 ,
-              items : new Array ()
-           },
-           survey : {
-             total : 0 ,
-             total_attendees : 0 ,
-             items : new Array ()
-           }
-       };
-
-
-       for (var i = 0; i < reports.length; i++) {
-         var brfReport = new Object();
-         var documentObject  = reports[i];
-
-         //================================================================================
-          //  var appli_type ;
-          //  if( documentObject.app_type  == 1 ){ // => Quiz
-          //    appli_type = "quiz";
-          //  }else{ // => Survey
-          //    appli_type = "survey";
-          //  }
-         //================================================================================
-
-
-
-         // ==> Calculations
-         var total_passed , total_is_completed , total_is_completed_count ;
-         if(documentObject.app_report != null )
-         total_passed = _.countBy(documentObject.app_report.attendees, {'passed_the_grade': true});
-         else     total_passed = 0
-
-         if(documentObject.app_report != null )
-          total_is_completed = _.countBy(documentObject.app_report.attendees, {'is_completed': true});
-          else total_is_completed = 0;
-
-         if(documentObject.app_report != null )
-           total_is_completed_count = _.countBy(documentObject.app_report.attendees, 'results.correct_answers');
-           else total_is_completed_count = 0
-
-
-
-         brfReport['app_id'] = documentObject._id ;
-         brfReport['app_name'] = documentObject.questionnaire_title ;
-         brfReport['app_type']= ( documentObject.app_type  == 1) ? "Quiz" : "Survey";
-         brfReport['total_questions'] = documentObject.questions.length
-          if(documentObject.app_report != null )
-         brfReport['total_attendees'] = documentObject.app_report.attendees.length;
-         else  brfReport['total_attendees'] =  0
-
-         if(documentObject.app_type == 1)
-         brfReport['total_passed']= (total_passed.true != null )? total_passed.true : 0 ;
-         if(documentObject.app_type == 1)
-         brfReport['total_completed']= (total_is_completed.true != null )? total_is_completed.true : 0 ;
-          if(documentObject.app_report != null )
-         brfReport['history']= documentObject.app_report.history;
-         else
-         brfReport['history'] = "No histories meet your selected criteria !" ;
-
-         // ====================>>> Quizzes ans survey
-         if( documentObject.app_type  == 1 ){ // => Quizzes
-            app_manager.quiz.items.push(brfReport);
-            app_manager.quiz.total_attendees += (documentObject.app_report != null ) ? documentObject.app_report.attendees.length : 0
-
-         }
-
-         if( documentObject.app_type  == 0 ){ // => Survey
-           app_manager.survey.items.push(brfReport);
-           app_manager.survey.total_attendees += (documentObject.app_report != null ) ? documentObject.app_report.attendees.length : 0
-         }
-
-         brief_reports.push(brfReport);
-       }
-
-       // ==> Store count of apps
-       if(app_manager.quiz.items.length != 0 )
-         app_manager.quiz.total = app_manager.quiz.items.length;
-
-      if(app_manager.survey.items.length != 0 )
-           app_manager.survey.total = app_manager.survey.items.length
-
-
-
-       if( req.body.pagination != null ){
-           // ==> Build Paginations and anther options
-           if (!_.isNumber(page_number)) page_number = 0;
-           if(!_.isNumber(pages)) pages = config.default_records_per_page ;
-
-           if(page_number == 1 || page_number < 0) page_number = 0 ;
-           if(page_number != 0 ) page_number = page_number - 1 ;
-           if(pages == 0 || pages < 0 ) pages = config.default_records_per_page;
-
-           var brief_reports = _.chunk(brief_reports, pages);
-           if(page_number > (brief_reports.length - 1)) page_number = brief_reports.length - 1;
-           brf_rports = brief_reports[page_number] ;
-
-           // ==> Store Pagination
-           var paging = {
-              items : brief_reports ,
-              item_per_page: pages ,
-              total_items : creatorQuestionnaires.length ,
-              page_index : page_number,
-              total_pages :brief_reports.length ,
-           } ;
-
-           if(app_manager.paging == undefined )
-           app_manager.paging = paging ;
-      }
-
-      // if(req.body.pagination == null )
-      //   brf_rports = brief_reports ;
-
-        // ==> Send list right now
-       res.send(notes.notifications.success_calling(app_manager));
-    });
-
-});
 
 // ==> Updated Data
 rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)=>{
@@ -3398,6 +3214,265 @@ rptRouters.post("/:app_id/detailed/report/v0", api_key_report_auth ,( req , res 
       res.send(notes.notifications.catch_errors(err))
     });
   });
+});
+
+
+rptRouters.post(
+  [
+    "/:creator_id/brief/report" ,
+    "/:creator_id/brief/:app_type/report"
+  ]
+   , api_key_report_auth , ( req , res ) => {
+
+    // ==> Sorting by Params
+    var creator_id = req.params.creator_id;
+    var app_type = req.params.app_type ;
+    var app_manager = new Object();
+    var queries = new Object();
+
+    // ==> Sorting by specific data
+    if ( creator_id != null )
+      queries['creator_id'] = creator_id ;
+
+    if ( app_type != null )
+      queries['app_type'] = ( app_type.toLowerCase() == 'quiz') ? 1 : 0 ;
+
+
+
+    // ==> Sorting it by pagination
+    if( req.body.pagination != null ){
+          if(req.body.pagination == null || ! req.body.pagination) {
+              return new Promise((resolve,reject) => {
+                 res.status(400).send(notes.notifications.catch_fields(notes.Messages.Required_Message("`pagination` Object")));
+              });
+            }
+          var obj_pagination = new Array();
+          if(req.body.pagination.page_number == null )
+              obj_pagination[obj_pagination.length]='page_number';
+          if(req.body.pagination.records_per_page == null )
+              obj_pagination[obj_pagination.length]='records_per_page';
+          if(obj_pagination.length != 0 ){
+              return new Promise((resolve,reject) => {
+                res.status(400).send(notes.notifications.catch_fields(notes.Messages.Required_Message(obj_pagination)));
+              });
+           }
+
+         var page_number = req.body.pagination.page_number;
+         var pages = req.body.pagination.records_per_page;
+     }
+     var application_args_info = (object) => {
+       var applications = {
+         quizzes : new Array() ,
+         surveys : new Array()
+       };
+       var zoom_in_apps = (objx) => {
+         if ( objx.app_type == 1 ) applications.quizzes.push(objx)
+         else applications.surveys.push(objx)
+       }
+       object.map(zoom_in_apps);
+       return applications ;
+     };
+    var attendee_structure_counts = function ( object  , from = null , to = null ){
+      /* report_attendee_details - att_draft []*/
+      var all_attendees = {
+        quizzes : new Array(),
+        surveys : new Array()
+      };
+      var attendee_counts = {
+        quizzes : 0 ,
+        surveys : 0
+      } ;
+
+
+      var zoom_in_this_date_object = (date_object) => {
+         var attendee_atgs = {
+           quizzes : new Array() ,
+           surveys : new Array()
+         }
+         var completed_date = new Date (date_object.report_attendee_details.completed_date) ;
+         var date_from = new Date (from);
+         var date_to = new Date (to);
+
+         if(completed_date >= date_from && completed_date <= date_to ){
+           if(date_object.impr_application_object.app_type == 1 ){
+             attendee_atgs.quizzes.push(date_object);
+             all_attendees.quizzes.push(attendee_atgs.quizzes.length);
+            }else {
+             attendee_atgs.surveys.push(date_object);
+             all_attendees.surveys.push(attendee_atgs.surveys.length);
+           }
+         }
+
+
+      };
+      var atendee_searched_by_date = (object) => {
+          if(from != null && to != null ) {
+            object.att__draft.att_draft.map(zoom_in_this_date_object)
+          }
+      }
+      var attendee_draft_arguments = ( object ) => {
+          if(from == null && to == null){
+            if(object.app_type == 1 )
+              all_attendees.quizzes.push(object.att__draft.att_draft.length);
+            else
+              all_attendees.surveys.push(object.att__draft.att_draft.length);
+
+          }
+
+
+      }
+
+
+      // ==> Proccess
+
+      if ( from == null && to == null ) {
+        object.map(attendee_draft_arguments); ;
+        attendee_counts.quizzes = ( all_attendees.quizzes.length != 0 ) ? all_attendees.quizzes.reduce((x , y) => x + y) : 0 ;
+        attendee_counts.surveys = ( all_attendees.surveys.length != 0 ) ? all_attendees.surveys.reduce((x , y) => x + y) : 0 ;
+      } else if( from != null && to != null ) {
+        object.map(atendee_searched_by_date); ;
+        attendee_counts.quizzes = ( all_attendees.quizzes.length != 0 ) ? all_attendees.quizzes.reduce((x , y) => x + y) : 0 ;
+        attendee_counts.surveys = ( all_attendees.surveys.length != 0 ) ? all_attendees.surveys.reduce((x , y) => x + y) : 0 ;
+      }
+
+      return attendee_counts ;
+    };
+    // ==> Start the query here !
+    qtnr.find(queries).populate('app_report').populate('att__draft').exec(function(error, creatorQuestionnaires){
+      if( error || ! creatorQuestionnaires || creatorQuestionnaires.length == 0) {
+        return new Promise((resolve , reject)=>{
+          res.status(404).send(notes.notifications.show_app_access());
+        });
+      }
+
+      var applications_atendee_through_date_range = (apps) => {
+        var counts = 0 ;
+        var atts_x = new Array ();
+        var zoome_in_quiz_students = (current_object) => {
+          var completed_date_in_one =  new Date (current_object.report_attendee_details.completed_date) ;
+          var started_at_date = new Date(req.body.date.date_from);
+          var ended_at_date = new Date(req.body.date.date_to);
+          if(completed_date_in_one >= started_at_date && completed_date_in_one <= ended_at_date )
+            atts_x.push(current_object);
+        }
+        apps.att__draft.att_draft.map(zoome_in_quiz_students);
+        counts = atts_x.length ;
+        return counts ;
+      }
+      var storing_items = ( questionnaires  , app_manager , pagination = null , date = null ) => {
+
+        var organize_questionnaire_info = (applications) => {
+          var total_passed = 0 , total_completed = 0 ;
+          if(applications.app_report != undefined)
+          total_passed =   _.countBy(applications.app_report.attendees , {'passed_the_grade': true}) ;
+
+          if(applications.app_report != undefined)
+          total_completed = _.countBy(applications.app_report.attendees , {'is_completed': true})   ;
+
+
+          var all_items = {
+              app_id : applications._id,
+              app_name: applications.questionnaire_title,
+              app_type: applications.app_type,
+              total_questions: applications.questions.length,
+              total_attendees: 0,
+              total_passed: (total_passed.true != null )? total_passed.true : 0  ,
+              total_completed: (total_completed.true != null )? total_completed.true : 0
+          }
+          // => Attendee counts without date range
+          if( applications.att__draft != undefined && applications.att__draft.att_draft != null )
+          all_items.total_attendees = applications.att__draft.att_draft.length ;
+          // ==> Attendee counts if we have date range
+          if( date != null )
+           all_items.total_attendees = applications_atendee_through_date_range(applications);
+
+          return app_manager.items.push(all_items);
+        }
+        var app_items = questionnaires.map(organize_questionnaire_info);
+        if( pagination != null ){
+          // => some givens
+          var page_number = req.body.pagination.page_number ;
+          var recodrs_per_page = req.body.pagination.records_per_page
+          var all_record_counts  = app_manager.items.length ;
+          // => some exceptions
+
+
+          if (!_.isNumber(page_number)) page_number = 0;
+          if(!_.isNumber(recodrs_per_page)) recodrs_per_page = config.default_records_per_page ;
+
+          if(page_number == 1 || page_number < 0) page_number = 0 ;
+          if(page_number != 0 ) page_number = page_number - 1 ;
+          if(recodrs_per_page == 0 || recodrs_per_page < 0 ) recodrs_per_page = config.default_records_per_page;
+
+          var paging = _.chunk(app_manager.items, recodrs_per_page);
+          if(page_number > (all_record_counts - 1)) page_number = all_record_counts - 1;
+
+          return app_manager.items = paging[page_number] ;
+        }
+
+      };
+      // ==> Date [ filter ]
+      if( req.body.date != null ){
+          var obj_date = new Array();
+          if( req.body.date.date_from == null )
+              obj_date[obj_date.length]='date_from';
+          if( req.body.date.date_to == null )
+              obj_date[obj_date.length]='date_to';
+          if( obj_date.length != 0 ){
+              return new Promise((resolve,reject) => {
+                res.status(400).send(notes.notifications.catch_fields(notes.Messages.Required_Message(obj_date)));
+              });
+           }
+      }
+
+
+      // ==> Pagination
+
+
+
+
+      var total_quizzes = 0 ;
+      var total_surveys = 0 ;
+      var date_fields = {
+        date_from : null ,
+        date_to : null
+      } ;
+
+      if( req.body.date != null ){
+        date_fields.date_from = req.body.date.date_from
+        date_fields.date_to = req.body.date.date_to
+      }
+
+      var attendee_counts = attendee_structure_counts(creatorQuestionnaires  , date_fields.date_from , date_fields.date_to ) ;
+      var app_type = application_args_info(creatorQuestionnaires);
+
+    // ==> Build structure
+      if( req.params.app_type != null ){
+        if( req.params.app_type.toLowerCase() == 'quiz' ){
+          app_manager['quiz'] = new Object();
+          app_manager['quiz']['total'] = app_type.quizzes.length;
+          app_manager['quiz']['total_attendees'] = attendee_counts.quizzes;
+        }
+        if( req.params.app_type.toLowerCase() == 'survey' ){
+          app_manager['survey'] = new Object();
+          app_manager['survey']['total'] = app_type.surveys.length;
+          app_manager['survey']['total_attendees'] = attendee_counts.surveys;
+        }
+      }else {
+        app_manager['quiz'] = new Object();
+        app_manager['quiz']['total'] = app_type.quizzes.length;
+        app_manager['quiz']['total_attendees'] = attendee_counts.quizzes;
+
+        app_manager['survey'] = new Object();
+        app_manager['survey']['total'] = app_type.surveys.length;
+        app_manager['survey']['total_attendees'] = attendee_counts.surveys;
+      }
+
+      // ==> case excuted paging
+      app_manager['items'] = new Array();
+      storing_items( creatorQuestionnaires  , app_manager , req.body.pagination , req.body.date );
+      res.send(notes.notifications.success_calling(app_manager));
+    });
 });
 
 module.exports = {
