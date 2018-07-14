@@ -3377,8 +3377,8 @@ rptRouters.post(
               total_questions: applications.questions.length,
               total_attendees: 0,
               total_passed: (total_passed.true != null )? total_passed.true : 0  ,
-              total_completed: (total_completed.true != null )? total_completed.true : 0 ,
-              history : applications.app_report.history
+              total_completed: (total_completed.true != null )? total_completed.true : 0
+              // history : applications.app_report.history
           }
           // => Attendee counts without date range
           if( applications.att__draft != undefined && applications.att__draft.att_draft != null )
