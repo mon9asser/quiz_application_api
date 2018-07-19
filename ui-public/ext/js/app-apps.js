@@ -1919,7 +1919,39 @@ apps.controller("apps-controller" , [
              if(questionType == 0 ){ answer_obj['value'] = 'Answer 1'; }
              if(questionType == 1 ){ answer_obj['media_type'] = 0 ;  answer_obj['media_src'] = $scope.server_ip + "img/media-icon.png"; }
              if(questionType == 2 ){ answer_obj['boolean_type'] = "true/false"; answer_obj['boolean_value'] = false; new_question.answers_format.push({ '_id': obj_2_id ,'creator_id' : $scope.user_id ,'is_correct' : true ,'boolean_type' : "true/false" ,'boolean_value': true });}
-             if(questionType == 3 ){ var rating_scale = $(evt.item).attr("data-asnwer-type") ; answer_obj['ratscal_type'] = rating_scale ;answer_obj['step_numbers'] = 5 ; if(rating_scale == 0 ){ answer_obj['show_labels'] = false ;answer_obj['started_at'] = "Left label" ;answer_obj['centered_at'] = "Center label" ; answer_obj['ended_at'] = "Right label" ; } }
+             if(questionType == 3 ){
+               var rating_scale = $(evt.item).attr("data-asnwer-type") ;
+               answer_obj['ratscal_type'] = rating_scale ;
+               answer_obj['step_numbers'] = 5 ;
+               answer_obj['rating_scale_answers'] = [
+                 {
+                   _id : answer_obj['_id'] + '_1' ,
+                   rat_scl_value : 1
+                 },
+                 {
+                   _id : answer_obj['_id'] + '_2' ,
+                   rat_scl_value : 2
+                 },
+                 {
+                   _id : answer_obj['_id'] + '_3' ,
+                   rat_scl_value : 3
+                 },
+                 {
+                   _id : answer_obj['_id'] + '_4' ,
+                   rat_scl_value : 4
+                 },
+                 {
+                   _id : answer_obj['_id'] + '_5' ,
+                   rat_scl_value : 5
+                 }
+               ];
+               if( rating_scale == 0 ){
+                 answer_obj['show_labels'] = false ;
+                 answer_obj['started_at'] = "Left label" ;
+                 answer_obj['centered_at'] = "Center label" ;
+                 answer_obj['ended_at'] = "Right label" ;
+               }
+             }
              if(questionType == 4 ){ new_question.answer_settings.answer_char_max = 500 ;  }
              new_question.answers_format.push(answer_obj);
              if($scope.mongoose_id == null ){
@@ -2886,7 +2918,7 @@ apps.controller("apps-controller" , [
         $timeout(function (){
           if( $("#docQuestions").children('li').length <= 1  )
           $scope.questionIndex = 0;
-          $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
+          $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers, null , $scope.questionIndex , $scope.questions_list[$scope.questionIndex].answers_format);
           //+++++ $scope.iframe_access.fill_rating_scale_values(5);
         } , 50 );
        }
@@ -2976,7 +3008,7 @@ apps.controller("apps-controller" , [
     $scope.rating_scale_values = function (){
       $timeout(function (){
         if($scope.question_type == 3 ){
-           $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
+           $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers, null , $scope.questionIndex , $scope.questions_list[$scope.questionIndex].answers_format );
         }
       } , 5000 );
     };
@@ -3315,7 +3347,7 @@ apps.controller("apps-controller" , [
     });
     $scope.style_of_answers = ($scope.question_settings.choice_style ) ? "Two columns per row" : "One column per row";
     } , 1500 );
-    $scope.change_rating_scale_value = function (val , is_changed = null){
+    $scope.change_rating_scale_value = function (val , is_changed = null , questionIndex = null , answer_object = null ){
 
         //+++++ $scope.iframe_access.fill_rating_scale_values($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
 
@@ -3324,10 +3356,22 @@ apps.controller("apps-controller" , [
         }
         var rating_value = val;
         $scope.rating_scale_elements = [];
-        for( i=0; i<rating_value; i++){
+        var array = new Array();
+        for( i=0; i< rating_value; i++){
+
           $scope.rating_scale_elements.push({
              index : i
           });
+            array.push({
+              _id : answer_object._id + '_'+ (i + 1)  ,
+              rat_scl_value :  i + 1
+            })
+
+        }
+
+        // ==> Fill answer object
+        if(answer_object != null && questionIndex != null ){
+          $scope.questions_list[questionIndex].answers_format[0].rating_scale_answers = array ;
         }
       };
       // ==> Do an action
@@ -3354,7 +3398,7 @@ apps.controller("apps-controller" , [
 
          $scope.question_id = $(itemEl).attr("data-question-id");
          var question_sor = $scope.questions_list.find($scope.callback_index);
-        //  console.log($scope.question_id);
+         //  console.log($scope.question_id);
          $scope.edit_this_question ( $scope.question_id  , newIndex ) ;
 
          $scope.highlighted_question_and_show_data (newIndex , itemEl);

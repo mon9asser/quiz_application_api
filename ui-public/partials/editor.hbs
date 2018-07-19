@@ -369,7 +369,7 @@
                 <li class="steps_qs" ng:if="questions_list[questionIndex].question_type == 3">
                     <span class="title-checkbox"> Steps ( {>questions_list[questionIndex].answers_format[0].step_numbers<} )</span>
                     <div class="rating_scale_options">
-                        <input ng:change="change_rating_scale_value(questions_list[questionIndex].answers_format[0].step_numbers , true)" ng:model="questions_list[questionIndex].answers_format[0].step_numbers" id="step_slider" min="2" max="10" type="range" name="">
+                        <input ng:change="change_rating_scale_value(questions_list[questionIndex].answers_format[0].step_numbers , true , questionIndex , questions_list[questionIndex].answers_format[0]  )" ng:model="questions_list[questionIndex].answers_format[0].step_numbers" id="step_slider" min="2" max="10" type="range" name="">
                     </div> <!-- Slide Range -->
                 </li>
                 <li ng:if="questions_list[questionIndex].question_type == 4">

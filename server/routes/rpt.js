@@ -85,7 +85,7 @@ rptRouters.get("/:app_id/retrieve/:attendee_id/quiz/details" , api_key_report_au
 
     var application_id = req.params.app_id;
     var attendee_id = req.params.attendee_id
-    console.log(attendee_id);
+    // console.log(attendee_id);
     rpt.findOne({"questionnaire_id":application_id} , (error , qtnrDocument)=>{
         if(error , !qtnrDocument) {
           res.send({error:"application doesn't exists !"})
@@ -581,7 +581,7 @@ rptRouters.post("/:app_id/report/add" , api_key_report_auth , helper , ( req , r
      // ========> report object
       var report = rptDocument ;
 
-      // console.log(qtnrDocument.questions);
+      // // console.log(qtnrDocument.questions);
       // ========> Get question information from ..
       var index_question = _.findIndex(qtnrDocument.questions , {"id": question_id});
       var find_question  = _.find(qtnrDocument.questions , {"id": question_id});
@@ -650,7 +650,7 @@ rptRouters.post("/:app_id/report/add" , api_key_report_auth , helper , ( req , r
             collected_answers['answer_id_'+answer_id]['is_correct'] = find_answer.is_correct; /* @Deprecated in v1.2.0 */
 
           // ===> correction answer ( in progression ) // Stopped here
-          // console.log(find_question.answer_settings);
+          // // console.log(find_question.answer_settings);
           // collected_answers['is_correct'] = true ;
 
 
@@ -824,16 +824,16 @@ rptRouters.post("/:app_id/report/add" , api_key_report_auth , helper , ( req , r
 
         var reporting = new rpt(report_object);
         reporting.save().then((reports)=>{
-            console.log('#1 Create Attendees');
+            // console.log('#1 Create Attendees');
             // #1 Create Attendees
            return reporting.create_attendees(attendee_object );
         }).then((attendee_arguments)=>{
-          console.log('#2 Create Questions and answers');
+          // console.log('#2 Create Questions and answers');
            // #2 Create Questions and answers
            return reporting.create_survey_quiz_answers(question_answers_object , helper);
         }).then((attendee_user)=>{
            // #3 Calculation Part
-           console.log('#3 Calculation Part');
+           // console.log('#3 Calculation Part');
            if(qtnrDocument.app_type == 1)
            return reporting.quiz_calculation(attendee_user,qtnrDocument);
         }).then(()=>{
@@ -1039,13 +1039,13 @@ rptRouters.delete("/:app_id/report/clear" , api_key_report_auth , (req , res) =>
 //          brief_object['app_type'] = (current_page[i].app_type == 1) ? "Quiz" : "Survey";
 //          brief_object['total_questions'] = current_page[i].questionnaire_info.questions.length
 //          brief_object['total_attendees'] = current_page[i].attendees.length;
-//         //  console.log(current_page[i].questionnaire_info.app_type);
+//         //  // console.log(current_page[i].questionnaire_info.app_type);
 //         if(current_page[i].questionnaire_info.app_type == 1)
 //          brief_object["total_passed"] =     (total_passed.true != null )? total_passed.true : 0 ;
 //          if(current_page[i].questionnaire_info.app_type == 1)
 //          brief_object["total_completed"] =  (total_is_completed.true != null )? total_is_completed.true : 0 ;
 //          brief_object['history'] =current_page[i].history;
-//         //  console.log(brief_object);
+//         //  // console.log(brief_object);
 //          breif.push(brief_object);
 //      }
 //
@@ -1428,7 +1428,7 @@ rptRouters.post("/:app_id/detailed/report/v1.1", api_key_report_auth ,( req , re
                                 question_object['attendee_answers'].push(answers_object)
                               }
 
-                              // console.log(question_object);
+                              // // console.log(question_object);
                               attendee_object['questions'].push(question_object);
                           }
 
@@ -1652,7 +1652,7 @@ rptRouters.post("/:app_id/detailed/report/v1.1", api_key_report_auth ,( req , re
                           question_object['attendee_answers'].push(answers_object)
                         }
 
-                        // console.log(question_object);
+                        // // console.log(question_object);
                         dtls_rpt['attendees']['questions'].push(question_object)
                     }
                   }
@@ -2005,13 +2005,13 @@ rptRouters.post(["/:creator_id/brief/report/deprecated","/:creator_id/brief/:app
          brief_object['app_type'] = (current_page[i].app_type == 1) ? "Quiz" : "Survey";
          brief_object['total_questions'] = current_page[i].questionnaire_info.questions.length
          brief_object['total_attendees'] = current_page[i].attendees.length;
-        //  console.log(current_page[i].questionnaire_info.app_type);
+        //  // console.log(current_page[i].questionnaire_info.app_type);
         if(current_page[i].questionnaire_info.app_type == 1)
          brief_object["total_passed"] =     (total_passed.true != null )? total_passed.true : 0 ;
          if(current_page[i].questionnaire_info.app_type == 1)
          brief_object["total_completed"] =  (total_is_completed.true != null )? total_is_completed.true : 0 ;
          brief_object['history'] =current_page[i].history;
-        //  console.log(brief_object);
+        //  // console.log(brief_object);
          breif.push(brief_object);
      }
 
@@ -2217,72 +2217,6 @@ var is_failed = (value) => {
 };
 
 
-// ==> Updated Data
-rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)=>{
-    var app_id = req.params.app_id;
-    drft.findOne({"application_id":app_id}).populate("questionnaire_info").then((reportDocument)=>{
-       rpt.findOne({'questionnaire_id': app_id }).then((rbt_document)=>{
-
-          var offline_report = rbt_document;
-          if(!reportDocument ){
-              return new Promise( ( resolve , reject ) => {
-                res.send(notes.notifications.catch_errors("No attendee found"));
-              });
-            }
-          if(reportDocument.questionnaire_info.app_type != 0 ){
-            return new Promise((resolve,reject)=>{
-              res.send(notes.notifications.survey_failed());
-            });
-          }
-
-        var statistics_report = new Object();
-
-       if(statistics_report.app_nfo == undefined)  statistics_report.app_nfo = new Object();
-       if(statistics_report.overview  == undefined) statistics_report.overview = new Object();
-       if(statistics_report.questions  == undefined) statistics_report.questions = new Array();
-
-
-
-       statistics_report.app_nfo["survey_id"] = reportDocument.questionnaire_info._id;
-       statistics_report.app_nfo["survey_name"] = reportDocument.questionnaire_info.questionnaire_title;
-       statistics_report.app_nfo["total_questions"] = reportDocument.questionnaire_info.questions.length;
-
-       var an_offline_report =  (offline_report == null ) ? [] : offline_report.attendees;
-       var an_online_report = reportDocument.att_draft;
-       var unreported = an_online_report.find_reported_attendees(an_offline_report);
-
-       var started_and_not = _.countBy( unreported , { "report_attendees" : Object() });
-       var total_attendee_objects = an_online_report.length ;
-       var started_attendees = (started_and_not.true == undefined ) ? 0 :  started_and_not.true; ;
-       var not_started_attendees = ( started_and_not.false == undefined ) ? 0 :  started_and_not.false;
-       var completed_quiz = an_offline_report.length ;
-       console.log(started_and_not);
-        statistics_report.overview["total_attendees"] = reportDocument.att_draft.length;
-        statistics_report.overview["started"] = started_attendees;
-        statistics_report.overview["not_started"] = not_started_attendees
-        statistics_report.overview["completed"] = completed_quiz;
-
-        var statistics = reportDocument.statistics;
-          for ( var i = 0; i < statistics.length; i++ ){
-            var qs_object = new Object();
-            qs_object['question_id'] = statistics[i].question_id;
-            qs_object['question'] = statistics[i].question_body;
-            qs_object['count_of_attendees'] = statistics[i].attendee_count;
-            qs_object['answers'] =  _.map( statistics[i].question_answers , _.partialRight(_.pick, ['answer_id','answer_body','attendee_percentage_count','attendee_raw_count']));
-            statistics_report.questions.push(qs_object);
-          }
-        res.send(statistics_report);
-
-
-       });
-    });
-});
-
-
-
-
-
-
 rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) => {
 
   var app_id = req.params.app_id ;
@@ -2313,7 +2247,7 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
           var questionnaire  = creatorQuestionnaires;
 
           var unreported = online_report.find_reported_attendees(offline_report);
-          console.log(unreported.length);
+          // console.log(unreported.length);
           var started_not_started = _.countBy( unreported , { report_attendees : Object() });
 
           var total_attendee_objects = online_report.length ;
@@ -2546,44 +2480,6 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
   });// => End Populate calling
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 rptRouters.post("/:app_id/detailed/report/v0", api_key_report_auth ,( req , res ) => {
   var app_id = req.params.app_id ;
@@ -2894,7 +2790,7 @@ rptRouters.post("/:app_id/detailed/report/v0", api_key_report_auth ,( req , res 
                                 question_object['attendee_answers'].push(answers_object)
                               }
 
-                              // console.log(question_object);
+                              // // console.log(question_object);
                               attendee_object['questions'].push(question_object);
                           }
 
@@ -3159,7 +3055,7 @@ rptRouters.post("/:app_id/detailed/report/v0", api_key_report_auth ,( req , res 
                           question_object['attendee_answers'].push(answers_object)
                         }
 
-                        // console.log(question_object);
+                        // // console.log(question_object);
                         dtls_rpt.items['questions'].push(question_object)
                         // dtls_rpt.items['attendees']['questions'].push(question_object)
                     }
@@ -3216,6 +3112,387 @@ rptRouters.post("/:app_id/detailed/report/v0", api_key_report_auth ,( req , res 
   });
 });
 
+
+
+rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res) => {
+  var app_id = req.params.app_id;
+  var queries = { _id : app_id };
+  qtnr.findOne(queries).populate('att__draft').populate('app_report').exec( (  _error_ , _document_  ) => {
+    var get_all_attendee_questions = ()=> {
+      var _pure_questions_ = new Array();
+      var pure_all_questions = (XC) => {
+        var question_data = XC.questions_data;
+        var store_questions = (QS) => {
+          if(QS['attendee_id'] == undefined )
+             QS['attendee_id'] = XC.user_id ;
+          _pure_questions_.push(QS)
+        }
+          question_data.map(store_questions) ;
+          return _pure_questions_ ;
+      }
+      _online_report_.map(pure_all_questions);
+      // console.log(_pure_questions_);
+      return _pure_questions_
+    }
+    if( _error_ || !_document_  ) {
+      return new Promise((resolve , reject)=>{
+        res.status(404).send({
+          message : "failed" ,
+          status_code : 0 ,
+          error : {
+            message : "This Survey does not exists !"
+          }
+        });
+      });
+    }
+
+    if( _document_.app_type != 0 ){
+      return new Promise((resolve , reject)=>{
+        res.status(404).send(notes.notifications.error_app_type());
+      });
+    }
+
+
+    var _online_report_ , _questions_ , _offline_report_ ;
+
+    _questions_  = _document_.questions ;
+    _offline_report_ = new Array();
+    _online_report_ = new Array();
+
+    if(req.body.date != undefined){
+      // ==> Search by date
+      var show_attendee_with_times_offline = ( AT ) => {
+        var completed_date = new Date ( AT.completed_date );
+        var date_from = new Date (req.body.date.date_from);
+        var date_to = new Date (req.body.date.date_to);
+        // console.log(completed_date >= date_from && completed_date <= date_to);
+        if( completed_date >= date_from && completed_date <= date_to )
+          {
+            _offline_report_.push(AT);
+          }
+      };
+      var show_attendee_with_times = ( AT ) => {
+        var completed_date = new Date ( AT.report_attendee_details.completed_date );
+        var date_from = new Date (req.body.date.date_from);
+        var date_to = new Date (req.body.date.date_to);
+        // // console.log(completed_date >= date_from && completed_date <= date_to);
+        if( completed_date >= date_from && completed_date <= date_to )
+          _online_report_.push(AT);
+
+      };
+      if(_document_.att__draft != undefined)
+       _document_.att__draft.att_draft.map(show_attendee_with_times);
+       if(_document_.app_report != undefined)
+       _document_.app_report.attendee_details.map(show_attendee_with_times_offline);
+    }else {
+      _online_report_  =  ( _document_.att__draft == null ) ? [] : _document_.att__draft.att_draft ;
+      _offline_report_ =  ( _document_.app_report == null ) ? [] : _document_.app_report.attendee_details;
+    }
+
+    var question_access = [];
+    var all_counts = 0 ;
+    var _attendee_questions_ = get_all_attendee_questions();
+    var build_attendee_list = (QS) => {
+      if( QS.question_type == 0 || QS.question_type == 1 ||  QS.question_type == 2 ){
+        var question__id = QS.question_id ;
+        var question_index = question_access.findIndex(x => x.question_id == question__id )
+        var zoom_in_answers = ( ANS ) => {
+          var qs_data = question_access.find(x => x.question_id == question__id)
+          var answer_exists = qs_data.answers.find( x => x.answer_id == ANS.answer_id );
+          if(answer_exists != undefined ){
+            var attExists = answer_exists.attendees.indexOf(QS.attendee_id)
+            if(attExists == -1 ){
+              answer_exists.attendees.push(QS.attendee_id);
+            }
+          }else {
+            qs_data.answers.push({
+              answer_id : ANS.answer_id ,
+              attendees : [QS.attendee_id]
+            });
+          }
+        };
+
+        if( question_index == -1 ){
+           question_access.push({
+                    question_id: question__id ,
+                    attendees: [ QS.attendee_id ] ,
+                    answers :  new Array()
+            });
+           var qs_data = question_access.find(x => x.question_id == question__id)
+           if( qs_data != undefined ){
+             QS.answer_ids.map(zoom_in_answers)
+           }
+        }else{
+          var attendee_exsits = question_access[question_index].attendees.indexOf(QS.attendee_id);
+          // ==> Store attendees
+          if( attendee_exsits == -1 ){
+            question_access[question_index].attendees.push(QS.attendee_id);
+          }
+          // ==> store answers
+          QS.answer_ids.map(zoom_in_answers);
+        }
+      }else if( QS.question_type == 3 ){
+
+        var qs_id = QS.question_id ;
+        var attendee_answer_value = QS.answer_ids[0].answer_object.answer_value ;
+        var attendee_idx = QS.attendee_id ;
+
+        var question_acc = question_access.find(x => x.question_id == qs_id);
+        if( question_acc == undefined ){
+
+          question_access.push({
+                   question_id: qs_id ,
+                   attendees: [ attendee_idx] ,
+                   answers :  [
+                     {
+                       answer_id : attendee_answer_value ,
+                       attendees : [attendee_idx]
+                     }
+                   ]
+           });
+
+        }else {
+
+          var att_id = question_acc.attendees.indexOf( attendee_idx );
+          // Push to attendee questions
+
+          if(att_id == -1 ){
+            question_acc.attendees.push(attendee_idx);
+          }
+          // push to answers
+          var ans_dt = question_acc.answers.find(x => x.answer_id == attendee_answer_value );
+          if(ans_dt != undefined ){
+            var atdaas = ans_dt.attendees.indexOf(attendee_idx);
+            if(atdaas == -1 ){
+              ans_dt.attendees.push(attendee_idx);
+            }
+          }else {
+            question_acc.answers.push({
+              answer_id: attendee_answer_value ,
+              attendees : [attendee_idx]
+            })
+          }
+        }
+
+      }
+    }
+    _attendee_questions_.map(build_attendee_list)
+
+
+    var get_answer_count_percentage_values = ( question_id , answer_id ) => {
+      var count_percent  = 0 ;
+      var question_data = question_access.find(x => x.question_id == question_id );
+      if(question_data != undefined){
+
+        var answer_finder = question_data.answers.find(x => x.answer_id == answer_id );
+        if( answer_finder != undefined ){
+          var get_all_attendees = ( ATO ) => {
+            return ATO.attendees.length;
+          };
+          var all_answer_counts = question_data.answers.map(get_all_attendees).reduce(( x , y ) =>  x +y )
+          var perc_calc = 100 / all_answer_counts ;
+          count_percent = perc_calc * answer_finder.attendees.length;
+          if(count_percent.toString().length >= 5 )
+          count_percent =parseFloat( count_percent.toString().substring(0 , 5))
+        }
+      }
+      return count_percent ;
+    }
+
+
+
+    var get_rat_scale_percentage_attendee_counts = (question_id , rat_scale_val ) => {
+      var rat_counts = 0;
+       var get_question_data = question_access.find(x => x.question_id == question_id );
+       if(get_question_data != undefined ){
+        var leng_attendees = get_question_data.answers.find(x => x.answer_id == rat_scale_val ) ;
+         var count_it_right_now = ( xAnswer ) => {
+           return xAnswer.attendees.length;
+         };
+         var count_all_answers = get_question_data.answers.map(count_it_right_now)
+         var count_all_values = count_all_answers.reduce((x , y ) => x + y) ;
+         var percentage_vvl = 100 / count_all_values ;
+         if(leng_attendees == undefined )
+         rat_counts = 0 ;
+         else
+           rat_counts = leng_attendees.attendees.length * percentage_vvl
+       }
+
+
+       if(rat_counts.toString().length >= 5 )
+       rat_counts = rat_counts.toString().substring(0 , 5 )
+       rat_counts = parseFloat(rat_counts);
+       return rat_counts ;
+    }
+
+    var get_rat_scale_attendee_counts = (question_id , rat_scale_val ) => {
+      var rat_counts = 0;
+       var get_question_data = question_access.find(x => x.question_id == question_id );
+       if(get_question_data != undefined ){
+         var clength = get_question_data.answers.find(x => x.answer_id == rat_scale_val ) ;
+         if(clength == undefined ) rat_counts = 0 ;
+         else
+          rat_counts = clength.attendees.length;
+       }
+       return rat_counts ;
+    }
+    var get_answer_count_values = ( question_id , answer_id ) => {
+      var counts  = 0 ;
+      var question_data = question_access.find(x => x.question_id == question_id );
+      if(question_data != undefined){
+        var answer_finder = question_data.answers.find(x => x.answer_id == answer_id );
+        if( answer_finder != undefined ){
+           counts = answer_finder.attendees.length ;
+        }
+      }
+      return counts ;
+    }
+
+    var get_answers_percentage_free_text_answers = ( question_id , report , question_attendee_counts ) => {
+      var question_finder = _questions_.find(x => x._id == question_id );
+      var answer_arguments = new Array() ;
+      if( question_finder != undefined ){
+        var anwer_id = question_finder.answers_format[0]._id ;
+        var get_all_free_text_questions = (QS) => {
+           if( QS.question_id == question_id ){
+             var user_answer = QS.answer_ids[0].answer_object.answer_value;
+             var detect_if_qs_found_before = answer_arguments.findIndex( x => x.answer_body == user_answer );
+             if(detect_if_qs_found_before == -1 ){
+               var bdAnswer = {
+                  _id : anwer_id ,
+                  answer_body :user_answer ,
+                  attendee_raw_count:1
+                }
+                answer_arguments.push(bdAnswer);
+             }else{
+               answer_arguments[detect_if_qs_found_before].attendee_raw_count =  answer_arguments[detect_if_qs_found_before].attendee_raw_count + 1 ;
+             }
+           }
+        }
+          _attendee_questions_.map(get_all_free_text_questions);
+
+      }
+      return answer_arguments ;
+    };
+    var get_answers_percentage_rating_scale_free_texts = ( question_id , report , question_attendee_counts )=>{
+      var question_finder = _questions_.find(x => x._id == question_id );
+      var answer_arguments = new Array() ;
+      if( question_finder != undefined ){
+         var sorting_rating_scale_answers = ( ANS ) => {
+
+          answer_arguments.push({
+             _id : ( ('undefined' + '_'+ANS.rat_scl_value) != ANS._id ) ? ANS._id : 'd1f4e5r4erer5w5d5er54_'+ ANS.rat_scl_value,
+             answer_body :ANS.rat_scl_value,
+             attendee_percentage_count: get_rat_scale_percentage_attendee_counts(question_id , ANS.rat_scl_value) ,
+             attendee_raw_count: get_rat_scale_attendee_counts(question_id , ANS.rat_scl_value)
+           });
+           return answer_arguments ;
+         }
+         question_finder.answers_format[0].rating_scale_answers.map(sorting_rating_scale_answers);
+      }
+      return answer_arguments ;
+    };
+    var get_answers_percentage = ( question_id , report ) => {
+      var question_finder = _questions_.find(x => x._id == question_id );
+      var answer_lists = new Array ();
+      if( question_finder != undefined ){
+        var get_all_answers = ( ANS ) => {
+          var answer_values = new Object() ;
+          if( question_finder.question_type == 0 ){
+
+            answer_values['_id'] = ANS._id ;
+            answer_values['answer_body'] = ANS.value ;
+            answer_values['attendee_raw_count'] = get_answer_count_values( question_id , ANS._id );
+            answer_values['attendee_percentage_count'] = get_answer_count_percentage_values( question_id , ANS._id );
+          }
+          if(question_finder.question_type == 1 ){
+            answer_values['_id'] = ANS._id ;
+            var no_media_here = config.server_ip + 'img/media-icon.png' ;
+             if(ANS.media_src != undefined && no_media_here == ANS.media_src )
+                 answer_values['answer_body'] = "No Media Here !";
+              else    answer_values['answer_body'] = ANS.Media_directory;
+
+            answer_values['attendee_raw_count'] =   get_answer_count_values( question_id , ANS._id );
+            answer_values['attendee_percentage_count']   = get_answer_count_percentage_values( question_id , ANS._id );;
+          }
+          if(question_finder.question_type == 2 ){
+            console.log();
+            answer_values['_id'] = ANS._id ;
+            answer_values['answer_body'] = ANS.boolean_value;
+            answer_values['attendee_raw_count'] =   get_answer_count_values( question_id , ANS._id );
+            answer_values['attendee_percentage_count']   = get_answer_count_percentage_values( question_id , ANS._id );;
+          }
+          return answer_values ;
+        };
+        return question_finder.answers_format.map( get_all_answers );
+      }else return [];
+    }
+    var get_question_attendee_counts = ( qustion_id ) => {
+        var attendee_question_ata = [] ;
+        var map_one_by_one = (AT) => {
+          var all_questions = AT.questions_data;
+          var question_index = all_questions.findIndex(x => x.question_id == qustion_id );
+          if(question_index != -1){
+            var question_object_dt = all_questions.find(x => x.question_id == qustion_id );
+            attendee_question_ata.push(question_object_dt);
+          }
+        };
+        _online_report_.map(map_one_by_one);
+        return attendee_question_ata.length;
+     };
+    var show_all_questions = ( questions , reports ) => {
+       var question_lists = new Array() ;
+
+       // ==> Questions
+       var question_invocation = ( QS ) => {
+         var question_object = {
+             question_id : QS._id ,
+             question : striptags(QS.question_body).replace("&nbsp;",'')  ,
+             question_type : QS.question_type ,
+             count_of_attendees : get_question_attendee_counts( QS._id )
+         };
+
+
+         if( QS.question_type == 0 || QS.question_type == 1 || QS.question_type == 2  )
+          question_object['answers'] = get_answers_percentage( QS._id , _online_report_) ;
+
+          if(QS.question_type == 3 )
+           question_object['answers'] = get_answers_percentage_rating_scale_free_texts ( QS._id , _online_report_ , get_question_attendee_counts( QS._id )) ;
+
+          if(QS.question_type == 4 )
+           question_object['answers'] = get_answers_percentage_free_text_answers( QS._id , _online_report_ , get_question_attendee_counts( QS._id ));
+
+         question_lists.push(question_object);
+       };
+       questions.map(question_invocation);
+       return question_lists ;
+     };
+
+     var app_manager = new Object();
+     app_manager['app_info'] = new Object();
+     app_manager['overview'] = new Object();
+     app_manager['questions'] =  show_all_questions ( _questions_ , _online_report_ );
+
+     // Calculations
+     var unreported = _online_report_.find_reported_attendees(_offline_report_);
+     var started_and_not = _.countBy( unreported , { "report_attendees" : Object() });
+     var started_attendees = (started_and_not.true == undefined ) ? 0 :  started_and_not.true; ;
+     var not_started_attendees = ( started_and_not.false == undefined ) ? 0 :  started_and_not.false;
+
+     // App info.
+     app_manager.app_info['survey_id'] = _document_._id ;
+     app_manager.app_info['survey_name'] = _document_.questionnaire_title ;
+     app_manager.app_info['total_questions'] = _questions_.length ;
+
+     // Overview
+     app_manager.overview['total_attendees'] =  _online_report_.length
+     app_manager.overview['started'] = started_attendees;
+     app_manager.overview['not_started']= not_started_attendees ;
+     app_manager.overview['completed']= _offline_report_.length;
+
+    res.send(app_manager);
+  });
+});
 
 rptRouters.post(
   [
@@ -3405,7 +3682,7 @@ rptRouters.post(
 
           var paging = _.chunk(app_manager.items, pages);
           if(page_number > (all_record_counts - 1)) page_number = all_record_counts - 1;
-          console.log("page_number == " + page_number);
+          // console.log("page_number == " + page_number);
           app_manager.items = paging[page_number] ;
           app_manager.paging = {
             item_per_page : pages ,

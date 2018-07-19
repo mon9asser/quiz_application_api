@@ -108,12 +108,12 @@ var notes = {
       catch_fields : ( requiredFields ) => { return  { status_code : 0 , message :"failed" , error : { "message" : requiredFields } } } ,
       catch_promise : ( error ) => {return  { status_code : 0 , message :"message" , error } } ,
       catch_existing_data : ( field ) => { return  { status_code : 0 , message :"failed" , error : { "message" : "This `"+field+"` already exists !"} } } ,
-      catch_doesnt_existing_data : ( field ) => { return  { status_code : 0 , message :"failed" , error : { "message" : "This `"+field+"` dones not exists !"} } } ,
+      catch_doesnt_existing_data : ( field ) => { return  { status_code : 0 , message :"failed" , error : { "message" : "This `"+field+"` does not exists !"} } } ,
       password_authentication_failed : (  ) => { return  { status_code : 0 , message :"failed" , error : { "message" : "Wrong Password ! , please try again" } } } ,
       show_authentication_failed : ( object ) => { return  { status_code : 0 , message :"failed" , error : object } } ,
       show_app_access : (  ) => { return  { status_code : 0 , message :"failed" , error : { "message":"This creator has no applications !" } } } ,
       show_app_types : (  ) => {  return  { status_code : 0 , message :"failed" , error : {  "message" : "This app is wrong it should be `quiz` Or `survey`"} } }  ,
-
+      error_app_type : (  ) => { return { status_code : 0 , message :"failed" , error : {  "message" : "This api is calling for survey type only ! "} }  } ,
       catch_errors : ( erx ) => { return  { status_code : 0 , message :"failed" , error : { "message" : erx } } } ,
       success_calling : ( object ) => { return { status_code : 1 , message :"success" , data: object }  }
   }

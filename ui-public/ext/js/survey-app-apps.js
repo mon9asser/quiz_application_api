@@ -177,7 +177,11 @@ apps.controller("survey" , [
 
         }
       }else {
-          img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src  ;
+        var media_prt;
+         if(answer_value.media_optional == undefined )
+           media_prt = answer_value.media_src ;
+           else media_prt = answer_value.media_optional.media_src;
+          img_vlox_data = $scope.server_ip + media_prt  ;
       }
       // alert(img_vlox_data);
       return {
@@ -1668,7 +1672,9 @@ apps.controller("survey" , [
           } // => End true/false question
 
 
-
+          if(question.question_type == 3 ){
+            console.log({__question  : question});
+          }
 
    };  // ==> End Select answer
     $scope.load_case_many_answer_option = (question_type , is_single_choice ) => {

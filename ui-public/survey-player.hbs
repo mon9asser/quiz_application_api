@@ -160,8 +160,8 @@
                             <!-- Scale -->
                             <center>
                               <div class="scale-optn" ng:if="obj_val.answers_format[0].ratscal_type == 0 ">
-                                <ul ng:init="rating_scale_elements" class="scalet-o ul_scal_{>obj_val._id<}" >
-                                  <li data-index='0' ng:repeat="(key_ , val_) in rating_scale_elements"> <!-- index , class_name , answer_id , question_id , rs_type -->
+                                <ul  class="scalet-o ul_scal_{>obj_val._id<}" >
+                                  <li data-index='0' ng:repeat="(key_ , val_) in obj_val.answers_format[0].rating_scale_answers track by $index"> <!-- index , class_name , answer_id , question_id , rs_type -->
                                     <span class="scale_value_{>obj_val.answers_format[0]._id<}" ng:click="select_this_rating_value( $index , 'scale_value_'+obj_val.answers_format[0]._id  , obj_val.answers_format[0]._id , obj_val._id , obj_val.answers_format[0].ratscal_type )">
                                         {> $index + 1 <}
                                     </span>
@@ -189,7 +189,7 @@
                     <!-- Ratings  -->
                     <ul class="start-o rating_scale_block">
                       <!--  Ratings  -->
-                      <li data-index='0' ng:repeat="(ratingscale_keys , ratingscale_vale) in rating_scale_elements track by $index">
+                      <li data-index='0' ng:repeat="(ratingscale_keys , ratingscale_vale)  in obj_val.answers_format[0].rating_scale_answers track by $index">
                         <span ng:click="select_rating_scale__($index , 1 , obj_val._id , obj_val.answers_format[0]._id , obj_val.question_type )" href="#">
                             <i class="fa fa-star-o"></i>
                         </span>
