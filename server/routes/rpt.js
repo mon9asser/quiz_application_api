@@ -3490,7 +3490,11 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
      app_manager.overview['not_started']= not_started_attendees ;
      app_manager.overview['completed']= _offline_report_.length;
 
-    res.send(app_manager);
+    res.send({
+      status_code : 1 ,
+      message :"success" ,
+      data : app_manager
+    });
   });
 });
 
