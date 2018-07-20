@@ -1803,7 +1803,7 @@ rptRouters.post("/:app_id/report_collection/:user_id" , (req , res) => {
         var rptObject = new Object();
         if(attendee_obka != undefined )
          {
-           attendee_obka.report_attendees.is_completed = true 
+           attendee_obka.report_attendees.is_completed = true
          }
         if(!reptDoc){ // Add new Report
             rptObject['attendees'] = attendee_obka.report_attendees;
@@ -3599,7 +3599,12 @@ rptRouters.post(
             if(object.app_type == 1 )
               all_attendees.quizzes.push(object.att__draft.att_draft.length);
             else
-              all_attendees.surveys.push(object.att__draft.att_draft.length);
+            {
+              var ll_ = 0 ;
+              if(object.att__draft != undefined )
+              ll_ = object.att__draft.att_draft.length
+              all_attendees.surveys.push(ll_);
+            }
 
           }
 
