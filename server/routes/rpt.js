@@ -1801,7 +1801,10 @@ rptRouters.post("/:app_id/report_collection/:user_id" , (req , res) => {
     if(attendee_object_index != -1){
         var attendee_obka = attendee_draft.att_draft.find( x => x.user_id == user_id );
         var rptObject = new Object();
-
+        if(attendee_obka != undefined )
+         {
+           attendee_obka.report_attendees.is_completed = true 
+         }
         if(!reptDoc){ // Add new Report
             rptObject['attendees'] = attendee_obka.report_attendees;
             rptObject['history'] = new Array({
@@ -3650,9 +3653,6 @@ rptRouters.post(
           if(applications.app_report != undefined)
           total_completed = _.countBy(applications.app_report.attendees , {'is_completed': true})   ;
 
-          console.log("( Application Type ) : " + applications.app_type);
-          console.log(applications.app_report.attendees);
-          console.log("================================");
           var all_items = {
               app_id : applications._id,
               app_name: applications.questionnaire_title,
