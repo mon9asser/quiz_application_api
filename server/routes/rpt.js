@@ -3189,6 +3189,8 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
       _offline_report_ =  ( _document_.app_report == null ) ? [] : _document_.app_report.attendee_details;
     }
 
+
+
     var question_access = [];
     var all_counts = 0 ;
     var _attendee_questions_ = get_all_attendee_questions();
@@ -3626,6 +3628,8 @@ rptRouters.post(
         });
       }
 
+      _offline_report_ =  ( creatorQuestionnaires.app_report == null || creatorQuestionnaires.app_report == undefined ) ? [] : creatorQuestionnaires.app_report.attendee_details;
+
       var applications_atendee_through_date_range = (apps) => {
         var counts = 0 ;
         var atts_x = new Array ();
@@ -3657,7 +3661,7 @@ rptRouters.post(
               app_type: applications.app_type,
               total_questions: applications.questions.length,
               total_attendees: 0,
-              total_completed: (total_completed.true != null )? total_completed.true : 0
+              total_completed: _offline_report_.length
               // history : applications.app_report.history
           }
           console.log(total_completed);
