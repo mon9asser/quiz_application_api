@@ -180,7 +180,7 @@ qtnrRouters.delete("/:app_id/delete", auth_verify_api_keys_tokens , (req, res)=>
     }
 
     res.send({
-      "status_code":1
+      "status_code":1 ,
       "message" : "success" ,
       "data" : "application has been deleted successfully !"
     });
