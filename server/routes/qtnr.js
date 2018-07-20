@@ -167,7 +167,7 @@ qtnrRouters.delete("/:app_id/delete", auth_verify_api_keys_tokens , (req, res)=>
   qtnr.findByIdAndRemove(app_id).then((appDoc)=>{
     if(!appDoc) {
       return new Promise((resolve , reject )=>{
-        res.status(404).send(notes.Errors.Error_Doesnt_exists("Application"));
+        res.status(404).send(notes.notifications.catch_doesnt_existing_data("Application"));
       });
     }
 
@@ -180,7 +180,9 @@ qtnrRouters.delete("/:app_id/delete", auth_verify_api_keys_tokens , (req, res)=>
     }
 
     res.send({
-      "success" : "application has been deleted successfully !"
+      "status_code":1
+      "message" : "success" ,
+      "data" : "application has been deleted successfully !"
     });
   });
 
