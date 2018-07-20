@@ -3657,10 +3657,12 @@ rptRouters.post(
               app_type: applications.app_type,
               total_questions: applications.questions.length,
               total_attendees: 0,
-              total_passed: (total_passed.true != null )? total_passed.true : 0  ,
               total_completed: (total_completed.true != null )? total_completed.true : 0
               // history : applications.app_report.history
           }
+          console.log(total_completed);
+          if( applications.app_type == 1 )
+          all_items['total_passed'] = (total_passed.true != null )? total_passed.true : 0
           // => Attendee counts without date range
           if( applications.att__draft != undefined && applications.att__draft.att_draft != null )
           all_items.total_attendees = applications.att__draft.att_draft.length ;
