@@ -3650,7 +3650,9 @@ rptRouters.post(
           if(applications.app_report != undefined)
           total_completed = _.countBy(applications.app_report.attendees , {'is_completed': true})   ;
 
-
+          console.log("( Application Type ) : " + applications.app_type);
+          console.log(applications.app_report.attendees);
+          console.log("================================");
           var all_items = {
               app_id : applications._id,
               app_name: applications.questionnaire_title,
