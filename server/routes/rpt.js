@@ -3594,6 +3594,7 @@ rptRouters.post(
             object.att__draft.att_draft.map(zoom_in_this_date_object)
           }
       }
+       
       var attendee_draft_arguments = ( object ) => {
           if(from == null && to == null){
             if(object.app_type == 1 )

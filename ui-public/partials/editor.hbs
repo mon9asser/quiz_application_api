@@ -1,4 +1,9 @@
 
+<style media="screen">
+  .saving_option{
+     margin-left: 15px;
+  }
+</style>
 <div class="editor-block">
   <div class="editor-blocker">
     <ul class="tab-editor">
@@ -9,7 +14,7 @@
         <div class="clearFix"></div>
         <div style="display:none;" class="x-editor-x-body open-this-tab" id="question-pt">
           <div id="dynamic-layer" class="col-sm-8 top-margins">
-            <textarea id="editor-quest-data" placeholder="Question Title ?" ng:model="questions_list[questionIndex].question_body" class="form-control quest-title-edit textarea-qs redactor-editor"></textarea>
+            <textarea id="editor-quest-data" placeholder="{> questions_list[questionIndex].question_body <}" ng:model="questions_list[questionIndex].question_body" class="form-control quest-title-edit textarea-qs redactor-editor"></textarea>
           </div>
           <div class="col-sm-4 media-uploads top-margins media-parts-x">
             <div class="ques-media-container">
@@ -18,7 +23,7 @@
                 Add Media
               </div>
               <!-- Image Cases -->
-              <div ng:if="quest_media_parts.media_type == 0" style="background-image:url('{>server_ip+quest_media_parts.media_field<}')" class="image_case">
+              <div ng:if="quest_media_parts.media_type == 0" ng:style="load_image_data_with_date(server_ip+quest_media_parts.media_field)" class="image_case">
                   <!-- Load image here -->
               </div>
               <!-- Video Cases -->

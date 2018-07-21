@@ -2791,6 +2791,8 @@ input.lab ,input.lab:focus , input.lab:checked , input.lab:active , input.lab:li
     max-width: 576px;
     min-width: 200px;
     border-radius: 120px;
+    left: -110px !important;
+    top: 10px !important;
     background: rgba(0,0,0,.97);
 }
 .redactor-air a.re-button-icon, .redactor-toolbar a.re-button-icon {

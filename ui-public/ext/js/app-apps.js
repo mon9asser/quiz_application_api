@@ -969,6 +969,7 @@ apps.controller("apps-controller" , [
 
         $timeout(function(){
           $scope.loading_event_handler_for_redactors();
+          // $(".redactor-in-0").html('');
         } , 300);
       } , 500 );
     };
@@ -1504,10 +1505,11 @@ apps.controller("apps-controller" , [
             return false ;
           }
 
-          var changes_button = $(".save_changes");
-          changes_button.html("<span class='saving_option'></span> Saving Changes");
-          changes_button.css("padding-left","40px");
-
+          if(decline_next != false ){
+            var changes_button = $(".save_changes");
+            changes_button.html("<span class='saving_option'></span> Saving Changes");
+            changes_button.css("padding-left","40px");
+          }
           // Save change in db
           $.getJSON($scope.json_apk_file , function(api_key_data){
             $http({
@@ -1680,7 +1682,7 @@ apps.controller("apps-controller" , [
                      $scope.headers = new Object();
                    }
 
-                   $scope.save_changes_in_angular_backend(true);
+                   $scope.save_changes_in_angular_backend(false);
 
                    $timeout(function (){
                      $.getJSON( $scope.json_apk_file , function (api_key_data ){
@@ -1830,6 +1832,9 @@ apps.controller("apps-controller" , [
 
           var found_qs = $scope.questions_list.find($scope.callback_index);
           var targetIndex = $scope.questions_list.indexOf(found_qs);
+
+          // Fill with null
+          $scope.question_media = null ;
           // Remove From array
           delete found_qs['media_question'];
           // remove from view
@@ -1842,6 +1847,11 @@ apps.controller("apps-controller" , [
         }
     };
 
+    $scope.load_image_data_with_date = (dirImg) => {
+      return {
+        "background-image" : "url('"+dirImg + "?" + new Date() +"')"
+      }
+    }
     $scope.status_of_questions = function (){
        // -----------------------------------------------------
        // ----------------- init questions from db
