@@ -3594,7 +3594,7 @@ rptRouters.post(
             object.att__draft.att_draft.map(zoom_in_this_date_object)
           }
       }
-       
+
       var attendee_draft_arguments = ( object ) => {
           if(from == null && to == null){
             if(object.app_type == 1 )
@@ -3614,7 +3614,6 @@ rptRouters.post(
 
 
       // ==> Proccess
-
       if ( from == null && to == null ) {
         object.map(attendee_draft_arguments); ;
         attendee_counts.quizzes = ( all_attendees.quizzes.length != 0 ) ? all_attendees.quizzes.reduce((x , y) => x + y) : 0 ;
@@ -3649,6 +3648,7 @@ rptRouters.post(
         counts = atts_x.length ;
         return counts ;
       }
+
       var storing_items = ( questionnaires  , app_manager , pagination = null , date = null ) => {
 
         var organize_questionnaire_info = (applications) => {
@@ -3665,7 +3665,7 @@ rptRouters.post(
               app_type: applications.app_type,
               total_questions: applications.questions.length,
               total_attendees: 0,
-              total_completed: (total_completed.true != null )? total_completed.true : 0
+              total_completed: ( total_completed.true != null )? total_completed.true : 0
               // history : applications.app_report.history
           }
           if( applications.app_type == 1 )
@@ -3744,6 +3744,7 @@ rptRouters.post(
       var attendee_counts = attendee_structure_counts(creatorQuestionnaires  , date_fields.date_from , date_fields.date_to ) ;
       var app_type = application_args_info(creatorQuestionnaires);
 
+
     // ==> Build structure
       if( req.params.app_type != null ){
         if( req.params.app_type.toLowerCase() == 'quiz' ){
@@ -3760,7 +3761,7 @@ rptRouters.post(
         app_manager['quiz'] = new Object();
         app_manager['quiz']['total'] = app_type.quizzes.length;
         app_manager['quiz']['total_attendees'] = attendee_counts.quizzes;
-
+        
         app_manager['survey'] = new Object();
         app_manager['survey']['total'] = app_type.surveys.length;
         app_manager['survey']['total_attendees'] = attendee_counts.surveys;
