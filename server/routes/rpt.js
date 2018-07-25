@@ -3599,7 +3599,10 @@ rptRouters.post(
       var attendee_draft_arguments = ( object ) => {
           if(from == null && to == null){
             if(object.app_type == 1 )
-              all_attendees.quizzes.push(object.att__draft.att_draft.length);
+              {
+                if(object.att__draft != undefined)
+                all_attendees.quizzes.push(object.att__draft.att_draft.length);
+              }
             else
             {
               var ll_ = 0 ;
@@ -3757,9 +3760,23 @@ rptRouters.post(
             date_object.date_from = req.body.date.date_from ;
             date_object.date_to = req.body.date.date_to ;
           }
+          var atte_ndee , att_detls  ;
+          if( applications.app_report != null )
+            {
+              atte_ndee = applications.app_report.attendees;
+              att_detls = applications.app_report.attendee_details ;
+            }
+          else
+          {
+            atte_ndee = [] ;
+            att_detls = [] ;
+          }
+
+
           if( applications.app_type == 1 )
-            all_items['total_passed'] = filter_by_total_passed ( applications.app_report.attendees , applications.app_report.attendee_details , date_object.date_from , date_object.date_to  )  //  (total_passed.true != null )? total_passed.true : 0
-            all_items['total_completed'] = filter_by_total_completed ( applications.app_report.attendees , applications.app_report.attendee_details , date_object.date_from , date_object.date_to  )
+            all_items['total_passed'] = filter_by_total_passed ( atte_ndee  , att_detls , date_object.date_from , date_object.date_to  )  //  (total_passed.true != null )? total_passed.true : 0
+
+          all_items['total_completed'] = filter_by_total_completed ( atte_ndee  , att_detls , date_object.date_from , date_object.date_to  )
 
           // => Attendee counts without date range
           if( applications.att__draft != undefined && applications.att__draft.att_draft != null )
