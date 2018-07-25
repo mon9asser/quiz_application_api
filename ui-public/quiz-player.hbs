@@ -148,6 +148,7 @@
                               <div class="arrow-right question-label-box-brd" ng:class="load_border_styles(obj_val.question_type)"></div>
                             </span>
                             <span data:ng:bind:html="obj_val.question_body | trust_this_html_values" class="question-body-text"></span>
+                            <p ng:if="obj_val.question_description != null || obj_val.question_description != undefined" class="dsc-data" data:ng:bind:html="obj_val.question_description | trust_this_html_values"></p>
                             <span class="required_option question-text-required-text"  ng:if="obj_val.answer_settings.is_required == true"> Required </span>
                           </div>
                           <div ng:if="(obj_val.question_type == 0 || obj_val.question_type == 1 ) && obj_val.answer_settings.single_choice == false" class="notes question-warnning-box">

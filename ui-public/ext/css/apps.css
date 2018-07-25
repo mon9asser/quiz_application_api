@@ -3610,3 +3610,4 @@ margin-right: 5px;
 .redactor-placeholder:before{
   cursor: text;
 }
+.redactor-in-1 {min-height: 60px !important; }

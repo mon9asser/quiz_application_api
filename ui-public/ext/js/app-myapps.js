@@ -84,16 +84,20 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
   $scope.application_description = "This description for Quiz 1";
   // ==> Init Default Value for app type
   $scope.create_application =  function (appType){
-    $scope.application_title = appType + "1";
-    $scope.application_description = "This description for "+appType + " 1";
-    if(appType == "Quiz") {
-      $scope.applicationType  = 1 ;
-    }else {
-      $scope.applicationType = 0;
-    } ;
+      var ll = $(".all_questionnaire_lists").children('li').length // attr('questionnaire_type_x'). ;
+       
+      $scope.application_title = appType + "1";
+      $scope.application_description = "This description for "+appType + " 1";
+      if(appType == "Quiz") {
+        $scope.applicationType  = 1 ;
+      }else {
+        $scope.applicationType = 0;
+      } ;
   };
   // ==> Create new application
   $scope.start_app_creation = function (){
+
+    alert();
     if($scope.application_title  == '' )
       {
         $scope.application_fields[$scope.application_fields.length]

@@ -130,6 +130,7 @@
                         <div class="arrow-right default_theme_brd select_box_brd  question-label-box-brd"></div>
                       </span>
                       <span data:ng:bind:html="obj_val.question_body | trust_this_html_values" class="question-body-text select_texts" ng:mouseover="show_hovred_element('select_texts')"></span>
+                      <p ng:if="obj_val.question_description != null || obj_val.question_description != undefined" class="dsc-data" data:ng:bind:html="obj_val.question_description | trust_this_html_values"></p>
                       <span class="required_option question_type__colr select_texts question-text-required-block question-text-required-text" ng:mouseover="show_hovred_element('select_texts')" ng:if="obj_val.answer_settings.is_required == true"> Required </span>
                    </div>
                    <div ng:if="(obj_val.question_type == 0 || obj_val.question_type == 1 ) && obj_val.answer_settings.single_choice == false" class="notes select_box_brd question-warnning-block question-warnning-box" >

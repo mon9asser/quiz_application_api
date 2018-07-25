@@ -97,7 +97,7 @@
                            <div class="text-answers">
                              <!-- Answer Texts -->
                              <!-- <input class="writanswer-input" type="text" name="" ng:model="answer_value.value"> -->
-                             <textarea class="writanswer-input editor-all-ans-data" ng:model="answer_value.value" ng:change="answer_in_ui_view(answer_value.value , $index , answer_value._id)"></textarea>
+                             <input class="writanswer-input editor-all-ans-data" ng:model="answer_value_obk[$index].value" placeholder="{> answer_value.value <}" ng:change="answer_in_ui_view( answer_value_obk[$index].value , $index ,  answer_value._id )" />
 
                              <div ng:if="answer_value.media_optional != null" class="media-options">
                                <!-- Case it an image -->

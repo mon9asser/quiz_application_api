@@ -159,6 +159,8 @@ apps.filter('math_around_it' , [
 apps.controller("apps-controller" , [
   '$scope','$http' , '$timeout','$window','$rootScope' , '$sce' ,
   ( $scope , $http , $timeout , $window , $rootScope , $sce ) => {
+
+
   var question_status = function (a, b) {
       var correct_answers = a.map( function(x){ return x._id; } );
       var solved_answers = b.map( function(x){ return x.answer_id; } );
@@ -283,6 +285,8 @@ apps.controller("apps-controller" , [
     $scope.cropper = null ;
     $scope.is_disabled = false ;
     $scope.question = new Object();
+
+
     $scope.json_source = $scope.server_ip + "ext/json/json-keys.json";
     var question_data_object = null
     // ==> Objects in scope object
@@ -1661,7 +1665,7 @@ apps.controller("apps-controller" , [
      };
      $scope.save_media_with = function ( type ) {
 
-        
+
         if($scope.file_object.file == null && $scope.file_object.link == null)
         return false ;
 
@@ -5271,4 +5275,36 @@ apps.controller("apps-controller" , [
        $scope.reload_stylesheet_data();
        $scope.swape_editor();
      } catch (e) {}
+  //
+  // $scope.page_b = $("body");
+  // $scope.stored_question_values = '';
+  // $scope.page_b.on("click" , function(eve){
+  //   var cl = $(eve.target.parentNode);
+  //
+  //
+  //   // if(cl.hasClass ('redactor-in-0')){
+  //   //   cl.html('<p></p>')
+  //   // }
+  //
+  //   //   cl.html('');
+  //   // }else {
+  //   //   cl.html(value);
+  //   // }
+  // })
+ $scope.answer_in_ui_view =   ( answer_val , index , answer_id ) => {
+
+       //answer_value.value
+         var target_question = $scope.questions_list.find( x => x._id == $scope.question_id );
+         if(target_question != undefined){
+           var currAnswer =  target_question.answers_format.find( x => x._id == answer_id ) ;
+           if(  currAnswer != undefined ){
+           
+              $scope.questions_list.find( x => x._id == $scope.question_id ).answers_format.find( x => x._id == answer_id ).value = answer_val;
+           }
+
+         }
+
+         console.log(  $scope.questions_list[0]);
+}
+
 }]);

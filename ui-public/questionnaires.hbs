@@ -30,7 +30,7 @@
             There are no any records !
           </li>
           {{#each myApps }}
-          <li class="listed-app-{{_id}}">
+          <li questionnaire_type_x="{{app_type}}" class="listed-app-{{_id}} all_questionnaire_lists">
             <ul class="item-listed">
               <li><span>{{questionnaire_title}}</span></li>
 
@@ -40,9 +40,6 @@
               <li class="menli"><a style="color:green;" href="#">Preview <span ng:if="{{app_type}} == 1">Quiz</span><span ng:if="{{app_type}} == 0">Survey</span></a></li>
             </ul>
           </li>
-
-
-
           {{/each }}
         </ul>
 
