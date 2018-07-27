@@ -43,7 +43,7 @@
                       <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                       Back
                     </button> -->
-                    <button ng:click="start_this_quiz()" class="button-take-this welcome-screen-button welcome-screen-button-block" type="button" name="button">
+                    <button ng:click="start_this_quiz()" class="button-take-this welcome-screen-button welcome-screen-button-block" type="button" name="button" ng:cloak>
                       <i class="fa fa-sign-in" aria-hidden="true"></i>
                       {> __player_object.settings.label_btns.lbl_start_with <}
                     </button>
@@ -69,7 +69,7 @@
                           <i ng:if="obj_val.question_type == 3" class="fa iconx-x-survey iconx-x" ng:class=" (obj_val.answers_format[0].ratscal_type == 0) ? 'fa-signal' :'fa-star-o' " ></i>
                           <i ng:if="obj_val.question_type == 4" class="fa fa-text-width iconx-x-survey iconx-x"></i>
                         </span> -->
-                        <span class="qs-numericals">{> $index + 1 <}</span>
+                        <span class="qs-numericals" ng:cloak>{> $index + 1 <}</span>
                         <div class="arrow-right default_theme_brd question-label-box-brd"></div>
                      </span>
                      <span data:ng:bind:html="obj_val.question_body | trust_this_html_values" class="question-body-text"></span>
@@ -79,12 +79,12 @@
               </div>
               <!-- Answer container -->
               <div class="answer-container">
-                <ul id="question_{>obj_val._id<}" ng:class="load_case_many_answer_option(obj_val.question_type , obj_val.answer_settings.single_choice)" class="question-list" ng:if="obj_val.question_type <= 2">
+                <ul id="question_{>obj_val._id<}" ng:class="load_case_many_answer_option(obj_val.question_type , obj_val.answer_settings.single_choice)" class="question-list" ng:if="obj_val.question_type <= 2" ng:cloak>
                   <li
                     class="answer_{>ansvalue._id<} answer_opg_editor"
                     data:ng:class="classes_for_this_answer(obj_val.answer_settings , obj_val._id , ansvalue._id)"
                     data:ng:click="select_this_answer(obj_val._id , ansvalue._id , obj_val , ansvalue , __player_object._id , '{{user.id}}' , ansvalue.is_correct , $index)"
-                    data:ng:repeat="(anskey , ansvalue) in obj_val.answers_format">
+                    data:ng:repeat="(anskey , ansvalue) in obj_val.answers_format" ng:cloak>
                         <!-- Case it 0 => Text choices -->
                         <div ng:if="obj_val.question_type == 0" class="answer-contents">
                           <div ng:if="ansvalue.media_optional != null" class="media-options">
@@ -111,7 +111,7 @@
                         </div>
                         <!-- Case it 1 => Media choices -->
                         <div ng:if="obj_val.question_type == 1" class="answer-contents">
-                             <label class="labels">{> labels[$index] | uppercase <}</label>
+                             <label class="labels" ng:cloak>{> labels[$index] | uppercase <}</label>
                              <!-- Case it wrong answer -->
                              <span class="answer-results-wrong">
                                <i class="fa fa-close"></i>
@@ -134,7 +134,7 @@
                         </div>
                         <!-- Case it 2 => True/false choices -->
                         <div ng:if="obj_val.question_type == 2" class="answer-contents">
-                           <label class="labels">{> labels[$index] | uppercase <}</label>
+                           <label class="labels" ng:cloak>{> labels[$index] | uppercase <}</label>
                            <!-- Case it wrong answer -->
                            <span class="answer-results-wrong">
                                <i class="fa fa-close"></i>
@@ -143,7 +143,7 @@
                            <span class="answer-results-right">
                              <i class="fa fa-check"></i>
                            </span>
-                           <div class="text-values">
+                           <div class="text-values" ng:cloak>
                                {> ansvalue.boolean_value <}
                            </div>
                         </div>
@@ -161,7 +161,7 @@
                             <!-- Scale -->
                             <center>
                               <div class="scale-optn" ng:if="obj_val.answers_format[0].ratscal_type == 0 ">
-                                <ul  class="scalet-o ul_scal_{>obj_val._id<}" >
+                                <ul  class="scalet-o ul_scal_{>obj_val._id<}" ng:cloak >
                                   <li data-index='0' ng:repeat="(key_ , val_) in obj_val.answers_format[0].rating_scale_answers track by $index"> <!-- index , class_name , answer_id , question_id , rs_type -->
                                     <span class="scale_value_{>obj_val.answers_format[0]._id<}" ng:click="select_this_rating_value( $index , 'scale_value_'+obj_val.answers_format[0]._id  , obj_val.answers_format[0]._id , obj_val._id , obj_val.answers_format[0].ratscal_type )">
                                         {> $index + 1 <}
@@ -171,13 +171,13 @@
                                 <div class="clearFix"></div>
 
                                 <div class="block-labels text-center"  ng:show="obj_val.answers_format[0].show_labels == true">
-                                  <span class="first-lbl">
+                                  <span class="first-lbl" ng:cloak>
                                     {>obj_val.answers_format[0].started_at | show_chars<}
                                   </span>
-                                  <span class="second-lbl">
+                                  <span class="second-lbl" ng:cloak>
                                     {>obj_val.answers_format[0].centered_at | show_chars <}
                                   </span>
-                                  <span class="third-lbl">
+                                  <span class="third-lbl" ng:cloak>
                                     {>obj_val.answers_format[0].ended_at | show_chars <}
                                   </span>
                                 </div>
@@ -208,22 +208,22 @@
               <!-- ng:if="__player_object.settings.auto_slide == true"  -->
               <div ng:if="__player_object.settings.auto_slide == true && obj_val.question_type <= 2 && obj_val.answer_settings.single_choice == true" class="question_notes question_type__colr">
                   <span class="fa fa-info-circle"></span>
-                  <span>{> __player_object.settings.label_btns.when_you_solve <} </span>
+                  <span ng:cloak>{> __player_object.settings.label_btns.when_you_solve <} </span>
               </div>
               <!--  Warning Case-->
               <div class="warning_case answer-alarm-text-box"  ng:click="go_to_not_attended_question()"></div>
               <!-- Question buttons  -->
               <div ng:if ="__player_object.settings.navigation_btns == true" class="qusu-details ques-questions text-right">
-                <button ng:click="back_to_prev_slider()" class="button-take-this back-answer-question-button" type="button" name="button">
+                <button ng:click="back_to_prev_slider()" class="button-take-this back-answer-question-button" type="button" name="button" ng:cloak>
                     <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                     {> __player_object.settings.label_btns.lbl_back_with <}
                 </button>
-                <button ng:if="obj_val.question_type == 4" ng:click="save_and_go_to_next_slider($index , obj_val , obj_val._id )" class="button-take-this continue-answer-question-button-block" type="button" name="button">
+                <button ng:if="obj_val.question_type == 4" ng:click="save_and_go_to_next_slider($index , obj_val , obj_val._id )" class="button-take-this continue-answer-question-button-block" type="button" name="button" ng:cloak>
                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                     <span ng:if="$index != (__player_object.questions.length - 1)">  {> __player_object.settings.label_btns.lbl_continue_with <}</span>
                     <span ng:if="$index == (__player_object.questions.length - 1)"> {> __player_object.settings.label_btns.lbl_finish_with <}</span>
                 </button>
-                <button ng:if="obj_val.question_type != 4" ng:click="go_to_next_slider($index , true)" class="button-take-this continue-answer-question-button-block" type="button" name="button">
+                <button ng:if="obj_val.question_type != 4" ng:click="go_to_next_slider($index , true)" class="button-take-this continue-answer-question-button-block" type="button" name="button" ng:cloak>
                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                     <span ng:if="$index != (__player_object.questions.length - 1)"> {> __player_object.settings.label_btns.lbl_continue_with <}</span>
                     <span ng:if="$index == (__player_object.questions.length - 1)">{> __player_object.settings.label_btns.lbl_finish_with <}</span>
@@ -241,11 +241,11 @@
                    <div class="warning_case goodbye-screen-warning-text question-label-block" style="background: tomato;" ng:class="load_slide_theme(obj_val.question_type)" ng:click="go_to_not_attended_question()"></div>
                    <!-- Question buttons  -->
                    <div class="qusu-details ques-questions text-right">
-                       <button ng:click="back_to_prev_slider()" class="button-take-this back-button-goodbye-screen" type="button" name="button">
+                       <button ng:cloak ng:click="back_to_prev_slider()" class="button-take-this back-button-goodbye-screen" type="button" name="button">
                          <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                          {> __player_object.settings.label_btns.lbl_back_with <}
                        </button>
-                       <button data:ng:click="submit_quiz_into_report()" class="button-take-this submi_the_quiz_handler submit-button-goodbye-screen" type="button" name="button">
+                       <button ng:cloak data:ng:click="submit_quiz_into_report()" class="button-take-this submi_the_quiz_handler submit-button-goodbye-screen" type="button" name="button">
                          <i class="fa fa-arrow-right fac-icon-submit" aria-hidden="true"></i>
                          <span>
                             {> __player_object.settings.label_btns.lbl_submit_quiz_with <}

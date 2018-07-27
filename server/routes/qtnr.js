@@ -2434,6 +2434,35 @@ qtnrRouters.get("/applications/list" , auth_api_keys_only , (req , res )=>{
 
 });
 
+qtnrRouters.get("/:creator_id/applications/list"  , (req , res )=>{
+  var creator_id = req.params.creator_id ;
+
+  qtnr.find({ creator_id : creator_id }).populate("creator_id").exec((error , doc)=>{
+    if(!doc || error){
+      return new Promise((resolve, reject) => {
+         res.status(404).send("There are no any applications");
+        });
+    }
+
+    var applications =  {
+      quizzes : new Array () ,
+      surveys : new Array ()
+    }
+
+    var zoom_in_app_types = (APP) => {
+      if(APP.app_type == 0 )
+        applications.surveys.push(APP);
+      else
+        applications.quizzes.push(APP);
+    }
+    doc.map(zoom_in_app_types);
+
+    res.send(applications);
+  });
+
+});
+
+
 // ===========================================> New Versions
 // /-*--------------------------------------------------------------------
 qtnrRouters.post("/:app_id/stylesheet/add/files" , (req, res) => {

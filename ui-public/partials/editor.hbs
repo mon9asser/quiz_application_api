@@ -267,10 +267,33 @@
                     </div>
                  </li>
                 <li class="required_qs">
-
+                  <style media="screen">
+                    .help-links {
+                      border: 1px solid #cecaca;
+                      /* padding: 5px; */
+                      border-radius: 11px;
+                      width: 18px;
+                      height: 18px;
+                      line-height: 7px;
+                      line-height: 16px;
+                      vertical-align: baseline;
+                      margin-left: 4px;
+                      margin-top: -1px;
+                      font-size: 10px;
+                      font-style: normal;
+                      text-align: center;
+                      display: inline-block;
+                      font-weight: bold;
+                      cursor: pointer;
+                      color: #999;
+                    }
+                  </style>
                    <div class="checkbox-toggle answer-settins">
                       <input ng:change="unsaved_question_x(question_settings.is_required)" ng:model="question_settings.is_required" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                      <span class="title-checkbox">Required</span>
+                      <span class="title-checkbox">
+                        Required
+                          <i class="help-links">?</i>
+                      </span>
                    </div>
                    <!-- <div class="input_wrapper">
                        <input ng:change="unsaved_question_x(question_settings.is_required)" ng:model="question_settings.is_required" type="checkbox" class="switch_4">
@@ -291,7 +314,10 @@
 
                    <div class="checkbox-toggle answer-settins">
                       <input ng:change="unsaved_question_x(question_settings.single_choice)" ng:model="question_settings.single_choice" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                      <span class="title-checkbox">Single Response</span>
+                      <span class="title-checkbox"  data-toggle="tooltip" data-placement="right" title="Tooltip on right">
+                        Single Response
+                        <i class="help-links">?</i>
+                      </span>
                    </div>
                    <!-- <div class="input_wrapper">
                        <input ng:change="unsaved_question_x(question_settings.single_choice)" ng:model="question_settings.single_choice" type="checkbox" class="switch_4">
@@ -312,7 +338,10 @@
 
                    <div class="checkbox-toggle answer-settins">
                       <input ng:change="randomize_option_change(question_settings.is_randomized)" ng:model="question_settings.is_randomized" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                      <span class="title-checkbox">Randomize</span>
+                      <span class="title-checkbox">
+                        Randomize
+                        <i class="help-links">?</i>
+                      </span>
                    </div>
                    <!-- <div class="input_wrapper">
                        <input ng:change="unsaved_question_x(question_settings.is_randomized)" ng:model="question_settings.is_randomized" type="checkbox" class="switch_4">
@@ -333,7 +362,10 @@
 
                    <div class="checkbox-toggle answer-settins">
                       <input ng:change="unsaved_question_x(question_settings.super_size)" ng:model="question_settings.super_size" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                      <span class="title-checkbox">Super Size</span>
+                      <span class="title-checkbox">
+                        Super Size
+                        <i class="help-links">?</i>
+                      </span>
                    </div>
                    <!-- <div class="input_wrapper">
                        <input ng:change="unsaved_question_x(question_settings.super_size)" ng:model="question_settings.super_size" type="checkbox" class="switch_4">
@@ -354,7 +386,10 @@
 
                   <div class="checkbox-toggle answer-settins">
                      <input ng:change="unsaved_question_x(question_settings.choice_style)" ng:model="question_settings.choice_style" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                     <span class="title-checkbox">Style of Answer ( {>(question_settings.choice_style ) ? "Two columns per row" : "One column per row"<} )</span>
+                     <span class="title-checkbox">
+                       Style of Answer ( {>(question_settings.choice_style ) ? "Two columns per row" : "One column per row"<} )
+                       <i class="help-links">?</i>
+                     </span>
                   </div>
                   <!-- <div class="input_wrapper">
                       <input ng:change="unsaved_question_x(question_settings.choice_style)" ng:model="question_settings.choice_style" type="checkbox" class="switch_4">

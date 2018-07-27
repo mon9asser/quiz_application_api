@@ -5298,7 +5298,7 @@ apps.controller("apps-controller" , [
          if(target_question != undefined){
            var currAnswer =  target_question.answers_format.find( x => x._id == answer_id ) ;
            if(  currAnswer != undefined ){
-           
+
               $scope.questions_list.find( x => x._id == $scope.question_id ).answers_format.find( x => x._id == answer_id ).value = answer_val;
            }
 
@@ -5306,5 +5306,6 @@ apps.controller("apps-controller" , [
 
          console.log(  $scope.questions_list[0]);
 }
+
 
 }]);

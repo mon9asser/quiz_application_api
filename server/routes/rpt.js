@@ -3771,7 +3771,7 @@ rptRouters.post(
             atte_ndee = [] ;
             att_detls = [] ;
           }
-
+          
 
           if( applications.app_type == 1 )
             all_items['total_passed'] = filter_by_total_passed ( atte_ndee  , att_detls , date_object.date_from , date_object.date_to  )  //  (total_passed.true != null )? total_passed.true : 0

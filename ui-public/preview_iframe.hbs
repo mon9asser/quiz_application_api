@@ -98,11 +98,11 @@
 
                       <div class="description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text"  ng:mouseover="show_hovred_element('select_texts')" ng:bind:html="__player_object.settings.titles.title_start_with | trust_this_html_values"></div>
                       <div class="qusu-details text-right">
-                        <button ng:click="back_to_editor_mode()" class="button-take-this select_button welcome-screen-button-block welcome-screen-button" type="button" name="button">
+                        <button ng:click="back_to_editor_mode()" class="button-take-this select_button welcome-screen-button-block welcome-screen-button" type="button" name="button" ng:cloak>
                             <i class="fa fa-sign-in" aria-hidden="true"></i>
                             {> __player_object.settings.label_btns.lbl_back_with <}
                         </button>
-                        <button ng:click="start_this_quiz()" class="button-take-this select_button welcome-screen-button-block welcome-screen-button" type="button" name="button">
+                        <button ng:click="start_this_quiz()" class="button-take-this select_button welcome-screen-button-block welcome-screen-button" type="button" name="button" ng:cloak>
                             <i class="fa fa-sign-in" aria-hidden="true"></i>
                             {> __player_object.settings.label_btns.lbl_start_with <}
                         </button>
@@ -125,8 +125,8 @@
                             <i ng:if="obj_val.question_type == 3" class="iconx-x fa" ng:class="(obj_val.answers_format[0].ratscal_type == 0) ? 'fa-signal' :'fa-star-o' "></i>
                             <i ng:if="obj_val.question_type == 4" class="iconx-x fa fa-text-width"></i>
                         </span> -->
-                        <span ng:if="__player_object.settings.indexes.questions == 0 " class="qs-numericals select_numbers">{> question_indexes.numberical[$index] <}</span>
-                        <span ng:if="__player_object.settings.indexes.questions == 1 " class="qs-numericals select_numbers">{> question_indexes.alphabetical[$index] | uppercase <}</span>
+                        <span ng:if="__player_object.settings.indexes.questions == 0 " class="qs-numericals select_numbers" ng:cloak>{> question_indexes.numberical[$index] <}</span>
+                        <span ng:if="__player_object.settings.indexes.questions == 1 " class="qs-numericals select_numbers" ng:cloak>{> question_indexes.alphabetical[$index] | uppercase <}</span>
                         <div class="arrow-right default_theme_brd select_box_brd  question-label-box-brd"></div>
                       </span>
                       <span data:ng:bind:html="obj_val.question_body | trust_this_html_values" class="question-body-text select_texts" ng:mouseover="show_hovred_element('select_texts')"></span>
@@ -150,7 +150,7 @@
                   <div class="answer-container answer-block-selector">
                         <!-- data:ng:class="(obj_val.answer_settings.choice_style)?'ng_inline_block':'ng_block'" -->
                             <!-- Quiz Questions answer-block-selector -->
-                            <ul id="question_{>obj_val._id<}" ng:class="load_case_many_answer_option(obj_val.question_type , obj_val.answer_settings.single_choice)" class="question-list question-list-preview-quta" ng:if="obj_val.question_type <= 2"> <!-- Question id , answer id  -->
+                            <ul id="question_{>obj_val._id<}" ng:class="load_case_many_answer_option(obj_val.question_type , obj_val.answer_settings.single_choice)" class="question-list question-list-preview-quta" ng:if="obj_val.question_type <= 2" ng:cloak> <!-- Question id , answer id  -->
                               <li
                                 class="answer_{>ansvalue._id<} answer_opg_editor select_box_brd question-answer-row-select-blk question-answer-row-select"
                                 data:ng:class="classes_for_this_answer(obj_val.answer_settings , obj_val._id , ansvalue._id)"
@@ -171,8 +171,8 @@
                                         </div>
                                       </div>
                                       <!-- Text values -->
-                                      <label ng:if="__player_object.settings.indexes.answers == 0 " class="labels select_box_brd answer_numbering_block answer_numbering_block_box">{> answer_indexes.numberical[$index]  <}</label>
-                                      <label ng:if="__player_object.settings.indexes.answers == 1 " class="labels select_box_brd answer_numbering_block answer_numbering_block_box">{> answer_indexes.alphabetical[$index] | uppercase <}</label>
+                                      <label ng:if="__player_object.settings.indexes.answers == 0 " class="labels select_box_brd answer_numbering_block answer_numbering_block_box" ng:cloak>{> answer_indexes.numberical[$index]  <}</label>
+                                      <label ng:if="__player_object.settings.indexes.answers == 1 " class="labels select_box_brd answer_numbering_block answer_numbering_block_box" ng:cloak>{> answer_indexes.alphabetical[$index] | uppercase <}</label>
 
                                       <div class="text-values select_texts" ng:mouseover="show_hovred_element('select_texts')" data:ng:bind:html="ansvalue.value | trust_this_html_values"></div>
                                       <!-- Case it wrong answer -->
@@ -186,8 +186,8 @@
                                    </div>
                                    <!-- Case it 1 => Media choices -->
                                    <div ng:if="obj_val.question_type == 1" class="answer-contents">
-                                     <label ng:if="__player_object.settings.indexes.answers == 0 " class="labels select_box_data answer_numbering_block answer_numbering_block_box">{> answer_indexes.numberical[$index] <}</label>
-                                     <label ng:if="__player_object.settings.indexes.answers == 1 " class="labels select_box_data answer_numbering_block answer_numbering_block_box">{> answer_indexes.alphabetical[$index] | uppercase  <}</label>
+                                     <label ng:if="__player_object.settings.indexes.answers == 0 " class="labels select_box_data answer_numbering_block answer_numbering_block_box" ng:cloak>{> answer_indexes.numberical[$index] <}</label>
+                                     <label ng:if="__player_object.settings.indexes.answers == 1 " class="labels select_box_data answer_numbering_block answer_numbering_block_box" ng:cloak>{> answer_indexes.alphabetical[$index] | uppercase  <}</label>
                                      <!-- Case it wrong answer -->
                                      <span class="answer-results-wrong select_box_brd">
                                        <i class="fa fa-close"></i>
@@ -210,8 +210,8 @@
                                    </div>
                                    <!-- Case it 2 => True/false choices -->
                                    <div ng:if="obj_val.question_type == 2" class="answer-contents">
-                                     <label ng:if="__player_object.settings.indexes.answers == 0 " class="labels select_box_data answer_numbering_block answer_numbering_block_box">{> answer_indexes.numberical[$index] <}</label>
-                                     <label ng:if="__player_object.settings.indexes.answers == 1 " class="labels select_box_data answer_numbering_block answer_numbering_block_box">{> answer_indexes.alphabetical[$index] | uppercase  <}</label>
+                                     <label ng:if="__player_object.settings.indexes.answers == 0 " class="labels select_box_data answer_numbering_block answer_numbering_block_box" ng:cloak>{> answer_indexes.numberical[$index] <}</label>
+                                     <label ng:if="__player_object.settings.indexes.answers == 1 " class="labels select_box_data answer_numbering_block answer_numbering_block_box" ng:cloak>{> answer_indexes.alphabetical[$index] | uppercase  <}</label>
                                      <!-- Case it wrong answer -->
                                      <span class="answer-results-wrong select_box_brd">
                                        <i class="fa fa-close"></i>
@@ -220,7 +220,7 @@
                                      <span class="answer-results-right select_box_brd">
                                        <i class="fa fa-check"></i>
                                      </span>
-                                     <div class="text-values select_texts answer-text-box-area answer-text-box-area-block" ng:mouseover="show_hovred_element('select_texts')">
+                                     <div class="text-values select_texts answer-text-box-area answer-text-box-area-block" ng:mouseover="show_hovred_element('select_texts')" ng:cloak>
                                        {> ansvalue.boolean_value <}
                                      </div>
                                    </div>
@@ -238,22 +238,22 @@
                                  <div class="">
                                    <center>
                                      <div class="scale-optn" ng:if="obj_val.answers_format[0].ratscal_type == 0 ">
-                                       <ul ng:init="rating_scale_elements" class="scalet-o ul_scal_{>obj_val._id<}" >
+                                       <ul ng:init="rating_scale_elements" class="scalet-o ul_scal_{>obj_val._id<}" ng:cloak >
                                          <li data-index='0' ng:repeat="(key_ , val_) in obj_val.answers_format[0].rating_scale_answers track by $index"> <!-- index , class_name , answer_id , question_id , rs_type -->
-                                           <span class="scale_value_{>obj_val.answers_format[0]._id<}" ng:click="select_this_rating_value( $index , 'scale_value_'+obj_val.answers_format[0]._id  , obj_val.answers_format[0]._id , obj_val._id , obj_val.answers_format[0].ratscal_type )">
+                                           <span class="scale_value_{>obj_val.answers_format[0]._id<}" ng:click="select_this_rating_value( $index , 'scale_value_'+obj_val.answers_format[0]._id  , obj_val.answers_format[0]._id , obj_val._id , obj_val.answers_format[0].ratscal_type )" ng:cloak>
                                                {> $index + 1 <}
                                            </span>
                                          </li>
                                        </ul>
                                        <div class="clearFix"></div>
                                         <div class="block-labels text-center"  ng:show="obj_val.answers_format[0].show_labels == true">
-                                          <span class="first-lbl">
+                                          <span class="first-lbl" ng:cloak>
                                             {>obj_val.answers_format[0].started_at <}
                                           </span>
-                                          <span class="second-lbl">
+                                          <span class="second-lbl" ng:cloak>
                                             {>obj_val.answers_format[0].centered_at <}
                                           </span>
-                                          <span class="third-lbl">
+                                          <span class="third-lbl" ng:cloak>
                                             {>obj_val.answers_format[0].ended_at <}
                                           </span>
                                         </div>
@@ -291,14 +291,14 @@
                   </div>
                   <div class="warning_case default_theme_texts_bg select_box_data warning-message-answer-box warning-message-answer question-label-box question-label-block" ng:click="go_to_not_attended_question()"></div>
                   <div ng:if ="__player_object.settings.navigation_btns == true" class="qusu-details ques-questions text-right">
-                      <button ng:click="back_to_prev_slider()" class="button-take-this select_button back-answer-question-button back-answer-question-button-block" ng:class="load_slide_theme(obj_val.question_type)" type="button" name="button">
+                      <button ng:click="back_to_prev_slider()" class="button-take-this select_button back-answer-question-button back-answer-question-button-block" ng:class="load_slide_theme(obj_val.question_type)" type="button" name="button" ng:cloak>
                             <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                             {> __player_object.settings.label_btns.lbl_back_with <}
                       </button>
-                      <button ng:click="go_to_next_slider($index , true)" ng:class="load_slide_theme(obj_val.question_type)" class="button-take-this select_button continue-answer-question-button continue-answer-question-button-block" type="button" name="button">
+                      <button ng:click="go_to_next_slider($index , true)" ng:class="load_slide_theme(obj_val.question_type)" class="button-take-this select_button continue-answer-question-button continue-answer-question-button-block" type="button" name="button" ng:cloak>
                           <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                          <span ng:if="$index != (__player_object.questions.length - 1)">{> __player_object.settings.label_btns.lbl_continue_with <}</span>
-                          <span ng:if="$index == (__player_object.questions.length - 1)">{> __player_object.settings.label_btns.lbl_finish_with <}</span>
+                          <span ng:if="$index != (__player_object.questions.length - 1)" ng:cloak>{> __player_object.settings.label_btns.lbl_continue_with <}</span>
+                          <span ng:if="$index == (__player_object.questions.length - 1)" ng:cloak>{> __player_object.settings.label_btns.lbl_finish_with <}</span>
                       </button>
                   </div>
                </di>

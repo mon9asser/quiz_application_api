@@ -102,7 +102,7 @@
                  <!-- End Text Loader -->
   							  <span class="questionnaire-title">
                     <!-- Quiz Name -->
-                     <span>
+                     <span ng:cloak>
                        {> application_settings.questionnaire_title <}
                      </span>
                   </span>
@@ -125,7 +125,7 @@
                 <!-- End Text Loader -->
     						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
 
-                   <li class="question-li-x qs-{>qs_value._id<}" id="questoin_tag_{>qs_value._id<}" data-index="{>$index<}" data-question-id="{>qs_value._id<}" ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " ng:repeat="(qs_key , qs_value) in questions_list track by $index">
+                   <li class="question-li-x qs-{>qs_value._id<}" id="questoin_tag_{>qs_value._id<}" data-index="{>$index<}" data-question-id="{>qs_value._id<}" ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " ng:repeat="(qs_key , qs_value) in questions_list track by $index" ng:cloak>
                          <div class="question-part">
                              <div class="qs-type quesiontlist_iconx">
                                <div class="drag-handler">
@@ -140,7 +140,7 @@
                                    <i ng:if="qs_value.question_type == 4" class="fa fa-text-width iconn-x"></i>
                                  </span>
                                  <!-- Append question title here ! -->
-                                 <span class="qs-body">
+                                 <span class="qs-body" ng:cloak>
                                    {> qs_value.question_body | this_chars_only <}
                                  </span>
                                </div>
@@ -234,7 +234,7 @@
                       <span>Image Cropping</span>
                     </div>
                     <div class="cropping-data">
-                       <img style="width: 100%;" id="cropping-image-act" ng:src="{>cropped_media_info.image_source<}" alt="">
+                       <img style="width: 100%;" id="cropping-image-act" ng:src="{>cropped_media_info.image_source<}" alt="" ng:cloak>
                     </div>
                     <!-- <div class="all-preview">
                       <div class="preview-data-cropped prev-1 preview-crp">

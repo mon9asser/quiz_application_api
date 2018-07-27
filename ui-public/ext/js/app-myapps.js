@@ -1,10 +1,14 @@
 // == -----------------------------------------------------------------
 // == --------------------------> Login part
-// == -----------------------------------------------------------------
+// == - ----------------------------------------------------------------
 apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope" , function ($rootScope , $http , $scope){
 
   $scope.server_ip = $("#serverIp").val() ;
   $scope.user_id = $("#userId").val() ;
+  $scope.survey_applications = [];
+  $scope.quiz_applications = [];
+
+
   $scope.application_settings = {
          titles :
            {
@@ -85,19 +89,24 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
   // ==> Init Default Value for app type
   $scope.create_application =  function (appType){
       var ll = $(".all_questionnaire_lists").children('li').length // attr('questionnaire_type_x'). ;
-       
+
       $scope.application_title = appType + "1";
       $scope.application_description = "This description for "+appType + " 1";
       if(appType == "Quiz") {
         $scope.applicationType  = 1 ;
+        $scope.application_title = appType + " " +( $scope.quiz_applications.length + 1 );
+        $scope.application_description = "This description for "+appType + " " +( $scope.quiz_applications.length + 1 );
       }else {
         $scope.applicationType = 0;
+        $scope.application_title = appType + " " +( $scope.survey_applications.length + 1 );
+        $scope.application_description = "This description for "+appType + " " +( $scope.survey_applications.length + 1 );
       } ;
   };
+
   // ==> Create new application
   $scope.start_app_creation = function (){
 
-    alert();
+
     if($scope.application_title  == '' )
       {
         $scope.application_fields[$scope.application_fields.length]
@@ -186,5 +195,14 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
       }
     }); // End Json Apps
   }; // end app deletion
-
+  $scope.get_all_applications_data = () => {
+    $http({
+      url :$scope.server_ip +'api/'+ $scope.user_id + '/applications/list' ,
+      type : 'GET'
+    }).then(( resp ) => {
+       $scope.survey_applications = resp.data.surveys;
+       $scope.quiz_applications = resp.data.quizzes;
+    });
+  }
+  $scope.get_all_applications_data();
 }]);
