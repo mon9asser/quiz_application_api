@@ -1940,7 +1940,7 @@ iframe.super-size{
   ==================================================
 */
 .right_part {
-  display: none;
+  /* display: none; */
 }
 .loader-container {
   background: #fff;
@@ -3392,7 +3392,7 @@ table.label-table tbody .labels-options {
   display: block;
 }
 .dontdisplay_editor_preview_option {
-  display: none;
+  /* display: none; */
 }
 .x-change-mtop {
   margin-top: 12px;
@@ -3611,3 +3611,31 @@ margin-right: 5px;
   cursor: text;
 }
 .redactor-in-1 {min-height: 60px !important; }
+.editor-contents {
+  position:relative; z-index:100;
+}
+
+/*  */
+.swiper-container {
+      width: 100%;
+      height: 100%;
+    }
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+      /* Center slide text vertically */
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+    }
+    

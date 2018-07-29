@@ -1,422 +1,187 @@
-{{> top }}
-
-{{#if header_status }}
- {{> navbar }}
-{{/if }}
-
-
-<style media="screen">
-  .editor-block {
-    width: 95% !important;
-    margin: 0px auto;
-  }
-  .buttons-container{
-    width: 100% !important;
-    padding: 0px !important;
-    display: block !important;
-    margin-top: 15px !important;
-    margin-bottom: 10px !important;
-  }
-</style>
-
-<style media="screen" ng:if="{{ header_status }} == false" >
-  .update-rows { margin-top: 16px !important; }
-  .question-data { margin-top: 10px !important; }
-  .question-x { margin-top:0px !important; }
-  .settings_menu {  top: -4px !important; }
-</style>
-
-<!-- Redacor menu -->
-<!-- <div id="redactor-editor-menu" class="redactor-menu-x"></div> -->
-<!-- Loader -->
-<div class="loader_block">
-  <div class="quiver"><span class="arrows st"></span><span class="arrows nd"></span><span class="arrows rd"></span><span class="arrows th"></span><span class="arrows fth"></span><span class="loading">Loading</span></div>
-</div>
-
-<!-- Editor Content -->
-<div style="position:relative; z-index:100;" ng:controller="apps-controller">
-
-<div class="side-left-bar">
-  <div class="question-data">
-
-    <!-- Question Types -->
-     <ul id="qs-sortable" class="question-x">
-
-       <li id="question-muliple-choices" ng:click="onclick_items('question-muliple-choices')" data-type="qst" data-question-type="0" question-data="partials/multi-choices.hbs">
-           <span class="qs-type" title="Multiple Choices">
-              <i class="icon-insert-template"></i>
-           </span>
-           <span class="titles">Choices</span>
-       </li>
-
-       <li id="question-media-choices" ng:click="onclick_items('question-media-choices')" data-type="qst" data-question-type="1" question-data="partials/media-choices.hbs">
-        <span class="qs-type" title="Media Choices">
-           <i class="icon-image"></i>
-        </span>
-        <span class="titles">Media</span>
-       </li>
-
-       <li id="question-boolean-choices" ng:click="onclick_items('question-boolean-choices')" data-type="qst" data-question-type="2" question-data="partials/true-false.hbs">
-        <span class="qs-type" title="Ture/False">
-           <i class="icon-check-circle"></i>
-        </span>
-        <span class="titles">Boolean</span>
-       </li>
-     </ul>
-
-  </div>
-</div>
+<!DOCTYPE html>
+<html lang="en" dir="ltr" ng:app="applications" ng:controller="page-controller">
+  <head>
+      <meta charset="utf-8">
+      <title>Quiz Editor</title>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular.min.js" charset="utf-8"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" rel="stylesheet">
+      <link href="{{ server_ip }}ext/frameworks/css/redactor.min.css" rel="stylesheet">
+      <link href="{{ server_ip }}ext/frameworks/css/cropper.css" rel="stylesheet">
+      <link href="{{ server_ip }}ext/frameworks/css/spectrum.css" rel="stylesheet">
+      <link href="{{ server_ip }}ext/css/apps.css" rel="stylesheet">
+      <style media="screen">
+        .editor-block {
+          width: 95% !important;
+          margin: 0px auto;
+        }
+        .buttons-container{
+          width: 100% !important;
+          padding: 0px !important;
+          display: block !important;
+          margin-top: 15px !important;
+          margin-bottom: 10px !important;
+        }
+      </style>
+      <style media="screen" ng:if="{{ header_status }} == false" >
+        .update-rows { margin-top: 16px !important; }
+        .question-data { margin-top: 10px !important; }
+        .question-x { margin-top:0px !important; }
+        .settings_menu {  top: -4px !important; }
+      </style>
+  </head>
+  <body ng:controller="apps-controller">
+    <!-- Inputs -->
+    <input id="userId" type="hidden" name="" value="{{user.id}}">
+    <input id="userEmail" type="hidden" name="" value="{{user.email}}">
+    <input id="userName" type="hidden" name="" value="{{user.name}}">
+    <input id="userToken" type="hidden" name="" value="{{user.token}}">
+    <input id="serverIp" type="hidden" name="" value="{{ server_ip }}">
+    <input id="applicationId" type="hidden" name="" value="{{app._id}}">
+    <input id="applicationType" type="hidden" name="" value="{{app.app_type}}">
 
 
+    <div class="editor-contents" ng:controller="apps-controller">
+      <!-- ++++ Start Editor Contents ++++  -->
+      <div class="side-left-bar">
+        <!-- ++++ Start left bar ++++  -->
+        <div class="question-data">
+          <ul id="qs-sortable" class="question-x">
+            <li id="question-muliple-choices" data-type="qst" data-question-type="0" question-data="partials/multi-choices.hbs">
+                 <span class="qs-type" title="Multiple Choices">
+                    <i class="icon-insert-template"></i>
+                 </span>
+                 <span class="titles">Choices</span>
+            </li>
+            <li id="question-media-choices" data-type="qst" data-question-type="1" question-data="partials/media-choices.hbs">
+              <span class="qs-type" title="Media Choices">
+                 <i class="icon-image"></i>
+              </span>
+              <span class="titles">Media</span>
+            </li>
+            <li id="question-boolean-choices" data-type="qst" data-question-type="2" question-data="partials/true-false.hbs">
+             <span class="qs-type" title="Ture/False">
+                <i class="icon-check-circle"></i>
+             </span>
+             <span class="titles">Boolean</span>
+            </li>
+          </ul>
+        </div>
+        <!-- ++++ End left bar ++++  -->
+      </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="Quizontainer-fluid update-rows">
-  <!-- Title of application -->
-  <div class="container-fluid">
-			<div class="row">
-					<div class="col-md-12">
-						 <div class="area-qs-ch quiz-titles">
-               <!-- Start Text Loader -->
-               <div class="text-loader">
-                   <span></span>
-                   <span></span>
-               </div>
-               <!-- End Text Loader -->
-							  <span class="questionnaire-title">
+      <div class="Quizontainer-fluid update-rows">
+        <!-- ++++ Start application Title ++++  -->
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="area-qs-ch quiz-titles">
+                <span class="questionnaire-title">
                   <!-- Quiz Name -->
-                   <span>
-                     {> application_settings.questionnaire_title <}
+                   <span ng:cloak>
+                     {> _application_.questionnaire_title <}
                    </span>
                 </span>
-                <!-- <a class="choices-right-add btn-danger btn setting-menu-handler" href="#">
-                  <i class="fa fa-cog"></i>
-                </a> -->
- 							  <a class="choices-right-add btn-primary preview-button btn rm-margin" href="{{server_ip}}{{app._id}}/live_preview/{{user.id}}">Preview Quiz</a>
-  					 </div>
-					</div>
-	    </div>
-	</div>
-
-
-
-  <div class="container-fluid row-x-body">
-
-    <div class="row">
-       <!-- Question (Editor) menu -->
-      <div class="left_part col-md-5 col-sm-6 col-xs-12">
-
-          <div class="question-data qsdragged-list qs-dropped background_drag_drop">
-            <div class="loading-data">
-                <div class="data-loader">Loading...</div>
+                <a class="choices-right-add btn-primary preview-button btn rm-margin" href="{{server_ip}}{{app._id}}/live_preview/{{user.id}}">
+                  Preview Quiz
+                </a>
+              </div>
             </div>
+          </div>
+        </div>
 
-            <!-- End Text Loader -->
-						<ul id="docQuestions" class="dropped-qs dropped-qs-2">
-
-               <li class="question-li-x qs-{>qs_value._id<}" id="questoin_tag_{>qs_value._id<}" data-index="{>$index<}" data-question-id="{>qs_value._id<}" ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " ng:repeat="(qs_key , qs_value) in questions_list track by $index">
-
-                     <div class="question-part">
-                       <div class="qs-type quesiontlist_iconx">
-                         <div class="drag-handler">
-                           <i>...</i>
-                         </div>
-                         <div  ng:click="edit_this_question(qs_value._id , $index )"  class="single-question-container">
-                           <span class="qs-type" title="Multiple Choices">
-                             <i ng:if="qs_value.question_type == 0" class="icon-insert-template"></i>
-                             <i ng:if="qs_value.question_type == 1" class="icon-image"></i>
-                             <i ng:if="qs_value.question_type == 2" class="icon-check-circle"></i>
-                           </span>
-                           <!-- Append question title here ! -->
-                           <span class="qs-body" ng-bind="qs_value.question_body | this_chars_only"></span>
+        <div class="container-fluid row-x-body">
+           <div class="row">
+             <!-- +++++ Start Left Columns -->
+             <div class="left_part col-md-5 col-sm-6 col-xs-12">
+                <div class="question-data qsdragged-list qs-dropped background_drag_drop" style="margin-top:0px !important;">
+                  <ul id="docQuestions" class="dropped-qs dropped-qs-2">
+                     <li class="question-li-x qs-{>qs_value._id<}" id="questoin_tag_{>qs_value._id<}" data-index="{>$index<}" data-question-id="{>qs_value._id<}" ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " ng:repeat="(qs_key , qs_value) in _questions_ track by $index" ng:cloak>
+                       <div class="question-part">
+                         <div class="qs-type quesiontlist_iconx">
+                           <div class="drag-handler">
+                             <i>...</i>
+                           </div>
+                           <div class="single-question-container">
+                             <span class="qs-type" title="Multiple Choices">
+                               <i ng:if="qs_value.question_type == 0" class="icon-insert-template"></i>
+                               <i ng:if="qs_value.question_type == 1" class="icon-image"></i>
+                               <i ng:if="qs_value.question_type == 2" class="icon-check-circle"></i>
+                             </span>
+                             <span class="qs-body" ng-bind="qs_value.question_body | striphtmltags" ng:cloak></span>
+                           </div>
                          </div>
                        </div>
+                     </li>
+                     <div ng:if="_questions_.length == 0" class="qs-status">
+                         <h2>
+                          Drag drop questions here !
+                         </h2>
                      </div>
-                </li>
-
-                <div ng:if="questions_list.length == 0" class="qs-status">
-                    <h2>
-                     Drag drop questions here !
-                    </h2>
+                  <ul>
                 </div>
-						</ul>
-				</div>
-
-        <!-- <div style="width:100%; margin-top:10px; background:yellow; padding:5px;">
-          Time and progressBar ( Editor only ) : new issue still inProgress
-        </div> -->
-      </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-       <!-- List of questions -->
-      <div class="right_part col-md-7 col-sm-6 col-xs-12">
-        <!-- Switch to view or editor [Handler]-->
-        <div class="switched-button switch-mode">
-           <!-- <span class="swMode">
-             On <span class="action-case"> {> editor_mode <} </span>
-           </span> -->
-           <!-- <div class="mode-chs-x">
-               <input type="checkbox" class="slide-mode" ng:model="create_quiz.template_mode" id="mode-chox-option" name="check" />
-               <label  ng:click="change_mode()" for="mode-chox-option"></label>
-               <span class="image-on mode-option-x"></span>
-           </div> -->
-             <!-- <div  class="input-switch">
-                  <label>
-                     <i class="fa fa-paperclip"></i>
-                     <span ng:bind="activated_screen_name"></span>
-                  </label>
-             </div> -->
-             <div  class="input-switch" ng:class="(screen_type != 0 ) ? 'display_editor_preview_option':'dontdisplay_editor_preview_option'">
-               <label ng:if="screen_type == 3">Welcome Screen</label>
-               <label ng:if="screen_type == 2">Goodbye Screen</label>
-               <label ng:if="screen_type == 1">Result Screeen</label>
              </div>
-
-             <div class="input-switch" ng:class="(screen_type == 0 ) ? 'display_editor_preview_option':'dontdisplay_editor_preview_option'">
-                 <label for="switch-editor">Edit</label>
-                 <input type="checkbox" id="switch-editor" ng:model="switching_editor_preview_value" ng:change="switching_editor_preview()" class="input" />
-                 <label for="switch-editor" class="switch"></label>
-                 <label for="switch-editor">Preview</label>
-            </div>
-
-        </div>
+             <!-- +++++ End Left Columns -->
 
 
 
 
-
-
-
-
-        <!-- Edit Template && Preview Template  -->
-        <div class="question-editor swipper-container-block">
-            <!-- Preview Page -->
-             <div class="preview-container" style="position:relative;">
-                {{> preview app = app }}
-                <!-- Loading edditor -->
-                <!-- <div class="loader-container">
-                   <div class="loader">
-                     <span>{</span><span>}</span>
-                     <span class="loadin-editor">Loading Preview</span>
-                   </div>
-                </div> -->
-              </div>
-            <!-- Editor Page -->
-            <div class="editor-container" style="position:relative; "><!-- template_mode -->
-               {{> editor app = app }}
-               <!-- Loading edditor -->
-               <div class="loader-container">
-                  <div class="loader">
-                    <span>{</span><span>}</span>
-                    <span class="loadin-editor">Loading Editor</span>
+             <!-- +++++ Start Right Columns -->
+              <div class="right_part col-md-7 col-sm-6 col-xs-12">
+                <div class="switched-button switch-mode">
+                  <div class="input-switch" ng:class="(screen_type == 0 ) ? 'display_editor_preview_option':'dontdisplay_editor_preview_option'">
+                    <label for="switch-editor">Edit</label>
+                    <input type="checkbox" id="switch-editor" ng:model="switching_editor_preview_value" ng:change="switching_editor_preview()" class="input" />
+                    <label for="switch-editor" class="switch"></label>
+                    <label for="switch-editor">Preview</label>
                   </div>
-               </div>
-            </div>
-        </div>
-
-
-
-
-
-
-
-
-
-        <!--
-        ++++++++++++++++++++++++++++++++++++++++
-        Cropping Images
-        ++++++++++++++++++++++++++++++++++++++++
-       -->
-        <div class="masklayer">
-          <div class="box-data-cropping">
-              <div class="title">
-                <i class="fa fa-crop"></i>
-                <span>Image Cropping</span>
-              </div>
-              <div class="cropping-data">
-                 <img style="width: 100%;" id="cropping-image-act" ng:src="{>cropped_media_info.image_source<}" alt="">
-              </div>
-              <!-- <div class="all-preview">
-                <div class="preview-data-cropped prev-1 preview-crp">
-
                 </div>
-                <div class="preview-data-cropped prev-2 preview-crp">
 
-                </div>
-              </div> -->
-
-              <div class="btn-blocker">
-                <button class="btn btn-danger" ng:click="cancel_the_cropping()" type="button" name="button">
-                  Cancel
-                </button>
-                <button class="btn btn-primary" type="button" name="button" ng:click="save_cropped_images()">
-                  Crop
-                </button>
+                <!-- Question Container -->
+                 <div class="question-editor swipper-container-block">
+                   <div class="swiper-container">
+                     <div class="swiper-wrapper">
+                       <div class="swiper-slide">Slide 1</div>
+                       <div class="swiper-slide">Slide 2</div>
+                       <div class="swiper-slide">Slide 3</div>
+                       <div class="swiper-slide">Slide 4</div>
+                       <div class="swiper-slide">Slide 5</div>
+                       <div class="swiper-slide">Slide 6</div>
+                       <div class="swiper-slide">Slide 7</div>
+                       <div class="swiper-slide">Slide 8</div>
+                       <div class="swiper-slide">Slide 9</div>
+                       <div class="swiper-slide">Slide 10</div>
+                     </div>
+                   </div>
+                 </div>
               </div>
-          </div>
+             <!-- +++++ End Right Columns -->
+
+
+
+           </div>
         </div>
-        <!--
-        ++++++++++++++++++++++++++++++++++++++++
-        End Cropping Images
-        ++++++++++++++++++++++++++++++++++++++++
-       -->
-
-
-
-
-
-
+        <!-- ++++ End application Title ++++  -->
       </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      <!-- ++++ End Editor Contents ++++ -->
     </div>
-  </div>
-
-</div>
 
 
 
-
-<!-- Overlay box -- w -- edit media -->
-  <div class="box-overlay media-uploader media-imgvid-uploader">
-    <!--
-    ++++++++++++++++++++++++++++++++++++
-    Box Overlay
-    ++++++++++++++++++++++++++++++++++++
-    -->
-    <div class="box-data">
-      <div class="box-data-title">
-        <b>Media Uploader</b>
-      </div>
-      <div class="media-part-controller">
-        <input ng:change="media_is_changed()" ng:model="file_object.link" type="text" class="form-control media-inputs show_media_link" placeholder="Media Link">
-        <ul class="media-links">
-          <li>
-            <a class="video-handler" href="#">
-              Add Video
-            </a>
-          </li>
-          <li>
-            <input ng:change="media_is_changed()" ng:model="file_object.file" class="image-uploader-x" type="file" name="" value="">
-            <a class="image-handler" href="#">
-              Add Image
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="preview-media">
-        <div class="pre-title media-im-vid">
-          <span>Preview</span>
-        </div>
-        <div class="preview-media-part media-im-vid">
-          <div class="media-x-preview">
-            <!-- List media part here -->
-          </div>
-        </div>
-        <div class="preview-media-part butns-part">
-          <button ng:click="close_media_box()" class="button_updates btn btn-danger btn-close-media" type="button" name="button">
-            Close
-          </button>
-          <button ng:click="save_media_with('preview')" class="button_updates btn btn-primary mm-update" type="button" name="button">
-            Save
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-<!-- Settings Menu -->
-<!-- Issue Here -->
-  {{> settings_menu }}
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{{> bottom }}
+    <!-- JS Links -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" charset="utf-8"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" charset="utf-8"></script>
+    <script src="{{ server_ip }}ext/frameworks/js/spectrum.js"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor.js"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-color.js"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-size.js"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-family.js"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/cropper.js"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sweetalert.min.js"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sortable.min.js"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/js/a-application.js"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/js/app-apps.js"></script>
+  </body>
+</html>
