@@ -10,7 +10,9 @@
       <link href="{{ server_ip }}ext/frameworks/css/redactor.min.css" rel="stylesheet">
       <link href="{{ server_ip }}ext/frameworks/css/cropper.css" rel="stylesheet">
       <link href="{{ server_ip }}ext/frameworks/css/spectrum.css" rel="stylesheet">
+      <link href="{{ server_ip }}ext/css/swiper.min.css" rel="stylesheet">
       <link href="{{ server_ip }}ext/css/apps.css" rel="stylesheet">
+
       <style media="screen">
         .editor-block {
           width: 95% !important;
@@ -48,19 +50,19 @@
         <!-- ++++ Start left bar ++++  -->
         <div class="question-data">
           <ul id="qs-sortable" class="question-x">
-            <li id="question-muliple-choices" data-type="qst" data-question-type="0" question-data="partials/multi-choices.hbs">
+            <li id="question-muliple-choices" data-type="qst" data-question-type="0" question-data="partials/multi-choices.hbs" ng:click="add_new_question(0)">
                  <span class="qs-type" title="Multiple Choices">
                     <i class="icon-insert-template"></i>
                  </span>
                  <span class="titles">Choices</span>
             </li>
-            <li id="question-media-choices" data-type="qst" data-question-type="1" question-data="partials/media-choices.hbs">
+            <li id="question-media-choices" data-type="qst" data-question-type="1" question-data="partials/media-choices.hbs" ng:click="add_new_question(1)">
               <span class="qs-type" title="Media Choices">
                  <i class="icon-image"></i>
               </span>
               <span class="titles">Media</span>
             </li>
-            <li id="question-boolean-choices" data-type="qst" data-question-type="2" question-data="partials/true-false.hbs">
+            <li id="question-boolean-choices" data-type="qst" data-question-type="2" question-data="partials/true-false.hbs" ng:click="add_new_question(2)">
              <span class="qs-type" title="Ture/False">
                 <i class="icon-check-circle"></i>
              </span>
@@ -141,18 +143,156 @@
 
                 <!-- Question Container -->
                  <div class="question-editor swipper-container-block">
-                   <div class="swiper-container">
+                   <div class="swiper-container swiper-data">
                      <div class="swiper-wrapper">
-                       <div class="swiper-slide">Slide 1</div>
-                       <div class="swiper-slide">Slide 2</div>
-                       <div class="swiper-slide">Slide 3</div>
-                       <div class="swiper-slide">Slide 4</div>
-                       <div class="swiper-slide">Slide 5</div>
-                       <div class="swiper-slide">Slide 6</div>
-                       <div class="swiper-slide">Slide 7</div>
-                       <div class="swiper-slide">Slide 8</div>
-                       <div class="swiper-slide">Slide 9</div>
-                       <div class="swiper-slide">Slide 10</div>
+                       <div class="swiper-slide ">
+                         <div class="editor-blocker">
+                           <ul class="tab-editor">
+                             <li>
+                                <div class="x-editor-x-title question-opener"  ng:click="expand_collapsed_items('#question-pt')" >
+                                  Question
+                                </div>
+                                <div class="clearFix"></div>
+                                <div style="display:none;" class="x-editor-x-body open-this-tab" id="question-pt">
+                                  <div id="dynamic-layer" class="col-sm-8 top-margins">
+                                    <textarea id="editor-quest-data" class="form-control quest-title-edit textarea-qs redactor-editor"></textarea>
+                                  </div>
+                                  <div class="col-sm-4 media-uploads top-margins media-parts-x">
+
+                                  </div>
+                                </div>
+                             </li>
+                             <li>
+                                <div class="x-editor-x-title" ng:click="expand_collapsed_items('#Description-pt')">
+                                  Description
+                                </div>
+                                <div style="display:none;" class="x-editor-x-body" id="Description-pt">
+                                  <div class="col-xs-12 col-md-12">
+                                    <div class="row-cols margin-top">
+                                       <textarea id="editor-desc-data" name="name" class="form-control descriptions description-field description-field-x redactor-editor" placeholder="Description ..." rows="3" cols="80"></textarea>
+                                    </div>
+                                  </div>
+                                </div>
+                              </li>
+                             <li>
+                                <div class="x-editor-x-title" ng:click="expand_collapsed_items('#answers-pt')">
+                                    Answers
+                                </div>
+                                <div style="display:none;"class="x-editor-x-body" id="answers-pt">
+                                  <div class="multi-answers-part">
+                                     --
+                                  </div>
+                                </div>
+                              </li>
+                             <li>
+                               <div class="x-editor-x-title" ng:click="expand_collapsed_items('#Settings-pt')">
+                                  Question Settings
+                               </div>
+                               <div style="display:none;" class="x-editor-x-body" id="Settings-pt">
+                                 <div class="col-sm-12">
+                                   <div class="row-cols margin-top">
+                                     <div class="question-settings">
+                                       <ul class="listSettings-qs">
+                                          <li class="show_lbls_qs">
+                                             <div class="scale-options">
+                                               <div class="checkbox-toggle answer-settins">
+                                                 <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                                                 <span class="title-checkbox">Show labels</span>
+                                               </div>
+                                             </div>
+                                             <div class="scale-options item-labels">
+                                                <input class="lab" type="text" placeholder="Left">
+                                                <input class="lab" type="text" placeholder="Center">
+                                                <input class="lab" type="text" placeholder="Right">
+                                             </div>
+                                           </li>
+                                           <li class="required_qs">
+                                             <div class="checkbox-toggle answer-settins">
+                                                <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                                                <span class="title-checkbox">
+                                                  Required
+                                                    <i class="help-links">?</i>
+                                                </span>
+                                             </div>
+                                           </li>
+                                           <li class="single_response_qs">
+                                             <div class="checkbox-toggle answer-settins">
+                                                <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                                                <span class="title-checkbox"  data-toggle="tooltip" data-placement="right" title="Tooltip on right">
+                                                  Single Response
+                                                  <i class="help-links">?</i>
+                                                </span>
+                                             </div>
+                                          </li>
+                                          <li class="randomize_qs">
+                                            <div class="checkbox-toggle answer-settins">
+                                                <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                                                <span class="title-checkbox">
+                                                  Randomize
+                                                  <i class="help-links">?</i>
+                                                </span>
+                                             </div>
+                                          </li>
+                                          <li class="super_sizer_qs">
+                                            <div class="checkbox-toggle answer-settins">
+                                                <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                                                <span class="title-checkbox">
+                                                  Super Size
+                                                  <i class="help-links">?</i>
+                                                </span>
+                                             </div>
+                                          </li>
+                                          <li class="answer_stylish_qs">
+                                            <div class="checkbox-toggle answer-settins">
+                                               <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                                               <span class="title-checkbox">
+                                                 Style of Answer
+                                                 <i class="help-links">?</i>
+                                               </span>
+                                            </div>
+                                          </li>
+                                          <li class="steps_qs">
+                                                <span class="title-checkbox">
+                                                  Steps ( ... )
+                                                   <i class="help-links">?</i>
+                                                </span>
+                                                <div class="rating_scale_options">
+                                                    <input  id="step_slider" min="2" max="10" type="range" name="">
+                                                </div> <!-- Slide Range -->
+                                           </li>
+                                           <li>
+                                             <span class="title-checkbox">
+                                               Max characters ( ... )
+                                              <i class="help-links">?</i>
+                                            </span>
+                                             <div class="rating_scale_options">
+                                                 <input id="char_max_slider" min="100" max="2000" type="range" name="">
+                                             </div> <!-- Slide Range -->
+                                            </li>
+
+                                       </ul>
+                                     </div>
+                                   </div>
+                                 </div>
+                               </div>
+                             </li>
+                           </ul>
+                           <!--  Save Changes -->
+                           <div class="editor-block btn-0-container">
+                              <div class="buttons-container text-right">
+                                  <button style="float:left;"  class="btn btn-danger-outline" type="button" name="button">
+                                        Delete
+                                  </button>
+                                  <button id="saving-changes" class="btn btn-primary-outline save_changes " type="button" name="button">
+                                        Save Changes
+                                  </button>
+                              </div>
+                           </div>
+                         </div>
+                       </div>
+                       <div class="swiper-slide ">
+                         Views
+                       </div>
                      </div>
                    </div>
                  </div>
@@ -181,6 +321,7 @@
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/cropper.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sweetalert.min.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sortable.min.js"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/js/swiper.min.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/js/a-application.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/js/app-apps.js"></script>
   </body>
