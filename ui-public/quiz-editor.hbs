@@ -100,7 +100,7 @@
              <div class="left_part col-md-5 col-sm-6 col-xs-12">
                 <div class="question-data qsdragged-list qs-dropped background_drag_drop" style="margin-top:0px !important;">
                   <ul id="docQuestions" class="dropped-qs dropped-qs-2">
-                     <li class="question-li-x qs-{>qs_value._id<}" id="questoin_tag_{>qs_value._id<}" data-index="{>$index<}" data-question-id="{>qs_value._id<}" ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " ng:repeat="(qs_key , qs_value) in _questions_ track by $index" ng:cloak>
+                     <li class="question-li-x qs-{>qs_value._id<}" ng:click="init_this_question(qs_value._id)" id="questoin_tag_{>qs_value._id<}" data-index="{>$index<}" data-question-id="{>qs_value._id<}" ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " ng:repeat="(qs_key , qs_value) in _questions_ track by $index" ng:cloak>
                        <div class="question-part">
                          <div class="qs-type quesiontlist_iconx">
                            <div class="drag-handler">
@@ -145,152 +145,8 @@
                  <div class="question-editor swipper-container-block">
                    <div class="swiper-container swiper-data">
                      <div class="swiper-wrapper">
-                       <div class="swiper-slide ">
-                         <div class="editor-blocker">
-                           <ul class="tab-editor">
-                             <li>
-                                <div class="x-editor-x-title question-opener"  ng:click="expand_collapsed_items('#question-pt')" >
-                                  Question
-                                </div>
-                                <div class="clearFix"></div>
-                                <div style="display:none;" class="x-editor-x-body open-this-tab" id="question-pt">
-                                  <div id="dynamic-layer" class="col-sm-8 top-margins">
-                                    <textarea id="editor-quest-data" class="form-control quest-title-edit textarea-qs redactor-editor"></textarea>
-                                  </div>
-                                  <div class="col-sm-4 media-uploads top-margins media-parts-x">
-
-                                  </div>
-                                </div>
-                             </li>
-                             <li>
-                                <div class="x-editor-x-title" ng:click="expand_collapsed_items('#Description-pt')">
-                                  Description
-                                </div>
-                                <div style="display:none;" class="x-editor-x-body" id="Description-pt">
-                                  <div class="col-xs-12 col-md-12">
-                                    <div class="row-cols margin-top">
-                                       <textarea id="editor-desc-data" name="name" class="form-control descriptions description-field description-field-x redactor-editor" placeholder="Description ..." rows="3" cols="80"></textarea>
-                                    </div>
-                                  </div>
-                                </div>
-                              </li>
-                             <li>
-                                <div class="x-editor-x-title" ng:click="expand_collapsed_items('#answers-pt')">
-                                    Answers
-                                </div>
-                                <div style="display:none;"class="x-editor-x-body" id="answers-pt">
-                                  <div class="multi-answers-part">
-                                     --
-                                  </div>
-                                </div>
-                              </li>
-                             <li>
-                               <div class="x-editor-x-title" ng:click="expand_collapsed_items('#Settings-pt')">
-                                  Question Settings
-                               </div>
-                               <div style="display:none;" class="x-editor-x-body" id="Settings-pt">
-                                 <div class="col-sm-12">
-                                   <div class="row-cols margin-top">
-                                     <div class="question-settings">
-                                       <ul class="listSettings-qs">
-                                          <li class="show_lbls_qs">
-                                             <div class="scale-options">
-                                               <div class="checkbox-toggle answer-settins">
-                                                 <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                                                 <span class="title-checkbox">Show labels</span>
-                                               </div>
-                                             </div>
-                                             <div class="scale-options item-labels">
-                                                <input class="lab" type="text" placeholder="Left">
-                                                <input class="lab" type="text" placeholder="Center">
-                                                <input class="lab" type="text" placeholder="Right">
-                                             </div>
-                                           </li>
-                                           <li class="required_qs">
-                                             <div class="checkbox-toggle answer-settins">
-                                                <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                                                <span class="title-checkbox">
-                                                  Required
-                                                    <i class="help-links">?</i>
-                                                </span>
-                                             </div>
-                                           </li>
-                                           <li class="single_response_qs">
-                                             <div class="checkbox-toggle answer-settins">
-                                                <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                                                <span class="title-checkbox"  data-toggle="tooltip" data-placement="right" title="Tooltip on right">
-                                                  Single Response
-                                                  <i class="help-links">?</i>
-                                                </span>
-                                             </div>
-                                          </li>
-                                          <li class="randomize_qs">
-                                            <div class="checkbox-toggle answer-settins">
-                                                <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                                                <span class="title-checkbox">
-                                                  Randomize
-                                                  <i class="help-links">?</i>
-                                                </span>
-                                             </div>
-                                          </li>
-                                          <li class="super_sizer_qs">
-                                            <div class="checkbox-toggle answer-settins">
-                                                <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                                                <span class="title-checkbox">
-                                                  Super Size
-                                                  <i class="help-links">?</i>
-                                                </span>
-                                             </div>
-                                          </li>
-                                          <li class="answer_stylish_qs">
-                                            <div class="checkbox-toggle answer-settins">
-                                               <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                                               <span class="title-checkbox">
-                                                 Style of Answer
-                                                 <i class="help-links">?</i>
-                                               </span>
-                                            </div>
-                                          </li>
-                                          <li class="steps_qs">
-                                                <span class="title-checkbox">
-                                                  Steps ( ... )
-                                                   <i class="help-links">?</i>
-                                                </span>
-                                                <div class="rating_scale_options">
-                                                    <input  id="step_slider" min="2" max="10" type="range" name="">
-                                                </div> <!-- Slide Range -->
-                                           </li>
-                                           <li>
-                                             <span class="title-checkbox">
-                                               Max characters ( ... )
-                                              <i class="help-links">?</i>
-                                            </span>
-                                             <div class="rating_scale_options">
-                                                 <input id="char_max_slider" min="100" max="2000" type="range" name="">
-                                             </div> <!-- Slide Range -->
-                                            </li>
-
-                                       </ul>
-                                     </div>
-                                   </div>
-                                 </div>
-                               </div>
-                             </li>
-                           </ul>
-                           <!--  Save Changes -->
-                           <div class="editor-block btn-0-container">
-                              <div class="buttons-container text-right">
-                                  <button style="float:left;"  class="btn btn-danger-outline" type="button" name="button">
-                                        Delete
-                                  </button>
-                                  <button id="saving-changes" class="btn btn-primary-outline save_changes " type="button" name="button">
-                                        Save Changes
-                                  </button>
-                              </div>
-                           </div>
-                         </div>
-                       </div>
-                       <div class="swiper-slide ">
+                       <div class="swiper-slide" ng:include="'/partials/editor.hbs'"></div>
+                       <div class="swiper-slide">
                          Views
                        </div>
                      </div>
@@ -317,7 +173,7 @@
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-color.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-size.js"></script>
-    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-family.js"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-family.js"></script> 
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/cropper.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sweetalert.min.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sortable.min.js"></script>

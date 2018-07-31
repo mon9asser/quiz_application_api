@@ -3694,3 +3694,8 @@ margin-right: 5px;
 .description-field-x {
   margin-top: 10px;
 }
+
+#docQuestions > li.marked_question {
+  border: 1px solid #0aa6f9;
+  background: #edf9ff;
+}

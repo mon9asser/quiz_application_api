@@ -1,3 +1,24 @@
+apps.directive("redactor", function() {
+  return {
+    require: '?ngModel',
+    link: function($scope, elem, attrs, controller) {
+
+      controller.$render = function() {
+
+        elem.redactor({
+          keyupCallback: function() {
+            $scope.$apply(controller.$setViewValue(elem.getCode()));
+          },
+          execCommandCallback: function() {
+            $scope.$apply(controller.$setViewValue(elem.getCode()));
+          }
+        });
+
+        elem.setCode(controller.$viewValue);
+      };
+    }
+  };
+});
 apps.filter( 'striphtmltags' , ($sce) => {
   return function (specs){
     var div = $("<div>"+ specs + "</div>");
@@ -44,7 +65,8 @@ apps.controller("apps-controller" , [
   $scope.answer_ids  = null ;
   $scope.active_question_id = null ;
   $scope.retrieve_data_url = $scope.server_ip + "api/"+$scope.app_id+"/application/get/all";
-
+  $scope.question_index = null;
+  
   $scope.header_data = {
      "X-api-keys": api_key_data.API_KEY ,
      "X-api-app-name": api_key_data.APP_NAME
@@ -64,8 +86,81 @@ apps.controller("apps-controller" , [
       $scope._settings_     = $scope._application_.settings;
       $scope.question_ids  = $scope._application_.question_ids;
       $scope.answer_ids  = $scope._application_.answer_ids ;
+      $scope.air_redactor_object = {
+            paragraphize: false,
+            replaceDivs: false,
+            linebreaks: false,
+            enterKey: false ,
+            air : true ,
+            buttonsAddBefore : {
+              before: 'html',
+              buttons: ['bold','italic','link','deleted','underline']
+            } ,
+            plugins: ['fontcolor' , 'fontsize'] ,
+            buttonsHide: ['format' , 'lists'] ,
+            callbacks: {
+              airOpened : function (){
+                var app = $(this);
+                var elems = $(app[0].component.toolbar.$toolbar.nodes[0]);
+
+                elems.css({
+                  left: '-330px'
+                });
+                if(elems.find(".re-bold").length > 1 )
+                elems.find(".re-bold").eq(elems.find(".re-bold").length - 1).css('display','none')
+
+                if(elems.find(".re-italic").length > 1 )
+                elems.find(".re-italic").eq(elems.find(".re-italic").length - 1).css('display','none')
+
+                if(elems.find(".re-deleted").length > 1 )
+                elems.find(".re-deleted").eq(elems.find(".re-deleted").length - 1).css('display','none')
+
+                if(elems.find(".re-link").length > 1 )
+                elems.find(".re-link").eq(elems.find(".re-link").length - 1).css('display','none')
+              }
+            }
+      };
 
 
+      $scope.inti_question_redactor = () => {
+        $timeout(function(){
+          // $R('#editor-quest-data' , $scope.air_redactor_object );
+        } , 300 );
+      }
+      // => When Changing question Text area
+      $scope.when_changing_question_text_area = (question_data) => {
+          $scope._questions_[$scope.question_index].question_body = question_data ;
+          console.log($scope._questions_);
+      }
+      // => Select Current Question
+      $scope.mark_current_question_in_list = (question_id) => {
+        // ==> Remove Old selected question.
+        $("#docQuestions").children("li").each(function(){
+          if( $(this).hasClass('marked_question') )
+          $(this).removeClass('marked_question');
+        });
+        $("#docQuestions").children('li.qs-'+question_id.toString()).addClass('marked_question');
+        // $("#docQuestions").children('li').removeClass('marked_question');
+
+        // marked_question
+        // alert(question_index);
+      }
+      // => Init this question
+      $scope.init_this_question = ( question_id ) => {
+         // Init Question to edit
+         var question_index = $scope._questions_.findIndex(x => x._id == question_id );
+         if( question_index == -1  ) return false;
+
+         // => Storing Question Index
+         $scope.question_index = question_index ;
+         // => Truncate Question Textarea
+         $('#editor-quest-data').val('');
+         // => Select current question
+         $scope.mark_current_question_in_list(question_id) ;
+         // => apply redactor in question this tag
+         $scope.inti_question_redactor();
+      }
+      // => Add new question (click-event)
       $scope.add_new_question = ( question_type , atIndex = null ,  other_types = null ) => {
 
         if($scope._questions_.length > 200 )
@@ -157,7 +252,7 @@ apps.controller("apps-controller" , [
 
 
         // ==> Slide To Bottom
-        $(".qsdragged-list").animate({
+        $(".qsdragged-list , html , body").animate({
           scrollTop: 1000000000000
         }, 10 );
 
@@ -189,6 +284,7 @@ apps.controller("apps-controller" , [
           });
           $scope.swiper_data.update();
       }
+
       // Loading Functions
       $scope.init_swiperJs();
       // =============================================================>>
