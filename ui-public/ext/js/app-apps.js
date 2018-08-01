@@ -1,30 +1,11 @@
-apps.directive("redactor", function() {
-  return {
-    require: '?ngModel',
-    link: function($scope, elem, attrs, controller) {
 
-      controller.$render = function() {
 
-        elem.redactor({
-          keyupCallback: function() {
-            $scope.$apply(controller.$setViewValue(elem.getCode()));
-          },
-          execCommandCallback: function() {
-            $scope.$apply(controller.$setViewValue(elem.getCode()));
-          }
-        });
-
-        elem.setCode(controller.$viewValue);
-      };
-    }
-  };
-});
 apps.filter( 'striphtmltags' , ($sce) => {
   return function (specs){
     var div = $("<div>"+ specs + "</div>");
     var text_values = div.text() ;
     var spesificChars = '' ;
-    var char_counts = 35 ;
+    var char_counts = 20 ;
 
     if( text_values == undefined )
       spesificChars = text_values ;
@@ -66,7 +47,7 @@ apps.controller("apps-controller" , [
   $scope.active_question_id = null ;
   $scope.retrieve_data_url = $scope.server_ip + "api/"+$scope.app_id+"/application/get/all";
   $scope.question_index = null;
-  
+
   $scope.header_data = {
      "X-api-keys": api_key_data.API_KEY ,
      "X-api-app-name": api_key_data.APP_NAME
@@ -121,12 +102,29 @@ apps.controller("apps-controller" , [
             }
       };
 
-
-      $scope.inti_question_redactor = () => {
+      // => Load First Question in list
+      $scope.first_callback_question = () => {
+        if( $scope._questions_.length == 0 ) return false ;
+        $scope.active_question_id = $scope._questions_[0]._id ;
+        $scope.init_this_question($scope.active_question_id);
         $timeout(function(){
-          // $R('#editor-quest-data' , $scope.air_redactor_object );
-        } , 300 );
+          $(".redactor-in-0").addClass('redactor-placeholder');
+          $('.redactor-in-0').attr('placeholder' ,  $scope._questions_[0].question_body);
+          $('.redactor-in-0').on('input' , function(){
+              $scope._questions_[$scope.question_index].question_body = $('.redactor-in-0').html();
+              $timeout(function(){
+                $scope.$apply();
+              })
+          });
+
+        });
       }
+      // Fill Texts with request questions
+      $scope.fill_textarea_parts = (question_id) => {
+        var question_object = $scope._questions_.find(x => x._id == question_id );
+        if( question_object == undefined ) return false ;
+        $(".redactor-in-0").attr( 'placeholder' , $( "<span>"+ question_object.question_body +"<span>" ).text() );
+      };
       // => When Changing question Text area
       $scope.when_changing_question_text_area = (question_data) => {
           $scope._questions_[$scope.question_index].question_body = question_data ;
@@ -134,12 +132,16 @@ apps.controller("apps-controller" , [
       }
       // => Select Current Question
       $scope.mark_current_question_in_list = (question_id) => {
+
         // ==> Remove Old selected question.
         $("#docQuestions").children("li").each(function(){
           if( $(this).hasClass('marked_question') )
           $(this).removeClass('marked_question');
         });
-        $("#docQuestions").children('li.qs-'+question_id.toString()).addClass('marked_question');
+        // alert($("#docQuestions").children('li.qs-'+question_id.toString()).prop('className') )
+        $timeout(function(){
+          $("#docQuestions").children('li.qs-'+question_id.toString()).addClass('marked_question');
+        })
         // $("#docQuestions").children('li').removeClass('marked_question');
 
         // marked_question
@@ -150,15 +152,15 @@ apps.controller("apps-controller" , [
          // Init Question to edit
          var question_index = $scope._questions_.findIndex(x => x._id == question_id );
          if( question_index == -1  ) return false;
-
          // => Storing Question Index
          $scope.question_index = question_index ;
          // => Truncate Question Textarea
-         $('#editor-quest-data').val('');
+         // $('#editor-quest-data').val('');
          // => Select current question
-         $scope.mark_current_question_in_list(question_id) ;
-         // => apply redactor in question this tag
-         $scope.inti_question_redactor();
+        $timeout(function(){
+          $scope.mark_current_question_in_list(question_id) ;
+          $scope.fill_textarea_parts(question_id);
+        })
       }
       // => Add new question (click-event)
       $scope.add_new_question = ( question_type , atIndex = null ,  other_types = null ) => {
@@ -286,6 +288,7 @@ apps.controller("apps-controller" , [
       }
 
       // Loading Functions
+      $scope.first_callback_question();
       $scope.init_swiperJs();
       // =============================================================>>
     /* End Code of Document here */

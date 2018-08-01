@@ -3,7 +3,9 @@
   <head>
       <meta charset="utf-8">
       <title>Quiz Editor</title>
-      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular.min.js" charset="utf-8"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" charset="utf-8"></script>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" rel="stylesheet">
@@ -97,7 +99,7 @@
         <div class="container-fluid row-x-body">
            <div class="row">
              <!-- +++++ Start Left Columns -->
-             <div class="left_part col-md-5 col-sm-6 col-xs-12">
+             <div class="left_part col-md-4 col-sm-6 col-xs-12">
                 <div class="question-data qsdragged-list qs-dropped background_drag_drop" style="margin-top:0px !important;">
                   <ul id="docQuestions" class="dropped-qs dropped-qs-2">
                      <li class="question-li-x qs-{>qs_value._id<}" ng:click="init_this_question(qs_value._id)" id="questoin_tag_{>qs_value._id<}" data-index="{>$index<}" data-question-id="{>qs_value._id<}" ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " ng:repeat="(qs_key , qs_value) in _questions_ track by $index" ng:cloak>
@@ -131,7 +133,7 @@
 
 
              <!-- +++++ Start Right Columns -->
-              <div class="right_part col-md-7 col-sm-6 col-xs-12">
+              <div class="right_part col-md-8 col-sm-6 col-xs-12">
                 <div class="switched-button switch-mode">
                   <div class="input-switch" ng:class="(screen_type == 0 ) ? 'display_editor_preview_option':'dontdisplay_editor_preview_option'">
                     <label for="switch-editor">Edit</label>
@@ -167,17 +169,18 @@
 
 
     <!-- JS Links -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" charset="utf-8"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" charset="utf-8"></script>
+
+
     <script src="{{ server_ip }}ext/frameworks/js/spectrum.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-color.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-size.js"></script>
-    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-family.js"></script> 
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-family.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/cropper.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sweetalert.min.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sortable.min.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/js/swiper.min.js"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/js/redactor-angular.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/js/a-application.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/js/app-apps.js"></script>
   </body>

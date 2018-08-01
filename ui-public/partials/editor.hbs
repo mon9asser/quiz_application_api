@@ -8,7 +8,7 @@
          <div class="clearFix"></div>
          <div style="display:none;" class="x-editor-x-body open-this-tab" id="question-pt">
            <div id="dynamic-layer" class="col-sm-8 top-margins">
-             <textarea placeholder="{>_questions_[question_index].question_body<}" ng:change="when_changing_question_text_area(this_qustion_textarea)" ng:model="this_qustion_textarea" id="editor-quest-data" class="form-control quest-title-edit textarea-qs redactor-editor"></textarea>
+             <textarea placeholder="{>_questions_[question_index].question_body<}" ng:change="when_changing_question_text_area(this_qustion_textarea)"  ng:model="this_qustion_textarea"  redactor id="editor-quest-data" class="form-control quest-title-edit textarea-qs redactor-editor"></textarea>
            </div>
            <div class="col-sm-4 media-uploads top-margins media-parts-x">
 
@@ -19,10 +19,11 @@
          <div class="x-editor-x-title" ng:click="expand_collapsed_items('#Description-pt')">
            Description
          </div>
-         <div style="display:none;" class="x-editor-x-body" id="Description-pt">
+         <div style="display:none; margin-top: 12px;" class="x-editor-x-body" id="Description-pt">
            <div class="col-xs-12 col-md-12">
              <div class="row-cols margin-top">
-                <textarea id="editor-desc-data" name="name" class="form-control descriptions description-field description-field-x redactor-editor" placeholder="Description ..." rows="3" cols="80"></textarea>
+
+                <textarea ng:model="description"  id="editor-desc-data" name="name" class="form-control descriptions description-field description-field-x redactor-editor" placeholder="Description ..."  redactor></textarea>
              </div>
            </div>
          </div>
