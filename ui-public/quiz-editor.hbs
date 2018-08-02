@@ -102,7 +102,7 @@
              <div class="left_part col-md-4 col-sm-6 col-xs-12">
                 <div class="question-data qsdragged-list qs-dropped background_drag_drop" style="margin-top:0px !important;">
                   <ul id="docQuestions" class="dropped-qs dropped-qs-2">
-                     <li class="question-li-x qs-{>qs_value._id<}" ng:click="init_this_question(qs_value._id)" id="questoin_tag_{>qs_value._id<}" data-index="{>$index<}" data-question-id="{>qs_value._id<}" ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " ng:repeat="(qs_key , qs_value) in _questions_ track by $index" ng:cloak>
+                     <li class="question-li-x qs-{>qs_value._id<}" ng:click="highlighted_question(qs_value._id)" id="questoin_tag_{>qs_value._id<}" data-index="{>$index<}" data-question-id="{>qs_value._id<}" ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " ng:repeat="(qs_key , qs_value) in _questions_ track by $index" ng:cloak>
                        <div class="question-part">
                          <div class="qs-type quesiontlist_iconx">
                            <div class="drag-handler">
@@ -134,6 +134,11 @@
 
              <!-- +++++ Start Right Columns -->
               <div class="right_part col-md-8 col-sm-6 col-xs-12">
+
+                <div class="">
+
+                </div>
+
                 <div class="switched-button switch-mode">
                   <div class="input-switch" ng:class="(screen_type == 0 ) ? 'display_editor_preview_option':'dontdisplay_editor_preview_option'">
                     <label for="switch-editor">Edit</label>
@@ -142,7 +147,6 @@
                     <label for="switch-editor">Preview</label>
                   </div>
                 </div>
-
                 <!-- Question Container -->
                  <div class="question-editor swipper-container-block">
                    <div class="swiper-container swiper-data">
@@ -168,11 +172,45 @@
 
 
 
+    <div class="box-overlay media-uploader media-imgvid-uploader">
+      <div class="box-data">
+        <div class="box-data-title">
+          <b class="media-title">Media Uploader</b>
+        </div>
+        <div class="media-part-controller">
+          <input type="text" class="form-control media-inputs show_media_link" placeholder="Media Link">
+          <ul class="media-links">
+            <li>
+              <a ng:click="show_media_link()" class="video-handler" href="#">
+                Add Video
+              </a>
+            </li>
+            <li>
+              <input ng:change="image_uploader_is_touched()" ng:model="media_image_model" class="image-uploader-x" type="file" name="" value="">
+              <a ng:click="upload_image_handler()" class="image-handler" href="#">
+                Add Image
+              </a>
+            </li>
+          </ul>
+        </div>
+
+
+        <div class="preview-media-part butns-part">
+          <button ng:click="close_current_image_uploader()" class="button_updates btn btn-danger btn-close-media" type="button" name="button">
+            Close
+          </button>
+          <button class="button_updates btn btn-primary mm-update" type="button" name="button">
+            Save
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+
     <!-- JS Links -->
-
-
     <script src="{{ server_ip }}ext/frameworks/js/spectrum.js"></script>
-    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor.js"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor.min.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-color.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-size.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-family.js"></script>
