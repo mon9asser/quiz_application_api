@@ -2286,6 +2286,18 @@ qtnrRouters.post("/:app_id/application/:objects" , auth_verify_api_keys , (req ,
 
       qtnr.findOne({ _id:app_id }).then( ( qtnairsDocument) => {
 
+
+      /*
+      if( qtnairsDocument.application_ids == undefined )
+          qtnairsDocument['application_ids'] = new Object();
+
+      var id_counts = 100;
+      for ( var i = 0; i <= id_counts; i++) {
+        qtnairsDocument['application_ids']['id_' + i ] = mongoose.Types.ObjectId();
+      }
+      */
+
+
          if (!qtnairsDocument){
            return new Promise((resolve, reject)=>{
               res.status(404).send(notes.Errors.Error_Doesnt_exists("Application"));
@@ -2299,7 +2311,7 @@ qtnrRouters.post("/:app_id/application/:objects" , auth_verify_api_keys , (req ,
          }
         var apps ;
         if( objects == 'retrieve'){
-             apps = qtnairsDocument ;
+          apps = qtnairsDocument ;
         }
         if( objects == 'settings'){
              apps = qtnairsDocument.settings ;
@@ -2332,7 +2344,7 @@ qtnrRouters.post("/:app_id/application/:objects" , auth_verify_api_keys , (req ,
              apps = qtnairsDocument.theme_style ;
         }
 
-       res.send(apps);
+        res.send(apps);
         }).catch((er)=>{
           return new Promise((resolve, reject)=>{
             res.status(404).send(notes.Errors.General_Error);
@@ -4940,6 +4952,49 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
 
 
 
+
+
+qtnrRouters.get("/:app_id/application/get/all"  , ( req , res )=>{
+  var appId = req.params.app_id ;
+
+  qtnr.findOne({ _id:appId }).populate('app_registry').exec( ( error , qtnairsDocument ) => {
+
+    var application_object = new Object();
+
+    if( application_object['question_ids'] == undefined )
+      application_object['question_ids'] = new Object();
+
+      if( application_object['answer_ids'] == undefined )
+        application_object['answer_ids'] = new Object();
+
+
+     for (var i = 0; i <= 200 ; i++) {
+       application_object['question_ids']['id_'+i] =  mongoose.Types.ObjectId()
+       application_object['answer_ids']['id_'+i] =  mongoose.Types.ObjectId()
+     }
+
+
+     if ( qtnairsDocument._id != undefined ) application_object['_id'] = qtnairsDocument._id ;
+     if ( qtnairsDocument.settings != undefined ) application_object['settings'] = qtnairsDocument.settings ;
+     if ( qtnairsDocument.theme_style != undefined ) application_object['theme_style'] = qtnairsDocument.theme_style ;
+     if ( qtnairsDocument.creator_id != undefined ) application_object['creator_id'] = qtnairsDocument.creator_id ;
+     if ( qtnairsDocument.app_type != undefined ) application_object['app_type'] = qtnairsDocument.app_type ;
+     if ( qtnairsDocument.questionnaire_title != undefined ) application_object['questionnaire_title'] = qtnairsDocument.questionnaire_title ;
+     if ( qtnairsDocument.description != undefined ) application_object['description'] = qtnairsDocument.description ;
+     if ( qtnairsDocument.createdAt != undefined ) application_object['createdAt'] = qtnairsDocument.createdAt ;
+     if ( qtnairsDocument.updatedAt  != undefined ) application_object['updatedAt'] = qtnairsDocument.updatedAt ;
+     if ( qtnairsDocument.questions != undefined ) application_object['questions'] = qtnairsDocument.questions ;
+     if ( qtnairsDocument.app_registry  != undefined ) application_object['app_registry'] = qtnairsDocument.app_registry ;
+     if ( qtnairsDocument.app_report  != undefined ) application_object['app_report'] = qtnairsDocument.app_report ;
+     if ( qtnairsDocument.att__draft != undefined ) application_object['att__draft'] = qtnairsDocument.att__draft ;
+     if ( qtnairsDocument.stylesheet_properties != undefined ) application_object['stylesheet_properties'] = qtnairsDocument.stylesheet_properties ;
+     if ( qtnairsDocument.theme_style != undefined ) application_object['theme_style'] = qtnairsDocument.theme_style ;
+
+
+    res.send(application_object);
+  });
+
+});
 
 module.exports = {
     qtnrRouters
