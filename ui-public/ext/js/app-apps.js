@@ -227,6 +227,8 @@ apps.controller("apps-controller" , [
          $(".qsdragged-list , html , body").animate({
            scrollTop: scroll_top
          }, 10 );
+         // ==> Storing Question into DB
+         $scope.storing_questions_into_database();
        }
       // => Slide toggle between tags
       $scope.expand_collapsed_items = function (id){
@@ -347,9 +349,60 @@ apps.controller("apps-controller" , [
       $scope.calling_media_uploader = () => {
         $(".media-imgvid-uploader").fadeIn();
       }
+      // ==> Delete answer from question
+      $scope.question_answer_deletion = function (answer_id , question_id){
+
+         var question_selected = $scope._questions_.find(x => x._id == question_id); //heeer
+         var answer_selected = question_selected.answers_format.find(x => x._id == answer_id );
+
+         var targetIndex = question_selected.answers_format.findIndex(x => x._id == answer_id );
+
+         if(targetIndex != -1 ){
+           question_selected.answers_format.splice(targetIndex, 1);
+           // ==> delete from iframe object ( Live Preview )
+           $timeout(function(){
+             $scope.$apply();
+             //+++++ $scope.iframe_access.model_deletion(1 , $scope.question_id , answer_id);
+           });
+         }
+       };
+      // ==> Mark Question as a right question
+      $scope.question_answer_mark_it_correct = function (answer_id , question_id){
+          // ==> This Answer
+
+
+          var question_selected = $scope._questions_.find( x => x._id == question_id );
+          var answer_selected = question_selected.answers_format.find(x => x._id == answer_id );
+          //(answer_selected);
+          if( question_selected.question_type == 2 ){
+            var all_answers = question_selected.answers_format;
+            for (var i = 0; i < all_answers.length; i++) {
+              all_answers[i].is_correct = false;
+            }
+            answer_selected.is_correct = !answer_selected.is_correct ;
+            //(answer_selected);
+            return false ;
+          }
+
+          // let's excute our func here
+          if(question_selected.answer_settings.single_choice == true ) { // only one response
+            var all_answers = question_selected.answers_format;
+            //(all_answers);
+            for (var i = 0; i < all_answers.length; i++) {
+              all_answers[i].is_correct = false;
+            }
+            answer_selected.is_correct = !answer_selected.is_correct ;
+          }else { // multiple response
+            answer_selected.is_correct = !answer_selected.is_correct ;
+          }
+        };
       // ==> Add
       $scope.add_new_media_for_question = () => {
         $scope.media_for = 'questions' ; // => Question
+        $(".media-uploader").fadeIn();
+      }
+      $scope.add_new_media_for_answer = () => {
+        $scope.media_for = 'answer' ; // => Question
         $(".media-uploader").fadeIn();
       }
       // => Close Current window
@@ -432,35 +485,47 @@ apps.controller("apps-controller" , [
 
           var formImageData = new FormData();
           formImageData.append('media_field' , $scope.cropper_results.file  );
-          var media_dimentionals = {
-              height  : $scope.cropper_results.height ,
-              width   : $scope.cropper_results.width ,
-              scaleX  : $scope.cropper_results.scaleX ,
-              scaleY  : $scope.cropper_results.scaleY ,
-              x       : $scope.cropper_results.x ,
-              y       : $scope.cropper_results.y
-          };
-          formImageData.append('media_dimentionals' , media_dimentionals  )   ;
-          formImageData.append('questions' , $scope._questions_ )   ;
+          formImageData.append('height' , $scope.cropper_results.height  );
+          formImageData.append('width' , $scope.cropper_results.width  );
+          formImageData.append('scaleX' , $scope.cropper_results.scaleX  );
+          formImageData.append('scaleY' , $scope.cropper_results.scaleY  );
+          formImageData.append('x' , $scope.cropper_results.x  );
+          formImageData.append('y' , $scope.cropper_results.y  );
+          formImageData.append('questions' , $scope._questions_ );
 
-
+         // ==> Send Data To Api
          var progressHandler = (event) => {
            console.log( "Uploaded "+event.loaded+" bytes of "+event.total );
-           var percent = (event.loaded / event.total) * 100;
+           var percent = Math.round (event.loaded / event.total) * 100;
            console.log(percent);
          };
-         var completeHandler = () => {};
-         var errorHandler = () => {};
-         var abortHandler = () => {};
+         var completeHandler = ( event ) => {
+           console.log(event.target);
+
+           // => ___question_5b58789124398227ee908f4d.jpg
+           // =>    question_5b58789124398227ee908f4d.jpg
+         };
+         var errorHandler = ( event ) => { "Upload Failed"  };
+         var abortHandler = ( event ) => { "Upload Aborted" };
          var ajax = new XMLHttpRequest();
          ajax.upload.addEventListener("progress", progressHandler, false);
          ajax.addEventListener("load", completeHandler, false);
          ajax.addEventListener("error", errorHandler, false);
          ajax.addEventListener("abort", abortHandler, false);
-         ajax.open("POST",  $scope.server_ip + "api/"+  model +  "/" + questionId + "/cropping_system" );
+         ajax.open("POST",  $scope.server_ip + "api/" + $scope.app_id + '/' +  model +  "/" + questionId + "/cropping_system" );
          ajax.send(formImageData);
 
       };
+      // => Storing Data of questions into db
+      $scope.storing_questions_into_database = () => {
+        $http({
+          url : $scope.server_ip + 'api/' + $scope.app_id + "/add/questions" ,
+          method : "POST" ,
+          data : { data : $scope._questions_ }
+        }).then((response)=>{
+          console.log(response.data);
+        });
+      }
       // ==> Calling bootstrap tooltip
       $scope.init_bootstrap_tooltip = ( ) => {
           return $('[data-toggle="tooltip"]').tooltip();

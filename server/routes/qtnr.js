@@ -6,6 +6,8 @@ const fs = require('fs');
 const path = require('path') ;
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
+var im = require('imagemagick');
+
 // ==> updating [issue #114]
 const multer = require('multer')
 // const fileType = require('file-type')
@@ -4998,18 +5000,105 @@ qtnrRouters.get("/:app_id/application/get/all"  , ( req , res )=>{
 
 
 
-qtnrRouters.post("/:model/:question_id/cropping_system"  , question_answer_images.single("media_field") , ( req , res )=>{
+qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answer_images.single("media_field") , ( req , res )=>{
   /*Params data*/
   //model
   //question_id
   /*body data*/
   //cropping_data
-  console.log(req.body.media_dimentionals);
-  console.log(req.body.questions);
-  console.log(req.file); 
+  var model_type = req.params.model ;
+  var appId = req.params.app_id ;
+  var questionId = req.params.question_id;
+  var file_path = 'ui-public/themeimages/';
+  var file_name = '_' ;
+  if( req.params.model == "question" )
+  file_name = "question_" + questionId
+
+  var imagePath =  req.file.path ;
+  var fileExtension = path.extname(imagePath);
+  var new_filename = "question_"+questionId+fileExtension.toLowerCase();
+  var new_file_path = file_path + new_filename ;
+  var main_filename = req.file.originalname ;
+  var main_file_path = file_path  + req.file.originalname ;
+
+
+  if(! fs.existsSync(main_file_path)){
+    res.send(false);
+    return false ;
+  }
+
+  var resizing = req.body.width + 'x' + req.body.height +'+'+ req.body.x +'+'+  req.body.y ;
+  im.convert([ main_file_path ,'-crop', resizing , new_file_path ], function( err, stdout ){
+    if (err) throw err;
+    var new_file_path_ = file_path + '___' +new_filename ;
+    fs.rename( imagePath  , new_file_path_  , (err)=>{
+       if(err) throw err ;
+     });
+  });
+
+  // ==> Saving Data
+  qtnr.findOne({ _id:appId }).then( (   qtnairsDocument ) => {
+      var questions = qtnairsDocument.questions ;
+      var this_question = questions.find( x => x._id == questionId ) ;
+      if(this_question != undefined ){
+        if(model_type == 'question'){
+          if( this_question.media_question == undefined )
+          this_question['media_question'] = new Object();
+
+          if(this_question.media_question.media_type == undefined )
+          this_question.media_question['media_type'] = '';
+          if(this_question.media_question.media_name == undefined )
+          this_question.media_question['media_name'] = '';
+          if(this_question.media_question.media_field == undefined )
+          this_question.media_question['media_field'] = '';
+          if(this_question.media_question.Media_directory == undefined )
+          this_question.media_question['Media_directory'] = '';
+          if(this_question.media_question.image_cropped == undefined )
+          this_question.media_question['image_cropped'] = '';
+          if(this_question.media_question.image_full == undefined )
+          this_question.media_question['image_full'] = '';
+          if(this_question.media_question.image_updated_date == undefined )
+          this_question.media_question['image_updated_date'] = '';
+
+          this_question.media_question['media_type'] = 0;
+          this_question.media_question['media_name'] = new_filename
+          this_question.media_question['media_field'] = new_file_path ;
+          this_question.media_question['Media_directory'] = config.server_ip + 'themeimages/'+ new_filename;
+          this_question.media_question['image_cropped'] = new_filename;
+          this_question.media_question['image_full'] =   '___' +new_filename  ;
+          this_question.media_question['image_updated_date'] = new Date();
+        }
+      }
+
+      qtnairsDocument.markModified('questions');
+      qtnairsDocument.save().then(()=>{
+        res.send("E++++++++++++");
+      });
+  });
+  // console.log(req.body.media_dimentionals);
+  // console.log(req.body.questions);
+  // console.log(req.file);
 
 });
 
+
+qtnrRouters.post("/:app_id/add/:data"  , ( req , res ) => {
+  var appId = req.params.app_id ;
+  var dataColumns = req.params.data;
+  var data = req.body.data ;
+
+  qtnr.findOne({ _id:appId }).then( (   qtnairsDocument ) => {
+
+    if(qtnairsDocument.questions == undefined )
+    qtnairsDocument.questions = '';
+    qtnairsDocument.questions = data ;
+    qtnairsDocument.markModified('questions');
+    qtnairsDocument.save().then(()=>{
+      res.send("F+++++++++++++");
+    });
+  });
+
+});
 module.exports = {
     qtnrRouters
 };

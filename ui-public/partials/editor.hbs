@@ -33,7 +33,29 @@
          </div>
          <div style="display:none;"class="x-editor-x-body" id="answers-pt">
            <div class="multi-answers-part">
-              --
+               <ul ng:if="_questions_[question_index].question_type <= 2" class="choices-part">
+                 <li ng:repeat="( answer_key , answer_value ) in  _questions_[question_index].answers_format track by $index" class="answers_x">
+                   <!-- Multiple choice type -->
+                     <div ng:if="_questions_[question_index].question_type == 0" class="">
+                       <ul class="answer-pt-controller">
+                         <!-- is correct answer -->
+                         <li ng:if="_application_.app_type == 1" ng:if="answer_value.is_correct == false" title="Make it Correct Answer">
+                             <span ng:click="question_answer_mark_it_correct(answer_value._id , _questions_[question_index]._id )" class="fa fa-check"></span>
+                         </li>
+
+                         <li title="Edit it with media">
+                             <span class="fa fa-file-image-o edit-options-answer"></span>
+                         </li>
+                               <!-- Delete This Answer -->
+                          <li ng:click="question_answer_deletion(answer_value._id , _questions_[question_index]._id)" title="Delete this answer">
+                             <span class="fa fa-trash"></span>
+                           </li>
+                       </ul>
+                     </div>
+                 </li>
+
+               </ul>
+               <!--  Other Types in questions here [surveys]-->
            </div>
          </div>
        </li>

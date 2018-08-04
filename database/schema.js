@@ -311,7 +311,7 @@ var Questionnaire_questions = {
         created_at :              { type : Date     } ,
         updated_at:               { type : Date     } ,
         question_body:            { type : String   } ,
-        question_description :    { type : String },
+        question_description :    { type : { is_enabled : { type : Boolean} , value  : { type : String}  } },
         enable_description  :     { type : Boolean },
         answers_format :            answer_bo , // Under Updateing
         media_question :          { type : { media_type :{ type : Number } , media_name : { type : String } , media_field:{ type : String } , video_type : {type : String} , video_id : {type : String} , video_source : {type : String} } } ,  //  /* url of video */ } } ,
