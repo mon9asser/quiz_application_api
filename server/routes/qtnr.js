@@ -4996,6 +4996,20 @@ qtnrRouters.get("/:app_id/application/get/all"  , ( req , res )=>{
 
 });
 
+
+
+qtnrRouters.post("/:model/:question_id/cropping_system"  , question_answer_images.single("media_field") , ( req , res )=>{
+  /*Params data*/
+  //model
+  //question_id
+  /*body data*/
+  //cropping_data
+  console.log(req.body.media_dimentionals);
+  console.log(req.body.questions);
+  console.log(req.file); 
+
+});
+
 module.exports = {
     qtnrRouters
 };

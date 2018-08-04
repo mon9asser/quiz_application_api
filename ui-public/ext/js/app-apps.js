@@ -18,7 +18,7 @@ apps.filter( 'striphtmltags' , ($sce) => {
             }
           }
       }
-    
+
     // spesificChars =  spesificChars.textContent || spesificChars.innerText || "";
     // remove ( &nbsp; ) from text
 
@@ -30,14 +30,54 @@ apps.controller("apps-controller" , [
 ( $scope , $http , $timeout , $window , $rootScope , $sce  ) => {
   // ==> Veriables
  $scope.server_ip = $("#serverIp").val();
+ $scope.memory_size_of_object  = ( obj ) => {
+    var bytes = 0;
+      function sizeOf(obj) {
+        if(obj !== null && obj !== undefined) {
+                  switch(typeof obj) {
+                  case 'number':
+                      bytes += 8;
+                      break;
+                  case 'string':
+                      bytes += obj.length * 2;
+                      break;
+                  case 'boolean':
+                      bytes += 4;
+                      break;
+                  case 'object':
+                      var objClass = Object.prototype.toString.call(obj).slice(8, -1);
+                      if(objClass === 'Object' || objClass === 'Array') {
+                          for(var key in obj) {
+                              if(!obj.hasOwnProperty(key)) continue;
+                              sizeOf(obj[key]);
+                          }
+                      } else bytes += obj.toString().length * 2;
+                      break;
+                  }
+              }
+              return bytes;
+          };
+
+          function formatByteSize(bytes) {
+              if(bytes < 1024) return bytes + " bytes";
+              else if(bytes < 1048576) return(bytes / 1024).toFixed(3) + " KiB";
+              else if(bytes < 1073741824) return(bytes / 1048576).toFixed(3) + " MiB";
+              else return(bytes / 1073741824).toFixed(3) + " GiB";
+          };
+
+          return formatByteSize(sizeOf(obj));
+ }
  $scope.json_source = $scope.server_ip + "ext/json/json-keys.json";
   // ==> Api Links
  $.getJSON( $scope.json_source , function ( api_key_data ){
   $scope.server_ip = $("#serverIp").val();
   $scope.user_id = $("#userId").val();
   $scope.app_id = $("#applicationId").val();
+  $scope.cropper_results = {};
   $scope.swiper_data = null ;
   $scope.switching_editor_preview_value = false ;
+  $scope.is_add_new_unsaved = false;
+  $scope.is_unsaved_data = false ;
   $scope.media_for = 'questions' ;
   $scope._application_ = null ;
   $scope._questions_ = null ;
@@ -45,10 +85,11 @@ apps.controller("apps-controller" , [
   $scope.database_data = null ;
   $scope.question_ids  = null ;
   $scope.answer_ids  = null ;
-  $scope.active_question_id = null ;
+  $scope.question_id   = $("#question_id").val()  ;
   $scope.retrieve_data_url = $scope.server_ip + "api/"+$scope.app_id+"/application/get/all";
   $scope.question_index = null;
   $scope.media_image_uploader = $('.image-uploader-x');
+  $scope.image_view_source = null ;
   $scope.header_data = {
      "X-api-keys": api_key_data.API_KEY ,
      "X-api-app-name": api_key_data.APP_NAME
@@ -62,12 +103,13 @@ apps.controller("apps-controller" , [
     /* Start Code From Here */
     // =============================================================>>
     // Main Data Object
-      $scope.database_data  = resp.data ;
-      $scope._application_  = resp.data ;
-      $scope._questions_    = $scope._application_.questions;
-      $scope._settings_     = $scope._application_.settings;
-      $scope.question_ids  = $scope._application_.question_ids;
-      $scope.answer_ids  = $scope._application_.answer_ids ;
+
+      $http({ method : "GET" , url : $scope.retrieve_data_url }).then(( object ) => {  $scope.database_data =  object.data ; });
+      $scope._application_ =  resp.data ;
+      $scope._questions_   =  $scope._application_.questions;
+      $scope._settings_    =  $scope._application_.settings;
+      $scope.question_ids  =  $scope._application_.question_ids;
+      $scope.answer_ids    =  $scope._application_.answer_ids;
 
       // +++++++++++++++++++++++++++ Calling From UI  Design
       // ==> Switching between View and editor
@@ -81,7 +123,7 @@ apps.controller("apps-controller" , [
              $(".x-editor-x-body").css("display" , 'none');
              $scope.swiper_data.slideTo(1);
          }
-           // alert($(".preview-container").css('display'));
+           // console.log($(".preview-container").css('display'));
        };
       // => Add new question (click-event)
       $scope.add_new_question = ( question_type , atIndex = null ,  other_types = null ) => {
@@ -105,7 +147,7 @@ apps.controller("apps-controller" , [
          }
          // question_object['media_question'] =
          question_object['answer_settings'] = new Object();
-         $scope.active_question_id = question_object._id ;
+
 
          // ==> Storing Answers
          answer_object['_id'] = $scope.answer_ids[ 'id_' + question_object.answers_format.length] + '' + $scope._questions_.length ;
@@ -173,13 +215,18 @@ apps.controller("apps-controller" , [
          else
            $scope._questions_.splice( atIndex , 0 ,  question_object );
 
+         // ==> Unsaved Data
+         $scope.is_add_new_unsaved = true ;
          // ==> Selecting according to question index
          $scope.highlighted_question(question_object._id);
          // ==> Slide To Bottom
+         var scroll_top = 0 ;
+         if($scope._questions_.length >= 8 ){
+           scroll_top = 1000000000000
+         }else  scroll_top = 0
          $(".qsdragged-list , html , body").animate({
-           scrollTop: 1000000000000
+           scrollTop: scroll_top
          }, 10 );
-
        }
       // => Slide toggle between tags
       $scope.expand_collapsed_items = function (id){
@@ -207,7 +254,7 @@ apps.controller("apps-controller" , [
         var questionIndex = $scope._questions_.findIndex( x=> x._id == questionId );
         if( questionIndex == -1 ) return false ;
 
-        $scope.question_index = questionIndex ;
+
         $("#docQuestions").children("li").each(function(){
            if( $(this).hasClass('marked_question') )
            $(this).removeClass('marked_question');
@@ -217,9 +264,23 @@ apps.controller("apps-controller" , [
           $("#docQuestions").children('li.qs-'+questionId.toString()).addClass('marked_question');
         });
 
+        $scope.question_index = questionIndex ;
+        $("#question_id").val(questionId)
+
         // ==> Fill and binding event handler with textarea box
         $scope.fill_boxes_with_question_objects(questionId);
+        // ==> Detect if Unsaved data is happened
+        // $scope.detect_if_there_unsaved_data ($scope.is_unsaved_data )
       }
+      // ==> Detect id unsaved data is happened
+      // $scope.detect_if_there_unsaved_data = (unsaved_data) => {
+      //   if( unsaved_data == true )
+      //   {
+      //
+      //   }
+      //   else
+      //   return true
+      // }
       // ==> Fill Question Boxes
       $scope.fill_boxes_with_question_objects = ( questionId ) => {
 
@@ -227,7 +288,7 @@ apps.controller("apps-controller" , [
         if( questionIndex == -1 ) return false ;
 
         var question = $scope._questions_.find ( x => x._id == questionId );
-        $scope.active_question_id = questionId ;
+
 
 
         // ==> Distrbute question data
@@ -238,6 +299,7 @@ apps.controller("apps-controller" , [
             var question_value = $(this).html() ;
             $timeout(function(){
                 $scope._questions_[$scope.question_index].question_body = $R('#editor-quest-data' , 'source.getCode');
+                $scope.is_unsaved_data = true ;
             } , 500 );
         });
 
@@ -245,6 +307,7 @@ apps.controller("apps-controller" , [
             var question_value = $(this).html() ;
             $timeout(function(){
                 $scope._questions_[$scope.question_index].question_description = $R('#editor-desc-data' , 'source.getCode');
+                $scope.is_unsaved_data = true ;
             } , 500 );
         });
 
@@ -275,8 +338,10 @@ apps.controller("apps-controller" , [
       }
       // ==> Display first question
       $scope.init_first_question = () => {
-        if($scope._questions_.length != 0 )
+        if($scope._questions_.length != 0 ){
           $scope.highlighted_question($scope._questions_[0]._id);
+
+        }
       }
       // ==> Display media data
       $scope.calling_media_uploader = () => {
@@ -289,29 +354,121 @@ apps.controller("apps-controller" , [
       }
       // => Close Current window
       $scope.close_current_image_uploader = () => {
-        return $(".media-uploader").fadeOut();
+        return $(".media-uploader , .live_preview_image").fadeOut();
       };
-      $scope.media_image_uploader.on('change' , function(){
-        if($scope.media_for == 'questions')
-          {
-              var question_id = $scope.active_question_id;
-              var question = $scope._questions_.find(x => x._id == question_id );
-              if(question == undefined ) return false ;
-              alert(question_id);
-              console.log(question);
-              var image_file = $(this);
-              var file = image_file[0].files[0] ;
-              var reader = new FileReader();
-              var read_file = reader.readAsDataURL(file);
-              reader.onload = ( e ) => {
-                var image_src_blob_data = e.target.result ;
-              }
-          }else if ($scope.media_for == 'answers' ) {}
-      })
+      // => Start cropping image
+      $scope.init_cropping_image = () => {
+        $timeout(function(){
+          var image_data = document.getElementById("cropping_system");
+          var cropper =  new Cropper ( image_data , {
+            aspectRatio : 145 / 120 ,
+            initialAspectRatio : 145 / 120 ,
+            dragMode: 'none' ,
+            center : true ,
+            responsive : true ,
+            movable :false ,
+            rotatable : false ,
+            minContainerWidth : 145 ,
+            minContainerHeight: 120 ,
+            minCropBoxWidth:145,
+            minCropBoxWHeight:120 ,
+            background : false ,
+            zoomable : false ,
+            crop : (event) => {
 
+              $scope.cropper_results['x'] = event.detail.x;
+              $scope.cropper_results['y'] = event.detail.y;
+              $scope.cropper_results['width'] = event.detail.width;
+              $scope.cropper_results['height'] = event.detail.height;
+              // $scope.cropper_results['rotate'] = event.detail.rotate;
+              $scope.cropper_results['scaleX'] = event.detail.scaleX;
+              $scope.cropper_results['scaleY'] = event.detail.scaleY;
+
+            }
+          } );
+        }, 250 );
+      };
+      // ==> Reading current Image then blob
+      $scope.init_blob_data = (image_file) =>
+        {
+          $scope.image_view_source = null ;
+          var file = image_file[0].files[0] ;
+          $scope.cropper_results['file'] = file ;
+          var reader = new FileReader();
+          var read_file = reader.readAsDataURL(file);
+          reader.onload = ( e ) => {
+            $scope.image_view_source =  e.target.result  ;
+            var img_data = '<img id="cropping_system" src="'+ $scope.image_view_source +'" alt="Image">';
+            var loader_data = "<div class='loading_data'></div>" ;
+            $(".live_preview_image").html(loader_data + img_data);
+            $('.loading_data').fadeOut(1000);
+            $scope.$apply();
+          }
+        }
+      // => Image Uploader Changes and inputs
+      $scope.media_image_uploader.on('change , input' , function(){
+          // ==> Detect if question is in exists
+
+          var question_id = $("#question_id").val() ;
+          var question = $scope._questions_.find(x => x._id == question_id );
+
+          if(question == undefined ) return false ;
+          $(".live_preview_image").fadeIn();
+          // ==> Reading Image file
+          $scope.init_blob_data($(this));
+          // ==> Calling Cropping liberary
+          $scope.init_cropping_image();
+
+
+          $timeout(function(){
+            $scope.$apply();
+          });
+      });
+      $scope.storing_image_with_cropped_data = ( ) => {
+          var questionId = $("#question_id").val();
+          var model ;
+          if($scope.media_for == 'questions' ) model = 'question';
+          else model = 'answer';
+
+          var formImageData = new FormData();
+          formImageData.append('media_field' , $scope.cropper_results.file  );
+          var media_dimentionals = {
+              height  : $scope.cropper_results.height ,
+              width   : $scope.cropper_results.width ,
+              scaleX  : $scope.cropper_results.scaleX ,
+              scaleY  : $scope.cropper_results.scaleY ,
+              x       : $scope.cropper_results.x ,
+              y       : $scope.cropper_results.y
+          };
+          formImageData.append('media_dimentionals' , media_dimentionals  )   ;
+          formImageData.append('questions' , $scope._questions_ )   ;
+
+
+         var progressHandler = (event) => {
+           console.log( "Uploaded "+event.loaded+" bytes of "+event.total );
+           var percent = (event.loaded / event.total) * 100;
+           console.log(percent);
+         };
+         var completeHandler = () => {};
+         var errorHandler = () => {};
+         var abortHandler = () => {};
+         var ajax = new XMLHttpRequest();
+         ajax.upload.addEventListener("progress", progressHandler, false);
+         ajax.addEventListener("load", completeHandler, false);
+         ajax.addEventListener("error", errorHandler, false);
+         ajax.addEventListener("abort", abortHandler, false);
+         ajax.open("POST",  $scope.server_ip + "api/"+  model +  "/" + questionId + "/cropping_system" );
+         ajax.send(formImageData);
+
+      };
+      // ==> Calling bootstrap tooltip
+      $scope.init_bootstrap_tooltip = ( ) => {
+          return $('[data-toggle="tooltip"]').tooltip();
+      }
       // ==> Calling Funcs
       $scope.init_swiperJs();
       $scope.init_first_question();
+      $scope.init_bootstrap_tooltip();
     // =============================================================>>
     /* End Code of Document here */
 });});}]);

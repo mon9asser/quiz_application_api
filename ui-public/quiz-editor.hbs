@@ -3,14 +3,12 @@
   <head>
       <meta charset="utf-8">
       <title>Quiz Editor</title>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" charset="utf-8"></script>
+
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" rel="stylesheet">
-      <link href="{{ server_ip }}ext/frameworks/css/redactor.min.css" rel="stylesheet">
       <link href="{{ server_ip }}ext/frameworks/css/cropper.css" rel="stylesheet">
+      <link href="{{ server_ip }}ext/frameworks/css/redactor.min.css" rel="stylesheet">
       <link href="{{ server_ip }}ext/frameworks/css/spectrum.css" rel="stylesheet">
       <link href="{{ server_ip }}ext/css/swiper.min.css" rel="stylesheet">
       <link href="{{ server_ip }}ext/css/apps.css" rel="stylesheet">
@@ -34,6 +32,10 @@
         .question-x { margin-top:0px !important; }
         .settings_menu {  top: -4px !important; }
       </style>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" charset="utf-8"></script>
+
   </head>
   <body ng:controller="apps-controller">
     <!-- Inputs -->
@@ -44,7 +46,7 @@
     <input id="serverIp" type="hidden" name="" value="{{ server_ip }}">
     <input id="applicationId" type="hidden" name="" value="{{app._id}}">
     <input id="applicationType" type="hidden" name="" value="{{app.app_type}}">
-
+    <input id="question_id" type="text" name="" value="">
 
     <div class="editor-contents" ng:controller="apps-controller">
       <!-- ++++ Start Editor Contents ++++  -->
@@ -135,7 +137,7 @@
              <!-- +++++ Start Right Columns -->
               <div class="right_part col-md-8 col-sm-6 col-xs-12">
 
-                <div class="">
+                <div class="helper-guids">
 
                 </div>
 
@@ -194,12 +196,15 @@
           </ul>
         </div>
 
+        <div class="media-part-controller live_preview_image">
+            <!-- <img id="cropping_system" ng:src="{>image_view_source <}" alt="Image"> -->
+        </div>
 
         <div class="preview-media-part butns-part">
           <button ng:click="close_current_image_uploader()" class="button_updates btn btn-danger btn-close-media" type="button" name="button">
             Close
           </button>
-          <button class="button_updates btn btn-primary mm-update" type="button" name="button">
+          <button ng:click="storing_image_with_cropped_data()" class="button_updates btn btn-primary mm-update" type="button" name="button">
             Save
           </button>
         </div>
@@ -210,11 +215,13 @@
 
     <!-- JS Links -->
     <script src="{{ server_ip }}ext/frameworks/js/spectrum.js"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/cropper.js"></script>
+
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor.min.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-color.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-size.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-family.js"></script>
-    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/cropper.js"></script>
+
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sweetalert.min.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sortable.min.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/js/swiper.min.js"></script>

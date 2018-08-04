@@ -503,6 +503,7 @@ textarea:focus, textarea:active, textarea, .form-control:focus {
   /* margin-left: 13px; */
   font-size: 14px;
   font-family: RobotoRegular;
+  line-height: 2;
 }
 
 
@@ -1583,7 +1584,8 @@ ul li:last-child.emails {
   overflow: hidden;
   display: block;
   position: relative;
-    min-height: 121px;
+  height: 120px;
+  width: 145px;
   margin: 15px auto;
   border: dashed 1px #eee;
   padding-top: 15px;
@@ -3779,3 +3781,47 @@ textarea.quest-title-edit , textarea.quest-title-edit:focus , textarea.quest-tit
 .show_media_link{
       font-size: 12px;
 }
+.media-uploader{
+  display: none;
+}
+.tooltip .tooltiptext {
+  line-height: 2;
+}
+.live_preview_image{
+  display: none;
+  width: 99%;
+  margin: 0px auto;
+    position: relative;
+}
+.live_preview_image > .loading_data{
+  display: block;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  padding-top: 35%;
+  left: 0px;
+  right: 0px;
+  background: #eee;
+  z-index: 2000000;
+  text-align: center;
+  vertical-align: middle;
+}
+.live_preview_image > img {
+  width: 100%;
+  display: block;
+
+}
+.facircledata{
+  font-size: 38px;
+  color: #4985bd;
+}
+/* .helper-guids{
+  display: block;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  background: red;
+  z-index: 20000;
+} */
