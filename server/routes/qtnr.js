@@ -5006,6 +5006,7 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
   //question_id
   /*body data*/
   //cropping_data
+
   var model_type = req.params.model ;
   var appId = req.params.app_id ;
   var questionId = req.params.question_id;
@@ -5013,7 +5014,7 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
   var file_name = '_' ;
   if( req.params.model == "question" )
   file_name = "question_" + questionId
-  console.log(req.file);
+
   var imagePath =  req.file.path ;
   var fileExtension = path.extname(imagePath);
   var new_filename = "question_"+questionId+fileExtension.toLowerCase();
@@ -5069,12 +5070,13 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
           this_question.media_question['image_cropped'] = new_filename;
           this_question.media_question['image_full'] =   '___' +new_filename  ;
           this_question.media_question['image_updated_date'] = new Date();
+
         }
       }
 
       qtnairsDocument.markModified('questions');
       qtnairsDocument.save().then(()=>{
-        res.json("E++++++++++++");
+        res.json( questions );
       });
   });
   // console.log(req.body.media_dimentionals);

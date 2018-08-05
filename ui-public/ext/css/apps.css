@@ -3888,3 +3888,32 @@ textarea.quest-title-edit , textarea.quest-title-edit:focus , textarea.quest-tit
   color: #868686;
   margin-top: 7px;
 }
+.case-there-is-no-img {
+  display: block;
+  position: absolute;
+  overflow: hidden;
+  background: #fdfdfdcf;
+   top: 0px;
+   bottom: 0px;
+   left: 0px;
+   right: 0px;
+
+}
+.case-there-is-no-img > ul {
+  width: 100%;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  margin: 0px;
+  padding: 0px;
+  margin-top: 30%;
+  color: #868686;
+}
+.case-there-is-no-img > ul > li
+{
+  font-size: 25px;
+}
+.case-there-is-no-img span
+{
+  margin-top: 0px;
+}

@@ -11,12 +11,23 @@
              <textarea ng:model="_questions_[question_index].question_body"  redactor id="editor-quest-data" class="form-control quest-title-edit textarea-qs redactor-editor"></textarea>
            </div>
            <!-- Media  -->
-
+           
            <div class="col-sm-4 media-uploads top-margins media-parts-x">
+             <!--  Case there is no image -->
+             <div ng:if="current_media_question == undefined " class="case-there-is-no-img" ng:click="add_new_media_for_question()">
+               <ul>
+                 <li>
+                   <span class="fa fa-plus"></span>
+                 </li>
+               </ul>
+               <span class="ima-size">145 x 145</span>
+             </div>
 
-             <div style="background-image:url()" class="question-image"></div>
+             <!-- Case it Image  -->
+             <div ng:if="current_media_question != undefined " ng:style="load_image_media()" class="question-image"></div>
+
              <!-- Controlling on this media  -->
-             <div class="meddia-qs-cont">
+             <div ng:if="current_media_question != undefined " class="meddia-qs-cont">
                <ul>
                  <li ng:click="add_new_media_for_question()">
                    <span class="fa fa-pencil"></span>
@@ -27,6 +38,8 @@
                </ul>
                <span class="ima-size">145 x 145</span>
               </div>
+
+
            </div>
          </div>
       </li>
