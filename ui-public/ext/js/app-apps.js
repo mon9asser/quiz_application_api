@@ -494,6 +494,6 @@ apps.controller("apps-controller" , [
     $scope.init_swiperJs();
     $scope.init_first_question();
     $scope.init_bootstrap_tooltip();
-  }, 200);
+  }, 400);
 
 }]);
