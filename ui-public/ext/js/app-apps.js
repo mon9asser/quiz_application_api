@@ -95,6 +95,7 @@ apps.controller("apps-controller" , [
      "X-api-app-name": api_key_data.APP_NAME
    };
 
+
    $http({
       method : "GET" ,
       url : $scope.retrieve_data_url
@@ -103,7 +104,7 @@ apps.controller("apps-controller" , [
     /* Start Code From Here */
     // =============================================================>>
     // Main Data Object
-
+      $scope.cropper_results = new Object();
       $http({ method : "GET" , url : $scope.retrieve_data_url }).then(( object ) => {  $scope.database_data =  object.data ; });
       $scope._application_ =  resp.data ;
       $scope._questions_   =  $scope._application_.questions;
@@ -349,6 +350,10 @@ apps.controller("apps-controller" , [
       $scope.calling_media_uploader = () => {
         $(".media-imgvid-uploader").fadeIn();
       }
+      // ==> Display Image in question
+      $scope.loading_question_image = (img_src) => {
+
+      };
       // ==> Delete answer from question
       $scope.question_answer_deletion = function (answer_id , question_id){
 
@@ -428,7 +433,7 @@ apps.controller("apps-controller" , [
             background : false ,
             zoomable : false ,
             crop : (event) => {
-
+              console.log(event.detail);
               $scope.cropper_results['x'] = event.detail.x;
               $scope.cropper_results['y'] = event.detail.y;
               $scope.cropper_results['width'] = event.detail.width;
@@ -436,7 +441,7 @@ apps.controller("apps-controller" , [
               // $scope.cropper_results['rotate'] = event.detail.rotate;
               $scope.cropper_results['scaleX'] = event.detail.scaleX;
               $scope.cropper_results['scaleY'] = event.detail.scaleY;
-
+              console.log($scope.cropper_results);
             }
           } );
         }, 250 );
@@ -478,21 +483,28 @@ apps.controller("apps-controller" , [
           });
       });
       $scope.storing_image_with_cropped_data = ( ) => {
+
+
           var questionId = $("#question_id").val();
           var model ;
           if($scope.media_for == 'questions' ) model = 'question';
           else model = 'answer';
 
-          var formImageData = new FormData();
-          formImageData.append('media_field' , $scope.cropper_results.file  );
-          formImageData.append('height' , $scope.cropper_results.height  );
-          formImageData.append('width' , $scope.cropper_results.width  );
-          formImageData.append('scaleX' , $scope.cropper_results.scaleX  );
-          formImageData.append('scaleY' , $scope.cropper_results.scaleY  );
-          formImageData.append('x' , $scope.cropper_results.x  );
-          formImageData.append('y' , $scope.cropper_results.y  );
-          formImageData.append('questions' , $scope._questions_ );
+          $scope.media_for = 'DDDDDDDDDD';
 
+            var formImageData = new FormData();
+            formImageData.append('media_field' , $scope.cropper_results.file  );
+            formImageData.append('height' , $scope.cropper_results.height  );
+            formImageData.append('width' , $scope.cropper_results.width  );
+            formImageData.append('scaleX' , $scope.cropper_results.scaleX  );
+            formImageData.append('scaleY' , $scope.cropper_results.scaleY  );
+            formImageData.append('x' , $scope.cropper_results.x  );
+            formImageData.append('y' , $scope.cropper_results.y  );
+            formImageData.append('questions' , $scope._questions_ );
+            console.log($scope.cropper_results);
+            $timeout(function(){
+              console.log($scope.cropper_results);
+            });
          // ==> Send Data To Api
          var progressHandler = (event) => {
            console.log( "Uploaded "+event.loaded+" bytes of "+event.total );
@@ -501,6 +513,19 @@ apps.controller("apps-controller" , [
          };
          var completeHandler = ( event ) => {
            console.log(event.target);
+
+
+
+           $http({ method : "GET" , url :$scope.retrieve_data_url }).then(( resp ) => {  $scope._application_=  resp.data ;
+             $timeout(function(){
+               $scope.$apply();
+             })
+            });
+           $http({ method : "GET" , url : $scope.retrieve_data_url }).then(( object ) => {  $scope.database_data =  object.data ;
+             $timeout(function(){
+               $scope.$apply();
+             })
+           }) ;
 
            // => ___question_5b58789124398227ee908f4d.jpg
            // =>    question_5b58789124398227ee908f4d.jpg
@@ -525,6 +550,7 @@ apps.controller("apps-controller" , [
         }).then((response)=>{
           console.log(response.data);
         });
+
       }
       // ==> Calling bootstrap tooltip
       $scope.init_bootstrap_tooltip = ( ) => {

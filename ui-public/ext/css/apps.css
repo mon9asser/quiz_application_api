@@ -1590,6 +1590,8 @@ ul li:last-child.emails {
   border: dashed 1px #eee;
   padding-top: 15px;
   cursor: pointer;
+  padding: 0px;
+  border-radius: 5px;
 }
 .media-parts-x > span {
   line-height: 90px;
@@ -3825,3 +3827,64 @@ textarea.quest-title-edit , textarea.quest-title-edit:focus , textarea.quest-tit
   background: red;
   z-index: 20000;
 } */
+.question-image {
+  background-repeat: none ;
+  background-size: cover;
+  background-position: center center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.media-parts-x:hover > .meddia-qs-cont {
+  opacity: 1;
+}
+.meddia-qs-cont {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  background: #fdfdfdcf;
+  cursor: auto;
+  opacity: 0;
+  -webkit-transition: opacity 0.5s linear ;
+  transition: opacity 0.5s linear ;
+  -moz-transition: opacity 0.5s linear ;
+}
+.meddia-qs-cont ul {
+  display: inline-block;
+  position: relative;
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
+  vertical-align: baseline;
+  margin-top: 25%;
+}
+.meddia-qs-cont ul li {
+  padding: 0px;
+  margin: 0px;
+  display: inline;
+}
+.meddia-qs-cont ul li span {
+    border: 1px solid #868686;
+    border-radius: 12px;
+    height: 25px;
+    width: 25px;
+    font-size: 13px;
+    line-height: 24px;
+    color: #868686;
+    cursor: pointer;
+}
+.meddia-qs-cont ul li span:hover {
+  color: #999;
+  border: 1px solid #999;
+}
+.ima-size {
+  top: 42%;
+  display: block;
+  font-size: 12px;
+  width: 100%;
+  color: #868686;
+  margin-top: 7px;
+}

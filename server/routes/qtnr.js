@@ -4993,7 +4993,7 @@ qtnrRouters.get("/:app_id/application/get/all"  , ( req , res )=>{
      if ( qtnairsDocument.theme_style != undefined ) application_object['theme_style'] = qtnairsDocument.theme_style ;
 
 
-    res.send(application_object);
+    res.json(application_object);
   });
 
 });
@@ -5013,7 +5013,7 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
   var file_name = '_' ;
   if( req.params.model == "question" )
   file_name = "question_" + questionId
-
+  console.log(req.file);
   var imagePath =  req.file.path ;
   var fileExtension = path.extname(imagePath);
   var new_filename = "question_"+questionId+fileExtension.toLowerCase();
@@ -5026,7 +5026,9 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
     res.send(false);
     return false ;
   }
-
+  console.log(req.body.width);
+  if(req.body.width == undefined || req.body.height == undefined ||req.body.x == undefined || req.body.y == undefined)
+  return false ;
   var resizing = req.body.width + 'x' + req.body.height +'+'+ req.body.x +'+'+  req.body.y ;
   im.convert([ main_file_path ,'-crop', resizing , new_file_path ], function( err, stdout ){
     if (err) throw err;
@@ -5072,7 +5074,7 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
 
       qtnairsDocument.markModified('questions');
       qtnairsDocument.save().then(()=>{
-        res.send("E++++++++++++");
+        res.json("E++++++++++++");
       });
   });
   // console.log(req.body.media_dimentionals);
@@ -5094,7 +5096,7 @@ qtnrRouters.post("/:app_id/add/:data"  , ( req , res ) => {
     qtnairsDocument.questions = data ;
     qtnairsDocument.markModified('questions');
     qtnairsDocument.save().then(()=>{
-      res.send("F+++++++++++++");
+      res.json("F+++++++++++++");
     });
   });
 
