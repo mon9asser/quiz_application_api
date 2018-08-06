@@ -69,6 +69,8 @@ apps.controller("apps-controller" , [
     $scope.question_ids  =  $scope._application_.question_ids;
     $scope.answer_ids    =  $scope._application_.answer_ids;
     $scope._questions_   =  $scope._application_.questions;
+    // ==> Calling Funcs
+    $scope.init_first_question();
   });
 
   // ==> Calculate the momory size of
@@ -492,7 +494,6 @@ apps.controller("apps-controller" , [
   // ==> Calling Methods Here
   $timeout(function(){
     $scope.init_swiperJs();
-    $scope.init_first_question();
     $scope.init_bootstrap_tooltip();
   }, 400);
 
