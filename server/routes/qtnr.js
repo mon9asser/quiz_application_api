@@ -5116,7 +5116,7 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
 
             if( this_answer.media_optional.image_cropped== undefined )
             this_answer.media_optional['image_cropped'] = '';
-            
+
             if( this_answer.media_optional.image_full== undefined )
             this_answer.media_optional['image_full'] = '';
 
@@ -5173,8 +5173,8 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
       }
 
       qtnairsDocument.markModified('questions');
-      qtnairsDocument.save().then(()=>{
-        res.json( questions );
+      qtnairsDocument.save().then((data)=>{
+        res.send( data );
       });
   });
   // console.log(req.body.media_dimentionals);
