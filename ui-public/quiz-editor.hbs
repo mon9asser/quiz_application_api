@@ -46,11 +46,11 @@
     <input id="serverIp" type="hidden" name="" value="{{ server_ip }}">
     <input id="applicationId" type="hidden" name="" value="{{app._id}}">
     <input id="applicationType" type="hidden" name="" value="{{app.app_type}}">
-    <input id="question_id" type="text" name="" value="">
-    <input id="cropping-image-width" type="text" name="" value="">
-    <input id="cropping-image-height" type="text" name="" value="">
-    <input id="cropping-image-x" type="text" name="" value="">
-    <input id="cropping-image-y" type="text" name="" value="">
+    <input id="question_id" type="hidden" name="" value="">
+    <input id="cropping-image-width" type="hidden" name="" value="">
+    <input id="cropping-image-height" type="hidden" name="" value="">
+    <input id="cropping-image-x" type="hidden" name="" value="">
+    <input id="cropping-image-y" type="hidden" name="" value="">
 
     <div class="editor-contents" ng:controller="apps-controller">
       <!-- ++++ Start Editor Contents ++++  -->
@@ -184,7 +184,7 @@
           <b class="media-title">Media Uploader</b>
         </div>
         <div class="media-part-controller">
-          <input type="text" class="form-control media-inputs show_media_link" placeholder="Media Link">
+          <input ng:change="media_links_are_changed()" ng:model="media_link" type="text" class="form-control media-inputs show_media_link" placeholder="Media Link">
           <ul class="media-links">
             <li>
               <a ng:click="show_media_link()" class="video-handler" href="#">
@@ -200,9 +200,14 @@
           </ul>
         </div>
 
+        <!-- Image thumbnail -->
         <div class="media-part-controller live_preview_image">
             <!-- <img id="cropping_system" ng:src="{>image_view_source <}" alt="Image"> -->
         </div>
+        <div class="progrbar">
+          <div class="highlighted_progress"></div>
+        </div>
+
 
         <div class="preview-media-part butns-part">
           <button ng:click="close_current_image_uploader()" class="button_updates btn btn-danger btn-close-media" type="button" name="button">

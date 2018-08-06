@@ -11,10 +11,10 @@
              <textarea ng:model="_questions_[question_index].question_body"  redactor id="editor-quest-data" class="form-control quest-title-edit textarea-qs redactor-editor"></textarea>
            </div>
            <!-- Media  -->
-           
+
            <div class="col-sm-4 media-uploads top-margins media-parts-x">
              <!--  Case there is no image -->
-             <div ng:if="current_media_question == undefined " class="case-there-is-no-img" ng:click="add_new_media_for_question()">
+             <div ng:if="_questions_[question_index].media_question == undefined " class="case-there-is-no-img" ng:click="add_new_media_for_question()">
                <ul>
                  <li>
                    <span class="fa fa-plus"></span>
@@ -23,17 +23,27 @@
                <span class="ima-size">145 x 145</span>
              </div>
 
-             <!-- Case it Image  -->
-             <div ng:if="current_media_question != undefined " ng:style="load_image_media()" class="question-image"></div>
+             <!-- Case it is an Image  -->
+             <div ng:if="_questions_[question_index].media_question != undefined  && _questions_[question_index].media_question.media_type == 0" ng:style="load_image_media()" class="question-image question-media"></div>
+             <!--  Case Video -->
+             <div ng:if="_questions_[question_index].media_question != undefined  && _questions_[question_index].media_question.media_type == 1" class="question-media question-video">
+               <!-- case it vimeo or youtube  -->
+               <iframe ng:src="{> _questions_[question_index].media_question.embed_path | trust_iframe_url <}" ng:if="_questions_[question_index].media_question.video_type == 1 || _questions_[question_index].media_question.video_type == 0" width="100%" height="120px"></iframe>
+               <!-- case it mp4  -->
+               <video ng:if="_questions_[question_index].media_question.video_type == 2">
+                 <source ng:src="{> _questions_[question_index].media_question.mp4_option.mp4_url | trust_iframe_url <}" type="video/mp4">
+                 <source ng:src="{> _questions_[question_index].media_question.mp4_option.ogg_url | trust_iframe_url <}" type="video/ogg">
+               </video>
+             </div>
 
              <!-- Controlling on this media  -->
-             <div ng:if="current_media_question != undefined " class="meddia-qs-cont">
+             <div ng:if="_questions_[question_index].media_question != undefined " class="meddia-qs-cont">
                <ul>
                  <li ng:click="add_new_media_for_question()">
                    <span class="fa fa-pencil"></span>
                  </li>
                  <li>
-                   <span class="fa fa-close"></span>
+                   <span ng:click="remove_question_media(_questions_[question_index]._id)" class="fa fa-close"></span>
                  </li>
                </ul>
                <span class="ima-size">145 x 145</span>
@@ -60,31 +70,19 @@
              Answers
          </div>
          <div style="display:none;"class="x-editor-x-body" id="answers-pt">
-           <div class="multi-answers-part">
-               <ul ng:if="_questions_[question_index].question_type <= 2" class="choices-part">
-                 <li ng:repeat="( answer_key , answer_value ) in  _questions_[question_index].answers_format track by $index" class="answers_x">
-                   <!-- Multiple choice type -->
-                     <div ng:if="_questions_[question_index].question_type == 0" class="">
-                       <ul class="answer-pt-controller">
-                         <!-- is correct answer -->
-                         <li ng:if="_application_.app_type == 1" ng:if="answer_value.is_correct == false" title="Make it Correct Answer">
-                             <span ng:click="question_answer_mark_it_correct(answer_value._id , _questions_[question_index]._id )" class="fa fa-check"></span>
-                         </li>
+           <!-- Multiple Choices and Media choices -->
+           <div ng:if="_questions_[question_index].question_type <= 1" class="multi-answers-part">
+             <ul ng:if="question_type <= 2" class="choices-part">
+                <li>
+                  
+                </li>
+              </ul>
 
-                         <li title="Edit it with media">
-                             <span class="fa fa-file-image-o edit-options-answer"></span>
-                         </li>
-                               <!-- Delete This Answer -->
-                          <li ng:click="question_answer_deletion(answer_value._id , _questions_[question_index]._id)" title="Delete this answer">
-                             <span class="fa fa-trash"></span>
-                           </li>
-                       </ul>
-                     </div>
-                 </li>
-
-               </ul>
-               <!--  Other Types in questions here [surveys]-->
+              <div class="add-new-answer">
+                <span>Add New Option</span>
+              </div>
            </div>
+
          </div>
        </li>
       <li>

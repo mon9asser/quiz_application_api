@@ -23,58 +23,154 @@ apps.filter( 'striphtmltags' , ($sce) => {
      return spesificChars ;
   }
 });
+apps.filter('trust_iframe_url' , ( $sce ) => {
+  return function (url){
+    return  $sce.trustAsResourceUrl(url);
+  };
+});
 apps.controller("apps-controller" , [
 '$scope','$http' , '$timeout','$window','$rootScope' , '$sce' ,
 ( $scope , $http , $timeout , $window , $rootScope , $sce  ) => {
-
-  $scope.server_ip = $("#serverIp").val();
-  $scope.user_id = $("#userId").val();
-  $scope.app_id = $("#applicationId").val();
-  $scope.json_source = $scope.server_ip + "ext/json/json-keys.json";
-  $scope.swiper_data = null ;
-  $scope.switching_editor_preview_value = false ;
-  $scope.is_add_new_unsaved = false;
-  $scope.is_unsaved_data = false ;
-  $scope.media_for = 'questions' ;
-  $scope._application_ = null ;
-  $scope._questions_ = null ;
-  $scope._settings_ = null ;
-  $scope.database_data = [] ;
-  $scope.question_ids  = [] ;
-  $scope.answer_ids  = [] ;
-  $scope.question_id   = $("#question_id").val()  ;
-  $scope.retrieve_data_url = $scope.server_ip + "api/"+$scope.app_id+"/application/get/all";
-  $scope.question_index = null;
-  $scope.media_image_uploader = $('.image-uploader-x');
-  $scope.image_view_source = null ;
-  $scope.header_data = null ;
-  $scope._application_ = null ;
-  $scope._questions_   =  null;
-  $scope._settings_    =  null;
-  $scope.question_ids  =  null;
-  $scope.answer_ids    = null;
-  $scope.cropper = null ;
-  $scope.current_media_question = undefined ;
-  $scope.cropper_results = new Object() ;
-  // $.getJSON( $scope.json_source , function ( api_key_data ){
-  //   $scope.header_data = {
+  $rootScope.media_type = 0 ;
+  $rootScope.server_ip = $("#serverIp").val();
+  $rootScope.user_id = $("#userId").val();
+  $rootScope.app_id = $("#applicationId").val();
+  $rootScope.json_source = $rootScope.server_ip + "ext/json/json-keys.json";
+  $rootScope.swiper_data = null ;
+  $rootScope.switching_editor_preview_value = false ;
+  $rootScope.is_add_new_unsaved = false;
+  $rootScope.is_unsaved_data = false ;
+  $rootScope.media_for = 'questions' ;
+  $rootScope._application_ = null ;
+  $rootScope._questions_ = [] ;
+  $rootScope._settings_ = null ;
+  $rootScope.database_data = [] ;
+  $rootScope.question_ids  = [] ;
+  $rootScope.answer_ids  = [] ;
+  $rootScope.question_id   = $("#question_id").val()  ;
+  $rootScope.retrieve_data_url = $rootScope.server_ip + "api/"+$rootScope.app_id+"/application/get/all";
+  $rootScope.question_index = null;
+  $rootScope.media_image_uploader = $('.image-uploader-x');
+  $rootScope.image_view_source = null ;
+  $rootScope.header_data = null ;
+  $rootScope._application_ = null ;
+  $rootScope._settings_    =  null;
+  $rootScope.question_ids  =  null;
+  $rootScope.answer_ids    = null;
+  $rootScope.video_object = new Object();
+  $rootScope.cropper = null ;
+  $rootScope.cropper_results = new Object() ;
+  // $.getJSON( $rootScope.json_source , function ( api_key_data ){
+  //   $rootScope.header_data = {
   //      "X-api-keys": api_key_data.API_KEY ,
   //      "X-api-app-name": api_key_data.APP_NAME
   //    };
   // });
   // ==> Loading Applications
-  $http({ method : "GET" , url : $scope.retrieve_data_url }).then(( resp )=>{
-    $scope._application_ =  resp.data ;
-    $scope._settings_    =  $scope._application_.settings;
-    $scope.question_ids  =  $scope._application_.question_ids;
-    $scope.answer_ids    =  $scope._application_.answer_ids;
-    $scope._questions_   =  $scope._application_.questions;
+  $http({ method : "GET" , url : $rootScope.retrieve_data_url }).then(( resp )=>{
+    $rootScope._application_ =  resp.data ;
+    $rootScope._settings_    =  $rootScope._application_.settings;
+    $rootScope.question_ids  =  $rootScope._application_.question_ids;
+    $rootScope.answer_ids    =  $rootScope._application_.answer_ids;
+    $rootScope._questions_   =  $rootScope._application_.questions;
     // ==> Calling Funcs
-    $scope.init_first_question();
+    $rootScope.init_first_question();
   });
+  // ==> Check if answer with media for Tooltip
+  $rootScope.case_it_with_media = ( question , answer ) => {
+    console.log(answer);
+    if(question.question_type == 0 ){
 
+      var value ;
+      if( answer.media_optional == undefined ){
+        value : '100%'
+      }else {
+        value : '110%'
+      }
+      return {
+        bottom : value
+      };
+    }
+    if(question.question_type == 1 ){
+
+    }
+  };
+  // ==> Media Links are changed
+  $rootScope.media_links_are_changed = () => {
+    var youtube =   $scope.media_link.toLowerCase().includes("youtube") ;
+    var vimeo =   $scope.media_link.toLowerCase().includes("vimeo") ;
+    var mp4 =   $scope.media_link.toLowerCase().includes(".mp4") ;
+    var video = $scope.media_link ;
+    $rootScope.video_object = new Object();
+    var videoType = -1  , video_src_value , videoId  ;
+    if( youtube == true ){
+      var videoType = 0 ;
+      var idWithLastSplit = video.lastIndexOf('?');
+      var videos = video.substr(idWithLastSplit + 1);
+      var lastId = video.substr(0, video.indexOf('&'));
+      if(lastId != '' || lastId )
+       videoId = lastId ;
+       else
+       videoId = videos ;
+       var afterEqualChar = video.lastIndexOf('=');
+       videoId = video.substring(afterEqualChar + 1);
+       video_src_value = "http://youtube.com/embed/"+ videoId ;
+    }
+    if( vimeo == true ){
+      var videoType = 1 ;
+      var n = video.lastIndexOf('/');
+      videoId = video.substring(n + 1);
+      video_src_value = "https://player.vimeo.com/video/"+ videoId;;
+    }
+    if( mp4 == true ){
+      var videoType = 2 ;
+      videoType = 2 ;
+      videoId = null;
+      video_src_value = video.substring(0, video.lastIndexOf('.'));
+    }
+    if(videoType == -1 ) return false ;
+
+    $rootScope.video_object['video_type'] = videoType ;
+    $rootScope.video_object['video_id'] = videoId ;
+    $rootScope.video_object['embed_url'] = video_src_value ;
+
+    $rootScope.extracting_videos( video_src_value , videoType , video , videoId );
+
+  }
+  $rootScope.extracting_videos = (video_src , video_type , urlInput , videoId ) => {
+    var questionId = $("#question_id").val();
+    var this_question = $scope._questions_.find (x => x._id == questionId );
+    if(this_question != undefined){
+      // ==> if it question
+      if( $rootScope.media_for == 'questions' ) {
+            if( this_question.media_question == undefined )
+              this_question['media_question'] = new Object();
+              this_question.media_question['media_src'] = urlInput;
+              this_question.media_question['Media_directory'] = urlInput;
+              this_question.media_question['media_type'] = 1;
+              this_question.media_question['media_name'] = urlInput;
+              this_question.media_question['video_id'] = videoId;
+              this_question.media_question['video_type'] = video_type ;
+              this_question.media_question['embed_path'] = video_src;
+              if (video_type == 2 ) {
+                this_question.media_question['mp4_option'] = {
+                  mp4_url: video_src +'.mp4' ,
+                  ogg_url : video_src +'.ogg'
+                };
+              }
+
+              $timeout(function(){
+                 $rootScope.$apply();
+              } , 300 );
+      }
+      if( $rootScope.media_for ==  'answer' ) {
+        alert("its answer video");
+      }
+      // ==> if it answer
+    }
+  };
   // ==> Calculate the momory size of
-  $scope.memory_size_of_object  = ( obj ) => {
+  $rootScope.memory_size_of_object  = ( obj ) => {
     var bytes = 0;
      function sizeOf(obj) {
        if(obj !== null && obj !== undefined) {
@@ -112,25 +208,25 @@ apps.controller("apps-controller" , [
          return formatByteSize(sizeOf(obj));
        }
   // ==> Switching Slide Mode
-  $scope.switching_editor_preview = () => {
+  $rootScope.switching_editor_preview = () => {
 
-       if( $scope.switching_editor_preview_value == false ) {
+       if( $rootScope.switching_editor_preview_value == false ) {
            // => Editor
-           $scope.swiper_data.slideTo(0);
+           $rootScope.swiper_data.slideTo(0);
          }else {
            // => Preview
            $(".x-editor-x-body").css("display" , 'none');
-           $scope.swiper_data.slideTo(1);
+           $rootScope.swiper_data.slideTo(1);
        }
          // console.log($(".preview-container").css('display'));
   };
   // => Add new question (click-event)
-  $scope.add_new_question = ( question_type , atIndex = null ,  other_types = null ) => {
-    if($scope._questions_.length > 200 )
+  $rootScope.add_new_question = ( question_type , atIndex = null ,  other_types = null ) => {
+    if($rootScope._questions_.length > 200 )
     return false ;
     var question_object = new Object() , answer_object = new Object() ;
     // => Build Default Question
-    question_object['_id'] = $scope.question_ids['id_' +  $scope._questions_.length  ];
+    question_object['_id'] = $rootScope.question_ids['id_' +  $rootScope._questions_.length  ];
     question_object['question_body'] =  "Add Your Question Here !";
     question_object['answers_format'] = new Array();
     question_object['question_type'] =  parseInt(question_type);
@@ -141,34 +237,34 @@ apps.controller("apps-controller" , [
     }
     // question_object['media_question'] =
     question_object['answer_settings'] = new Object();
-    answer_object['_id'] = $scope.answer_ids[ 'id_' + question_object.answers_format.length] + '' + $scope._questions_.length ;
+    answer_object['_id'] = $rootScope.answer_ids[ 'id_' + question_object.answers_format.length] + '' + $rootScope._questions_.length ;
     if( question_type == 0 ) {
       answer_object['value'] = "Answer " + ( question_object.answers_format.length + 1 )
-      if ( $scope._application_.app_type == 1 )
+      if ( $rootScope._application_.app_type == 1 )
       answer_object['is_correct'] = false ;
       // => Push To Answer Array
       question_object.answers_format.push( answer_object );
     }
     if( question_type == 1 ){
-       // answer_object['_id'] = $scope.answer_ids[ 'id_' + question_object.answers_format.length ];
+       // answer_object['_id'] = $rootScope.answer_ids[ 'id_' + question_object.answers_format.length ];
        answer_object['media_src'] = "No Media Here !";
-       if ( $scope._application_.app_type == 1 )
+       if ( $rootScope._application_.app_type == 1 )
        answer_object['is_correct'] = false ;
        // => Push To Answer Array
        question_object.answers_format.push( answer_object );
     }
     if( question_type == 2 ){
-       answer_object['_id'] = $scope.answer_ids[ 'id_' + question_object.answers_format.length ] + '' + $scope._questions_.length +'_a';
+       answer_object['_id'] = $rootScope.answer_ids[ 'id_' + question_object.answers_format.length ] + '' + $rootScope._questions_.length +'_a';
        answer_object['boolean_type'] = "true/false";
        answer_object['boolean_value'] = true ;
-       if ( $scope._application_.app_type == 1 )
+       if ( $rootScope._application_.app_type == 1 )
        answer_object['is_correct'] = false ;
        // => Push To Answer Array
        question_object.answers_format.push( answer_object );
-       answer_object['_id'] = $scope.answer_ids[ 'id_' + question_object.answers_format.length ] + '' + $scope._questions_.length +'_b';;
+       answer_object['_id'] = $rootScope.answer_ids[ 'id_' + question_object.answers_format.length ] + '' + $rootScope._questions_.length +'_b';;
        answer_object['boolean_type'] = "true/false";
        answer_object['boolean_value'] = false ;
-       if ( $scope._application_.app_type == 1 )
+       if ( $rootScope._application_.app_type == 1 )
        answer_object['is_correct'] = true ;
        // => Push To Answer Array
        question_object.answers_format.push( answer_object );
@@ -194,24 +290,27 @@ apps.controller("apps-controller" , [
     }
     // => Push To Question Array
      if( atIndex == null )
-       $scope._questions_.push( question_object );
+       $rootScope._questions_.push( question_object );
        else
-       $scope._questions_.splice( atIndex , 0 ,  question_object );
+       $rootScope._questions_.splice( atIndex , 0 ,  question_object );
        // ==> Selecting according to question index
-        $scope.highlighted_question(question_object._id);
+        $rootScope.highlighted_question(question_object._id);
         // ==> Slide To Bottom
         var scroll_top = 0 ;
-        if($scope._questions_.length >= 8 ){
+        if($rootScope._questions_.length >= 8 ){
         scroll_top = 1000000000000
         }else  scroll_top = 0
         $(".qsdragged-list , html , body").animate({
         scrollTop: scroll_top
         }, 10 );
         // ==> Storing Question into DB
-     $scope.storing_questions_into_database();
+     $rootScope.storing_questions_into_database();
+     $timeout(function(){
+       $rootScope.$apply();
+     } , 300 )
   };
   // ==> Expan collapse between editor
-  $scope.expand_collapsed_items = function (id){
+  $rootScope.expand_collapsed_items = function (id){
           var targetId = $(id) ;
           var all_edit_sections = $("#question-pt , #Description-pt , #answers-pt , #Settings-pt");
           $("#question-pt , #Description-pt , #answers-pt , #Settings-pt").each(function(){
@@ -231,9 +330,9 @@ apps.controller("apps-controller" , [
           }
         };
   // => Mark Selected Question
-  $scope.highlighted_question = (questionId) => {
+  $rootScope.highlighted_question = (questionId) => {
         // => detect current question is exists or not
-        var questionIndex = $scope._questions_.findIndex( x=> x._id == questionId );
+        var questionIndex = $rootScope._questions_.findIndex( x=> x._id == questionId );
         if( questionIndex == -1 ) return false ;
 
 
@@ -246,25 +345,25 @@ apps.controller("apps-controller" , [
           $("#docQuestions").children('li.qs-'+questionId.toString()).addClass('marked_question');
         });
 
-        $scope.question_index = questionIndex ;
+        $rootScope.question_index = questionIndex ;
         $("#question_id").val(questionId)
 
         // ==> Fill and binding event handler with textarea box
-        $scope.fill_boxes_with_question_objects(questionId);
+        $rootScope.fill_boxes_with_question_objects(questionId);
         // ==> Detect if Unsaved data is happened
-        // $scope.detect_if_there_unsaved_data ($scope.is_unsaved_data )
+        // $rootScope.detect_if_there_unsaved_data ($rootScope.is_unsaved_data )
       }
   // ==> Fill Question Boxes
-  $scope.fill_boxes_with_question_objects = ( questionId ) => {
+  $rootScope.fill_boxes_with_question_objects = ( questionId ) => {
 
-            var questionIndex = $scope._questions_.findIndex( x=> x._id == questionId );
+            var questionIndex = $rootScope._questions_.findIndex( x=> x._id == questionId );
             if( questionIndex == -1 ) return false ;
 
-            var question = $scope._questions_.find ( x => x._id == questionId );
+            var question = $rootScope._questions_.find ( x => x._id == questionId );
             if(question == undefined ) return false;
 
-            $scope.current_media_question = ( question.media_question == undefined ) ? undefined : question.media_question ;
-
+            // $rootScope.current_media_question = ( question.media_question == undefined ) ? undefined : question.media_question ;
+            // $rootScope._questions_[$rootScope.question_index].media_question
             // ==> Distrbute question data
             // ==> Question Text
             $(".redactor-in-0").html(question.question_body);
@@ -272,76 +371,78 @@ apps.controller("apps-controller" , [
             $(".redactor-in-0 , #editor-quest-data").on("input" , function (){
                 var question_value = $(this).html() ;
                 $timeout(function(){
-                    $scope._questions_[$scope.question_index].question_body = $R('#editor-quest-data' , 'source.getCode');
-                    $scope.is_unsaved_data = true ;
+                    $rootScope._questions_[$rootScope.question_index].question_body = $R('#editor-quest-data' , 'source.getCode');
+                    $rootScope.is_unsaved_data = true ;
                 } , 500 );
             });
 
             $(".redactor-in-1 , #editor-desc-data").on("input" , function (){
                 var question_value = $(this).html() ;
                 $timeout(function(){
-                    $scope._questions_[$scope.question_index].question_description = $R('#editor-desc-data' , 'source.getCode');
-                    $scope.is_unsaved_data = true ;
+                    $rootScope._questions_[$rootScope.question_index].question_description = $R('#editor-desc-data' , 'source.getCode');
+                    $rootScope.is_unsaved_data = true ;
                 } , 500 );
             });
 
             $timeout(function(){
-              $scope.$apply();
+              $rootScope.$apply();
             });
 
           }
   //==> Show Media Link in input
-  $scope.show_media_link = () => {
+  $rootScope.show_media_link = () => {
+    $rootScope.media_type = 1;
       $(".media-inputs").css("display" , "block");
   }
   // => Image Uploader
-  $scope.upload_image_handler = () => {
-      return $scope.media_image_uploader.trigger('click');
+  $rootScope.upload_image_handler = () => {
+      $rootScope.media_type = 0 ;
+      return $rootScope.media_image_uploader.trigger('click');
   }
   // => Show Image
-  $scope.image_uploader_is_touched = () => {
-      console.log($scope.media_image_model[0].files[0]);
+  $rootScope.image_uploader_is_touched = () => {
+      console.log($rootScope.media_image_model[0].files[0]);
   }
   // Init swiperJs
-  $scope.init_swiperJs = () => {
-         $scope.swiper_data = new Swiper ('.swiper-data' , {
+  $rootScope.init_swiperJs = () => {
+         $rootScope.swiper_data = new Swiper ('.swiper-data' , {
           allowTouchMove : false
          });
-         $scope.swiper_data.update();
+         $rootScope.swiper_data.update();
       }
   // ==> Display first question
-  $scope.init_first_question = () => {
-            if($scope._questions_.length != 0 ){
-              $scope.highlighted_question($scope._questions_[0]._id);
-              $scope.current_media_question = ( $scope._questions_[0].media_question == undefined ) ? undefined : $scope._questions_[0].media_question ;
+  $rootScope.init_first_question = () => {
+            if($rootScope._questions_.length != 0 ){
+              $rootScope.highlighted_question($rootScope._questions_[0]._id);
+              // $rootScope.current_media_question = ( $rootScope._questions_[0].media_question == undefined ) ? undefined : $rootScope._questions_[0].media_question ;
             }
           }
   // ==> Display media data
-  $scope.calling_media_uploader = () => {
+  $rootScope.calling_media_uploader = () => {
                 $(".media-imgvid-uploader").fadeIn();
               }
   // ==> Display Image in question
-  $scope.loading_question_image = (img_src) => {
+  $rootScope.loading_question_image = (img_src) => {
   };
   // ==> Add
-  $scope.add_new_media_for_question = () => {
-        $scope.media_for = 'questions' ; // => Question
+  $rootScope.add_new_media_for_question = () => {
+        $rootScope.media_for = 'questions' ; // => Question
         $(".media-uploader").fadeIn();
       }
   // ==> Add media for question
-  $scope.add_new_media_for_answer = () => {
-            $scope.media_for = 'answer' ; // => Question
+  $rootScope.add_new_media_for_answer = () => {
+            $rootScope.media_for = 'answer' ; // => Question
             $(".media-uploader").fadeIn();
           }
   // => Close Current window
-  $scope.close_current_image_uploader = () => {
-                return $(".media-uploader , .live_preview_image").fadeOut();
+  $rootScope.close_current_image_uploader = () => {
+                return $(".media-uploader , .live_preview_image , .progrbar ").fadeOut();
               };
   // => Start cropping image
-  $scope.init_cropping_image = () => {
+  $rootScope.init_cropping_image = () => {
                     $timeout(function(){
                       var image_data = document.getElementById("cropping_system");
-                      $scope.cropper =  new Cropper ( image_data , {
+                      $rootScope.cropper =  new Cropper ( image_data , {
                         aspectRatio : 145 / 120 ,
                         initialAspectRatio : 145 / 120 ,
                         dragMode: 'none' ,
@@ -356,145 +457,190 @@ apps.controller("apps-controller" , [
                         background : false ,
                         zoomable : false ,
                         crop : (event) => {
-                          $scope.store_cropping_data (event);
-                           //  $scope.cropper_results['x'] = event.detail.x;
-                           // $scope.cropper_results['y'] = event.detail.y;
-                           // $scope.cropper_results['width'] = event.detail.width;
-                           // $scope.cropper_results['height'] = event.detail.height;
-                           // // $scope.cropper_results['rotate'] = event.detail.rotate;
-                           // $scope.cropper_results['scaleX'] = event.detail.scaleX;
-                           // $scope.cropper_results['scaleY'] = event.detail.scaleY;
+                          $rootScope.store_cropping_data (event);
+                           //  $rootScope.cropper_results['x'] = event.detail.x;
+                           // $rootScope.cropper_results['y'] = event.detail.y;
+                           // $rootScope.cropper_results['width'] = event.detail.width;
+                           // $rootScope.cropper_results['height'] = event.detail.height;
+                           // // $rootScope.cropper_results['rotate'] = event.detail.rotate;
+                           // $rootScope.cropper_results['scaleX'] = event.detail.scaleX;
+                           // $rootScope.cropper_results['scaleY'] = event.detail.scaleY;
                         }
                       } );
                     }, 250 );
                   };
   // => Storing Copping results
-  $scope.store_cropping_data = (evt) => {
+  $rootScope.store_cropping_data = (evt) => {
                         $('#cropping-image-x').val(evt.detail.x);
                         $('#cropping-image-y').val(evt.detail.y);
                         $('#cropping-image-width').val(evt.detail.width);
                         $('#cropping-image-height').val(evt.detail.height);
 
-                        // $scope.cropper_results['rotate'] = event.detail.rotate;
-                        // $scope.cropper_results['scaleX'] = evt.detail.scaleX;
-                        // $scope.cropper_results['scaleY'] = evt.detail.scaleY;
+                        // $rootScope.cropper_results['rotate'] = event.detail.rotate;
+                        // $rootScope.cropper_results['scaleX'] = evt.detail.scaleX;
+                        // $rootScope.cropper_results['scaleY'] = evt.detail.scaleY;
                       };
   // ==> Reading current Image then blob
-  $scope.init_blob_data = (image_file) => {
-                              $scope.image_view_source = null ;
-                              var file = image_file[0].files[0] ;
-
-                              $scope.cropper_results['file'] = file ;
-                              var reader = new FileReader();
-                              var read_file = reader.readAsDataURL(file);
-                              reader.onload = ( e ) => {
-                                $scope.image_view_source =  e.target.result  ;
-                                var img_data = '<img id="cropping_system" src="'+ $scope.image_view_source +'" alt="Image">';
-                                var loader_data = "<div class='loading_data'></div>" ;
-                                $(".live_preview_image").html(loader_data + img_data);
-                                $('.loading_data').fadeOut(1000);
-                                $scope.$apply();
-                              }
-                            }
+  $rootScope.init_blob_data = (image_file) => {
+        $rootScope.image_view_source = null ;
+        var file = image_file[0].files[0] ;
+        if(file == undefined) return false ;
+        $rootScope.cropper_results['file'] = file ;
+        var reader = new FileReader();
+        var read_file = reader.readAsDataURL(file);
+        reader.onload = ( e ) => {
+          $rootScope.image_view_source =  e.target.result  ;
+          var img_data = '<img id="cropping_system" src="'+ $rootScope.image_view_source +'" alt="Image">';
+          var loader_data = "<div class='loading_data'></div>" ;
+          $(".live_preview_image").html(loader_data + img_data);
+          $('.loading_data').fadeOut(1000);
+          $rootScope.$apply();
+        }
+  };
   // => Image Uploader Changes and inputs
-  $scope.media_image_uploader.on('change , input' , function(){
+  $rootScope.media_image_uploader.on('change , input' , function(){
                                     // ==> Detect if question is in exists
 
                                     var question_id = $("#question_id").val() ;
-                                    var question = $scope._questions_.find(x => x._id == question_id );
+                                    var question = $rootScope._questions_.find(x => x._id == question_id );
 
                                     if(question == undefined ) return false ;
-                                    $(".live_preview_image").fadeIn();
+                                    $(".live_preview_image , .progrbar").fadeIn();
                                     // ==> Reading Image file
-                                    $scope.init_blob_data($(this));
+                                    $rootScope.init_blob_data($(this));
                                     // ==> Calling Cropping liberary
-                                    $scope.init_cropping_image();
+                                    $rootScope.init_cropping_image();
 
 
                                     $timeout(function(){
-                                      $scope.$apply();
+                                      $rootScope.$apply();
                                     });
                                 });
-  // => Storing copped data in $scope object
-  $scope.storing_image_with_cropped_data = ( ) => {
+  // => Storing copped data in $rootScope object
+  $rootScope.storing_image_with_cropped_data = ( ) => {
 
-          var questionId = $("#question_id").val();
-                                        var model ;
-                                        if($scope.media_for == 'questions' ) model = 'question';
-                                        else model = 'answer';
-
-                                          var x = $('#cropping-image-x').val();
-                                          var y = $('#cropping-image-y').val();
-                                          var width = $('#cropping-image-width').val();
-                                          var height = $('#cropping-image-height').val();
-
-                                          var formImageData = new FormData();
-                                          formImageData.append('media_field' , $scope.media_image_uploader[0].files[0]   );
-                                          formImageData.append('height' , height  );
-                                          formImageData.append('width' , width  );
-                                          formImageData.append('x' ,x  );
-                                          formImageData.append('y' , y  );
-                                          formImageData.append('questions' , $scope._questions_ );
-
-                                       // ==> Send Data To Api
-                                       var progressHandler = (event) => {
-                                         console.log( "Uploaded "+event.loaded+" bytes of "+event.total );
-                                         var percent = Math.round (event.loaded / event.total) * 100;
-                                         console.log(percent);
-                                       };
-                                       var completeHandler = ( event ) => {
-                                         console.log(event.target);
-
-                                         $http({ method : "GET" , url : $scope.retrieve_data_url }).then( ( resp ) => {
-                                           var qs = resp.data.questions;
-                                           var rarget_question = qs.find(x => x._id == $("#question_id").val());
-                                           $scope.current_media_question = (rarget_question.media_question == undefined ) ? undefined : rarget_question.media_question ;
-                                          });
-                                         // => ___question_5b58789124398227ee908f4d.jpg
-                                         // =>    question_5b58789124398227ee908f4d.jpg
-                                       };
-                                       var errorHandler = ( event ) => { "Upload Failed"  };
-                                       var abortHandler = ( event ) => { "Upload Aborted" };
-                                       var ajax = new XMLHttpRequest();
-                                       ajax.upload.addEventListener("progress", progressHandler, false);
-                                       ajax.addEventListener("load", completeHandler, false);
-                                       ajax.addEventListener("error", errorHandler, false);
-                                       ajax.addEventListener("abort", abortHandler, false);
-                                       ajax.open("POST",  $scope.server_ip + "api/" + $scope.app_id + '/' +  model +  "/" + questionId + "/cropping_system" );
-                                       // ajax.setRequestHeader("Content-type", undefined );
-                                       ajax.send(formImageData);
+      var questionId = $("#question_id").val();
+      var model ;
+      if($rootScope.media_for == 'questions' ) model = 'question';
+      else model = 'answer';
 
 
-          };
+
+            var x = $('#cropping-image-x').val();
+            var y = $('#cropping-image-y').val();
+            var width = $('#cropping-image-width').val();
+            var height = $('#cropping-image-height').val();
+            var formImageData = new FormData();
+            formImageData.append('media_field' , $rootScope.media_image_uploader[0].files[0]   );
+            formImageData.append('height' , height  );
+            formImageData.append('width' , width  );
+            formImageData.append('x' ,x  );
+            formImageData.append('y' , y  );
+            formImageData.append('questions' , $rootScope._questions_ );
+
+           // ==> Send Data To Api
+            var progressHandler = (event) => {
+            console.log( "Uploaded "+event.loaded+" bytes of "+event.total );
+            var percent = Math.round (event.loaded / event.total) * 100;
+            $('.highlighted_progress').css({width : percent + '%' });
+            };
+            var completeHandler = ( event ) => {
+            var image_extension = $rootScope.media_image_uploader[0].files[0].name.split('.').pop() ;
+            var ThisQuestion = $rootScope._questions_.find(x => x._id == $("#question_id").val());
+            if($rootScope.media_for == 'questions'){
+                        if(ThisQuestion.media_question == undefined)
+                        ThisQuestion['media_question'] = new Object();
+                        var cropped_image_path = $rootScope.server_ip + "themeimages/question_" + ThisQuestion._id +'.' +image_extension ;
+                        var main_image_path = $rootScope.server_ip + "themeimages/__question_" + ThisQuestion._id  +'.'  +image_extension ;
+                        var updated_date = new Date();
+                        ThisQuestion['media_question']['media_type'] = 0 ;
+                        ThisQuestion['media_question']['media_name'] ="question_" + ThisQuestion._id +image_extension ;
+                        ThisQuestion['media_question']['media_field'] = "themeimages/question_" + ThisQuestion._id +image_extension ;
+                        ThisQuestion['media_question']['Media_directory'] = cropped_image_path ;
+                        ThisQuestion['media_question']['image_cropped'] = "question_" + ThisQuestion._id +image_extension
+                        ThisQuestion['media_question']['image_full'] ="__question_" + ThisQuestion._id +image_extension
+                        ThisQuestion['media_question']['image_updated_date'] = updated_date ;
+
+                }
+
+
+
+
+
+
+                // ==> If it answer
+            if($rootScope.media_for == 'answer') {
+              alert("its answer !!");
+            }
+            $timeout(function(){
+                 // ==> Refresh status
+                   $rootScope.$apply();
+                 // ==> Close Navigation part
+                $timeout(function(){
+                   $rootScope.close_current_image_uploader();
+                 } , 150);
+                 $timeout(function(){
+                   $('.highlighted_progress').css({width : 0 + '%' });
+                 } , 300 );
+                 } , 300 );
+                }
+
+
+            var errorHandler = ( event ) => { "Upload Failed"  };
+            var abortHandler = ( event ) => { "Upload Aborted" };
+            var ajax = new XMLHttpRequest();
+            ajax.upload.addEventListener("progress", progressHandler, false);
+            ajax.addEventListener("load", completeHandler, false);
+            ajax.addEventListener("error", errorHandler, false);
+            ajax.addEventListener("abort", abortHandler, false);
+            ajax.open("POST",  $rootScope.server_ip + "api/" + $rootScope.app_id + '/' +  model +  "/" + questionId + "/cropping_system" );
+            // ajax.setRequestHeader("Content-type", undefined );
+            ajax.send(formImageData);
+
+ };
+   $rootScope.answer_classes_cases = (question_settings) =>  {
+     // if(question_settings == undefined ) return ;
+     return 'super_size';
+   }
   // => load_image_media
-  $scope.load_image_media = () => {
-    var img = $scope.current_media_question.Media_directory;
-    var image_data =$scope.current_media_question.image_updated_date;
+  $rootScope.load_image_media = () => {
+    var img = $rootScope._questions_[$rootScope.question_index].media_question.Media_directory;
+    var image_data = $rootScope._questions_[$rootScope.question_index].media_question.image_updated_date;
     var img_src = img +'?' + image_data ;
 
     return {
         'background-image':'url("'+img_src+'")'
     };
   }
-  // => Storing Data of questions into db
-  $scope.storing_questions_into_database = () => {
-                                          $http({
-                                            url : $scope.server_ip + 'api/' + $scope.app_id + "/add/questions" ,
-                                            method : "POST" ,
-                                            data : { data : $scope._questions_ }
-                                          }).then((response)=>{
-                                            console.log(response.data);
-                                          });
+  // ==> Remove Question Media
+  $scope.remove_question_media = (question_id) => {
+    var Question = $scope._questions_.find(x => x._id == question_id );
+    if(Question == undefined ) return false ;
+    if(Question.media_question == undefined ) return false ;
 
-                                        }
+    return Question.media_question = undefined ;
+  };
+  // => Storing Data of questions into db
+  $rootScope.storing_questions_into_database = () => {
+     $http({
+      url : $rootScope.server_ip + 'api/' + $rootScope.app_id + "/add/questions" ,
+      method : "POST" ,
+      data : { data : $rootScope._questions_ }
+     }).then((response)=>{
+       $rootScope._questions_ = response.data ;
+       $timeout(function(){
+         $rootScope.$apply();
+       } , 300 );
+    });
+  };
   // => init tooltip
-  $scope.init_bootstrap_tooltip = ( ) => {
+  $rootScope.init_bootstrap_tooltip = ( ) => {
       return $('[data-toggle="tooltip"]').tooltip();
          }
   // ==> Calling Methods Here
   $timeout(function(){
-    $scope.init_swiperJs();
-    $scope.init_bootstrap_tooltip();
+    $rootScope.init_swiperJs();
+    $rootScope.init_bootstrap_tooltip();
   }, 400);
 
 }]);
