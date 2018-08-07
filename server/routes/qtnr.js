@@ -96,18 +96,21 @@ qtnrRouters.use(build_session);
 qtnrRouters.post("/upload/animage"  , question_answer_images.single("media_field") , (req, res) => {
     var file_path = 'ui-public/themeimages/';
     var fileIs = file_path + req.file.originalname
-    im.convert([ fileIs ,'-crop', "200x200+50+50" , file_path +  "____________________cropped_image.jpg" ], function( err, stdout ){
-      console.log(err);
+    setTimeout(function(){
+      im.convert([ fileIs ,'-crop', "200x200+50+50" , file_path +  "____________________cropped_image.jpg" ], function( err, stdout ){
+        console.log(err);
 
-      if(err){
-        return new Promise((resolve, reject) => {
-            res.send( err );
-        });
-      }
+        if(err){
+          return new Promise((resolve, reject) => {
+              res.send( err );
 
-        console.log(stdout);
-        res.send(req.file);
-    });
+          });
+        }
+
+          console.log(stdout);
+          res.send(req.file);
+      });
+    } , 500 );
 });
 
 
