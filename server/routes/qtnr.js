@@ -5051,10 +5051,21 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
     console.log("There is no issue at here ! +++++++++++++ ");
   var resizing = req.body.width + 'x' + req.body.height +'+'+ req.body.x +'+'+  req.body.y ;
   im.convert([ main_file_path ,'-crop', resizing , new_file_path ], function( err, stdout ){
-    if (err) throw err;
+
+
+    if (err) {
+      console.log("ERR im -----");
+      console.log(err);
+      throw err;
+    }
     var new_file_path_ = file_path + '___' +new_filename ;
     fs.rename( imagePath  , new_file_path_  , (err)=>{
-       if(err) throw err ;
+
+       if(err) {
+         console.log("ERR RENAME +++++");
+         console.log(err);
+
+         throw err} ;
      });
   });
 
