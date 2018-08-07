@@ -5006,10 +5006,12 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
   //question_id
   /*body data*/
   //cropping_data model_type == 'answer'
+  console.log("+++++++++++++++++++++++++++++++++++++++++++++++++");
 
   var model_type = req.params.model ;
   var appId = req.params.app_id ;
   var questionId = req.params.question_id;
+
   var file_path = 'ui-public/themeimages/';
   var file_name = '_' ;
   if( req.params.model == "question" )
@@ -5037,7 +5039,7 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
       new_file_path = file_path + new_filename ;
 
   }
-
+ 
   if(! fs.existsSync(main_file_path)){
     res.send(false);
     return false ;

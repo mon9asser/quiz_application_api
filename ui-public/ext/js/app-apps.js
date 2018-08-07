@@ -544,10 +544,10 @@ apps.controller("apps-controller" , [
             var percent = Math.round (event.loaded / event.total) * 100;
             $('.highlighted_progress').css({width : percent + '%' });
             };
-            var completeHandler = ( event ) => {
-            var image_extension = $rootScope.media_image_uploader[0].files[0].name.split('.').pop() ;
-            var ThisQuestion = $rootScope._questions_.find(x => x._id == $("#question_id").val());
-            if($rootScope.media_for == 'questions'){
+            var completeHandler = (   ) => {
+                        var image_extension = $rootScope.media_image_uploader[0].files[0].name.split('.').pop() ;
+                        var ThisQuestion = $rootScope._questions_.find(x => x._id == $("#question_id").val());
+                        if($rootScope.media_for == 'questions'){
                         if(ThisQuestion.media_question == undefined)
                         ThisQuestion['media_question'] = new Object();
                         var cropped_image_path = $rootScope.server_ip + "themeimages/question_" + ThisQuestion._id +'.' +image_extension ;
@@ -563,39 +563,45 @@ apps.controller("apps-controller" , [
 
                 }
 
+                  // ==> If it answer
+                      if($rootScope.media_for == 'answer') {
+                        alert("its answer !!");
+                      }
+                      $timeout(function(){
+                       // ==> Refresh status
+                         $rootScope.$apply();
+                       // ==> Close Navigation part
+                      $timeout(function(){
+                         $rootScope.close_current_image_uploader();
+                       } , 150);
+                       $timeout(function(){
+                         $('.highlighted_progress').css({width : 0 + '%' });
+                       } , 300 );
+                       } , 300 );
+                }; // end complete
 
+   var cropping_url = $rootScope.server_ip + "api/" + $rootScope.app_id + '/' +  model +  "/" + questionId + "/cropping_system" ;
+   $http({
+     url : cropping_url ,
+     method : "POST" ,
+     data : formImageData ,
+     headers : { 'Content-Type' : undefined} ,
+     uploadEventHandlers : {
+     progress : function (event ){
+             console.log( "Uploaded "+event.loaded+" bytes of "+event.total );
+             var percent = Math.round (event.loaded / event.total) * 100;
+             $('.highlighted_progress').css({width : percent + '%' });
+             if (event.loaded == event.total) {
 
+             }
+        }
+    }
+   }).then((response)=>{
+      $timeout(function(){
+            completeHandler();
+      },300);
+   });
 
-
-
-                // ==> If it answer
-            if($rootScope.media_for == 'answer') {
-              alert("its answer !!");
-            }
-            $timeout(function(){
-                 // ==> Refresh status
-                   $rootScope.$apply();
-                 // ==> Close Navigation part
-                $timeout(function(){
-                   $rootScope.close_current_image_uploader();
-                 } , 150);
-                 $timeout(function(){
-                   $('.highlighted_progress').css({width : 0 + '%' });
-                 } , 300 );
-                 } , 300 );
-                }
-
-
-            var errorHandler = ( event ) => { "Upload Failed"  };
-            var abortHandler = ( event ) => { "Upload Aborted" };
-            var ajax = new XMLHttpRequest();
-            ajax.upload.addEventListener("progress", progressHandler, false);
-            ajax.addEventListener("load", completeHandler, false);
-            ajax.addEventListener("error", errorHandler, false);
-            ajax.addEventListener("abort", abortHandler, false);
-            ajax.open("POST",  $rootScope.server_ip + "api/" + $rootScope.app_id + '/' +  model +  "/" + questionId + "/cropping_system" );
-            // ajax.setRequestHeader("Content-type", undefined );
-            ajax.send(formImageData);
 
  };
    $rootScope.answer_classes_cases = (question_settings) =>  {
@@ -606,11 +612,11 @@ apps.controller("apps-controller" , [
   $rootScope.load_image_media = () => {
     var img = $rootScope._questions_[$rootScope.question_index].media_question.Media_directory;
     var image_data = $rootScope._questions_[$rootScope.question_index].media_question.image_updated_date;
-    var img_src = img +'?' + image_data ;
+    var img_src = $sce.trustAsResourceUrl(img) +'?' + image_data ;
 
-    return {
-        'background-image':'url("'+img_src+'")'
-    };
+    return  {
+       'background-image':'url("'+img_src+'")'
+     };
   }
   // ==> Remove Question Media
   $scope.remove_question_media = (question_id) => {
