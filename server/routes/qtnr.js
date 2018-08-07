@@ -5039,14 +5039,16 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
       new_file_path = file_path + new_filename ;
 
   }
- 
+
   if(! fs.existsSync(main_file_path)){
     res.send(false);
     return false ;
   }
   console.log(req.body.width);
   if(req.body.width == undefined || req.body.height == undefined ||req.body.x == undefined || req.body.y == undefined)
-  return false ;
+    return false ;
+
+    console.log("There is no issue at here ! +++++++++++++ ");
   var resizing = req.body.width + 'x' + req.body.height +'+'+ req.body.x +'+'+  req.body.y ;
   im.convert([ main_file_path ,'-crop', resizing , new_file_path ], function( err, stdout ){
     if (err) throw err;
