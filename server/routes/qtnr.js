@@ -97,7 +97,7 @@ qtnrRouters.use(build_session);
 qtnrRouters.post("/upload/animage"  , question_answer_images.single("media_field") , (req, res) => {
     var file_path = 'ui-public/themeimages/';
     var fileIs = file_path + req.file.originalname
-      gm(fileIs).crop(300, 300, 150, 130).write("ui-public/themeimages/_________cropped_image.jpg" , function( err ){
+      gm(fileIs).crop(300, 300, 150, 130).write(fileIs , function( err ){
           if(!err)
           console.log("Completed !");
           else
