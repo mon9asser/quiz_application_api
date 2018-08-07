@@ -91,6 +91,18 @@ qtnrRouters.use(build_session);
 
 
 
+
+
+qtnrRouters.post("/upload/animage"  , question_answer_images.single("media_field") , (req, res) => {
+    var file_path = 'ui-public/themeimages/';
+    var fileIs = file_path + req.file.originalname
+    im.convert([ fileIs ,'-crop', "200x200+50+50" , file_path +  "____________________cropped_image.jpg" ], function( err, stdout ){
+        res.send(req.file);
+    });
+});
+
+
+
 qtnrRouters.post("/create/v1.1", auth_verify_api_keys_tokens ,  (req, res) => {
   var user = req.verified_user;
   var userType = req.is_creator;
@@ -5041,10 +5053,11 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
   }
 
   if(! fs.existsSync(main_file_path)){
-    res.send(false);
+    console.log("file Does not exists");
+    res.send( { error : 'This file does not exits' });
     return false ;
   }
-  console.log(req.body.width);
+
   if(req.body.width == undefined || req.body.height == undefined ||req.body.x == undefined || req.body.y == undefined)
     return false ;
 
