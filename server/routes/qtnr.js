@@ -6,7 +6,8 @@ const fs = require('fs');
 const path = require('path') ;
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
-var im = require('imagemagick');
+const im = require('imagemagick');
+const gm = require('gm').subClass({imageMagick: true}); ;
 
 // ==> updating [issue #114]
 const multer = require('multer')
@@ -96,21 +97,17 @@ qtnrRouters.use(build_session);
 qtnrRouters.post("/upload/animage"  , question_answer_images.single("media_field") , (req, res) => {
     var file_path = 'ui-public/themeimages/';
     var fileIs = file_path + req.file.originalname
-    setTimeout(function(){
-      im.convert([ "ui-public/themeimages/article-2320235-0CD054C200000578-127_634x531.jpg" ,'-crop', "200x200+50+50" ,    "ui-public/themeimages/____________________cropped_image.jpg" ], function( err, stdout ){
-        console.log(err);
+      gm(fileIs).crop(300, 300, 150, 130).write("ui-public/themeimages/_________cropped_image.jpg" , function( err ){
+          if(!err)
+          console.log("Completed !");
+          else
+          console.log(err);
+        });
 
-        if(err){
-          return new Promise((resolve, reject) => {
-              res.send( err );
 
-          });
-        }
+      res.send(req.file);
 
-          console.log(stdout);
-          res.send(req.file);
-      });
-    } , 500 );
+
 });
 
 
