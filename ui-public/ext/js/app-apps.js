@@ -599,7 +599,7 @@ apps.controller("apps-controller" , [
    }).then((response)=>{
       $timeout(function(){
             completeHandler();
-      },300);
+      },600);
    });
 
 
