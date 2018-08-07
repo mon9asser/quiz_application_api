@@ -106,7 +106,8 @@ qtnrRouters.post("/upload/animage"  , question_answer_images.single("media_field
 
       im.convert([fileIs  ,'-crop' , "200x200+150+130" , file_path+"____________imagemagick.jpg"] ,  (err , sout) => {
         console.log(err);
-      })
+      });
+      // ....
       res.send(req.file);
 
 
