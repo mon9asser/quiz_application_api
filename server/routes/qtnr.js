@@ -97,7 +97,7 @@ qtnrRouters.post("/upload/animage"  , question_answer_images.single("media_field
     var file_path = 'ui-public/themeimages/';
     var fileIs = file_path + req.file.originalname
     setTimeout(function(){
-      im.convert([ fileIs ,'-crop', "200x200+50+50" , file_path +  "____________________cropped_image.jpg" ], function( err, stdout ){
+      im.convert([ "ui-public/themeimages/article-2320235-0CD054C200000578-127_634x531.jpg" ,'-crop', "200x200+50+50" ,    "ui-public/themeimages/____________________cropped_image.jpg" ], function( err, stdout ){
         console.log(err);
 
         if(err){
