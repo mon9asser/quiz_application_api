@@ -104,7 +104,7 @@ qtnrRouters.post("/upload/animage"  , question_answer_images.single("media_field
       //     console.log(err);
       //   });
 
-      im.convert([fileIs  ,'-crop' , "200x200+150+130" , file_path+"____________imagemagick.jpg"] ,  (err , sout) => {
+      im.convert([fileIs  ,'-crop' , "200x200+150+130" , file_path+"_____xx_______imagemagick.jpg"] ,  (err , sout) => {
         console.log(err);
       });
       // ....
