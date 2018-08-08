@@ -104,7 +104,10 @@ qtnrRouters.post("/upload/animage"  , question_answer_images.single("media_field
     var fileIs = file_path + req.file.originalname
     // open a file called "lenna.png"
     Jimp.read(fileIs, (err, Image) => {
-        if (err) throw err;
+        if (err) {
+          res.send({ status_code : 0 , error : err , message : 'Failed'  });
+          return false ;
+        };
         Image.crop(200,200,200,200)
         .write(file_path + '_____________CROPPING_WITH_JIMP_IN_EC2.jpg');;
     });
@@ -5074,10 +5077,7 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
   if(req.body.width == undefined || req.body.height == undefined ||req.body.x == undefined || req.body.y == undefined)
     return false ;
 
-    console.log("There is no issue at here ! +++++++++++++ ");
-  var resizing = req.body.width + 'x' + req.body.height +'+'+ req.body.x +'+'+  req.body.y ;
-
-  // sharp(main_file_path)
+     // sharp(main_file_path)
   // .extract({ left: parseInt(req.body.x), top:  parseInt(req.body.y) , width:   parseInt(req.body.width) , height: parseInt(req.body.height) })
   // .toFile(new_file_path, function(err) {
   //   if(err) throw err;
@@ -5108,7 +5108,20 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
   //        throw err} ;
   //    });
   // });
+  Jimp.read( main_file_path , (err, Image) => {
+      if (err) {
+        res.send({ status_code : 0 , error : err , message : 'Failed'  });
+        return false ;
+      };
+      Image.crop( parseInt(req.body.x) , parseInt(req.body.y) , parseInt(req.body.width) , parseInt(req.body.height))
+      .write(new_file_path);
 
+      // ==> Rename main file with double perfix
+      var new_file_path_ = file_path + '___' +new_filename ;
+      if( fs.existsSync (imagePath) ){
+        fs.rename( imagePath  , new_file_path_  , ( err ) => {  });
+      }
+  });
   // ==> Saving Data
   qtnr.findOne({ _id:appId }).then( (   qtnairsDocument ) => {
       var questions = qtnairsDocument.questions ;
