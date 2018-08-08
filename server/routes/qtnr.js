@@ -6,8 +6,10 @@ const fs = require('fs');
 const path = require('path') ;
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
-const im = require('imagemagick');
-const gm = require('gm').subClass({imageMagick: true}); ;
+const sharp = require('sharp');
+
+// const im = require('imagemagick');
+// const gm = require('gm').subClass({imageMagick: true}); ;
 
 // ==> updating [issue #114]
 const multer = require('multer')
@@ -96,21 +98,20 @@ qtnrRouters.use(build_session);
 
 qtnrRouters.post("/upload/animage"  , question_answer_images.single("media_field") , (req, res) => {
     // var file_path = 'ui-public/themeimages/';
-    var file_path = '~/mm/quiz_application/ui-public/themeimages/';
+    var file_path = 'ui-public/themeimages/';
     // var file_path = 'themeimages/';
     var fileIs = file_path + req.file.originalname
-      gm(fileIs).crop(300, 300, 150, 130).write(file_path+"_____xx_______imagemagick.jpg" , function( err ){
-          if(!err)
-          console.log("Completed !");
-          else
-          console.log(err);
-        });
+    sharp(fileIs)
+    .extract({left: 200, top: 200, width: 200, height: 200 })
+    .toFile(file_path+'xxxxxxxxxxxxxxxxxxx___cropping__image___testing.jpg', function(err) {
+      if(err) throw err;
 
-      // im.convert([fileIs  ,'-crop' , "200x200+150+130" , file_path+"_____xx_______imagemagick.jpg"] ,  (err , sout) => {
-      //   console.log(err);
-      // });
-      // ....
-      res.send(req.file);
+      // Extract a region of the input image, saving in the same format.
+    }).catch((err)=>{
+      console.log(err);
+    });
+
+    res.send(req.file);
 
 
 });
@@ -5077,24 +5078,24 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
 
     console.log("There is no issue at here ! +++++++++++++ ");
   var resizing = req.body.width + 'x' + req.body.height +'+'+ req.body.x +'+'+  req.body.y ;
-  im.convert([ main_file_path ,'-crop', resizing , new_file_path ], function( err, stdout ){
-
-
-    if (err) {
-      console.log("ERR im -----");
-      console.log(err);
-      throw err;
-    }
-    var new_file_path_ = file_path + '___' +new_filename ;
-    fs.rename( imagePath  , new_file_path_  , (err)=>{
-
-       if(err) {
-         console.log("ERR RENAME +++++");
-         console.log(err);
-
-         throw err} ;
-     });
-  });
+  // im.convert([ main_file_path ,'-crop', resizing , new_file_path ], function( err, stdout ){
+  //
+  //
+  //   if (err) {
+  //     console.log("ERR im -----");
+  //     console.log(err);
+  //     throw err;
+  //   }
+  //   var new_file_path_ = file_path + '___' +new_filename ;
+  //   fs.rename( imagePath  , new_file_path_  , (err)=>{
+  //
+  //      if(err) {
+  //        console.log("ERR RENAME +++++");
+  //        console.log(err);
+  //
+  //        throw err} ;
+  //    });
+  // });
 
   // ==> Saving Data
   qtnr.findOne({ _id:appId }).then( (   qtnairsDocument ) => {
