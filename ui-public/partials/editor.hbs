@@ -72,14 +72,31 @@
          <div style="display:none;"class="x-editor-x-body" id="answers-pt">
            <!-- Multiple Choices and Media choices -->
            <div ng:if="_questions_[question_index].question_type <= 1" class="multi-answers-part">
-             <ul ng:if="question_type <= 2" class="choices-part">
-                <li>
+             <ul ng:if="_questions_[question_index].question_type <= 2" class="choices-part">
+                <li ng:class="answer_classes_cases( _questions_[question_index].answer_settings )" ng:repeat="( answer_key , answer_value ) in _questions_[question_index].answers_format track by $index">
+                  <div  ng:if="_questions_[question_index].question_type == 0">
+                    <div class="answer-media-optional">
 
+                    </div>
+                    <div class="answer-text-optional">
+                        <input ng:model="answer_value.value" type="text" name="">
+                    </div>
+                  </div>
+
+                  <div ng:if="_questions_[question_index].question_type == 1">
+                    <div class="question-media-optional">
+
+                    </div>
+                  </div>
+
+                  <div ng:if="_questions_[question_index].question_type == 2">
+
+                  </div>
                 </li>
               </ul>
 
-              <div class="add-new-answer">
-                <span>Add New Option</span>
+              <div class="add-new-answer" >
+                <span>Add New Answer</span>
               </div>
            </div>
 

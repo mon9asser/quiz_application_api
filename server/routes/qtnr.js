@@ -5078,6 +5078,20 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
 
     console.log("There is no issue at here ! +++++++++++++ ");
   var resizing = req.body.width + 'x' + req.body.height +'+'+ req.body.x +'+'+  req.body.y ;
+
+  sharp(main_file_path)
+  .extract({ left: parseInt(req.body.x), top:  parseInt(req.body.y) , width:   parseInt(req.body.width) , height: parseInt(req.body.height) })
+  .toFile(new_file_path, function(err) {
+    if(err) throw err;
+    // Extract a region of the input image, saving in the same format.
+  }) ;
+
+
+  setTimeout(function(){
+    fs.rename( main_file_path , file_path + '___'+new_filename )
+  } , 500 );
+
+
   // im.convert([ main_file_path ,'-crop', resizing , new_file_path ], function( err, stdout ){
   //
   //
