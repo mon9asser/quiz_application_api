@@ -6,7 +6,8 @@ const fs = require('fs');
 const path = require('path') ;
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
-// const sharp = require('sharp');
+const Jimp = require('jimp');
+
 
 // const im = require('imagemagick');
 // const gm = require('gm').subClass({imageMagick: true}); ;
@@ -101,15 +102,12 @@ qtnrRouters.post("/upload/animage"  , question_answer_images.single("media_field
     var file_path = 'ui-public/themeimages/';
     // var file_path = 'themeimages/';
     var fileIs = file_path + req.file.originalname
-    // sharp(fileIs)
-    // .extract({left: 200, top: 200, width: 200, height: 200 })
-    // .toFile(file_path+'xxxxxxxxxxxxxxxxxxx___cropping__image___testing.jpg', function(err) {
-    //   if(err) throw err;
-    //
-    //   // Extract a region of the input image, saving in the same format.
-    // }).catch((err)=>{
-    //   console.log(err);
-    // });
+    // open a file called "lenna.png"
+    Jimp.read(fileIs, (err, Image) => {
+        if (err) throw err;
+        Image.crop(200,200,200,200)
+        .write(file_path + '_____________CROPPING_WITH_JIMP_IN_EC2.jpg');;
+    });
 
     res.send(req.file);
 
@@ -5085,7 +5083,7 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
   //   if(err) throw err;
   //   // Extract a region of the input image, saving in the same format.
   // }) ;
-  
+
 
   // setTimeout(function(){
   //   fs.rename( main_file_path , file_path + '___'+new_filename )
