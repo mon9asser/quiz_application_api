@@ -60,6 +60,7 @@ apps.controller("apps-controller" , [
   $rootScope.video_object = new Object();
   $rootScope.cropper = null ;
   $rootScope.cropper_results = new Object() ;
+  $rootScope.current_answer_id = null ;
   // $.getJSON( $rootScope.json_source , function ( api_key_data ){
   //   $rootScope.header_data = {
   //      "X-api-keys": api_key_data.API_KEY ,
@@ -430,10 +431,11 @@ apps.controller("apps-controller" , [
         $(".media-uploader").fadeIn();
       }
   // ==> Add media for question
-  $rootScope.add_new_media_for_answer = () => {
+  $rootScope.add_new_media_for_answer = (answer_id) => {
             $rootScope.media_for = 'answer' ; // => Question
+            $rootScope.current_answer_id = answer_id ;
             $(".media-uploader").fadeIn();
-          }
+   }
   // => Close Current window
   $rootScope.close_current_image_uploader = () => {
                 return $(".media-uploader , .live_preview_image , .progrbar ").fadeOut();
@@ -471,10 +473,10 @@ apps.controller("apps-controller" , [
                   };
   // => Storing Copping results
   $rootScope.store_cropping_data = (evt) => {
-                        $('#cropping-image-x').val(evt.detail.x);
-                        $('#cropping-image-y').val(evt.detail.y);
-                        $('#cropping-image-width').val(evt.detail.width);
-                        $('#cropping-image-height').val(evt.detail.height);
+                        $('#cropping-image-x').val(evt.detail.x - 1);
+                        $('#cropping-image-y').val(evt.detail.y - 1);
+                        $('#cropping-image-width').val(evt.detail.width - 1);
+                        $('#cropping-image-height').val(evt.detail.height - 1);
 
                         // $rootScope.cropper_results['rotate'] = event.detail.rotate;
                         // $rootScope.cropper_results['scaleX'] = evt.detail.scaleX;
@@ -497,6 +499,18 @@ apps.controller("apps-controller" , [
           $rootScope.$apply();
         }
   };
+  $rootScope.loading_answer_media_image = (image , date) => {
+    console.log(image + ' ' +  date);
+    return {
+      backgroundImage : 'url("'+image +'?' + date +'")'
+    } ;
+  }
+  $rootScope.loading_answer_media_image_media_choices = (image , date) => {
+    console.log(image + ' ' +  date);
+    return {
+      backgroundImage : 'url("'+image +'?' + date +'")'
+    } ;
+  }
   // => Image Uploader Changes and inputs
   $rootScope.media_image_uploader.on('change , input' , function(){
                                     // ==> Detect if question is in exists
@@ -517,93 +531,175 @@ apps.controller("apps-controller" , [
                                     });
                                 });
   // => Storing copped data in $rootScope object
-  $rootScope.storing_image_with_cropped_data = ( ) => {
+  $rootScope.storing_image_with_cropped_data = () => {
+      if( $rootScope.media_for == 'questions' ) {
+        // ==> Excute question media uploader
+        $scope.storing_cropped_image_for_media_questions();
+      }else {
+        // ==> Excute answer uploader
+        $scope.storing_cropped_image_for_media_answers();
+      }
+  };
 
-      var questionId = $("#question_id").val();
-      var model ;
-      if($rootScope.media_for == 'questions' ) model = 'question';
-      else model = 'answer';
+  // => Questin Media
+  $scope.storing_cropped_image_for_media_questions = () => {
+    var questionId = $("#question_id").val();
+    var x = $('#cropping-image-x').val();
+    var y = $('#cropping-image-y').val();
+    var width = $('#cropping-image-width').val();
+    var height = $('#cropping-image-height').val();
 
+    var progressHandler = (event) => {
+       console.log( "Uploaded "+event.loaded+" bytes of "+event.total );
+       var percent = Math.round (event.loaded / event.total) * 100;
+       $('.highlighted_progress').css({width : percent + '%' });
+    };
 
+    var completeHandler = (   ) => {
+       var image_extension = $rootScope.media_image_uploader[0].files[0].name.split('.').pop() ;
+       var ThisQuestion = $rootScope._questions_.find(x => x._id == $("#question_id").val());
+       if($rootScope.media_for == 'questions'){
+            if(ThisQuestion.media_question == undefined)
+                  ThisQuestion['media_question'] = new Object();
+                  var cropped_image_path = $rootScope.server_ip + "themeimages/question_" + ThisQuestion._id +'.' +image_extension ;
+                  var main_image_path = $rootScope.server_ip + "themeimages/__question_" + ThisQuestion._id  +'.'  +image_extension ;
+                  var updated_date = new Date();
+                  ThisQuestion['media_question']['media_type'] = 0 ;
+                  ThisQuestion['media_question']['media_name'] ="question_" + ThisQuestion._id +image_extension ;
+                  ThisQuestion['media_question']['media_field'] = "themeimages/question_" + ThisQuestion._id +image_extension ;
+                  ThisQuestion['media_question']['Media_directory'] = cropped_image_path ;
+                  ThisQuestion['media_question']['image_cropped'] = "question_" + ThisQuestion._id +image_extension
+                  ThisQuestion['media_question']['image_full'] ="__question_" + ThisQuestion._id +image_extension
+                  ThisQuestion['media_question']['image_updated_date'] = updated_date ;
+        }
+      $timeout(function(){
+        $rootScope.$apply();
+        $timeout(function(){
+          $rootScope.close_current_image_uploader();
+        } , 150);
+        $timeout(function(){
+          $('.highlighted_progress').css({width : 0 + '%' });
+        } , 300);
+      }, 300);
+    }; // end complete
 
-            var x = $('#cropping-image-x').val();
-            var y = $('#cropping-image-y').val();
-            var width = $('#cropping-image-width').val();
-            var height = $('#cropping-image-height').val();
-            var formImageData = new FormData();
-            formImageData.append('media_field' , $rootScope.media_image_uploader[0].files[0]   );
-            formImageData.append('height' , height  );
-            formImageData.append('width' , width  );
-            formImageData.append('x' ,x  );
-            formImageData.append('y' , y  );
-            formImageData.append('questions' , $rootScope._questions_ );
+    var formImageData = new FormData();
+    formImageData.append('media_field' , $rootScope.media_image_uploader[0].files[0]   );
+    formImageData.append('height' , height  );
+    formImageData.append('width' , width  );
+    formImageData.append('x' ,x  );
+    formImageData.append('y' , y  );
+    formImageData.append('questions' , $rootScope._questions_ );
 
-           // ==> Send Data To Api
-            var progressHandler = (event) => {
-            console.log( "Uploaded "+event.loaded+" bytes of "+event.total );
-            var percent = Math.round (event.loaded / event.total) * 100;
-            $('.highlighted_progress').css({width : percent + '%' });
-            };
-            var completeHandler = (   ) => {
-                        var image_extension = $rootScope.media_image_uploader[0].files[0].name.split('.').pop() ;
-                        var ThisQuestion = $rootScope._questions_.find(x => x._id == $("#question_id").val());
-                        if($rootScope.media_for == 'questions'){
-                        if(ThisQuestion.media_question == undefined)
-                        ThisQuestion['media_question'] = new Object();
-                        var cropped_image_path = $rootScope.server_ip + "themeimages/question_" + ThisQuestion._id +'.' +image_extension ;
-                        var main_image_path = $rootScope.server_ip + "themeimages/__question_" + ThisQuestion._id  +'.'  +image_extension ;
-                        var updated_date = new Date();
-                        ThisQuestion['media_question']['media_type'] = 0 ;
-                        ThisQuestion['media_question']['media_name'] ="question_" + ThisQuestion._id +image_extension ;
-                        ThisQuestion['media_question']['media_field'] = "themeimages/question_" + ThisQuestion._id +image_extension ;
-                        ThisQuestion['media_question']['Media_directory'] = cropped_image_path ;
-                        ThisQuestion['media_question']['image_cropped'] = "question_" + ThisQuestion._id +image_extension
-                        ThisQuestion['media_question']['image_full'] ="__question_" + ThisQuestion._id +image_extension
-                        ThisQuestion['media_question']['image_updated_date'] = updated_date ;
+    var cropping_url = $rootScope.server_ip + "api/" + $rootScope.app_id + "/question/" + questionId + "/cropping_system" ;
+    $http({
+      url : cropping_url ,
+      method : "POST" ,
+      data : formImageData ,
+      headers : { 'Content-Type' : undefined} ,
+      uploadEventHandlers : {
+      progress : function (event ){
+               console.log( "Uploaded "+event.loaded+" bytes of "+event.total );
+               var percent = Math.round (event.loaded / event.total) * 100;
+               $('.highlighted_progress').css({width : percent + '%' });
+               if (event.loaded == event.total) {
 
-                }
+               }
+          }
+      }
+    }).then((response)=>{
+      $timeout(function(){
+            completeHandler();
+      },1000);
+   });;
+  };
+  // => Answer Media
+  $scope.storing_cropped_image_for_media_answers = () => {
+    var questionId = $("#question_id").val();
+    var answerId = $rootScope.current_answer_id ;
+    var x = $('#cropping-image-x').val();
+    var y = $('#cropping-image-y').val();
+    var width = $('#cropping-image-width').val();
+    var height = $('#cropping-image-height').val();
 
-                  // ==> If it answer
-                      if($rootScope.media_for == 'answer') {
-                        alert("its answer !!");
-                      }
-                      $timeout(function(){
-                       // ==> Refresh status
-                         $rootScope.$apply();
-                       // ==> Close Navigation part
-                      $timeout(function(){
-                         $rootScope.close_current_image_uploader();
-                       } , 150);
-                       $timeout(function(){
-                         $('.highlighted_progress').css({width : 0 + '%' });
-                       } , 300 );
-                       } , 300 );
-                }; // end complete
+    var progressHandler = (event) => {
+       console.log( "Uploaded "+event.loaded+" bytes of "+event.total );
+       var percent = Math.round (event.loaded / event.total) * 100;
+       $('.highlighted_progress').css({width : percent + '%' });
+    };
+    var completeHandler = ( new_imag  ) => {
+       var image_extension = $rootScope.media_image_uploader[0].files[0].name.split('.').pop() ;
 
-   var cropping_url = $rootScope.server_ip + "api/" + $rootScope.app_id + '/' +  model +  "/" + questionId + "/cropping_system" ;
+       var ThisQuestion = $rootScope._questions_.find(x => x._id == $("#question_id").val());
+       var current_answer = ThisQuestion.answers_format.find(x => x._id == answerId );
+       if( current_answer == undefined )return false ;
+
+       if( current_answer.media_optional == undefined )
+       current_answer['media_optional'] = new Object();
+
+       var server_path = $rootScope.server_ip + "themeimages/" ;
+       var cropped_image_src = server_path + 'answer_media_' + answerId +'.' + image_extension;
+       var cropped_image_name = 'answer_media_' + answerId +'.' + image_extension;
+       var full_image_name = "___answer_media_" +answerId + '.' +image_extension;
+       var image_updated_date = new Date()  ;
+       if( ThisQuestion.question_type == 0){
+         current_answer.media_optional['media_name'] = cropped_image_name ;
+         current_answer.media_optional['media_type'] = 0;
+         current_answer.media_optional['Media_directory'] = cropped_image_src ;
+         current_answer.media_optional['image_cropped'] = cropped_image_name
+         current_answer.media_optional['image_full'] = full_image_name ;
+         current_answer.media_optional['image_updated_date'] = image_updated_date ;
+       }else if (ThisQuestion.question_type == 1){
+         current_answer['media_name'] = cropped_image_name ;
+         current_answer['media_type'] = 0;
+         current_answer['Media_directory'] = cropped_image_src ;
+         current_answer['image_cropped'] = cropped_image_name
+         current_answer['image_full'] = full_image_name ;
+         current_answer['image_updated_date'] = image_updated_date ;
+       }
+       $timeout(function(){
+          $rootScope.$apply();
+          $timeout(function(){
+            $rootScope.close_current_image_uploader();
+          } , 150);
+          $timeout(function(){
+            $('.highlighted_progress').css({width : 0 + '%' });
+          } , 300);
+      }, 300);
+    }; // end complete
+
+   var formImageData = new FormData();
+   formImageData.append('media_field' , $rootScope.media_image_uploader[0].files[0]   );
+   formImageData.append('height' , height  );
+   formImageData.append('width' , width  );
+   formImageData.append('x' ,x  );
+   formImageData.append('y' , y  );
+   formImageData.append('questions' , $rootScope._questions_ );
+
+   var cropping_url = $rootScope.server_ip + "api/" + $rootScope.app_id +"/question/"+ questionId +  "/answer/" + answerId + "/cropping_system" ;
    $http({
      url : cropping_url ,
      method : "POST" ,
      data : formImageData ,
      headers : { 'Content-Type' : undefined} ,
      uploadEventHandlers : {
-     progress : function (event ){
-             console.log( "Uploaded "+event.loaded+" bytes of "+event.total );
-             var percent = Math.round (event.loaded / event.total) * 100;
-             $('.highlighted_progress').css({width : percent + '%' });
-             if (event.loaded == event.total) {
+       progress : function (event) {
+         console.log( "Uploaded "+event.loaded+" bytes of "+event.total );
+         var percent = Math.round (event.loaded / event.total) * 100;
+         $('.highlighted_progress').css({width : percent + '%' });
+         if (event.loaded == event.total) {
 
-             }
-        }
-    }
+         }
+       }
+     }
    }).then((response)=>{
       $timeout(function(){
-            completeHandler();
+
+            completeHandler(response.data.img_path);
       },1000);
-   });
+   });;
+  };
 
-
- };
    $rootScope.answer_classes_cases = (question_settings) =>  {
      // if(question_settings == undefined ) return ;
      return 'super_size';
@@ -639,6 +735,7 @@ apps.controller("apps-controller" , [
        } , 300 );
     });
   };
+
   // => init tooltip
   $rootScope.init_bootstrap_tooltip = ( ) => {
       return $('[data-toggle="tooltip"]').tooltip();

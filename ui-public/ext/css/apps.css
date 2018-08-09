@@ -4091,3 +4091,67 @@ textarea.quest-title-edit , textarea.quest-title-edit:focus , textarea.quest-tit
   border:0px;
   outline: none;
 }
+ul.answer-lists {
+  display: block;
+  position: relative;
+  /* overflow: hidden; */
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
+  margin-top: 10px;
+}
+ul.answer-lists  li {
+  display: inline-block;
+  width: 24%;
+  padding: 0px;
+  margin: 0px;
+  border: 1px dashed #eee;
+  padding: 5px;
+  color: #c3c3c3;
+  font-size: 16px;
+  line-height: 30px;
+}
+.media-options , .media-options:focus , .media-options:hover {
+  display: block;
+  position: relative;
+  border: none;
+  outline: none;
+  width: 100%;
+  padding: 0px 10px;
+  margin-top: 0px;
+}
+.media-cases {
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+.media-there {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  color: #eae9e9;
+  font-size: 800%;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  height:120px;
+  width:145px;
+  margin: 0px auto;
+}
+.media-there > span.fa-picture-o {
+  margin-top: 10px;
+}
+
+.media-img {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover ;
+}
+.media-vid {
+  display: block;
+}
+.image-responsive {
+  width: 98%;
+  height: auto;
+  display: block;
+  margin: 0px auto;
+}

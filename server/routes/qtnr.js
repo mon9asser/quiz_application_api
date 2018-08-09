@@ -5027,92 +5027,116 @@ qtnrRouters.get("/:app_id/application/get/all"  , ( req , res )=>{
 });
 
 
+// http://localhost:9000/api/5b6b512976144b09ca46a362/question/5b6b512a76144b09ca46a4f5/answer/5b6b512a76144b09ca46a4f60/cropping_system
+qtnrRouters.post("/:app_id/question/:question_id/answer/:answer_id/cropping_system"  , question_answer_images.single("media_field") , ( req , res )=> {
+  var questionId = req.params.question_id;
+  var answerId = req.params.answer_id;
+  var appId = req.params.app_id;
 
-qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answer_images.single("media_field") , ( req , res )=>{
-  /*Params data*/
-  //model
-  //question_id
-  /*body data*/
-  //cropping_data model_type == 'answer'
-  console.log("+++++++++++++++++++++++++++++++++++++++++++++++++");
+  var file_path = 'ui-public/themeimages/';
+  var file_name = '___answer_media_' + answerId ;
+  var imagePath =  req.file.path ;
+  var fileExtension = path.extname(imagePath);
+  var new_filename = "answer_media_"+answerId+fileExtension.toLowerCase();
+  var new_file_path = file_path + new_filename ;
+  var main_filename = req.file.originalname ;
+  var main_file_path = file_path  + req.file.originalname ;
 
-  var model_type = req.params.model ;
+  if(! fs.existsSync(main_file_path)){
+    res.send({ status_code : 0 , message : 'Failed' , error : { message : "You didn't upload this image , please try later ..."}  });
+    return false ;
+  }
+
+  if(req.body.width == undefined || req.body.height == undefined ||req.body.x == undefined || req.body.y == undefined)
+    {
+      res.send({ status_code : 0 , message : 'Failed' , error : { message : "Image Coordinates are required"}  });
+      return false ;
+    }
+
+   Jimp.read( main_file_path).then( Image => {
+     Image.crop( parseInt(req.body.x) , parseInt(req.body.y) , parseInt(req.body.width) , parseInt(req.body.height))
+     .write(new_file_path);
+
+     // ==> Rename main file with double perfix
+     var new_file_path_ = file_path + '___' +new_filename ;
+     if( fs.existsSync (imagePath) ){
+       fs.rename( imagePath  , new_file_path_  , ( err ) => {  });
+     }
+   }).catch(error => {
+     res.send(error);
+     return false;
+   });
+
+   qtnr.findOne({ _id:appId }).then( (   qtnairsDocument ) => {
+     if(!qtnairsDocument){
+       res.send({ status_code : 0 , message : 'Failed' , error : { message : "Application doesn't exists ..."}  });
+       return false ;
+     }
+     var questions = qtnairsDocument.questions ;
+
+     var this_question = questions.find( x => x._id == questionId ) ;
+     if(this_question == undefined ){
+       res.send({ status_code : 0 , message : 'Failed' , error : { message : "This question doesn't exists ..."}  });
+       return false ;
+     }
+
+     var this_answer = this_question.answers_format.find(x => x._id == answerId );
+     if(this_answer == undefined ){
+       res.send({ status_code : 0 , message : 'Failed' , error : { message : "This answer doesn't exists ..."}  });
+       return false ;
+     }
+
+     if(this_question.question_type == 0 ){
+       if( this_answer.media_optional == undefined )
+       this_answer['media_optional'] = new Object();
+
+       this_answer.media_optional['media_name'] = new_filename;
+       this_answer.media_optional['media_type']= 0;
+       this_answer.media_optional['Media_directory']= config.server_ip + 'themeimages/'+ new_filename;;
+       this_answer.media_optional['image_cropped']= new_filename;
+       this_answer.media_optional['image_full']= '___' +new_filename  ;
+       this_answer.media_optional['image_updated_date']= new Date();
+     }
+     if(this_question.question_type == 1 ){
+       this_answer['media_name'] = new_filename;
+       this_answer['media_type']= 0;
+       this_answer['Media_directory']= config.server_ip + 'themeimages/'+ new_filename;;
+       this_answer['image_cropped']= new_filename;
+       this_answer['image_full']= '___' +new_filename  ;
+       this_answer['image_updated_date']= new Date();
+     }
+
+     qtnairsDocument.markModified('questions');
+     qtnairsDocument.save().then((data)=>{
+        res.send( {img_path : config.server_ip + 'themeimages/'+ new_filename} );
+         return false;
+      });
+   });
+});
+qtnrRouters.post("/:app_id/question/:question_id/cropping_system"  , question_answer_images.single("media_field") , ( req , res )=>{
   var appId = req.params.app_id ;
   var questionId = req.params.question_id;
 
-  var file_path = 'ui-public/themeimages/';
-  var file_name = '_' ;
-  if( req.params.model == "question" )
-    file_name =  "question_" + questionId
-
   var imagePath =  req.file.path ;
   var fileExtension = path.extname(imagePath);
+  var file_path = 'ui-public/themeimages/';
   var new_filename = "question_"+questionId+fileExtension.toLowerCase();
   var new_file_path = file_path + new_filename ;
   var main_filename = req.file.originalname ;
   var main_file_path = file_path  + req.file.originalname ;
 
-  // ==> Case it answer
-  if(req.params.model == "answer"){
-    if( req.body.answer_id == undefined )
-      {
-        res.send("answer_id is not defined");
-        return false;
-      }
-      // answer_media_5b5f668678114e0ae9ce1ab0.png
-      // answer_text_5b471f1d0bfbcc1d20c8232a.png
-      // ==> File Path here
-      file_name =  "answer_media_" + answer_id ;
-      new_filename = "answer_media_"+answer_id+fileExtension.toLowerCase();
-      new_file_path = file_path + new_filename ;
-
-  }
-
   if(! fs.existsSync(main_file_path)){
-    console.log("file Does not exists");
-    res.send( { error : 'This file does not exits' });
+    res.send({ status_code : 0 , message : 'Failed' , error : { message : "You didn't upload this image , please try later ..."}  });
     return false ;
   }
 
   if(req.body.width == undefined || req.body.height == undefined ||req.body.x == undefined || req.body.y == undefined)
-    return false ;
+    {
+      res.send({ status_code : 0 , message : 'Failed' , error : { message : "Image Coordinates are required"}  });
+      return false ;
+    }
 
-     // sharp(main_file_path)
-  // .extract({ left: parseInt(req.body.x), top:  parseInt(req.body.y) , width:   parseInt(req.body.width) , height: parseInt(req.body.height) })
-  // .toFile(new_file_path, function(err) {
-  //   if(err) throw err;
-  //   // Extract a region of the input image, saving in the same format.
-  // }) ;
-
-
-  // setTimeout(function(){
-  //   fs.rename( main_file_path , file_path + '___'+new_filename )
-  // } , 500 );
-
-
-  // im.convert([ main_file_path ,'-crop', resizing , new_file_path ], function( err, stdout ){
-  //
-  //
-  //   if (err) {
-  //     console.log("ERR im -----");
-  //     console.log(err);
-  //     throw err;
-  //   }
-  //   var new_file_path_ = file_path + '___' +new_filename ;
-  //   fs.rename( imagePath  , new_file_path_  , (err)=>{
-  //
-  //      if(err) {
-  //        console.log("ERR RENAME +++++");
-  //        console.log(err);
-  //
-  //        throw err} ;
-  //    });
-  // });
-  Jimp.read( main_file_path , (err, Image) => {
-      if (err) {
-        res.send({ status_code : 0 , error : err , message : 'Failed'  });
-        return false ;
-      };
+    Jimp.read( main_file_path).then( Image => {
       Image.crop( parseInt(req.body.x) , parseInt(req.body.y) , parseInt(req.body.width) , parseInt(req.body.height))
       .write(new_file_path);
 
@@ -5121,134 +5145,33 @@ qtnrRouters.post("/:app_id/:model/:question_id/cropping_system"  , question_answ
       if( fs.existsSync (imagePath) ){
         fs.rename( imagePath  , new_file_path_  , ( err ) => {  });
       }
-  });
-  // ==> Saving Data
-  qtnr.findOne({ _id:appId }).then( (   qtnairsDocument ) => {
-      var questions = qtnairsDocument.questions ;
-      var this_question = questions.find( x => x._id == questionId ) ;
-      if(this_question != undefined ){
-        if( model_type == 'question'){
-          if( this_question.media_question == undefined )
-          this_question['media_question'] = new Object();
+    }).catch(error => {
+      console.log(error);
+    });
 
-          if(this_question.media_question.media_type == undefined )
-          this_question.media_question['media_type'] = '';
-          if(this_question.media_question.media_name == undefined )
-          this_question.media_question['media_name'] = '';
-          if(this_question.media_question.media_field == undefined )
-          this_question.media_question['media_field'] = '';
-          if(this_question.media_question.Media_directory == undefined )
-          this_question.media_question['Media_directory'] = '';
-          if(this_question.media_question.image_cropped == undefined )
-          this_question.media_question['image_cropped'] = '';
-          if(this_question.media_question.image_full == undefined )
-          this_question.media_question['image_full'] = '';
-          if(this_question.media_question.image_updated_date == undefined )
-          this_question.media_question['image_updated_date'] = '';
-
-          this_question.media_question['media_type'] = 0;
-          this_question.media_question['media_name'] = new_filename
-          this_question.media_question['media_field'] = new_file_path ;
-          this_question.media_question['Media_directory'] = config.server_ip + 'themeimages/'+ new_filename;
-          this_question.media_question['image_cropped'] = new_filename;
-          this_question.media_question['image_full'] =   '___' +new_filename  ;
-          this_question.media_question['image_updated_date'] = new Date();
-
-        }else if( model_type == 'answer' ) {
-          if(req.body.answer_id == undefined )
-          {
-            res.send("Undefined 'answer_id'");
-            return false;
-          }
-
-          var answer_id = req.body.answer_id ;
-          var this_answer = this_question.answers_format.find(x => x._id == answer_id );
-          if(this_answer == undefined )
-          {
-            res.send("Undefined Answer !");
-            return false ;
-          }
-          // ==> Media with text
-          if(this_question.question_type == 0 ){
-            if( this_answer.media_optional == undefined )
-            this_answer['media_optional'] = new Object();
-
-            if(this_answer.media_optional.media_name == undefined )
-            this_answer.media_optional['media_name'] = ''
-
-            if( this_answer.media_optional.media_type== undefined )
-            this_answer.media_optional['media_type'] = '';
-
-            if( this_answer.media_optional.Media_directory== undefined )
-            this_answer.media_optional['Media_directory'] = '';
-
-            if( this_answer.media_optional.image_cropped== undefined )
-            this_answer.media_optional['image_cropped'] = '';
-
-            if( this_answer.media_optional.image_full== undefined )
-            this_answer.media_optional['image_full'] = '';
-
-            if( this_answer.media_optional.image_updated_date== undefined )
-            this_answer.media_optional['image_updated_date'] = '';
-
-
-            this_answer.media_optional.media_name = new_filename;
-            this_answer.media_optional.media_type= 0;
-            this_answer.media_optional.Media_directory= config.server_ip + 'themeimages/'+ new_filename;;
-            this_answer.media_optional.image_cropped= new_filename;
-            this_answer.media_optional.image_full= '___' +new_filename  ;
-            this_answer.media_optional.image_updated_date= new Date();
-
-
-          }
-          if( this_question.question_type == 1 ){
-
-                if(this_answer.media_name == undefined )
-                this_answer['media_name'] = ''
-
-                if( this_answer.media_type== undefined )
-                this_answer['media_type'] = '';
-
-                if( this_answer.Media_directory== undefined )
-                this_answer['Media_directory'] = '';
-
-                if( this_answer.image_cropped== undefined )
-                this_answer['image_cropped'] = '';
-
-                if( this_answer.image_full== undefined )
-                this_answer['image_full'] = '';
-
-                if( this_answer.image_updated_date== undefined )
-                this_answer['image_updated_date'] = '';
-
-
-                this_answer.media_name = new_filename;
-                this_answer.media_type= 0;
-                this_answer.Media_directory= config.server_ip + 'themeimages/'+ new_filename;;
-                this_answer.image_cropped= new_filename;
-                this_answer.image_full= '___' +new_filename  ;
-                this_answer.image_updated_date= new Date();
-
-          }
-
-
-
-
-
-
-
-        }
+   qtnr.findOne({ _id:appId }).then( (   qtnairsDocument ) => {
+     var questions = qtnairsDocument.questions ;
+     var this_question = questions.find( x => x._id == questionId ) ;
+     if(this_question == undefined ){
+       res.send({ status_code : 0 , message : 'Failed' , error : { message : "This question doesn't exists ..."}  });
+       return false ;
       }
+      if(this_question.media_question == undefined )
+      this_question['media_question'] = new Object();
+      this_question.media_question['media_type'] = 0;
+      this_question.media_question['media_name'] = new_filename
+      this_question.media_question['media_field'] = new_file_path ;
+      this_question.media_question['Media_directory'] = config.server_ip + 'themeimages/'+ new_filename;
+      this_question.media_question['image_cropped'] = new_filename;
+      this_question.media_question['image_full'] =   '___' +new_filename  ;
+      this_question.media_question['image_updated_date'] = new Date();
 
       qtnairsDocument.markModified('questions');
       qtnairsDocument.save().then((data)=>{
         res.send( data );
+         return false; 
       });
-  });
-  // console.log(req.body.media_dimentionals);
-  // console.log(req.body.questions);
-  // console.log(req.file);
-
+   });
 });
 
 
