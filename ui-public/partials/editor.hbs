@@ -33,7 +33,7 @@
                <!-- case it vimeo or youtube  -->
                <iframe ng:src="{> _questions_[question_index].media_question.embed_path | trust_iframe_url <}" ng:if="_questions_[question_index].media_question.video_type == 1 || _questions_[question_index].media_question.video_type == 0" width="100%" height="120px"></iframe>
                <!-- case it mp4  -->
-               <video ng:if="_questions_[question_index].media_question.video_type == 2">
+               <video ng:if="_questions_[question_index].media_question.video_type == 2" controls>
                  <source ng:src="{> _questions_[question_index].media_question.mp4_option.mp4_url | trust_iframe_url <}" type="video/mp4">
                  <source ng:src="{> _questions_[question_index].media_question.mp4_option.ogg_url | trust_iframe_url <}" type="video/ogg">
                </video>
@@ -75,49 +75,71 @@
          <div style="display:none;"class="x-editor-x-body" id="answers-pt">
            <!-- Multiple Choices and Media choices -->
            <div ng:if="_questions_[question_index].question_type <= 1" class="multi-answers-part">
-              <ul class="answer-lists">
-                <li ng:repeat="(answer_keys , answer_value ) in _questions_[question_index].answers_format track by $index">
-                  <!-- Answer Controller   -->
+              <ul class="choices-part" id="block-answers">
+                 <li data-answer-id="{>answer_value._id<}" class="answers_x one_column" ng:repeat="(answer_key , answer_value) in _questions_[question_index].answers_format track by $index" ng:class="make_answer_classes(answer_value)">
+                    <span class="fa fa-bars drag-tools"  data-toggle="tooltip" title="Move" ></span>
+                   <!-- Answer Controlling -->
+                   <ul class="answer-pt-controller">
+                     <li  ng:if="answer_value.is_correct != undefined" data-toggle="tooltip" title="Correct Answer" ng:click="make_this_correct_incorrect_answer(answer_value._id)">
+                       <span class="fa fa-check"></span>
+                     </li>
+                     <li data-toggle="tooltip" title="Delete" ng:click="delete_this_answer(answer_value._id)">
+                       <span class="fa fa-trash"></span>
+                     </li>
+                     <li data-toggle="tooltip" title="Media Options"  ng:click="add_new_media_for_answer(answer_value._id , this)">
+                       <span class="fa fa-file-image-o"></span>
+                     </li>
 
-                  <!-- Case it with => 0 , 1 -->
-                  <div ng:if="_questions_[question_index].question_type == 0 || _questions_[question_index].question_type == 1">
-                    <!-- Media -->
-                    <div class="media-cases">
-                      <button ng:click="add_new_media_for_answer(answer_value._id)" name="button">add media answer</button>
-                      <!-- Case there is no any media -->
-
-                      <div class="media-there text-center" ng:if="( answer_value.Media_directory == undefined  &&   _questions_[question_index].question_type == 1 )  ">
-                        <span class="fa fa-picture-o"></span>
-                      </div>
-
-                      <!-- Case Image media -->
-                      <!-- <div ng:if="_questions_[question_index].question_type == 0 && answer_value.media_optional != undefined &&  answer_value.media_optional.media_type ==0" ng:style="loading_answer_media_image( answer_value.media_optional.Media_directory , answer_value.media_optional.image_updated_date)" class="media-there media-img"></div>
-                      <div ng:if="_questions_[question_index].question_type == 1 && answer_value.Media_directory != undefined && answer_value.media_type ==0" ng:style="loading_answer_media_image_media_choices( answer_value.Media_directory , answer_value.image_updated_date)" class="media-there media-img"></div> -->
-
-                      <img ng:if="_questions_[question_index].question_type == 0 && answer_value.media_optional != undefined &&  answer_value.media_optional.media_type ==0" ng:src="{>answer_value.media_optional.Media_directory + '?' + answer_value.media_optional.image_updated_date <}" class="image-responsive" alt="Image">
-                      <img ng:if="_questions_[question_index].question_type == 1 && answer_value.Media_directory != undefined && answer_value.media_type == 0" ng:src="{>answer_value.Media_directory + '?' + answer_value.image_updated_date <}" alt="Image"  class="image-responsive">
-
-                      <!-- Case Video media -->
-                      <div class="media-there media-vid" ng:if="(answer_value.media_optional != undefined || answer_value.Media_directory != undefined) && (answer_value.media_type ==1 || answer_value.media_optional.media_type ==1)">
-                        <iframe ng:if="answer_value.media_optional != undefined && (answer_value.media_optional.video_type == 0 || answer_value.media_optional.video_type == 1 )" ng:src="{> answer_value.media_optional.embed_path | trust_iframe_url <}" width="100%" height="120px"></iframe>
-                        <iframe ng:if="answer_value.Media_directory != undefined && (answer_value.video_type == 0 || answer_value.video_type == 1 )" ng:src="{> answer_value.embed_path | trust_iframe_url <}" width="100%" height="120px"></iframe>
-                        <video ng:if="answer_value.media_optional != undefined || answer_value.Media_directory != undefined && (answer_value.video_type == 2 || answer_value.media_optional.video_type == 2 )" width="100%" height="120px">
-                            <source ng:if="answer_value.Media_directory != undefined" ng:src="{>answer_value.mp4_option.mp4_url | trust_iframe_url <}" type="video/mp4">
-                            <source ng:if="answer_value.Media_directory != undefined" ng:src="{>answer_value.mp4_option.ogg_url | trust_iframe_url <}" type="video/ogg">
-                            <source ng:if="answer_value.media_optional != undefined" ng:src="{>answer_value.mp4_url | trust_iframe_url <}" type="video/mp4">
-                            <source ng:if="answer_value.media_optional != undefined" ng:src="{>answer_value.ogg_url | trust_iframe_url <}" type="video/ogg">
+                   </ul>
+                   <!-- answer media for 0 -->
+                   <div ng:if="_questions_[question_index].question_type == 0" class="media-data-answer">
+                     <!-- Case it Image -->
+                     <img ng:if=" answer_value.media_optional != undefined &&  answer_value.media_optional.media_type ==0" ng:src="{>answer_value.media_optional.Media_directory + '?' + answer_value.media_optional.image_updated_date <}" class="image-responsive" alt="Image">
+                     <!-- Case it video  -->
+                     <div ng:if="answer_value.media_optional != undefined && answer_value.media_optional.media_type ==1" class="video_case text-center">
+                        <!-- Case video iframes => youtube/ vimeo -->
+                        <iframe class="iframe-selector" ng:if="(answer_value.media_optional.video_type == 0 || answer_value.media_optional.video_type == 1 )" ng:src="{> answer_value.media_optional.embed_path | trust_iframe_url <}" width="100%" height="120px"></iframe>
+                        <!-- Case video tags => html mp4 video -->
+                        <video ng:if="answer_value.media_optional.video_type == 2 " width="100%" height="120px" controls>
+                            <source ng:if="answer_value.media_optional.mp4_option != undefined" ng:src="{>answer_value.media_optional.mp4_option.mp4_url | trust_iframe_url <}" type="video/mp4">
+                            <source ng:if="answer_value.media_optional.mp4_option != undefined" ng:src="{>answer_value.media_optional.mp4_option.ogg_url | trust_iframe_url <}" type="video/ogg">
                         </video>
-                      </div>
-
-
-
-
-                    </div>
-                    <!-- Input -->
-                    <input ng:if="_questions_[question_index].question_type == 0" class="media-options" type="text"  ng:model='answer_value.value'>
-                  </div>
-                </li>
+                     </div>
+                   </div>
+                   <!-- answer media for 1 -->
+                   <div ng:if="_questions_[question_index].question_type == 1" class="media-data-answer">
+                     <!-- Case There is not any media  -->
+                     <div ng:if='answer_value.media_type == undefined' ng:click="add_new_media_for_answer(answer_value._id , this)" class="not-media-there">
+                        <img ng:src="{> server_ip + 'img/media-default-icone.jpg'<}" class="image-responsive" alt="Image">
+                     </div>
+                     <!-- Case it Image -->
+                     <img ng:if="answer_value.Media_directory != undefined && answer_value.media_type == 0" ng:src="{>answer_value.Media_directory + '?' + answer_value.image_updated_date <}" alt="Image"  class="image-responsive">
+                     <!-- Case it video  -->
+                     <div ng:if="answer_value.embed_path != undefined && answer_value.media_type ==1" class="video_case text-center">
+                        <!-- Case video iframes => youtube/ vimeo -->
+                        <iframe class="iframe-selector" ng:if="(answer_value.video_type == 0 || answer_value.video_type == 1 )" ng:src="{> answer_value.embed_path | trust_iframe_url <}" width="100%" height="120px"></iframe>
+                        <!-- Case video tags => html mp4 video -->
+                        <video ng:if="answer_value.video_type == 2 " class="video-mp4" controls>
+                            <source ng:if="answer_value.mp4_option != undefined" ng:src="{>answer_value.mp4_option.mp4_url | trust_iframe_url <}" type="video/mp4">
+                            <source ng:if="answer_value.mp4_option != undefined" ng:src="{>answer_value.mp4_option.ogg_url | trust_iframe_url <}" type="video/ogg">
+                        </video>
+                     </div>
+                   </div>
+                   <!-- Answer Text -->
+                   <div ng:class="(answer_value.media_optional != undefined)?'add_dashed_border':''"  ng:if="answer_value.value != undefined" class="text-answers">
+                     <input ng:model="answer_value.value" type="text" class="writanswer-input editor-all-ans-data">
+                   </div>
+                 </li>
               </ul>
+
+              <div class="add-new-option" ng:click="add_new_answer(_questions_[question_index]._id)">
+                     Add new option
+              </div>
+           </div>
+
+           <!-- True and false choices -->
+           <div ng:if="_questions_[question_index].question_type == 2" class="multi-answers-part">
+
            </div>
 
          </div>
