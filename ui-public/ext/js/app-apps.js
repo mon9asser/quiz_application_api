@@ -336,20 +336,23 @@ apps.controller("apps-controller" , [
        else
        $rootScope._questions_.splice( atIndex , 0 ,  question_object );
        // ==> Selecting according to question index
-        $rootScope.highlighted_question(question_object._id);
-        // ==> Slide To Bottom
-        var scroll_top = 0 ;
-        if($rootScope._questions_.length >= 8 ){
-        scroll_top = 1000000000000
-        }else  scroll_top = 0
-        $(".qsdragged-list , html , body").animate({
-        scrollTop: scroll_top
-        }, 10 );
-        // ==> Storing Question into DB
-     $rootScope.storing_questions_into_database();
-     $timeout(function(){
-       $rootScope.$apply();
-     } , 300 )
+        $timeout(function(){
+          $rootScope.highlighted_question(question_object._id);
+          // ==> Slide To Bottom
+          var scroll_top = 0 ;
+          if($rootScope._questions_.length >= 8 ){
+          scroll_top = 1000000000000
+          }else  scroll_top = 0
+          $(".qsdragged-list , html , body").animate({
+          scrollTop: scroll_top
+          }, 10 );
+          // ==> Storing Question into DB
+           $rootScope.storing_questions_into_database();
+           $timeout(function(){
+             $rootScope.$apply();
+           } , 300 )
+        });
+
   };
   // ==> Expan collapse between editor
   $rootScope.expand_collapsed_items = function (id){
@@ -371,6 +374,9 @@ apps.controller("apps-controller" , [
             }, 500 );
           }
         };
+  $rootScope.image_source_link = (src) => {
+    return src ;
+  }
   // => Mark Selected Question
   $rootScope.highlighted_question = (questionId) => {
         // => detect current question is exists or not
@@ -627,8 +633,8 @@ apps.controller("apps-controller" , [
        if ( $rootScope.media_type == 1 ) $rootScope.storing_video_for_media_answer( );
      }
      $timeout(function(){
-        $rootScope.close_current_image_uploader();
-     } , 300);
+          $rootScope.close_current_image_uploader();
+     } , 800 );
    };
 
    $rootScope.storing_cropped_image_for_media_question = (   ) => {
@@ -666,9 +672,7 @@ apps.controller("apps-controller" , [
             }
           $timeout(function(){
             $rootScope.$apply();
-            $timeout(function(){
-              $rootScope.close_current_image_uploader();
-            } , 150);
+
             $timeout(function(){
               $('.highlighted_progress').css({width : 0 + '%' });
             } , 300);
@@ -790,9 +794,7 @@ apps.controller("apps-controller" , [
              }
              $timeout(function(){
                 $rootScope.$apply();
-                $timeout(function(){
-                  $rootScope.close_current_image_uploader();
-                } , 150);
+
                 $timeout(function(){
                   $('.highlighted_progress').css({width : 0 + '%' });
                 } , 300);
@@ -955,10 +957,67 @@ sort: false  */
       }
     });
   }
+  // ==> Sorting Questions
+  $rootScope.init_drag_drop = () => {
+    Sortable.create (document.getElementById("qs-sortable") , {
+      sort: false,
+       disabled: false,
+       animation: 180 ,
+        group: {
+           name: "question-list",
+           pull: "clone",
+           revertClone: false,
+       },
+       onMove : function (evt){
+
+           var dragged = evt.dragged;
+               var draggedRect = evt.draggedRect;
+               var related = evt.related;
+               var relatedRect = evt.relatedRect;
+
+           var ParentID = $(dragged).parent().prop("id");
+           var ParentEl = $(dragged).parent();
+           if(ParentID == "qs-sortable") {
+             ParentEl.find(dragged).html("");
+             // set animation
+             // ParentEl.find(dragged).addClass("animated wobble");
+             ParentEl.find(dragged).css({
+               minHeight : '40px' ,
+               background : "ghostwhite"
+             });
+             ParentEl.find(dragged).remove();
+           }
+
+        } ,
+       onEnd  : function (evt) {
+         var Item = evt.item;
+         evt.oldIndex;
+		     evt.newIndex;
+         var question_type = Item.getAttribute('data-question-type') ;
+         // ==> Remove current gost
+          $rootScope.add_new_question ( question_type , evt.newIndex ,  null ) ;
+         $timeout(function(){
+           $("#docQuestions").find("li.question_bult_in").remove();
+         } , 10);
+       }
+    })
+    Sortable.create( document.getElementById("docQuestions") , {
+       ghostClass: 'shadow_element' ,
+        group: "question-list" ,
+        disabled: false ,
+        animation: 250 ,
+        handle: '.drag-handler',
+        onStart : function (evt) {} ,
+        onEnd  : function (evt) {}
+    });
+
+  };
   // ==> Calling Methods Here
+  $rootScope.init_drag_drop();
   $timeout(function(){
     $rootScope.init_swiperJs();
     $rootScope.init_bootstrap_tooltip();
+
   }, 400);
   //
 

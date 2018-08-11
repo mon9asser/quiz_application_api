@@ -51,27 +51,27 @@
     <input id="cropping-image-height" type="hidden" name="" value="">
     <input id="cropping-image-x" type="hidden" name="" value="">
     <input id="cropping-image-y" type="hidden" name="" value="">
-    <input id="file_extension" type="text" name="" value="">
-    
+    <input id="file_extension" type="hidden" name="" value="">
+
     <div class="editor-contents" ng:controller="apps-controller">
       <!-- ++++ Start Editor Contents ++++  -->
       <div class="side-left-bar">
         <!-- ++++ Start left bar ++++  -->
         <div class="question-data">
           <ul id="qs-sortable" class="question-x">
-            <li id="question-muliple-choices" data-type="qst" data-question-type="0" question-data="partials/multi-choices.hbs" ng:click="add_new_question(0)">
+            <li class="question_bult_in" id="question-muliple-choices" data-type="qst" data-question-type="0" question-data="partials/multi-choices.hbs" ng:click="add_new_question(0)">
                  <span class="qs-type" title="Multiple Choices">
                     <i class="icon-insert-template"></i>
                  </span>
                  <span class="titles">Choices</span>
             </li>
-            <li id="question-media-choices" data-type="qst" data-question-type="1" question-data="partials/media-choices.hbs" ng:click="add_new_question(1)">
+            <li class="question_bult_in" id="question-media-choices" data-type="qst" data-question-type="1" question-data="partials/media-choices.hbs" ng:click="add_new_question(1)">
               <span class="qs-type" title="Media Choices">
                  <i class="icon-image"></i>
               </span>
               <span class="titles">Media</span>
             </li>
-            <li id="question-boolean-choices" data-type="qst" data-question-type="2" question-data="partials/true-false.hbs" ng:click="add_new_question(2)">
+            <li class="question_bult_in" id="question-boolean-choices" data-type="qst" data-question-type="2" question-data="partials/true-false.hbs" ng:click="add_new_question(2)">
              <span class="qs-type" title="Ture/False">
                 <i class="icon-check-circle"></i>
              </span>
