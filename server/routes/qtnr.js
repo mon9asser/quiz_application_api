@@ -287,6 +287,28 @@ qtnrRouters.patch("/:app_id/app/setup_settings", auth_verify_api_keys_tokens , (
     });
   });
 });
+
+qtnrRouters.patch("/:app_id/app/setup_settings/storing" , (req,res)=>{
+  var app_id = req.params.app_id;
+  qtnr.findById(app_id , (err,d)=>{
+    if(err || !d){
+      return new Promise((resolve, reject) => {
+         res.status(401).send(notes.Errors.Error_Doesnt_exists("Application"));
+     });
+    }
+    d.settings = req.body.settings;
+    d.questionnaire_title = req.body.questionnaire_title;
+    d.markModified("settings");
+    d.save().then((success)=>{
+      if(success)
+       {
+         res.send({
+           succ : success
+         })
+       }
+    });
+  });
+});
 // Create settings for quiz or survey ( remember this part => surv/quiz for used with /init route)
 qtnrRouters.patch("/:app_id/app/edit", auth_verify_generated_tokens ,  (req, res) => {
     var user = req.verified_user;
@@ -5169,7 +5191,7 @@ qtnrRouters.post("/:app_id/question/:question_id/cropping_system"  , question_an
       qtnairsDocument.markModified('questions');
       qtnairsDocument.save().then((data)=>{
         res.send( data );
-         return false; 
+         return false;
       });
    });
 });

@@ -76,7 +76,7 @@
            <!-- Multiple Choices and Media choices -->
            <div ng:if="_questions_[question_index].question_type <= 1" class="multi-answers-part">
               <ul class="choices-part" id="block-answers">
-                 <li data-answer-id="{>answer_value._id<}" class="answers_x one_column" ng:repeat="(answer_key , answer_value) in _questions_[question_index].answers_format track by $index" ng:class="make_answer_classes(answer_value)">
+                 <li data-answer-id="{>answer_value._id<}" class="answers_x" ng:repeat="(answer_key , answer_value) in _questions_[question_index].answers_format track by $index" ng:class="make_answer_classes(answer_value , _questions_[question_index].question_type)">
                     <span class="fa fa-bars drag-tools"  data-toggle="tooltip" title="Move" ></span>
                    <!-- Answer Controlling -->
                    <ul class="answer-pt-controller">
@@ -89,7 +89,6 @@
                      <li data-toggle="tooltip" title="Media Options"  ng:click="add_new_media_for_answer(answer_value._id , this)">
                        <span class="fa fa-file-image-o"></span>
                      </li>
-
                    </ul>
                    <!-- answer media for 0 -->
                    <div ng:if="_questions_[question_index].question_type == 0" class="media-data-answer">
@@ -139,14 +138,24 @@
 
            <!-- True and false choices -->
            <div ng:if="_questions_[question_index].question_type == 2" class="multi-answers-part">
-
+             <ul class="answer-list-booleans">
+               <li ng:repeat="(answer_key , answer_value) in _questions_[question_index].answers_format track by $index" ng:class="make_answer_classes(answer_value , _questions_[question_index].question_type)" class="answer-classes">
+                 <!-- Answer Controlling -->
+                 <ul class="answer-pt-controller">
+                   <li  ng:if="answer_value.is_correct != undefined" data-toggle="tooltip" title="Correct Answer" ng:click="make_this_correct_incorrect_answer(answer_value._id)">
+                     <span class="fa fa-check"></span>
+                   </li>
+                 </ul>
+                 <input type="text" name="" value="" ng:model="answer_value.boolean_value">
+               </li>
+             </ul>
            </div>
 
          </div>
        </li>
       <li>
         <div class="x-editor-x-title" ng:click="expand_collapsed_items('#Settings-pt')">
-           Question Settings
+           Answer Settings
         </div>
         <div style="display:none;" class="x-editor-x-body" id="Settings-pt">
           <div class="col-sm-12">
@@ -169,40 +178,40 @@
                     <li class="required_qs">
                       <div class="checkbox-toggle answer-settins">
                          <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                         <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
+                         <span class="title-checkbox"  ng:model="_questions_[question_index].answer_settings.is_required" data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
                            Required
                              <i class="help-links">?</i>
                          </span>
                       </div>
                     </li>
-                    <li class="single_response_qs">
+                    <li class="single_response_qs" ng:if="_questions_[question_index].question_type <= 1">
                       <div class="checkbox-toggle answer-settins">
-                         <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                         <input ng:model="_questions_[question_index].answer_settings.single_choice" ng:change="change_answer_of_single_choices(_questions_[question_index].answer_settings.single_choice)" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
                          <span class="title-checkbox"  data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
                            Single Response
                            <i class="help-links">?</i>
                          </span>
                       </div>
                    </li>
-                   <li class="randomize_qs">
+                   <li class="randomize_qs" ng:if="_questions_[question_index].question_type <= 1">
                      <div class="checkbox-toggle answer-settins">
-                         <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                         <input ng:model="_questions_[question_index].answer_settings.is_randomized" ng:change="is_randomized_answer_with(_questions_[question_index].answer_settings.is_randomized)" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
                          <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
                            Randomize
                            <i class="help-links">?</i>
                          </span>
                       </div>
                    </li>
-                   <li class="super_sizer_qs">
+                   <li class="super_sizer_qs" ng:if="_questions_[question_index].question_type <= 1">
                      <div class="checkbox-toggle answer-settins">
-                         <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                         <input ng:model="_questions_[question_index].answer_settings.super_size" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
                          <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
                            Super Size
                            <i class="help-links">?</i>
                          </span>
                       </div>
                    </li>
-                   <li class="answer_stylish_qs">
+                   <!-- <li class="answer_stylish_qs">
                      <div class="checkbox-toggle answer-settins">
                         <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
                         <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
@@ -210,7 +219,7 @@
                           <i class="help-links">?</i>
                         </span>
                      </div>
-                   </li>
+                   </li> -->
                    <li class="steps_qs">
                          <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
                            Steps ( ... )

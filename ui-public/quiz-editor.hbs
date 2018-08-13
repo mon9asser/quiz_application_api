@@ -106,7 +106,7 @@
         <div class="container-fluid row-x-body">
            <div class="row">
              <!-- +++++ Start Left Columns -->
-             <div class="left_part col-md-4 col-sm-6 col-xs-12">
+             <div id="left-part-question-lists" class="left_part col-md-5 col-sm-6 col-xs-12">
                 <div class="question-data qsdragged-list qs-dropped background_drag_drop" style="margin-top:0px !important;">
                   <ul id="docQuestions" class="dropped-qs dropped-qs-2">
                      <li class="question-li-x qs-{>qs_value._id<}" ng:click="highlighted_question(qs_value._id)" id="questoin_tag_{>qs_value._id<}" data-index="{>$index<}" data-question-id="{>qs_value._id<}" ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " ng:repeat="(qs_key , qs_value) in _questions_ track by $index" ng:cloak>
@@ -136,11 +136,8 @@
              </div>
              <!-- +++++ End Left Columns -->
 
-
-
-
              <!-- +++++ Start Right Columns -->
-              <div class="right_part col-md-8 col-sm-6 col-xs-12">
+              <div class="right_part col-md-7 col-sm-6 col-xs-12">
 
                 <div class="helper-guids">
 
@@ -149,7 +146,7 @@
                 <div class="switched-button switch-mode">
                   <div class="input-switch" ng:class="(screen_type == 0 ) ? 'display_editor_preview_option':'dontdisplay_editor_preview_option'">
                     <label for="switch-editor">Edit</label>
-                    <input type="checkbox" id="switch-editor" ng:model="switching_editor_preview_value" ng:change="switching_editor_preview()" class="input" />
+                    <input type="checkbox" id="switch-editor" ng:model="is_view" ng:change="switching_editor_preview(is_view)" class="input" />
                     <label for="switch-editor" class="switch"></label>
                     <label for="switch-editor">Preview</label>
                   </div>
@@ -159,17 +156,12 @@
                    <div class="swiper-container swiper-data">
                      <div class="swiper-wrapper">
                        <div class="swiper-slide" ng:include="'/partials/editor.hbs'"></div>
-                       <div class="swiper-slide">
-                         Views
-                       </div>
+                       <div class="swiper-slide" ng:include="'/partials/preview.hbs'"></div>
                      </div>
                    </div>
                  </div>
               </div>
              <!-- +++++ End Right Columns -->
-
-
-
            </div>
         </div>
         <!-- ++++ End application Title ++++  -->
@@ -178,7 +170,7 @@
     </div>
 
 
-
+    <!-- Image Uploader -->
     <div class="box-overlay media-uploader media-imgvid-uploader">
       <div class="box-data">
         <div class="box-data-title">
@@ -222,6 +214,21 @@
       </div>
     </div>
 
+
+
+    <!-- Setting Menu  -->
+    {{> settings_menu }}
+
+
+
+    <div class="modal-content-overlay">
+      <div class="cssload-tetrominos">
+      	<div class="cssload-tetromino cssload-box1"></div>
+      	<div class="cssload-tetromino cssload-box2"></div>
+      	<div class="cssload-tetromino cssload-box3"></div>
+      	<div class="cssload-tetromino cssload-box4"></div>
+      </div>
+   </div>
 
     <!-- JS Links -->
     <script src="{{ server_ip }}ext/frameworks/js/spectrum.js"></script>
