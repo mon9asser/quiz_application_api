@@ -72,8 +72,8 @@
                         <span class="qs-numericals" ng:cloak>{> $index + 1 <}</span>
                         <div class="arrow-right default_theme_brd question-label-box-brd"></div>
                      </span>
-                     <span data:ng:bind:html="obj_val.question_body | trust_this_html_values" class="question-body-text"></span>
-                     <p ng:if="obj_val.question_description != null || obj_val.question_description != undefined" class="dsc-data" data:ng:bind:html="obj_val.question_description | trust_this_html_values"></p>
+                     <span data:ng:bind:html="obj_val.question_body | trust_this_html_values" class="question-body-text question-data-text-bdy"></span>
+                     <p ng:if="obj_val.question_description != null || obj_val.question_description != undefined" class="dsc-data question-data-text-desc" data:ng:bind:html="obj_val.question_description | trust_this_html_values"></p>
                      <span class="required_option question_type__colr question-text-required-text" ng:if="obj_val.answer_settings.is_required == true"> Required </span>
                  </div>
               </div>

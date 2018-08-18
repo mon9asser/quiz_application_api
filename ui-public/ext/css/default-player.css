@@ -19,8 +19,8 @@
   position: relative;
   margin-top: 10%;
   width: 60%;
-  min-height: 120;
-  padding: 35px;
+  min-height: 120px;
+  padding: 35px 20px;
   margin: 0px auto;
 }
 .buttons-container {
@@ -172,42 +172,9 @@
   width: 100%;
   /*overflow: hidden;*/
 }
-/* .survey_questions */
-.answer-container ul {
-  display: block;
-  position: relative;
-  /*overflow: hidden;*/
-  width: 100%;
-  padding: 0px;
-  margin: 15px auto 0px auto;
-  text-align: left;
 
-}
 
-.answer-container ul li {
-  padding: 8px;
-  /*border: 1px dashed #ececec;*/
-  border-style: dashed;
-  border-color: #ececec;
-  border-width: 1px;
-  margin: 3px;
-  text-align: left;
-  /*box-shadow: 0px 0px 1px 0px #eee;*/
-  list-style: none;
-  cursor: pointer;
-}
-.answer-container ul li.ng_block {
-  width: 98%;
-  display: block;
-  position: relative;
-  margin-top: 7px;
-}
 
-.answer-container ul li:hover {
-    border: 1px solid #e6d4da;
-    /*box-shadow: 0px 0px 1px 0px #81c784;*/
-    /*background: #fdfdfd;*/
-}
 
 .success_answer {
   border: 1px solid #81c784 !important;
@@ -220,11 +187,6 @@
 }
 
 
-.answer-container ul li.ng_inline_block{
-  width: 48%;
-  display: inline-block;
-  position: relative;
-}
 
 .answer-contents{
   display: block;
@@ -306,6 +268,7 @@
   overflow: hidden;
   width: 98.5%;
   margin-top: 25px;
+  line-height: 2.8;
 }
 
 .label-question {
@@ -1278,10 +1241,65 @@ select.select-current-element , select.select-current-element:focus , select.sel
 .player-block {
   z-index: 2000;
 }
-
+.ther_is_many{
+  display: inline-block;
+}
+.question-editor-media{
+  width: 100% !important;
+}
+.question-data-media{
+  width: 30%;
+  display: block;
+  position: relative;
+  margin: 15px 0px;
+}
+.video-data-media {
+  width: 100%;
+  display: block;
+}
 .qusu-details > button {
     margin-top: 5px;
     border-radius: unset;
     margin-left: 3px;
     margin-right: 4px;
+}
+.answer_text{
+  display: block;
+  position: relative;
+  /* color: #999; */
+  font-size: 15px;
+}
+
+/* .survey_questions */
+.answer-container ul {
+  display: block;
+  position: relative;
+  /*overflow: hidden;*/
+  width: 100%;
+  padding: 0px;
+  margin: 15px auto 0px auto;
+  text-align: center;
+  list-style: none;
+}
+.answer-container ul li{
+    padding: 8px;
+    margin: 3px;
+    text-align: left;
+    cursor: pointer;
+    border-style: dashed;
+    border-width: 1px;
+    border-color: #e6d4da;
+    width: 30%;
+    color: #999;
+    display: inline-block;
+}
+.answer-container ul li:hover {
+  border: 1px solid #e6d4da;
+}
+.answer-container ul li.super_size_class{
+  width: 48%;
+  display: inline-block;
+}
+button {
+  font-family: RobotoRegular;
 }

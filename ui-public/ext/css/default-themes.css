@@ -162,6 +162,9 @@ html , body {
       z-index: 4;
     }
  }
+
+
+
 /* ========================================================== */
 /* ===>> Theme selectors */
 /* ========================================================== */
@@ -311,8 +314,7 @@ html , body {
 .question_type_texts_qs_brd { border-color: #c17c7e;  }
 /*=====================================================================================*/
 /*Answer*/
-.answer-container ul li {background: transparent ;}
-.answer-container ul li {border-color: rgb(236, 236, 236); }
+
 .answer-text-box-area { font-size: 14px; } /* answer text size */
 .answer-text-box-area { color: #999 ; } /* answer text color */
 .answer-text-box-area { font-weight: normal; } /* answer text style */
@@ -320,9 +322,11 @@ html , body {
 .answer-alarm-text-box { color:#c17c7e; }
 
 /* Numbering*/
-.answer-container ul li > .answer-contents > label.labels { background: #fff;}
+/* .answer-container ul li > .answer-contents > label.labels { background: #fff;}
 .answer-container ul li > .answer-contents > label.labels { color: #999;}
-.answer-container ul li > .answer-contents > label.labels { font-size:14px;}
+.answer-container ul li > .answer-contents > label.labels { font-size:14px;} */
+
+
 
 /*.answer-container ul li > .text-values {color: green; }*/
 
@@ -336,7 +340,7 @@ ul li.selected_answer > div > .no-media-here { color: #999;}
 /*Right answer */
 ul li.right_answer , ul li.right_answer:hover { background: aliceblue; }
 ul li.right_answer { border-color: #1E824C ; }
-ul li.right_answer { color: #fff; }
+ul li.right_answer { color: #38824c; }
 ul li.right_answer > .answer-contents > label.labels { color: #fff; } /* => number color */
 ul li.right_answer > .answer-contents > label.labels { background: #1E824C; } /* => number color */
 ul li.right_answer > .answer-contents > label.labels { font-size: 14px;} /* => font size */
@@ -345,9 +349,9 @@ ul li.right_answer > .answer-contents > .answer-results-right { color: #1E824C; 
 ul li.right_answer > div > .no-media-here { color: #1E824C;}
 /*=====================================================================================*/
 /*Wrong answer */
-ul li.wrong_answer , ul li.wrong_answer:hover { background: #d91e1805; }
+ul li.wrong_answer { background: #d91e1805; }
 ul li.wrong_answer { border-color:#D91E18 ; }
-ul li.wrong_answer { color: #fff; }
+ul li.wrong_answer { color: #ea8888; }
 ul li.wrong_answer > .answer-contents > label.labels { color: #fff;  } /* => number color */
 ul li.wrong_answer > .answer-contents > label.labels { background: #D91E18; } /* => number color */
 ul li.wrong_answer > .answer-contents > label.labels { font-size: 14px;} /* => font size */
@@ -406,3 +410,34 @@ ul li.wrong_answer > div > .no-media-here { color: #D91E18;}
     stroke: #eee;
     /*stroke-width: 5px;*/
    }
+   .answer_txt_val{
+     display: inline-block;
+   }
+   .answer_txt_val > .answer_text {
+     display: inline-block;
+   }
+
+
+.iconxs-correct-answers {
+  float: right;
+  margin-top: 4px;
+  margin-right: 6px;
+  display: none;
+}
+
+
+ul li.wrong_answer > .wrong-ico {
+  display: inline-block;
+}
+ul li.right_answer > .correct-ico {
+  display: inline-block;
+}
+.answer_label {
+  display: inline-block;
+}
+.answer_label{
+      vertical-align: middle;
+      border: 1px solid #f1f1f1;
+    padding: 1px 6px;
+    font-size: 14px;
+}

@@ -13,7 +13,8 @@
         </div>
         <!-- Sections -->
         <ul class="second-nav">
-          <li class="nav-parent">
+
+          <li  ng:hide="enable_css_mode"  class="nav-parent">
             <a href="#" class="head-items">
               General
               <span class="nav-next"></span>
@@ -65,7 +66,7 @@
               </ul>
             </div>
           </li>
-          <li class="nav-parent">
+          <li  ng:hide="enable_css_mode"  class="nav-parent">
             <a href="#">
               Progress bar Options
               <span class="nav-next"></span>
@@ -83,7 +84,7 @@
               </ul>
             </div>
           </li>
-          <li class="nav-parent">
+          <li  ng:hide="enable_css_mode"  class="nav-parent">
             <a href="#">
               Timer Options
               <span class="nav-next"></span>
@@ -115,7 +116,7 @@
               </ul>
             </div>
           </li>
-          <li class="nav-parent">
+          <li  ng:hide="enable_css_mode"  class="nav-parent">
             <a href="#">
               Expiration Options
               <span class="nav-next"></span>
@@ -137,7 +138,7 @@
               </ul>
             </div>
           </li>
-          <li class="nav-parent">
+          <li  ng:hide="enable_css_mode"  class="nav-parent">
             <a href="#">
               Messages and Texts
               <span class="nav-next"></span>
@@ -146,31 +147,31 @@
               <ul>
                 <li class="righ-check-box">
                   <label style=" margin-left: 10px;">Welcome Page:</label>
-                  <textarea ng:model="_settings_.titles.title_start_with" class="text-area-style" name="name"></textarea>
+                  <textarea ng:keyup="go_to_screen_number(0)" ng:model="_settings_.titles.title_start_with" class="text-area-style" name="name"></textarea>
                 </li>
                 <li class="righ-check-box">
                   <label  style=" margin-left: 10px;">Goodbye and Thank you Page :</label>
-                  <textarea ng:model="_settings_.titles.title_end_with" class="text-area-style" name="name"></textarea>
+                  <textarea ng:keyup="go_to_screen_number(1)" ng:model="_settings_.titles.title_end_with" class="text-area-style" name="name"></textarea>
                 </li>
                 <li class="righ-check-box">
                   <label  style=" margin-left: 10px;">Quiz Pass Page :</label>
-                  <textarea  ng:model="_settings_.titles.title_success_with" class="text-area-style" name="name"></textarea>
+                  <textarea  ng:keyup="go_to_screen_number(2)" ng:model="_settings_.titles.title_success_with" class="text-area-style" name="name"></textarea>
                 </li>
                 <li class="righ-check-box">
                   <label style=" margin-left: 10px;">Quiz Fail Page: :</label>
-                  <textarea ng:model="_settings_.titles.title_failed_with" class="text-area-style" name="name"></textarea>
+                  <textarea ng:keyup="go_to_screen_number(2)" ng:model="_settings_.titles.title_failed_with" class="text-area-style" name="name"></textarea>
                 </li>
               </ul>
             </div>
           </li>
-          <li class="nav-parent">
+          <li  ng:hide="enable_css_mode"  class="nav-parent">
             <a href="#">
-              Labels
+              Labels and Buttons
               <span class="nav-next"></span>
             </a>
             <div class="items">
               <ul>
-                <li class="righ-check-box input-x">
+                <li class="righ-check-box input-x list-of-labels">
                   <div class="label-manger">
                     <label style=" margin-left: 10px;">Question Labels</label>
                     <ul class="labels_">
@@ -185,6 +186,10 @@
                         </span>
                       </li>
                     </ul>
+                    <div class="style-block">
+                      Styles
+                      <span class="fa fa-caret-down"></span>
+                    </div>
                   </div>
                   <div class="label-manger">
                     <label style=" margin-left: 10px;">Answer Labels</label>
@@ -200,6 +205,10 @@
                         </span>
                       </li>
                     </ul>
+                    <div class="style-block">
+                      Styles
+                      <span class="fa fa-caret-down"></span>
+                    </div>
                   </div>
                 </li>
                 <li class="righ-check-box input-x">
@@ -266,9 +275,237 @@
               <ul>
                 <li class="righ-check-box">
                   <label for="enable-css-mode" style=" margin-left: 10px;">Enable Css Mode</label>
-                  <input type="checkbox" id="enable-css-mode" class="switch_1 input-checkboxes">
+                  <input ng:change="enable_css_mode_func(enable_css_mode)" ng:model="enable_css_mode" type="checkbox" id="enable-css-mode" class="switch_1 input-checkboxes">
                 </li>
               </ul>
+              <div class="container-of-classes" ng:show="enable_css_mode == true">
+                <code>Player > Style > {> selecotor_name <}</code>
+              </div>
+              <div class="pellet-containerz"  ng:show="enable_css_mode == true">
+                <h4 class="element_types" ng:if="selecotor_name == '.Answers'">Basic</h4>
+                <ul>
+                  <li ng:show="css_pellet_mode.background == true">
+                    <span>Background</span>
+                    <input ng:model="background_models" class="background_models" type="text" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.color == true">
+                    <span>Color</span>
+                    <input ng:model="color_models" class="color_models" type="text" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.fontSize == true">
+                    <span>Font Size</span>
+                    <input ng:model="font_size_models" style="width:60px; color:#999;" value="15" type="number" min="15" max="25" name="">
+                  </li>
+                  <li ng:show="css_pellet_mode.fontFamily == true">
+                    <span>Font Family</span>
+                    <select ng:model="font_family_models" class="select_borders">
+                      <option value="arial">Arial</option>
+                      <option value='"helvetica neue", helvetica, arial, sans-serif'>Helvetica</option>
+                      <option value="RobotoRegular">Roboto Regular</option>
+                      <option value="opensansregular">Open Sans Regular</option>
+                      <option value="OpenSansSemiBold">Open Sans Semi Bold</option>
+                    </select>
+                  </li>
+                  <li ng:show="css_pellet_mode.width == true">
+                    <span>Width</span>
+                    <input style="width:60px; color:#999;" ng:model="media_container" type="number" min="180" max="500" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.border == true">
+                    <span>Border</span>
+                    <input ng:model="border_models_color" class="border_models_color" type="text" name="" value="">
+                    <select style="margin-right:10px;" ng:model="border_style_models">
+                      <option value="none">None</option>
+                      <option value="solid">Solid</option>
+                      <option value="dashed">Dashed</option>
+                      <option value="dotted">Dotted</option>
+                    </select>
+                      <ul class="border-lists">
+                        <li>
+                          <span>Left</span>
+                          <select ng:model="border_left_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Right</span>
+                          <select ng:model="border_right_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Top</span>
+                          <select ng:model="border_top_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Bottom</span>
+                          <select ng:model="border_bottom_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                      </ul>
+                  </li>
+                </ul>
+                <!--  Hover Cases -->
+                <h4 class="element_types" ng:if="selecotor_name == '.Answers'">Hover Cases</h4>
+                <ul>
+                  <li ng:show="css_pellet_mode.hover_background == true">
+                    <span>Background</span>
+                    <input ng:model="hover_background_models" class="hover_background_models" type="text" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.hover_color == true">
+                    <span>Color</span>
+                    <input ng:model="hover_color_models" class="hover_color_models" type="text" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.hover_border == true">
+                    <span>Border</span>
+                    <input ng:model="hover_border_models_color" class="hover_border_models_color" type="text" name="" value="">
+                    <select style="margin-right:10px;" ng:model="hover_border_style_models">
+                      <option value="none">None</option>
+                      <option value="solid">Solid</option>
+                      <option value="dashed">Dashed</option>
+                      <option value="dotted">Dotted</option>
+                    </select>
+                      <ul class="border-lists">
+                        <li>
+                          <span>Left</span>
+                          <select ng:model="hover_border_left_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Right</span>
+                          <select ng:model="hover_border_right_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Top</span>
+                          <select ng:model="hover_border_top_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Bottom</span>
+                          <select ng:model="hover_border_bottom_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                      </ul>
+                  </li>
+                </ul>
+                <!--  Selected Cases -->
+                <h4 class="element_types" ng:if="selecotor_name == '.Answers'">Selected Answer Cases</h4>
+                <ul>
+                  <li ng:show="css_pellet_mode.selected_background == true">
+                    <span>Background</span>
+                    <input ng:model="selected_background_models" class="selected_background_models" type="text" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.selected_color == true">
+                    <span>Color</span>
+                    <input ng:model="selected_color_models" class="selected_color_models" type="text" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.selected_border == true">
+                    <span>Border</span>
+                    <input ng:model="selected_border_models_color" class="selected_border_models_color" type="text" name="" value="">
+                    <select style="margin-right:10px;" ng:model="selected_border_style_models">
+                      <option value="none">None</option>
+                      <option value="solid">Solid</option>
+                      <option value="dashed">Dashed</option>
+                      <option value="dotted">Dotted</option>
+                    </select>
+                      <ul class="border-lists">
+                        <li>
+                          <span>Left</span>
+                          <select ng:model="selected_border_left_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Right</span>
+                          <select ng:model="selected_border_right_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Top</span>
+                          <select ng:model="selected_border_top_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Bottom</span>
+                          <select ng:model="selected_border_bottom_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                      </ul>
+                  </li>
+                </ul>
+                <!-- <h4 class="element_types" ng:if="selecotor_name == '.Answers'">Correct Answer Cases</h4>
+                <h4 class="element_types" ng:if="selecotor_name == '.Answers'">Wrong Answer Cases</h4> -->
+              </div>
             </div>
           </li>
         </ul>
@@ -276,7 +513,7 @@
           <!-- <span class="title-editor-option">Editor Saving Option</span>
           <input type="checkbox" id="passing-grade" class="switch_1 input-checkboxes">
           <label for="passing-grade" style=" margin-left: 10px;">Auto save</label> -->
-          <button ng:click="saving_quiz_settings();" type="button" class="btn btn-primary" name="button"> Apply Changes</button>
+          <button id="save_setting_change" ng:click="saving_quiz_settings();" type="button" class="btn btn-primary" name="button"> Apply Changes</button>
         </div>
     </div>
 </div>

@@ -1,3 +1,4 @@
+
 apps.filter('apply_html' , ['$sce' , ( $sce ) => {
   return ( returned_values ) => { return $sce.trustAsHtml(returned_values);  };
 }]);
@@ -34,6 +35,22 @@ apps.filter('trust_iframe_url' , ( $sce ) => {
 apps.controller("apps-controller" , [
 '$scope','$http' , '$timeout','$window','$rootScope' , '$sce' ,
 ( $scope , $http , $timeout , $window , $rootScope , $sce  ) => {
+  $scope.question_labels = {
+    label_0 : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ],
+    label_1 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50]
+  }
+  $scope.answer_labels = {
+    label_0 : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ],
+    label_1 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50]
+  }
+  $rootScope.isEmpty = (obj) => {
+      for(var key in obj) {
+          if(obj.hasOwnProperty(key))
+              return false;
+      }
+      return true;
+  }
+  $rootScope.this_attendee_draft = {};
   $rootScope.media_type = 0 ;
   $rootScope.server_ip = $("#serverIp").val();
   $rootScope.user_id = $("#userId").val();
@@ -46,6 +63,7 @@ apps.controller("apps-controller" , [
   $rootScope.is_add_new_unsaved = false;
   $rootScope.is_unsaved_data = false ;
   $rootScope.media_for = 'questions' ;
+  // $rootScope.enable_css_mode = false;
   $rootScope._application_ = null ;
   $rootScope._questions_ = [] ;
   $rootScope._settings_ = null ;
@@ -68,7 +86,68 @@ apps.controller("apps-controller" , [
   $rootScope.cropper_results = new Object() ;
   $rootScope.current_answer_id = null ;
   $rootScope.current_media_video = new Object();
+  $rootScope.screen_type = 3 ;
+  $rootScope.go_to_screen_number = (screen_number) => {
+    $rootScope.screen_type = screen_number ;
+  }
+  $rootScope.start_the_quiz = (  ) => {
+    var enabled_css = $("#enabled_css")
+     if( enabled_css == 'true' ) return false;
+     else
+        {
+           $rootScope.screen_type = 3 ;
+           $rootScope.question_index = 0;
+        }
+  };
+  $rootScope.css_pellet_mode = {
+    background:false,
+    color:false,
+    fontSize:false,
+    fontFamily:false,
+    border:false,
+    width : false ,
 
+    // ==> Case Hover answers
+    hover_background : false,
+    hover_border : false,
+    hover_color : false,
+
+    // ==> Case Selected canswers
+    selected_background : false,
+    selected_borde : false,
+    selected_color : false ,
+
+    correct_background : false ,
+    correct_border : false ,
+    correct_color : false ,
+    correct_icon_background : false ,
+    correct_icon_border : false ,
+    correct_icon_color : false ,
+
+    wrong_background : false ,
+    wrong_border : false ,
+    wrong_color : false ,
+    wrong_icon_background : false ,
+    wrong_icon_border : false ,
+    wrong_icon_color : false ,
+
+    rating_color : false ,
+    scale_color : false ,
+    scale_hover_color : false ,
+    scale_background : false ,
+    scale_hover_background : false ,
+
+    free_boxtext_background: false ,
+    free_boxtext_color: false
+  };
+
+  // $rootScope.selecotor_name = "block"
+  // $rootScope.background_models = '#fff';
+  // $rootScope.border_models = '1px solid #fff';
+  // $rootScope.color_models = '#fff';
+  // $rootScope.font_size_models = '18px';
+  // $rootScope.font_family_models = 'OpenSansRegular';
+  // $rootScope.width_models = '25%';
   // $.getJSON( $rootScope.json_source , function ( api_key_data ){
   //   $rootScope.header_data = {
   //      "X-api-keys": api_key_data.API_KEY ,
@@ -88,6 +167,37 @@ apps.controller("apps-controller" , [
       $(".modal-content-overlay").fadeOut();
     } , 600);
   });
+  $rootScope.list_answer_classes = () => {
+    var classes = "";
+    if( $rootScope._questions_[$rootScope.question_index].answer_settings.super_size == true || $rootScope. _questions_[$rootScope.question_index].question_type == 2)
+    classes += "super_size_class ";
+
+
+     return classes ;
+  }
+  // ==> Load color spectrum
+  $rootScope.load_spectrum_plugin = () => {
+
+    $('.border_models_color , .color_models , .background_models , .hover_border_models_color, .hover_background_models , .hover_color_models , .selected_border_models_color , .selected_background_models , .selected_color_models').spectrum(
+      {
+        showPaletteOnly: true,
+         togglePaletteOnly: true,
+         togglePaletteMoreText: 'more',
+         togglePaletteLessText: 'less',
+         color: 'blanchedalmond',
+         palette: [
+             ["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
+             ["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
+             ["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"],
+             ["#ea9999","#f9cb9c","#ffe599","#b6d7a8","#a2c4c9","#9fc5e8","#b4a7d6","#d5a6bd"],
+             ["#e06666","#f6b26b","#ffd966","#93c47d","#76a5af","#6fa8dc","#8e7cc3","#c27ba0"],
+             ["#c00","#e69138","#f1c232","#6aa84f","#45818e","#3d85c6","#674ea7","#a64d79"],
+             ["#900","#b45f06","#bf9000","#38761d","#134f5c","#0b5394","#351c75","#741b47"],
+             ["#600","#783f04","#7f6000","#274e13","#0c343d","#073763","#20124d","#4c1130"]
+         ]
+      }
+     );
+  }
   // ==> Check if answer with media for Tooltip
   $rootScope.case_it_with_media = ( question , answer ) => {
     console.log(answer);
@@ -108,12 +218,12 @@ apps.controller("apps-controller" , [
     }
   };
   // ==> Media Links are changed
-  $scope.media_links_are_changed = () => {
+  $rootScope.media_links_are_changed = () => {
 
-    var youtube =   $scope.media_link.toLowerCase().includes("youtube") ;
-    var vimeo =   $scope.media_link.toLowerCase().includes("vimeo") ;
-    var mp4 =   $scope.media_link.toLowerCase().includes(".mp4") ;
-    var video = $scope.media_link ;
+    var youtube =   $rootScope.media_link.toLowerCase().includes("youtube") ;
+    var vimeo =   $rootScope.media_link.toLowerCase().includes("vimeo") ;
+    var mp4 =   $rootScope.media_link.toLowerCase().includes(".mp4") ;
+    var video = $rootScope.media_link ;
     $rootScope.video_object = new Object();
     var videoType = -1  , video_src_value , videoId  ;
     if( youtube == true ){
@@ -401,6 +511,7 @@ apps.controller("apps-controller" , [
   }
   // => Mark Selected Question
   $rootScope.highlighted_question = (questionId) => {
+      $rootScope.screen_type = 3;
         // => detect current question is exists or not
         var questionIndex = $rootScope._questions_.findIndex( x=> x._id == questionId );
         if( questionIndex == -1 ) return false ;
@@ -422,10 +533,26 @@ apps.controller("apps-controller" , [
         $rootScope.fill_boxes_with_question_objects(questionId);
         $timeout(function(){
           $rootScope.init_bootstrap_tooltip();
-        })
+        });
+        $('.right_part').fadeIn();
         // ==> Detect if Unsaved data is happened
         // $rootScope.detect_if_there_unsaved_data ($rootScope.is_unsaved_data )
       }
+    $rootScope.saving_this_question = () => {
+      $("#saving-changes").html("Saving ...")
+      $timeout(function(){
+        $("#saving-changes").html("Save Changes");
+      } , 200);
+      $rootScope.storing_questions_into_database();
+    };
+    $rootScope.delete_the_current_question = () => {
+      var currently = $rootScope._questions_[$rootScope.question_index]._id;
+      if(currently == undefined ) return false ;
+      $rootScope._questions_.splice( $rootScope.question_index , 1 );
+      $('.right_part').hide();
+      $rootScope.storing_questions_into_database();
+      $('#docQuestions > li.marked_question').removeClass('marked_question');
+    }
   // ==> Fill Question Boxes
   $rootScope.fill_boxes_with_question_objects = ( questionId ) => {
 
@@ -469,7 +596,7 @@ apps.controller("apps-controller" , [
   }
   // => Image Uploader
   $rootScope.upload_image_handler = () => {
-      $scope.media_image_model = '';
+      $rootScope.media_image_model = '';
       $rootScope.media_type = 0 ;
       return $rootScope.media_image_uploader.trigger('click');
   }
@@ -486,7 +613,8 @@ apps.controller("apps-controller" , [
   }
 
   $rootScope.saving_quiz_settings = () => {
-    url = $scope.server_ip + "api/" + $scope.app_id + "/app/setup_settings/storing" ;
+    $("#save_setting_change").html("Saving Changes ...");
+    url = $rootScope.server_ip + "api/" + $rootScope.app_id + "/app/setup_settings/storing" ;
      $http({
        method : "PATCH" ,
        url    : url ,
@@ -496,7 +624,7 @@ apps.controller("apps-controller" , [
          questionnaire_title : $rootScope._application_.questionnaire_title
        }
      }).then(()=>{
-       alert("completed!")
+       $("#save_setting_change").html("Apply Changes");
      });
   }
   // => Show Image
@@ -717,6 +845,7 @@ apps.controller("apps-controller" , [
         $rootScope.cropper_results['file'] = file ;
         var reader = new FileReader();
         var read_file = reader.readAsDataURL(file);
+
         reader.onload = ( e ) => {
           $rootScope.image_view_source =  e.target.result  ;
           var img_data = '<img id="cropping_system" src="'+ $rootScope.image_view_source +'" alt="Image">';
@@ -724,12 +853,44 @@ apps.controller("apps-controller" , [
           $(".live_preview_image").html(loader_data + img_data);
           $('.loading_data').fadeOut(1000);
           $('.box-overlay').height($(document).height() + 50);
+
+
+
           $rootScope.$apply();
         }
 
         // console.log($rootScope.media_image_uploader[0].files[0]);
   };
+  $rootScope.go_back_to_first_qs = () => {
+    // alert($rootScope.enable_css_mode);
+    if( $rootScope.enable_css_mode != true ) {
 
+      $rootScope.screen_type = 3 ;
+      $rootScope.question_index = 0 ;
+        $rootScope.highlighted_question($rootScope._questions_[$rootScope.question_index]._id);
+    }
+  }
+  $rootScope.go_to_next_slide = ( index )=>{
+
+    if( $rootScope.enable_css_mode != true ) {
+        if( index == ( $rootScope._questions_.length - 1 ) )
+          $rootScope.screen_type = 1;
+          index = index + 1 ;
+          $rootScope.question_index = index ;
+
+          if($rootScope._questions_[$rootScope.question_index] != undefined && $rootScope.screen_type == 3  )
+          $rootScope.highlighted_question($rootScope._questions_[$rootScope.question_index]._id)
+      }
+  }
+  $rootScope.back_to_previouse_slide = ( index )=>{
+
+     if( index == 0 ) $rootScope.screen_type = 0;
+     if( index > 0 && index <= ($rootScope._questions_.length - 1 ) )
+      index = index - 1 ;
+     $rootScope.question_index = index ;
+     if($rootScope._questions_[$rootScope.question_index] != undefined && $rootScope.screen_type == 3 )
+     $rootScope.highlighted_question($rootScope._questions_[$rootScope.question_index]._id)
+  }
   $rootScope.loading_answer_media_image = (image , date) => {
     console.log(image + ' ' +  date);
     return {
@@ -752,9 +913,13 @@ apps.controller("apps-controller" , [
                                     $(".live_preview_image , .progrbar").fadeIn();
                                     // ==> Reading Image file
                                     $rootScope.read_image_file($(this));
+                                    var file_size = parseInt ($rootScope.cropper_results.file.size / 1000);
+                                    if( file_size > 400 ){
+                                      alert("Image too large ... ");
+                                      return false;
+                                    }
                                     // ==> Calling Cropping liberary
                                     $rootScope.init_cropping_image();
-
                                     $timeout(function(){
                                       $rootScope.$apply();
                                     });
@@ -774,11 +939,15 @@ apps.controller("apps-controller" , [
        if ( $rootScope.media_type == 0 ) $rootScope.storing_cropped_image_for_media_answer();
        if ( $rootScope.media_type == 1 ) $rootScope.storing_video_for_media_answer( );
      }
-     $timeout(function(){
-          $rootScope.close_current_image_uploader();
-     } , 800 );
-   };
 
+   };
+   $rootScope.fileExists = (url) =>
+       {
+           var http = new XMLHttpRequest();
+           http.open('HEAD', url, false);
+           http.send();
+           return http.status != 404;
+       }
    $rootScope.storing_cropped_image_for_media_question = (   ) => {
 
         $("#file_extension").val( $rootScope.media_image_uploader[0].files[0].name.split('.').pop());
@@ -788,13 +957,9 @@ apps.controller("apps-controller" , [
         var width = $('#cropping-image-width').val();
         var height = $('#cropping-image-height').val();
 
-        var progressHandler = (event) => {
-           console.log( "Uploaded "+event.loaded+" bytes of "+event.total );
-           var percent = Math.round (event.loaded / event.total) * 100;
-           $('.highlighted_progress').css({width : percent + '%' });
-        };
-
         var completeHandler = () => {
+
+            // ==> Detect if file exists
 
             var image_extension = $("#file_extension").val();
            var ThisQuestion = $rootScope._questions_.find(x => x._id == $("#question_id").val());
@@ -804,6 +969,16 @@ apps.controller("apps-controller" , [
                       var cropped_image_path = $rootScope.server_ip + "themeimages/question_" + ThisQuestion._id +'.' +image_extension ;
                       var main_image_path = $rootScope.server_ip + "themeimages/__question_" + ThisQuestion._id  +'.'  +image_extension ;
                       var updated_date = new Date();
+
+                      if($rootScope.fileExists(cropped_image_path) != true )
+                      {
+                        // Error Message
+
+                        $(".live_preview_image > .loading_data").html("Image is too large !");
+                        $(".live_preview_image > .loading_data").css({display : 'block' , fontSize : '20px' , color : 'red'});
+                        return false;
+                      }
+
                       ThisQuestion['media_question']['media_type'] = 0 ;
                       ThisQuestion['media_question']['media_name'] ="question_" + ThisQuestion._id +image_extension ;
                       ThisQuestion['media_question']['media_field'] = "themeimages/question_" + ThisQuestion._id +image_extension ;
@@ -814,12 +989,22 @@ apps.controller("apps-controller" , [
             }
           $timeout(function(){
             $rootScope.$apply();
-
+            $timeout(function(){
+              $rootScope.close_current_image_uploader();
+            },300)
             $timeout(function(){
               $('.highlighted_progress').css({width : 0 + '%' });
             } , 300);
-          }, 300);
+          }, 500);
         }; // end complete
+        var progressHandler = (event) => {
+           console.log( "Uploaded "+event.loaded+" bytes of "+event.total );
+           var percent = Math.round (event.loaded / event.total) * 100;
+           $('.highlighted_progress').css({width : percent + '%' });
+
+        };
+
+
 
         var formImageData = new FormData();
         formImageData.append('media_field' , $rootScope.media_image_uploader[0].files[0]   );
@@ -844,14 +1029,13 @@ apps.controller("apps-controller" , [
                         var percent = Math.round (event.loaded / event.total) * 100;
                         $('.highlighted_progress').css({width : percent + '%' });
                         if (event.loaded == event.total) {
-
+                          $timeout(function(){
+                              completeHandler();
+                          } , 1500);
                         }
                    }
                }
         }).then(()=>{
-          $timeout(function(){
-            completeHandler();
-          } , 1000 );
         });
        //  $http({
        //    url : cropping_url ,
@@ -888,6 +1072,9 @@ apps.controller("apps-controller" , [
         $rootScope.storing_questions_into_database();
       } , 300);
    };
+
+
+
    $rootScope.storing_cropped_image_for_media_answer = (   )   => {
             $("#file_extension").val( $rootScope.media_image_uploader[0].files[0].name.split('.').pop() );
           var questionId = $("#question_id").val();
@@ -1208,6 +1395,7 @@ sort: false  */
   }
 
   $rootScope.translate_number = 0
+
   $rootScope.navbar_menu_init = () => {
     // ==> Set Width
     var nav_bar = $(".nav-container");
@@ -1216,14 +1404,7 @@ sort: false  */
     nav_bar.css({transform : "translate3d("+(question_lists.width() + 19 )+"px , 0 , 0)" , width : question_lists.width() + 23 + 'px' })
     // ==> Change current translate3d
   };
-  // ==> Calling Methods Here
-  $timeout(function(){
-    $rootScope.init_swiperJs();
-    $rootScope.init_bootstrap_tooltip();
-    $rootScope.init_drag_drop();
-    // ==> When Resize window
 
-  }, 400);
   //     transform: rotate(90deg);
   $rootScope.navbar_menu_init();
 
@@ -1245,4 +1426,1124 @@ sort: false  */
      })
      this_item.slideDown();
   });
+
+  $rootScope.select_this_answer=( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex )=>{
+     if( $rootScope.isEmpty( $rootScope.this_attendee_draft ) ){
+          $rootScope.this_attendee_draft = new Object();
+          $rootScope.this_attendee_draft['att_draft'] = new Array();
+          $rootScope.this_attendee_draft['application_id'] = $rootScope.app_id;
+          $rootScope.this_attendee_draft['questionnaire_info'] = $rootScope.app_id;
+          var cuIndex = $rootScope.this_attendee_draft.att_draft.findIndex (x => x.user_id == $rootScope.user_id) ;
+          if(cuIndex == -1 ){
+            var all_seconds = parseInt( $rootScope._settings_.time_settings.hours * 60 * 60 ) + parseInt(  $rootScope._settings_.time_settings.minutes * 60  ) + parseInt($rootScope._settings_.time_settings.seconds )
+            $rootScope._settings_.time_settings.value = all_seconds ;
+            $rootScope.this_attendee_draft.att_draft.push({
+              'questions_data' : new Array() ,
+              'is_loaded':true ,
+              'start_expiration_time' : new Date() ,
+              'user_id' : $rootScope.user_id ,
+              'user_info':$rootScope.user_id ,
+              'is_completed':false ,
+              'impr_application_object':$rootScope._application_
+            });
+          }
+     }
+     // => consider ( show results per qs setting ) => ?
+     var show_results_setting =  ( $rootScope._settings_ != undefined ) ?  $rootScope._settings_.show_results_per_qs : false ;
+     // => consider ( review setting )
+     var review_setting =  ( $rootScope._settings_ != undefined ) ?  $rootScope._settings_.review_setting : false ;
+     // => consider ( multi answers  )
+     var is_single_choice_setting = ( question.answer_settings.single_choice != undefined) ?  question.answer_settings.single_choice : true ;
+     // => consider auto slide when answer select if it only single answer
+     var auto_slide_setting = ( $rootScope._settings_ != undefined ) ?  $rootScope._settings_.auto_slide : false ;
+
+     var answer_iu_list = $('#question_' + questionId).children('li');
+     var this_answer = $('.answer_'+answerId) ;
+
+     var stored_object = {
+                 question_id : questionId ,
+                 answer_id : answerId ,
+                 question : question ,
+                 answer: answer ,
+                 app_id : app_id ,
+                 user_id : user_id ,
+                 is_correct : is_correct ,
+                 answer_index : answerIndex
+    };
+
+    if( question.question_type == 0 || question.question_type == 1 )
+                        {
+                            if( is_single_choice_setting ){ // 1 - case this question has single answer
+                                            // =====> Single Answer
+                                  if(review_setting && show_results_setting == false ){
+                                                /* Many clicks ! */
+                                               // => Delete the-old highlited answer and Highlight the new selected answer
+                                               answer_iu_list.removeClass('selected_answer animated shake');
+                                               this_answer.addClass('selected_answer animated shake');
+
+                                                if($rootScope.this_attendee_draft.att_draft != undefined){
+                                                  // remove old answer answer_ids
+                                                  var question_id = stored_object.question_id ;
+                                                  // question_id
+                                                  var attendee_part = $rootScope.this_attendee_draft.att_draft.find(x => x.user_id == $rootScope.user_id);
+                                                  if(attendee_part != undefined){
+                                                    var target_question = attendee_part.questions_data.find(x => x.question_id == question_id);
+                                                    if(target_question != undefined)
+                                                    target_question.answer_ids = new Array();
+                                                  }
+                                                }
+                                               // => No need to show the correct answer here
+                                               // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
+                                               // => Mongo status => move the data into mongo ( attendee draft )
+                                               $rootScope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
+
+                                  }else if ( review_setting == false && show_results_setting ) {
+                                              /* One Click ! */
+                                              // => Highlight the selected answer for some moments ( timeframe )
+                                              var there_is_highlighted_answer = false ;
+                                              answer_iu_list.each(function (i){
+                                                var there = $(this).hasClass('selected_answer');
+                                                if(there) there_is_highlighted_answer = true;
+                                              });
+                                              if(there_is_highlighted_answer == false )
+                                              this_answer.addClass('selected_answer animated shake');
+                                              else
+                                                return false ; // => Prevent user from correct or edit his answer
+
+                                              // => Show the correct answer if selected is wrong show the wrong style + right style ( answer )
+                                                  // if user select the correct answer only need to show the right style in the selected answer
+                                              var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                                              if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                                                // =>> Show The correct
+                                                this_answer.addClass('right_answer');
+                                              }else {
+                                                // => show wrong answer
+                                                this_answer.addClass('wrong_answer');
+                                                // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                                                answer_iu_list.each(function (i){
+                                                  var currentAnswer = $(this);
+                                                  var answers_inBackend = question.answers_format[i].is_correct ;
+                                                  if(answers_inBackend){
+                                                    currentAnswer.addClass('right_answer');
+                                                  }
+                                                });
+                                              }
+                                              // => Angular backend ( attendee_draft  ) do this ---> don't allow attendee change the selected answer
+                                              // => Mongo status => move the data into mongo ( attendee draft )
+                                              $rootScope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
+                                              // => Auto slide status ( true ) => move to next slide directly after few moments ( timeframe )
+
+                                  } else if ( review_setting == false && show_results_setting == false ) {
+                                              /* One Click ! */
+                                              // => Highlight the selected answer
+                                              var there_is_highlighted_answer = false ;
+                                              answer_iu_list.each(function (i){
+                                                var there = $(this).hasClass('selected_answer');
+                                                if(there) there_is_highlighted_answer = true;
+                                              });
+                                              if(there_is_highlighted_answer == false )
+                                              this_answer.addClass('selected_answer animated shake');
+                                              else
+                                                return false ;
+                                              // => No need to show the correct answer here
+                                              // => Angular backend ( attendee_draft  ) do this ---> don't allow attendee change the selected answer
+                                              // => Mongo status => move the data into mongo ( attendee draft )
+                                              $rootScope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
+                                              // => Auto slide status ( true ) => move to next slide directly
+
+                                  } else if (review_setting   && show_results_setting ) {
+                                              /* Many clicks ! */
+                                              // => Delete the-old highlited answer and Highlight the new selected answer for some moments ( timeframe )
+                                              var there_is_highlighted_answer = false ;
+                                              answer_iu_list.each(function (i){
+                                                var there = $(this).hasClass('selected_answer');
+                                                if(there) there_is_highlighted_answer = true;
+                                              });
+                                              if(there_is_highlighted_answer == false )
+                                              this_answer.addClass('selected_answer animated shake');
+                                              // => Show the correct answer if selected is wrong show the wrong style + right style ( answer )
+                                              // if user select the correct answer only need to show the right style in the selected answer
+                                              var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                                              if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                                                // =>> Show The correct
+                                                this_answer.addClass('right_answer');
+                                              }else {
+                                                // => Show wrong answer
+                                                this_answer.addClass('wrong_answer');
+                                                // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                                                answer_iu_list.each(function (i){
+                                                  var currentAnswer = $(this);
+                                                  var answers_inBackend = question.answers_format[i].is_correct ;
+                                                  if(answers_inBackend){
+                                                    currentAnswer.addClass('right_answer');
+                                                  }
+                                                });
+                                              }
+
+
+
+                                              // => Angular backend ( attendee_draft  ) do this ---> allow attendee change the selected answer
+                                              $rootScope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
+                                              // => Auto slide status ( true ) => move to next slide directly after few moments ( timeframe )
+
+                                  }
+
+                            }else { // 2 - case this question has many answers
+                                          // =====> Many answer cases
+                                  if(review_setting && show_results_setting == false ){
+                                            /* Many clicks ! */
+                                            /*
+                                              if attendee clicked on selected answer
+                                                ( Delete the highlighted style ) => from { UI - AngulrBD  - Mongo }
+                                            */
+                                            /*
+                                              if attendee clicked on unselected answer
+                                                ( Add the highlighted style ) => into { UI - AngulrBD  - Mongo }
+                                            */
+                                            if(this_answer.hasClass('selected_answer animated shake')){
+                                              this_answer.removeClass('selected_answer animated shake');
+                                            }else {
+                                              this_answer.addClass('selected_answer animated shake');
+                                            }
+
+                                            // ===================> Updates
+
+                                            // => No need to show the correct answers
+                                            // => Angular backend ( attendee_draft  ) do this --->  allow attendee change or add the answer
+                                            // => Mongo status => move the data into mongo ( attendee draft )
+                                            $rootScope.store_into_attendee_draft( stored_object , false );
+                                            // => Auto slide status ( NO need to go to the next slide ) onlu continue button do this action
+                                  }else if(review_setting == false && show_results_setting ) {
+                                            /* One Click for each answer ! */
+                                            var has_wrong_answer = false ;
+                                            answer_iu_list.each(function(i){
+                                              var there = $(this);
+                                              if(there.hasClass('wrong_answer'))
+                                                has_wrong_answer = true;
+                                            });
+                                            if(has_wrong_answer ) return false ;
+                                            /*
+                                              if attendee clicked on selected answer
+                                              ( Add the highlighted style ) => into { UI } ==> consider ( timeframe )
+                                                Show the correct answers if attendee selected any wrong answer from many correct answers
+                                            */
+                                            if(!this_answer.hasClass('selected_answer'))
+                                            this_answer.addClass('selected_answer animated shake');
+                                            else return false ;
+
+
+                                            // => Show the correct answers ( Case all correct answers are selected ) without wrong style
+                                            var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                                            if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                                              // =>> Show The correct
+                                              this_answer.addClass('right_answer');
+                                            }else {
+                                              // => show wrong answer
+                                              this_answer.addClass('wrong_answer');
+                                              // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                                              answer_iu_list.each(function (i){
+                                                var currentAnswer = $(this);
+                                                var answers_inBackend = question.answers_format[i].is_correct ;
+                                                if(answers_inBackend){
+                                                  currentAnswer.addClass('right_answer');
+                                                }
+                                              });
+                                            }
+                                            // => Angular backend ( attendee_draft  ) do this ---> dont allow attendee change the selected answer only add new answer !
+                                            // => Mongo status => move the data into mongo ( attendee draft )
+                                            $rootScope.store_into_attendee_draft( stored_object , false );
+                                            // => Auto slide status ( NO need to go to the next slide ) only continue button do this action
+                                  } else if ( review_setting == false && show_results_setting == false ) {
+                                            /* One Click for each answer ! */
+                                            /*
+                                              if attendee clicked on selected answer
+                                              ( Add the highlighted style ) => into { UI }
+                                            */
+                                            if(!this_answer.hasClass('selected_answer'))
+                                            this_answer.addClass('selected_answer animated shake');
+                                            else return false ;
+                                            // => No need to show the correct answers
+                                            // => Angular backend ( attendee_draft  ) do this ---> dont allow attendee change the selected answer only add new answer !
+                                            // => Mongo status => move the data into mongo ( attendee draft )
+                                            $rootScope.store_into_attendee_draft( stored_object , false );
+                                            // => Auto slide status ( NO need to go to the next slide ) only continue button do this action
+                                  } else if (review_setting   && show_results_setting ) {
+                                            /* Many clicks ! */
+                                            /*
+                                              if attendee clicked on selected answer
+                                                ( Delete the highlighted style ) => from  { UI } => with timeframe
+
+                                                => case the sleceted answer is wrong - show the correct results with wrong answer style
+                                            */
+                                            /*
+                                              if attendee clicked on unselected answer
+                                                ( Add the highlighted style ) => into { UI } => with timeframe
+
+                                                => case the sleceted answer is right - show the correct results
+                                            */
+
+                                             if(!this_answer.hasClass('selected_answer'))
+                                              this_answer.addClass('selected_answer animated shake');
+                                              else this_answer.removeClass('selected_answer animated shake');
+
+                                              var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                                              if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                                                // =>> Show The correct
+                                                this_answer.addClass('right_answer');
+                                              }else {
+                                                // => show wrong answer
+                                                this_answer.addClass('wrong_answer');
+                                                // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                                                answer_iu_list.each(function (i){
+                                                  var currentAnswer = $(this);
+                                                  var answers_inBackend = question.answers_format[i].is_correct ;
+                                                  if(answers_inBackend){
+                                                    currentAnswer.addClass('right_answer');
+                                                  }
+                                                });
+                                              }
+                                            // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the selected answer Or add new answer !
+                                            // => Mongo status => move the data into mongo ( attendee draft )
+                                            $rootScope.store_into_attendee_draft( stored_object , false );
+                                            // => Auto slide status ( NO need to go to the next slide ) only continue button do this action
+                                  }
+                            }  //  => ( End multi answers With single answer )
+      }
+
+
+      if( question.question_type == 2 ){ // => True False
+                     if ( review_setting && show_results_setting ) {
+                         /* Many clicks ! */
+                         // => Delete the-old highlighted answer and Highlight the new selected answer
+                         if(!this_answer.hasClass('selected_answer')){
+                           answer_iu_list.each(function(i){
+                             var there = $(this);
+                              there.removeClass('selected_answer animated shake')
+                           });
+                          this_answer.addClass('selected_answer animated shake');
+                         }
+
+                         // => show the correct answer here
+                         var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                         if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                           // =>> Show The correct
+                           this_answer.addClass('right_answer');
+                         }else {
+                           // => show wrong answer
+                           this_answer.addClass('wrong_answer');
+                           // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                           answer_iu_list.each(function (i){
+                             var currentAnswer = $(this);
+                             var answers_inBackend = question.answers_format[i].is_correct ;
+                             if(answers_inBackend){
+                               currentAnswer.addClass('right_answer');
+                             }
+                           });
+                         }
+
+                         var has_wrong_answer = false ;
+                         answer_iu_list.each(function(i){
+                           var there = $(this);
+                          if(there.hasClass('wrong_answer')) has_wrong_answer = true ;
+                         });
+                         if(has_wrong_answer) return false ;
+                         // => Review Old answer
+                         // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
+                         // => Mongo status => move the data into mongo ( attendee draft )
+                         $rootScope.store_into_attendee_draft( stored_object );
+                         // => Auto slide status ( true ) => move to next slide directly
+
+                       } else if ( review_setting == false && show_results_setting ){
+                         /* One Click ! */
+                         // => Highlight the selected answer for some moments ( timeframe )
+                         var has_wrong_answer = false ;
+                         answer_iu_list.each(function(i){
+                           var there = $(this);
+                          if(there.hasClass('wrong_answer') || there.hasClass('right_answer')) has_wrong_answer = true ;
+                         });
+                         if(has_wrong_answer) return false;
+                         // => Show the correct answer if selected is wrong show the wrong style + right style ( answer )
+                             // if user select the correct answer only need to show the right style in the selected answer
+                             var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                             if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                               // =>> Show The correct
+                               this_answer.addClass('right_answer');
+                             }else {
+                               // => show wrong answer
+                               this_answer.addClass('wrong_answer');
+                               // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                               answer_iu_list.each(function (i){
+                                 var currentAnswer = $(this);
+                                 var answers_inBackend = question.answers_format[i].is_correct ;
+                                 if(answers_inBackend){
+                                   currentAnswer.addClass('right_answer');
+                                 }
+                               });
+                             }
+
+                         // => Angular backend ( attendee_draft  ) do this ---> don't allow attendee change the selected answer
+                         // => Mongo status => move the data into mongo ( attendee draft )
+                         $rootScope.store_into_attendee_draft( stored_object );
+                         // => Auto slide status ( true ) => move to next slide directly after few moments ( timeframe )
+
+                       } else if ( review_setting && show_results_setting == false ){
+                         /* Many clicks ! */
+                        // => Delete the-old highlited answer and Highlight the new selected answer
+                         answer_iu_list.each(function(i){
+                            var there = $(this);
+                              if(there.hasClass('selected_answer'))
+                             there.removeClass('selected_answer animated shake')
+                         });
+                        this_answer.addClass('selected_answer animated shake');
+
+                        // ==> Review old Answer
+                        // ===================> Updates
+                        if($rootScope.this_attendee_draft.att_draft != undefined){
+                            // remove old answer answer_ids
+                            var question_id = stored_object.question_id ;
+                            // question_id
+                            var attendee_part = $rootScope.this_attendee_draft.att_draft.find(x => x.user_id == $rootScope.user_id);
+                            var attendee_inx = $rootScope.this_attendee_draft.att_draft.findIndex(x => x.user_id == $rootScope.user_id);
+
+                            if(attendee_inx != -1 ){
+                                var target_question = attendee_part.questions_data.find(x => x.question_id == question_id);
+                                if(target_question != undefined)
+                                  target_question.answer_ids = new Array();
+                             }
+                          }
+                        // => No need to show the correct answer here
+                        // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
+                        // => Mongo status => move the data into mongo ( attendee draft )
+                        $rootScope.store_into_attendee_draft( stored_object );
+                        // => Auto slide status ( true ) => move to next slide directly
+
+                     } else if ( review_setting == false && show_results_setting  == false ){
+                         var is_selected_answer = false ;
+                          answer_iu_list.each(function(){
+                            var there = $(this);
+                            if(there.hasClass('selected_answer')) is_selected_answer = true ;
+                          });
+                          if(is_selected_answer) return false ;
+                         this_answer.addClass('selected_answer animated shake');
+                         $rootScope.store_into_attendee_draft(stored_object);
+
+                     }
+              }
+
+      } ;
+      $rootScope.store_into_attendee_draft = (object) => {
+
+             if (  $rootScope.this_attendee_draft != null && $rootScope.this_attendee_draft.application_id != undefined)
+                { // ==> attendee_draft is not empty
+
+                    var findAttendeeIndex = $rootScope.this_attendee_draft.att_draft.findIndex(x => x.user_id == $rootScope.user_id );
+                    var findAttendee = $rootScope.this_attendee_draft.att_draft.find(x => x.user_id == $rootScope.user_id );
+
+                    if(findAttendeeIndex != - 1){
+                      // ==> Attendee Object [FOUND]
+                      var attendeeInfo = $rootScope.this_attendee_draft.att_draft[findAttendeeIndex];
+                      console.log({attendeeInfo : attendeeInfo});
+                      if(attendeeInfo.questions_data == undefined )
+                      attendeeInfo.questions_data = new Array();
+                      var findQuestionIndex = attendeeInfo.questions_data.findIndex(x => x.question_id == object.question_id);
+                      var findQuestion = attendeeInfo.questions_data.find(x => x.question_id == object.question_id);
+                      if(findQuestionIndex == -1){
+
+                        // ==> Question UNFOUND
+                        attendeeInfo.questions_data.push({
+                          question_id : object.question_id ,
+                          question_index : 0 ,
+                          question_type : object.question.question_type,
+                          question_text : object.question.question_body,
+                          answer_ids : new Array({answer_id : object.answer_id , is_correct : object.is_correct , answer_object : object.answer , answer_index : object.answer_index }) ,
+                          correct_answers : object.question.answers_format.filter(x => x.is_correct == true) ,
+                          updated_date : new Date()
+                        });
+
+
+                        // ==============================>> Report Questions ( all_questions , right_questions , wrong_questions )
+                        if(attendeeInfo.report_questions == undefined)
+                        attendeeInfo.report_questions = new Object();
+
+                        if(attendeeInfo.report_questions.all_questions == undefined )
+                          attendeeInfo.report_questions.all_questions = new Array();
+                          // ==> Store the questions here plz
+                          attendeeInfo.report_questions.all_questions.push(object.question_id);
+
+
+                        // ==> store correct answers that solved
+                        if(attendeeInfo.report_questions.right_questions == undefined )
+                          attendeeInfo.report_questions.right_questions = new Array();
+
+                        // ==> store wrong answers that solved
+                        if(attendeeInfo.report_questions.wrong_questions == undefined )
+                          attendeeInfo.report_questions.wrong_questions = new Array();
+
+
+                        var answerIndexVal = object.question.answers_format.findIndex(x => x._id == object.answer_id );
+                        if(answerIndexVal != -1 ){
+                          answerObject = object.question.answers_format.find(x => x._id == object.answer_id );
+                          if(answerObject.is_correct == true )
+                            attendeeInfo.report_questions.right_questions.push(object.question_id) ;
+                          else
+                            attendeeInfo.report_questions.wrong_questions.push(object.question_id) ;
+                        }
+
+                        // ==============================>> Report attendee_details
+                        if(attendeeInfo.report_attendee_details == undefined )
+                          attendeeInfo.report_attendee_details = new Object();
+
+                          // ==> Calculations
+                          if( $rootScope._settings_  == undefined || $rootScope._settings_ == null )
+                            alert("Something went wrong !")
+
+                          var app_grade_value = parseInt($rootScope._settings_.grade_settings.value);
+                          var total_app_questions = parseInt($rootScope._questions_.length);
+                          var correct_questions = parseInt(attendeeInfo.report_questions.right_questions.length);
+                          var wrong_questions  = parseInt(attendeeInfo.report_questions.wrong_questions.length);
+                          var percentage = Math.round(correct_questions * 100 ) / total_app_questions ;
+                          var isPassed = ( percentage >= app_grade_value )? true : false ;
+                          var is_completed = ( total_app_questions == attendeeInfo.questions_data.length ) ? true : false ;
+
+                          attendeeInfo.is_completed = is_completed ;
+                          attendeeInfo.report_attendee_details.attendee_id = $rootScope.user_id ;
+                          attendeeInfo.report_attendee_details.attendee_information = $rootScope.user_id ;
+                          attendeeInfo.report_attendee_details.total_questions = attendeeInfo.questions_data.length ;
+                          attendeeInfo.report_attendee_details.pass_mark = isPassed ,
+                          attendeeInfo.report_attendee_details.correct_answers =  correct_questions ,
+                          attendeeInfo.report_attendee_details.wrong_answers = wrong_questions ;
+                          attendeeInfo.report_attendee_details.status= (isPassed == true ) ? "Passed": "Failed";
+                          attendeeInfo.report_attendee_details.score= percentage;
+                          attendeeInfo.report_attendee_details.completed_status= is_completed;
+                          attendeeInfo.report_attendee_details.created_at= new Date();
+                          attendeeInfo.report_attendee_details.completed_date= new Date();
+
+                          // ==============================>> Report report_attendees
+                          if(attendeeInfo.report_attendees == undefined )
+                            attendeeInfo.report_attendees = new Object();
+
+                            attendeeInfo.report_attendees.created_at = new Date()
+                            attendeeInfo.report_attendees.updated_at = new Date()
+                            attendeeInfo.report_attendees.attendee_id = $rootScope.user_id;
+                            attendeeInfo.report_attendees.user_information = $rootScope.user_id;
+                            attendeeInfo.report_attendees.is_completed = is_completed ;
+                            attendeeInfo.report_attendees.passed_the_grade = isPassed ;
+                            attendeeInfo.report_attendees.survey_quiz_answers = new Array();
+                            attendeeInfo.report_attendees.results = new Object();
+                            attendeeInfo.report_attendees.results['wrong_answers'] = wrong_questions;
+                            attendeeInfo.report_attendees.results['correct_answers'] = correct_questions ;
+                            attendeeInfo.report_attendees.results['count_of_questions'] = attendeeInfo.questions_data.length ;
+                            attendeeInfo.report_attendees.results['result'] = new Object();
+                            attendeeInfo.report_attendees.results['result']['percentage_value'] = percentage;
+                            attendeeInfo.report_attendees.results['result']['raw_value'] = correct_questions ;
+                            attendeeInfo.report_attendees.survey_quiz_answers.push({
+                              question_id :  object.question_id  ,
+                              questions : {
+                                question_id : object.question_id,
+                                question_body :object.question.question_body ,
+                                question_type : object.question.question_type
+                              } ,
+                              answers : {
+                                answer_id : new Array (object.answer_id) ,
+                                answer_body :  new Object() ,
+                                is_correct : object.is_correct
+                              }
+                            });
+                            attendeeInfo.report_attendees.survey_quiz_answers[attendeeInfo.report_attendees.survey_quiz_answers.length - 1 ].
+                            answers.answer_body["answer_id_"+object.answer_id] = {
+                                     answer_id : object.answer_id ,
+                                     answer_body : object.answer ,
+                                     is_correct : object.is_correct
+                             }
+                             console.log({attendeeInfo: attendeeInfo});
+                            // console.log(attendeeInfo);
+                      }else {
+                        // ==> Question FOUND ==> Update here !
+                         var findAnswer = findQuestion.answer_ids.find(x => x.answer_id == object.answer_id);
+                         var findAnswerIndex = findQuestion.answer_ids.findIndex(x => x.answer_id == object.answer_id);
+                         if(findAnswerIndex == -1 ){
+                           findQuestion.answer_ids.push({
+                              answer_id : object.answer_id , is_correct : object.is_correct , answer_object : object.answer , answer_index : object.answer_index
+                            });
+                         }else{
+                           findQuestion.answer_ids.splice(findAnswerIndex, 1);
+                         }
+
+
+                         var app_correct_answers =  findQuestion.correct_answers
+                         var attendee_solved_answers =  findQuestion.answer_ids
+                         var question_status = function (a, b) {
+                              var correct_answers = a.map( function(x){ return x._id; } );
+                              var solved_answers = b.map( function(x){ return x.answer_id; } );
+                              var is_right_question =  (solved_answers.sort().join('') == correct_answers.sort().join(''));
+                              return is_right_question ;
+                            };
+                         var isCorrect =  question_status (app_correct_answers , attendee_solved_answers);
+
+                         if(findQuestion.answer_ids.length != 0){
+                                 var all_report_questions_index = attendeeInfo.report_questions.all_questions.findIndex(x => x == object.question_id);
+                                 if(all_report_questions_index != -1 ){
+
+                                   var wrong_exists =  attendeeInfo.report_questions.wrong_questions.findIndex(x => x == object.question_id);
+                                   var right_exists =  attendeeInfo.report_questions.right_questions.findIndex(x => x == object.question_id);
+
+                                   if(isCorrect == false ){
+                                     if( wrong_exists == -1 )  // add  here
+                                       attendeeInfo.report_questions.wrong_questions.push(object.question_id);
+
+                                     if(right_exists != -1 )  // delete it from here
+                                       attendeeInfo.report_questions.right_questions.splice(right_exists , 1 );
+                                   }else {
+                                     if(right_exists == -1 )  // add  here
+                                        attendeeInfo.report_questions.right_questions.push(object.question_id);
+
+                                     if( wrong_exists != -1 ){ // delete it from here
+                                        attendeeInfo.report_questions.wrong_questions.splice(wrong_exists , 1);
+                                     }
+                                   }
+                                 } // => End all questions
+                          }else if(findQuestion.answer_ids.length == 0){
+                           var qsIndex_all = attendeeInfo.report_questions.all_questions.findIndex( x => x == object.question_id);
+                           var qsIndex_wrong = attendeeInfo.report_questions.wrong_questions.findIndex(x => x == object.question_id);
+                           var qsIndex_right = attendeeInfo.report_questions.right_questions.findIndex(x => x == object.question_id);
+
+                           if(qsIndex_wrong != -1)
+                           attendeeInfo.report_questions.wrong_questions.splice(qsIndex_wrong , 1);
+
+                           if(qsIndex_right != -1)
+                           attendeeInfo.report_questions.right_questions.splice(qsIndex_right , 1);
+
+                           if(qsIndex_all != -1)
+                           attendeeInfo.report_questions.all_questions.splice(qsIndex_all , 1);
+                         } // End store answer question
+
+
+
+                         var app_grade_value = parseInt($rootScope._settings_.grade_settings.value);
+                         var total_app_questions = parseInt($rootScope._questions_.length);
+                         var correct_questions = parseInt(attendeeInfo.report_questions.right_questions.length);
+                         var wrong_questions  = parseInt(attendeeInfo.report_questions.wrong_questions.length);
+                         var percentage = Math.round(correct_questions * 100 ) / total_app_questions ;
+                         var isPassed = ( percentage >= app_grade_value )? true : false ;
+                         var is_completed = ( total_app_questions == attendeeInfo.questions_data.length ) ? true : false ;
+
+                         attendeeInfo.is_completed = is_completed ;
+                         attendeeInfo.report_attendee_details.total_questions = attendeeInfo.questions_data.length ;
+                         attendeeInfo.report_attendee_details.pass_mark = isPassed ,
+                         attendeeInfo.report_attendee_details.correct_answers =  correct_questions ,
+                         attendeeInfo.report_attendee_details.wrong_answers = wrong_questions ;
+                         attendeeInfo.report_attendee_details.status= (isPassed == true ) ? "Passed": "Failed";
+                         attendeeInfo.report_attendee_details.score= percentage;
+                         attendeeInfo.report_attendee_details.completed_status= is_completed;
+                         attendeeInfo.report_attendee_details.completed_date= new Date();
+
+
+                         attendeeInfo.report_attendees.updated_at = new Date()
+                         attendeeInfo.report_attendees.attendee_id = $rootScope.user_id;
+                         attendeeInfo.report_attendees.user_information = $rootScope.user_id;
+                         attendeeInfo.report_attendees.is_completed = is_completed ;
+                         attendeeInfo.report_attendees.passed_the_grade = isPassed ;
+
+                         attendeeInfo.report_attendees.results['wrong_answers'] = wrong_questions;
+                         attendeeInfo.report_attendees.results['correct_answers'] = correct_questions ;
+                         attendeeInfo.report_attendees.results['count_of_questions'] = attendeeInfo.questions_data.length ;
+                         attendeeInfo.report_attendees.results['result']['percentage_value'] = percentage;
+                         attendeeInfo.report_attendees.results['result']['raw_value'] = correct_questions ;
+                         var qsIndex_x = attendeeInfo.report_attendees.survey_quiz_answers.findIndex(x => x.question_id == object.question_id);
+                         var question_obj_val ;
+                         if(qsIndex_x != -1 ){
+                            question_obj_val = {
+                              question_id :  object.question_id  ,
+                              questions : {
+                                question_id : object.question_id,
+                                question_body :object.question.question_body ,
+                                question_type : object.question.question_type
+                              } ,
+                              answers : {
+                                answer_id : new Array (object.answer_id) ,
+                                answer_body :  new Object() ,
+                                is_correct : object.is_correct
+                              }
+                            }; // end question object
+
+                             question_obj_val.answers.answer_body["answer_id_"+object.answer_id] = {
+                                     answer_id : object.answer_id ,
+                                     answer_body : object.answer ,
+                                     is_correct : object.is_correct
+                             }
+
+                             attendeeInfo.report_attendees.survey_quiz_answers[qsIndex_x] = question_obj_val ;
+
+                         }
+                      }
+                    }else {
+                      // ==> Attenee Object [UNFOUND]
+
+                    }
+                }else {
+                  // ==> attendee_draft is empty
+
+                }
+
+                $timeout(function(){  $rootScope.$apply(); } , 300);
+                console.log({
+                  currAttendee : $rootScope.this_attendee_draft
+                });
+    }
+  $rootScope.enable_css_mode_func = ( is_enabled ) => {
+    $("#enabled_css").val( is_enabled );
+
+   if(is_enabled == true ){
+      $('body , html').bind('mouseover' , function(e){
+        var target = e.target;
+        $('.selector').each(function(){
+          $(this).removeClass('selector_line');
+        });
+        if(target.className.indexOf('selector') != -1 ){  ;
+          $(target).addClass('selector_line');
+        }
+      });
+      $('body , html').click(function(e){
+        if(e.target.className.indexOf('selector') != -1 ){
+            $( '.selector' ).prop('contenteditable', false );
+            $( '*' ).each(function(e){
+              $(this).css ({outlineColor : "transparent"});
+            })
+            e.target.contentEditable = true ;
+            e.target.style.outline = "#20fdb9 solid 3px";
+            if(e.target.getAttribute('box-target-type') == 'box-player')
+            e.target.style.outlineOffset = "-4px";
+            else
+            e.target.style.outlineOffset = "4px";
+            e.target.focus();
+            $( '.selector' ).attr('disabled');
+
+            var current_class = $("."+e.target.getAttribute('box-target-class')) ;
+            // ==> Show Options
+            if(e.target.getAttribute('box-target-type') == 'box-player'){
+              // ==> fill colors
+              $rootScope.background_models = current_class.css("background-color");
+              $('.background_models').spectrum('set' , $rootScope.background_models );
+
+              // ==> show inputs
+              $rootScope.selecotor_name = ".Player-Page";
+              $rootScope.css_pellet_mode.background = true;
+              $rootScope.css_pellet_mode.border = false;
+              $rootScope.css_pellet_mode.color = false ;
+              $rootScope.css_pellet_mode.fontSize = false ;
+              $rootScope.css_pellet_mode.fontFamily = false ;
+              $rootScope.css_pellet_mode.width = false ;
+
+              $rootScope.css_pellet_mode.hover_background = false ;
+              $rootScope.css_pellet_mode.hover_border = false ;
+              $rootScope.css_pellet_mode.hover_color = false ;
+              $rootScope.css_pellet_mode.selected_background = false ;
+              $rootScope.css_pellet_mode.selected_border = false ;
+              $rootScope.css_pellet_mode.selected_color = false ;
+              $rootScope.css_pellet_mode.correct_background = false ;
+              $rootScope.css_pellet_mode.correct_border = false ;
+              $rootScope.css_pellet_mode.correct_color = false ;
+              $rootScope.css_pellet_mode.correct_icon_background = false ;
+              $rootScope.css_pellet_mode.correct_icon_border = false ;
+              $rootScope.css_pellet_mode.correct_icon_color = false ;
+              $rootScope.css_pellet_mode.wrong_background = false ;
+              $rootScope.css_pellet_mode.wrong_border = false ;
+              $rootScope.css_pellet_mode.wrong_color = false ;
+              $rootScope.css_pellet_mode.wrong_icon_background = false ;
+              $rootScope.css_pellet_mode.wrong_icon_border = false ;
+              $rootScope.css_pellet_mode.wrong_icon_color = false ;
+              $rootScope.css_pellet_mode.rating_color = false ;
+              $rootScope.css_pellet_mode.scale_color = false ;
+              $rootScope.css_pellet_mode.scale_hover_color = false ;
+              $rootScope.css_pellet_mode.scale_background = false ;
+              $rootScope.css_pellet_mode.scale_hover_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_color = false ;
+
+            }
+            if(e.target.getAttribute('box-target-type') == 'box-containers'){
+              // ==> fill colors
+
+              $rootScope.background_models = current_class.css("background-color");
+              $rootScope.border_models_color = current_class.css("border-color");
+
+              $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
+              $('.background_models').spectrum('set' , $rootScope.background_models );
+
+              $rootScope.border_style_models = current_class.css("border-style").toString();
+              $rootScope.border_left_models = current_class.css("border-left-width").toString();
+              $rootScope.border_right_models = current_class.css("border-right-width").toString();
+              $rootScope.border_top_models = current_class.css("border-top-width").toString();
+              $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
+
+              // ==> show inputs
+              $rootScope.selecotor_name = ".Container";
+              $rootScope.css_pellet_mode.background = true;
+              $rootScope.css_pellet_mode.border = true;
+              $rootScope.css_pellet_mode.width = false ;
+              $rootScope.css_pellet_mode.color = false ;
+              $rootScope.css_pellet_mode.fontSize = false ;
+              $rootScope.css_pellet_mode.fontFamily = false ;
+
+              $rootScope.css_pellet_mode.hover_background = false ;
+              $rootScope.css_pellet_mode.hover_border = false ;
+              $rootScope.css_pellet_mode.hover_color = false ;
+              $rootScope.css_pellet_mode.selected_background = false ;
+              $rootScope.css_pellet_mode.selected_border = false ;
+              $rootScope.css_pellet_mode.selected_color = false ;
+              $rootScope.css_pellet_mode.correct_background = false ;
+              $rootScope.css_pellet_mode.correct_border = false ;
+              $rootScope.css_pellet_mode.correct_color = false ;
+              $rootScope.css_pellet_mode.correct_icon_background = false ;
+              $rootScope.css_pellet_mode.correct_icon_border = false ;
+              $rootScope.css_pellet_mode.correct_icon_color = false ;
+              $rootScope.css_pellet_mode.wrong_background = false ;
+              $rootScope.css_pellet_mode.wrong_border = false ;
+              $rootScope.css_pellet_mode.wrong_color = false ;
+              $rootScope.css_pellet_mode.wrong_icon_background = false ;
+              $rootScope.css_pellet_mode.wrong_icon_border = false ;
+              $rootScope.css_pellet_mode.wrong_icon_color = false ;
+              $rootScope.css_pellet_mode.rating_color = false ;
+              $rootScope.css_pellet_mode.scale_color = false ;
+              $rootScope.css_pellet_mode.scale_hover_color = false ;
+              $rootScope.css_pellet_mode.scale_background = false ;
+              $rootScope.css_pellet_mode.scale_hover_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_color = false ;
+            }
+            if(e.target.getAttribute('box-target-type') == 'box-answers'){
+                // ==> Fetch Style results
+
+                // Basic answers
+                $rootScope.selecotor_name = ".Answers";
+                $rootScope.background_models = current_class.css("background-color");
+                $rootScope.border_models_color = current_class.css("border-color");
+                $rootScope.color_models = current_class.css("color");
+                $rootScope.font_size_models = parseInt(current_class.css("font-size"));
+                $rootScope.font_family_models = current_class.css("font-family").toString().toLowerCase();
+                $rootScope.border_style_models = current_class.css("border-style").toString();
+                $rootScope.border_left_models = current_class.css("border-left-width").toString();
+                $rootScope.border_right_models = current_class.css("border-right-width").toString();
+                $rootScope.border_top_models = current_class.css("border-top-width").toString();
+                $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
+                $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
+                $('.background_models').spectrum('set' , $rootScope.background_models );
+                $('.color_models').spectrum('set' , $rootScope.color_models );
+
+
+                // ==> Hover answers
+                var hover_classes = $('.'+e.target.getAttribute('box-target-class') +':hover');
+                $rootScope.hover_border_models_color = hover_classes.css('border-color');
+                $rootScope.hover_background_models  = hover_classes.css('background-color');
+                $rootScope.hover_color_models = hover_classes.css('color');
+                $rootScope.hover_border_style_models = hover_classes.css('border-style');
+                $rootScope.hover_border_left_models = hover_classes.css('border-left-width');
+                $rootScope.hover_border_right_models = hover_classes.css('border-right-width');
+                $rootScope.hover_border_top_models = hover_classes.css('border-top-width');
+                $rootScope.hover_border_bottom_models = hover_classes.css('border-bottom-width');
+                $('.hover_border_models_color').spectrum('set' , $rootScope.hover_border_models_color );
+                $('.hover_background_models').spectrum('set' , $rootScope.hover_background_models );
+                $('.hover_color_models').spectrum('set' , $rootScope.hover_color_models );
+
+                // ==> Selected Answers (selected_answer) =>
+                var selected_classes = $('.'+e.target.getAttribute('box-target-class') +'.selected_answer');
+                $rootScope.selected_border_models_color = selected_classes.css('border-color');
+                $rootScope.selected_background_models  = selected_classes.css('background-color');
+                $rootScope.selected_color_models = selected_classes.css('color');
+                $rootScope.selected_border_style_models = selected_classes.css('border-style');
+                $rootScope.selected_border_left_models = selected_classes.css('border-left-width');
+                $rootScope.selected_border_right_models = selected_classes.css('border-right-width');
+                $rootScope.selected_border_top_models = selected_classes.css('border-top-width');
+                $rootScope.selected_border_bottom_models = selected_classes.css('border-bottom-width');
+                $('.selected_border_models_color').spectrum('set' , $rootScope.selected_border_models_color );
+                $('.selected_background_models').spectrum('set' , $rootScope.selected_background_models );
+                $('.selected_color_models').spectrum('set' , $rootScope.selected_color_models );
+
+
+                var question_type = $rootScope._questions_[$rootScope.question_index].question_type ;
+                if(question_type == undefined) return false ;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.background = true;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.border = true;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.color = true ;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.fontSize = true ;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.fontFamily = true ;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.width = false ;
+
+
+                /* Consider the following cases +++++ */
+                // ==> Case Hover in answer
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.hover_background = true;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.hover_border = true;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.hover_color = true ;
+
+                // ==> Case select answer
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.selected_background = true;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.selected_border = true;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.selected_color = true ;
+
+                // ==> Case correct answer
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.correct_background = true;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.correct_border = true;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.correct_color = true ;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.correct_icon_background = true;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.correct_icon_border = true;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.correct_icon_color = true ;
+
+                // ==> Case wrong answer
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.wrong_background = true;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.wrong_border = true;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.wrong_color = true ;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.wrong_icon_background = true;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.wrong_icon_border = true;
+                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.css_pellet_mode.wrong_icon_color = true ;
+
+                // ==> rating and scale answers
+                if( question_type == 3 )
+                $rootScope.css_pellet_mode.rating_color = false;
+                // ==> Do border for scale answers
+                if( question_type == 3 )
+                $rootScope.css_pellet_mode.scale_color = false ;
+                if( question_type == 3 )
+                $rootScope.css_pellet_mode.scale_hover_color = false ;
+                if( question_type == 3 )
+                $rootScope.css_pellet_mode.scale_background = false;
+                if( question_type == 3 )
+                $rootScope.css_pellet_mode.scale_hover_background = false;
+
+                // ==> Free texts answers
+                if( question_type == 4 )
+                $rootScope.css_pellet_mode.free_boxtext_background = false;
+                if( question_type == 4 )
+                $rootScope.css_pellet_mode.free_boxtext_color = false;
+                // ==> consider to set border in this option
+            }
+            if(e.target.getAttribute('box-target-type') == 'box-texts'){
+              // ==> fill colors
+              $rootScope.color_models = current_class.css("color");
+              $('.color_models').spectrum('set' , $rootScope.color_models );
+
+              $rootScope.font_size_models = parseInt(current_class.css("font-size"));
+              $rootScope.font_family_models = current_class.css("font-family").toString().toLowerCase();
+
+              $rootScope.selecotor_name = ".Texts";
+              $rootScope.css_pellet_mode.background = false;
+              $rootScope.css_pellet_mode.border = false;
+              $rootScope.css_pellet_mode.color = true ;
+              $rootScope.css_pellet_mode.fontSize = true ;
+              $rootScope.css_pellet_mode.fontFamily = true ;
+              $rootScope.css_pellet_mode.width = false ;
+
+              $rootScope.css_pellet_mode.hover_background = false ;
+              $rootScope.css_pellet_mode.hover_border = false ;
+              $rootScope.css_pellet_mode.hover_color = false ;
+              $rootScope.css_pellet_mode.selected_background = false ;
+              $rootScope.css_pellet_mode.selected_border = false ;
+              $rootScope.css_pellet_mode.selected_color = false ;
+              $rootScope.css_pellet_mode.correct_background = false ;
+              $rootScope.css_pellet_mode.correct_border = false ;
+              $rootScope.css_pellet_mode.correct_color = false ;
+              $rootScope.css_pellet_mode.correct_icon_background = false ;
+              $rootScope.css_pellet_mode.correct_icon_border = false ;
+              $rootScope.css_pellet_mode.correct_icon_color = false ;
+              $rootScope.css_pellet_mode.wrong_background = false ;
+              $rootScope.css_pellet_mode.wrong_border = false ;
+              $rootScope.css_pellet_mode.wrong_color = false ;
+              $rootScope.css_pellet_mode.wrong_icon_background = false ;
+              $rootScope.css_pellet_mode.wrong_icon_border = false ;
+              $rootScope.css_pellet_mode.wrong_icon_color = false ;
+              $rootScope.css_pellet_mode.rating_color = false ;
+              $rootScope.css_pellet_mode.scale_color = false ;
+              $rootScope.css_pellet_mode.scale_hover_color = false ;
+              $rootScope.css_pellet_mode.scale_background = false ;
+              $rootScope.css_pellet_mode.scale_hover_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_color = false ;
+            }
+            if(e.target.getAttribute('box-target-type') == 'box-buttons'){
+
+              $rootScope.border_models_color = current_class.css("border-color");
+              $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
+
+              $rootScope.color_models = current_class.css("color");
+              $('.color_models').spectrum('set' , $rootScope.color_models );
+
+              $rootScope.background_models = current_class.css("background-color");
+              $('.background_models').spectrum('set' , $rootScope.background_models );
+
+              $rootScope.font_size_models = parseInt(current_class.css("font-size"));
+              var current_class = $("."+e.target.getAttribute('box-target-class')) ;;
+
+              $rootScope.font_family_models = current_class.css("font-family").toString().toLowerCase();
+
+              $rootScope.border_style_models = current_class.css("border-style").toString();
+              $rootScope.border_left_models = current_class.css("border-left-width").toString();
+              $rootScope.border_right_models = current_class.css("border-right-width").toString();
+              $rootScope.border_top_models = current_class.css("border-top-width").toString();
+              $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
+
+              $rootScope.selecotor_name = ".Buttons";
+              $rootScope.css_pellet_mode.background = true;
+              $rootScope.css_pellet_mode.border = true;
+              $rootScope.css_pellet_mode.color = true ;
+              $rootScope.css_pellet_mode.fontSize = true ;
+              $rootScope.css_pellet_mode.fontFamily = true ;
+              $rootScope.css_pellet_mode.width = false ;
+
+              $rootScope.css_pellet_mode.hover_background = false ;
+              $rootScope.css_pellet_mode.hover_border = false ;
+              $rootScope.css_pellet_mode.hover_color = false ;
+              $rootScope.css_pellet_mode.selected_background = false ;
+              $rootScope.css_pellet_mode.selected_border = false ;
+              $rootScope.css_pellet_mode.selected_color = false ;
+              $rootScope.css_pellet_mode.correct_background = false ;
+              $rootScope.css_pellet_mode.correct_border = false ;
+              $rootScope.css_pellet_mode.correct_color = false ;
+              $rootScope.css_pellet_mode.correct_icon_background = false ;
+              $rootScope.css_pellet_mode.correct_icon_border = false ;
+              $rootScope.css_pellet_mode.correct_icon_color = false ;
+              $rootScope.css_pellet_mode.wrong_background = false ;
+              $rootScope.css_pellet_mode.wrong_border = false ;
+              $rootScope.css_pellet_mode.wrong_color = false ;
+              $rootScope.css_pellet_mode.wrong_icon_background = false ;
+              $rootScope.css_pellet_mode.wrong_icon_border = false ;
+              $rootScope.css_pellet_mode.wrong_icon_color = false ;
+              $rootScope.css_pellet_mode.rating_color = false ;
+              $rootScope.css_pellet_mode.scale_color = false ;
+              $rootScope.css_pellet_mode.scale_hover_color = false ;
+              $rootScope.css_pellet_mode.scale_background = false ;
+              $rootScope.css_pellet_mode.scale_hover_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_color = false ;
+            }
+            if(e.target.getAttribute('box-target-type') == "box-media"){
+              $rootScope.selecotor_name = ".Media Container";
+              $rootScope.media_container = parseInt(current_class.width());
+
+              $rootScope.css_pellet_mode.background = false;
+              $rootScope.css_pellet_mode.border = false;
+              $rootScope.css_pellet_mode.color = false ;
+              $rootScope.css_pellet_mode.fontSize = false ;
+              $rootScope.css_pellet_mode.fontFamily = false ;
+              $rootScope.css_pellet_mode.width = true ;
+
+
+              $rootScope.css_pellet_mode.hover_background = false ;
+              $rootScope.css_pellet_mode.hover_border = false ;
+              $rootScope.css_pellet_mode.hover_color = false ;
+              $rootScope.css_pellet_mode.selected_background = false ;
+              $rootScope.css_pellet_mode.selected_border = false ;
+              $rootScope.css_pellet_mode.selected_color = false ;
+              $rootScope.css_pellet_mode.correct_background = false ;
+              $rootScope.css_pellet_mode.correct_border = false ;
+              $rootScope.css_pellet_mode.correct_color = false ;
+              $rootScope.css_pellet_mode.correct_icon_background = false ;
+              $rootScope.css_pellet_mode.correct_icon_border = false ;
+              $rootScope.css_pellet_mode.correct_icon_color = false ;
+              $rootScope.css_pellet_mode.wrong_background = false ;
+              $rootScope.css_pellet_mode.wrong_border = false ;
+              $rootScope.css_pellet_mode.wrong_color = false ;
+              $rootScope.css_pellet_mode.wrong_icon_background = false ;
+              $rootScope.css_pellet_mode.wrong_icon_border = false ;
+              $rootScope.css_pellet_mode.wrong_icon_color = false ;
+              $rootScope.css_pellet_mode.rating_color = false ;
+              $rootScope.css_pellet_mode.scale_color = false ;
+              $rootScope.css_pellet_mode.scale_hover_color = false ;
+              $rootScope.css_pellet_mode.scale_background = false ;
+              $rootScope.css_pellet_mode.scale_hover_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_color = false ;
+            }
+            if(e.target.getAttribute('box-target-type') == 'box-labels'){
+
+              $rootScope.border_models_color = current_class.css("border-color");
+              $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
+
+              $rootScope.color_models = current_class.css("color");
+              $('.color_models').spectrum('set' , $rootScope.color_models );
+
+              $rootScope.background_models = current_class.css("background-color");
+              $('.background_models').spectrum('set' , $rootScope.background_models );
+
+              $rootScope.selecotor_name = ".Labels";
+              $rootScope.css_pellet_mode.background = true;
+              $rootScope.css_pellet_mode.border = true;
+              $rootScope.css_pellet_mode.color = true ;
+              $rootScope.css_pellet_mode.fontSize = false ;
+              $rootScope.css_pellet_mode.fontFamily = false ;
+              $rootScope.css_pellet_mode.width = false ;
+
+
+
+              $rootScope.css_pellet_mode.hover_background = false ;
+              $rootScope.css_pellet_mode.hover_border = false ;
+              $rootScope.css_pellet_mode.hover_color = false ;
+              $rootScope.css_pellet_mode.selected_background = false ;
+              $rootScope.css_pellet_mode.selected_border = false ;
+              $rootScope.css_pellet_mode.selected_color = false ;
+              $rootScope.css_pellet_mode.correct_background = false ;
+              $rootScope.css_pellet_mode.correct_border = false ;
+              $rootScope.css_pellet_mode.correct_color = false ;
+              $rootScope.css_pellet_mode.correct_icon_background = false ;
+              $rootScope.css_pellet_mode.correct_icon_border = false ;
+              $rootScope.css_pellet_mode.correct_icon_color = false ;
+              $rootScope.css_pellet_mode.wrong_background = false ;
+              $rootScope.css_pellet_mode.wrong_border = false ;
+              $rootScope.css_pellet_mode.wrong_color = false ;
+              $rootScope.css_pellet_mode.wrong_icon_background = false ;
+              $rootScope.css_pellet_mode.wrong_icon_border = false ;
+              $rootScope.css_pellet_mode.wrong_icon_color = false ;
+              $rootScope.css_pellet_mode.rating_color = false ;
+              $rootScope.css_pellet_mode.scale_color = false ;
+              $rootScope.css_pellet_mode.scale_hover_color = false ;
+              $rootScope.css_pellet_mode.scale_background = false ;
+              $rootScope.css_pellet_mode.scale_hover_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_color = false ;
+            }
+            $timeout(function(){
+              $rootScope.$apply();
+            } , 10);
+        }
+      });
+    }else {
+      $("body , html , .selector").unbind('mouseenter mouseover mouseleave');
+      $( '.selector' ).prop('contenteditable', false );
+      $( '.selector' ).removeClass('selector_line');
+      $( '*' ).each(function(e){
+        $(this).css ({outlineColor : "transparent"});
+      })
+    }
+  }
+
+  // ==> Calling Methods Here
+  $timeout(function(){
+    $rootScope.init_swiperJs();
+    $rootScope.init_bootstrap_tooltip();
+    $rootScope.init_drag_drop();
+    $rootScope.load_spectrum_plugin();
+  }, 400);
 }]);

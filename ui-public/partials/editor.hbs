@@ -29,9 +29,9 @@
              <img ng:if="_questions_[question_index].media_question != undefined  && _questions_[question_index].media_question.media_type == 0" ng:src="{> image_source_link( _questions_[question_index].media_question.Media_directory + '?' + _questions_[question_index].media_question.image_updated_date); <}" class="image-responsive" alt="Image">
 
              <!--  Case Video -->
-             <div ng:if="_questions_[question_index].media_question != undefined  && _questions_[question_index].media_question.media_type == 1" class="question-media question-video">
+             <div ng:if="_questions_[question_index].media_question != undefined  && _questions_[question_index].media_question.media_type == 1" class="question-media question-video question-editor-media" style="height:auto;">
                <!-- case it vimeo or youtube  -->
-               <iframe ng:src="{> _questions_[question_index].media_question.embed_path | trust_iframe_url <}" ng:if="_questions_[question_index].media_question.video_type == 1 || _questions_[question_index].media_question.video_type == 0" width="100%" height="120px"></iframe>
+               <iframe ng:src="{> _questions_[question_index].media_question.embed_path | trust_iframe_url <}" ng:if="_questions_[question_index].media_question.video_type == 1 || _questions_[question_index].media_question.video_type == 0" width="100%" height="auto"></iframe>
                <!-- case it mp4  -->
                <video ng:if="_questions_[question_index].media_question.video_type == 2" controls>
                  <source ng:src="{> _questions_[question_index].media_question.mp4_option.mp4_url | trust_iframe_url <}" type="video/mp4">
@@ -249,10 +249,10 @@
     <!--  Save Changes -->
     <div class="editor-block btn-0-container">
        <div class="buttons-container text-right">
-           <button style="float:left;"  class="btn btn-danger-outline" type="button" name="button">
+           <button ng:click="delete_the_current_question()" style="float:left;"  class="btn btn-danger-outline" type="button" name="button">
                  Delete
            </button>
-           <button id="saving-changes" class="btn btn-primary-outline save_changes " type="button" name="button">
+           <button ng:click="saving_this_question()" id="saving-changes" class="btn btn-primary-outline save_changes " type="button" name="button">
                  Save Changes
            </button>
        </div>

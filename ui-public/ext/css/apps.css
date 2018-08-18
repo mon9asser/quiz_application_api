@@ -1601,7 +1601,7 @@ ul li:last-child.emails {
   overflow: hidden;
   display: block;
   position: relative;
-  height: 120px;
+  height: auto; /*120*/
   width: 145px;
   margin: 15px auto;
   border: dashed 1px #eee;
@@ -1609,6 +1609,7 @@ ul li:last-child.emails {
   cursor: pointer;
   padding: 0px;
   border-radius: 5px;
+  min-height: 120px;
 }
 .media-parts-x > span {
   line-height: 90px;
@@ -3778,9 +3779,10 @@ margin-right: 5px;
 .redactor-styles {
   font-size: 16px ;
 }
+/*
 .redactor-styles{
   min-height: 73px;
-}
+} */
 textarea.quest-title-edit , textarea.quest-title-edit:focus , textarea.quest-title-edit:hover {
   background:#fdfdfd;
   resize: none;
@@ -4603,6 +4605,7 @@ margin-right: 10px;
   width: 48%;
   display: inline-block;
   position: relative;
+  margin-top: 20px;
 }
 .label-manger > label {
   color: #fff;
@@ -4893,3 +4896,157 @@ animation: cssload-tetromino4 1.125s ease-out infinite;
   z-index: 50000;
   background: rgba(255,255,255,0.8);
 }
+.question-media{
+  width: 25%;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+.right_part{
+  display: none;
+}
+.list-of-labels {
+  text-align: center;
+  border: 1px dashed #ffffff57;
+  padding: 20px 0px;
+}
+.style-block{
+  position: relative;
+  width: 58%;
+  text-align: center;
+  margin: 15px auto;
+  color: #eee;
+  display: inline-block;
+}
+.style-block > .fa-caret-down
+{
+  margin-left: 10px;
+  font-size: 23px;
+  vertical-align: middle;
+}
+
+.selector_line{
+  outline: #20fdb9 solid 2px !important;
+  outline-offset:4px;
+  cursor: pointer;
+}
+*[contentEditable='true']:focus{
+  outline: #20fdb9 solid 2px !important;
+  outline-offset:4px;
+  cursor: pointer;
+}
+button[contentEditable='true']:focus{
+  outline: #20fdb9 solid 3px !important;
+  outline-offset:4px;
+  cursor: pointer;
+}
+.redactor-in[contentEditable='true']:focus{
+  outline:none !important;
+  outline-offset:0px !important;;
+  cursor: pointer;
+}
+.redactor-in[contentEditable='true']:focus{
+  outline: none !important;
+  outline-offset:0px !important;;
+  cursor: pointer;
+}
+.pellet-containerz{
+  display: block;
+  width: 95%;
+  margin: 10px auto;
+}
+.pellet-containerz > ul {
+  display: block;
+  margin: 0px;
+  width: 100%;
+  padding: 0px;
+  list-style: none;
+  border-bottom: 1px dashed #6e707d;
+}
+.pellet-containerz > ul > li {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+  margin-top: 25px;
+  margin-bottom: 15px;
+}
+.pellet-containerz > ul > li > span {
+  color: #fff;
+  margin-top: 3px;
+  font-family: OpenSansSemiBold;
+}
+.pellet-containerz > ul > li > input , .pellet-containerz > ul > li > select {
+  float: right;
+  width: 20px;
+  background: transparent;
+  border: 1px dashed #ffffff40;
+  padding: 7px 5px;
+  margin-left:10px;
+}
+.pellet-containerz > ul > li > select {
+  width: 187px;
+  color: #999;
+  background: transparent;
+  margin-right: 0px;
+}
+.pellet-containerz > ul > li > select > option{
+  background-color: transparent !important;
+}
+.container-of-classes {
+    display: block;
+    position: relative;
+    width: 100%;
+    margin: 10px auto;
+    background: #ff634717;
+    height: auto;
+    line-height: initial;
+    border: 1px dashed #ffffff36;
+    border-radius: 15px;
+    padding: 10px;
+}
+.container-of-classes > code {
+      border-radius: 5px !important;
+}
+.border-lists{
+  display: block;
+  position: relative;
+  width: 100%;
+  margin: 30px auto;
+  list-style: none;
+}
+.border-lists > li {
+  display: block;
+  position: relative;
+  width: 100%;
+  text-align: left;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.border-lists > li > span {
+  color: #fff;
+}
+.border-lists > li > input {
+ float: right;
+ width: 20px;
+ background: transparent;
+ border: 1px dashed #ffffff40;
+ padding: 7px 5px;
+}
+.select_borders{
+  padding: 6px;
+  float: right;
+  background: transparent;
+  color: #999;
+  border: 1px dashed #9999998f;
+}
+.sp-replacer{
+  float: right;
+}
+
+.element_types {
+  margin-top: 40px;
+  font-size: 17px;
+  color: #f3b3b6;
+  font-family: RobotoBold;
+ }
