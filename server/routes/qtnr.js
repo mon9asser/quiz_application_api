@@ -5077,6 +5077,7 @@ qtnrRouters.post("/:app_id/question/:question_id/answer/:answer_id/cropping_syst
 
    Jimp.read( main_file_path).then( Image => {
      Image.crop( parseInt(req.body.x) , parseInt(req.body.y) , parseInt(req.body.width) , parseInt(req.body.height))
+     .quality(40)
      .write(new_file_path);
 
      // ==> Rename main file with double perfix
@@ -5160,6 +5161,8 @@ qtnrRouters.post("/:app_id/question/:question_id/cropping_system"  , question_an
 
     Jimp.read( main_file_path).then( Image => {
       Image.crop( parseInt(req.body.x) , parseInt(req.body.y) , parseInt(req.body.width) , parseInt(req.body.height))
+      .resize(225, 200) // => 25
+      .quality(80)
       .write(new_file_path);
 
       // ==> Rename main file with double perfix

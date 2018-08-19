@@ -4585,6 +4585,7 @@ margin-right: 10px;
   margin-left: 20px;
 }
 .labels_ > li {
+  cursor: pointer;
   display: inline-block;
   position: relative;
   border: 1px dashed #eeeeee57;
@@ -5049,4 +5050,13 @@ button[contentEditable='true']:focus{
   font-size: 17px;
   color: #f3b3b6;
   font-family: RobotoBold;
+ }
+ .back-answer-question-button { color: #fff;}
+ .back-answer-question-button { background: #c17c7e }
+ .back-answer-question-button { font-size: 13px; }
+
+ .selected_labels {
+   outline-color: transparent;
+  border-color: #ffffff;
+  background: #c17c7e;
  }

@@ -175,12 +175,12 @@
                   <div class="label-manger">
                     <label style=" margin-left: 10px;">Question Labels</label>
                     <ul class="labels_">
-                      <li>
+                      <li ng:click="active_this_label(0)" ng:class="( _settings_.indexes.questions == 0) ? 'selected_labels' :''">
                         <span>
                           A<i>b</i><b>c</b>
                         </span>
                       </li>
-                      <li>
+                      <li ng:click="active_this_label(1)"  ng:class="( _settings_.indexes.questions == 1) ? 'selected_labels' :''">
                         <span>
                           1<i>2</i><b>3</b>
                         </span>
@@ -194,12 +194,12 @@
                   <div class="label-manger">
                     <label style=" margin-left: 10px;">Answer Labels</label>
                     <ul class="labels_">
-                      <li>
+                      <li ng:click="active_this_answer_label(0)" ng:class="( _settings_.indexes.answers == 0) ? 'selected_labels' :''">
                         <span>
                           A<i>b</i><b>c</b>
                         </span>
                       </li>
-                      <li>
+                      <li ng:click="active_this_answer_label(1)" ng:class="( _settings_.indexes.answers == 1) ? 'selected_labels' :''">
                         <span>
                           1<i>2</i><b>3</b>
                         </span>

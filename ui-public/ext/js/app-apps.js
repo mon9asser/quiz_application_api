@@ -2,6 +2,13 @@
 apps.filter('apply_html' , ['$sce' , ( $sce ) => {
   return ( returned_values ) => { return $sce.trustAsHtml(returned_values);  };
 }]);
+apps.filter('math_around_it' , [
+'$sce' , function(){
+  return (round_p) => {
+    return ( Math.round(round_p) ) ? Math.round(round_p): 0  ;
+  }
+}
+]);
 apps.filter( 'striphtmltags' , ($sce) => {
   return function (specs){
     var div = $("<div>"+ specs + "</div>");
@@ -90,7 +97,10 @@ apps.controller("apps-controller" , [
   $rootScope.go_to_screen_number = (screen_number) => {
     $rootScope.screen_type = screen_number ;
   }
-  $rootScope.start_the_quiz = (  ) => {
+  $window.start_the_quiz = (  ) => {
+    var enable_css_mode = $("#enabled_css").val();
+
+    if( enable_css_mode == 'false' ){
     var enabled_css = $("#enabled_css")
      if( enabled_css == 'true' ) return false;
      else
@@ -98,6 +108,7 @@ apps.controller("apps-controller" , [
            $rootScope.screen_type = 3 ;
            $rootScope.question_index = 0;
         }
+      }
   };
   $rootScope.css_pellet_mode = {
     background:false,
@@ -370,6 +381,11 @@ apps.controller("apps-controller" , [
        }
   // ==> Switching Slide Mode
   $rootScope.switching_editor_preview = (is_view) => {
+    // $rootScope.swiper_data = new Swiper ('.swiper-data' , {
+    //   allowTouchMove : false
+    // });
+    $rootScope.swiper_data.update();
+
     if( is_view == true)
     {
       $rootScope.swiper_data.slideTo(1);
@@ -799,6 +815,7 @@ apps.controller("apps-controller" , [
   $rootScope.init_cropping_image = () => {
                     $timeout(function(){
                       var image_data = document.getElementById("cropping_system");
+
                       $rootScope.cropper =  new Cropper ( image_data , {
                         aspectRatio : 145 / 120 ,
                         initialAspectRatio : 145 / 120 ,
@@ -845,7 +862,8 @@ apps.controller("apps-controller" , [
         $rootScope.cropper_results['file'] = file ;
         var reader = new FileReader();
         var read_file = reader.readAsDataURL(file);
-
+         if( file.type != "image/jpeg" && file.type != "image/png" && file.type != "image/jpg" )
+          return false;
         reader.onload = ( e ) => {
           $rootScope.image_view_source =  e.target.result  ;
           var img_data = '<img id="cropping_system" src="'+ $rootScope.image_view_source +'" alt="Image">';
@@ -861,7 +879,7 @@ apps.controller("apps-controller" , [
 
         // console.log($rootScope.media_image_uploader[0].files[0]);
   };
-  $rootScope.go_back_to_first_qs = () => {
+  $window.go_back_to_first_qs = () => {
     // alert($rootScope.enable_css_mode);
     if( $rootScope.enable_css_mode != true ) {
 
@@ -870,8 +888,17 @@ apps.controller("apps-controller" , [
         $rootScope.highlighted_question($rootScope._questions_[$rootScope.question_index]._id);
     }
   }
-  $rootScope.go_to_next_slide = ( index )=>{
+  $rootScope.active_this_label = (index_number ) => {
+    $rootScope._settings_.indexes.questions = index_number ;
+  }
+  $rootScope.active_this_answer_label =   (index_number ) => {
+    $rootScope._settings_.indexes.answers = index_number ;
+  }
+  $window.go_to_next_slide = (  )=>{
+    var enable_css_mode = $("#enabled_css").val();
 
+    if( enable_css_mode == 'false' ){
+    var index = $rootScope.question_index ;
     if( $rootScope.enable_css_mode != true ) {
         if( index == ( $rootScope._questions_.length - 1 ) )
           $rootScope.screen_type = 1;
@@ -881,15 +908,21 @@ apps.controller("apps-controller" , [
           if($rootScope._questions_[$rootScope.question_index] != undefined && $rootScope.screen_type == 3  )
           $rootScope.highlighted_question($rootScope._questions_[$rootScope.question_index]._id)
       }
+    }
   }
-  $rootScope.back_to_previouse_slide = ( index )=>{
+  $window.back_to_previouse_slide = (  qs = false )=>{
+    var enable_css_mode = $("#enabled_css").val();
 
-     if( index == 0 ) $rootScope.screen_type = 0;
-     if( index > 0 && index <= ($rootScope._questions_.length - 1 ) )
-      index = index - 1 ;
-     $rootScope.question_index = index ;
-     if($rootScope._questions_[$rootScope.question_index] != undefined && $rootScope.screen_type == 3 )
-     $rootScope.highlighted_question($rootScope._questions_[$rootScope.question_index]._id)
+    if( enable_css_mode == 'false' ){
+        var index = $rootScope._questions_.length - 1
+        if(qs == true ) index = $rootScope.question_index;
+        if( index == 0 ) $rootScope.screen_type = 0;
+        if( index > 0 && index <= ($rootScope._questions_.length - 1 ) )
+        index = index - 1 ;
+        $rootScope.question_index = index ;
+        if($rootScope._questions_[$rootScope.question_index] != undefined && $rootScope.screen_type == 3 )
+        $rootScope.highlighted_question($rootScope._questions_[$rootScope.question_index]._id)
+    }
   }
   $rootScope.loading_answer_media_image = (image , date) => {
     console.log(image + ' ' +  date);
@@ -905,25 +938,23 @@ apps.controller("apps-controller" , [
   }
   // => Image Uploader Changes and inputs
   $rootScope.media_image_uploader.on('change , input' , function(){
-                                    // ==> Detect if question is in exists
-                                    var question_id = $("#question_id").val() ;
-                                    var question = $rootScope._questions_.find(x => x._id == question_id );
+          // ==> Detect if question is in exists
+          var question_id = $("#question_id").val() ;
+          var question = $rootScope._questions_.find(x => x._id == question_id );
+          if(question == undefined ) return false ;
+          $(".live_preview_image , .progrbar").fadeIn();
+          // ==> Reading Image file
+          if( $(this)[0].files[0].type != "image/jpeg" && $(this)[0].files[0].type != "image/png" && $(this)[0].files[0].type != "image/jpg" )
+           return false;
 
-                                    if(question == undefined ) return false ;
-                                    $(".live_preview_image , .progrbar").fadeIn();
-                                    // ==> Reading Image file
-                                    $rootScope.read_image_file($(this));
-                                    var file_size = parseInt ($rootScope.cropper_results.file.size / 1000);
-                                    if( file_size > 400 ){
-                                      alert("Image too large ... ");
-                                      return false;
-                                    }
-                                    // ==> Calling Cropping liberary
-                                    $rootScope.init_cropping_image();
+          $rootScope.read_image_file($(this));
+
+          // ==> Calling Cropping liberary
+       $rootScope.init_cropping_image();
                                     $timeout(function(){
                                       $rootScope.$apply();
                                     });
-                                });
+ });
 
 
 
@@ -2090,6 +2121,13 @@ sort: false  */
                   currAttendee : $rootScope.this_attendee_draft
                 });
     }
+  $window.submit_the_quiz = () => {
+    var enable_css_mode = $("#enabled_css").val();
+
+    if( enable_css_mode == 'false' ){
+      $rootScope.screen_type = 2 ;
+    }
+  }
   $rootScope.enable_css_mode_func = ( is_enabled ) => {
     $("#enabled_css").val( is_enabled );
 
@@ -2120,6 +2158,62 @@ sort: false  */
 
             var current_class = $("."+e.target.getAttribute('box-target-class')) ;
             // ==> Show Options
+            if(e.target.getAttribute('box-target-type') == 'box-buttons'){
+
+              $rootScope.border_models_color = current_class.css("border-color");
+              $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
+
+              $rootScope.color_models = current_class.css("color");
+              $('.color_models').spectrum('set' , $rootScope.color_models );
+
+              $rootScope.background_models = current_class.css("background-color");
+              $('.background_models').spectrum('set' , $rootScope.background_models );
+
+              $rootScope.font_size_models = parseInt(current_class.css("font-size"));
+              var current_class = $("."+e.target.getAttribute('box-target-class')) ;;
+
+              $rootScope.font_family_models = current_class.css("font-family").toString().toLowerCase();
+
+              $rootScope.border_style_models = current_class.css("border-style").toString();
+              $rootScope.border_left_models = current_class.css("border-left-width").toString();
+              $rootScope.border_right_models = current_class.css("border-right-width").toString();
+              $rootScope.border_top_models = current_class.css("border-top-width").toString();
+              $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
+
+              $rootScope.selecotor_name = ".Buttons";
+              $rootScope.css_pellet_mode.background = true;
+              $rootScope.css_pellet_mode.border = true;
+              $rootScope.css_pellet_mode.color = true ;
+              $rootScope.css_pellet_mode.fontSize = true ;
+              $rootScope.css_pellet_mode.fontFamily = true ;
+              $rootScope.css_pellet_mode.width = false ;
+
+              $rootScope.css_pellet_mode.hover_background = false ;
+              $rootScope.css_pellet_mode.hover_border = false ;
+              $rootScope.css_pellet_mode.hover_color = false ;
+              $rootScope.css_pellet_mode.selected_background = false ;
+              $rootScope.css_pellet_mode.selected_border = false ;
+              $rootScope.css_pellet_mode.selected_color = false ;
+              $rootScope.css_pellet_mode.correct_background = false ;
+              $rootScope.css_pellet_mode.correct_border = false ;
+              $rootScope.css_pellet_mode.correct_color = false ;
+              $rootScope.css_pellet_mode.correct_icon_background = false ;
+              $rootScope.css_pellet_mode.correct_icon_border = false ;
+              $rootScope.css_pellet_mode.correct_icon_color = false ;
+              $rootScope.css_pellet_mode.wrong_background = false ;
+              $rootScope.css_pellet_mode.wrong_border = false ;
+              $rootScope.css_pellet_mode.wrong_color = false ;
+              $rootScope.css_pellet_mode.wrong_icon_background = false ;
+              $rootScope.css_pellet_mode.wrong_icon_border = false ;
+              $rootScope.css_pellet_mode.wrong_icon_color = false ;
+              $rootScope.css_pellet_mode.rating_color = false ;
+              $rootScope.css_pellet_mode.scale_color = false ;
+              $rootScope.css_pellet_mode.scale_hover_color = false ;
+              $rootScope.css_pellet_mode.scale_background = false ;
+              $rootScope.css_pellet_mode.scale_hover_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_color = false ;
+            }
             if(e.target.getAttribute('box-target-type') == 'box-player'){
               // ==> fill colors
               $rootScope.background_models = current_class.css("background-color");
@@ -2352,62 +2446,6 @@ sort: false  */
               $rootScope.selecotor_name = ".Texts";
               $rootScope.css_pellet_mode.background = false;
               $rootScope.css_pellet_mode.border = false;
-              $rootScope.css_pellet_mode.color = true ;
-              $rootScope.css_pellet_mode.fontSize = true ;
-              $rootScope.css_pellet_mode.fontFamily = true ;
-              $rootScope.css_pellet_mode.width = false ;
-
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
-            }
-            if(e.target.getAttribute('box-target-type') == 'box-buttons'){
-
-              $rootScope.border_models_color = current_class.css("border-color");
-              $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
-
-              $rootScope.color_models = current_class.css("color");
-              $('.color_models').spectrum('set' , $rootScope.color_models );
-
-              $rootScope.background_models = current_class.css("background-color");
-              $('.background_models').spectrum('set' , $rootScope.background_models );
-
-              $rootScope.font_size_models = parseInt(current_class.css("font-size"));
-              var current_class = $("."+e.target.getAttribute('box-target-class')) ;;
-
-              $rootScope.font_family_models = current_class.css("font-family").toString().toLowerCase();
-
-              $rootScope.border_style_models = current_class.css("border-style").toString();
-              $rootScope.border_left_models = current_class.css("border-left-width").toString();
-              $rootScope.border_right_models = current_class.css("border-right-width").toString();
-              $rootScope.border_top_models = current_class.css("border-top-width").toString();
-              $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
-
-              $rootScope.selecotor_name = ".Buttons";
-              $rootScope.css_pellet_mode.background = true;
-              $rootScope.css_pellet_mode.border = true;
               $rootScope.css_pellet_mode.color = true ;
               $rootScope.css_pellet_mode.fontSize = true ;
               $rootScope.css_pellet_mode.fontFamily = true ;
