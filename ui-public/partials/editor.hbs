@@ -26,7 +26,7 @@
              <!-- Case it is an Image  -->
              <!-- _questions_[question_index].media_question.Media_directory  -->
              <!-- <div ng:if="_questions_[question_index].media_question != undefined  && _questions_[question_index].media_question.media_type == 0" ng:style="load_image_media()" class="question-image question-media"></div> -->
-             <img ng:if="_questions_[question_index].media_question != undefined  && _questions_[question_index].media_question.media_type == 0" ng:src="{> image_source_link( _questions_[question_index].media_question.Media_directory + '?' + _questions_[question_index].media_question.image_updated_date); <}" class="image-responsive" alt="Image">
+             <img ng:if="_questions_[question_index].media_question != undefined  && _questions_[question_index].media_question.media_type == 0" ng:src="{> _questions_[question_index].media_question | read_image <}" class="image-responsive" alt="Image">
 
              <!--  Case Video -->
              <div ng:if="_questions_[question_index].media_question != undefined  && _questions_[question_index].media_question.media_type == 1" class="question-media question-video question-editor-media" style="height:auto;">

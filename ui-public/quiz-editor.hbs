@@ -3,7 +3,7 @@
   <head>
       <meta charset="utf-8">
       <title>Quiz Editor</title>
-      
+
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" rel="stylesheet">
@@ -193,12 +193,17 @@
           </ul>
         </div>
 
-        <!-- Image thumbnail -->
-        <div class="media-part-controller live_preview_image">
-            <!-- <img id="cropping_system" ng:src="{>image_view_source <}" alt="Image"> -->
-        </div>
-        <div class="progrbar">
-          <div class="highlighted_progress"></div>
+        <!-- Media View -->
+        <!-- Image Case -->
+        <div ng:if="media_data != undefined">
+          <div class="media-part-controller live_preview_image">
+            <img ng:if="media_data.media_type == 0" id="cropping_system" ng:src="{> media_data.media_src <}" alt="Image">
+            <iframe ng:if="media_data.media_type == 1 && ( media_data.video_type == 1 || media_data.video_type == 0)" ng:src="{> media_data.media_src <}" width="100%" height="auto"></iframe>
+            <div class='loading_data'></div>
+          </div>
+          <div class="progrbar">
+            <div class="highlighted_progress"></div>
+          </div>
         </div>
 
 
