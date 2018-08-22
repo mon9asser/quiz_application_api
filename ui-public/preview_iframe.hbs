@@ -1,7 +1,7 @@
 
 
  <!DOCTYPE html>
-<html style="height:100%"  ng:app="applications" ng:controller="attendee-controller" ng:controller="preview_players"><!--  -->
+<html style="height:100%;overflow: initial;"  ng:app="applications" ng:controller="attendee-controller" ng:controller="preview_players"><!--  -->
   <head>
 
     <meta charset="utf-8">
@@ -38,7 +38,7 @@
     <script src="{{ server_ip }}ext/frameworks/js/spectrum.js"></script>
 
   </head>
-  <body style="height:100%">
+  <body style="height:100% ;overflow: initial;">
 
     <!-- User Id -->
     <input type="hidden" id="server_ip" name="" value="{{server_ip}}">
@@ -72,6 +72,8 @@
 -->
 <div class="player-body-block player-body-screen"></div>
 <div ng:controller="preview_players" class="player-block">
+
+ 
 
 <!--   ng:controller="preview_players"  -->
 <div class="preview_player_container-cont-selected player_opg_editor player-block" >
@@ -152,78 +154,61 @@
                             <!-- Quiz Questions answer-block-selector -->
                             <ul id="question_{>obj_val._id<}" ng:class="load_case_many_answer_option(obj_val.question_type , obj_val.answer_settings.single_choice)" class="question-list question-list-preview-quta" ng:if="obj_val.question_type <= 2" ng:cloak> <!-- Question id , answer id  -->
                               <li
-                                class="answer_{>ansvalue._id<} answer_opg_editor select_box_brd question-answer-row-select-blk question-answer-row-select"
-                                data:ng:class="classes_for_this_answer(obj_val.answer_settings , obj_val._id , ansvalue._id)"
-                                data:ng:click="select_this_answer(obj_val._id , ansvalue._id , obj_val , ansvalue , __player_object._id , '{{user.id}}' , ansvalue.is_correct , $index)"
-                                data:ng:repeat="(anskey , ansvalue) in obj_val.answers_format">
+                                class="answer_{>answer_value._id<} answer_opg_editor select_box_brd question-answer-row-select-blk question-answer-row-select"
+                                data:ng:class="classes_for_this_answer(obj_val.answer_settings , obj_val._id , answer_value._id)"
+                                data:ng:click="select_this_answer(obj_val._id , answer_value._id , obj_val , answer_value , __player_object._id , '{{user.id}}' , answer_value.is_correct , $index)"
+                                data:ng:repeat="(anskey , answer_value) in obj_val.answers_format">
 
                                  <!-- Cases with question type-->
                                    <!-- Case it 0 => Text choices -->
-                                   <div ng:if="obj_val.question_type == 0" class="answer-contents">
-                                      <div ng:if="ansvalue.media_optional != null" class="media-options">
-                                         <!--  image case  -->
-                                         <div ng:if="ansvalue.media_optional.media_type == 0" ng:style="blob_background_data(ansvalue , obj_val.answer_settings.choice_style )"  class="image_case"></div>
-                                         <!-- <div ng:if="ansvalue.media_optional.media_type == 0" style="background-image:url('{>server_ip+ansvalue.media_optional.media_src<}')"  class="image_case"></div> -->
-                                         <!-- Video Cases -->
-                                         <div ng-bind-html="ansvalue.media_optional | set_iframe" ng:if="ansvalue.media_optional.media_type == 1"  class="video_case">
-                                            <!-- Append answer media here -->
-                                            Loading Media
-                                        </div>
-                                      </div>
-                                      <!-- Text values -->
-                                      <label ng:if="__player_object.settings.indexes.answers == 0 " class="labels select_box_brd answer_numbering_block answer_numbering_block_box" ng:cloak>{> answer_indexes.numberical[$index]  <}</label>
-                                      <label ng:if="__player_object.settings.indexes.answers == 1 " class="labels select_box_brd answer_numbering_block answer_numbering_block_box" ng:cloak>{> answer_indexes.alphabetical[$index] | uppercase <}</label>
+                                   <span box-target-type="box-labels" box-target-class="answer_label"  class="answer_label selector">{> question_labels['label_' + __player_object.settings.indexes.answers.toString()][$index] | uppercase <}</span>
+                                   <!-- Answer Media  -->
+                                   <!-- answer media for 0 -->
+                                   <div ng:if="answer_value.media_optional != undefined && obj_val.question_type == 0" class="media-data-answer">
+                                     <!-- Case it Image -->
+                                     <img style="    width: 100%;     margin-bottom: 10px;" ng:if=" answer_value.media_optional != undefined &&  answer_value.media_optional.media_type ==0" ng:src="{>answer_value.media_optional.Media_directory + '?' + answer_value.media_optional.image_updated_date <}" class="image-responsive" alt="Image">
+                                     <!-- Case it video  -->
+                                     <div ng:if="answer_value.media_optional != undefined && answer_value.media_optional.media_type ==1" class="video_case text-center">
+                                        <!-- Case video iframes => youtube/ vimeo -->
+                                        <iframe class="iframe-selector" ng:if="(answer_value.media_optional.video_type == 0 || answer_value.media_optional.video_type == 1 )" ng:src="{> answer_value.media_optional.embed_path | trust_iframe_url <}" width="100%" height="120px"></iframe>
+                                        <!-- Case video tags => html mp4 video -->
+                                        <video ng:if="answer_value.media_optional.video_type == 2 " width="100%" height="120px" controls>
+                                            <source ng:if="answer_value.media_optional.mp4_option != undefined" ng:src="{>answer_value.media_optional.mp4_option.mp4_url | trust_iframe_url <}" type="video/mp4">
+                                            <source ng:if="answer_value.media_optional.mp4_option != undefined" ng:src="{>answer_value.media_optional.mp4_option.ogg_url | trust_iframe_url <}" type="video/ogg">
+                                        </video>
+                                     </div>
+                                   </div>
+                                   <!-- answer media for 1 -->
+                                   <div ng:if="obj_val.question_type == 1" class="media-data-answer" style="margin-top:10px; margin-bottom:10px;">
+                                     <!-- Case There is not any media  -->
+                                     <div ng:if='answer_value.media_type == undefined' class="not-media-there">
+                                        <img ng:src="{> server_ip + 'img/media-default-icone.jpg'<}" class="image-responsive" alt="Image" >
+                                     </div>
+                                     <!-- Case it Image -->
+                                     <img style="    width: 100%;     margin-bottom: 10px;"  ng:if="answer_value.Media_directory != undefined && answer_value.media_type == 0" ng:src="{>answer_value.Media_directory + '?' + answer_value.image_updated_date <}" alt="Image"  class="image-responsive">
+                                     <!-- Case it video  -->
+                                     <div ng:if="answer_value.embed_path != undefined && answer_value.media_type ==1" class="video_case text-center">
+                                        <!-- Case video iframes => youtube/ vimeo -->
+                                        <iframe class="iframe-selector" ng:if="(answer_value.video_type == 0 || answer_value.video_type == 1 )" ng:src="{> answer_value.embed_path | trust_iframe_url <}" width="100%" height="120px"></iframe>
+                                        <!-- Case video tags => html mp4 video -->
+                                        <video ng:if="answer_value.video_type == 2 " class="video-mp4" controls>
+                                            <source ng:if="answer_value.mp4_option != undefined" ng:src="{>answer_value.mp4_option.mp4_url | trust_iframe_url <}" type="video/mp4">
+                                            <source ng:if="answer_value.mp4_option != undefined" ng:src="{>answer_value.mp4_option.ogg_url | trust_iframe_url <}" type="video/ogg">
+                                        </video>
+                                     </div>
+                                   </div>
+                                    <!-- Answer Texts  -->
+                                    <div ng:if="obj_val.question_type == 0" class="answer-texts answer_txt_val">
+                                      <span class="answer_text">{> answer_value.value <}</span>
+                                    </div>
+                                    <!-- Case Boolean questions -->
+                                    <div class="answer_txt_val" ng:if="obj_val.question_type == 2">
+                                      <span class="answer_text">{> answer_value.boolean_value <}</span>
+                                    </div>
 
-                                      <div class="text-values select_texts" ng:mouseover="show_hovred_element('select_texts')" data:ng:bind:html="ansvalue.value | trust_this_html_values"></div>
-                                      <!-- Case it wrong answer -->
-                                      <span class="answer-results-wrong select_box_brd">
-                                        <i class="fa fa-close"></i>
-                                      </span>
-                                      <!-- Case it right answer -->
-                                      <span class="answer-results-right select_box_brd">
-                                        <i class="fa fa-check"></i>
-                                      </span>
-                                   </div>
-                                   <!-- Case it 1 => Media choices -->
-                                   <div ng:if="obj_val.question_type == 1" class="answer-contents">
-                                     <label ng:if="__player_object.settings.indexes.answers == 0 " class="labels select_box_data answer_numbering_block answer_numbering_block_box" ng:cloak>{> answer_indexes.numberical[$index] <}</label>
-                                     <label ng:if="__player_object.settings.indexes.answers == 1 " class="labels select_box_data answer_numbering_block answer_numbering_block_box" ng:cloak>{> answer_indexes.alphabetical[$index] | uppercase  <}</label>
-                                     <!-- Case it wrong answer -->
-                                     <span class="answer-results-wrong select_box_brd">
-                                       <i class="fa fa-close"></i>
-                                     </span>
-                                     <!-- Case it right answer -->
-                                     <span class="answer-results-right select_box_brd">
-                                       <i class="fa fa-check"></i>
-                                     </span>
-                                     <!--  Image Case  -->
-                                     <div ng:if="ansvalue.Media_directory == null || ansvalue.Media_directory == undefined" class="image_case no-media-here select_texts answer-text-box-area answer-text-box-area" ng:mouseover="show_hovred_element('select_texts')">
-                                       No Media here !
-                                     </div>
-                                     <div ng:if="ansvalue.media_type == 0 && ansvalue.Media_directory != null" ng:style="blob_background_data(ansvalue , obj_val.answer_settings.choice_style)"  class="image_case select_box_brd"></div>
-                                     <!-- <div ng:if="ansvalue.media_type == null" style="background-image:url('{>ansvalue.media_src<}')"  class="image_case"></div> -->
-                                     <!--  Video Case  -->
-                                     <div ng-bind-html="ansvalue | set_iframe" ng:if="ansvalue.media_type == 1"  class="video_case select_box_brd">
-                                       <!-- Append answer media here -->
-                                       Loading Media
-                                     </div>
-                                   </div>
-                                   <!-- Case it 2 => True/false choices -->
-                                   <div ng:if="obj_val.question_type == 2" class="answer-contents">
-                                     <label ng:if="__player_object.settings.indexes.answers == 0 " class="labels select_box_data answer_numbering_block answer_numbering_block_box" ng:cloak>{> answer_indexes.numberical[$index] <}</label>
-                                     <label ng:if="__player_object.settings.indexes.answers == 1 " class="labels select_box_data answer_numbering_block answer_numbering_block_box" ng:cloak>{> answer_indexes.alphabetical[$index] | uppercase  <}</label>
-                                     <!-- Case it wrong answer -->
-                                     <span class="answer-results-wrong select_box_brd">
-                                       <i class="fa fa-close"></i>
-                                     </span>
-                                     <!-- Case it right answer -->
-                                     <span class="answer-results-right select_box_brd">
-                                       <i class="fa fa-check"></i>
-                                     </span>
-                                     <div class="text-values select_texts answer-text-box-area answer-text-box-area-block" ng:mouseover="show_hovred_element('select_texts')" ng:cloak>
-                                       {> ansvalue.boolean_value <}
-                                     </div>
-                                   </div>
+                                    <span class="iconxs-correct-answers fa fa-times wrong-ico"></span>
+                                    <span class="iconxs-correct-answers fa fa-check correct-ico"></span>
+
                                 </li>
                             </ul>
 

@@ -61,7 +61,7 @@
                 </li>
                 <li class="righ-check-box">
                   <label for="goodby-screen-we-enable" style=" margin-left: 10px;" >Enable Goodby and welcome screen</label>
-                  <input ng:model="_settings_.enable_screens" type="checkbox" id="goodby-screen-we-enable" class="switch_1 input-checkboxes">
+                  <input ng:model="_settings_.enable_screens" ng:change="enable_screen_func(_settings_.enable_screens)" type="checkbox" id="goodby-screen-we-enable" class="switch_1 input-checkboxes">
                 </li>
               </ul>
             </div>
@@ -77,9 +77,30 @@
                   <label for="enable-progress-bar" style=" margin-left: 10px;" >Enable Progress bar</label>
                   <input ng:model="_settings_.progression_bar.is_available" type="checkbox" id="enable-progress-bar" class="switch_1 input-checkboxes">
                 </li>
-                <li class="righ-check-box">
+                <li class="righ-check-box dropdown">
                   <label style=" margin-left: 10px;" >Styles</label>
-                  <i class="fa fa-caret-down i-icons" aria-hidden="true"></i>
+                  <i class="fa fa-caret-down i-icons" data-toggle="dropdown" aria-hidden="true"></i>
+                  <ul class="dropdown-menu">
+                    <li ng:click ="set_model_type(1 , 0)">
+                      <a href="#" class="text-center" style="padding: 10px 20px;">
+                        <div class="progress-bx" style="outline-color: transparent;">
+                           <span box-target-type="box-texts" box-target-class="progress-bar-txt" class="progress-bar-txt selector" contenteditable="false" style="outline: transparent solid 3px; outline-offset: 4px;" onkeydown="if(event.metaKey) return true; return false;">50%</span>
+                           <div style="width: 140px;" class="progress-ctmain selector" box-target-type="box-containers" box-target-class="progress-ctmain" contenteditable="false" style="outline: transparent solid 3px; outline-offset: 4px;" onkeydown="if(event.metaKey) return true; return false;">
+                             <div box-target-type="box-containers" box-target-class="highlighted-progress" class="highlighted-progress selector" contenteditable="false" style="outline-color: transparent;"></div>
+                           </div>
+                         </div>
+                      </a>
+                    </li>
+                    <li ng:click ="set_model_type(2 , 0)">
+                      <a href="#" class="text-center" style="float: none;">
+                        <div class="progress-container option-container text-left" style="margin:0px auto; float:none;">
+                          <div class="progress-bx">
+                             inProgress
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                  </ul>
                 </li>
               </ul>
             </div>
@@ -93,24 +114,56 @@
               <ul>
                 <li>
                   <div class="time-frames">
-                    <input ng:hide="(_settings_.time_settings.timer_type == false)" ng:disabled="( _settings_.time_settings.timer_type == false || _settings_.time_settings.is_with_time == false)" ng:model="_settings_.time_settings.hours" ng:change="time_hrs_is_changed(_settings_.time_settings.hours)" type="number" min="00" max="9" name="" value="00">
-                    <span  ng:hide="(_settings_.time_settings.timer_type == false)">:</span>
-                    <input ng:disabled="_settings_.time_settings.is_with_time == false" ng:model="_settings_.time_settings.minutes"ng:change="time_mins_is_changed(_settings_.time_settings.minutes)" type="number" min="00" max="59" name="" value="00">
-                    <span>:</span>
-                    <input ng:disabled="_settings_.time_settings.is_with_time == false" ng:model="_settings_.time_settings.seconds" ng:change="time_hrs_is_changed(_settings_.time_settings.seconds)" type="number" min="00" max="59" name="" value="00">
+                    <input style="color:#b3b3b3;" ng:hide="(_settings_.time_settings.timer_type == false)" ng:disabled="( _settings_.time_settings.timer_type == false || _settings_.time_settings.is_with_time == false)" ng:model="_settings_.time_settings.hours" ng:change="time_hrs_is_changed(_settings_.time_settings.hours)" type="number" min="00" max="9" name="" value="00">
+                    <span  style="color:#b3b3b3;" ng:hide="(_settings_.time_settings.timer_type == false)">:</span>
+                    <input style="color:#b3b3b3;" ng:disabled="_settings_.time_settings.is_with_time == false" ng:model="_settings_.time_settings.minutes"ng:change="time_mins_is_changed(_settings_.time_settings.minutes)" type="number" min="00" max="59" name="" value="00">
+                    <span style="color:#b3b3b3;" >:</span>
+                    <input style="color:#b3b3b3;" ng:disabled="_settings_.time_settings.is_with_time == false" ng:model="_settings_.time_settings.seconds" ng:change="time_hrs_is_changed(_settings_.time_settings.seconds)" type="number" min="00" max="59" name="" value="00">
                   </div>
                 </li>
                 <li class="righ-check-box">
                   <label for="enable-timer" style=" margin-left: 10px;" >Enable Timer</label>
-                  <input ng:model="_settings_.time_settings.is_with_time" type="checkbox" id="enable-timer" class="switch_1 input-checkboxes">
+                  <input ng:change="timer_is_enabled(_settings_.time_settings.is_with_time)" ng:model="_settings_.time_settings.is_with_time" type="checkbox" id="enable-timer" class="switch_1 input-checkboxes">
                 </li>
                 <li class="righ-check-box">
                   <label for="time-types" style=" margin-left: 10px;" >Enable Hours</label>
                   <input ng:model="_settings_.time_settings.timer_type" type="checkbox" id="time-types" class="switch_1 input-checkboxes">
                 </li>
-                <li class="righ-check-box">
+                <li class="righ-check-box dropdown">
                   <label style=" margin-left: 10px;" >Styles</label>
-                  <i class="fa fa-caret-down i-icons" aria-hidden="true"></i>
+                  <i class="fa fa-caret-down i-icons" data-toggle="dropdown" aria-hidden="true"></i>
+                  <ul class="dropdown-menu">
+                    <li ng:click ="set_model_type(1 , 1)">
+                      <a href="#" class="text-center" style="padding: 10px 20px;">
+                        <div class="time-container option-container text-right" style="overflow: hidden;width: auto;margin: 0px auto; padding: 14px 0px;    float: none;display: inline-block;">
+                           <span>
+                             <span box-target-class="timer" box-target-type="box-timer" class="timer selector">00</span>
+                             <span>:</span>
+                             <span box-target-class="timer" box-target-type="box-timer" class="timer selector">00</span>
+                             <span>:</span>
+                             <span box-target-class="timer" box-target-type="box-timer" class="timer selector">00</span>
+                           </span>
+                         </div>
+                      </a>
+                    </li>
+                    <li>
+                      <a ng:click ="set_model_type(2 , 1)" href="#" class="text-center" style="float: none;">
+                        <div class="time-container option-container text-right"  style="overflow: hidden;width: auto;padding: 9px 0px; float:none;">
+                            <div class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
+                              05
+                            </div>
+                            <span box-target-class="dotted-hrs" box-target-type="box-texts" class="dotted-hrs selector">:</span>
+                            <div class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
+                              30
+                            </div>
+                            <span box-target-class="dotted-hrs" box-target-type="box-texts" class="dotted-hrs selector">:</span>
+                            <div class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
+                              45
+                            </div>
+                          </div>
+                      </a>
+                    </li>
+                  </ul>
                 </li>
 
               </ul>
@@ -171,7 +224,7 @@
             </a>
             <div class="items">
               <ul>
-                <li class="righ-check-box input-x list-of-labels">
+                <li class="righ-check-box input-x list-of-labels" style="    padding-bottom: 30px;">
                   <div class="label-manger">
                     <label style=" margin-left: 10px;">Question Labels</label>
                     <ul class="labels_">
@@ -186,10 +239,10 @@
                         </span>
                       </li>
                     </ul>
-                    <div class="style-block">
+                    <!-- <div class="style-block">
                       Styles
                       <span class="fa fa-caret-down"></span>
-                    </div>
+                    </div> -->
                   </div>
                   <div class="label-manger">
                     <label style=" margin-left: 10px;">Answer Labels</label>
@@ -205,10 +258,10 @@
                         </span>
                       </li>
                     </ul>
-                    <div class="style-block">
+                    <!-- <div class="style-block">
                       Styles
                       <span class="fa fa-caret-down"></span>
-                    </div>
+                    </div> -->
                   </div>
                 </li>
                 <li class="righ-check-box input-x">
@@ -284,6 +337,19 @@
               <div class="pellet-containerz"  ng:show="enable_css_mode == true">
                 <h4 class="element_types" ng:if="selecotor_name == '.Answers'">Basic</h4>
                 <ul>
+                  <li ng:show="css_pellet_mode.radial_text_color == true">
+                    <span>Text Color</span>
+                    <input ng:model="radial_text_colors" class="radial_text_colors" type="text" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.radial_fill == true">
+                    <span>Track Progress Color</span>
+                    <input ng:model="radial_fill_colors" class="radial_fill_colors" type="text" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.radial_strock == true">
+                    <span>Track Stroke Color</span>
+                    <input ng:model="radial_storck_colors" class="radial_storck_colors" type="text" name="" value="">
+                  </li>
+
                   <li ng:show="css_pellet_mode.background == true">
                     <span>Background</span>
                     <input ng:model="background_models" class="background_models" type="text" name="" value="">

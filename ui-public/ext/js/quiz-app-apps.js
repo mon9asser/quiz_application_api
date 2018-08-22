@@ -2061,5 +2061,81 @@ apps.controller("players" , [
     try {
       $("#stylesheet_link").attr("href" , $scope.server_ip + "themes/stylesheet_of_app_" + $scope.application_id +".css" );
     }catch(e){}
+
+
+
+
+
+
+    // ==> Draw Progress Radial
+    var svg ;
+    $rootScope.draw_radial_progression = (precentage_value) => {
+      d3.select("svg").remove()
+            if(svg){
+            svg.selectAll("*").remove();
+
+          }
+          var wrapper = document.getElementById('radialprogress');
+          var start = 0;
+
+          var colours = {
+            fill: "#c17c7e" ,
+            track: '#c17c7e36',
+            text: '#c17c7e',
+            stroke: 'transparent',
+          }
+
+          var radius = 40;
+          var border = 4;
+          var strokeSpacing = 5;
+          var endAngle = Math.PI * 2;
+          var formatText = d3.format('.0%');
+          var boxSize = radius * 2;
+          var count = precentage_value;
+          var progress = start;
+          var step = precentage_value < start ? -0.01 : 0.01;
+
+          //Define the circle
+          var circle = d3.svg.arc()
+            .startAngle(0)
+            .innerRadius(radius)
+            .outerRadius(radius - border);
+
+          //setup SVG wrapper
+          svg = d3.select(wrapper)
+            .append('svg')
+            .attr('width', boxSize)
+            .attr('height', boxSize);
+
+
+          // ADD Group container
+          var g = svg.append('g')
+            .attr('transform', 'translate(' + boxSize / 2 + ',' + boxSize / 2 + ')');
+
+          //Setup track
+          var track = g.append('g').attr('class', 'radial-progress');
+          track.append('path')
+            .attr('fill', colours.track)
+            .attr('stroke', colours.stroke)
+            .attr('stroke-width', strokeSpacing + 'px')
+            .attr('d', circle.endAngle(endAngle));
+
+          //Add colour fill
+          var value = track.append('path')
+            .attr('fill', colours.fill)
+            .attr('stroke', colours.stroke)
+            .attr('stroke-width', strokeSpacing + 'px');
+
+          //Add text value
+          var numberText = track.append('text')
+            .attr('fill', colours.text)
+            .attr('text-anchor', 'middle')
+            .attr('dy', '.4rem');
+
+            //update position of endAngle
+            value.attr('d', circle.endAngle(endAngle * precentage_value));
+            //update text value
+            numberText.text(formatText(precentage_value));
+    }
   } // => end controller functionality
 ]);

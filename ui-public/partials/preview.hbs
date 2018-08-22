@@ -20,21 +20,30 @@
    }
  </style>
 
- <!--
----------------------------------------------------------
-=============================>>> Time and progress bar
----------------------------------------------------------
- -->
 
 
 
- <!--
+<div box-target-class="player-body-screen" box-target-type="box-player"  class="selector keep-it-padding  player-body-screen" style="outline-offset:-4px;">
+
+  <!--
  ---------------------------------------------------------
- =============================>>> Question  Screen => {> question <}
+ =============================>>> Time and progress bar
  ---------------------------------------------------------
- -->
-<div box-target-class="player-body-screen" box-target-type="box-player" ng:if="screen_type == 3" class="selector keep-it-padding  player-body-screen" style="outline-offset:-4px;">
-    <div box-target-type="box-containers" box-target-class="question-screen-box" class="selector x-widther container screen-container survey-player-questions question_typeco_object question_opg_editor_block select_box_brd question-screen-block question-screen-box">
+  -->
+<div ng:if="_settings_.time_settings.is_with_time == true || _settings_.progression_bar.is_available == true" box-target-type="box-containers" box-target-class="quiz-option-container" class="quiz-option-container selector">
+  <!-- Progress -1 -->
+  <div ng:if="_settings_.progression_bar.is_available == true" ng:include="progressbar_models"></div>
+  <!-- Time 1 -->
+  <div ng:if="_settings_.time_settings.is_with_time == true" ng:include="time_models"></div>
+</div>
+
+   <!--
+   ---------------------------------------------------------
+   =============================>>> Question  Screen => {> question <}
+   ---------------------------------------------------------
+   -->
+
+    <div ng:if="screen_type == 3" box-target-type="box-containers" box-target-class="question-screen-box" class="selector x-widther container screen-container survey-player-questions question_typeco_object question_opg_editor_block select_box_brd question-screen-block question-screen-box">
        <div box-target-type="box-containers" box-target-class="question-box-text" class="selector text-left question-body load_qs_theme question_opg_editor select_box_brd question-box-block question-box-text">
           <span box-target-type="box-labels" box-target-class="question-label-box" class="selector label-question default_theme_texts_bg select_box_brd question-label-block question-label-box">
             <span class="qs-numericals select_numbers">
@@ -44,7 +53,7 @@
             <div class="arrow-right default_theme_brd select_box_brd  question-label-box-brd"></div>
           </span>
           <span box-target-type="box-texts" box-target-class="question-data-text-bdy" class="selector question-body-text select_texts question-data-text-bdy" ng:bind:html='_questions_[question_index].question_body | apply_html'></span>
-          <p box-target-type="box-texts" box-target-class="question-data-text-desc" ng:if="_questions_[question_index].question_description.is_enabled == true != undefined" class="dsc-data question-data-text-desc" data:ng:bind:html="_questions_[question_index].question_description.value | apply_html"></p>
+          <p box-target-type="box-texts" box-target-class="question-data-text-desc" ng:if="_questions_[question_index].question_description.is_enabled == true && _questions_[question_index].question_description.value != ''" class="dsc-data question-data-text-desc" data:ng:bind:html="_questions_[question_index].question_description.value | apply_html"></p>
           <span class="selector required_option question_type__colr select_texts question-text-required-block question-text-required-text" ng:if="question.answer_settings.is_required == true"> Required </span>
        </div>
        <!--  Questin Media Cases-->
@@ -131,11 +140,11 @@
 
        <!-- Button Container  -->
        <div ng:if ="_settings_.navigation_btns == true" class="qusu-details ques-questions text-right">
-           <span data-tpco box-target-class="back-answer-question-button" box-target-type="box-buttons" onclick="window.back_to_previouse_slide(true)" class="selector button-take-this select_button back-answer-question-button back-answer-question-button-block" type="button" name="button">
+           <span data-tpco box-target-class="back-answer-question-button" box-target-type="box-buttons" ng:click="back_to_previouse_slide(enable_css_mode)" class="selector button-take-this select_button back-answer-question-button back-answer-question-button-block" type="button" name="button">
                  <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                  {> _settings_.label_btns.lbl_back_with <}
            </span>
-           <span data-tpco style="margin-right:10px;" box-target-class="continue-answer-question-button" box-target-type="box-buttons" onclick="window.go_to_next_slide()" class="selector button-take-this select_button continue-answer-question-button continue-answer-question-button-block" type="button" name="button">
+           <span data-tpco style="margin-right:10px;" box-target-class="continue-answer-question-button" box-target-type="box-buttons" ng:click="go_to_next_slide(enable_css_mode)" class="selector button-take-this select_button continue-answer-question-button continue-answer-question-button-block" type="button" name="button">
                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                <span>{> _settings_.label_btns.lbl_continue_with <}</span>
                <!-- <span ng:if="$index != (__player_object.questions.length - 1)">{> _settings_.label_btns.lbl_continue_with <}</span> -->
@@ -143,87 +152,79 @@
            </span>
        </div>
     </div>
-</div>
+
+     <!--
+    ---------------------------------------------------------
+    =============================>>> Welcome Screen
+    ---------------------------------------------------------
+     -->
+     <div ng:if="screen_type == 0 && _settings_.enable_screens == true"  class="swiper-slide welcoming-screen-x">
+       <div box-target-class="box-welcome-screen" box-target-type="box-containers" data-selected-block="question-slide" class="container  x-widther screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-welcome-screen selector">
+          <div>
+              <div box-target-class="welcome-screen-text" box-target-type="box-texts" box-target-class="player-body-screen" box-target-type="box-player" class="selector description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text" ng:bind:html="_settings_.titles.title_start_with | apply_html"></div>
+              <div class="qusu-details text-right">
+                 <span data-tpco ng:click="start_the_quiz(enable_css_mode)" box-target-class="welcome-screen-button" box-target-type="box-buttons" class="selector button-take-this select_button welcome-screen-button-block welcome-screen-button" type="button" name="button">
+                     <i class="fa fa-sign-in" aria-hidden="true"></i>
+                       {> _settings_.label_btns.lbl_start_with <}
+                 </span>
+              </div>
+          </div>
+       </div>
+     </div>
 
 
-
-
- <!--
----------------------------------------------------------
-=============================>>> Welcome Screen
----------------------------------------------------------
- -->
-<div box-target-class="player-body-screen" box-target-type="box-player" ng:if="screen_type == 0 && _settings_.enable_screens == true" class="selector swiper-wrapper quiz-contents keep-it-padding player-body-screen" ng:if="_settings_.enable_screens == true" style="outline-offset:-4px;">
-    <div  class="swiper-slide welcoming-screen-x">
-      <div box-target-class="box-welcome-screen" box-target-type="box-containers" data-selected-block="question-slide" class="container  x-widther screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-welcome-screen selector">
-         <div>
-             <div box-target-class="welcome-screen-text" box-target-type="box-texts" box-target-class="player-body-screen" box-target-type="box-player" class="selector description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text" ng:bind:html="_settings_.titles.title_start_with | apply_html"></div>
-             <div class="qusu-details text-right">
-                <span data-tpco onclick="window.start_the_quiz()" box-target-class="welcome-screen-button" box-target-type="box-buttons" class="selector button-take-this select_button welcome-screen-button-block welcome-screen-button" type="button" name="button">
-                    <i class="fa fa-sign-in" aria-hidden="true"></i>
-                      {> _settings_.label_btns.lbl_start_with <}
-                </span>
-             </div>
+     <!--
+     ---------------------------------------------------------
+     =============================>>> Ending Screen
+     ---------------------------------------------------------
+     -->
+     <div ng:if="screen_type == 1 && _settings_.enable_screens == true" box-target-class="box-goodbye-screen" box-target-type="box-containers" data-selected-block ="question-slide" class="selector screen_opg_editor container screen-container about-quiz screen-ending-starting select_box_brd goodbye-screen-block box-goodbye-screen x-widther ">
+         <div box-target-class="goodbye-screen-text" box-target-type="box-texts" class="selector description-body redactor-styles select_texts goodbye-screen-text-block goodbye-screen-text" ng:bind:html="_settings_.titles.title_end_with | apply_html"></div>
+         <div box-target-class="goodbye-screen-text" box-target-type="box-texts"  class="selector warning_case select_box_data goodbye-screen-text-warning-block goodbye-screen-warning-text goodbye-screen-text "></div>
+         <div class="qusu-details ques-questions text-right">
+             <span box-target-class="back-button-goodbye-screen" box-target-type="box-buttons" data-tpco ng:click="back_to_previouse_slide(enable_css_mode)" class="selector button-take-this select_button back-button-goodbye-screen-block back-button-goodbye-screen" type="button" name="button">
+                 <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                 {> _settings_.label_btns.lbl_back_with <}
+             </span>
+             <span box-target-class="submit-button-goodbye-screen" box-target-type="box-buttons" data-tpco ng:click="submit_the_quiz(enable_css_mode)" class="selector button-take-this submi_the_quiz_handler select_button submit-button-goodbye-screen submit-button-goodbye-screen-block" type="button" name="button">
+                 <i class="fa fa-arrow-right fac-icon-submit" aria-hidden="true"></i>
+                 <span>
+                     {> _settings_.label_btns.lbl_submit_quiz_with <}
+                 </span>
+             </span>
          </div>
-      </div>
-    </div>
-</div>
+     </div>
 
-<!--
----------------------------------------------------------
-=============================>>> Ending Screen
----------------------------------------------------------
--->
-<div box-target-class="player-body-screen" box-target-type="box-player" ng:if="screen_type == 1 && _settings_.enable_screens == true" class="selector player-body-screen swiper-slide keep-it-padding" style="outline-offset:-4px;" >
-    <div box-target-class="box-goodbye-screen" box-target-type="box-containers" data-selected-block ="question-slide" class="selector screen_opg_editor container screen-container about-quiz screen-ending-starting select_box_brd goodbye-screen-block box-goodbye-screen x-widther ">
-        <div box-target-class="goodbye-screen-text" box-target-type="box-texts" class="selector description-body redactor-styles select_texts goodbye-screen-text-block goodbye-screen-text" ng:bind:html="_settings_.titles.title_end_with | apply_html"></div>
-        <div box-target-class="goodbye-screen-text" box-target-type="box-texts"  class="selector warning_case select_box_data goodbye-screen-text-warning-block goodbye-screen-warning-text goodbye-screen-text "></div>
-        <div class="qusu-details ques-questions text-right">
-            <span box-target-class="back-button-goodbye-screen" box-target-type="box-buttons" data-tpco onclick="window.back_to_previouse_slide()" class="selector button-take-this select_button back-button-goodbye-screen-block back-button-goodbye-screen" type="button" name="button">
-                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-                {> _settings_.label_btns.lbl_back_with <}
-            </span>
-            <span box-target-class="submit-button-goodbye-screen" box-target-type="box-buttons" data-tpco onclick="window.submit_the_quiz()" class="selector button-take-this submi_the_quiz_handler select_button submit-button-goodbye-screen submit-button-goodbye-screen-block" type="button" name="button">
-                <i class="fa fa-arrow-right fac-icon-submit" aria-hidden="true"></i>
-                <span>
-                    {> _settings_.label_btns.lbl_submit_quiz_with <}
-                </span>
-            </span>
+
+     <!--
+   ---------------------------------------------------------
+   =============================>>> Result  Screen
+   ---------------------------------------------------------
+   -->
+   <div ng:if="screen_type == 2 && _settings_.enable_screens == true" box-target-class="box-result-screen" box-target-type="box-containers" data-selected-block ="question-slide" style="margin-bottom:20px;" class="selector x-widther container screen-container screen-ending-starting screen_opg_editor select_box_brd box-result-screen result-screen-block">
+     <div>
+       <div box-target-class="result-screen-text" box-target-type="box-texts" ng:if="this_attendee_draft.att_draft[0].report_attendee_details.score >= _settings_.grade_settings.value" class="selector description-body redactor-styles title_success_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
+       <div box-target-class="result-screen-text" box-target-type="box-texts" ng:if="this_attendee_draft.att_draft[0].report_attendee_details.score <= _settings_.grade_settings.value" class="selector description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
+       <div class="quiz-grade">
+          <div class="quiz-grade grade-score text-center">
+              <h3 box-target-class="result-screen-score-text" box-target-type="box-texts" class="selector select_texts result-screen-score-text-block result-screen-score-text" ng:mouseover="show_hovred_element('select_texts')">{> _settings_.label_btns.lbl_score_with <} :  {> this_attendee_draft.att_draft[0].report_attendee_details.correct_answers  + "/" + _questions_.length <} </h3>
+          </div>
+          <div class="quiz-grade grade-score text-center">
+              <h5 box-target-class="result-screen-grade-text" box-target-type="box-texts" class="selector select_texts result-screen-grade-text-block result-screen-grade-text" ng:mouseover="show_hovred_element('select_texts')">{> _settings_.label_btns.lbl_grade_with <} : {> this_attendee_draft.att_draft[0].report_attendee_details.score | math_around_it <}%</h5>
+          </div>
+       </div>
+       <div class="qusu-details text-right">
+             <span data-tpco box-target-class="review-result-box" box-target-type="box-buttons"  ng:click="go_back_to_first_qs(enable_css_mode)" class="selector button-take-this select_button review-result-box-block review-result-box" type="button" name="button">
+               <i class="fa fa-reply-all" aria-hidden="true"></i>
+               {> _settings_.label_btns.lbl_review_with <}
+             </span>
+             <span data-tpco  box-target-class="retake-result-box" box-target-type="box-buttons" ng:click="go_back_to_first_qs(enable_css_mode)" class="selector button-take-this retake-this-quiz select_button retake-result-box-block retake-result-box" type="button" name="button">
+               <i class="fa fa-repeat" aria-hidden="true"></i>
+               <span>
+               {> _settings_.label_btns.lbl_retake_with <}
+               </span>
+             </span>
         </div>
-    </div>
-  </div>
-
-
-  <!--
----------------------------------------------------------
-=============================>>> Result  Screen
----------------------------------------------------------
--->
-<div box-target-class="player-body-screen" box-target-type="box-player" ng:if="screen_type == 2 && _settings_.enable_screens == true" class="selector player-body-screen swiper-slide welcoming-screen-x keep-it-padding" style="outline-offset:-4px;">
-    <div box-target-class="box-result-screen" box-target-type="box-containers" data-selected-block ="question-slide" style="margin-bottom:20px;" class="selector x-widther container screen-container screen-ending-starting screen_opg_editor select_box_brd box-result-screen result-screen-block">
-      <div>
-        <div box-target-class="result-screen-text" box-target-type="box-texts" ng:if="this_attendee_draft.att_draft[0].report_attendee_details.score >= _settings_.grade_settings.value" class="selector description-body redactor-styles title_success_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
-        <div box-target-class="result-screen-text" box-target-type="box-texts" ng:if="this_attendee_draft.att_draft[0].report_attendee_details.score <= _settings_.grade_settings.value" class="selector description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
-        <div class="quiz-grade">
-           <div class="quiz-grade grade-score text-center">
-               <h3 box-target-class="result-screen-score-text" box-target-type="box-texts" class="selector select_texts result-screen-score-text-block result-screen-score-text" ng:mouseover="show_hovred_element('select_texts')">{> _settings_.label_btns.lbl_score_with <} :  {> this_attendee_draft.att_draft[0].report_attendee_details.correct_answers  + "/" + _questions_.length <} </h3>
-           </div>
-           <div class="quiz-grade grade-score text-center">
-               <h5 box-target-class="result-screen-grade-text" box-target-type="box-texts" class="selector select_texts result-screen-grade-text-block result-screen-grade-text" ng:mouseover="show_hovred_element('select_texts')">{> _settings_.label_btns.lbl_grade_with <} : {> this_attendee_draft.att_draft[0].report_attendee_details.score | math_around_it <}%</h5>
-           </div>
-        </div>
-        <div class="qusu-details text-right">
-              <span data-tpco box-target-class="review-result-box" box-target-type="box-buttons"  onclick="go_back_to_first_qs()" class="selector button-take-this select_button review-result-box-block review-result-box" type="button" name="button">
-                <i class="fa fa-reply-all" aria-hidden="true"></i>
-                {> _settings_.label_btns.lbl_review_with <}
-              </span>
-              <span data-tpco  box-target-class="retake-result-box" box-target-type="box-buttons" onclick="go_back_to_first_qs()" class="selector button-take-this retake-this-quiz select_button retake-result-box-block retake-result-box" type="button" name="button">
-                <i class="fa fa-repeat" aria-hidden="true"></i>
-                <span>
-                {> _settings_.label_btns.lbl_retake_with <}
-                </span>
-              </span>
-         </div>
-      </div>
-    </div>
+     </div>
+   </div>
 </div>

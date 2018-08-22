@@ -5132,7 +5132,7 @@ qtnrRouters.post("/:app_id/question/:question_id/answer/:answer_id/cropping_syst
 
      qtnairsDocument.markModified('questions');
      qtnairsDocument.save().then((data)=>{
-        res.send( {img_path : config.server_ip + 'themeimages/'+ new_filename} );
+        res.send( data );
          return false;
       });
    });

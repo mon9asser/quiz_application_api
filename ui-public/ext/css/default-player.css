@@ -1291,7 +1291,7 @@ select.select-current-element , select.select-current-element:focus , select.sel
     border-color: #e6d4da;
     width: 30%;
     color: #999;
-    display: inline-block;
+    display: inline-block ;
 }
 .answer-container ul li:hover {
   border: 1px solid #e6d4da;

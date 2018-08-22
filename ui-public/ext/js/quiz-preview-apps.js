@@ -11,7 +11,11 @@ Array.prototype.find_unsolved_questions = function (questions_list) {
 //=============================================
 // => Filters
 //=============================================
-
+apps.filter('trust_iframe_url' , ( $sce ) => {
+  return function (url){
+    return  $sce.trustAsResourceUrl(url);
+  };
+});
 apps.filter("set_iframe" , [
       "$timeout" ,"$sce" ,
   function (  $timeout , $sce){
@@ -113,32 +117,48 @@ apps.controller("preview_players" , [
       // server_ip+answer_value.media_optional.media_src
       // alert($scope.server_ip + answer_value.media_optional.media_src);
       var img_vlox_data ;
+      console.log(answer_value);
 
-      if(answer_value.coppied_data != undefined){
-
-        if( answer_value.coppied_data.column_style != undefined && style_type == true )
-        {
-          if( answer_value.coppied_data.column_style.blob_data != undefined)
-          img_vlox_data = answer_value.coppied_data.column_style.blob_data;
-          else
-          img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src ;
-
-        }
-        if(answer_value.coppied_data.rawly_style != undefined && style_type == false) {
-          if(answer_value.coppied_data.rawly_style.blob_data != undefined)
-          img_vlox_data = answer_value.coppied_data.rawly_style.blob_data;
-          else
-          img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src ;
-
-        }
-      }else {
-          img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src  ;
-      }
+      img_vlox_data = $scope.server_ip + answer_value.media_optional.Media_directory;
+      // if(answer_value.coppied_data != undefined){
+      //
+      //   if( answer_value.coppied_data.column_style != undefined && style_type == true )
+      //   {
+      //     if( answer_value.coppied_data.column_style.blob_data != undefined)
+      //     img_vlox_data = answer_value.coppied_data.column_style.blob_data;
+      //     else
+      //     img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src ;
+      //
+      //   }
+      //   if(answer_value.coppied_data.rawly_style != undefined && style_type == false) {
+      //     if(answer_value.coppied_data.rawly_style.blob_data != undefined)
+      //     img_vlox_data = answer_value.coppied_data.rawly_style.blob_data;
+      //     else
+      //     img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src ;
+      //
+      //   }
+      // }else {
+      //       ;
+      // }
       // alert(img_vlox_data);
       return {
         backgroundImage : 'url(' + img_vlox_data + ')'
       }
     };
+    // ==> Make it correct answer
+    $rootScope.make_answer_classes = ( answer , questionType ) => {
+      var classes = '';
+      var settings = $rootScope._questions_[$rootScope.question_index].answer_settings;
+      // => correct answer
+      if(  answer.is_correct == true )  classes += 'choices_correct_answer ';
+      // => super_size
+      if(settings != undefined ){
+        if( questionType <= 1 && settings.super_size == true ){
+           classes += 'super_size_class ';
+        }
+      }
+      return classes ;
+    }
     $scope.time_progress = () => {
       var dash_array = 628;
       var all_seconds = parseInt( $scope.__player_object.settings.time_settings.value );
@@ -228,7 +248,14 @@ apps.controller("preview_players" , [
        number_1 : 0 ,
        number_2 : 0
     };
-
+    $scope.question_labels = {
+      label_0 : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ],
+      label_1 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50]
+    }
+    $scope.answer_labels = {
+      label_0 : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ],
+      label_1 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50]
+    }
     $scope.url_application = $scope.server_ip + "api/" + $scope.app_id +'/application/retrieve';
 
     $window.player_questions = (questions , sliderIndex) => {

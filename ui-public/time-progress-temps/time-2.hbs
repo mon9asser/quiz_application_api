@@ -1,0 +1,14 @@
+<!-- Time 2 -->
+    <div class="time-container option-container text-right">
+      <div  ng:if="_settings_.time_settings.timer_type == true" class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
+        {>_settings_.time_settings.hours <}
+      </div>
+      <span ng:if="_settings_.time_settings.timer_type == true" box-target-class="dotted-hrs" box-target-type="box-texts" class="dotted-hrs selector">:</span>
+      <div class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
+          {>_settings_.time_settings.minutes <}
+      </div>
+      <span box-target-class="dotted-hrs" box-target-type="box-texts" class="dotted-hrs selector">:</span>
+      <div class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
+        {>_settings_.time_settings.seconds <}
+      </div>
+</div>

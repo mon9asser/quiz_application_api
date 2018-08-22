@@ -63,6 +63,21 @@ apps.controller("apps-controller" , [
       }
       return true;
   }
+  $rootScope.set_model_type = ( model_index , model_type) => {
+    if(model_type == 0 ){
+      $rootScope._settings_.progression_bar.progression_bar_layout = model_index;
+      $rootScope.progressbar_models = "/time-progress-temps/progressbar-"+model_index+".hbs";
+      if(model_index == 2 ){
+        $rootScope.draw_radial_progression(0/100);
+      }
+    }
+    if(model_type == 1){
+      $rootScope._settings_.time_settings.timer_layout = model_index;
+      $rootScope.time_models = "/time-progress-temps/time-"+model_index+".hbs";
+    }
+  };
+  $rootScope.progressbar_models = "/time-progress-temps/progressbar-1.hbs" ;
+  $rootScope.time_models = "/time-progress-temps/time-1.hbs" ;
   $rootScope.this_attendee_draft = {};
   $rootScope.media_type = 0 ;
   $rootScope.server_ip = $("#serverIp").val();
@@ -71,12 +86,12 @@ apps.controller("apps-controller" , [
   $rootScope.json_source = $rootScope.server_ip + "ext/json/json-keys.json";
   $rootScope.default_player =  $rootScope.server_ip + "ext/css/default-player.css";
   $rootScope.default_theme =  $rootScope.server_ip + "ext/css/default-themes.css";
-  $rootScope.swiper_data = null ;
+  // $rootScope.swiper_data = null ;
   $rootScope.switching_editor_preview_value = false ;
   $rootScope.is_add_new_unsaved = false;
   $rootScope.is_unsaved_data = false ;
   $rootScope.media_for = 'questions' ;
-  // $rootScope.enable_css_mode = false;
+  $rootScope.enable_css_mode = false;
   $rootScope._application_ = null ;
   $rootScope._questions_ = [] ;
   $rootScope._settings_ = null ;
@@ -104,19 +119,9 @@ apps.controller("apps-controller" , [
   $rootScope.go_to_screen_number = (screen_number) => {
     $rootScope.screen_type = screen_number ;
   }
-  $window.start_the_quiz = (  ) => {
-    var enable_css_mode = $("#enabled_css").val();
 
-    if( enable_css_mode == 'false' ){
-    var enabled_css = $("#enabled_css")
-     if( enabled_css == 'true' ) return false;
-     else
-        {
-           $rootScope.screen_type = 3 ;
-           $rootScope.question_index = 0;
-        }
-      }
-  };
+
+
   $rootScope.css_pellet_mode = {
     background:false,
     color:false,
@@ -156,7 +161,11 @@ apps.controller("apps-controller" , [
     scale_hover_background : false ,
 
     free_boxtext_background: false ,
-    free_boxtext_color: false
+    free_boxtext_color: false ,
+
+    radial_text_color: false ,
+    radial_fill: false ,
+    radial_strock: false ,
   };
 
   // $rootScope.selecotor_name = "block"
@@ -180,8 +189,9 @@ apps.controller("apps-controller" , [
     $rootScope.answer_ids    =  $rootScope._application_.answer_ids;
     $rootScope._questions_   =  $rootScope._application_.questions;
     // ==> Calling Funcs
-    $rootScope.init_first_question();
+
     $timeout(function(){
+      $rootScope.init_first_question();
       $(".modal-content-overlay").fadeOut();
     } , 600);
   });
@@ -196,7 +206,7 @@ apps.controller("apps-controller" , [
   // ==> Load color spectrum
   $rootScope.load_spectrum_plugin = () => {
 
-    $('.border_models_color , .color_models , .background_models , .hover_border_models_color, .hover_background_models , .hover_color_models , .selected_border_models_color , .selected_background_models , .selected_color_models').spectrum(
+    $('.border_models_color , .color_models , .background_models , .hover_border_models_color, .hover_background_models , .hover_color_models , .selected_border_models_color , .selected_background_models , .selected_color_models , .radial_storck_colors , .radial_fill_colors , .radial_text_colors').spectrum(
       {
         showPaletteOnly: true,
          togglePaletteOnly: true,
@@ -274,7 +284,7 @@ apps.controller("apps-controller" , [
     $rootScope.video_object['video_type'] = videoType ;
     $rootScope.video_object['video_id'] = videoId ;
     $rootScope.video_object['embed_url'] = video_src_value ;
-
+    console.log($rootScope.video_object);
     $rootScope.extracting_videos( video_src_value , videoType , video , videoId );
 
   }
@@ -392,18 +402,17 @@ apps.controller("apps-controller" , [
        }
   // ==> Switching Slide Mode
   $rootScope.switching_editor_preview = (is_view) => {
-    // $rootScope.swiper_data = new Swiper ('.swiper-data' , {
-    //   allowTouchMove : false
-    // });
-    $rootScope.swiper_data.update();
 
     if( is_view == true)
     {
-      $rootScope.swiper_data.slideTo(1);
-      $(".x-editor-x-body").css("display" , 'none');
+      $(".editor-page").css({"transform" : "translate3d(-100% , 0 , 0)" , height : '0px'});
+      $(".preview-page").css({ transform : "translate3d(-100%, 0px, 0px)" ,  height : 'auto'});
     }
-    else if ( is_view == false )
-    $rootScope.swiper_data.slideTo(0);
+    else if ( is_view == false ){
+      $(".editor-page").css({"transform" : "translate3d(0% , 0 , 0)" , height : 'auto'});
+      $(".preview-page").css({"transform" : "translate3d(0% , 0 , 0)" , height : '0px'});
+    }
+    // $rootScope.swiper_data.slideTo(0);
 
   };
   // => Add new question (click-event)
@@ -709,10 +718,10 @@ apps.controller("apps-controller" , [
   }
   // Init swiperJs
   $rootScope.init_swiperJs = () => {
-         $rootScope.swiper_data = new Swiper ('.swiper-data' , {
-           allowTouchMove : false
-         });
-         $rootScope.swiper_data.update();
+         // $rootScope.swiper_data = new Swiper ('.swiper-data' , {
+         //   allowTouchMove : false
+         // });
+         // $rootScope.swiper_data.update();
   }
 
   $rootScope.init_first_question = () => {
@@ -798,6 +807,8 @@ apps.controller("apps-controller" , [
     if(answer_index == -1) return false ;
     question.answers_format.splice (answer_index , 1);
   }
+  // destory cropper
+
   // ==> Add New Answer
   $rootScope.add_new_media_for_question = () => {
         $rootScope.media_data = new Object();
@@ -845,6 +856,7 @@ apps.controller("apps-controller" , [
               {
                 if ( this_answer.media_optional.media_type == 0 ){
                    $rootScope.media_data['media_src'] = this_answer.media_optional.Media_directory;
+                   $rootScope.media_data['media_type'] = this_answer.media_optional.media_type;
                 }
                 if ( this_answer.media_optional.media_type == 1 ){
                   if( this_answer.media_optional.video_type == 0 || this_answer.media_optional.video_type == 1 )
@@ -852,6 +864,7 @@ apps.controller("apps-controller" , [
                   if( this_answer.media_optional.video_type == 2 )
                   $rootScope.media_data['media_src'] = this_answer.media_optional.Media_directory
                   $rootScope.media_data['video_type'] = this_answer.media_optional.video_type;
+                  $rootScope.media_data['media_type'] = this_answer.media_optional.media_type;
                 }
               }
           }
@@ -859,7 +872,8 @@ apps.controller("apps-controller" , [
             if(this_answer.media_type != undefined )
               {
                 if ( this_answer.media_type == 0 ){
-                   $rootScope.media_data['media_src'] = this_answer.Media_directory;
+                    $rootScope.media_data['media_src'] = this_answer.Media_directory;
+                    $rootScope.media_data['media_type'] = this_answer.media_type;
                 }
                 if ( this_answer.media_type == 1 ){
                   if( this_answer.video_type == 0 || this_answer.video_type == 1 )
@@ -867,12 +881,14 @@ apps.controller("apps-controller" , [
                   if( this_answer.video_type == 2 )
                   $rootScope.media_data['media_src'] = this_answer.Media_directory
                   $rootScope.media_data['video_type'] = this_answer.video_type;
+                  $rootScope.media_data['media_type'] = this_answer.media_type;
                 }
               }
           }
         }
       }
 
+      console.log($rootScope.media_data);
    }
   // => Close Current window
   $rootScope.close_current_image_uploader = () => {
@@ -909,6 +925,7 @@ apps.controller("apps-controller" , [
                            // $rootScope.cropper_results['scaleY'] = event.detail.scaleY;
                         }
                       } );
+
                     }, 250 );
                   };
   // => Storing Copping results
@@ -924,6 +941,7 @@ apps.controller("apps-controller" , [
                       };
   // ==> Reading current Image then blob
   $rootScope.read_image_file = (image_file) => {
+
         $rootScope.image_view_source = null ;
         var file = image_file[0].files[0] ;
         if(file == undefined) return false ;
@@ -946,51 +964,15 @@ apps.controller("apps-controller" , [
 
         // console.log($rootScope.media_image_uploader[0].files[0]);
   };
-  $window.go_back_to_first_qs = () => {
-    // alert($rootScope.enable_css_mode);
-    if( $rootScope.enable_css_mode != true ) {
 
-      $rootScope.screen_type = 3 ;
-      $rootScope.question_index = 0 ;
-        $rootScope.highlighted_question($rootScope._questions_[$rootScope.question_index]._id);
-    }
-  }
   $rootScope.active_this_label = (index_number ) => {
     $rootScope._settings_.indexes.questions = index_number ;
   }
   $rootScope.active_this_answer_label =   (index_number ) => {
     $rootScope._settings_.indexes.answers = index_number ;
   }
-  $window.go_to_next_slide = (  )=>{
-    var enable_css_mode = $("#enabled_css").val();
 
-    if( enable_css_mode == 'false' ){
-    var index = $rootScope.question_index ;
-    if( $rootScope.enable_css_mode != true ) {
-        if( index == ( $rootScope._questions_.length - 1 ) )
-          $rootScope.screen_type = 1;
-          index = index + 1 ;
-          $rootScope.question_index = index ;
 
-          if($rootScope._questions_[$rootScope.question_index] != undefined && $rootScope.screen_type == 3  )
-          $rootScope.highlighted_question($rootScope._questions_[$rootScope.question_index]._id)
-      }
-    }
-  }
-  $window.back_to_previouse_slide = (  qs = false )=>{
-    var enable_css_mode = $("#enabled_css").val();
-
-    if( enable_css_mode == 'false' ){
-        var index = $rootScope._questions_.length - 1
-        if(qs == true ) index = $rootScope.question_index;
-        if( index == 0 ) $rootScope.screen_type = 0;
-        if( index > 0 && index <= ($rootScope._questions_.length - 1 ) )
-        index = index - 1 ;
-        $rootScope.question_index = index ;
-        if($rootScope._questions_[$rootScope.question_index] != undefined && $rootScope.screen_type == 3 )
-        $rootScope.highlighted_question($rootScope._questions_[$rootScope.question_index]._id)
-    }
-  }
   $rootScope.loading_answer_media_image = (image , date) => {
     console.log(image + ' ' +  date);
     return {
@@ -1016,8 +998,10 @@ apps.controller("apps-controller" , [
 
           $rootScope.read_image_file($(this));
 
+
           // ==> Calling Cropping liberary
           $rootScope.init_cropping_image();
+
           $timeout(function(){
             $rootScope.$apply();
           });
@@ -1086,6 +1070,7 @@ apps.controller("apps-controller" , [
     $timeout(function(){
       $rootScope.sorting_answers_in_list();
       $rootScope.init_bootstrap_tooltip();
+      $timeout(function(){ $rootScope.storing_questions_into_database(); } , 500 );
     } , 300);
   };
   // => Storing Data of questions into db
@@ -1934,13 +1919,96 @@ sort: false  */
                   currAttendee : $rootScope.this_attendee_draft
                 });
     }
-  $window.submit_the_quiz = () => {
-    var enable_css_mode = $("#enabled_css").val();
 
-    if( enable_css_mode == 'false' ){
-      $rootScope.screen_type = 2 ;
+  $rootScope.back_to_previouse_slide = (css_mode) => {
+    if ( css_mode == true ) return false;
+    var question_index = $rootScope.question_index;
+
+    if ( question_index == 0 ) {
+      if($rootScope._settings_.enable_screens == true ){
+        $rootScope.screen_type = 0;
+        $("#docQuestions").children("li").each(function(){
+           if( $(this).hasClass('marked_question') )
+           $(this).removeClass('marked_question');
+        });
+      }
+    };
+
+    // if( question_index == ( $rootScope._questions_.length - 1 ) ) $rootScope.screen_type = 1;
+    if( question_index != 0  && ( question_index == ( $rootScope._questions_.length - 1 ) && $rootScope.screen_type == 3 ))
+      $rootScope.question_index = $rootScope.question_index - 1;
+        $rootScope.highlighted_by_color_only();
+
+        if ( $rootScope.screen_type == 1 )
+        {
+          $rootScope.question_index = ( $rootScope._questions_.length - 1 );
+          $rootScope.screen_type = 3 ;
+        }
+
+  }
+  $rootScope.go_to_next_slide = (css_mode) => {
+    if(css_mode == true ) return false;
+    var question_index = $rootScope.question_index;
+    console.log(question_index == ( $rootScope._questions_.length - 1 ) );
+    if( question_index == ( $rootScope._questions_.length - 1 ) )
+      {
+        if($rootScope._settings_.enable_screens == true )
+          {
+            $rootScope.screen_type = 1;
+            $("#docQuestions").children("li").each(function(){
+               if( $(this).hasClass('marked_question') )
+               $(this).removeClass('marked_question');
+            });
+          }
+      }
+    else
+    {
+      $rootScope.question_index = $rootScope.question_index + 1;
+      $rootScope.highlighted_by_color_only();
+    }
+    $timeout(function(){$rootScope.$apply()} , 300);
+  }
+  $rootScope.start_the_quiz = (css_mode) => {
+      if(css_mode == true ) return false;
+      $rootScope.screen_type = 3 ;
+      $rootScope.question_index = 0 ;
+      $rootScope.highlighted_by_color_only();
+      $timeout(function(){$rootScope.$apply()} , 300);
+  }
+  $rootScope.submit_the_quiz = (css_mode) => {
+    if(css_mode == true ) return false;
+    if( $rootScope.screen_type == 1 ){
+      $rootScope.screen_type = 2;
     }
   }
+  $rootScope.go_back_to_first_qs = (css_mode) => {
+    if(css_mode == true ) return false;
+    if($rootScope._questions_.length != 0 )
+    $rootScope.question_index = 0 ;
+    $rootScope.screen_type = 3;
+  }
+  $rootScope.highlighted_by_color_only = () => {
+    var questionId = $rootScope._questions_[$rootScope.question_index]._id;
+
+    $("#docQuestions").children("li").each(function(){
+       if( $(this).hasClass('marked_question') )
+       $(this).removeClass('marked_question');
+    });
+    $timeout(function(){
+      $("#docQuestions").children('li.qs-'+questionId.toString()).addClass('marked_question');
+    });
+  }
+  $rootScope.timer_is_enabled = (is_enabeld) => {
+    if(is_enabeld == true )
+    $(".time-frames > input, .time-frames > input , .time-frames > span").css("color" , "#fff")
+    else $(".time-frames > input, .time-frames > input  , .time-frames > span").css("color" , "#b3b3b3")
+  }
+  $rootScope.enable_screen_func = (is_enabled_screen) => {
+    if( is_enabled_screen == false )
+      $rootScope.screen_type = 3 ;
+      else
+      $rootScope.screen_type = 0 ;
+  };
   $rootScope.enable_css_mode_func = ( is_enabled ) => {
     $("#enabled_css").val( is_enabled );
 
@@ -1950,17 +2018,26 @@ sort: false  */
         $('.selector').each(function(){
           $(this).removeClass('selector_line');
         });
+
+        if( typeof(target.className) == 'object')
+        return false;
+
         if(target.className.indexOf('selector') != -1 ){  ;
           $(target).addClass('selector_line');
         }
       });
       $('body , html').click(function(e){
+        // box-svg-container
+        if( typeof(e.target.className) == 'object')
+        return false;
         if(e.target.className.indexOf('selector') != -1 ){
+
             $( '.selector' ).prop('contenteditable', false );
             $( '*' ).each(function(e){
               $(this).css ({outlineColor : "transparent"});
             })
             e.target.contentEditable = true ;
+            e.target.setAttribute("onkeydown","if(event.metaKey) return true; return false;");
             e.target.style.outline = "#20fdb9 solid 3px";
             if(e.target.getAttribute('box-target-type') == 'box-player')
             e.target.style.outlineOffset = "-4px";
@@ -1968,6 +2045,7 @@ sort: false  */
             e.target.style.outlineOffset = "4px";
             e.target.focus();
             $( '.selector' ).attr('disabled');
+
 
             var current_class = $("."+e.target.getAttribute('box-target-class')) ;
             // ==> Show Options
@@ -2026,6 +2104,10 @@ sort: false  */
               $rootScope.css_pellet_mode.scale_hover_background = false ;
               $rootScope.css_pellet_mode.free_boxtext_background = false ;
               $rootScope.css_pellet_mode.free_boxtext_color = false ;
+
+              $rootScope.css_pellet_mode.radial_strock = false ;
+              $rootScope.css_pellet_mode.radial_fill = false ;
+              $rootScope.css_pellet_mode.radial_text_color = false ;
             }
             if(e.target.getAttribute('box-target-type') == 'box-player'){
               // ==> fill colors
@@ -2066,6 +2148,10 @@ sort: false  */
               $rootScope.css_pellet_mode.scale_hover_background = false ;
               $rootScope.css_pellet_mode.free_boxtext_background = false ;
               $rootScope.css_pellet_mode.free_boxtext_color = false ;
+
+              $rootScope.css_pellet_mode.radial_strock = false ;
+              $rootScope.css_pellet_mode.radial_fill = false ;
+              $rootScope.css_pellet_mode.radial_text_color = false ;
 
             }
             if(e.target.getAttribute('box-target-type') == 'box-containers'){
@@ -2117,6 +2203,10 @@ sort: false  */
               $rootScope.css_pellet_mode.scale_hover_background = false ;
               $rootScope.css_pellet_mode.free_boxtext_background = false ;
               $rootScope.css_pellet_mode.free_boxtext_color = false ;
+
+              $rootScope.css_pellet_mode.radial_strock = false ;
+              $rootScope.css_pellet_mode.radial_fill = false ;
+              $rootScope.css_pellet_mode.radial_text_color = false ;
             }
             if(e.target.getAttribute('box-target-type') == 'box-answers'){
                 // ==> Fetch Style results
@@ -2247,6 +2337,11 @@ sort: false  */
                 if( question_type == 4 )
                 $rootScope.css_pellet_mode.free_boxtext_color = false;
                 // ==> consider to set border in this option
+
+
+                $rootScope.css_pellet_mode.radial_strock = false ;
+                $rootScope.css_pellet_mode.radial_fill = false ;
+                $rootScope.css_pellet_mode.radial_text_color = false ;
             }
             if(e.target.getAttribute('box-target-type') == 'box-texts'){
               // ==> fill colors
@@ -2289,6 +2384,10 @@ sort: false  */
               $rootScope.css_pellet_mode.scale_hover_background = false ;
               $rootScope.css_pellet_mode.free_boxtext_background = false ;
               $rootScope.css_pellet_mode.free_boxtext_color = false ;
+
+              $rootScope.css_pellet_mode.radial_strock = false ;
+              $rootScope.css_pellet_mode.radial_fill = false ;
+              $rootScope.css_pellet_mode.radial_text_color = false ;
             }
             if(e.target.getAttribute('box-target-type') == "box-media"){
               $rootScope.selecotor_name = ".Media Container";
@@ -2326,6 +2425,10 @@ sort: false  */
               $rootScope.css_pellet_mode.scale_hover_background = false ;
               $rootScope.css_pellet_mode.free_boxtext_background = false ;
               $rootScope.css_pellet_mode.free_boxtext_color = false ;
+
+              $rootScope.css_pellet_mode.radial_strock = false ;
+              $rootScope.css_pellet_mode.radial_fill = false ;
+              $rootScope.css_pellet_mode.radial_text_color = false ;
             }
             if(e.target.getAttribute('box-target-type') == 'box-labels'){
 
@@ -2338,7 +2441,7 @@ sort: false  */
               $rootScope.background_models = current_class.css("background-color");
               $('.background_models').spectrum('set' , $rootScope.background_models );
 
-              $rootScope.selecotor_name = ".Labels";
+              $rootScope.selecotor_name = ".Box";
               $rootScope.css_pellet_mode.background = true;
               $rootScope.css_pellet_mode.border = true;
               $rootScope.css_pellet_mode.color = true ;
@@ -2371,14 +2474,131 @@ sort: false  */
               $rootScope.css_pellet_mode.scale_hover_background = false ;
               $rootScope.css_pellet_mode.free_boxtext_background = false ;
               $rootScope.css_pellet_mode.free_boxtext_color = false ;
+
+              $rootScope.css_pellet_mode.radial_strock = false ;
+              $rootScope.css_pellet_mode.radial_fill = false ;
+              $rootScope.css_pellet_mode.radial_text_color = false ;
+            }
+            if(e.target.getAttribute('box-target-type') == 'box-svg-container'){
+              $rootScope.selecotor_name = ".Radial";
+              $rootScope.css_pellet_mode.background = false;
+              $rootScope.css_pellet_mode.border = false;
+              $rootScope.css_pellet_mode.color = false ;
+              $rootScope.css_pellet_mode.fontSize = false ;
+              $rootScope.css_pellet_mode.fontFamily = false ;
+              $rootScope.css_pellet_mode.width = false ;
+
+              $rootScope.css_pellet_mode.hover_background = false ;
+              $rootScope.css_pellet_mode.hover_border = false ;
+              $rootScope.css_pellet_mode.hover_color = false ;
+              $rootScope.css_pellet_mode.selected_background = false ;
+              $rootScope.css_pellet_mode.selected_border = false ;
+              $rootScope.css_pellet_mode.selected_color = false ;
+              $rootScope.css_pellet_mode.correct_background = false ;
+              $rootScope.css_pellet_mode.correct_border = false ;
+              $rootScope.css_pellet_mode.correct_color = false ;
+              $rootScope.css_pellet_mode.correct_icon_background = false ;
+              $rootScope.css_pellet_mode.correct_icon_border = false ;
+              $rootScope.css_pellet_mode.correct_icon_color = false ;
+              $rootScope.css_pellet_mode.wrong_background = false ;
+              $rootScope.css_pellet_mode.wrong_border = false ;
+              $rootScope.css_pellet_mode.wrong_color = false ;
+              $rootScope.css_pellet_mode.wrong_icon_background = false ;
+              $rootScope.css_pellet_mode.wrong_icon_border = false ;
+              $rootScope.css_pellet_mode.wrong_icon_color = false ;
+              $rootScope.css_pellet_mode.rating_color = false ;
+              $rootScope.css_pellet_mode.scale_color = false ;
+              $rootScope.css_pellet_mode.scale_hover_color = false ;
+              $rootScope.css_pellet_mode.scale_background = false ;
+              $rootScope.css_pellet_mode.scale_hover_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_color = false ;
+
+              // ==> Fill colors
+              // HERE++++++
+              var number = e.target.getAttribute('box-target-number') ;
+              var class_text_color = ".track-text";
+              var class_fill_track = ".track-progress";
+              var class_stroke_track = ".track-all";
+
+              var target_class_text = class_text_color+'-'+number;
+              var target_fill_track = class_fill_track+'-'+number;
+              var target_stroke_track = class_stroke_track+'-'+number;
+
+              // ==> Case it Progress
+              $rootScope.radial_text_colors = $(target_class_text).css("fill");
+              $('.radial_text_colors').spectrum('set' , $rootScope.radial_text_colors );
+
+              $rootScope.radial_fill_colors = $(target_fill_track).css("fill");
+              $('.radial_fill_colors').spectrum('set' , $rootScope.radial_fill_colors );
+
+              $rootScope.radial_storck_colors = $(target_stroke_track).css("fill");
+              $('.radial_storck_colors').spectrum('set' , $rootScope.radial_storck_colors );
+
+
+              $rootScope.css_pellet_mode.radial_strock = true ;
+              $rootScope.css_pellet_mode.radial_fill = true ;
+              $rootScope.css_pellet_mode.radial_text_color = true ;
+            }
+            if(e.target.getAttribute('box-target-type') == 'box-timer'){
+              $rootScope.selecotor_name = ".Timer";
+              $rootScope.css_pellet_mode.background = true;
+              $rootScope.css_pellet_mode.border = true;
+              $rootScope.css_pellet_mode.color = true ;
+              $rootScope.css_pellet_mode.fontSize = false ;
+              $rootScope.css_pellet_mode.fontFamily = false ;
+              $rootScope.css_pellet_mode.width = false ;
+              $rootScope.css_pellet_mode.hover_background = false ;
+              $rootScope.css_pellet_mode.hover_border = false ;
+              $rootScope.css_pellet_mode.hover_color = false ;
+              $rootScope.css_pellet_mode.selected_background = false ;
+              $rootScope.css_pellet_mode.selected_border = false ;
+              $rootScope.css_pellet_mode.selected_color = false ;
+              $rootScope.css_pellet_mode.correct_background = false ;
+              $rootScope.css_pellet_mode.correct_border = false ;
+              $rootScope.css_pellet_mode.correct_color = false ;
+              $rootScope.css_pellet_mode.correct_icon_background = false ;
+              $rootScope.css_pellet_mode.correct_icon_border = false ;
+              $rootScope.css_pellet_mode.correct_icon_color = false ;
+              $rootScope.css_pellet_mode.wrong_background = false ;
+              $rootScope.css_pellet_mode.wrong_border = false ;
+              $rootScope.css_pellet_mode.wrong_color = false ;
+              $rootScope.css_pellet_mode.wrong_icon_background = false ;
+              $rootScope.css_pellet_mode.wrong_icon_border = false ;
+              $rootScope.css_pellet_mode.wrong_icon_color = false ;
+              $rootScope.css_pellet_mode.rating_color = false ;
+              $rootScope.css_pellet_mode.scale_color = false ;
+              $rootScope.css_pellet_mode.scale_hover_color = false ;
+              $rootScope.css_pellet_mode.scale_background = false ;
+              $rootScope.css_pellet_mode.scale_hover_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_background = false ;
+              $rootScope.css_pellet_mode.free_boxtext_color = false ;
+
+              // ==> Get current colors
+              $rootScope.color_models = current_class.css("color");
+              $('.color_models').spectrum('set' , $rootScope.color_models );
+              $rootScope.background_models = current_class.css("background-color");
+              $rootScope.border_models_color = current_class.css("border-color");
+
+              $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
+              $('.background_models').spectrum('set' , $rootScope.background_models );
+
+              $rootScope.border_style_models = current_class.css("border-style").toString();
+              $rootScope.border_left_models = current_class.css("border-left-width").toString();
+              $rootScope.border_right_models = current_class.css("border-right-width").toString();
+              $rootScope.border_top_models = current_class.css("border-top-width").toString();
+              $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
+
             }
             $timeout(function(){
               $rootScope.$apply();
             } , 10);
         }
       });
+
     }else {
       $("body , html , .selector").unbind('mouseenter mouseover mouseleave');
+      $("body , html").unbind('click');
       $( '.selector' ).prop('contenteditable', false );
       $( '.selector' ).removeClass('selector_line');
       $( '*' ).each(function(e){
@@ -2389,12 +2609,7 @@ sort: false  */
 
 
 
-  $timeout(function(){
-    $rootScope.init_swiperJs();
-    $rootScope.init_bootstrap_tooltip();
-    $rootScope.init_drag_drop();
-    $rootScope.load_spectrum_plugin();
-  }, 400);
+
 
 
 
@@ -2409,7 +2624,17 @@ sort: false  */
       if ( $rootScope.media_type == 1 ) $rootScope.storing_video_for_media_answer( );
     }
   };
+  $rootScope.grep_progress_width = () => {
 
+    // {> ( question_index + 1 ) * 100 /  _questions_.length | math_around_it <} %
+    var percentage_value = Math.round(( parseInt( $rootScope.question_index + 1 ) * 100  ) / $rootScope._questions_.length )  ;
+    // alert(percentage_value)
+    if( $rootScope.screen_type == 0 )
+      percentage_value = 0;
+    return {
+      width : percentage_value + '%'
+    }
+  }
   $rootScope.storing_cropped_image_for_media_question = () => {
     $("#file_extension").val( $rootScope.media_image_uploader[0].files[0].name.split('.').pop());
     var questionId = $("#question_id").val();
@@ -2460,4 +2685,245 @@ sort: false  */
       }
     }).catch((err)=>{ console.log(err);});
   }
+  $rootScope.storing_cropped_image_for_media_answer = () => {
+      $("#file_extension").val( $rootScope.media_image_uploader[0].files[0].name.split('.').pop() );
+      var questionId = $("#question_id").val();
+      var answerId = $rootScope.current_answer_id ;
+      var x = $('#cropping-image-x').val();
+      var y = $('#cropping-image-y').val();
+      var width = $('#cropping-image-width').val();
+      var height = $('#cropping-image-height').val();
+      var formImageData = new FormData();
+      var after_uploaded_image_callback = ( media_object ) => {
+        var current_question = $rootScope._questions_[$rootScope.question_index] ;
+        var answer_obka =   current_question.answers_format.find(x => x._id == answerId )
+
+        if(answer_obka != undefined  ){
+          if(current_question.question_type == 0 ){
+           if(answer_obka.media_optional == undefined )
+            answer_obka['media_optional'] = new Object();
+            answer_obka.media_optional = media_object;
+          }
+          if(current_question.question_type == 1 ){
+            answer_obka['Media_directory'] = media_object.Media_directory
+            answer_obka['image_cropped'] = media_object.image_cropped
+            answer_obka['image_full'] = media_object.image_full
+            answer_obka['image_updated_date'] = media_object.image_updated_date
+            answer_obka['media_name'] = media_object.media_name;
+            answer_obka['media_src'] = media_object.media_src;
+            answer_obka['media_type'] = media_object.media_type ;
+            answer_obka['is_correct'] = media_object.is_correct;
+          }
+        }
+        $timeout(function(){ $rootScope.$apply(); });
+      };
+      formImageData.append('media_field' , $rootScope.media_image_uploader[0].files[0]   );
+      formImageData.append('height' , height  );
+      formImageData.append('width' , width  );
+      formImageData.append('x' ,x  );
+      formImageData.append('y' , y  );
+      formImageData.append('questions' , $rootScope._questions_ );
+      var cropping_url = $rootScope.server_ip + "api/" + $rootScope.app_id +"/question/"+ questionId +  "/answer/" + answerId + "/cropping_system" ;
+      $http({
+        url : cropping_url ,
+        method : "POST" ,
+        data : formImageData ,
+        headers : { 'Content-Type' : undefined} ,
+        uploadEventHandlers : {
+          progress : (event) => {
+              var percent = Math.round (event.loaded / event.total) * 100;
+              $('.highlighted_progress').css({width : percent + '%' });
+              if (event.loaded == event.total) {
+
+              }
+          }
+        }
+      }).then(( response )=>{
+        var questions = response.data.questions ;
+        var current_qs = questions.find(x => x._id == questionId );
+        if(current_qs != undefined){
+          var current_answer = current_qs.answers_format.find(x => x._id == answerId );
+          if( current_answer != undefined ){
+            if(current_answer.media_optional != undefined && current_qs.question_type == 0 ){
+              $timeout(function(){
+                    after_uploaded_image_callback(current_answer.media_optional);
+                    $timeout(function(){
+                      $rootScope.close_current_image_uploader();
+                      $timeout(function(){ $(".progrbar > .highlighted_progress").css('width' , 0 ); } , 500);
+                    },100);
+                } , 500 );
+            }
+            if(current_answer.media_type != undefined && current_qs.question_type == 1 ){
+              $timeout(function(){
+                  var media_okh = new Object();
+
+                  media_okh['Media_directory'] = current_answer.Media_directory
+                  media_okh['image_cropped'] = current_answer.image_cropped
+                  media_okh['image_full'] = current_answer.image_full
+                  media_okh['image_updated_date'] = current_answer.image_updated_date
+                  media_okh['media_name'] = current_answer.media_name;
+                  media_okh['media_src'] = current_answer.media_src;
+                  media_okh['media_type'] = current_answer.media_type ;
+                  media_okh['is_correct'] = current_answer.is_correct;
+
+                    after_uploaded_image_callback(media_okh);
+                    $timeout(function(){
+                      $rootScope.close_current_image_uploader();
+                      $timeout(function(){ $(".progrbar > .highlighted_progress").css('width' , 0 ); } , 500);
+                    },100);
+                } , 500 );
+            }
+          }
+        }
+
+        // if(current_qs.media_question != undefined ){
+        //   $timeout(function(){
+        //       after_uploaded_image_callback(current_qs.media_question);
+        //       $timeout(function(){
+        //         $rootScope.close_current_image_uploader();
+        //         $timeout(function(){ $(".progrbar > .highlighted_progress").css('width' , 0 ); } , 500);
+        //       },100);
+        //   } , 500 );
+        // }
+      }).catch((err)=>{ console.log(err); });
+  }
+
+
+
+  $rootScope.storing_video_for_media_question = (   )         => {
+    var video_object = $rootScope.current_media_video ;
+    var target_question = $rootScope._questions_[$rootScope.question_index] ;
+    if( target_question.media_question == undefined ) target_question['media_question'] = new Object();
+    target_question.media_question = video_object.media_question;
+
+    // ==> Saving Data
+    $timeout(function(){
+      $rootScope.storing_questions_into_database();
+      $timeout(function(){ $rootScope.close_current_image_uploader() } , 300)
+    } , 300);
+  };
+
+  $rootScope.storing_video_for_media_answer = (   )           => {
+ var video_object = $rootScope.current_media_video ;
+ var target_question = $rootScope._questions_[$rootScope.question_index] ;
+ var answerId = $rootScope.current_answer_id ;
+ var current_answer = target_question.answers_format.find(x => x._id == answerId);
+ if( current_answer == undefined ) return false ;
+
+ if( target_question.question_type == 0 ){
+   if( current_answer.media_optional == undefined ) current_answer['media_optional'] = new Object();
+   current_answer.media_optional['media_src'] = video_object.media_optional.media_src;
+   current_answer.media_optional['Media_directory'] = video_object.media_optional.Media_directory;
+   current_answer.media_optional['media_type'] = video_object.media_optional.media_type;
+   current_answer.media_optional['media_name'] = video_object.media_optional.media_name;
+   current_answer.media_optional['video_id'] = video_object.media_optional.video_id;
+   current_answer.media_optional['video_type'] = video_object.media_optional.video_type;
+   current_answer.media_optional['embed_path'] = video_object.media_optional.embed_path;
+   if ( video_object.media_optional.video_type == 2 )
+     current_answer.media_optional['mp4_option'] =  video_object.media_optional.mp4_option;
+ }
+ if( target_question.question_type == 1 ){
+   current_answer['media_src'] = video_object.media_src;
+   current_answer['Media_directory'] = video_object.Media_directory;
+   current_answer['media_type'] = video_object.media_type;
+   current_answer['media_name'] = video_object.media_name;
+   current_answer['video_id'] = video_object.video_id;
+   current_answer['video_type'] = video_object.video_type;
+   current_answer['embed_path'] = video_object.embed_path ;
+   if ( video_object.video_type == 2 )
+     current_answer['mp4_option'] =  video_object.mp4_option;
+ }
+
+ // ==> Saving Data
+ $timeout(function(){
+   $rootScope.storing_questions_into_database();
+   $timeout(function(){ $rootScope.close_current_image_uploader() } , 300)
+ } , 300);
+};
+
+  // ==> Draw Progress Radial
+  var svg ;
+  $rootScope.draw_radial_progression = (precentage_value) => {
+    d3.select("svg").remove()
+				  if(svg){
+				  svg.selectAll("*").remove();
+
+				}
+				var wrapper = document.getElementById('radialprogress');
+				var start = 0;
+
+				var colours = {
+				  fill: "#c17c7e" ,
+				  track: '#c17c7e36',
+				  text: '#c17c7e',
+				  stroke: 'transparent',
+				}
+
+				var radius = 25;
+				var border = 2;
+				var strokeSpacing = 5;
+				var endAngle = Math.PI * 2;
+				var formatText = d3.format('.0%');
+				var boxSize = radius * 2;
+				var count = precentage_value;
+				var progress = start;
+				var step = precentage_value < start ? -0.01 : 0.01;
+
+				//Define the circle
+				var circle = d3.svg.arc()
+				  .startAngle(0)
+				  .innerRadius(radius)
+				  .outerRadius(radius - border);
+
+				//setup SVG wrapper
+				svg = d3.select(wrapper)
+				  .append('svg')
+				  .attr('width', boxSize)
+				  .attr('height', boxSize);
+
+
+				// ADD Group container
+				var g = svg.append('g')
+				  .attr('transform', 'translate(' + boxSize / 2 + ',' + boxSize / 2 + ')');
+
+				//Setup track
+				var track = g.append('g').attr('class', 'radial-progress');
+				track.append('path')
+          .attr("class" , "track-all-1")
+          .attr('d', circle.endAngle(endAngle))
+				  // .attr('fill', colours.track)
+				  // .attr('stroke', colours.stroke)
+				  // .attr('stroke-width', strokeSpacing + 'px');
+
+
+
+				//Add colour fill
+				var value = track.append('path')
+          .attr("class" , "track-progress-1");
+				  // .attr('fill', colours.fill)
+				  // .attr('stroke', colours.stroke)
+				  // .attr('stroke-width', strokeSpacing + 'px');
+
+				//Add text value
+				var numberText = track.append('text')
+        .attr("class" , "track-text-1")
+        .attr('text-anchor', 'middle')
+        .attr('dy', '.5rem')
+				// .attr('fill', colours.text);
+
+
+				  //update position of endAngle
+				  value.attr('d', circle.endAngle(endAngle * precentage_value));
+				  //update text value
+				  numberText.text(formatText(precentage_value));
+  }
+  // ==> Calling all function according timeout
+  $timeout(function(){
+    $rootScope.draw_radial_progression(0/100);
+    // $rootScope.init_swiperJs();
+    $rootScope.init_bootstrap_tooltip();
+    $rootScope.init_drag_drop();
+    $rootScope.load_spectrum_plugin();
+
+  }, 500 );
 }]);

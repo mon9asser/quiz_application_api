@@ -35,6 +35,7 @@
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" charset="utf-8"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js" charset="utf-8"></script>
 
   </head>
   <body ng:controller="apps-controller">
@@ -144,19 +145,24 @@
                 </div>
 
                 <div class="switched-button switch-mode">
-                  <div class="input-switch" ng:class="(screen_type == 0 ) ? 'display_editor_preview_option':'dontdisplay_editor_preview_option'">
+                  <div ng:if="screen_type == 3" class="input-switch" ng:class="(screen_type == 0 ) ? 'display_editor_preview_option':'dontdisplay_editor_preview_option'">
                     <label for="switch-editor">Edit</label>
                     <input type="checkbox" id="switch-editor" ng:model="is_view" ng:change="switching_editor_preview(is_view)" class="input" />
                     <label for="switch-editor" class="switch"></label>
                     <label for="switch-editor">Preview</label>
+                  </div>
+                  <div ng:if="screen_type != 3">
+                      <span ng:if="screen_type == 0">Welcome Screen</span>
+                      <span ng:if="screen_type == 1">Goodbye Screen</span>
+                      <span ng:if="screen_type == 2">Result Screen</span>
                   </div>
                 </div>
                 <!-- Question Container -->
                  <div class="question-editor swipper-container-block">
                    <div class="swiper-container swiper-data">
                      <div class="swiper-wrapper">
-                       <div class="swiper-slide" ng:include="'/partials/editor.hbs'"></div>
-                       <div class="swiper-slide" ng:include="'/partials/preview.hbs'"></div>
+                       <div class="swiper-slide editor-page" ng:include="'/partials/editor.hbs'"></div>
+                       <div class="swiper-slide preview-page" ng:include="'/partials/preview.hbs'"></div>
                      </div>
                    </div>
                  </div>
@@ -197,8 +203,8 @@
         <!-- Image Case -->
         <div ng:if="media_data != undefined">
           <div class="media-part-controller live_preview_image">
-            <img ng:if="media_data.media_type == 0" id="cropping_system" ng:src="{> media_data.media_src <}" alt="Image">
-            <iframe ng:if="media_data.media_type == 1 && ( media_data.video_type == 1 || media_data.video_type == 0)" ng:src="{> media_data.media_src <}" width="100%" height="auto"></iframe>
+            <img ng:if="media_data.media_type == 0" id="cropping_system" class="isCropperImage" ng:src="{> media_data.media_src | trust_iframe_url <}" alt="Image">
+            <iframe ng:if="media_data.media_type == 1 && ( media_data.video_type == 1 || media_data.video_type == 0)" ng:src="{> media_data.media_src | trust_iframe_url <}" width="100%" height="auto"></iframe>
             <div class='loading_data'></div>
           </div>
           <div class="progrbar">

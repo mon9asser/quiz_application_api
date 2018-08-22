@@ -3,6 +3,9 @@ body {
     background: #eceff4;
     overflow-x: hidden;
 }
+* {
+  vertical-align: middle;
+}
 .widContainer {
     width: 95%;
     display: block;
@@ -2093,7 +2096,7 @@ span.loadin-editor{
 .single-question-container {
   display: inline-block;
   position: absolute;
-  top: 0px;
+  top: -4px;
   right: 0px;
   left: 0px;
   right: 0px;
@@ -3769,7 +3772,7 @@ margin-right: 5px;
       border-color: #eeeeef !important ;
 }
 .redactor-in-style{
-      color: #a7a7a7;
+      color: #222;
 }
 .redactor-box.redactor-styles-on .redactor-toolbar {
   padding: 15px 16px 11px 10px;
@@ -3796,7 +3799,7 @@ textarea.quest-title-edit , textarea.quest-title-edit:focus , textarea.quest-tit
   border:1px solid #999;
 }
 .redactor-in{
-  color: #a7a7a7;
+  color: #222;
 }
 .butns-part {
   width: 97%;
@@ -4440,7 +4443,7 @@ transition: all 2s linear, color 2s linear;
   display: block;
   position: relative;
   margin: 20px auto 0px 25px;
-  overflow: hidden;
+  /* overflow: hidden; */
   display: none;
 }
 .items > ul {
@@ -5060,3 +5063,68 @@ button[contentEditable='true']:focus{
   border-color: #ffffff;
   background: #c17c7e;
  }
+ .preview-page , .editor-page {
+    webkit-transition: transform .2s linear ;
+   transition: transform .2s linear ;
+   -moz-transition: transform .2s linear  ;
+ }
+.dropdown-menu {
+  right: 0px;
+}
+.dropdown-menu li a {
+  padding: 0px;
+  margin: 0px;
+  border: none;
+}
+.dropdown-menu li a , .dropdown-menu li a:focus , .dropdown-menu li a:hover{
+  background: none;
+  color: #999;
+}
+
+.open>.dropdown-menu {
+  display: block;
+width: 249px;
+right: 0px;
+float: right;
+position: absolute;
+right: 0px;
+left: inherit;
+border: none;
+border-radius: 0px;
+border-radius: 5px;
+border: 1px dashed #ffffff;
+padding-top: 0px;
+}
+.open>.dropdown-menu > li > a {
+  padding: 8px 20px;
+  overflow: hidden;
+}
+.open>.dropdown-menu > li > a:hover {
+  background: #eee;
+}
+.option-x {
+  display: inline-block;
+  position: relative;
+  width: 48%;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  padding-left: 11px;
+}
+.enable-description-values {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin: 10px auto;
+  height: auto;
+}
+.enable-description-values > label {
+  display: inline-block;
+  float: left;
+  margin-left: 10px;
+  margin-top: 4px;
+  font-size: 16px;
+  color: #999;
+}
