@@ -63,17 +63,17 @@
          <div style="display:none; margin-top: 12px;" class="x-editor-x-body" id="Description-pt">
            <div class="col-xs-12 col-md-12">
              <div class="enable-description-values">
-               <label id="enable-desc-data">Enabel Description</label>
-               <input style="margin-bottom: 10px; margin-top: 0px; margin-left: 15px;" ng:model="_questions_[question_index].question_description.is_enabled" type="checkbox" for="enable-desc-data" class="switch_1 input-checkboxes ">
-
+               <label style="font-size:15px;" id="enable-desc-data">Enabel Description</label>
+               <input style="float: right; margin-bottom: 10px; margin-top: 0px; margin-left: 15px;" ng:model="_questions_[question_index].question_description.is_enabled" type="checkbox" for="enable-desc-data" class="switch_1 input-checkboxes ">
              </div>
-             <div ng:if="_questions_[question_index].question_description.is_enabled == true" class="row-cols margin-top" style="padding-bottom: 5px;">
-               <textarea ng:model="description"  id="editor-desc-data" name="name" class="form-control descriptions description-field description-field-x redactor-editor" placeholder="Description ..."  redactor = "{buttons: ['formatting', '|','html' , 'bold', 'italic' , 'underline' , 'deleted' , 'link'  ] , plugins: ['fontcolor']}"></textarea>
+              <!-- ng:if="_questions_[question_index].question_description.is_enabled == true" -->
+             <div class="row-cols margin-top" style="padding-bottom: 5px;">
+               <textarea style="background:#eee;" ng:model="_questions_[question_index].question_description.value"  id="editor-desc-data" name="name" class="form-control descriptions description-field description-field-x redactor-editor" placeholder="Description ..."  redactor = "{buttons: ['formatting', '|','html' , 'bold', 'italic' , 'underline' , 'deleted' , 'link'  ] , plugins: ['fontcolor']}"></textarea>
              </div>
            </div>
          </div>
        </li>
-      <li>
+      <li ng:if="_questions_[question_index].question_type != 4">
          <div class="x-editor-x-title" ng:click="expand_collapsed_items('#answers-pt')">
              Answers
          </div>
@@ -156,6 +156,26 @@
              </ul>
            </div>
 
+           <!-- Rating Scale Answer -->
+           <div ng:if="_questions_[question_index].question_type == 3" class="multi-answers-part">
+              <ul class="rating-scale-list">
+                <li ng:click="mark_rating_scale(_questions_[question_index].answers_format[0].ratscal_type , $index )" ng:mouseover="hover_rating_scale(_questions_[question_index].answers_format[0].ratscal_type , $index )" ng:repeat="(answer_key , answer_value ) in _questions_[question_index].answers_format[0].rating_scale_answers track by $index">
+                  <span ng:if="_questions_[question_index].answers_format[0].ratscal_type == 1" class="fa fa-star-o ratings"></span>
+                  <span ng:if="_questions_[question_index].answers_format[0].ratscal_type == 0" class="scales"> {> answer_value.rat_scl_value <}</span>
+                </li>
+              </ul>
+              <ul  class="rating-scale-list text-center" ng:if="_questions_[question_index].answers_format[0].ratscal_type == 0 && _questions_[question_index].answers_format[0].show_labels == true">
+                <li style="margin-left: 20px;font-size: 15px;">
+                  {> _questions_[question_index].answers_format[0].started_at <}
+                </li>
+                <li style="margin-left: 20px;font-size: 15px;">
+                  {> _questions_[question_index].answers_format[0].centered_at <}
+                </li>
+                <li style="margin-left: 20px;font-size: 15px;">
+                  {> _questions_[question_index].answers_format[0].ended_at <}
+                </li>
+              </ul>
+           </div>
          </div>
        </li>
       <li>
@@ -167,19 +187,7 @@
             <div class="row-cols margin-top">
               <div class="question-settings">
                 <ul class="listSettings-qs">
-                   <li class="show_lbls_qs">
-                      <div class="scale-options">
-                        <div class="checkbox-toggle answer-settins">
-                          <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                          <span class="title-checkbox">Show labels</span>
-                        </div>
-                      </div>
-                      <div class="scale-options item-labels">
-                         <input class="lab" type="text" placeholder="Left">
-                         <input class="lab" type="text" placeholder="Center">
-                         <input class="lab" type="text" placeholder="Right">
-                      </div>
-                    </li>
+
                     <li class="required_qs">
                       <div class="checkbox-toggle answer-settins">
                          <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
@@ -225,16 +233,29 @@
                         </span>
                      </div>
                    </li> -->
-                   <li class="steps_qs">
+                   <li class="show_lbls_qs" ng:if="_questions_[question_index].question_type == 3 && _questions_[question_index].answers_format[0].ratscal_type == 0 ">
+                      <div class="scale-options">
+                        <div class="checkbox-toggle answer-settins">
+                          <input ng:model="_questions_[question_index].answers_format[0].show_labels" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                          <span class="title-checkbox">Show labels</span>
+                        </div>
+                      </div>
+                      <div class="scale-options item-labels" ng:if="_questions_[question_index].answers_format[0].show_labels == true">
+                         <input ng:model="_questions_[question_index].answers_format[0].started_at" class="lab" type="text" placeholder="Left">
+                         <input ng:model="_questions_[question_index].answers_format[0].centered_at" class="lab" type="text" placeholder="Center">
+                         <input ng:model="_questions_[question_index].answers_format[0].ended_at" class="lab" type="text" placeholder="Right">
+                      </div>
+                    </li>
+                   <li class="steps_qs" ng:if="_questions_[question_index].question_type == 3 ">
                          <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
-                           Steps ( ... )
+                           Steps ( {> _questions_[question_index].answers_format[0].step_numbers<} )
                             <i class="help-links">?</i>
                          </span>
                          <div class="rating_scale_options">
-                             <input  id="step_slider" min="2" max="10" type="range" name="">
+                             <input ng:model="_questions_[question_index].answers_format[0].step_numbers" ng:change="step_number_of_rating_scale(_questions_[question_index].answers_format[0].step_numbers)"  id="step_slider" min="2" max="10" type="range" name="">
                          </div> <!-- Slide Range -->
                     </li>
-                    <li>
+                    <li  ng:if="_questions_[question_index].question_type == 4 ">
                       <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
                         Max characters ( ... )
                        <i class="help-links">?</i>

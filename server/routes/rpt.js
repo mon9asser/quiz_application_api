@@ -1801,7 +1801,7 @@ rptRouters.post("/:app_id/report_collection/:user_id" , (req , res) => {
     if(attendee_object_index != -1){
         var attendee_obka = attendee_draft.att_draft.find( x => x.user_id == user_id );
         var rptObject = new Object();
-        if(attendee_obka != undefined )
+        if(attendee_obka != undefined && attendee_obka.report_attendees != undefined )
          {
            attendee_obka.report_attendees.is_completed = true
          }
@@ -3771,7 +3771,7 @@ rptRouters.post(
             atte_ndee = [] ;
             att_detls = [] ;
           }
-          
+
 
           if( applications.app_type == 1 )
             all_items['total_passed'] = filter_by_total_passed ( atte_ndee  , att_detls , date_object.date_from , date_object.date_to  )  //  (total_passed.true != null )? total_passed.true : 0

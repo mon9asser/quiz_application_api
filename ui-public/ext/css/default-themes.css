@@ -628,7 +628,7 @@ ul li.right_answer > .correct-ico {
 }
 .time-container > span > span.timer
 {
-    color: #c17c7e; 
+    color: #c17c7e;
      padding: 2px;
      border: 1px dashed #efdfe0;
      vertical-align: baseline;
@@ -639,4 +639,8 @@ ul li.right_answer > .correct-ico {
      padding-left: 5px;
      border-radius: 5px;
      background: white;
+}
+.selected_scale_number {
+  background : '#c17c7e' ,
+  color :'#fff'
 }

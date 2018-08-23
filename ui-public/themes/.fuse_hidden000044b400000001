@@ -1,0 +1,5 @@
+.player-body-screen { background-color:rgb(255, 0, 0); }
+.question-screen-box { background-color:rgb(238, 238, 238); border-color:rgb(120, 63, 4); border-style:dashed; }
+.answer-container ul li { background-color:rgb(217, 234, 211); color:rgb(0, 0, 0); border-style:dashed; border-color:rgb(0, 0, 255); }
+.answer-container ul li.selected_answer, .answer-container ul li.selected_answer:hover { background-color:rgb(61, 133, 198); color:rgb(7, 55, 99); }
+.answer-container ul li:hover { background-color:teal; color:#fff; border-style:dashed; border-color:rgb(0, 0, 255); }

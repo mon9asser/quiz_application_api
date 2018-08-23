@@ -141,7 +141,7 @@
 }
 
 .question-media {
-  width: 60%;
+  width: 30%;
   display: block;
   position: relative;
   margin: 15px 0px;
@@ -1293,8 +1293,13 @@ select.select-current-element , select.select-current-element:focus , select.sel
     color: #999;
     display: inline-block ;
 }
+.start-o li, .start-o li:hover, .start-o li:focus{
+  display: inline-block !important;
+}
 .answer-container ul li:hover {
-  border: 1px solid #e6d4da;
+  /* border: 1px solid #e6d4da; */
+  padding: 8px;
+  margin: 3px;
 }
 .answer-container ul li.super_size_class{
   width: 48%;
@@ -1303,3 +1308,4 @@ select.select-current-element , select.select-current-element:focus , select.sel
 button {
   font-family: RobotoRegular;
 }
+ 

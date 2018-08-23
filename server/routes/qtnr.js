@@ -95,8 +95,6 @@ qtnrRouters.use(build_session);
 
 
 
-
-
 qtnrRouters.post("/upload/animage"  , question_answer_images.single("media_field") , (req, res) => {
     // var file_path = 'ui-public/themeimages/';
     var file_path = 'ui-public/themeimages/';
@@ -290,6 +288,8 @@ qtnrRouters.patch("/:app_id/app/setup_settings", auth_verify_api_keys_tokens , (
 
 qtnrRouters.patch("/:app_id/app/setup_settings/storing" , (req,res)=>{
   var app_id = req.params.app_id;
+
+
   qtnr.findById(app_id , (err,d)=>{
     if(err || !d){
       return new Promise((resolve, reject) => {
@@ -5200,7 +5200,15 @@ qtnrRouters.post("/:app_id/question/:question_id/cropping_system"  , question_an
    });
 });
 
-
+qtnrRouters.get("/:app_id/player/data" , ( req , res ) => {
+  var app_id = req.params.app_id;
+  qtnr.findOne({_id : app_id}).populate('app_report').populate('att__draft').exec(function(error, creatorQuestionnaires) {
+    if(error){
+        res.send({error : "This Application doesn't exists !" })
+    }
+    res.send(creatorQuestionnaires);
+  });
+});
 qtnrRouters.post("/:app_id/add/:data"  , ( req , res ) => {
   var appId = req.params.app_id ;
   var dataColumns = req.params.data;

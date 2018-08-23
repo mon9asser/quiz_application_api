@@ -1,15 +1,15 @@
 <!-- Time 1 -->
     <div class="time-container option-container text-right">
       <span>
-        <span ng:if="_settings_.time_settings.timer_type == true" class="timer">
+        <span box-target-class="timer" box-target-type="box-timer" ng:if="_settings_.time_settings.timer_type == true" class="timer selector">
           {>_settings_.time_settings.hours <}
         </span>
         <span ng:if="_settings_.time_settings.timer_type == true" >:</span>
-        <span class="timer">
+        <span box-target-class="timer" box-target-type="box-timer" class="timer selector">
           {>_settings_.time_settings.minutes <}
         </span>
         <span>:</span>
-        <span class="timer">
+        <span box-target-class="timer" box-target-type="box-timer" class="timer selector">
           {>_settings_.time_settings.seconds <}
         </span>
       </span>

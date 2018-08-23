@@ -339,32 +339,32 @@
                 <ul>
                   <li ng:show="css_pellet_mode.radial_text_color == true">
                     <span>Text Color</span>
-                    <input ng:model="radial_text_colors" class="radial_text_colors" type="text" name="" value="">
+                    <input ng:change="apply_stylesheet_in_views( 'fill', radial_text_colors)" ng:model="radial_text_colors" class="radial_text_colors" type="text" name="" value="">
                   </li>
                   <li ng:show="css_pellet_mode.radial_fill == true">
                     <span>Track Progress Color</span>
-                    <input ng:model="radial_fill_colors" class="radial_fill_colors" type="text" name="" value="">
+                    <input ng:change="apply_stylesheet_in_views('fill', radial_fill_colors)" ng:model="radial_fill_colors" class="radial_fill_colors" type="text" name="" value="">
                   </li>
                   <li ng:show="css_pellet_mode.radial_strock == true">
                     <span>Track Stroke Color</span>
-                    <input ng:model="radial_storck_colors" class="radial_storck_colors" type="text" name="" value="">
+                    <input ng:change="apply_stylesheet_in_views('stoke', radial_storck_colors)" ng:model="radial_storck_colors" class="radial_storck_colors" type="text" name="" value="">
                   </li>
 
-                  <li ng:show="css_pellet_mode.background == true">
+                  <li  ng:show="css_pellet_mode.background == true">
                     <span>Background</span>
-                    <input ng:model="background_models" class="background_models" type="text" name="" value="">
+                    <input  ng:change="apply_stylesheet_in_views('background-color',background_models)"  ng:model="background_models" class="background_models" type="text" name="" value="">
                   </li>
                   <li ng:show="css_pellet_mode.color == true">
                     <span>Color</span>
-                    <input ng:model="color_models" class="color_models" type="text" name="" value="">
+                    <input  ng:change="apply_stylesheet_in_views('color' , color_models)" ng:model="color_models" class="color_models" type="text" name="" value="">
                   </li>
                   <li ng:show="css_pellet_mode.fontSize == true">
                     <span>Font Size</span>
-                    <input ng:model="font_size_models" style="width:60px; color:#999;" value="15" type="number" min="15" max="25" name="">
+                    <input ng:change="apply_stylesheet_in_views('font-size' , font_size_models)" ng:model="font_size_models" style="width:60px; color:#999;" value="15" type="number" min="15" max="25" name="">
                   </li>
                   <li ng:show="css_pellet_mode.fontFamily == true">
                     <span>Font Family</span>
-                    <select ng:model="font_family_models" class="select_borders">
+                    <select  ng:change="apply_stylesheet_in_views('font-family' , font_family_models)" ng:model="font_family_models" class="select_borders">
                       <option value="arial">Arial</option>
                       <option value='"helvetica neue", helvetica, arial, sans-serif'>Helvetica</option>
                       <option value="RobotoRegular">Roboto Regular</option>
@@ -374,12 +374,12 @@
                   </li>
                   <li ng:show="css_pellet_mode.width == true">
                     <span>Width</span>
-                    <input style="width:60px; color:#999;" ng:model="media_container" type="number" min="180" max="500" name="" value="">
+                    <input style="width:60px; color:#999;" ng:change="apply_stylesheet_in_views('width' , media_container)" ng:model="media_container" type="number" min="180" max="500" name="" value="">
                   </li>
                   <li ng:show="css_pellet_mode.border == true">
                     <span>Border</span>
-                    <input ng:model="border_models_color" class="border_models_color" type="text" name="" value="">
-                    <select style="margin-right:10px;" ng:model="border_style_models">
+                    <input ng:change="apply_stylesheet_in_views('border-color' , border_models_color)" ng:model="border_models_color" class="border_models_color" type="text" name="" value="">
+                    <select style="margin-right:10px;" ng:change="apply_stylesheet_in_views('border-style' , border_style_models)"  ng:model="border_style_models">
                       <option value="none">None</option>
                       <option value="solid">Solid</option>
                       <option value="dashed">Dashed</option>
@@ -388,7 +388,7 @@
                       <ul class="border-lists">
                         <li>
                           <span>Left</span>
-                          <select ng:model="border_left_models" class="select_borders">
+                          <select ng:change="apply_stylesheet_in_views('border-left-width' , border_left_models)" ng:model="border_left_models" class="select_borders">
                             <option value="0px">None</option>
                             <option value="1px">1px</option>
                             <option value="2px">2px</option>
@@ -399,7 +399,7 @@
                         </li>
                         <li>
                           <span>Right</span>
-                          <select ng:model="border_right_models" class="select_borders">
+                          <select ng:change="apply_stylesheet_in_views('border-right-width' , border_right_models)" ng:model="border_right_models" class="select_borders">
                             <option value="0px">None</option>
                             <option value="1px">1px</option>
                             <option value="2px">2px</option>
@@ -410,7 +410,7 @@
                         </li>
                         <li>
                           <span>Top</span>
-                          <select ng:model="border_top_models" class="select_borders">
+                          <select ng:change="apply_stylesheet_in_views('border-top-width' , border_top_models)"  ng:model="border_top_models" class="select_borders">
                             <option value="0px">None</option>
                             <option value="1px">1px</option>
                             <option value="2px">2px</option>
@@ -421,7 +421,7 @@
                         </li>
                         <li>
                           <span>Bottom</span>
-                          <select ng:model="border_bottom_models" class="select_borders">
+                          <select ng:change="apply_stylesheet_in_views('border-bottom-width' , border_bottom_models)" ng:model="border_bottom_models" class="select_borders">
                             <option value="0px">None</option>
                             <option value="1px">1px</option>
                             <option value="2px">2px</option>
@@ -438,16 +438,16 @@
                 <ul>
                   <li ng:show="css_pellet_mode.hover_background == true">
                     <span>Background</span>
-                    <input ng:model="hover_background_models" class="hover_background_models" type="text" name="" value="">
+                    <input ng:change="apply_stylesheet_in_views('background-color' , hover_background_models , 'hover')" ng:model="hover_background_models" class="hover_background_models" type="text" name="" value="">
                   </li>
                   <li ng:show="css_pellet_mode.hover_color == true">
                     <span>Color</span>
-                    <input ng:model="hover_color_models" class="hover_color_models" type="text" name="" value="">
+                    <input ng:change="apply_stylesheet_in_views('color' , hover_color_models , 'hover')" ng:model="hover_color_models" class="hover_color_models" type="text" name="" value="">
                   </li>
                   <li ng:show="css_pellet_mode.hover_border == true">
                     <span>Border</span>
-                    <input ng:model="hover_border_models_color" class="hover_border_models_color" type="text" name="" value="">
-                    <select style="margin-right:10px;" ng:model="hover_border_style_models">
+                    <input ng:change="apply_stylesheet_in_views('border-color' , hover_border_models_color  , 'hover')" ng:model="hover_border_models_color" class="hover_border_models_color" type="text" name="" value="">
+                    <select style="margin-right:10px;" ng:change="apply_stylesheet_in_views('border-style' , hover_border_style_models  , 'hover')" ng:model="hover_border_style_models">
                       <option value="none">None</option>
                       <option value="solid">Solid</option>
                       <option value="dashed">Dashed</option>
@@ -456,7 +456,7 @@
                       <ul class="border-lists">
                         <li>
                           <span>Left</span>
-                          <select ng:model="hover_border_left_models" class="select_borders">
+                          <select  ng:change="apply_stylesheet_in_views('border-left-width' , hover_border_left_models , 'hover')" ng:model="hover_border_left_models" class="select_borders">
                             <option value="0px">None</option>
                             <option value="1px">1px</option>
                             <option value="2px">2px</option>
@@ -467,7 +467,7 @@
                         </li>
                         <li>
                           <span>Right</span>
-                          <select ng:model="hover_border_right_models" class="select_borders">
+                          <select ng:change="apply_stylesheet_in_views('border-right-width' , hover_border_right_models , 'hover')" ng:model="hover_border_right_models" class="select_borders">
                             <option value="0px">None</option>
                             <option value="1px">1px</option>
                             <option value="2px">2px</option>
@@ -478,7 +478,7 @@
                         </li>
                         <li>
                           <span>Top</span>
-                          <select ng:model="hover_border_top_models" class="select_borders">
+                          <select ng:change="apply_stylesheet_in_views('border-top-width' , hover_border_top_models , 'hover')" ng:model="hover_border_top_models" class="select_borders">
                             <option value="0px">None</option>
                             <option value="1px">1px</option>
                             <option value="2px">2px</option>
@@ -489,7 +489,7 @@
                         </li>
                         <li>
                           <span>Bottom</span>
-                          <select ng:model="hover_border_bottom_models" class="select_borders">
+                          <select ng:change="apply_stylesheet_in_views('border-bottom-width' , hover_border_bottom_models , 'hover')" ng:model="hover_border_bottom_models" class="select_borders">
                             <option value="0px">None</option>
                             <option value="1px">1px</option>
                             <option value="2px">2px</option>
@@ -506,16 +506,16 @@
                 <ul>
                   <li ng:show="css_pellet_mode.selected_background == true">
                     <span>Background</span>
-                    <input ng:model="selected_background_models" class="selected_background_models" type="text" name="" value="">
+                    <input ng:change="apply_stylesheet_in_views('background-color' , selected_background_models , null , 'selected_answer')" ng:model="selected_background_models" class="selected_background_models" type="text" name="" value="">
                   </li>
                   <li ng:show="css_pellet_mode.selected_color == true">
                     <span>Color</span>
-                    <input ng:model="selected_color_models" class="selected_color_models" type="text" name="" value="">
+                    <input ng:change="apply_stylesheet_in_views('color' , selected_color_models, null , 'selected_answer')" ng:model="selected_color_models" class="selected_color_models" type="text" name="" value="">
                   </li>
                   <li ng:show="css_pellet_mode.selected_border == true">
                     <span>Border</span>
-                    <input ng:model="selected_border_models_color" class="selected_border_models_color" type="text" name="" value="">
-                    <select style="margin-right:10px;" ng:model="selected_border_style_models">
+                    <input  ng:change="apply_stylesheet_in_views('border-color' , selected_border_models_color, null , 'selected_answer')" ng:model="selected_border_models_color" class="selected_border_models_color" type="text" name="" value="">
+                    <select style="margin-right:10px;" ng:change="apply_stylesheet_in_views('border-style' , selected_border_style_models, null , 'selected_answer')" ng:model="selected_border_style_models">
                       <option value="none">None</option>
                       <option value="solid">Solid</option>
                       <option value="dashed">Dashed</option>
@@ -524,7 +524,7 @@
                       <ul class="border-lists">
                         <li>
                           <span>Left</span>
-                          <select ng:model="selected_border_left_models" class="select_borders">
+                          <select ng:change="apply_stylesheet_in_views( 'border-left-width', selected_border_left_models, null , 'selected_answer')" ng:model="selected_border_left_models" class="select_borders">
                             <option value="0px">None</option>
                             <option value="1px">1px</option>
                             <option value="2px">2px</option>
@@ -535,7 +535,7 @@
                         </li>
                         <li>
                           <span>Right</span>
-                          <select ng:model="selected_border_right_models" class="select_borders">
+                          <select ng:change="apply_stylesheet_in_views('border-right-width' , selected_border_right_models, null , 'selected_answer')" ng:model="selected_border_right_models" class="select_borders">
                             <option value="0px">None</option>
                             <option value="1px">1px</option>
                             <option value="2px">2px</option>
@@ -546,7 +546,7 @@
                         </li>
                         <li>
                           <span>Top</span>
-                          <select ng:model="selected_border_top_models" class="select_borders">
+                          <select  ng:change="apply_stylesheet_in_views('border-top-width' , selected_border_top_models, null , 'selected_answer')" ng:model="selected_border_top_models" class="select_borders">
                             <option value="0px">None</option>
                             <option value="1px">1px</option>
                             <option value="2px">2px</option>
@@ -557,7 +557,7 @@
                         </li>
                         <li>
                           <span>Bottom</span>
-                          <select ng:model="selected_border_bottom_models" class="select_borders">
+                          <select ng:change="apply_stylesheet_in_views('border-bottom-width' , selected_border_bottom_models, null , 'selected_answer')" ng:model="selected_border_bottom_models" class="select_borders">
                             <option value="0px">None</option>
                             <option value="1px">1px</option>
                             <option value="2px">2px</option>
@@ -579,7 +579,8 @@
           <!-- <span class="title-editor-option">Editor Saving Option</span>
           <input type="checkbox" id="passing-grade" class="switch_1 input-checkboxes">
           <label for="passing-grade" style=" margin-left: 10px;">Auto save</label> -->
-          <button id="save_setting_change" ng:click="saving_quiz_settings();" type="button" class="btn btn-primary" name="button"> Apply Changes</button>
+          <button ng:if="enable_css_mode == false" id="save_setting_change" ng:click="saving_quiz_settings();" type="button" class="btn btn-primary" name="button"> Apply Changes</button>
+          <button ng:if="enable_css_mode == true"  id="save_css_change" ng:click="saving_quiz_stylesheet();" type="button" class="btn btn-danger" name="button"> Apply Changes</button>
         </div>
     </div>
 </div>

@@ -1,5 +1,6 @@
  <link rel="stylesheet" ng:href="{> default_player  <}">
  <link rel="stylesheet" ng:href="{> default_theme  <}">
+ <link rel="stylesheet" ng:href="{>stylesheet_uri<}">
  <input type="hidden" id="enabled_css" value="false">
  <style>
    .x-widther{
@@ -84,8 +85,10 @@
            <li ng:click="select_this_answer ( _questions_[question_index]._id , answer_value._id , _questions_[question_index] , answer_value , app_id , user_id , answer_value.is_correct , $index )" box-target-class="answer-container ul li" box-target-type="box-answers" ng:class="list_answer_classes()" class="selector answer_opg_editor select_box_brd question-answer-row-select-blk question-answer-row-select answer_{>answer_value._id<}" ng:repeat="(anskey , answer_value) in _questions_[question_index].answers_format">
              <!-- Answer label -->
              <!-- {> question_labels['label_' + _settings_.indexes.questions.toString()][question_index] | uppercase <} -->
-             <span box-target-type="box-labels" box-target-class="answer_label"  class="answer_label selector">{> question_labels['label_' + _settings_.indexes.answers.toString()][$index] | uppercase <}</span>
-             <!-- Answer Media  -->
+             <!-- <span box-target-type="box-labels" box-target-class="answer_label"  class="answer_label selector">{> question_labels['label_' + _settings_.indexes.answers.toString()][$index] | uppercase <}</span> -->
+             <label box-target-type="box-labels" box-target-class="answer_numbering_block_box"  class="selector labels select_box_brd answer_numbering_block answer_numbering_block_box">{> question_labels['label_' + _settings_.indexes.answers.toString()][$index] | uppercase <}</label>
+
+            <!-- Answer Media  -->
              <!-- answer media for 0 -->
              <div ng:if="answer_value.media_optional != undefined && _questions_[question_index].question_type == 0" class="media-data-answer">
                <!-- Case it Image -->
@@ -134,6 +137,58 @@
 
            </li>
          </ul>
+         <!--  Rating Scale answers  -->
+         <div ng:if="(_questions_[question_index].question_type == 3) && (_questions_[question_index].answers_format[0].ratscal_type == 0)" class="block-of-scale">
+             <!-- Case it 3 => Scale -->
+             <div class="survey-answer">
+                 <!-- Rating Case -->
+                 <div class=""> <!--  -->
+
+                   <!-- Scale -->
+                   <center>
+
+                     <div class="scale-optn" ng:if="_questions_[question_index].answers_format[0].ratscal_type == 0 ">
+                       <ul  class="scalet-o ul_scal_{>_questions_[question_index]._id<}" ng:cloak >
+                         <li style="width: auto;" data-index='0' ng:repeat="(key_ , val_) in _questions_[question_index].answers_format[0].rating_scale_answers track by $index"> <!-- index , class_name , answer_id , question_id , rs_type -->
+                           <span class=" spanex scale_value_{>_questions_[question_index].answers_format[0]._id<}" ng:click="select_this_rating_value( $index , 'scale_value_'+_questions_[question_index].answers_format[0]._id  , _questions_[question_index].answers_format[0]._id , _questions_[question_index]._id , _questions_[question_index].answers_format[0].ratscal_type )">
+                               {> $index + 1 <}
+                           </span>
+                         </li>
+                       </ul>
+                       <div class="clearFix"></div>
+
+                       <div class="block-labels text-center"  ng:show="_questions_[question_index].answers_format[0].show_labels == true">
+                         <span class="first-lbl" ng:cloak>
+                           {>_questions_[question_index].answers_format[0].started_at <}
+                         </span>
+                         <span class="second-lbl" ng:cloak>
+                           {>_questions_[question_index].answers_format[0].centered_at  <}
+                         </span>
+                         <span class="third-lbl" ng:cloak>
+                           {>_questions_[question_index].answers_format[0].ended_at  <}
+                         </span>
+                       </div>
+                     </div>
+                   </center>
+                 </div>
+               </div>
+         </div>
+         <div ng:if="(_questions_[question_index].question_type == 3) && (_questions_[question_index].answers_format[0].ratscal_type == 1)" class="block-of-ratings">
+           <!-- Ratings  -->
+           <ul class="start-o rating_scale_block">
+             <!--  Ratings  -->
+             <li style="width: auto;" data-index='0' ng:repeat="(ratingscale_keys , ratingscale_vale)  in _questions_[question_index].answers_format[0].rating_scale_answers track by $index">
+               <span style="font-size:35px" ng:click="select_rating_scale__($index , 1 , _questions_[question_index]._id , _questions_[question_index].answers_format[0]._id , _questions_[question_index].question_type )" href="#">
+                   <i class="fa fa-star-o"></i>
+               </span>
+             </li>
+           </ul>
+         </div>
+         <!--  End Rating Answers-->
+         <div ng:if="_questions_[question_index].question_type == 4" class="block-of-fre-txts">
+           <!-- Case it 4 => Free texts -->
+           <textarea class="free-text-values" placeholder="Write your answer here !"></textarea>
+         </div>
        </div>
        <!--  End Answer Container -->
 

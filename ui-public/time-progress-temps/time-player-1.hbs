@@ -1,0 +1,16 @@
+<!-- Time 1 -->
+    <div class="time-container option-container text-right">
+      <span>
+        <span  ng:if="_settings_.time_settings.timer_type == true" class="timer hr">
+          {>__player_object.settings.time_settings.hours<}
+        </span>
+        <span style="margin:0px 5px;" ng:if="_settings_.time_settings.timer_type == true"  >:</span>
+        <span class="timer selector min">
+          {>__player_object.settings.time_settings.minutes <}
+        </span>
+        <span style="margin:0px 5px;">:</span>
+        <span class="timer selector sec">
+          {>__player_object.settings.time_settings.seconds <}
+        </span>
+      </span>
+    </div>

@@ -26,7 +26,28 @@
           </div>
      </div>
 
-     <div ng:include="loading_target_header"></div>
+     <!--
+    ---------------------------------------------------------
+    =============================>>> Time and progress bar
+    ---------------------------------------------------------
+     -->
+     <style media="screen">
+       .quiz-option-container {
+         z-index: 2000;
+          width: 60%;
+          margin: 0px auto;
+          float: none;
+          display: inherit;
+          margin-bottom: 20px;
+          margin-top: 20px;
+       }
+     </style>
+   <div ng:if="__player_object.settings.time_settings.is_with_time == true || _settings_.progression_bar.is_available == true"  class="quiz-option-container">
+     <!-- Progress -1 -->
+     <div ng:if="__player_object.settings.progression_bar.is_available == true" ng:include="progressbar_models"></div>
+     <!-- Time 1 -->
+     <div ng:if="__player_object.settings.time_settings.is_with_time == true" ng:include="time_models"></div>
+   </div>
 
      <!-- <div class="quizapp-tools player-block">
        <div class="tool-obj">
@@ -148,7 +169,7 @@
                               <div class="arrow-right question-label-box-brd" ng:class="load_border_styles(obj_val.question_type)"></div>
                             </span>
                             <span data:ng:bind:html="obj_val.question_body | trust_this_html_values" class="question-body-text"></span>
-                            <p ng:if="obj_val.question_description. != null || obj_val.question_description != undefined" class="dsc-data" data:ng:bind:html="obj_val.question_description.value | trust_this_html_values"></p>
+                            <p ng:if="obj_val.question_description.value != null || obj_val.question_description.value != undefined" class="dsc-data" data:ng:bind:html="obj_val.question_description.value | trust_this_html_values"></p>
                             <span class="required_option question-text-required-text"  ng:if="obj_val.answer_settings.is_required == true"> Required </span>
                           </div>
                           <div ng:if="(obj_val.question_type == 0 || obj_val.question_type == 1 ) && obj_val.answer_settings.single_choice == false" class="notes question-warnning-box">
@@ -156,7 +177,8 @@
                           </div>
                           <div data:ng:if="obj_val.media_question != null" class="question-media" ng:class="(obj_val.answer_settings.super_size)? 'super-size':''">
                             <!-- Case : image type  -->
-                            <div data:ng:if="obj_val.media_question.media_type == 0" class="image-media-case img-cases" ng:style="set_image_background(obj_val.media_question.media_field)"></div>
+                            <img  data:ng:if="obj_val.media_question.media_type == 0" width="100%"   ng:src="{>obj_val.media_question.Media_directory<}" class="image-responsive ng-scope" alt="Image" src="http://localhost:9000/themeimages/question_5b7ece972d1a842b4f7a0068.png?1535037094.703">
+                            <!-- <div data:ng:if="obj_val.media_question.media_type == 0" class="image-media-case img-cases" ng:style="set_image_background(obj_val.media_question.Media_directory)"></div> -->
                             <!-- <div data:ng:if="obj_val.media_question.media_type == 0" class="image-media-case img-cases" style="background-image:url('{> server_ip + obj_val.media_question.media_field <}');"></div> -->
                             <!-- Case : Video type -->
                             <div data:ng:if="obj_val.media_question.media_type == 1" class="video-media-case" data:ng:bind:html="obj_val.media_question | set_iframe"></div>
@@ -178,7 +200,9 @@
                                    <div ng:if="obj_val.question_type == 0" class="answer-contents">
                                       <div ng:if="ansvalue.media_optional != null" class="media-options">
                                          <!--  image case  -->
-                                         <div ng:if="ansvalue.media_optional.media_type == 0" ng:style="blob_background_data(ansvalue , obj_val.answer_settings.choice_style)"  class="image_case"></div>
+                                         <div ng:if="ansvalue.media_optional.media_type == 0" class="image_case">
+                                           <img width="100%" ng:src="{> ansvalue.media_optional.Media_directory <}" alt="Image">
+                                         </div>
                                          <!-- <div ng:if="ansvalue.media_optional.media_type == 0" style="background-image:url('{>server_ip+ansvalue.media_optional.media_src<}')"  class="image_case"></div> -->
                                          <!-- Video Cases -->
                                          <div ng-bind-html="ansvalue.media_optional | set_iframe" ng:if="ansvalue.media_optional.media_type == 1"  class="video_case">
@@ -213,7 +237,7 @@
                                      <div ng:if="ansvalue.Media_directory == null || ansvalue.Media_directory == undefined" class="image_case no-media-here">
                                        No Media here !
                                      </div>
-                                     <div ng:if="ansvalue.media_type == 0 && ansvalue.Media_directory != null" ng:style="blob_background_data(ansvalue , obj_val.answer_settings.choice_style)"  class="image_case"></div>
+                                     <div ng:if="ansvalue.media_type == 0 && ansvalue.Media_directory != null" ng:style="set_question_background(ansvalue.Media_directory)"  class="image_case"></div>
                                      <!-- <div ng:if="ansvalue.media_type == null" style="background-image:url('{>ansvalue.media_src<}')"  class="image_case"></div> -->
                                      <!--  Video Case  -->
                                      <div ng-bind-html="ansvalue | set_iframe" ng:if="ansvalue.media_type == 1"  class="video_case">

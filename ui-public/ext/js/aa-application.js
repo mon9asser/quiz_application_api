@@ -1,7 +1,7 @@
 
 var apps ;
 
-apps = angular.module("applications" , []); 
+apps = angular.module("applications" , []);
 
 
   "use strict";

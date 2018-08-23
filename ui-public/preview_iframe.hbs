@@ -73,7 +73,7 @@
 <div class="player-body-block player-body-screen"></div>
 <div ng:controller="preview_players" class="player-block">
 
- 
+
 
 <!--   ng:controller="preview_players"  -->
 <div class="preview_player_container-cont-selected player_opg_editor player-block" >
@@ -161,7 +161,7 @@
 
                                  <!-- Cases with question type-->
                                    <!-- Case it 0 => Text choices -->
-                                   <span box-target-type="box-labels" box-target-class="answer_label"  class="answer_label selector">{> question_labels['label_' + __player_object.settings.indexes.answers.toString()][$index] | uppercase <}</span>
+                                   <label box-target-type="box-labels" box-target-class="answer_numbering_block_box"  class="selector labels select_box_brd answer_numbering_block answer_numbering_block_box">{>  question_labels['label_' + __player_object.settings.indexes.answers.toString()][$index] | uppercase <}</label>
                                    <!-- Answer Media  -->
                                    <!-- answer media for 0 -->
                                    <div ng:if="answer_value.media_optional != undefined && obj_val.question_type == 0" class="media-data-answer">

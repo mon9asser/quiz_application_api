@@ -5128,3 +5128,30 @@ padding-top: 0px;
   font-size: 16px;
   color: #999;
 }
+.rating-scale-list {
+  display: block;
+  position: relative;
+  width: 95%;
+  margin: 20px auto;
+  padding: 0px;
+  list-style: none;
+}
+.rating-scale-list > li {
+    display: inline-block;
+    position: relative;
+}
+ .ratings {
+  display: inline-block;
+  position: relative;
+  font-size: 35px;
+  margin: 0px 10px;
+  color: #999;
+  cursor: pointer;
+}
+.scales {
+  padding: 15px 20px;
+      margin-top: 10px;
+      display: inline-block;
+      cursor: pointer;
+      border:1px dashed #ddd;
+}
