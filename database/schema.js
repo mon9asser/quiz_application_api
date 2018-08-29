@@ -56,10 +56,12 @@ var Questionnaire_settings = {
         title_end_with: { type : String , trim : true },
         title_success_with: { type : String , trim : true },
         title_failed_with: { type : String , trim : true },
+        title_resume : { type : String , trim : true }
     }
   },
   label_btns :  { type : {
       lbl_start_with : { type : String , trim : true } ,
+      lbl_resume_with : { type : String , trim : true } ,
       lbl_continue_with  : { type : String , trim : true },
       lbl_retake_with  : { type : String , trim : true },
       lbl_review_with  : { type : String , trim : true },
@@ -102,8 +104,10 @@ var Questionnaire_settings = {
   expiration : { type : {
     is_set : { type :  Boolean } ,
     through_time: { type : Number  } ,
-    title :  { type : String , trim : true }
-  } },
+    expire_warning :  { type : String , trim : true } ,
+    expire_message :  { type : String , trim : true }
+  }
+  },
   randomize_settings : { type : Boolean },
   step_type : { type :  Boolean },
   auto_slide : { type :  Boolean },

@@ -509,13 +509,27 @@ ul li.right_answer > .correct-ico {
   float: left;
 }
 
-.time-container{
+.time-container  {
   float: right;
+  line-height: 1.5;
 }
 
+.progress-container{
+  float: left;
+  line-height:2;
+}
 
-
-
+.progress-text2 {
+  margin-left: 5px;
+  margin-top: 3px;
+  display: inline-block;
+  color: #c17c7e;
+  font-family: 'Unica One', monospace;
+  font-weight: bold;
+}
+.marsds{
+      margin-left: 5px;
+}
 
 
 
@@ -574,8 +588,8 @@ ul li.right_answer > .correct-ico {
 
   }
   .select_texts {
-    margin-top: 20px;
-    display: inline;
+    margin-top: 5px;
+    display: block;
   }
  .text-question-number {
 
@@ -643,4 +657,16 @@ ul li.right_answer > .correct-ico {
 .selected_scale_number {
   background : '#c17c7e' ,
   color :'#fff'
+}
+
+.tick-group{
+  display: inline;
+      font-family: 'Unica One', monospace;
+}
+
+.tick-group > span {
+    display: inline-block;
+    font-size: 25px;
+    color: #c17c7e;
+    font-weight: bold;
 }

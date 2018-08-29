@@ -229,6 +229,43 @@
 
 
      <!--
+    ---------------------------------------------------------
+    =============================>>> Resume Screen && expire page
+    ---------------------------------------------------------
+     -->
+     <div ng:if="screen_type == 4 && _settings_.enable_screens == true"  class="swiper-slide welcoming-screen-x">
+       <div box-target-class="box-welcome-screen" box-target-type="box-containers" data-selected-block="question-slide" class="container  x-widther screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-welcome-screen selector">
+          <div>
+            <div box-target-class="welcome-screen-text" box-target-type="box-texts" class="resume-text selector description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text" ng:bind:html="_settings_.titles.title_resume  | apply_html_with_date_filtering"></div>
+            <div box-target-class="welcome-screen-text" box-target-type="box-texts" class="expire-warning-text selector description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text" ng:bind:html="_settings_.expiration.expire_warning  | apply_html_with_date_filtering"></div>
+              <div class="qusu-details text-right">
+                 <span data-tpco ng:click="start_the_quiz(enable_css_mode)" box-target-class="welcome-screen-button" box-target-type="box-buttons" class="selector button-take-this select_button welcome-screen-button-block welcome-screen-button" type="button" name="button">
+                     <i class="fa fa-sign-in" aria-hidden="true"></i>
+                       {> _settings_.label_btns.lbl_resume_with <}
+                 </span>
+              </div>
+          </div>
+       </div>
+     </div>
+
+
+
+
+     <!--
+    ---------------------------------------------------------
+    =============================>>> Expired screen page
+    ---------------------------------------------------------
+     -->
+     <div ng:if="screen_type == 5 && _settings_.enable_screens == true"  class="swiper-slide welcoming-screen-x">
+       <div box-target-class="box-welcome-screen" box-target-type="box-containers" data-selected-block="question-slide" class="container  x-widther screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-welcome-screen selector">
+          <div>
+            <div box-target-class="welcome-screen-text" box-target-type="box-texts" class="expired_message_block expire-warning-text selector description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text" ng:bind:html="_settings_.expiration.expire_message  | apply_html_with_date_filtering"></div>
+          </div>
+       </div>
+     </div>
+
+
+     <!--
      ---------------------------------------------------------
      =============================>>> Ending Screen
      ---------------------------------------------------------
@@ -258,8 +295,9 @@
    -->
    <div ng:if="screen_type == 2 && _settings_.enable_screens == true" box-target-class="box-result-screen" box-target-type="box-containers" data-selected-block ="question-slide" style="margin-bottom:20px;" class="selector x-widther container screen-container screen-ending-starting screen_opg_editor select_box_brd box-result-screen result-screen-block">
      <div>
+
        <div box-target-class="result-screen-text" box-target-type="box-texts" ng:if="this_attendee_draft.att_draft[0].report_attendee_details.score >= _settings_.grade_settings.value" class="selector description-body redactor-styles title_success_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
-       <div box-target-class="result-screen-text" box-target-type="box-texts" ng:if="this_attendee_draft.att_draft[0].report_attendee_details.score <= _settings_.grade_settings.value" class="selector description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
+       <div box-target-class="result-screen-text" box-target-type="box-texts" ng:if="this_attendee_draft.att_draft[0].report_attendee_details.score < _settings_.grade_settings.value" class="selector description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
        <div class="quiz-grade">
           <div class="quiz-grade grade-score text-center">
               <h3 box-target-class="result-screen-score-text" box-target-type="box-texts" class="selector select_texts result-screen-score-text-block result-screen-score-text" ng:mouseover="show_hovred_element('select_texts')">{> _settings_.label_btns.lbl_score_with <} :  {> this_attendee_draft.att_draft[0].report_attendee_details.correct_answers  + "/" + _questions_.length <} </h3>

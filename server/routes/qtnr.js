@@ -2614,7 +2614,8 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
                    title_start_with : "Write Starting Text"  ,
                    title_end_with: "Write Ending Text" ,
                    title_success_with : " Success quiz Text" ,
-                   title_failed_with : "Quiz Failed Text"
+                   title_failed_with : "Quiz Failed Text",
+                   title_resume : "Quiz Resume Text"
                  } ,
                label_btns : {
                    lbl_start_with:"Start" ,
@@ -2623,6 +2624,7 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
                    lbl_review_with : "Review" ,
                    lbl_back_with : "Back",
                    lbl_finish_with : "Finish",
+                   lbl_resume_with : "Resume" , 
                    lbl_submit_quiz_with : "Submit Quiz",
                    lbl_score_with :"Score",
                    lbl_grade_with :"Grade" ,
@@ -2656,7 +2658,8 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
                expiration : {
                  is_set : false  ,
                  through_time : 3 , // => it will be per day
-                 title : "This quiz will expire after"
+                 expire_warning : "This quiz will expire after 3 days" ,
+                 expire_message : "Quiz is expired !"
                } ,
               //  theme_style : [] ,
                randomize_settings : false ,

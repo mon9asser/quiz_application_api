@@ -1,5 +1,5 @@
 <!-- Time 1 -->
-    <div class="time-container option-container text-right">
+    <!-- <div class="time-container option-container text-right">
       <span>
         <span  ng:if="_settings_.time_settings.timer_type == true" class="timer hr">
           {>__player_object.settings.time_settings.hours<}
@@ -13,4 +13,20 @@
           {>__player_object.settings.time_settings.seconds <}
         </span>
       </span>
+    </div> -->
+
+
+    <div>
+        <div class="tick-group"  ng:if="_settings_.time_settings.timer_type == true">
+            <span class="hr">{>__player_object.settings.time_settings.hours<}</span>
+            <sub>h</sub>
+        </div>
+        <div class="tick-group">
+            <span class="tick-text min">{>__player_object.settings.time_settings.minutes <}</span>
+            <sub>m</sub>
+        </div>
+        <div class="tick-group">
+            <span class="tick-text sec">{>__player_object.settings.time_settings.seconds <}</span>
+            <sub> s</sub>
+        </div>
     </div>

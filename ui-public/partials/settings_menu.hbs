@@ -95,7 +95,10 @@
                       <a href="#" class="text-center" style="float: none;">
                         <div class="progress-container option-container text-left" style="margin:0px auto; float:none;">
                           <div class="progress-bx">
-                             inProgress
+                            <span box-target-type="box-texts" box-target-class="progress-text2" class="progress-text2">
+                              <i class="fa fa-sliders"></i>
+                              <span class="marsds">{> (question_index + 1) + " / "+ _questions_.length <}</span>
+                            </span>
                           </div>
                         </div>
                       </a>
@@ -135,15 +138,20 @@
                   <ul class="dropdown-menu">
                     <li ng:click ="set_model_type(1 , 1)">
                       <a href="#" class="text-center" style="padding: 10px 20px;">
-                        <div class="time-container option-container text-right" style="overflow: hidden;width: auto;margin: 0px auto; padding: 14px 0px;    float: none;display: inline-block;">
-                           <span>
-                             <span box-target-class="timer" box-target-type="box-timer" class="timer selector">00</span>
-                             <span>:</span>
-                             <span box-target-class="timer" box-target-type="box-timer" class="timer selector">00</span>
-                             <span>:</span>
-                             <span box-target-class="timer" box-target-type="box-timer" class="timer selector">00</span>
-                           </span>
-                         </div>
+                        <div>
+                            <div ng:hide="(_settings_.time_settings.timer_type == false)" ng:disabled="( _settings_.time_settings.timer_type == false )" class="tick-group">
+                                <span ng:bind="_settings_.time_settings.hours"></span>
+                                <sub>h</sub>
+                            </div>
+                            <div class="tick-group">
+                              <span ng:bind="_settings_.time_settings.minutes"></span>
+                              <sub>m</sub>
+                            </div>
+                            <div class="tick-group">
+                              <span ng:bind="_settings_.time_settings.seconds"></span>
+                              <sub>s</sub>
+                            </div>
+                        </div>
                       </a>
                     </li>
                     <li>
@@ -177,16 +185,26 @@
             <div class="items">
               <ul>
                 <li class="righ-check-box">
-                  <label for="allow-expiration-date" style=" margin-left: 10px;" >Enable Expiration Date</label>
-                  <input ng:model="_settings_.expiration.is_set" type="checkbox" id="allow-expiration-date" class="switch_1 input-checkboxes">
+                  <label for="allow-expiration-date" style=" margin-left: 10px;" >
+                    Enable Expiration System
+                  </label>
+                  <input ng:change="show_expiration_screen(_settings_.expiration.is_set)" ng:model="_settings_.expiration.is_set" type="checkbox" id="allow-expiration-date" class="switch_1 input-checkboxes">
                 </li>
                 <li class="righ-check-box">
-                  <label style=" margin-left: 10px;" >Number Of Days</label>
-                  <input ng:model="_settings_.expiration.through_time" type="number" name="" value="" style="width:80px; float:right;">
+                  <label style="margin-left: 10px;" >
+                    Number Of Days
+                  </label>
+                  <input ng:change="changed_day_numbers(_settings_.expiration.through_time)" max="50" min="1" ng:model="_settings_.expiration.through_time" type="number" name="" value="" style="width:80px; float:right;">
                 </li>
-                <li class="righ-check-box">
-                  <label style=" margin-left: 10px;">Expiration Message</label>
-                  <textarea ng:model="_settings_.expiration.title" class="text-area-style" name="name"></textarea>
+                <li class="righ-check-box marked_instructions">
+                  <label style="margin-left: 10px;">
+                    Expire Warning
+                  </label>
+                  <textarea  style="min-height: 100px; resize: vertical;" ng:model="_settings_.expiration.expire_warning" class="text-area-style set_redactor" name="name"></textarea>
+                </li>
+                <li class="righ-check-box marked_instructions">
+                  <label style=" margin-left: 10px;">Expire Message</label>
+                  <textarea style="min-height: 100px; resize: vertical;" ng:model="_settings_.expiration.expire_message" class="text-area-style set_redactor" name="name"></textarea>
                 </li>
               </ul>
             </div>
@@ -199,20 +217,24 @@
             <div class="items">
               <ul>
                 <li class="righ-check-box">
-                  <label style=" margin-left: 10px;">Welcome Page:</label>
-                  <textarea ng:keyup="go_to_screen_number(0)" ng:model="_settings_.titles.title_start_with" class="text-area-style" name="name"></textarea>
+                  <label class="redactor-xxxx" style=" margin-left: 10px;">Welcome Page </label>
+                  <textarea ng:keyup="go_to_screen_number(0)" ng:model="_settings_.titles.title_start_with" class="text-area-style set_redactor" name="name"></textarea>
                 </li>
                 <li class="righ-check-box">
-                  <label  style=" margin-left: 10px;">Goodbye and Thank you Page :</label>
-                  <textarea ng:keyup="go_to_screen_number(1)" ng:model="_settings_.titles.title_end_with" class="text-area-style" name="name"></textarea>
+                  <label class="redactor-xxxx"  style=" margin-left: 10px;">Goodbye and Thank you Page </label>
+                  <textarea ng:keyup="go_to_screen_number(1)" ng:model="_settings_.titles.title_end_with" class="text-area-style set_redactor" name="name"></textarea>
                 </li>
                 <li class="righ-check-box">
-                  <label  style=" margin-left: 10px;">Quiz Pass Page :</label>
-                  <textarea  ng:keyup="go_to_screen_number(2)" ng:model="_settings_.titles.title_success_with" class="text-area-style" name="name"></textarea>
+                  <label class="redactor-xxxx"  style=" margin-left: 10px;">Quiz Pass Page  </label>
+                  <textarea  ng:keyup="go_to_screen_number(2)" ng:model="_settings_.titles.title_success_with" class="text-area-style set_redactor" name="name"></textarea>
                 </li>
                 <li class="righ-check-box">
-                  <label style=" margin-left: 10px;">Quiz Fail Page: :</label>
-                  <textarea ng:keyup="go_to_screen_number(2)" ng:model="_settings_.titles.title_failed_with" class="text-area-style" name="name"></textarea>
+                  <label class="redactor-xxxx"  style=" margin-left: 10px;">Quiz Fail Page </label>
+                  <textarea ng:keyup="go_to_screen_number(2)" ng:model="_settings_.titles.title_failed_with" class="text-area-style set_redactor" name="name"></textarea>
+                </li>
+                <li class="righ-check-box">
+                  <label class="redactor-xxxx"  style=" margin-left: 10px;">Resume Page</label>
+                  <textarea ng:keyup="go_to_screen_number(4)" ng:model="_settings_.titles.title_resume"  class="text-area-style set_redactor" name="name"></textarea>
                 </li>
               </ul>
             </div>
@@ -287,6 +309,10 @@
                 <li class="righ-check-box input-x">
                   <label style=" margin-left: 10px;">Finish Button</label>
                   <input ng:model="_settings_.label_btns.lbl_finish_with" type="text" name="" value="">
+                </li>
+                <li class="righ-check-box input-x">
+                  <label style=" margin-left: 10px;">Resume Button</label>
+                  <input ng:model="_settings_.label_btns.lbl_resume_with" type="text" name="" value="">
                 </li>
                 <li class="righ-check-box input-x">
                   <label style=" margin-left: 10px;">Submit Quiz Button</label>

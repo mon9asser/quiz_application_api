@@ -3300,6 +3300,7 @@ table.label-table tbody .labels-options {
 .select_texts {
   outline : 3px solid blue';
   padding:5px ;
+  display: block;
 }
 
 .select-current-element {
@@ -5150,8 +5151,104 @@ padding-top: 0px;
 }
 .scales {
   padding: 15px 20px;
-      margin-top: 10px;
-      display: inline-block;
-      cursor: pointer;
-      border:1px dashed #ddd;
+  margin-top: 10px;
+  display: inline-block;
+  cursor: pointer;
+  border:1px dashed #ddd;
+}
+.marked_instructions
+{
+  border: 1px dashed #ffffff26;
+  padding: 5px;
+  margin: 5px auto;
+  display: block;
+  margin-top: 20px;
+  background: #ffffff0d;
+}
+
+.date-exprission {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin-top: 5px;
+}
+.date-exprission > ul {
+  list-style: square;
+  padding: 0px;
+  margin: 0px;
+}
+.date-exprission > ul > li {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+}
+.righ-check-box > .redactor-box {
+  text-align: left;
+  display: inline-block;
+  margin-top: 10px;
+  background: #ffffff00;
+  color: #fff;
+
+  border-color : #fdfdfd1c !important;
+  border-style: dashed !important ;
+  border-top-width: 1px !important;
+  border-bottom-width: 0px !important;
+  border-left-width: 0px !important;
+  border-right-width: 0px !important;
+  border-radius: inherit;
+  width: 100%;
+}
+.righ-check-box > .redactor-box.redactor-styles-on .redactor-toolbar {
+    padding: 15px 16px 11px 10px;
+    background: #ffffff00;
+    border-bottom: 1px dashed #eee;
+    border: none !important;
+    margin-top: 10px !important;
+}
+.righ-check-box > .redactor-box > .redactor-in {
+  color: #fff;
+  width: 95%;
+  margin: 10px auto;
+}
+.righ-check-box > .redactor-box.redactor-styles-on .redactor-toolbar a.re-button-icon
+{
+  color: #fff;
+  border: 1px dashed #ffffff24 !important;
+}
+
+.righ-check-box > .redactor-box.redactor-styles-on .redactor-toolbar a.redactor-button-active {
+    background: rgba(245, 245, 245, 0.13);
+    color: rgba(0,0,0,.4);
+    color: #999 !important;
+}
+.redactor-xxxx {
+  font-weight: bold;
+  font-family: RobotoBold;
+  color: #e9e9e9;
+  font-size: 18px;
+}
+.wrong-formative {
+  color: tomato;
+  font-size: 13px;
+  border: 1px dashed tomato;
+  padding: 5px;
+  border-radius: 5px;
+  background: #ff63470d;
+}
+.resume-text , .expire-warning-text , .expired_message_block { display: none; }
+.redactor-styles {
+  padding: 0px !important;
+}
+.redactor-in-0  , .redactor-in-1 {
+  padding: 15px 10px !important;
+}
+.warn-expression {
+    background: #20fdb9;
+    padding: 7px 10px;
+    border-radius: 5px;
+    border: 1px dashed #00985f;
+    color: #056b44;
+    font-size: 15px;
 }

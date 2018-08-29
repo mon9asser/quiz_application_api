@@ -1,7 +1,70 @@
-
+// var start_expiration_date , expiration_day_counts ;
+var time_epiration = {
+    expiration_day_counts : 0
+};
 apps.filter('apply_html' , ['$sce' , ( $sce ) => {
   return ( returned_values ) => { return $sce.trustAsHtml(returned_values);  };
 }]);
+apps.filter("apply_html_with_date_filtering" , ['$sce'  , ( $sce  ) => {
+  return ( returned_values ) => {
+
+
+
+    var formative = returned_values.match("{{(.*)}}") ;
+
+
+    if(formative != null ){
+
+
+      var origin_formative = formative[0];
+      var returned_data = '';
+      var use_this_formate  = () => {
+        // var timestamps = new Date().getTime() + ( 6 * 24 * 60 * 60 * 1000 ) ;
+        var date_now = new Date();
+        var date_after_day_counts = new Date(new Date().getTime() + ( time_epiration.expiration_day_counts * 24 * 60 * 60 * 1000 ));
+        var time_hr = (date) => {
+          var hours = date.getHours();
+          var minutes = date.getMinutes();
+          var ampm = hours >= 12 ? 'pm' : 'am';
+          hours = hours % 12;
+          hours = hours ? hours : 12; // the hour '0' should be '12'
+          minutes = minutes < 10 ? '0'+minutes : minutes;
+          var strTime = hours + ':' + minutes + ' ' + ampm;
+          return strTime;
+        }
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ];
+        // long => 05 Jun 2018 12:00 pm
+        // short => 05 Jun
+        // american => 12/25/2018
+        var splited_date = date_after_day_counts.toString().split(" ") ;
+        var american_date = date_after_day_counts.getMonth() + "/" +date_after_day_counts.getDay() + "/" +date_after_day_counts.getFullYear() ;
+        var long = date_after_day_counts.getDay() + ' '  + monthNames[date_after_day_counts.getMonth()] + ' , ' + date_after_day_counts.getFullYear() + ' ' + time_hr(date_after_day_counts);
+        var short = date_after_day_counts.getDay() + ' ' +  monthNames[date_after_day_counts.getMonth()];
+
+        // if( origin_formative.toString().includes("date") && !origin_formative.includes("|") && origin_formative.length <= 10)
+        // {
+        //   return new Date() ;
+        // }else
+        origin_formative = origin_formative.replace("&nbsp;" , " ");
+        console.log( origin_formative + ' >> '+ origin_formative.length);
+        if( origin_formative.length > 22 ) return "<span class='warn-expression'> You can not use more than one expression ! </span>" ;
+        if ( origin_formative.toString().toLowerCase().includes("time_ago") && origin_formative.length == 14) {   return time_epiration.expiration_day_counts ; }
+        else if ( origin_formative.toString().toLowerCase().includes("day_counts") && origin_formative.length == 16) {  return time_epiration.expiration_day_counts ; }
+        else if ( origin_formative.toString().toLowerCase().includes("date") && origin_formative.includes("|") && origin_formative.toLowerCase().includes("long") && origin_formative.length == 17) {   return long ; }
+        else if ( origin_formative.toString().toLowerCase().includes("date") && origin_formative.includes("|") && origin_formative.toLowerCase().includes("short") && origin_formative.length == 18) {  return short ; }
+        else if ( origin_formative.toString().toLowerCase().includes("in_next_time") &&  origin_formative.length == 18) { return date_after_day_counts ; ; }
+        else if ( origin_formative.toString().toLowerCase().includes("date") && origin_formative.includes("|") && origin_formative.toString().toLowerCase().includes("american") &&  origin_formative.length == 21) { return american_date; }
+        else { return ".." ; }
+
+      } ;
+        returned_values = returned_values.replace(origin_formative , use_this_formate());
+    }
+     return $sce.trustAsHtml(returned_values) ;
+   };
+}]);
+
 apps.filter('math_around_it' , [
 '$sce' , function(){
   return (round_p) => {
@@ -15,6 +78,7 @@ apps.filter('read_image' , ($sce) => {
     return media_object.Media_directory + '?' + this_time;
   };
 });
+
 apps.filter( 'striphtmltags' , ($sce) => {
   return function (specs){
     var div = $("<div>"+ specs + "</div>");
@@ -76,6 +140,10 @@ apps.controller("apps-controller" , [
       $rootScope.time_models = "/time-progress-temps/time-"+model_index+".hbs";
     }
   };
+
+  $rootScope.changed_day_numbers = (number) => {
+    time_epiration.expiration_day_counts = number ;
+   };
   $rootScope.theme_stylesheet = new Array();
   $rootScope.progressbar_models = "/time-progress-temps/progressbar-1.hbs" ;
   $rootScope.time_models = "/time-progress-temps/time-1.hbs" ;
@@ -125,7 +193,10 @@ apps.controller("apps-controller" , [
   }
 
 
-
+  $rootScope.show_expiration_screen = (isTrue) => {
+    if(isTrue) $rootScope.screen_type = 4 ;
+    else $rootScope.screen_type = 3 ;
+  }
   $rootScope.css_pellet_mode = {
     background:false,
     color:false,
@@ -194,13 +265,97 @@ apps.controller("apps-controller" , [
     $rootScope._questions_   =  $rootScope._application_.questions;
     if($rootScope._application_.theme_style != undefined )
     $rootScope.theme_stylesheet = $rootScope._application_.theme_style;
-    // ==> Calling Funcs
 
+    time_epiration.expiration_day_counts = $rootScope._settings_.expiration.through_time ;
+    // ==> Calling Funcs
     $timeout(function(){
       $rootScope.init_first_question();
       $(".modal-content-overlay").fadeOut();
+      $timeout(function(){
+        $rootScope.loading_redactor_for_message();
+      } , 400)
     } , 600);
   });
+  $rootScope.storing_redactor_values = ( property , value ) => {
+      $rootScope._settings_.expiration[property] = value ;
+  }
+  $rootScope.loading_redactor_for_message = () => {
+    // ==> Redactor
+    $R('.set_redactor');
+    // ==> build event
+    $timeout(function(){
+      // ==> expire warning
+      $(".redactor-in-2").bind("change , input , keyup" , function(){
+        $(".resume-text ,.expired_message_block").hide();
+        $timeout(function(){ $(".expire-warning-text").show(); } , 5);
+         $timeout(function(){
+           var expire_warning_val = $R(".set_redactor" , "source.getCode")[0];
+           $rootScope.screen_type = 4 ;
+           $rootScope.storing_redactor_values('expire_warning' , expire_warning_val  )
+        } , 200 );
+      });
+      // ==> expire message
+      $(".redactor-in-3").bind("change , input, keyup" , function(){
+         $timeout(function(){
+           $rootScope.screen_type = 5 ;
+
+           $(".resume-text , .expire-warning-text").hide();
+           $(".expired_message_block").show();
+            var expire_message_val = $R(".set_redactor" , "source.getCode")[1];
+               $rootScope.storing_redactor_values( 'expire_message' , expire_message_val  );
+         }, 200 );
+      });
+      // ==> starting messages
+      $(".redactor-in-4").bind("change , input, keyup" , function(){
+         $timeout(function(){
+           $rootScope.screen_type = 0 ;
+            var starting_text = $R(".set_redactor" , "source.getCode")[2];
+            $rootScope._settings_.titles.title_start_with = starting_text;
+         }, 200 );
+      });
+      // ==> ending message
+      $(".redactor-in-5").bind("change , input, keyup" , function(){
+         $timeout(function(){
+           $rootScope.screen_type = 1 ;
+            var ending_text = $R(".set_redactor" , "source.getCode")[3];
+            $rootScope._settings_.titles.title_end_with = ending_text;
+         }, 200 );
+      });
+      // ==> success message
+      $(".redactor-in-6").bind("change , input, keyup" , function(){
+         $timeout(function(){
+            $rootScope.screen_type = 2 ;
+            var pass_text = $R(".set_redactor" , "source.getCode")[4];
+            $rootScope._settings_.titles.title_success_with = pass_text;
+         }, 200 );
+      });
+      // ==> failed message
+      $(".redactor-in-7").bind("change , input, keyup" , function(){
+         $timeout(function(){
+            $rootScope.screen_type = 2 ;
+            var fail_text = $R(".set_redactor" , "source.getCode")[5];
+            $rootScope._settings_.titles.title_failed_with = fail_text;
+         }, 200 );
+      });
+      // ==> resume message
+      /*
+      .resume-text ,
+      .expired_message_block
+      */
+      $(".redactor-in-8").bind("change , input, keyup" , function(){
+        $(".expire-warning-text , .expired_message_block").hide();
+        $timeout(function(){ $(".resume-text").show(); } , 5);
+
+        $rootScope.screen_type = 4 ;
+         $timeout(function(){
+            var title_resume = $R(".set_redactor" , "source.getCode")[6];
+            $rootScope._settings_.titles.title_resume = title_resume;
+            $timeout(function(){ console.log($rootScope._settings_.titles);} , 201);
+         }, 200 );
+      });
+
+    } , 200 );
+  }
   $rootScope.list_answer_classes = () => {
     var classes = "";
     if( $rootScope._questions_[$rootScope.question_index].answer_settings.super_size == true || $rootScope. _questions_[$rootScope.question_index].question_type == 2)
@@ -617,13 +772,14 @@ apps.controller("apps-controller" , [
                 $timeout(function(){
                     $rootScope._questions_[$rootScope.question_index].question_body = $R('#editor-quest-data' , 'source.getCode');
                     // $rootScope.is_unsaved_data = true ;
-                } , 5 );
+                } , 500 );
             });
 
             $(".redactor-in-1 , #editor-desc-data").on("input" , function (){
 
-                var question_value = $(this).html() ;
+
                 $timeout(function(){
+                  var question_value = $(this).html() ;
                     $rootScope._questions_[$rootScope.question_index].question_description.value = $R('#editor-desc-data' , 'source.getCode');
                     // $rootScope.is_unsaved_data = true ;
                 } , 500 );
@@ -670,19 +826,24 @@ apps.controller("apps-controller" , [
     });
   }
   $rootScope.saving_quiz_settings = () => {
+
+
+    // ==> Send request to saving
     $("#save_setting_change").html("Saving Changes ...");
-    url = $rootScope.server_ip + "api/" + $rootScope.app_id + "/app/setup_settings/storing" ;
-     $http({
-       method : "PATCH" ,
-       url    : url ,
-       data : {
-         creator_id : $rootScope.user_id ,
-         settings : $rootScope._settings_ ,
-         questionnaire_title : $rootScope._application_.questionnaire_title
-       }
-     }).then(()=>{
-       $("#save_setting_change").html("Apply Changes");
-     });
+
+      url = $rootScope.server_ip + "api/" + $rootScope.app_id + "/app/setup_settings/storing" ;
+       $http({
+         method : "PATCH" ,
+         url    : url ,
+         data : {
+           creator_id : $rootScope.user_id ,
+           settings : $rootScope._settings_ ,
+           questionnaire_title : $rootScope._application_.questionnaire_title
+         }
+       }).then(()=>{
+         $("#save_setting_change").html("Apply Changes");
+       });
+
   }
   // => Show Image
   $rootScope.image_uploader_is_touched = () => {
