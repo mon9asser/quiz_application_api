@@ -1,0 +1,3 @@
+.answer-alarm-text-box { color:rgb(102, 0, 0); }
+.answer-container ul li.border_line { color:rgb(224, 102, 102); background-color:rgb(153, 0, 0); }
+.border_line { border-left-width:2px; border-right-width:0px; border-bottom-width:0px; border-top-width:0px; border-color:rgb(204, 0, 0); }

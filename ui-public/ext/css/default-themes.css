@@ -1,8 +1,4 @@
-/* This file  will be default css color fo quiz */
 
-/* Start description of application
-  =================================================
-*/
 html , body {
   background: #f4f5f9;
 }
@@ -19,6 +15,14 @@ html , body {
     margin-top: 5px !important;
     margin-left: 0px !important;
     margin-right: 5px !important;
+}
+.border_line {
+  border-left-width: 2px;
+  border-right-width: 0px;
+  border-top-width: 0px;
+  border-bottom-width:0px;
+  border-style: dashed;
+  border-color: #c17c7e;
 }
 /*
 =============================================
@@ -273,7 +277,7 @@ html , body {
 .question-screen-box { border-bottom-width: 0px ; } /* Border bottom width */
 .question-screen-box { border-bottom-style: solid ; } /* Border bottom style */
 /* Question Text */
-.question-box-text { color: #888;}
+.question-box-text { color: #888; }
 .question-box-text { font-size : 16px; }
 .question-box-text { font-weight: normal; }
 .question-box-text { font-family: "OpenSansRegular"; }
@@ -319,7 +323,7 @@ html , body {
 .answer-text-box-area { color: #999 ; } /* answer text color */
 .answer-text-box-area { font-weight: normal; } /* answer text style */
 /* Answer Note ( Settings )  */
-.answer-alarm-text-box { color:#c17c7e; }
+.answer-alarm-text-box { color:#c17c7e; text-align: left; }
 
 /* Numbering*/
 /* .answer-container ul li > .answer-contents > label.labels { background: #fff;}
@@ -669,4 +673,21 @@ ul li.right_answer > .correct-ico {
     font-size: 25px;
     color: #c17c7e;
     font-weight: bold;
+}
+.question-warnning-box{
+  color: #c17c7e ;
+  margin-top: 30px;
+}
+
+.box-resume-screen {
+  background: #f9f9f9;
+}
+.notexpired{
+  border: 1px solid #af1d00;
+  color: #fff;
+  background: #f78973;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 14px;
+  position: relative;
 }

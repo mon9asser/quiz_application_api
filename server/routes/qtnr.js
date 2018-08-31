@@ -2624,7 +2624,7 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
                    lbl_review_with : "Review" ,
                    lbl_back_with : "Back",
                    lbl_finish_with : "Finish",
-                   lbl_resume_with : "Resume" , 
+                   lbl_resume_with : "Resume" ,
                    lbl_submit_quiz_with : "Submit Quiz",
                    lbl_score_with :"Score",
                    lbl_grade_with :"Grade" ,
@@ -2646,20 +2646,20 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
                  is_with_time:false ,
                  value : 1799 ,
                  timer_type : false ,
-                 timer_layout : 0 ,
+                 timer_layout : 1 ,
                  hours : 0 ,
                  minutes : 29 ,
                  seconds : 59
                },
                progression_bar : {
                  is_available:false ,
-                 progression_bar_layout:0
+                 progression_bar_layout:1
                } ,
                expiration : {
                  is_set : false  ,
                  through_time : 3 , // => it will be per day
                  expire_warning : "This quiz will expire after 3 days" ,
-                 expire_message : "Quiz is expired !"
+                 expire_message : "This Quiz is Expired from {{ time_ago }}  hours ago !"
                } ,
               //  theme_style : [] ,
                randomize_settings : false ,

@@ -25,7 +25,7 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
            lbl_review_with : "Review" ,
            lbl_back_with : "Back",
            lbl_finish_with : "Finish",
-           lbl_resume_with : "Resume" , 
+           lbl_resume_with : "Resume" ,
            lbl_submit_quiz_with : "Submit Quiz",
            lbl_score_with :"Score",
            lbl_grade_with :"Grade" ,
@@ -54,13 +54,13 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
          enable_screens : true ,
          progression_bar : {
            is_available:false ,
-           progression_bar_layout:0
+           progression_bar_layout:1
          } ,
          expiration : {
            is_set : false  ,
            through_time : 3 , // => it will be per day
            expire_warning : "This quiz will expire after 3 days" ,
-           expire_message : "Quiz is expired !"
+           expire_message : "This Quiz is Expired from {{ time_ago }}  hours ago !"
          } ,
         //  theme_style : [] ,
          randomize_settings : false ,

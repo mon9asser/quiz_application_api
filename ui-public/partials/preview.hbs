@@ -1,6 +1,6 @@
  <link rel="stylesheet" ng:href="{> default_player  <}">
  <link rel="stylesheet" ng:href="{> default_theme  <}">
- <link rel="stylesheet" ng:href="{>stylesheet_uri<}">
+ <link ng:href="{>stylesheet_uri<}">
  <input type="hidden" id="enabled_css" value="false">
  <style>
    .x-widther{
@@ -36,6 +36,7 @@
   <div ng:if="_settings_.progression_bar.is_available == true" ng:include="progressbar_models"></div>
   <!-- Time 1 -->
   <div ng:if="_settings_.time_settings.is_with_time == true" ng:include="time_models"></div>
+
 </div>
 
    <!--
@@ -54,8 +55,19 @@
             <div class="arrow-right default_theme_brd select_box_brd  question-label-box-brd"></div>
           </span>
           <span box-target-type="box-texts" box-target-class="question-data-text-bdy" class="selector question-body-text select_texts question-data-text-bdy" ng:bind:html='_questions_[question_index].question_body | apply_html'></span>
-          <p box-target-type="box-texts" box-target-class="question-data-text-desc" ng:if="_questions_[question_index].question_description.is_enabled == true && _questions_[question_index].question_description.value != ''" class="dsc-data question-data-text-desc" data:ng:bind:html="_questions_[question_index].question_description.value | apply_html"></p>
-          <span class="selector required_option question_type__colr select_texts question-text-required-block question-text-required-text" ng:if="question.answer_settings.is_required == true"> Required </span>
+
+          <span class="selector required_option question_type__colr select_texts question-text-required-block question-text-required-text selector" box-target-type="box-texts" box-target-class="required_option" ng:if="_questions_[question_index].answer_settings.is_required == true">
+            Required
+          </span>
+       </div>
+       <!--      margin-left: 10px;
+    margin-top: -2px;
+    display: inline-block; -->
+       <div ng:if="_questions_[question_index].question_description.is_enabled == true && _questions_[question_index].question_description.value != ''" box-target-type="box-texts" box-target-class="question-description-data"  class="question-description-data questiondescdata">
+         <p style="display: inline-flex;" class="description-block-box">
+           <span class="fa fa-dot-circle-o desc-icon-z-x selector" box-target-class="desc-icon-z-x" box-target-type="box-texts" aria-hidden="true"></span>
+           <span style="margin-left: 10px;margin-top: -2px; display: inline-block;" ng:cloak data:ng:bind:html="_questions_[question_index].question_description.value | apply_html"></span>
+         </p>
        </div>
        <!--  Questin Media Cases-->
        <div box-target-class="question-data-media" box-target-type="box-media" ng:if="_questions_[question_index].media_question != undefined" class="selector question-data-media">
@@ -73,16 +85,17 @@
          </div>
        </div>
        <!--  Case use has to select many answer-->
-       <div class="notes select_box_brd question-warnning-block question-warnning-box" >
-        <span class="selector text-left question_type__colr select_texts ther_is_many" ng:if="_questions_[question_index].answer_settings.single_choice == false">
-           There're many correct choices , You've to select them  to pass this question
+       <div class=" notes select_box_brd question-warnning-block question-warnning-box" >
+        <span box-target-type="box-texts" box-target-class="question_type__colr" class="selector text-left question_type__colr select_texts ther_is_many" ng:if="_questions_[question_index].answer_settings.single_choice == false">
+           <!-- There're many correct choices , You've to select them  to pass this question -->
+           {> _settings_.label_btns.there_are_many_options <}
         </span>
        </div>
 
        <!-- Answer container -->
        <div class="answer-container answer-block-selector">
-         <ul id="question_{>_questions_[question_index]._id<}" class="question-list question-list-preview-quta" ng:if="_questions_[question_index].question_type <= 2">
-           <li ng:click="select_this_answer ( _questions_[question_index]._id , answer_value._id , _questions_[question_index] , answer_value , app_id , user_id , answer_value.is_correct , $index )" box-target-class="answer-container ul li" box-target-type="box-answers" ng:class="list_answer_classes()" class="selector answer_opg_editor select_box_brd question-answer-row-select-blk question-answer-row-select answer_{>answer_value._id<}" ng:repeat="(anskey , answer_value) in _questions_[question_index].answers_format">
+         <ul box-target-type="box-containers" box-target-class="border_line" id="question_{>_questions_[question_index]._id<}" class="question-list question-list-preview-quta selector" ng:if="_questions_[question_index].question_type <= 2" ng:class="( (_questions_[question_index].question_type == 0 || _questions_[question_index].question_type == 1 ) && _questions_[question_index].answer_settings.single_choice == false )? 'border_line' : '' ">
+           <li ng:click="select_this_answer ( _questions_[question_index]._id , answer_value._id , _questions_[question_index] , answer_value , app_id , user_id , answer_value.is_correct , $index , enable_css_mode )" box-target-class="answer-container ul li" box-target-type="box-answers" ng:class="list_answer_classes()" class="selector answer_opg_editor select_box_brd question-answer-row-select-blk question-answer-row-select answer_{>answer_value._id<}" ng:repeat="(anskey , answer_value) in _questions_[question_index].answers_format">
              <!-- Answer label -->
              <!-- {> question_labels['label_' + _settings_.indexes.questions.toString()][question_index] | uppercase <} -->
              <!-- <span box-target-type="box-labels" box-target-class="answer_label"  class="answer_label selector">{> question_labels['label_' + _settings_.indexes.answers.toString()][$index] | uppercase <}</span> -->
@@ -192,6 +205,12 @@
        </div>
        <!--  End Answer Container -->
 
+       <!-- Messages and warnings -->
+
+       <div box-target-class="answer-alarm-text-box" box-target-type="box-texts" ng:if="_settings_.auto_slide == true && _questions_[question_index].question_type <= 2 && _questions_[question_index].answer_settings.single_choice == true" class="selector question_notes answer-alarm-text answer-alarm-text-box " >
+          <span class="fa fa-info-circle"></span>
+          <span>{> _settings_.label_btns.when_you_solve <} </span>
+       </div>
 
        <!-- Button Container  -->
        <div ng:if ="_settings_.navigation_btns == true" class="qusu-details ques-questions text-right">
@@ -216,7 +235,7 @@
      <div ng:if="screen_type == 0 && _settings_.enable_screens == true"  class="swiper-slide welcoming-screen-x">
        <div box-target-class="box-welcome-screen" box-target-type="box-containers" data-selected-block="question-slide" class="container  x-widther screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-welcome-screen selector">
           <div>
-              <div box-target-class="welcome-screen-text" box-target-type="box-texts" box-target-class="player-body-screen" box-target-type="box-player" class="selector description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text" ng:bind:html="_settings_.titles.title_start_with | apply_html"></div>
+              <div box-target-class="w-screen-text" box-target-type="box-texts" box-target-class="player-body-screen" box-target-type="box-player" class="selector description-body redactor-styles select_texts welcome-screen-text-block w-screen-text" ng:bind:html="_settings_.titles.title_start_with | apply_html"></div>
               <div class="qusu-details text-right">
                  <span data-tpco ng:click="start_the_quiz(enable_css_mode)" box-target-class="welcome-screen-button" box-target-type="box-buttons" class="selector button-take-this select_button welcome-screen-button-block welcome-screen-button" type="button" name="button">
                      <i class="fa fa-sign-in" aria-hidden="true"></i>
@@ -234,12 +253,12 @@
     ---------------------------------------------------------
      -->
      <div ng:if="screen_type == 4 && _settings_.enable_screens == true"  class="swiper-slide welcoming-screen-x">
-       <div box-target-class="box-welcome-screen" box-target-type="box-containers" data-selected-block="question-slide" class="container  x-widther screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-welcome-screen selector">
+       <div box-target-class="box-resume-screen" box-target-type="box-containers" data-selected-block="question-slide" class="container  x-widther screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-resume-screen selector">
           <div>
-            <div box-target-class="welcome-screen-text" box-target-type="box-texts" class="resume-text selector description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text" ng:bind:html="_settings_.titles.title_resume  | apply_html_with_date_filtering"></div>
-            <div box-target-class="welcome-screen-text" box-target-type="box-texts" class="expire-warning-text selector description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text" ng:bind:html="_settings_.expiration.expire_warning  | apply_html_with_date_filtering"></div>
+            <div box-target-class="box-resume-text" box-target-type="box-texts" class="resume-text selector description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text" ng:bind:html="_settings_.titles.title_resume  | apply_html_with_date_filtering"></div>
+            <div box-target-class="box-resume-text" box-target-type="box-texts" class="expire-warning-text selector description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text" ng:bind:html="_settings_.expiration.expire_warning  | apply_html_with_date_filtering"></div>
               <div class="qusu-details text-right">
-                 <span data-tpco ng:click="start_the_quiz(enable_css_mode)" box-target-class="welcome-screen-button" box-target-type="box-buttons" class="selector button-take-this select_button welcome-screen-button-block welcome-screen-button" type="button" name="button">
+                 <span data-tpco ng:click="start_the_quiz(enable_css_mode)" box-target-class="resume-screen-button" box-target-type="box-buttons" class="selector button-take-this select_button welcome-screen-button-block resume-screen-button" type="button" name="button">
                      <i class="fa fa-sign-in" aria-hidden="true"></i>
                        {> _settings_.label_btns.lbl_resume_with <}
                  </span>

@@ -7,22 +7,7 @@ apps.filter('apply_html' , ['$sce' , ( $sce ) => {
 }]);
 apps.filter("apply_html_with_date_filtering" , ['$sce'  , ( $sce  ) => {
   return ( returned_values ) => {
-
-
-
-    var formative = returned_values.match("{{(.*)}}") ;
-
-
-    if(formative != null ){
-
-
-      var origin_formative = formative[0];
-      var returned_data = '';
-      var use_this_formate  = () => {
-        // var timestamps = new Date().getTime() + ( 6 * 24 * 60 * 60 * 1000 ) ;
-        var date_now = new Date();
-        var date_after_day_counts = new Date(new Date().getTime() + ( time_epiration.expiration_day_counts * 24 * 60 * 60 * 1000 ));
-        var time_hr = (date) => {
+    var time_hr = (date) => {
           var hours = date.getHours();
           var minutes = date.getMinutes();
           var ampm = hours >= 12 ? 'pm' : 'am';
@@ -31,39 +16,139 @@ apps.filter("apply_html_with_date_filtering" , ['$sce'  , ( $sce  ) => {
           minutes = minutes < 10 ? '0'+minutes : minutes;
           var strTime = hours + ':' + minutes + ' ' + ampm;
           return strTime;
-        }
-        const monthNames = ["January", "February", "March", "April", "May", "June",
-          "July", "August", "September", "October", "November", "December"
-        ];
-        // long => 05 Jun 2018 12:00 pm
-        // short => 05 Jun
-        // american => 12/25/2018
-        var splited_date = date_after_day_counts.toString().split(" ") ;
-        var american_date = date_after_day_counts.getMonth() + "/" +date_after_day_counts.getDay() + "/" +date_after_day_counts.getFullYear() ;
-        var long = date_after_day_counts.getDay() + ' '  + monthNames[date_after_day_counts.getMonth()] + ' , ' + date_after_day_counts.getFullYear() + ' ' + time_hr(date_after_day_counts);
-        var short = date_after_day_counts.getDay() + ' ' +  monthNames[date_after_day_counts.getMonth()];
-
-        // if( origin_formative.toString().includes("date") && !origin_formative.includes("|") && origin_formative.length <= 10)
-        // {
-        //   return new Date() ;
-        // }else
-        origin_formative = origin_formative.replace("&nbsp;" , " ");
-        console.log( origin_formative + ' >> '+ origin_formative.length);
-        if( origin_formative.length > 22 ) return "<span class='warn-expression'> You can not use more than one expression ! </span>" ;
-        if ( origin_formative.toString().toLowerCase().includes("time_ago") && origin_formative.length == 14) {   return time_epiration.expiration_day_counts ; }
-        else if ( origin_formative.toString().toLowerCase().includes("day_counts") && origin_formative.length == 16) {  return time_epiration.expiration_day_counts ; }
-        else if ( origin_formative.toString().toLowerCase().includes("date") && origin_formative.includes("|") && origin_formative.toLowerCase().includes("long") && origin_formative.length == 17) {   return long ; }
-        else if ( origin_formative.toString().toLowerCase().includes("date") && origin_formative.includes("|") && origin_formative.toLowerCase().includes("short") && origin_formative.length == 18) {  return short ; }
-        else if ( origin_formative.toString().toLowerCase().includes("in_next_time") &&  origin_formative.length == 18) { return date_after_day_counts ; ; }
-        else if ( origin_formative.toString().toLowerCase().includes("date") && origin_formative.includes("|") && origin_formative.toString().toLowerCase().includes("american") &&  origin_formative.length == 21) { return american_date; }
-        else { return ".." ; }
-
-      } ;
-        returned_values = returned_values.replace(origin_formative , use_this_formate());
     }
-     return $sce.trustAsHtml(returned_values) ;
+    var monthNames = ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+    ];
+
+    var day_counts = time_epiration.expiration_day_counts;
+    var date_in_timestamps = new Date().getTime();
+    var calculated_date = new Date ( date_in_timestamps + ( day_counts * 24 * 60 * 60 * 1000 ) )
+
+    var splited_date = calculated_date.toString().split(" ");
+    var calculate_time_ago = new Date().getTime() - calculated_date.getTime() ;
+    var time_ago_hrs = (((calculate_time_ago / 1000 ) / 60 ) / 60 ) ;
+    if( time_ago_hrs < 0 ) time_ago_hrs = "<span class='notexpired'> <span class='small-note'>Note</span> Not Expired Yet </span>";
+    else time_ago_hrs = time_ago_hrs + " hour(s)";
+
+    var date_time = splited_date[0] + ' ' +  splited_date[2]   + ' ' +  splited_date[1]  + ' ' +  splited_date[3] ;
+   var date_long = splited_date[2] + ' ' + splited_date[1] + ' , ' + splited_date[3] + " "+ time_hr(calculated_date) ;
+   var date_short =splited_date[2] + ' ' +  monthNames[calculated_date.getMonth()];
+   var date_american = calculated_date.getMonth() + "/" +splited_date[2] + "/" +calculated_date.getFullYear() ;
+   var hr_sys = ( day_counts * 24 )
+
+   var filter_date_format = (formative_date) => {
+
+     switch (formative_date) {
+
+       case "{{ date | long }}" :
+         return date_long ;
+       break;
+       case "{{ date | short }}" :
+         return date_short ;
+       break;
+       case "{{ date | american }}" :
+         return date_american ;
+       break;
+       case "{{ hour_counts }}" :
+         return hr_sys ;
+       break;
+       case "{{ day_counts }}" :
+           return day_counts ;
+       break;
+       case "{{ time_ago }}" :
+         return time_ago_hrs ;
+       break;
+       case "{{ date }}" :
+         return date_time ;
+     }
    };
+    var formative_text = "";
+    var existing_formative = [] ;
+    var formative_array = [
+      "{{ date }}" ,
+      "{{ date | long }}" ,
+      "{{ date | short }}" ,
+      "{{ date | american }}" ,
+      "{{ hour_counts }}" ,
+      "{{ time_ago }}" ,
+      "{{ day_counts }}"
+
+    ];
+
+    for (var i = 0; i < formative_array.length; i++) {
+      var date_format = formative_array[i];
+      if(returned_values.toString().includes(date_format.toString()))
+        existing_formative.push(date_format) ;
+    }
+
+    for (var i = 0; i < existing_formative.length; i++) {
+      var date = existing_formative[i] ;
+      returned_values = returned_values.replace(date , filter_date_format(date) );
+    }
+
+    return $sce.trustAsHtml(returned_values) ;
+  };
 }]);
+// apps.filter("apply_html_with_date_filtering" , ['$sce'  , ( $sce  ) => {
+//   return ( returned_values ) => {
+//
+//
+//
+//     var formative = returned_values.match("{{(.*)}}") ;
+//
+//
+//     if(formative != null ){
+//
+//
+//       var origin_formative = formative[0];
+//       var returned_data = '';
+//       var use_this_formate  = () => {
+//         // var timestamps = new Date().getTime() + ( 6 * 24 * 60 * 60 * 1000 ) ;
+//         var date_now = new Date();
+//         var date_after_day_counts = new Date(new Date().getTime() + ( time_epiration.expiration_day_counts * 24 * 60 * 60 * 1000 ));
+//         var time_hr = (date) => {
+//           var hours = date.getHours();
+//           var minutes = date.getMinutes();
+//           var ampm = hours >= 12 ? 'pm' : 'am';
+//           hours = hours % 12;
+//           hours = hours ? hours : 12; // the hour '0' should be '12'
+//           minutes = minutes < 10 ? '0'+minutes : minutes;
+//           var strTime = hours + ':' + minutes + ' ' + ampm;
+//           return strTime;
+//         }
+//         const monthNames = ["January", "February", "March", "April", "May", "June",
+//           "July", "August", "September", "October", "November", "December"
+//         ];
+//         // long => 05 Jun 2018 12:00 pm
+//         // short => 05 Jun
+//         // american => 12/25/2018
+//         var splited_date = date_after_day_counts.toString().split(" ") ;
+//         var american_date = date_after_day_counts.getMonth() + "/" +date_after_day_counts.getDay() + "/" +date_after_day_counts.getFullYear() ;
+//         var long = date_after_day_counts.getDay() + ' '  + monthNames[date_after_day_counts.getMonth()] + ' , ' + date_after_day_counts.getFullYear() + ' ' + time_hr(date_after_day_counts);
+//         var short = date_after_day_counts.getDay() + ' ' +  monthNames[date_after_day_counts.getMonth()];
+//
+//         // if( origin_formative.toString().includes("date") && !origin_formative.includes("|") && origin_formative.length <= 10)
+//         // {
+//         //   return new Date() ;
+//         // }else
+//         origin_formative = origin_formative.replace("&nbsp;" , " ");
+//         console.log( origin_formative + ' >> '+ origin_formative.length);
+//         if( origin_formative.length > 22 ) return "<span class='warn-expression'> You can not use more than one expression ! </span>" ;
+//         if ( origin_formative.toString().toLowerCase().includes("time_ago") && origin_formative.length == 14) {   return time_epiration.expiration_day_counts ; }
+//         else if ( origin_formative.toString().toLowerCase().includes("day_counts") && origin_formative.length == 16) {  return time_epiration.expiration_day_counts ; }
+//         else if ( origin_formative.toString().toLowerCase().includes("date") && origin_formative.includes("|") && origin_formative.toLowerCase().includes("long") && origin_formative.length == 17) {   return long ; }
+//         else if ( origin_formative.toString().toLowerCase().includes("date") && origin_formative.includes("|") && origin_formative.toLowerCase().includes("short") && origin_formative.length == 18) {  return short ; }
+//         else if ( origin_formative.toString().toLowerCase().includes("in_next_time") &&  origin_formative.length == 18) { return date_after_day_counts ; ; }
+//         else if ( origin_formative.toString().toLowerCase().includes("date") && origin_formative.includes("|") && origin_formative.toString().toLowerCase().includes("american") &&  origin_formative.length == 21) { return american_date; }
+//         else { return ".." ; }
+//
+//       } ;
+//         returned_values = returned_values.replace(origin_formative , use_this_formate());
+//     }
+//      return $sce.trustAsHtml(returned_values) ;
+//    };
+// }]);
 
 apps.filter('math_around_it' , [
 '$sce' , function(){
@@ -266,6 +351,9 @@ apps.controller("apps-controller" , [
     if($rootScope._application_.theme_style != undefined )
     $rootScope.theme_stylesheet = $rootScope._application_.theme_style;
 
+    $rootScope.progressbar_models = "/time-progress-temps/progressbar-"+$rootScope._settings_.progression_bar.progression_bar_layout+".hbs" ;
+    $rootScope.time_models = "/time-progress-temps/time-"+$rootScope._settings_.time_settings.timer_layout+".hbs" ;
+
     time_epiration.expiration_day_counts = $rootScope._settings_.expiration.through_time ;
     // ==> Calling Funcs
     $timeout(function(){
@@ -281,13 +369,16 @@ apps.controller("apps-controller" , [
   }
   $rootScope.loading_redactor_for_message = () => {
     // ==> Redactor
-    $R('.set_redactor');
+    $R('.set_redactor' , {
+       plugins: ['fontcolor']  ,
+       buttons : ['html', 'format', 'bold', 'italic', 'underline', 'deleted' , 'link']
+     });
     // ==> build event
     $timeout(function(){
       // ==> expire warning
       $(".redactor-in-2").bind("change , input , keyup" , function(){
-        $(".resume-text ,.expired_message_block").hide();
-        $timeout(function(){ $(".expire-warning-text").show(); } , 5);
+        // $(".resume-text ,.expired_message_block").hide();
+        // $timeout(function(){ $(".expire-warning-text").show(); } , 5);
          $timeout(function(){
            var expire_warning_val = $R(".set_redactor" , "source.getCode")[0];
            $rootScope.screen_type = 4 ;
@@ -768,18 +859,14 @@ apps.controller("apps-controller" , [
             $(".redactor-in-1").html(question.question_description.value);
             $(".redactor-in-0 , #editor-quest-data").bind("input" , function (){
 
-                var question_value = $(this).html() ;
                 $timeout(function(){
                     $rootScope._questions_[$rootScope.question_index].question_body = $R('#editor-quest-data' , 'source.getCode');
                     // $rootScope.is_unsaved_data = true ;
                 } , 500 );
             });
 
-            $(".redactor-in-1 , #editor-desc-data").on("input" , function (){
-
-
+            $(".redactor-in-1 , #editor-desc-data").bind("input" , function (){
                 $timeout(function(){
-                  var question_value = $(this).html() ;
                     $rootScope._questions_[$rootScope.question_index].question_description.value = $R('#editor-desc-data' , 'source.getCode');
                     // $rootScope.is_unsaved_data = true ;
                 } , 500 );
@@ -1419,7 +1506,10 @@ $rootScope.select_rating_scale__ = function ( index , type , question_id = null 
 
 
  };
- $rootScope.select_this_rating_value = (index , class_name , answer_id , question_id , rs_type ) => {
+ $rootScope.select_this_rating_value = (index , class_name , answer_id , question_id , rs_type  ) => {
+
+
+
    var get_answers = $(".ul_scal_"+ question_id).children("li");
    get_answers.each(function(){
      $(this).children('.spanex').css({
@@ -1538,7 +1628,9 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
      this_item.slideDown();
   });
 
-  $rootScope.select_this_answer=( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex )=>{
+  $rootScope.select_this_answer=( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex , css_mode )=>{
+
+      if ( css_mode == true ) return false;
      if( $rootScope.isEmpty( $rootScope.this_attendee_draft ) ){
           $rootScope.this_attendee_draft = new Object();
           $rootScope.this_attendee_draft['att_draft'] = new Array();
@@ -2029,6 +2121,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
                           attendeeInfo.report_attendee_details.created_at= new Date();
                           attendeeInfo.report_attendee_details.completed_date= new Date();
 
+
                           // ==============================>> Report report_attendees
                           if(attendeeInfo.report_attendees == undefined )
                             attendeeInfo.report_attendees = new Object();
@@ -2457,7 +2550,11 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
 
               $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
               $('.background_models').spectrum('set' , $rootScope.background_models );
+              if(current_class.css("border-style") == undefined ) {
 
+                alert("is Working only when you set 'Single Response' to false !");
+                return false ;
+              }
               $rootScope.border_style_models = current_class.css("border-style").toString();
               $rootScope.border_left_models = current_class.css("border-left-width").toString();
               $rootScope.border_right_models = current_class.css("border-right-width").toString();
@@ -2507,17 +2604,20 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
                 // ==> Fetch Style results
 
                 // Basic answers
+                // var current_class = e.target.getAttribute('box-target-class');
+                // console.log(current_class);
                 $rootScope.selecotor_name = ".Answers";
                 $rootScope.background_models = current_class.css("background-color");
                 $rootScope.border_models_color = current_class.css("border-color");
                 $rootScope.color_models = current_class.css("color");
                 $rootScope.font_size_models = parseInt(current_class.css("font-size"));
-                $rootScope.font_family_models = current_class.css("font-family").toString().toLowerCase();
-                $rootScope.border_style_models = current_class.css("border-style").toString();
-                $rootScope.border_left_models = current_class.css("border-left-width").toString();
-                $rootScope.border_right_models = current_class.css("border-right-width").toString();
-                $rootScope.border_top_models = current_class.css("border-top-width").toString();
-                $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
+
+                $rootScope.font_family_models = (current_class.css("font-family") != undefined )? current_class.css("font-family").toString().toLowerCase():'';
+                $rootScope.border_style_models = (current_class.css("border-style") != undefined ) ? current_class.css("border-style").toString() : '';
+                $rootScope.border_left_models = (current_class.css("border-left-width") != undefined ) ? current_class.css("border-left-width").toString() : '';
+                $rootScope.border_right_models = (current_class.css("border-right-width") != undefined ) ? current_class.css("border-right-width").toString() : '';
+                $rootScope.border_top_models = (current_class.css("border-top-width") != undefined ) ? current_class.css("border-top-width").toString() : '';
+                $rootScope.border_bottom_models = (current_class.css("border-bottom-width") != undefined ) ? current_class.css("border-bottom-width").toString() : '';
                 $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
                 $('.background_models').spectrum('set' , $rootScope.background_models );
                 $('.color_models').spectrum('set' , $rootScope.color_models );
@@ -2894,8 +2994,9 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     }else {
       $("body , html , .selector").unbind('mouseenter mouseover mouseleave');
       $("body , html").unbind('click');
-      $( '.selector' ).prop('contenteditable', false );
-      $( '.selector' ).removeClass('selector_line');
+      $( '.selector , .selector_line' ).prop('contenteditable', false );
+      $( '.selector , .selector_line' ).removeClass('selector_line');
+
       $( '*' ).each(function(e){
         $(this).css ({outlineColor : "transparent"});
       })
