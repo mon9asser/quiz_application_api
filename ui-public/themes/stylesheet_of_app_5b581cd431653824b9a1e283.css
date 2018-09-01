@@ -1,0 +1,9 @@
+.player-body-screen { background:#ffffff; }
+.empty-progress-bar { background:#ff00ff; }
+.progress-bar-text { color:#00ffff; }
+.timer-text-type , .timeobjx > ul li.hrs span:last-child { color:#9fc5e8; }
+.highlighted-frame-bar , .timeobjx > ul li.hrs { background:#ffff00; }
+.border-frame-bar , .timeobjx > ul li.hrs { border-color:#d5a6bd; }
+.timer-text-numbers , .time-data , .timeobjx > ul li.hrs > span { color:#ead1dc; }
+.box-welcome-screen { border-left-width:3px; border-left-style:dashed; border-color:#76a5af; background:#6d9eeb; }
+.welcome-screen-text { font-size:11px; color:#a4c2f4; font-weight:bold; font-family:Petit Formal Script; }

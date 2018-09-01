@@ -3,7 +3,6 @@
 // == -----------------------------------------------------------------
 apps.controller("login-app" , ["$rootScope" , "$http" , "$scope" , function ($rootScope , $http , $scope){
   $scope.server_ip = $("#serverIp").val() ;
-
   $scope.json_apk_file = $scope.server_ip + "ext/json/json-keys.json";
   $scope.api_url = $scope.server_ip + "api/users/login/v1.1";
   $scope.login_access = $('#login_user');
@@ -46,7 +45,6 @@ apps.controller("login-app" , ["$rootScope" , "$http" , "$scope" , function ($ro
       console.log('----------------------------------------');
       console.log({API_KEY : api_key_data.API_KEY});
       console.log({APP_NAME : api_key_data.APP_NAME});
-      console.log( $scope.api_url );
       $http({
           method : "POST" ,
           url    : $scope.api_url ,

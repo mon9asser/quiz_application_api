@@ -6,12 +6,6 @@ const fs = require('fs');
 const path = require('path') ;
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
-const Jimp = require('jimp');
-
-
-// const im = require('imagemagick');
-// const gm = require('gm').subClass({imageMagick: true}); ;
-
 // ==> updating [issue #114]
 const multer = require('multer')
 // const fileType = require('file-type')
@@ -92,28 +86,6 @@ var qtnrRouters = express.Router();
 // qtnrRouters.use(bodyParser.urlencoded());
 // qtnrRouters.use(bodyParser.json());
 qtnrRouters.use(build_session);
-
-
-
-qtnrRouters.post("/upload/animage"  , question_answer_images.single("media_field") , (req, res) => {
-    // var file_path = 'ui-public/themeimages/';
-    var file_path = 'ui-public/themeimages/';
-    // var file_path = 'themeimages/';
-    var fileIs = file_path + req.file.originalname
-    // open a file called "lenna.png"
-    Jimp.read(fileIs, (err, Image) => {
-        if (err) {
-          res.send({ status_code : 0 , error : err , message : 'Failed'  });
-          return false ;
-        };
-        Image.crop(200,200,200,200)
-        .write(file_path + '_____________CROPPING_WITH_JIMP_IN_EC2.jpg');;
-    });
-
-    res.send(req.file);
-
-
-});
 
 
 
@@ -266,30 +238,6 @@ qtnrRouters.post("/init", auth_verify_api_keys_tokens  , (req, res) => {
 // Create settings for quiz or survey ( remember this part => surv/quiz for used with /init route)
 qtnrRouters.patch("/:app_id/app/setup_settings", auth_verify_api_keys_tokens , (req,res)=>{
   var app_id = req.params.app_id;
-  qtnr.findById(app_id , (err,d)=>{
-    if(err || !d){
-      return new Promise((resolve, reject) => {
-         res.status(401).send(notes.Errors.Error_Doesnt_exists("Application"));
-     });
-    }
-    d.settings = req.body.settings;
-    d.questionnaire_title = req.body.questionnaire_title;
-    d.markModified("settings");
-    d.save().then((success)=>{
-      if(success)
-       {
-         res.send({
-           succ : success
-         })
-       }
-    });
-  });
-});
-
-qtnrRouters.patch("/:app_id/app/setup_settings/storing" , (req,res)=>{
-  var app_id = req.params.app_id;
-
-
   qtnr.findById(app_id , (err,d)=>{
     if(err || !d){
       return new Promise((resolve, reject) => {
@@ -2338,18 +2286,6 @@ qtnrRouters.post("/:app_id/application/:objects" , auth_verify_api_keys , (req ,
 
       qtnr.findOne({ _id:app_id }).then( ( qtnairsDocument) => {
 
-
-      /*
-      if( qtnairsDocument.application_ids == undefined )
-          qtnairsDocument['application_ids'] = new Object();
-
-      var id_counts = 100;
-      for ( var i = 0; i <= id_counts; i++) {
-        qtnairsDocument['application_ids']['id_' + i ] = mongoose.Types.ObjectId();
-      }
-      */
-
-
          if (!qtnairsDocument){
            return new Promise((resolve, reject)=>{
               res.status(404).send(notes.Errors.Error_Doesnt_exists("Application"));
@@ -2363,7 +2299,7 @@ qtnrRouters.post("/:app_id/application/:objects" , auth_verify_api_keys , (req ,
          }
         var apps ;
         if( objects == 'retrieve'){
-          apps = qtnairsDocument ;
+             apps = qtnairsDocument ;
         }
         if( objects == 'settings'){
              apps = qtnairsDocument.settings ;
@@ -2396,7 +2332,7 @@ qtnrRouters.post("/:app_id/application/:objects" , auth_verify_api_keys , (req ,
              apps = qtnairsDocument.theme_style ;
         }
 
-        res.send(apps);
+       res.send(apps);
         }).catch((er)=>{
           return new Promise((resolve, reject)=>{
             res.status(404).send(notes.Errors.General_Error);
@@ -2614,8 +2550,7 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
                    title_start_with : "Write Starting Text"  ,
                    title_end_with: "Write Ending Text" ,
                    title_success_with : " Success quiz Text" ,
-                   title_failed_with : "Quiz Failed Text",
-                   title_resume : "Quiz Resume Text"
+                   title_failed_with : "Quiz Failed Text"
                  } ,
                label_btns : {
                    lbl_start_with:"Start" ,
@@ -2624,7 +2559,6 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
                    lbl_review_with : "Review" ,
                    lbl_back_with : "Back",
                    lbl_finish_with : "Finish",
-                   lbl_resume_with : "Resume" ,
                    lbl_submit_quiz_with : "Submit Quiz",
                    lbl_score_with :"Score",
                    lbl_grade_with :"Grade" ,
@@ -2646,20 +2580,19 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
                  is_with_time:false ,
                  value : 1799 ,
                  timer_type : false ,
-                 timer_layout : 1 ,
+                 timer_layout : 0 ,
                  hours : 0 ,
                  minutes : 29 ,
                  seconds : 59
                },
                progression_bar : {
                  is_available:false ,
-                 progression_bar_layout:1
+                 progression_bar_layout:0
                } ,
                expiration : {
                  is_set : false  ,
                  through_time : 3 , // => it will be per day
-                 expire_warning : "This quiz will expire after 3 days" ,
-                 expire_message : "This Quiz is Expired from {{ time_ago }}  hours ago !"
+                 title : "This quiz will expire after"
                } ,
               //  theme_style : [] ,
                randomize_settings : false ,
@@ -5008,227 +4941,6 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
 
 
 
-
-qtnrRouters.get("/:app_id/application/get/all"  , ( req , res )=>{
-  var appId = req.params.app_id ;
-
-  qtnr.findOne({ _id:appId }).populate('app_registry').exec( ( error , qtnairsDocument ) => {
-
-    var application_object = new Object();
-
-    if( application_object['question_ids'] == undefined )
-      application_object['question_ids'] = new Object();
-
-      if( application_object['answer_ids'] == undefined )
-        application_object['answer_ids'] = new Object();
-
-
-     for (var i = 0; i <= 200 ; i++) {
-       application_object['question_ids']['id_'+i] =  mongoose.Types.ObjectId()
-       application_object['answer_ids']['id_'+i] =  mongoose.Types.ObjectId()
-     }
-
-
-     if ( qtnairsDocument._id != undefined ) application_object['_id'] = qtnairsDocument._id ;
-     if ( qtnairsDocument.settings != undefined ) application_object['settings'] = qtnairsDocument.settings ;
-     if ( qtnairsDocument.theme_style != undefined ) application_object['theme_style'] = qtnairsDocument.theme_style ;
-     if ( qtnairsDocument.creator_id != undefined ) application_object['creator_id'] = qtnairsDocument.creator_id ;
-     if ( qtnairsDocument.app_type != undefined ) application_object['app_type'] = qtnairsDocument.app_type ;
-     if ( qtnairsDocument.questionnaire_title != undefined ) application_object['questionnaire_title'] = qtnairsDocument.questionnaire_title ;
-     if ( qtnairsDocument.description != undefined ) application_object['description'] = qtnairsDocument.description ;
-     if ( qtnairsDocument.createdAt != undefined ) application_object['createdAt'] = qtnairsDocument.createdAt ;
-     if ( qtnairsDocument.updatedAt  != undefined ) application_object['updatedAt'] = qtnairsDocument.updatedAt ;
-     if ( qtnairsDocument.questions != undefined ) application_object['questions'] = qtnairsDocument.questions ;
-     if ( qtnairsDocument.app_registry  != undefined ) application_object['app_registry'] = qtnairsDocument.app_registry ;
-     if ( qtnairsDocument.app_report  != undefined ) application_object['app_report'] = qtnairsDocument.app_report ;
-     if ( qtnairsDocument.att__draft != undefined ) application_object['att__draft'] = qtnairsDocument.att__draft ;
-     if ( qtnairsDocument.stylesheet_properties != undefined ) application_object['stylesheet_properties'] = qtnairsDocument.stylesheet_properties ;
-     if ( qtnairsDocument.theme_style != undefined ) application_object['theme_style'] = qtnairsDocument.theme_style ;
-
-
-    res.json(application_object);
-  });
-
-});
-
-
-// http://localhost:9000/api/5b6b512976144b09ca46a362/question/5b6b512a76144b09ca46a4f5/answer/5b6b512a76144b09ca46a4f60/cropping_system
-qtnrRouters.post("/:app_id/question/:question_id/answer/:answer_id/cropping_system"  , question_answer_images.single("media_field") , ( req , res )=> {
-  var questionId = req.params.question_id;
-  var answerId = req.params.answer_id;
-  var appId = req.params.app_id;
-
-  var file_path = 'ui-public/themeimages/';
-  var file_name = '___answer_media_' + answerId ;
-  var imagePath =  req.file.path ;
-  var fileExtension = path.extname(imagePath);
-  var new_filename = "answer_media_"+answerId+fileExtension.toLowerCase();
-  var new_file_path = file_path + new_filename ;
-  var main_filename = req.file.originalname ;
-  var main_file_path = file_path  + req.file.originalname ;
-
-  if(! fs.existsSync(main_file_path)){
-    res.send({ status_code : 0 , message : 'Failed' , error : { message : "You didn't upload this image , please try later ..."}  });
-    return false ;
-  }
-
-  if(req.body.width == undefined || req.body.height == undefined ||req.body.x == undefined || req.body.y == undefined)
-    {
-      res.send({ status_code : 0 , message : 'Failed' , error : { message : "Image Coordinates are required"}  });
-      return false ;
-    }
-
-   Jimp.read( main_file_path).then( Image => {
-     Image.crop( parseInt(req.body.x) , parseInt(req.body.y) , parseInt(req.body.width) , parseInt(req.body.height))
-     .resize(225, 200) // => 25
-     .quality(80)
-     .write(new_file_path);
-
-     // ==> Rename main file with double perfix
-     var new_file_path_ = file_path + '___' +new_filename ;
-     if( fs.existsSync (imagePath) ){
-       fs.rename( imagePath  , new_file_path_  , ( err ) => {  });
-     }
-   }).catch(error => {
-     res.send(error);
-     return false;
-   });
-
-   qtnr.findOne({ _id:appId }).then( (   qtnairsDocument ) => {
-     if(!qtnairsDocument){
-       res.send({ status_code : 0 , message : 'Failed' , error : { message : "Application doesn't exists ..."}  });
-       return false ;
-     }
-     var questions = qtnairsDocument.questions ;
-
-     var this_question = questions.find( x => x._id == questionId ) ;
-     if(this_question == undefined ){
-       res.send({ status_code : 0 , message : 'Failed' , error : { message : "This question doesn't exists ..."}  });
-       return false ;
-     }
-
-     var this_answer = this_question.answers_format.find(x => x._id == answerId );
-     if(this_answer == undefined ){
-       res.send({ status_code : 0 , message : 'Failed' , error : { message : "This answer doesn't exists ..."}  });
-       return false ;
-     }
-
-     if(this_question.question_type == 0 ){
-       if( this_answer.media_optional == undefined )
-       this_answer['media_optional'] = new Object();
-
-       this_answer.media_optional['media_name'] = new_filename;
-       this_answer.media_optional['media_type']= 0;
-       this_answer.media_optional['Media_directory']= config.server_ip + 'themeimages/'+ new_filename;;
-       this_answer.media_optional['image_cropped']= new_filename;
-       this_answer.media_optional['image_full']= '___' +new_filename  ;
-       this_answer.media_optional['image_updated_date']= new Date();
-     }
-     if(this_question.question_type == 1 ){
-       this_answer['media_name'] = new_filename;
-       this_answer['media_type']= 0;
-       this_answer['Media_directory']= config.server_ip + 'themeimages/'+ new_filename;;
-       this_answer['image_cropped']= new_filename;
-       this_answer['image_full']= '___' +new_filename  ;
-       this_answer['image_updated_date']= new Date();
-     }
-
-     qtnairsDocument.markModified('questions');
-     qtnairsDocument.save().then((data)=>{
-        res.send( data );
-         return false;
-      });
-   });
-});
-qtnrRouters.post("/:app_id/question/:question_id/cropping_system"  , question_answer_images.single("media_field") , ( req , res )=>{
-  var appId = req.params.app_id ;
-  var questionId = req.params.question_id;
-
-  var imagePath =  req.file.path ;
-  var fileExtension = path.extname(imagePath);
-  var file_path = 'ui-public/themeimages/';
-  var new_filename = "question_"+questionId+fileExtension.toLowerCase();
-  var new_file_path = file_path + new_filename ;
-  var main_filename = req.file.originalname ;
-  var main_file_path = file_path  + req.file.originalname ;
-
-  if(! fs.existsSync(main_file_path)){
-    res.send({ status_code : 0 , message : 'Failed' , error : { message : "You didn't upload this image , please try later ..."}  });
-    return false ;
-  }
-
-  if(req.body.width == undefined || req.body.height == undefined ||req.body.x == undefined || req.body.y == undefined)
-    {
-      res.send({ status_code : 0 , message : 'Failed' , error : { message : "Image Coordinates are required"}  });
-      return false ;
-    }
-
-    Jimp.read( main_file_path).then( Image => {
-      Image.crop( parseInt(req.body.x) , parseInt(req.body.y) , parseInt(req.body.width) , parseInt(req.body.height))
-      .resize(225, 200) // => 25
-      .quality(80)
-      .write(new_file_path);
-
-      // ==> Rename main file with double perfix
-      var new_file_path_ = file_path + '___' +new_filename ;
-      if( fs.existsSync (imagePath) ){
-        fs.rename( imagePath  , new_file_path_  , ( err ) => {  });
-      }
-    }).catch(error => {
-      console.log(error);
-    });
-
-   qtnr.findOne({ _id:appId }).then( (   qtnairsDocument ) => {
-     var questions = qtnairsDocument.questions ;
-     var this_question = questions.find( x => x._id == questionId ) ;
-     if(this_question == undefined ){
-       res.send({ status_code : 0 , message : 'Failed' , error : { message : "This question doesn't exists ..."}  });
-       return false ;
-      }
-      if(this_question.media_question == undefined )
-      this_question['media_question'] = new Object();
-      this_question.media_question['media_type'] = 0;
-      this_question.media_question['media_name'] = new_filename
-      this_question.media_question['media_field'] = new_file_path ;
-      this_question.media_question['Media_directory'] = config.server_ip + 'themeimages/'+ new_filename;
-      this_question.media_question['image_cropped'] = new_filename;
-      this_question.media_question['image_full'] =   '___' +new_filename  ;
-      this_question.media_question['image_updated_date'] = new Date();
-
-      qtnairsDocument.markModified('questions');
-      qtnairsDocument.save().then((data)=>{
-        res.send( data );
-         return false;
-      });
-   });
-});
-
-qtnrRouters.get("/:app_id/player/data" , ( req , res ) => {
-  var app_id = req.params.app_id;
-  qtnr.findOne({_id : app_id}).populate('app_report').populate('att__draft').exec(function(error, creatorQuestionnaires) {
-    if(error){
-        res.send({error : "This Application doesn't exists !" })
-    }
-    res.send(creatorQuestionnaires);
-  });
-});
-qtnrRouters.post("/:app_id/add/:data"  , ( req , res ) => {
-  var appId = req.params.app_id ;
-  var dataColumns = req.params.data;
-  var data = req.body.data ;
-
-  qtnr.findOne({ _id:appId }).then( (   qtnairsDocument ) => {
-
-    if(qtnairsDocument.questions == undefined )
-    qtnairsDocument.questions = '';
-    qtnairsDocument.questions = data ;
-    qtnairsDocument.markModified('questions');
-    qtnairsDocument.save().then(()=>{
-      res.json( qtnairsDocument.questions );
-    });
-  });
-
-});
 module.exports = {
     qtnrRouters
 };

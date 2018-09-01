@@ -1,175 +1,92 @@
-// var start_expiration_date , expiration_day_counts ;
-var time_epiration = {
-    expiration_day_counts : 0
-};
-apps.filter('apply_html' , ['$sce' , ( $sce ) => {
-  return ( returned_values ) => { return $sce.trustAsHtml(returned_values);  };
-}]);
-apps.filter("apply_html_with_date_filtering" , ['$sce'  , ( $sce  ) => {
-  return ( returned_values ) => {
-    var time_hr = (date) => {
-          var hours = date.getHours();
-          var minutes = date.getMinutes();
-          var ampm = hours >= 12 ? 'pm' : 'am';
-          hours = hours % 12;
-          hours = hours ? hours : 12; // the hour '0' should be '12'
-          minutes = minutes < 10 ? '0'+minutes : minutes;
-          var strTime = hours + ':' + minutes + ' ' + ampm;
-          return strTime;
-    }
-    var monthNames = ["January", "February", "March", "April", "May", "June",
-          "July", "August", "September", "October", "November", "December"
-    ];
-
-    var day_counts = time_epiration.expiration_day_counts;
-    var date_in_timestamps = new Date().getTime();
-    var calculated_date = new Date ( date_in_timestamps + ( day_counts * 24 * 60 * 60 * 1000 ) )
-
-    var splited_date = calculated_date.toString().split(" ");
-    var calculate_time_ago = new Date().getTime() - calculated_date.getTime() ;
-    var time_ago_hrs = (((calculate_time_ago / 1000 ) / 60 ) / 60 ) ;
-    if( time_ago_hrs < 0 ) time_ago_hrs = "<span class='notexpired'> <span class='small-note'>Note</span> Not Expired Yet </span>";
-    else time_ago_hrs = time_ago_hrs + " hour(s)";
-
-    var date_time = splited_date[0] + ' ' +  splited_date[2]   + ' ' +  splited_date[1]  + ' ' +  splited_date[3] ;
-   var date_long = splited_date[2] + ' ' + splited_date[1] + ' , ' + splited_date[3] + " "+ time_hr(calculated_date) ;
-   var date_short =splited_date[2] + ' ' +  monthNames[calculated_date.getMonth()];
-   var date_american = calculated_date.getMonth() + "/" +splited_date[2] + "/" +calculated_date.getFullYear() ;
-   var hr_sys = ( day_counts * 24 )
-
-   var filter_date_format = (formative_date) => {
-
-     switch (formative_date) {
-
-       case "{{ date | long }}" :
-         return date_long ;
-       break;
-       case "{{ date | short }}" :
-         return date_short ;
-       break;
-       case "{{ date | american }}" :
-         return date_american ;
-       break;
-       case "{{ hour_counts }}" :
-         return hr_sys ;
-       break;
-       case "{{ day_counts }}" :
-           return day_counts ;
-       break;
-       case "{{ time_ago }}" :
-         return time_ago_hrs ;
-       break;
-       case "{{ date }}" :
-         return date_time ;
-     }
-   };
-    var formative_text = "";
-    var existing_formative = [] ;
-    var formative_array = [
-      "{{ date }}" ,
-      "{{ date | long }}" ,
-      "{{ date | short }}" ,
-      "{{ date | american }}" ,
-      "{{ hour_counts }}" ,
-      "{{ time_ago }}" ,
-      "{{ day_counts }}"
-
-    ];
-
-    for (var i = 0; i < formative_array.length; i++) {
-      var date_format = formative_array[i];
-      if(returned_values.toString().includes(date_format.toString()))
-        existing_formative.push(date_format) ;
-    }
-
-    for (var i = 0; i < existing_formative.length; i++) {
-      var date = existing_formative[i] ;
-      returned_values = returned_values.replace(date , filter_date_format(date) );
-    }
-
-    return $sce.trustAsHtml(returned_values) ;
-  };
-}]);
-// apps.filter("apply_html_with_date_filtering" , ['$sce'  , ( $sce  ) => {
-//   return ( returned_values ) => {
-//
-//
-//
-//     var formative = returned_values.match("{{(.*)}}") ;
-//
-//
-//     if(formative != null ){
-//
-//
-//       var origin_formative = formative[0];
-//       var returned_data = '';
-//       var use_this_formate  = () => {
-//         // var timestamps = new Date().getTime() + ( 6 * 24 * 60 * 60 * 1000 ) ;
-//         var date_now = new Date();
-//         var date_after_day_counts = new Date(new Date().getTime() + ( time_epiration.expiration_day_counts * 24 * 60 * 60 * 1000 ));
-//         var time_hr = (date) => {
-//           var hours = date.getHours();
-//           var minutes = date.getMinutes();
-//           var ampm = hours >= 12 ? 'pm' : 'am';
-//           hours = hours % 12;
-//           hours = hours ? hours : 12; // the hour '0' should be '12'
-//           minutes = minutes < 10 ? '0'+minutes : minutes;
-//           var strTime = hours + ':' + minutes + ' ' + ampm;
-//           return strTime;
-//         }
-//         const monthNames = ["January", "February", "March", "April", "May", "June",
-//           "July", "August", "September", "October", "November", "December"
-//         ];
-//         // long => 05 Jun 2018 12:00 pm
-//         // short => 05 Jun
-//         // american => 12/25/2018
-//         var splited_date = date_after_day_counts.toString().split(" ") ;
-//         var american_date = date_after_day_counts.getMonth() + "/" +date_after_day_counts.getDay() + "/" +date_after_day_counts.getFullYear() ;
-//         var long = date_after_day_counts.getDay() + ' '  + monthNames[date_after_day_counts.getMonth()] + ' , ' + date_after_day_counts.getFullYear() + ' ' + time_hr(date_after_day_counts);
-//         var short = date_after_day_counts.getDay() + ' ' +  monthNames[date_after_day_counts.getMonth()];
-//
-//         // if( origin_formative.toString().includes("date") && !origin_formative.includes("|") && origin_formative.length <= 10)
-//         // {
-//         //   return new Date() ;
-//         // }else
-//         origin_formative = origin_formative.replace("&nbsp;" , " ");
-//         console.log( origin_formative + ' >> '+ origin_formative.length);
-//         if( origin_formative.length > 22 ) return "<span class='warn-expression'> You can not use more than one expression ! </span>" ;
-//         if ( origin_formative.toString().toLowerCase().includes("time_ago") && origin_formative.length == 14) {   return time_epiration.expiration_day_counts ; }
-//         else if ( origin_formative.toString().toLowerCase().includes("day_counts") && origin_formative.length == 16) {  return time_epiration.expiration_day_counts ; }
-//         else if ( origin_formative.toString().toLowerCase().includes("date") && origin_formative.includes("|") && origin_formative.toLowerCase().includes("long") && origin_formative.length == 17) {   return long ; }
-//         else if ( origin_formative.toString().toLowerCase().includes("date") && origin_formative.includes("|") && origin_formative.toLowerCase().includes("short") && origin_formative.length == 18) {  return short ; }
-//         else if ( origin_formative.toString().toLowerCase().includes("in_next_time") &&  origin_formative.length == 18) { return date_after_day_counts ; ; }
-//         else if ( origin_formative.toString().toLowerCase().includes("date") && origin_formative.includes("|") && origin_formative.toString().toLowerCase().includes("american") &&  origin_formative.length == 21) { return american_date; }
-//         else { return ".." ; }
-//
-//       } ;
-//         returned_values = returned_values.replace(origin_formative , use_this_formate());
-//     }
-//      return $sce.trustAsHtml(returned_values) ;
-//    };
-// }]);
-
-apps.filter('math_around_it' , [
-'$sce' , function(){
-  return (round_p) => {
-    return ( Math.round(round_p) ) ? Math.round(round_p): 0  ;
+apps.filter ("apply_html" , [
+'$sce' , function ($sce){
+  return function (text_changed){
+    return $sce.trustAsHtml(text_changed);
   }
 }
 ]);
-apps.filter('read_image' , ($sce) => {
-  return function (media_object){
-    var this_time = new Date(media_object.image_updated_date).getTime() / 1000 ;
-    return media_object.Media_directory + '?' + this_time;
-  };
-});
+apps.filter("image_w_server" , [
+"$timeout" ,"$sce"  ,
+function ( $timeout  , $sce   ){
+    return function (img_source){
+      var current_server = $("#serverIp").val() ;
+      var default_image = current_server + "img/media-icon.png";
 
-apps.filter( 'striphtmltags' , ($sce) => {
+      if (img_source == default_image){
+        return img_source ;
+      }else {
+        // console.log(current_server + 'themeimages'+img_source.split('themeimages').pop());
+        return current_server + 'themeimages'+img_source.split('themeimages').pop() ;
+      }
+    };
+}
+]);
+apps.filter("set_iframe" , [
+    "$timeout" ,"$sce" ,
+function (  $timeout , $sce){
+  return function (media_object){
+    var embed_video , video_path , video_mp4  , iframe_size ;
+
+    if( media_object.embed_path != null)
+    {
+       video_path = media_object.embed_path ;
+       iframe_size = new Object();
+       iframe_size.width = "100%";
+       iframe_size.height = "130px" ;
+    }
+    else
+    {
+       video_path = media_object.video_source ;
+       iframe_size = new Object();
+       iframe_size.width = "100%";
+       iframe_size.height = "130px" ;
+    }
+
+    if(media_object.mp4_option != undefined || media_object.mp4_option != null ){
+      video_mp4 = new Object();
+      video_mp4['mp4_url'] = media_object.mp4_option.mp4_url ;
+      video_mp4['ogg_url'] = media_object.mp4_option.ogg_url ;
+
+      iframe_size = new Object();
+      iframe_size.width = "100%";
+      iframe_size.height = "130px" ;
+    }else {
+      video_mp4 = new Object();
+      video_mp4['mp4_url'] =  media_object.media_field+'.mp4';
+      video_mp4['ogg_url'] =  media_object.media_field+'.ogg';
+      iframe_size = new Object();
+      iframe_size.width = "100%";
+      iframe_size.height = "130px" ;
+    }
+    switch (media_object.media_type) {
+      case 1:
+        if( media_object.video_type == 0 ){
+          embed_video = "<iframe width='"+iframe_size.width+"' height='"+iframe_size.height+"' src='"+video_path+"' ></iframe>";
+        }
+        if( media_object.video_type == 1 ){
+          embed_video = "<iframe width='"+iframe_size.width+"' height='"+iframe_size.height+"' src='"+video_path+"' webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>";
+        }
+        if( media_object.video_type == 2 ){
+          embed_video = '<video style="width:'+iframe_size.width+'; height:'+iframe_size.height+';" controls>' +
+                        '<source src="'+video_mp4.mp4_url+'" type="video/mp4">'+
+                        '<source src="'+video_mp4.ogg_url+'" type="video/ogg">'+
+                        'Your browser does not support the video tag.' +
+                      '</video>';
+        }
+      break;
+    }
+    return $sce.trustAsHtml(embed_video) ;
+  };
+}
+]);
+apps.filter('this_chars_only' , [
+'$sce' ,
+function ($sce){
   return function (specs){
     var div = $("<div>"+ specs + "</div>");
     var text_values = div.text() ;
     var spesificChars = '' ;
-    var char_counts = 20 ;
+    var char_counts = 35 ;
 
     if( text_values == undefined )
       spesificChars = text_values ;
@@ -188,773 +105,1024 @@ apps.filter( 'striphtmltags' , ($sce) => {
 
      return spesificChars ;
   }
-});
-apps.filter('trust_iframe_url' , ( $sce ) => {
-  return function (url){
-    return  $sce.trustAsResourceUrl(url);
-  };
-});
+}
+]);
+apps.filter('show_chars' , [
+'$sce' ,
+function ($sce){
+  return function (specs){
+    var spesificChars = '' ;
+    var char_counts = 16 ;
+
+    if(specs == undefined)
+      spesificChars = specs ;
+      else {
+          for (var i = 0; i < specs.length; i++) {
+            if(i < char_counts) {
+              spesificChars += specs[i];
+              if(i == (char_counts - 1) )
+                spesificChars += " . ";
+            }
+          }
+      }
+      // ng:bind:html = "value | filter"
+     return $sce.trustAsHtml(spesificChars);
+  }
+}
+]);
+apps.filter('trust_html' , ['$sce' , ( $sce ) => {
+return ( returned_values ) => { return $sce.trustAsHtml(returned_values);  };
+}]);
+apps.filter('trust_this_html_values' , [
+'$sce' , function ($sce){
+  return function (returned_val){
+     return returned_val ; // $sce.trustAsHtml(returned_val);
+  }
+}
+]);
+apps.filter('length_it' , [
+'$sce' , function(){
+  return (number) => {
+    return number.toString().length;
+  }
+}
+]);
+apps.filter('math_around_it' , [
+'$sce' , function(){
+  return (round_p) => {
+    return ( Math.round(round_p) ) ? Math.round(round_p): 0  ;
+  }
+}
+]);
+
+
 apps.controller("apps-controller" , [
 '$scope','$http' , '$timeout','$window','$rootScope' , '$sce' ,
-( $scope , $http , $timeout , $window , $rootScope , $sce  ) => {
-  $scope.question_labels = {
-    label_0 : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ],
-    label_1 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50]
-  }
-  $scope.answer_labels = {
-    label_0 : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ],
-    label_1 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50]
-  }
-  $rootScope.isEmpty = (obj) => {
-      for(var key in obj) {
-          if(obj.hasOwnProperty(key))
-              return false;
-      }
-      return true;
-  }
-  $rootScope.set_model_type = ( model_index , model_type) => {
-    if(model_type == 0 ){
-      $rootScope._settings_.progression_bar.progression_bar_layout = model_index;
-      $rootScope.progressbar_models = "/time-progress-temps/progressbar-"+model_index+".hbs";
-      if(model_index == 2 ){
-        $rootScope.draw_radial_progression(0/100);
-      }
-    }
-    if(model_type == 1){
-      $rootScope._settings_.time_settings.timer_layout = model_index;
-      $rootScope.time_models = "/time-progress-temps/time-"+model_index+".hbs";
-    }
+( $scope , $http , $timeout , $window , $rootScope , $sce ) => {
+
+
+var question_status = function (a, b) {
+    var correct_answers = a.map( function(x){ return x._id; } );
+    var solved_answers = b.map( function(x){ return x.answer_id; } );
+    var is_right_question =  (solved_answers.sort().join('') == correct_answers.sort().join(''));
+    return is_right_question ;
   };
+  $scope.close_media_box = () => {
+    $(".media-imgvid-uploader").fadeOut();
+  }
 
-  $rootScope.changed_day_numbers = (number) => {
-    time_epiration.expiration_day_counts = number ;
-   };
-  $rootScope.theme_stylesheet = new Array();
-  $rootScope.progressbar_models = "/time-progress-temps/progressbar-1.hbs" ;
-  $rootScope.time_models = "/time-progress-temps/time-1.hbs" ;
-  $rootScope.this_attendee_draft = {};
-  $rootScope.media_type = 0 ;
-  $rootScope.server_ip = $("#serverIp").val();
-  $rootScope.user_id = $("#userId").val();
-  $rootScope.app_id = $("#applicationId").val();
-  $rootScope.stylesheet_uri = $rootScope.server_ip + 'themes/stylesheet_of_app_' + $rootScope.app_id + '.css';
-  // alert($rootScope.stylesheet_uri);
-  $rootScope.json_source = $rootScope.server_ip + "ext/json/json-keys.json";
-  $rootScope.default_player =  $rootScope.server_ip + "ext/css/default-player.css";
-  $rootScope.default_theme =  $rootScope.server_ip + "ext/css/default-themes.css";
-  $rootScope.selector_class = undefined ;
-  // $rootScope.swiper_data = null ;
-  $rootScope.switching_editor_preview_value = false ;
-  $rootScope.is_add_new_unsaved = false;
-  // $rootScope.is_unsaved_data = false ;
-  $rootScope.media_for = 'questions' ;
-  $rootScope.enable_css_mode = false;
-  $rootScope._application_ = null ;
-  $rootScope._questions_ = [] ;
-  $rootScope._settings_ = null ;
-  $rootScope.database_data = [] ;
-  $rootScope.question_ids  = [] ;
-  $rootScope.answer_ids  = [] ;
-  $rootScope.question_id   = $("#question_id").val()  ;
-  $rootScope.retrieve_data_url = $rootScope.server_ip + "api/"+$rootScope.app_id+"/application/get/all";
-  $rootScope.question_index = null;
-  $rootScope.media_image_uploader = $('.image-uploader-x');
-  $rootScope.nav_status = 0;
-  $rootScope.image_view_source = null ;
-  $rootScope.header_data = null ;
-  $rootScope._application_ = null ;
-  $rootScope._settings_    =  null;
-  $rootScope.question_ids  =  null;
-  $rootScope.answer_ids    = null;
-  $rootScope.video_object = new Object();
-  $rootScope.cropper = null ;
-  $rootScope.cropper_results = new Object() ;
-  $rootScope.current_answer_id = null ;
-  $rootScope.current_media_video = new Object();
-  $rootScope.screen_type = 3 ;
-  $rootScope.media_data = undefined // => to display media in uploader box
-  $rootScope.go_to_screen_number = (screen_number) => {
-    $rootScope.screen_type = screen_number ;
+  $scope.set_image_background = (image_sourc , set_server = null)=>{
+    var set_server_ip = $scope.server_ip
+    if(set_server != null )
+      set_server_ip = '';
+      // http://34.215.133.182/img/media-icon.png
+    if(image_sourc == set_server_ip+image_sourc)
+      set_server_ip = '';
+    return {
+      "background-image" : "url('"+set_server_ip+image_sourc+"')"
+    }
   }
 
 
-  $rootScope.show_expiration_screen = (isTrue) => {
-    if(isTrue) $rootScope.screen_type = 4 ;
-    else $rootScope.screen_type = 3 ;
+
+  $scope.player_elements = null;
+  $scope.current_element = null;
+  $scope.screen_type = 0;
+  $scope.stylesheet_object = new Array();
+  $scope.question_indexes = {
+    alphabetical : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ],
+    numberical : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50]
   }
-  $rootScope.css_pellet_mode = {
-    background:false,
-    color:false,
-    fontSize:false,
-    fontFamily:false,
-    border:false,
-    width : false ,
+  $scope.answer_indexes = {
+    alphabetical : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ],
+    numberical : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50]
+  }
 
-    // ==> Case Hover answers
-    hover_background : false,
-    hover_border : false,
-    hover_color : false,
 
-    // ==> Case Selected canswers
-    selected_background : false,
-    selected_borde : false,
-    selected_color : false ,
-
-    correct_background : false ,
-    correct_border : false ,
-    correct_color : false ,
-    correct_icon_background : false ,
-    correct_icon_border : false ,
-    correct_icon_color : false ,
-
-    wrong_background : false ,
-    wrong_border : false ,
-    wrong_color : false ,
-    wrong_icon_background : false ,
-    wrong_icon_border : false ,
-    wrong_icon_color : false ,
-
-    rating_color : false ,
-    scale_color : false ,
-    scale_hover_color : false ,
-    scale_background : false ,
-    scale_hover_background : false ,
-
-    free_boxtext_background: false ,
-    free_boxtext_color: false ,
-
-    radial_text_color: false ,
-    radial_fill: false ,
-    radial_strock: false ,
+  $scope.defined_elements = {
+    fonts : 'span , p , font , b , strong , h1 , h2 , h3 , h4 , h5 , h6' ,
+    buttons : ['.select_button'] ,
+    font_elements : ['.select_texts' , '.select_numbers' , '.select_icons'] ,
+    background_elements : ['.select_box' , '.select_box_brd'] ,
+    border_elements : ['.select_brd'] ,
+    general_elements : ['.select_box_data']
   };
+  // ==> Editor Work
+  $scope.cropped_media_info = new Object();
+  $scope.this_iframe = $("iframe#live-preview-iframe");
+  $scope.first_load = 0;
+  $scope.activated_screen_name = null;
+  //+++++ $scope.iframe_access = null ;
+  $scope.iframe_object = null ;
+  $scope.activated_screens = true ;
+  $scope.is_drag_drop_item = false ;
+  $scope.rating_scale_elements = [] ;
+  $scope.rating_values = null ;
+  $scope.questions_list = null ;
+  $scope.__player_object = null ;
 
-  // $rootScope.selecotor_name = "block"
-  // $rootScope.background_models = '#fff';
-  // $rootScope.border_models = '1px solid #fff';
-  // $rootScope.color_models = '#fff';
-  // $rootScope.font_size_models = '18px';
-  // $rootScope.font_family_models = 'OpenSansRegular';
-  // $rootScope.width_models = '25%';
-  // $.getJSON( $rootScope.json_source , function ( api_key_data ){
-  //   $rootScope.header_data = {
-  //      "X-api-keys": api_key_data.API_KEY ,
-  //      "X-api-app-name": api_key_data.APP_NAME
-  //    };
-  // });
-  // ==> Loading Applications
-  $http({ method : "GET" , url : $rootScope.retrieve_data_url }).then(( resp )=>{
-    $rootScope._application_ =  resp.data ;
-    $rootScope._settings_    =  $rootScope._application_.settings;
-    $rootScope.question_ids  =  $rootScope._application_.question_ids;
-    $rootScope.answer_ids    =  $rootScope._application_.answer_ids;
-    $rootScope._questions_   =  $rootScope._application_.questions;
-    if($rootScope._application_.theme_style != undefined )
-    $rootScope.theme_stylesheet = $rootScope._application_.theme_style;
-
-    $rootScope.progressbar_models = "/time-progress-temps/progressbar-"+$rootScope._settings_.progression_bar.progression_bar_layout+".hbs" ;
-    $rootScope.time_models = "/time-progress-temps/time-"+$rootScope._settings_.time_settings.timer_layout+".hbs" ;
-
-    time_epiration.expiration_day_counts = $rootScope._settings_.expiration.through_time ;
-    // ==> Calling Funcs
-    $timeout(function(){
-      $rootScope.init_first_question();
-      $(".modal-content-overlay").fadeOut();
-      $timeout(function(){
-        $rootScope.loading_redactor_for_message();
-      } , 400)
-    } , 600);
-  });
-  $rootScope.storing_redactor_values = ( property , value ) => {
-      $rootScope._settings_.expiration[property] = value ;
-  }
-  $rootScope.loading_redactor_for_message = () => {
-    // ==> Redactor
-    $R('.set_redactor' , {
-       plugins: ['fontcolor']  ,
-       buttons : ['html', 'format', 'bold', 'italic', 'underline', 'deleted' , 'link']
-     });
-    // ==> build event
-    $timeout(function(){
-      // ==> expire warning
-      $(".redactor-in-2").bind("change , input , keyup" , function(){
-        // $(".resume-text ,.expired_message_block").hide();
-        // $timeout(function(){ $(".expire-warning-text").show(); } , 5);
-         $timeout(function(){
-           var expire_warning_val = $R(".set_redactor" , "source.getCode")[0];
-           $rootScope.screen_type = 4 ;
-           $rootScope.storing_redactor_values('expire_warning' , expire_warning_val  )
-        } , 200 );
-      });
-      // ==> expire message
-      $(".redactor-in-3").bind("change , input, keyup" , function(){
-         $timeout(function(){
-           $rootScope.screen_type = 5 ;
-
-           $(".resume-text , .expire-warning-text").hide();
-           $(".expired_message_block").show();
-            var expire_message_val = $R(".set_redactor" , "source.getCode")[1];
-               $rootScope.storing_redactor_values( 'expire_message' , expire_message_val  );
-         }, 200 );
-      });
-      // ==> starting messages
-      $(".redactor-in-4").bind("change , input, keyup" , function(){
-         $timeout(function(){
-           $rootScope.screen_type = 0 ;
-            var starting_text = $R(".set_redactor" , "source.getCode")[2];
-            $rootScope._settings_.titles.title_start_with = starting_text;
-         }, 200 );
-      });
-      // ==> ending message
-      $(".redactor-in-5").bind("change , input, keyup" , function(){
-         $timeout(function(){
-           $rootScope.screen_type = 1 ;
-            var ending_text = $R(".set_redactor" , "source.getCode")[3];
-            $rootScope._settings_.titles.title_end_with = ending_text;
-         }, 200 );
-      });
-      // ==> success message
-      $(".redactor-in-6").bind("change , input, keyup" , function(){
-         $timeout(function(){
-            $rootScope.screen_type = 2 ;
-            var pass_text = $R(".set_redactor" , "source.getCode")[4];
-            $rootScope._settings_.titles.title_success_with = pass_text;
-         }, 200 );
-      });
-      // ==> failed message
-      $(".redactor-in-7").bind("change , input, keyup" , function(){
-         $timeout(function(){
-            $rootScope.screen_type = 2 ;
-            var fail_text = $R(".set_redactor" , "source.getCode")[5];
-            $rootScope._settings_.titles.title_failed_with = fail_text;
-         }, 200 );
-      });
-      // ==> resume message
-      /*
-      .resume-text ,
-      .expired_message_block
-      */
-      $(".redactor-in-8").bind("change , input, keyup" , function(){
-        $(".expire-warning-text , .expired_message_block").hide();
-        $timeout(function(){ $(".resume-text").show(); } , 5);
-
-        $rootScope.screen_type = 4 ;
-         $timeout(function(){
-            var title_resume = $R(".set_redactor" , "source.getCode")[6];
-            $rootScope._settings_.titles.title_resume = title_resume;
-            $timeout(function(){ console.log($rootScope._settings_.titles);} , 201);
-         }, 200 );
-      });
-
-    } , 200 );
-  }
-  $rootScope.list_answer_classes = () => {
-    var classes = "";
-    if( $rootScope._questions_[$rootScope.question_index].answer_settings.super_size == true || $rootScope. _questions_[$rootScope.question_index].question_type == 2)
-    classes += "super_size_class ";
+  $scope.stylesheet_order = null ;
+  $scope.default_bg_of_view = '';
+  $scope.window_navigation = $(window);
+  $scope.generated_media_box_handler = $(".box-data");
+  $scope.close_iconx = $(".setting-iconx");
+  $scope.settings_menu = $(".settings_menu") ;
+  $scope.questions_list_box = $(".left_part");
+  $scope.upload_handler = $(".image-uploader-x");
+  $scope.hidden_question_body = $("#editor-question-body-hidden");
+  $scope.show_selected_text = $("#editor-quest-data");
+  $scope.questions_editor_preview_box = $(".left_part");
+  $scope.application_type = $("#applicationType").val();
+  $scope.video_handler = $(".video-handler");
+  $scope.close_settings_menu_handler = $(".setting-iconx");
+  $scope.server_ip = $("#serverIp").val();
+  $scope.user_id = $("#userId").val();
+  $scope.app_id = $("#applicationId").val();
+  $scope.slide_edditor_slices = $(".x-editor-x-title");
+  $scope.image_handler = $(".image-handler");
+  $scope.quest_media_parts = null ;
+  $scope.questPreiouseId = null ;
+  $scope.unsaved_question = false ;
+  $scope.old_question_data = null ;
+  $scope.spesific_chars = null ;
+  $scope.__player_object     = null;
+  $scope.timeFrame = 0;
+  $scope.left_part_position  = $scope.questions_list_box.width() + 21 ;
+  $scope.sort_handler = document.getElementById("docQuestions");
+  $scope.sortble_draggable_handler = document.getElementById("qs-sortable");
+  $scope.expand_collapse_handler =   $(".app-settings li .control-item-header") ;
+  $scope.switching_editor_preview_value = false ;
+  $scope.style_of_answers = "Two columns per row"
+  $scope.data_object   = null ;
+  $scope.answer_object = null ;
+  $scope.question_object_that_added = null ;
+  $scope.current_answer_index = null ;
+  $scope.model_type = null ;
+  $scope.drag_drop_status = true ;
+  $scope.questionIndex = null ;
+  $scope.current_video_id = null;
+  $scope.this_attendee_draft  = null
+  $scope.change_media_link_by_system = true ;
+  $scope.answer_media = null ;
+  $scope.selected_text = null ;
+  $scope.answer_old_status = null ;
+  $scope.mongodb_questions = null ;
+  $scope.question_id = null ;
+  $scope.question_media = null ;
+  $scope.answer_id = null ;
+  $scope.indexes = 1 ;
+  $scope.mongoose_id = null;
+  $scope.mongoose_answer_id = null;
+  $scope.mongoose_date = null;
+  $scope.unique_ids = null ;
+  $scope.targetElement_bind = null ;
+  $scope.application_stylesheet = null ;
+  $scope.app_title = null ;
+  $scope.selected_passage = null ;
+  $scope.current_editor_index = 0 ;
+  $scope.slide_screens = null ;
+  $scope.index_value = 0 ;
+  $scope.cropper = null ;
+  $scope.is_disabled = false ;
+  $scope.question = new Object();
 
 
-     return classes ;
-  }
-  // ==> Load color spectrum
-  $rootScope.load_spectrum_plugin = () => {
+  $scope.json_source = $scope.server_ip + "ext/json/json-keys.json";
+  var question_data_object = null
+  // ==> Objects in scope object
+  $scope.blob_background_data = ( answer_value , style_type ) => {
+    // server_ip+answer_value.media_optional.media_src
+    // alert($scope.server_ip + answer_value.media_optional.media_src);
+    var img_vlox_data ;
 
-    $('.border_models_color , .color_models , .background_models , .hover_border_models_color, .hover_background_models , .hover_color_models , .selected_border_models_color , .selected_background_models , .selected_color_models , .radial_storck_colors , .radial_fill_colors , .radial_text_colors').spectrum(
+
+    if(answer_value.coppied_data != undefined){
+
+      if( answer_value.coppied_data.column_style != undefined && style_type == true )
       {
-        showPaletteOnly: true,
-         togglePaletteOnly: true,
-         togglePaletteMoreText: 'more',
-         togglePaletteLessText: 'less',
-         color: 'blanchedalmond',
-         palette: [
-             ["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
-             ["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
-             ["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"],
-             ["#ea9999","#f9cb9c","#ffe599","#b6d7a8","#a2c4c9","#9fc5e8","#b4a7d6","#d5a6bd"],
-             ["#e06666","#f6b26b","#ffd966","#93c47d","#76a5af","#6fa8dc","#8e7cc3","#c27ba0"],
-             ["#c00","#e69138","#f1c232","#6aa84f","#45818e","#3d85c6","#674ea7","#a64d79"],
-             ["#900","#b45f06","#bf9000","#38761d","#134f5c","#0b5394","#351c75","#741b47"],
-             ["#600","#783f04","#7f6000","#274e13","#0c343d","#073763","#20124d","#4c1130"]
-         ]
-      }
-     );
-  }
-  // ==> Check if answer with media for Tooltip
-  $rootScope.case_it_with_media = ( question , answer ) => {
-    console.log(answer);
-    if(question.question_type == 0 ){
-
-      var value ;
-      if( answer.media_optional == undefined ){
-        value : '100%'
-      }else {
-        value : '110%'
-      }
-      return {
-        bottom : value
-      };
-    }
-    if(question.question_type == 1 ){
-
-    }
-  };
-  // ==> Media Links are changed
-  $rootScope.media_links_are_changed = () => {
-    var media_url = $(".show_media_link").val();
-    var youtube =   media_url.toLowerCase().includes("youtube") ;
-    var vimeo =   media_url.toLowerCase().includes("vimeo") ;
-    var mp4 =   media_url.toLowerCase().includes(".mp4") ;
-    var video = media_url ;
-    $rootScope.video_object = new Object();
-    var videoType = -1  , video_src_value , videoId  ;
-    if( youtube == true ){
-      var videoType = 0 ;
-      var idWithLastSplit = video.lastIndexOf('?');
-      var videos = video.substr(idWithLastSplit + 1);
-      var lastId = video.substr(0, video.indexOf('&'));
-      if(lastId != '' || lastId )
-       videoId = lastId ;
-       else
-       videoId = videos ;
-       var afterEqualChar = video.lastIndexOf('=');
-       videoId = video.substring(afterEqualChar + 1);
-       video_src_value = "http://youtube.com/embed/"+ videoId ;
-    }
-    if( vimeo == true ){
-      var videoType = 1 ;
-      var n = video.lastIndexOf('/');
-      videoId = video.substring(n + 1);
-      video_src_value = "https://player.vimeo.com/video/"+ videoId;;
-    }
-    if( mp4 == true ){
-      var videoType = 2 ;
-      videoType = 2 ;
-      videoId = null;
-      video_src_value = video.substring(0, video.lastIndexOf('.'));
-    }
-    if(videoType == -1 ) return false ;
-
-    $rootScope.video_object['video_type'] = videoType ;
-    $rootScope.video_object['video_id'] = videoId ;
-    $rootScope.video_object['embed_url'] = video_src_value ;
-    console.log($rootScope.video_object);
-    $rootScope.extracting_videos( video_src_value , videoType , video , videoId );
-
-  }
-  $rootScope.extracting_videos = (video_src , video_type , urlInput , videoId ) => {
-    $rootScope.current_media_video = new Object();
-    // $rootScope.video_object
-    var questionId = $("#question_id").val();
-    var this_question = $rootScope._questions_.find (x => x._id == questionId );
-    if(this_question == undefined) return false ;
-      // ==> if it question
-      if( $rootScope.media_for == 'questions' ) {
-        if ($rootScope.current_media_video.media_question == undefined)
-          $rootScope.current_media_video['media_question'] = new Object();
-          $rootScope.current_media_video.media_question['media_src'] = urlInput;
-          $rootScope.current_media_video.media_question['Media_directory'] = urlInput ;
-          $rootScope.current_media_video.media_question['media_type'] = 1 ;
-          $rootScope.current_media_video.media_question['media_name'] = urlInput;
-          $rootScope.current_media_video.media_question['video_id'] = videoId;
-          $rootScope.current_media_video.media_question['video_type'] = video_type ;
-          $rootScope.current_media_video.media_question['embed_path'] = video_src
-          if (video_type == 2 ) {
-                $rootScope.current_media_video.media_question['mp4_option'] = {
-                  mp4_url: video_src +'.mp4' ,
-                  ogg_url : video_src +'.ogg'
-                };
-          }
-
-
-
-          $timeout(function(){
-            $rootScope.$apply();
-          } , 300 );
-
+        if( answer_value.coppied_data.column_style.blob_data != undefined)
+        img_vlox_data = answer_value.coppied_data.column_style.blob_data;
+        else
+        img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src ;
 
       }
-      if( $rootScope.media_for ==  'answer' ) {
-        if( this_question.question_type == 0 ){
-          if ($rootScope.current_media_video.media_optional == undefined)
-            $rootScope.current_media_video['media_optional'] = new Object();
-            $rootScope.current_media_video.media_optional['media_src'] = urlInput;
-            $rootScope.current_media_video.media_optional['Media_directory'] = urlInput ;
-            $rootScope.current_media_video.media_optional['media_type'] = 1 ;
-            $rootScope.current_media_video.media_optional['media_name'] = urlInput;
-            $rootScope.current_media_video.media_optional['video_id'] = videoId;
-            $rootScope.current_media_video.media_optional['video_type'] = video_type ;
-            $rootScope.current_media_video.media_optional['embed_path'] = video_src
-            if (video_type == 2 ) {
-                  $rootScope.current_media_video.media_optional['mp4_option'] = {
-                    mp4_url: video_src +'.mp4' ,
-                    ogg_url : video_src +'.ogg'
-                  };
-            }
-            $timeout(function(){
-              $rootScope.$apply();
-            } , 300 );
-        }
-        if( this_question.question_type == 1 ){
-              $rootScope.current_media_video['media_src'] = urlInput;
-              $rootScope.current_media_video['Media_directory'] = urlInput ;
-              $rootScope.current_media_video['media_type'] = 1 ;
-              $rootScope.current_media_video['media_name'] = urlInput;
-              $rootScope.current_media_video['video_id'] = videoId;
-              $rootScope.current_media_video['video_type'] = video_type ;
-              $rootScope.current_media_video['embed_path'] = video_src
-              if ( video_type == 2 ){
-                    $rootScope.current_media_video['mp4_option'] = {
-                      mp4_url: video_src +'.mp4' ,
-                      ogg_url : video_src +'.ogg'
-                    };
-              }
-              $timeout(function(){
-                $rootScope.$apply();
-              } , 300 );
-        }
+      if(answer_value.coppied_data.rawly_style != undefined && style_type == false) {
+        if(answer_value.coppied_data.rawly_style.blob_data != undefined)
+        img_vlox_data = answer_value.coppied_data.rawly_style.blob_data;
+        else
+        img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src ;
+
       }
-
-  };
-  // ==> Calculate the momory size of
-  $rootScope.memory_size_of_object  = ( obj ) => {
-    var bytes = 0;
-     function sizeOf(obj) {
-       if(obj !== null && obj !== undefined) {
-                 switch(typeof obj) {
-                 case 'number':
-                     bytes += 8;
-                     break;
-                 case 'string':
-                     bytes += obj.length * 2;
-                     break;
-                 case 'boolean':
-                     bytes += 4;
-                     break;
-                 case 'object':
-                     var objClass = Object.prototype.toString.call(obj).slice(8, -1);
-                     if(objClass === 'Object' || objClass === 'Array') {
-                         for(var key in obj) {
-                             if(!obj.hasOwnProperty(key)) continue;
-                             sizeOf(obj[key]);
-                         }
-                     } else bytes += obj.toString().length * 2;
-                     break;
-                 }
-             }
-             return bytes;
-         };
-
-         function formatByteSize(bytes) {
-             if(bytes < 1024) return bytes + " bytes";
-             else if(bytes < 1048576) return(bytes / 1024).toFixed(3) + " KiB";
-             else if(bytes < 1073741824) return(bytes / 1048576).toFixed(3) + " MiB";
-             else return(bytes / 1073741824).toFixed(3) + " GiB";
-         };
-
-         return formatByteSize(sizeOf(obj));
-       }
-  // ==> Switching Slide Mode
-  $rootScope.switching_editor_preview = (is_view) => {
-
-    if( is_view == true)
-    {
-      $(".editor-page").css({"transform" : "translate3d(-100% , 0 , 0)" , height : '0px'});
-      $(".preview-page").css({ transform : "translate3d(-100%, 0px, 0px)" ,  height : 'auto'});
-    }
-    else if ( is_view == false ){
-      $(".editor-page").css({"transform" : "translate3d(0% , 0 , 0)" , height : 'auto'});
-      $(".preview-page").css({"transform" : "translate3d(0% , 0 , 0)" , height : '0px'});
-    }
-    // $rootScope.swiper_data.slideTo(0);
-
-  };
-  // => Add new question (click-event)
-  $rootScope.add_new_question = ( question_type , atIndex = null ,  other_types = null ) => {
-    if($rootScope._questions_.length > 200 )
-    return false ;
-    var question_object = new Object() , answer_object = new Object() ;
-    // => Build Default Question
-    question_object['_id'] = $rootScope.question_ids['id_' +  $rootScope._questions_.length  ];
-    question_object['question_body'] =  "Add Your Question Here !";
-    question_object['answers_format'] = new Array();
-    question_object['question_type'] =  parseInt(question_type);
-    question_object['created_at'] = new Date();
-    question_object['question_description'] = {
-     'value' :'' ,
-     'is_enabled': false
-    }
-    // question_object['media_question'] =
-    question_object['answer_settings'] = new Object();
-    answer_object['_id'] = $rootScope.answer_ids[ 'id_' + question_object.answers_format.length] + '' + $rootScope._questions_.length ;
-    if( question_type == 0 ) {
-      answer_object['value'] = "Answer " + ( question_object.answers_format.length + 1 )
-      if ( $rootScope._application_.app_type == 1 )
-      answer_object['is_correct'] = false ;
-      // => Push To Answer Array
-      question_object.answers_format.push( answer_object );
-      $rootScope.build_question_settings ( 'is_randomized' , false , question_object._id );
-      $rootScope.build_question_settings ( 'is_required' , false , question_object._id );
-      $rootScope.build_question_settings ( 'single_choice' , true , question_object._id );
-      $rootScope.build_question_settings ( 'super_size' , false , question_object._id );
-    }
-    if( question_type == 1 ){
-       // answer_object['_id'] = $rootScope.answer_ids[ 'id_' + question_object.answers_format.length ];
-       answer_object['media_src'] = "No Media Here !";
-       if ( $rootScope._application_.app_type == 1 )
-       answer_object['is_correct'] = false ;
-       // => Push To Answer Array
-       question_object.answers_format.push( answer_object );
-       $rootScope.build_question_settings ( 'is_randomized' , false , question_object._id );
-       $rootScope.build_question_settings ( 'is_required' , false , question_object._id );
-       $rootScope.build_question_settings ( 'single_choice' , true , question_object._id );
-       $rootScope.build_question_settings ( 'super_size' , false , question_object._id );
-    }
-    if( question_type == 2 ){
-       answer_object = new Object();
-       answer_object['_id'] = $rootScope.answer_ids[ 'id_' + question_object.answers_format.length ] + '' + $rootScope._questions_.length +'_a';
-       answer_object['boolean_type'] = "true/false";
-       answer_object['boolean_value'] = true ;
-       if ( $rootScope._application_.app_type == 1 )
-       answer_object['is_correct'] = false ;
-       // => Push To Answer Array
-       question_object.answers_format.push( answer_object );
-
-       var answer_object_2 = new Object();
-       answer_object_2['_id'] = $rootScope.answer_ids[ 'id_' + question_object.answers_format.length ] + '' + $rootScope._questions_.length +'_b';;
-       answer_object_2['boolean_type'] = "true/false";
-       answer_object_2['boolean_value'] = false ;
-       if ( $rootScope._application_.app_type == 1 )
-       answer_object_2['is_correct'] = true ;
-       $rootScope.build_question_settings ( 'is_randomized' , false , question_object._id );
-       $rootScope.build_question_settings ( 'is_required' , false , question_object._id );
-       // => Push To Answer Array
-       question_object.answers_format.push( answer_object_2 );
-    }
-    if( question_type == 3 ){
-          answer_object['ratscal_type'] = other_types ;
-          answer_object['step_numbers'] = 5 ;
-          answer_object['rating_scale_answers'] =  new Array(
-           { _id : answer_object['_id'] + '_' + 1  , rat_scl_value : 1 } ,
-           { _id : answer_object['_id'] + '_' + 2  , rat_scl_value : 2 } ,
-           { _id : answer_object['_id'] + '_' + 3  , rat_scl_value : 3 } ,
-           { _id : answer_object['_id'] + '_' + 4  , rat_scl_value : 4 } ,
-           { _id : answer_object['_id'] + '_' + 5  , rat_scl_value : 5 }
-          )
-        if( other_types == 0  ) {
-         answer_object['show_labels'] = false ;
-         answer_object['started_at']  = 'Bad' ;
-         answer_object['centered_at']  = 'Good' ;
-         answer_object['ended_at']  = 'Excellent' ;
-        }
-        // => Push To Answer Array
-        question_object.answers_format.push( answer_object );
-        $rootScope.build_question_settings ( 'is_randomized' , false , question_object._id );
-        $rootScope.build_question_settings ( 'is_required' , false , question_object._id );
-    }
-    // => Push To Question Array
-     if( atIndex == null )
-       $rootScope._questions_.push( question_object );
-       else
-       $rootScope._questions_.splice( atIndex , 0 ,  question_object );
-       // ==> Selecting according to question index
-        $timeout(function(){
-          $rootScope.highlighted_question(question_object._id);
-          // ==> Slide To Bottom
-          var scroll_top = 0 ;
-          if($rootScope._questions_.length >= 8 ){
-          scroll_top = 1000000000000
-          }else  scroll_top = 0
-          $(".qsdragged-list , html , body").animate({
-          scrollTop: scroll_top
-          }, 10 );
-          // ==> Storing Question into DB
-           $rootScope.storing_questions_into_database();
-           $timeout(function(){
-             $rootScope.$apply();
-           } , 300 )
-        });
-
-  };
-  // ==> Expan collapse between editor
-  $rootScope.expand_collapsed_items = function (id){
-          var targetId = $(id) ;
-          var all_edit_sections = $("#question-pt , #Description-pt , #answers-pt , #Settings-pt");
-          $("#question-pt , #Description-pt , #answers-pt , #Settings-pt").each(function(){
-            var this_element = $(this);
-            if(this_element.prop('id') != targetId.prop('id')){
-                this_element.slideUp();
-            }else {
-               targetId.slideDown();
-            }
-
-          });
-
-          if(targetId.prop('id') == 'Settings-pt'){
-            $('html , body').animate({
-              scrollTop: 1000000000000
-            }, 500 );
-          }
-        };
-  $rootScope.image_source_link = (src) => {
-    return src ;
-  }
-  // => Mark Selected Question
-  $rootScope.highlighted_question = (questionId) => {
-      $rootScope.screen_type = 3;
-        // => detect current question is exists or not
-        var questionIndex = $rootScope._questions_.findIndex( x=> x._id == questionId );
-        if( questionIndex == -1 ) return false ;
-
-
-        $("#docQuestions").children("li").each(function(){
-           if( $(this).hasClass('marked_question') )
-           $(this).removeClass('marked_question');
-        });
-
-        $timeout(function(){
-          $("#docQuestions").children('li.qs-'+questionId.toString()).addClass('marked_question');
-        });
-
-        $rootScope.question_index = questionIndex ;
-        $("#question_id").val(questionId)
-
-        // ==> Fill and binding event handler with textarea box
-
-        $timeout(function(){
-          $rootScope.fill_boxes_with_question_objects(questionId);
-          $rootScope.init_bootstrap_tooltip();
-        } , 300 );
-        $('.right_part').fadeIn();
-        // ==> Detect if Unsaved data is happened
-        // $rootScope.detect_if_there_unsaved_data (// $rootScope.is_unsaved_data )
-      }
-    $rootScope.saving_this_question = () => {
-      $("#saving-changes").html("Saving ...")
-      $timeout(function(){
-        $("#saving-changes").html("Save Changes");
-      } , 200);
-      $rootScope.storing_questions_into_database();
-    };
-    $rootScope.delete_the_current_question = () => {
-      var currently = $rootScope._questions_[$rootScope.question_index]._id;
-      if(currently == undefined ) return false ;
-      $rootScope._questions_.splice( $rootScope.question_index , 1 );
-      $('.right_part').hide();
-      $rootScope.storing_questions_into_database();
-      $('#docQuestions > li.marked_question').removeClass('marked_question');
-    }
-  // ==> Fill Question Boxes
-  $rootScope.fill_boxes_with_question_objects = ( questionId ) => {
-
-            var questionIndex = $rootScope._questions_.findIndex( x=> x._id == questionId );
-            if( questionIndex == -1 ) return false ;
-
-            var question = $rootScope._questions_.find ( x => x._id == questionId );
-            if(question == undefined ) return false;
-
-            // $rootScope.current_media_question = ( question.media_question == undefined ) ? undefined : question.media_question ;
-            // $rootScope._questions_[$rootScope.question_index].media_question
-            // ==> Distrbute question data
-            // ==> Question Text
-            $(".redactor-in-0").html(question.question_body);
-            $(".redactor-in-1").html(question.question_description.value);
-            $(".redactor-in-0 , #editor-quest-data").bind("input" , function (){
-
-                $timeout(function(){
-                    $rootScope._questions_[$rootScope.question_index].question_body = $R('#editor-quest-data' , 'source.getCode');
-                    // $rootScope.is_unsaved_data = true ;
-                } , 500 );
-            });
-
-            $(".redactor-in-1 , #editor-desc-data").bind("input" , function (){
-                $timeout(function(){
-                    $rootScope._questions_[$rootScope.question_index].question_description.value = $R('#editor-desc-data' , 'source.getCode');
-                    // $rootScope.is_unsaved_data = true ;
-                } , 500 );
-            });
-
-            $timeout(function(){
-              $rootScope.$apply();
-            });
-
-          }
-  //==> Show Media Link in input
-  $rootScope.show_media_link = () => {
-      $rootScope.media_type = 1;
-      $(".media-inputs").css("display" , "block");
-  }
-  // => Image Uploader
-  $rootScope.upload_image_handler = () => {
-      $rootScope.media_image_model = '';
-      $rootScope.media_type = 0 ;
-      return $rootScope.media_image_uploader.trigger('click');
-  }
-
-  // ==> Setting Changes
-  $rootScope.randomize_sorting_questions = (setting_changes) => {
-    if(setting_changes == true) {
-      // ==> Randmoize it
-      $rootScope._questions_ = $rootScope.randomize_arries( $rootScope._questions_);
     }else {
-      // => sorting it
-      $rootScope._questions_ = $rootScope.sorting_arries( $rootScope._questions_  , "_id");
+      console.log( answer_value);
+      var with_medi_ob ;
+      if(answer_value.media_optional != undefined)
+      with_medi_ob = $scope.server_ip + answer_value.media_optional.media_src  ;
+      else
+      with_medi_ob =   answer_value.media_src  ;
+      img_vlox_data = with_medi_ob;
+    }
+
+
+    return {
+      backgroundImage : 'url(' + img_vlox_data + ')'
     }
   }
 
-  $rootScope.saving_quiz_stylesheet = () => {
-    $("#save_css_change").html("Saving Changes ...");
-    $http({
-      method : "POST" ,
-      url    : $rootScope.server_ip+ 'api/' +$rootScope.app_id + "/stylesheet/add/files" ,
-      data : {
-        styles : $rootScope.theme_stylesheet
+  $scope.save_cropped_images = () => {
+
+    var question_index = $scope.questions_list.findIndex(x => x._id == $scope.cropped_media_info.answer_selector.question_id );
+    if(question_index != -1){
+      // => We found this question
+      var question_obj = $scope.questions_list[question_index];
+      var answer_index = question_obj.answers_format.findIndex(x => x._id == $scope.cropped_media_info.answer_selector.answer_id );
+      if( answer_index != -1 ){
+        var answer_obj = question_obj.answers_format[answer_index];
+        var ratio_size = {
+          width: 160,
+          height: 160
+        };
+
+        if(answer_obj.coppied_data == undefined)
+        {
+
+          var choose_style = question_obj.answer_settings.choice_style ;
+
+          answer_obj['coppied_data'] = {
+            rawly_style : new Object() ,
+            column_style : new Object()
+          };
+
+          var stylish ;
+          if(choose_style == true){
+              stylish = answer_obj.coppied_data.column_style;
+              ratio_size.width = 261;
+              ratio_size.height = 150;
+          }
+           else {
+             stylish = answer_obj.coppied_data.rawly_style;
+             ratio_size.width = 544;
+             ratio_size.height = 150;
+           }
+
+           stylish = {
+            'x':  $scope.cropped_media_info.x,
+            'y':  $scope.cropped_media_info.y,
+            'width':  $scope.cropped_media_info.width,
+            'height':  $scope.cropped_media_info.height,
+            'rotate':  $scope.cropped_media_info.rotate,
+            'scaleX':  $scope.cropped_media_info.scaleX,
+            'scaleY':  $scope.cropped_media_info.scaleY
+          };
+
+
+        }else {
+
+          var choose_style = question_obj.answer_settings.choice_style ;
+
+          if( answer_obj.coppied_data.rawly_style == undefined )
+              answer_obj.coppied_data['rawly_style'] = new Object();
+
+          if( answer_obj.coppied_data.column_style == undefined )
+              answer_obj.coppied_data['column_style'] = new Object();
+
+          var stylish;
+          if(choose_style == true){
+            stylish = answer_obj.coppied_data.column_style;
+            ratio_size.width = 261;
+            ratio_size.height = 150;
+          }
+          else{
+            stylish = answer_obj.coppied_data.rawly_style;
+            ratio_size.width = 544;
+            ratio_size.height = 150;
+          }
+
+
+          stylish.x = $scope.cropped_media_info.x;
+          stylish.y = $scope.cropped_media_info.y;
+          stylish.width = $scope.cropped_media_info.width;
+          stylish.height = $scope.cropped_media_info.height;
+          stylish.rotate = $scope.cropped_media_info.rotate;
+          stylish.scaleX = $scope.cropped_media_info.scaleX;
+          stylish.scaleY = $scope.cropped_media_info.scaleY;
+        }
+
+        // =>> Saving Blob Data
+        // dimensions
+
+        var canvas = $scope.cropper.getCroppedCanvas(ratio_size);
+        var blob_data = canvas.toDataURL();
+        stylish.blob_data = blob_data ;
+
+
+        if(choose_style == true)
+          answer_obj.coppied_data.column_style.blob_data = blob_data;
+        else
+          answer_obj.coppied_data.rawly_style.blob_data = blob_data;
+
+
+        // var question_index = $scope.questions_list.findIndex(x => x._id == $scope.question_id );
+        // if( question_index != -1 ){
+        //   console.log($scope.questions_list[question_index]);
+        // }
+
+        $scope.save_changes_in_angular_backend();
+        $scope.cancel_the_cropping();
       }
-    }).then(()=>{
-      $("#save_css_change").html("Apply Changes");
-    });
+    }
   }
-  $rootScope.saving_quiz_settings = () => {
+  $scope.cancel_the_cropping = () => {
+    $('.masklayer').fadeOut();
+  }
+  $scope.excute_the_cropping = (qus_id , ans_id , question_object ) => {
+    // append the current image right now
+    // console.log({
+    //   cropped_media_info : $scope.cropped_media_info
+    // });
 
+    // var image_data = "<img style='width: 100%;'  id='img_cropping' src='"+$scope.cropped_media_info.image_source+"' />"
+    // $(".cropping-data").html(image_data);
 
-    // ==> Send request to saving
-    $("#save_setting_change").html("Saving Changes ...");
+    // rename it rihght now ans see what happen if it called
+    var img_data = document.getElementById('img_cropping');
+    var choose_style = question_object.answer_settings.choice_style ;
+    var fixed_ration ;
+    if(choose_style == true)
+    fixed_ration = 26 / 15 ;
+    else
+    fixed_ration = 54 / 15 ;
+    $scope.cropper = new Cropper( img_data , {
+        aspectRatio: fixed_ration ,
+        crop(event) {
+          var cropper = this.cropper;
+          var imageData = cropper.getImageData();
+          $scope.cropped_media_info['answer_selector'] = {
+            question_id : qus_id ,
+            answer_id : ans_id
+          };
 
-      url = $rootScope.server_ip + "api/" + $rootScope.app_id + "/app/setup_settings/storing" ;
-       $http({
-         method : "PATCH" ,
-         url    : url ,
-         data : {
-           creator_id : $rootScope.user_id ,
-           settings : $rootScope._settings_ ,
-           questionnaire_title : $rootScope._application_.questionnaire_title
+          $scope.cropped_media_info['x'] = event.detail.x ;
+          $scope.cropped_media_info['y'] = event.detail.y ;
+          $scope.cropped_media_info['width'] = event.detail.width ;
+          $scope.cropped_media_info['height'] = event.detail.height ;
+          $scope.cropped_media_info['rotate'] = event.detail.rotate ;
+          $scope.cropped_media_info['scaleX'] = event.detail.scaleX ;
+          $scope.cropped_media_info['scaleY'] = event.detail.scaleY ;
+
+        },
+      });
+  }
+  $scope.cropping_this_image_right_now = (answer_id) => {
+
+      // => Givens
+      var server_ip = $scope.server_ip ;
+      var question_id = $scope.question_id ;
+      var answer_id = answer_id ;
+      var question_index = $scope.questions_list.findIndex(x => x._id == question_id );
+      if(question_index != -1){
+        // => We found this question
+        var question_obj = $scope.questions_list[question_index];
+        var answer_index = question_obj.answers_format.findIndex(x => x._id == answer_id );
+        if( answer_index != -1 ){
+          $(".masklayer").fadeIn();
+          var answer_obj = question_obj.answers_format[answer_index];
+          var answer_obj = question_obj.answers_format[answer_index];
+          $scope.cropped_media_info;
+          if(question_obj.question_type == 0)
+            $scope.cropped_media_info['name'] = answer_obj.media_optional.media_name
+          if(question_obj.question_type == 1)
+            $scope.cropped_media_info['name'] = answer_obj.media_name;
+
+          $scope.cropped_media_info['image_source'] = server_ip + "themeimages/"+ $scope.cropped_media_info['name'] ;
+
+          // => Use cropping funcs
+          var image = document.querySelector('#cropping-image-act');
+          $scope.excute_the_cropping( question_id , answer_id , question_obj );
+        }
+      }
+  }
+  $scope.headers = new Object() ;
+  $scope.window = {
+    // ===========> Width
+    current_window  : $(window).width()  ,
+    settings_menu   : $(".left_part").width() - 28
+    };
+  $scope.file_object = {
+    "media_type" : null ,
+    "file"       : null ,
+    "link"       : null
+    }
+
+    $scope.application_settings = {
+         questionnaire_title : null ,
+         settings : {
+           titles :
+             {
+               title_start_with : "Write Starting Text"  ,
+               title_end_with: "Write Ending Text" ,
+               title_success_with : " Success quiz Text" ,
+               title_failed_with : "Quiz Failed Text"
+             } ,
+           label_btns : {
+               lbl_start_with:"Start" ,
+               lbl_continue_with : "Continue" ,
+               lbl_retake_with : "Retake" ,
+               lbl_review_with : "Review"
+            } ,
+           grade_settings : {
+             is_graded : false ,
+             value : 90
+           } ,
+           time_settings : { // time_progress_models
+             is_with_time:false ,
+             value : "30" ,
+             timer_type : false ,
+             timer_layout : 1 ,
+             hours : 0 ,
+             minutes : 29 ,
+             seconds : 59
+           },
+           progression_bar : {
+             is_available:false ,
+             progression_bar_layout:0
+           } ,
+           expiration : {
+             is_set : false  ,
+             through_time : 3 , // => it will be per day
+             title : "This quiz will expire after"
+           } ,
+          //  theme_style : [] ,
+           randomize_settings : false ,
+           step_type : false ,
+           auto_slide : false ,
+           allow_touch_move : false ,
+           show_results_per_qs : false ,
+           retake_setting : false ,
+           navigation_btns : true ,
+           review_setting : false ,
+           createdAt : new Date() ,
+           updatedAt : new Date () ,
+           indexes : {
+             questions : '0' ,
+             answers : '1'
+           }
          }
-       }).then(()=>{
-         $("#save_setting_change").html("Apply Changes");
-       });
+    }
+    $scope.choose_time_model_ = ( time_model ) => {
+      $scope.time_progress_models = time_model ;
+      $scope.time_progress_models_changer();
+    }
+    $scope.is_disabled = $scope.application_settings.settings.grade_settings.is_graded ;
+    $scope.time_progress_models_changer = () => {
+    $scope.__player_object.settings.time_settings.timer_layout = $scope.time_progress_models ;
+    $scope.loading_target_header = '/head-models/model-' +  $scope.__player_object.settings.time_settings.timer_layout + '.hbs' ;
+    $scope.application_settings.settings.time_settings.timer_layout = $scope.time_progress_models;
+    // $scope.application_settings.settings.progression_bar.progression_bar_layout = $scope.time_progress_models ;
+    $timeout(function(){ $scope.$apply() } , 350);
+  };
 
+  $scope.question_settings = {
+    is_required           : false ,
+    single_choice  : false ,
+    is_randomized          : false ,
+    super_size         : false ,
+    choice_style : false  //
   }
-  // => Show Image
-  $rootScope.image_uploader_is_touched = () => {
-      console.log($rootScope.media_image_model[0].files[0]);
+  $scope.labels = [  'a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
+  $scope.seconds = 9 ;
+  $scope.minutes = 0;
+  $scope.hours = 0 ;
+  $scope.api_url_current_app         = $scope.server_ip + "api/"+$scope.app_id+"/application/retrieve"
+  $scope.json_apk_file               = $scope.server_ip + "ext/json/json-keys.json";
+  $scope.api_url_create_question     = null;
+  $scope.api_url_delete_question     = $scope.server_ip + "api/"+$scope.app_id+"/question/delete";
+  $scope.api_url_edit_question       = $scope.server_ip + "api/"+$scope.app_id+"/question/edit";
+  $scope.api_url_create_answer       = null;
+  $scope.api_url_delete_answer       = null;
+  $scope.api_url_edit_answer         = null;
+  $scope.api_url_init_id_date        = $scope.server_ip + "api/generate/new/data";
+  $scope.api_url_question_creation   = $scope.server_ip + "api/" + $scope.app_id + "/question/creation"
+  $scope.api_url_app_settings        = $scope.server_ip + "api/" + $scope.app_id + "/app/setup_settings"
+  $scope.url_application = $scope.server_ip + "api/" + $scope.app_id +'/application/retrieve';
+  // $scope.loading_target_header = '/head-models/model-' +  $scope.__player_object.settings.time_settings.timer_layout + '.hbs' ;
+
+      // ==> Loading and store main data
+      $.getJSON( $scope.json_apk_file , function (api_key_data ) {
+             $http({
+                   method : "POST" ,
+                   url    : $scope.api_url_current_app ,
+                   headers: {
+                     "X-api-keys": api_key_data.API_KEY,
+                     "X-api-app-name": api_key_data.APP_NAME
+                   },
+                   data: {
+                     creator_id : $scope.user_id
+                   }
+                }).then(function(resp){
+
+                  // Questions
+                  $scope.questions_list = resp.data.questions;
+                  $scope.__player_object = resp.data ;
+                  $scope.loading_target_header = '/head-models/model-' +  $scope.__player_object.settings.time_settings.timer_layout + '.hbs' ;
+                  $scope.question = (resp.data.questions.length != 0 ) ? resp.data.questions[0] : {} ;
+                  $scope.stored_stylesheet =  (resp.data.theme_style != null ) ? resp.data.theme_style : new Array() ;
+                  if($scope.stored_stylesheet != null){
+                    var bg_view = "#fff";
+                     var bgAccess = $scope.stored_stylesheet.find(x => x.class_name == '.player-body-screen') ;
+                     if(bgAccess != undefined){
+                       var bg_data = bgAccess.properties.find(x => x.property_name == 'background');
+                       if(bg_data != undefined) bg_view = bg_data.property_value;
+                     }
+
+                    $scope.default_bg_of_view = { background : bg_view } ;
+                  }
+                  $scope.stylesheet_order =   ( resp.data.stylesheet_properties != undefined ) ?  resp.data.stylesheet_properties :  "body:{}" ;
+                  question_data_object  = resp.data.questions;
+                  // Stylesheets
+                  $scope.application_stylesheet =  resp.data.theme_style;
+                  // APP Titles
+                  $scope.app_title = resp.data.questionnaire_title ;
+
+                  var mongo_settings = resp.data.settings;
+                  var settings_obj = new Object();
+
+
+                  // ===================+> Start Settings
+                  if(mongo_settings != null ){
+                      settings_obj['settings'] = mongo_settings ;
+                    // settings_obj['settings'] = new Object();
+                    if(mongo_settings.titles != null ){
+                        // settings_obj['settings']['titles'] = mongo_settings.titles
+
+                        if(mongo_settings.titles.title_start_with != null )
+                        settings_obj['settings']['titles']['title_start_with'] = mongo_settings.titles.title_start_with;
+                        else // => Default
+                        settings_obj['settings']['titles']['title_start_with'] = $scope.application_settings.settings.titles.title_start_with;
+
+                        if ($scope.time_progress_models != null )
+                            settings_obj['settings']['time_settings']['timer_layout'] = $scope.time_progress_models
+                        else
+                          settings_obj['settings']['time_settings']['timer_layout'] =$scope.application_settings.settings.time_settings.timer_layout;
+
+
+                        if(mongo_settings.titles.title_end_with != null )
+                        settings_obj['settings']['titles']['title_end_with'] = mongo_settings.titles.title_end_with;
+                        else // Default
+                        settings_obj['settings']['titles']['title_end_with'] =  $scope.application_settings.settings.titles.title_end_with;
+
+
+                        if(mongo_settings.titles.title_success_with != null )
+                        settings_obj['settings']['titles']['title_success_with'] = mongo_settings.titles.title_success_with;
+                        else // Default
+                        settings_obj['settings']['titles']['title_success_with'] = $scope.application_settings.settings.titles.title_success_with;
+
+                        if(mongo_settings.titles.title_failed_with != null )
+                        settings_obj['settings']['titles']['title_failed_with'] = mongo_settings.titles.title_failed_with;
+                        else // Default
+                        settings_obj['settings']['titles']['title_failed_with'] = $scope.application_settings.settings.titles.title_failed_with;
+                    } else  // end titles
+                    settings_obj['settings']['titles'] =  $scope.application_settings.settings.titles;
+
+
+                    if(mongo_settings.label_btns != null ){
+                      // settings_obj['settings']['label_btns'] = mongo_settings.label_btns ;
+
+
+                      if(mongo_settings.label_btns.lbl_start_with != null )
+                      settings_obj['settings']['label_btns']['lbl_start_with'] = mongo_settings.label_btns.lbl_start_with ;
+                      else // default
+                      settings_obj['settings']['label_btns']['lbl_start_with'] =  $scope.application_settings.settings.label_btns.lbl_start_with;
+
+                      if(mongo_settings.label_btns.lbl_continue_with != null )
+                      settings_obj['settings']['label_btns']['lbl_continue_with'] = mongo_settings.label_btns.lbl_continue_with ;
+                      else // default
+                      settings_obj['settings']['label_btns']['lbl_continue_with'] =  $scope.application_settings.settings.label_btns.lbl_continue_with;
+
+                      if(mongo_settings.label_btns.lbl_retake_with != null )
+                      settings_obj['settings']['label_btns']['lbl_retake_with'] = mongo_settings.label_btns.lbl_retake_with ;
+                      else // default
+                      settings_obj['settings']['label_btns']['lbl_retake_with'] =  $scope.application_settings.settings.label_btns.lbl_retake_with;
+
+                      if(mongo_settings.label_btns.lbl_review_with != null )
+                      settings_obj['settings']['label_btns']['lbl_review_with'] = mongo_settings.label_btns.lbl_review_with ;
+                      else // default
+                      settings_obj['settings']['label_btns']['lbl_review_with'] =  $scope.application_settings.settings.label_btns.lbl_review_with;
+
+                    }else  // end Labelds
+                    settings_obj['settings']['label_btns'] = $scope.application_settings.settings.label_btns;
+
+                    if(mongo_settings.grade_settings != null ){
+                      // settings_obj['settings']['grade_settings'] = mongo_settings.grade_settings ;
+
+                      if(mongo_settings.grade_settings.is_graded != null )
+                        settings_obj['settings']['grade_settings']['is_graded'] =mongo_settings.grade_settings.is_graded ;
+                        else // default
+                        settings_obj['settings']['grade_settings']['is_graded'] = $scope.application_settings.settings.grade_settings.is_graded;
+
+                      if(mongo_settings.grade_settings.value != null )
+                        settings_obj['settings']['grade_settings']['value'] =mongo_settings.grade_settings.value ;
+                        else // default
+                        settings_obj['settings']['grade_settings']['value'] = $scope.application_settings.settings.grade_settings.value;
+                    }else // end grade setting
+                    settings_obj['settings']['grade_settings'] = $scope.application_settings.settings.grade_settings;
+
+                    if(mongo_settings.time_settings != undefined && mongo_settings.time_settings.timer_layout != null)
+                    settings_obj['settings']['time_settings']['timer_layout'] = mongo_settings.time_settings.timer_layout;
+                    else // default
+                    settings_obj['settings']['time_settings']['timer_layout'] = $scope.application_settings.settings.timer_layout;
+                    // console.log(mongo_settings);
+
+
+                    if(mongo_settings.time_settings != null ){
+                      //  settings_obj['settings']['time_settings'] = mongo_settings.time_settings ;
+
+                      if(mongo_settings.time_settings.is_with_time != null)
+                      settings_obj['settings']['time_settings']['is_with_time'] = mongo_settings.time_settings.is_with_time ;
+                      else // default
+                      settings_obj['settings']['time_settings']['is_with_time'] = $scope.application_settings.settings.is_with_time;
+
+                      if(mongo_settings.time_settings.value != null)
+                      settings_obj['settings']['time_settings']['value'] = mongo_settings.time_settings.value;
+                      else // default
+                      settings_obj['settings']['time_settings']['value'] = $scope.application_settings.settings.value;
+
+                      if(mongo_settings.time_settings.timer_type != null)
+                      settings_obj['settings']['time_settings']['timer_type'] = mongo_settings.time_settings.timer_type ;
+                      else // default
+                      settings_obj['settings']['time_settings']['timer_type'] = $scope.application_settings.settings.timer_type;
+
+
+
+                      if(mongo_settings.time_settings.seconds != null)
+                      settings_obj['settings']['time_settings']['seconds'] = mongo_settings.time_settings.seconds;
+                      else // default
+                      settings_obj['settings']['time_settings']['seconds'] = $scope.application_settings.settings.seconds;
+
+
+                      if(mongo_settings.time_settings.minutes != null)
+                      settings_obj['settings']['time_settings']['minutes'] = mongo_settings.time_settings.minutes;
+                      else // default
+                      settings_obj['settings']['time_settings']['minutes'] = $scope.application_settings.settings.minutes;
+
+                      if(mongo_settings.time_settings.hours != null)
+                      settings_obj['settings']['time_settings']['hours'] = mongo_settings.time_settings.hours;
+                      else // default
+                      settings_obj['settings']['time_settings']['hours'] = $scope.application_settings.settings.hours;
+
+                    }else // end grade setting
+                      $scope.application_settings.settings.time_settings;
+
+                    if(mongo_settings.progression_bar != null ){
+
+                      // settings_obj['settings']['progression_bar'] = mongo_settings.progression_bar ;
+                      if(mongo_settings.progression_bar.is_available != null ){
+                        settings_obj['settings']['progression_bar']['is_available'] = mongo_settings.progression_bar.is_available ;
+                      }else  // default
+                      settings_obj['settings']['progression_bar']['is_available'] = $scope.application_settings.settings.progression_bar.is_available;
+
+                      if(mongo_settings.progression_bar.progression_bar_layout != null ){
+                        settings_obj['settings']['progression_bar']['progression_bar_layout'] = mongo_settings.progression_bar.progression_bar_layout;
+                      } else  // default
+                      settings_obj['settings']['progression_bar']['progression_bar_layout'] = $scope.application_settings.settings.progression_bar.progression_bar_layout;
+
+                    }// end grade progress bar
+
+                    if(mongo_settings.expiration != null ){
+
+                      if(mongo_settings.expiration.is_set != null)
+                        settings_obj['settings']['expiration']['is_set'] = mongo_settings.expiration.is_set ;
+                      else
+                        settings_obj['settings']['expiration']['is_set'] = $scope.application_settings.settings.expiration.is_set;
+
+                      if(mongo_settings.expiration.through_time != null)
+                      settings_obj['settings']['expiration']['through_time'] = mongo_settings.expiration.through_time ;
+                      else
+                      settings_obj['settings']['expiration']['through_time'] = $scope.application_settings.settings.expiration.through_time;
+
+                      if(mongo_settings.expiration.title != null)
+                      settings_obj['settings']['expiration']['title'] = mongo_settings.expiration.title ;
+                      else
+                      settings_obj['settings']['expiration']['title'] = $scope.application_settings.settings.expiration.title;
+                    } // end expiration date for this quiz
+
+
+
+                    if(mongo_settings.randomize_settings!= null ){
+                      settings_obj['settings']['randomize_settings'] = mongo_settings.randomize_settings ;
+                    }else  // end randomize settings
+                    settings_obj['settings']['randomize_settings'] = $scope.application_settings.settings.randomize_settings;
+                    if(mongo_settings.step_type != null){
+                      settings_obj['settings']['step_type'] = mongo_settings.step_type;
+                    }else  // end step_type settings
+                    settings_obj['settings']['step_type'] = $scope.application_settings.settings.step_type;
+
+                    if(mongo_settings.show_results_per_qs != null){
+                      settings_obj['settings']['show_results_per_qs'] = mongo_settings.show_results_per_qs;
+                    }else  // end step_type settings
+                    settings_obj['settings']['show_results_per_qs'] = $scope.application_settings.settings.show_results_per_qs;
+
+                    if(mongo_settings.auto_slide != null ){
+                      settings_obj['settings']['auto_slide'] = mongo_settings.auto_slide;
+                    }else
+                    settings_obj['settings']['auto_slide'] = $scope.application_settings.settings.auto_slide;
+
+                    if(mongo_settings.allow_touch_move != null ){
+                      settings_obj['settings']['allow_touch_move'] = mongo_settings.allow_touch_move;
+                    }else
+                    settings_obj['settings']['allow_touch_move'] = $scope.application_settings.settings.allow_touch_move;
+
+
+
+                    if(mongo_settings.retake_setting != null ){
+                      settings_obj['settings']['retake_setting'] = mongo_settings.retake_setting;
+                    }else  // end retake settings
+                    settings_obj['settings']['retake_setting'] = $scope.application_settings.settings.retake_setting ;
+
+                    if(mongo_settings.navigation_btns != null ){
+                      settings_obj['settings']['navigation_btns'] = mongo_settings.navigation_btns;
+                    }else // end navigation_btns settings
+                    settings_obj['settings']['navigation_btns'] = $scope.application_settings.settings.navigation_btns ;
+
+                    if(mongo_settings.review_setting != null ){
+                      settings_obj['settings']['review_setting'] = mongo_settings.review_setting;
+                    } else // end review settings
+                    settings_obj['settings']['review_setting'] = $scope.application_settings.settings.review_setting ;
+
+                  }else{
+                    // //($scope.application_settings);
+                    settings_obj['settings'] = $scope.application_settings.settings;
+                    // console.log(settings_obj['settings']);
+                  }
+
+
+                  if (resp.data.questionnaire_title != null ){
+                    settings_obj['questionnaire_title'] =  resp.data.questionnaire_title ;
+                  }
+                  //====================-> End Settings
+                  $scope.application_settings = settings_obj;
+                    $scope.is_disabled = $scope.application_settings.settings.grade_settings.is_graded ;
+                },function(err){
+             });
+        }); // End Json Data
+        // ==> functions in scope object
+  $window.edit_this_question_by_crossing_this_ifrm = ( currentIndex) => {
+
+      if(currentIndex < 0 )
+         {
+           // ==> Delete highlited questions
+           $("#docQuestions").children("li").each(function (){
+             ( $(this).hasClass("highlighted-question")  ) ?
+               $(this).removeClass("highlighted-question")
+               : null ;
+           });
+           $scope.activated_screens = false ;
+           $scope.activated_screen_name = "Welcome Screen";
+           $timeout(function(){$scope.$apply();} , 300 );
+           // ==> Disable edit preview
+           return false ;
+         }
+
+          if (currentIndex >= ($scope.questions_list.length ) ){
+            // ==> Goodbye screen
+           if(currentIndex == $scope.questions_list.length)
+             $scope.activated_screen_name = "Thank you page";
+            // ==> End Screen
+           if(currentIndex == ( $scope.questions_list.length + 1) )
+            $scope.activated_screen_name = "Grade Screen";
+
+           $scope.activated_screens = false ;
+            $timeout(function(){$scope.$apply();} , 300 );
+           return false ;
+         }
+         if (currentIndex <= ($scope.questions_list.length - 1 ) && currentIndex >= 0 ){
+           $("#docQuestions").children("li").each(function (){
+             ( $(this).hasClass("highlighted-question")  ) ?
+               $(this).removeClass("highlighted-question")
+               : null ;
+           });
+           $("#docQuestions").children("li").eq(currentIndex).addClass('highlighted-question');
+         }
+        $scope.activated_screens = true ;
+        $timeout(function(){
+          // $scope.edit_this_question($scope.question_id , currentIndex  );
+        } , 350);
+        $timeout(function(){  $scope.$apply(); } , 800 );
+        $scope.loading_event_handler_for_redactors();
+
+  };
+
+  $scope.time_tracker_layout = () => {
+    var layout_template = $scope.__player_object.settings.time_settings.timer_layout;
+    return '/time-layouts/layout-'+layout_template+'.hbs';
+  };
+  $scope.progression_layout = () => {
+     var layout_template = $scope.__player_object.settings.progression_bar.progression_bar_layout;
+     return '/progressbar-layouts/layout-'+layout_template+'.hbs';
+   };
+
+   $scope.loading_application_redactors = () => {
+    $timeout(function(){
+      // ==> Air Redactor events
+      var air_redactor_object = {
+            paragraphize: false,
+            replaceDivs: false,
+            linebreaks: false,
+            enterKey: false ,
+            air : true ,
+            buttonsAddBefore : {
+              before: 'html',
+              buttons: ['bold','italic','link','deleted','underline']
+            } ,
+            plugins: ['fontcolor' , 'fontsize'] ,
+            buttonsHide: ['format' , 'lists'] ,
+            callbacks: {
+              airOpened : function (){
+                var app = $(this);
+                var elems = $(app[0].component.toolbar.$toolbar.nodes[0]);
+
+                elems.css({
+                  left: '-330px'
+                });
+                if(elems.find(".re-bold").length > 1 )
+                elems.find(".re-bold").eq(elems.find(".re-bold").length - 1).css('display','none')
+
+                if(elems.find(".re-italic").length > 1 )
+                elems.find(".re-italic").eq(elems.find(".re-italic").length - 1).css('display','none')
+
+                if(elems.find(".re-deleted").length > 1 )
+                elems.find(".re-deleted").eq(elems.find(".re-deleted").length - 1).css('display','none')
+
+                if(elems.find(".re-link").length > 1 )
+                elems.find(".re-link").eq(elems.find(".re-link").length - 1).css('display','none')
+              }
+            }
+      };
+      // ==> Question Redactor
+      $R("#editor-quest-data" , air_redactor_object);
+      // ==> Description Redactor
+      $R("#editor-desc-data" , air_redactor_object );
+      // ==> Welcome screen redactor
+      $R("#editor-strt-txt");
+      // ==> GoodBye screen redactor
+      $R("#editor-end-txt");
+      // ==> Success screen redactor
+      $R("#editor-scs-txt");
+      // ==> Failed screen redactor
+      $R("#editor-fld-txt");
+      // ==> All answer redactors
+      // $R(".editor-all-ans-data" , air_redactor_object);
+
+      $timeout(function(){
+        $scope.loading_event_handler_for_redactors();
+        // $(".redactor-in-0").html('');
+      } , 300);
+    } , 500 );
+  };
+
+  $scope.swal_message = function (){
+    if($scope.unsaved_question) {
+        $(".swal-overlay").fadeIn();
+         swal({
+          text: "Would you like to save the last changes ?",
+          icon: "warning",
+          buttons: ["No" , "Save Changes"],
+          dangerMode: true
+        }).then((saving) => {
+
+        if (saving) {
+        // ==> Saving current change
+        swal("Question has been saved successfully", {
+          icon: "success",
+          buttons: false,
+        });
+
+        $("#saving-changes").trigger("click");
+
+      }else {
+
+        var all_old_questions = $scope.questions_list;
+        for (var i = 0; i < all_old_questions.length; i++) {
+          // Questions !!
+          var qs_body = all_old_questions[i].question_body;
+          $("#docQuestions").children("li").eq(i).children(".question-part").children('.qs-type').children('.single-question-container').
+          children('.qs-body').html(qs_body);
+
+        }
+      }
+      $(".swal-overlay").fadeOut(1000);
+
+    });;
+    }
   }
 
-  $rootScope.collect_hour_params = () => {
-    var hours = $rootScope._settings_.time_settings.hours;
-    var minutes = $rootScope._settings_.time_settings.minutes;
-    var seconds = $rootScope._settings_.time_settings.seconds;
 
-    var collected_time = parseInt( hours * 60 * 60 ) + parseInt( minutes * 60) + parseInt(seconds);
-    $rootScope._settings_.time_settings.value = collected_time;
+  $scope.select_rating_scale__ = function ( index , type){
+     var thisElement = index ;
+
+
+     if(type == 1 ) { // ==> Rating
+         var highlighted_stars = $('.fa-star').length ;
+         if($('.start-o').children("li").eq(index).children("span").children("i").hasClass("fa-star")){
+            if((highlighted_stars - 1 ) == index){
+              $(".start-o li").each(function(i){
+                $(this).children("span").children("i").removeClass("fa-star");
+                $(this).children("span").children("i").addClass("fa-star-o");
+              });
+            }else {
+              $(".start-o li").each(function(i){
+                 if($(this).children("span").children("i").hasClass('fa-star')){
+                     $(this).children("span").children("i").removeClass('fa-star');
+                     $(this).children("span").children("i").addClass("fa-star-o");
+                 }
+                 if(i <= thisElement){
+                     $(this).children("span").children("i").removeClass("fa-star-o");
+                      $(this).children("span").children("i").addClass('fa-star');
+                  }
+              });
+            }
+         }else {
+           $(".start-o li").each(function(i){
+             if(i <= thisElement){
+               $(this).children("span").children("i").removeClass("fa-star-o");
+               $(this).children("span").children("i").addClass("fa-star");
+             }
+           });
+         }
+      }
+      if(type == 0 ) { // ==> Scale .scalet-o li span
+         if($('.scalet-o').children("li").eq(index).children("span").hasClass("highlighted_scale")){
+           $('.scalet-o').children("li").eq(index).children("span").removeClass("highlighted_scale");
+         }else {
+           $('.scalet-o').children("li").each(function (){
+             $(this).children("span").removeClass("highlighted_scale");
+           });
+           $('.scalet-o').children("li").eq(index).children("span").addClass("highlighted_scale");
+         }
+      }
+     return false;
+  };
+
+
+
+  $scope.class_data_func = function (is_correct , choice_style){
+
+    var class_item = '';
+    if (choice_style != true )
+      class_item += 'one_column ';
+    if(is_correct && $scope.application_type == 1 )
+      class_item += 'highlighted-right-answers';
+    return class_item ;
+  };
+
+  $scope.collapse_menu_settings = function (target_iconx){
+        target_iconx.removeClass("fa-times");
+        target_iconx.addClass("fa-cog");
+        var settings_word = target_iconx.parent(".setting-iconx");
+        if(settings_word.children("span.settings_title").length == 0 ){
+            settings_word.append("<span class='settings_title'>Settings</span>");
+        }
+        // some styles
+        $scope.close_iconx.css("left", "-140px")
+        // $scope.close_iconx.css("left", "-60px")
+        // => Slide settings Menu into ( - right)
+        $scope.settings_menu.animate({"margin-right": '-='+$scope.settings_menu.width()});
+        // Slide question settings into ( + left )
+        $scope.questions_list_box.css({"left": '0px'});
+        $scope.questions_editor_preview_box.css({"margin-left": '0px'});
+        // Generated media box
+        $scope.generated_media_box_handler.css({left:"0px"}) ;
+        // append 'quiz setting' word
+
+      };
+      $scope.expand_menu_settings  = function (target_iconx){
+    target_iconx.removeClass("fa-cog");
+    target_iconx.addClass("fa-times");
+    // some styles
+    $scope.close_iconx.css("left", "-35px")
+    // => Slide settings Menu into ( + right)
+    $scope.settings_menu.animate({"margin-right": '+='+$scope.settings_menu.width()});
+    // Slide question list into ( + left )
+    $scope.questions_list_box.css({"left": '-'+ $scope.left_part_position + 'px'});
+    $scope.questions_editor_preview_box.css({"margin-left": '-'+ $scope.left_part_position + 'px'});
+    $scope.generated_media_box_handler.css({left:'-'+ Math.round(($scope.left_part_position / 2) + 25) + 'px'})
   }
-  $rootScope.time_hrs_is_changed = (hours) => {
-    $rootScope.collect_hour_params()
-  }
-  $rootScope.time_mins_is_changed = (mins) => {
-    $rootScope.collect_hour_params()
-  }
-  $rootScope.time_hrs_is_changed = (secs) => {
-    $rootScope.collect_hour_params() ;
-  }
-  $rootScope.sorting_arries = function (arr , propert_field){
+  $scope.expand_collapsed_items = function (id){
+     var targetId = id ;
+     var targetAll = $(".x-editor-x-body").height() ;
+     var targetH = $(targetId).height() ;
+     $(targetId).slideToggle();
+   };
+   $scope.callback_index = function (object){
+    if(object == null )
+      return false;
+    return object._id == $scope.question_id ;
+  };
+  $scope.callback_answer_index = function (object){
+    return object._id == $scope.answer_id ;
+  };
+
+  $scope.sorting_arries = function (arr , propert_field){
     var compare = (a,b) => {
       if (a[propert_field] < b[propert_field])
         return -1;
@@ -964,7 +1132,7 @@ apps.controller("apps-controller" , [
     }
     return arr.sort(compare);
   }
-  $rootScope.randomize_arries = function (array) {
+  $scope.randomize_arries = function (array) {
       var currentIndex = array.length, temporaryValue, randomIndex;
       // While there remain elements to shuffle...
       while (0 !== currentIndex) {
@@ -979,954 +1147,1507 @@ apps.controller("apps-controller" , [
 
       return array;
     }
-  $rootScope.is_randomized_answer_with = (is_randomizing) => {
-    if( is_randomizing == true )
-      $rootScope._questions_[$rootScope.question_index].answers_format = $rootScope.randomize_arries( $rootScope._questions_[$rootScope.question_index].answers_format );
-    else
-      $rootScope._questions_[$rootScope.question_index].answers_format = $rootScope.sorting_arries( $rootScope._questions_[$rootScope.question_index].answers_format , "_id");
-  }
-  // Init swiperJs
-  $rootScope.init_swiperJs = () => {
-         // $rootScope.swiper_data = new Swiper ('.swiper-data' , {
-         //   allowTouchMove : false
-         // });
-         // $rootScope.swiper_data.update();
-  }
+    $scope.show_media_uploader = function (media_for_model , answer_id = null  , is_appear = null ) {
 
-  $rootScope.init_first_question = () => {
-            if($rootScope._questions_.length != 0 ){
-              $timeout(function(){
-                $rootScope.highlighted_question($rootScope._questions_[0]._id);
-                $rootScope.expand_collapsed_items('#question-pt');
-                 $rootScope.fill_boxes_with_question_objects($rootScope._questions_[$rootScope.question_index]._id);
-                if($rootScope._questions_[$rootScope.question_index].question_type != 2 )
-                 {
-                   if($rootScope._questions_[0].question_type == 1 || $rootScope._questions_[0].question_type == 0)
-                   $timeout(function(){ $rootScope.sorting_answers_in_list(); } , 700  );
-                 }
-              })
-              // $rootScope.current_media_question = ( $rootScope._questions_[0].media_question == undefined ) ? undefined : $rootScope._questions_[0].media_question ;
+            if(media_for_model == "question_media_type")
+              $scope.model_type = "questions";
+            else
+              $scope.model_type = "answers";
+              // =============================================
+              // ================>> Storing media uploader
+              // =============================================
+              var media_block = $(".media-x-preview"); // => preview div
+              var show_media_link = $(".show_media_link"); // => input
+
+              if( $scope.model_type == "questions"){ // ==> This type is question media uploader
+                                /*Default all elements should be empty*/
+                                media_block.html('');
+                                show_media_link.val('') ;
+                                show_media_link.css("display","none");
+                                /*show media in ui*/
+
+                                if( $scope.question_media == undefined || $scope.question_media == null) {
+                                  var no_media = "<b class='no-media'>There is no media ! </b>"
+                                  media_block.html(no_media);
+                                }else {
+                                    show_media_link.css("display","block");
+                                    var iframe = "<iframe width='100%' height='250px'></iframe>";
+                                    var image  = "<div class ='show-image'></div>";
+                                    var mp4    = '<video width="100%" height="auto" controls>' +
+                                                    '<source src="'+$scope.question_media.media_field+'.mp4" type="video/mp4">'+
+                                                    '<source src="'+$scope.question_media.media_field+'.ogg" type="video/ogg">'+
+                                                    'Your browser does not support the video tag.' +
+                                                  '</video>' ;
+
+                                    // image
+                                    if($scope.question_media.media_type == 0 ) {
+                                      media_block.html(image);
+                                      show_media_link.val($scope.server_ip + $scope.question_media.media_field);
+                                        media_block.find('div').css({
+                                          "background-image":"url('"+$scope.server_ip + $scope.question_media.media_field  + '?' + new Date()  +"')"
+                                        });
+
+                                        // alert($scope.server_ip + $scope.question_media.media_field);
+                                    }
+                                    if($scope.question_media.media_type == 1 ) {
+                                      media_block.html(iframe);
+                                      show_media_link.val($scope.question_media.media_name);
+                                      // youtube or vimeo
+                                      if($scope.question_media.video_type == 0 || $scope.question_media.video_type == 1)
+                                        media_block.find('iframe').attr("src" , $scope.question_media.video_source);
+                                      // mp4
+                                      if( $scope.question_media.video_type == 2 ) {
+                                        media_block.html(mp4)
+                                      }
+
+                                      $timeout(function(){
+                                        // styling vimeo
+                                        if ($scope.question_media.video_type == 1 ){
+                                          // //(  media_block.find('iframe').html());
+                                        }
+                                      } , 3000 );
+                                    }
+                                }
+            } else if ($scope.model_type == "answers"){
+              var media_block = $(".media-x-preview");
+              // fill current answer id
+              $scope.answer_id = answer_id ;
+              // set it with empty values
+              //-------------------------
+              media_block.html('');
+              show_media_link.val('') ;
+              show_media_link.css("display","none");
+              // ====>> current answer id
+              var target_question = $scope.questions_list.find($scope.callback_index);
+              var target_answer = target_question.answers_format.find($scope.callback_answer_index);
+              // //(target_answer);
+              if(target_answer.media_src  == $scope.server_ip + "img/media-icon.png" ){
+                var no_media = "<b class='no-media'>There is no media ! </b>"
+                 media_block.html(no_media);
+              }else {
+                // //("/*/*/*/*/*//*/*/*/*/*/*/*/*/*/*///*");
+                // //(target_answer);
+                // //("/*/*/*/*/*//*/*/*/*/*/*/*/*/*/*///*");
+                show_media_link.css("display","block");
+                var iframe = "<iframe width='100%' height='250px'></iframe>";
+                var image  = "<div class ='show-image'></div>";
+
+                // ==> it will be according to question Type
+                if ($scope.question_type == 1 ) {  // text media only
+
+                  if(target_answer.media_type == 0 ) {
+                    media_block.html(image);
+                    show_media_link.val($scope.server_ip + target_answer.media_src);
+                    // media_block.find('div').css({
+                    //     "background-image":"url('"+$scope.server_ip + target_answer.media_src +"')"
+                    // });
+
+                    var  image_iframe = "<img id='img_cropping' style='width:100%;' src='"+$scope.server_ip + target_answer.media_src+"' />"
+                    var preview_box = $(".media-x-preview");
+                    preview_box.html(image_iframe);
+
+                    var  question_object = $scope.questions_list.find(x => x._id == $scope.question_id );
+                    if(question_object != undefined)
+                      {
+                        $timeout(function(){
+                            $scope.excute_the_cropping( $scope.question_id ,$scope.answer_id , question_object );
+                        } , 300)
+                      }
+
+                    // =>> Calling cropper here
+                  } // end image type
+
+                  if(target_answer.media_type == 1 ) {
+                      media_block.html(iframe);
+                      show_media_link.val(target_answer.embed_path);
+                      // youtube + vimeo
+                  if(target_answer.video_type == 0 || target_answer.video_type == 1)
+                      media_block.find('iframe').attr("src" , target_answer.embed_path);
+                      // mp4
+                  if( target_answer.video_type == 2 ) {
+                    var mp4    = '<video width="100%" height="auto" controls>' +
+                                    '<source src="'+target_answer.mp4_option.mp4_url+'" type="video/mp4">'+
+                                    '<source src="'+target_answer.mp4_option.ogg_url+'" type="video/ogg">'+
+                                    'Your browser does not support the video tag.' +
+                                  '</video>' ;
+                                  show_media_link.val(target_answer.mp4_option.mp4_url);
+                      media_block.html(mp4)
+                      }
+                } // end video type
+              }else if ($scope.question_type == 0 ) { // text with media
+
+                      if(target_answer.media_optional == undefined || !target_answer.media_optional ) {
+                        var no_media = "<b class='no-media'>There is no media ! </b>"
+                         media_block.html(no_media);
+                      }else {
+                        if(target_answer.media_optional.media_type == 0  ) {
+                          media_block.html(image);
+                          show_media_link.val($scope.server_ip + target_answer.media_optional.media_src );
+
+                          var image_iframe = "<img id='img_cropping' style='width:100%;' src='"+$scope.server_ip + target_answer.media_optional.media_src+"' />"
+                          var preview_box = $(".media-x-preview");
+                          preview_box.html(image_iframe);
+
+                          var  question_object = $scope.questions_list.find(x => x._id == $scope.question_id );
+                          if(question_object != undefined)
+                            {
+                              $timeout(function(){
+                                  $scope.excute_the_cropping( $scope.question_id ,$scope.answer_id , question_object );
+                              } , 300)
+                            }
+                          // media_block.find('div').css({
+                          //     "background-image":"url('"+$scope.server_ip + target_answer.media_optional.media_src +"')"
+                          // });
+                          // =>> Calling cropper here
+                          // alert( $scope.server_ip + target_answer.media_optional.media_src )
+                        } // end image type
+
+                        if(target_answer.media_optional.media_type == 1 ) {
+                            media_block.html(iframe);
+                            show_media_link.val(target_answer.media_optional.embed_path);
+                            // youtube + vimeo
+                        if(target_answer.media_optional.video_type == 0 || target_answer.media_optional.video_type == 1)
+                            media_block.find('iframe').attr("src" , target_answer.media_optional.embed_path);
+                            // mp4
+                        if( target_answer.media_optional.video_type == 2 ) {
+                          var mp4    = '<video width="100%" height="auto" controls>' +
+                                          '<source src="'+target_answer.media_optional.mp4_option.mp4_url+'" type="video/mp4">'+
+                                          '<source src="'+target_answer.media_optional.mp4_option.ogg_url+'" type="video/ogg">'+
+                                          'Your browser does not support the video tag.' +
+                                        '</video>' ;
+                                        show_media_link.val(target_answer.media_optional.mp4_option.mp4_url);
+                            media_block.html(mp4)
+                            }
+                      }
+
+                    } // end video type
+              } // end question type number 1
+
+
+
+
+              }
+              // //(target_answer);
+              // ('Answer Details');
+              // //(target_answer);
+              // //(">>>-----*************************----<<<");
+              // // ========> Show values related this part
+              // //($scope.file_object);
+              // console.log("Answer media uploader !! " + answer_id);
             }
-          }
-  // ==> Display media data
-  $rootScope.calling_media_uploader = () => {
-                $(".media-imgvid-uploader").fadeIn();
-              }
-  // ==> Display Image in question
-  $rootScope.loading_question_image = (img_src) => {
-  };
-  $rootScope.detect_if_it_correct_answer = (is_correct) => {
-    // $('[data-toggle="tooltip"]').tooltip();
-    if(is_correct == false) return "Make it 'Correct Answer'" ;
-    else return "Remove 'Correct Answer'" ;
-  }
-  // ==> Make it correct answer
-  $rootScope.make_answer_classes = ( answer , questionType ) => {
-    var classes = '';
-    var settings = $rootScope._questions_[$rootScope.question_index].answer_settings;
-    // => correct answer
-    if(  answer.is_correct == true )  classes += 'choices_correct_answer ';
-    // => super_size
-    if(settings != undefined ){
-      if( questionType <= 1 && settings.super_size == true ){
-         classes += 'super_size_class ';
-      }
-    }
-    return classes ;
-  }
-  $rootScope.change_answer_of_single_choices = (is_single_choice) => {
-    if(is_single_choice == true){
-      var answers = $rootScope._questions_[$rootScope.question_index].answers_format;
-      var only_one = answers[answers.length - 1];
-      only_one.is_correct = true;
-      if(answers != undefined ){
-        for (var i = 0; i < answers.length; i++) {
-          if(only_one._id != answers[i]._id)
-          answers[i].is_correct = false ;
-        }
-      }
-    }
-  }
-  // ===> Delete This Answer
-  $rootScope.make_this_correct_incorrect_answer = (answerId) => {
-
-    var question = $rootScope._questions_[$rootScope.question_index];
-    if(question._id == undefined) return false ;
-    var answer = question.answers_format.find(x => x._id == answerId);
-    if(answer == undefined ) return false ;
-    answer.is_correct = ! answer.is_correct ;
-
-    if(question.question_type <= 1 && question.answer_settings.single_choice == true){
-      for (var i = 0; i < question.answers_format.length; i++) {
-        if(answer._id != question.answers_format[i]._id)
-        question.answers_format[i].is_correct = false;
-      }
-    }
-    if( question.question_type == 2 ){
-      for (var i = 0; i < question.answers_format.length; i++) {
-        if(answer._id != question.answers_format[i]._id)
-        question.answers_format[i].is_correct = false;
-      }
-    }
-
-  }
-  // ===> Delete This Answer
-  $rootScope.delete_this_answer = (answerId) => {
-    var question = $rootScope._questions_[$rootScope.question_index];
-    if(question._id == undefined) return false ;
-    var answer_index = question.answers_format.findIndex(x => x._id == answerId);
-    if(answer_index == -1) return false ;
-    question.answers_format.splice (answer_index , 1);
-  }
-  // destory cropper
-
-  // ==> Add New Answer
-  $rootScope.add_new_media_for_question = () => {
-        $rootScope.media_data = new Object();
-        $rootScope.media_for = 'questions' ; // => Question
-        $(".box-data").css({ top :'148px'});
-        $('.box-overlay').height($(document).height());
-        $(".media-uploader").fadeIn();
-
-        // ==> Show Current Media if it found
-        var existing_question = $rootScope._questions_[$rootScope.question_index];
-        if(existing_question.media_question != null ){
-          if( existing_question.media_question.media_type == 0 )
-            $rootScope.media_data['media_src'] = existing_question.media_question.Media_directory + '?' +  existing_question.media_question.image_updated_date;
-          if ( existing_question.media_question.media_type == 1 ){
-              if( existing_question.media_question.video_type == 0 || existing_question.media_question.video_type == 1 )
-                $rootScope.media_data['media_src'] = existing_question.media_question.embed_path;
-              if( existing_question.media_question.video_type == 2 )
-                $rootScope.media_data['media_src'] = existing_question.media_question.media_field;
-
-                  $rootScope.media_data['video_type'] = existing_question.media_question.video_type ;
-          }
-          $rootScope.media_data['media_type'] = existing_question.media_question.media_type ;
-        }
-  }
-  // ==> Add media for question
-  $rootScope.add_new_media_for_answer = (answer_id , thisElem) => {
-    var main_answer_blocks = $('.answer-pt-controller');
-    var current_box = main_answer_blocks.children("li").eq(thisElem.$index);
-    $(".box-data").css({ top : ( parseInt(current_box.offset().top - 110) ) + 'px'});
-
-    $rootScope.media_for = 'answer' ; // => Question
-    $rootScope.current_answer_id = answer_id ;
-      $('.box-overlay').height($(document).height());
-    $(".media-uploader").fadeIn();
 
 
-      // ==> Show Current Media if it found
-      var existing_question = $rootScope._questions_[$rootScope.question_index];
-      if(existing_question != undefined ){ //answer_id
-        var this_answer = existing_question.answers_format.find( x => x._id == answer_id );
-        if(this_answer != undefined){
-          $rootScope.media_data = new Object();
-          if(existing_question.question_type == 0 ){
-            if(this_answer.media_optional != undefined )
-              {
-                if ( this_answer.media_optional.media_type == 0 ){
-                   $rootScope.media_data['media_src'] = this_answer.media_optional.Media_directory;
-                   $rootScope.media_data['media_type'] = this_answer.media_optional.media_type;
-                }
-                if ( this_answer.media_optional.media_type == 1 ){
-                  if( this_answer.media_optional.video_type == 0 || this_answer.media_optional.video_type == 1 )
-                  $rootScope.media_data['media_src'] = this_answer.media_optional.embed_path;
-                  if( this_answer.media_optional.video_type == 2 )
-                  $rootScope.media_data['media_src'] = this_answer.media_optional.Media_directory
-                  $rootScope.media_data['video_type'] = this_answer.media_optional.video_type;
-                  $rootScope.media_data['media_type'] = this_answer.media_optional.media_type;
-                }
-              }
-          }
-          if(existing_question.question_type == 1 ){
-            if(this_answer.media_type != undefined )
-              {
-                if ( this_answer.media_type == 0 ){
-                    $rootScope.media_data['media_src'] = this_answer.Media_directory;
-                    $rootScope.media_data['media_type'] = this_answer.media_type;
-                }
-                if ( this_answer.media_type == 1 ){
-                  if( this_answer.video_type == 0 || this_answer.video_type == 1 )
-                  $rootScope.media_data['media_src'] = this_answer.embed_path;
-                  if( this_answer.video_type == 2 )
-                  $rootScope.media_data['media_src'] = this_answer.Media_directory
-                  $rootScope.media_data['video_type'] = this_answer.video_type;
-                  $rootScope.media_data['media_type'] = this_answer.media_type;
-                }
-              }
-          }
-        }
-      }
-
-      console.log($rootScope.media_data);
-   }
-  // => Close Current window
-  $rootScope.close_current_image_uploader = () => {
-        $('.image-uploader-x , .show_media_link').val('');
-        return $(".media-uploader , .live_preview_image , .progrbar ").fadeOut();
-     };
-  // => Start cropping image
-  $rootScope.init_cropping_image = () => {
-                    $timeout(function(){
-                      var image_data = document.getElementById("cropping_system");
-
-                      $rootScope.cropper =  new Cropper ( image_data , {
-                        aspectRatio : 145 / 120 ,
-                        initialAspectRatio : 145 / 120 ,
-                        dragMode: 'none' ,
-                        center : true ,
-                        // responsive : true ,
-                        // movable :false ,
-                        // rotatable : false ,
-                        // minContainerWidth : 145 ,
-                        // minContainerHeight: 120 ,
-                        minCropBoxWidth:145,
-                        minCropBoxWHeight:120 ,
-                        background : false ,
-                        zoomable : false ,
-                        crop : (event) => {
-                          $rootScope.store_cropping_data (event);
-                           //  $rootScope.cropper_results['x'] = event.detail.x;
-                           // $rootScope.cropper_results['y'] = event.detail.y;
-                           // $rootScope.cropper_results['width'] = event.detail.width;
-                           // $rootScope.cropper_results['height'] = event.detail.height;
-                           // // $rootScope.cropper_results['rotate'] = event.detail.rotate;
-                           // $rootScope.cropper_results['scaleX'] = event.detail.scaleX;
-                           // $rootScope.cropper_results['scaleY'] = event.detail.scaleY;
-                        }
-                      } );
-
-                    }, 250 );
-                  };
-  // => Storing Copping results
-  $rootScope.store_cropping_data = (evt) => {
-                        $('#cropping-image-x').val(evt.detail.x - 1);
-                        $('#cropping-image-y').val(evt.detail.y - 1);
-                        $('#cropping-image-width').val(evt.detail.width - 1);
-                        $('#cropping-image-height').val(evt.detail.height - 1);
-
-                        // $rootScope.cropper_results['rotate'] = event.detail.rotate;
-                        // $rootScope.cropper_results['scaleX'] = evt.detail.scaleX;
-                        // $rootScope.cropper_results['scaleY'] = evt.detail.scaleY;
-                      };
-  // ==> Reading current Image then blob
-  $rootScope.read_image_file = (image_file) => {
-
-        $rootScope.image_view_source = null ;
-        var file = image_file[0].files[0] ;
-        if(file == undefined) return false ;
-        $rootScope.cropper_results['file'] = file ;
-
-          $rootScope.media_data = new Object();
-          var reader = new FileReader();
-          var read_file = reader.readAsDataURL(file);
-           if( file.type != "image/jpeg" && file.type != "image/png" && file.type != "image/jpg" )
-            return false;
-          reader.onload = ( e ) => {
-            $rootScope.image_view_source =  e.target.result  ;
-            // ==> Preview Image
-            $rootScope.media_data['media_type'] = 0 ;
-            $rootScope.media_data['media_src'] = e.target.result;
-            $('.loading_data').fadeOut(1000);
-            $('.box-overlay').height($(document).height() + 50);
-            $rootScope.$apply();
-          }
-
-        // console.log($rootScope.media_image_uploader[0].files[0]);
-  };
-
-  $rootScope.active_this_label = (index_number ) => {
-    $rootScope._settings_.indexes.questions = index_number ;
-  }
-  $rootScope.active_this_answer_label =   (index_number ) => {
-    $rootScope._settings_.indexes.answers = index_number ;
-  }
+            //media_for_model =>  media for question or answer ??
+            if(is_appear == null )
+            $(".media-imgvid-uploader").fadeIn();
+          };
 
 
-  $rootScope.loading_answer_media_image = (image , date) => {
-    console.log(image + ' ' +  date);
-    return {
-      backgroundImage : 'url("'+image +'?' + date +'")'
-    } ;
-  }
-  $rootScope.loading_answer_media_image_media_choices = (image , date) => {
-    console.log(image + ' ' +  date);
-    return {
-      backgroundImage : 'url("'+image +'?' + date +'")'
-    } ;
-  }
-  // => Image Uploader Changes and inputs
-  $rootScope.media_image_uploader.on('change , input' , function(){
-          // ==> Detect if question is in exists
-          var question_id = $("#question_id").val() ;
-          var question = $rootScope._questions_.find(x => x._id == question_id );
-          if(question == undefined ) return false ;
-          $(".live_preview_image , .progrbar").fadeIn();
-          // ==> Reading Image file
-          if( $(this)[0].files[0].type != "image/jpeg" && $(this)[0].files[0].type != "image/png" && $(this)[0].files[0].type != "image/jpg" )
-           return false;
+          $scope.delete_this_question = function(){
 
-          $rootScope.read_image_file($(this));
+            if( $scope.question_id == null )
+              return false ;
 
+            $scope.deleted_question_id = $scope.question_id ;
+            var editor_loader = $(".loader-container");
+            var editor_block = $(".right_part");
 
-          // ==> Calling Cropping liberary
-          $rootScope.init_cropping_image();
+            var found_qs = $scope.questions_list.find($scope.callback_index);
+            var targetIndex = $scope.questions_list.indexOf(found_qs);
+            if(targetIndex != -1 ){
+                var next_id = $scope.questions_list[ targetIndex + 1 ] ;
 
-          $timeout(function(){
-            $rootScope.$apply();
-          });
- });
+                // Remove all highlighted question
+                $("#docQuestions").children("li").each(function (){
+                  ($(this).hasClass("highlighted-question") == true ) ?
+                    $(this).removeClass("highlighted-question"):  null  ;
+                });
 
+                // Show loaders
+                editor_block.fadeOut(function (){
+                  editor_loader.fadeIn();
+                });
 
-
-
-
-
-   $rootScope.fileExists = (url) =>
-       {
-           var http = new XMLHttpRequest();
-           http.open('HEAD', url, false);
-           http.send();
-           return http.status != 404;
-       }
-
-
-
-
-
-
-
-   $rootScope.answer_classes_cases = (question_settings) =>  {
-     // if(question_settings == undefined ) return ;
-     return 'super_size';
-   }
-  // => load_image_media
-  $rootScope.load_image_media = () => {
-    var img = $rootScope._questions_[$rootScope.question_index].media_question.Media_directory;
-    var image_data = $rootScope._questions_[$rootScope.question_index].media_question.image_updated_date;
-    var img_src = $sce.trustAsResourceUrl(img) +'?' + image_data ;
-
-    return  {
-       'background-image':'url("'+img_src+'")'
-     };
-  }
-  // ==> Remove Question Media
-  $rootScope.remove_question_media = (question_id) => {
-    var Question = $rootScope._questions_.find(x => x._id == question_id );
-    if(Question == undefined ) return false ;
-    if(Question.media_question == undefined ) return false ;
-
-    return Question.media_question = undefined ;
-  };
-  $rootScope.add_new_answer = ( question_id ) => {
-    if(question_id == undefined) return false ;
-    var question = $rootScope._questions_.find(x => x._id == question_id );
-    if(question == undefined ) return false ;
-    var answer_object_data = new Object();
-    // ==> Fill according to question type
-    answer_object_data['_id'] = $rootScope.answer_ids[ 'id_' + question.answers_format.length] + '' + $rootScope._questions_.length ;
-    if ( question.question_type == 0 ){
-      answer_object_data['value'] = "Answer " + ( question.answers_format.length + 1 )
-      if ( $rootScope._application_.app_type == 1 )
-      answer_object_data['is_correct'] = false ;
-    }
-    if ( question.question_type == 1 ){
-      answer_object_data['media_src'] = "No Media Here !";
-      if ( $rootScope._application_.app_type == 1 )
-      answer_object_data['is_correct'] = false ;
-    }
-
-    question.answers_format.push(answer_object_data);
-    $timeout(function(){
-      $rootScope.sorting_answers_in_list();
-      $rootScope.init_bootstrap_tooltip();
-      $timeout(function(){ $rootScope.storing_questions_into_database(); } , 500 );
-    } , 300);
-  };
-  // => Storing Data of questions into db
-  $rootScope.storing_questions_into_database = () => {
-     $http({
-      url : $rootScope.server_ip + 'api/' + $rootScope.app_id + "/add/questions" ,
-      method : "POST" ,
-      data : { data : $rootScope._questions_ }
-     }).then((response)=>{
-       $rootScope._questions_ = response.data ;
-       $timeout(function(){
-         $rootScope.$apply();
-       } , 300 );
+                // doing some delay !
+                $timeout(function (){
+                    $scope.questions_list.splice(targetIndex, 1);
+                      //+++++ $scope.iframe_access.model_deletion(0 , $scope.question_id );
+                    $scope.save_changes_in_angular_backend();
+                } , 290);
+             }
+         };
+         $scope.hide_loader = function (){
+    $(".right_part").fadeIn( function (){
+      $(".question-opener").trigger("click");
+      $(".loader-container").fadeOut(6000);
     });
-  };
-/*,
-ghostClass: 'shadow_element',
-handle: '.drag-tool',
-sort: false  */
-  // => init tooltip
-  $rootScope.init_bootstrap_tooltip = ( ) => {
-      return $('[data-toggle="tooltip"]').tooltip();
-         }
-
-  $rootScope.sorting_answers_in_list = () => {
-    var answers = $rootScope._questions_[$rootScope.question_index].answers_format;
-    $timeout(function(){
-      Sortable.create( document.getElementById('block-answers') , {
-        animation: 150 ,
-        handle: '.drag-tools',
-        ghostClass: 'shadow_element' ,
-        onEnd : (evt) => {
-          var old_index = evt.oldIndex ;
-          var new_index = evt.newIndex;
-          var target_answer = answers[old_index];
-          // ==> Remove in Old index
-          answers.splice(old_index , 1);
-          // ==> Send it into new index
-          $timeout(function(){
-            answers.splice( new_index ,0,  target_answer );
-            $timeout(function(){ $rootScope.init_bootstrap_tooltip(); }  , 300)
-          }, 300 );
-        }
-      });
-    } , 300 )
-  }
-  // ==> Sorting Questions
-  $rootScope.init_drag_drop = () => {
-    Sortable.create (document.getElementById("qs-sortable") , {
-      sort: false,
-       disabled: false,
-       animation: 180 ,
-        group: {
-           name: "question-list",
-           pull: "clone",
-           revertClone: false,
-       },
-       onMove : function (evt){
-
-           var dragged = evt.dragged;
-               var draggedRect = evt.draggedRect;
-               var related = evt.related;
-               var relatedRect = evt.relatedRect;
-
-           var ParentID = $(dragged).parent().prop("id");
-           var ParentEl = $(dragged).parent();
-           if(ParentID == "qs-sortable") {
-             ParentEl.find(dragged).html("");
-             // set animation
-             // ParentEl.find(dragged).addClass("animated wobble");
-             ParentEl.find(dragged).css({
-               minHeight : '40px' ,
-               background : "ghostwhite"
-             });
-             ParentEl.find(dragged).remove();
-           }
-
-        } ,
-       onEnd  : function (evt) {
-
-         var Item = evt.item;
-         evt.oldIndex;
-		     evt.newIndex;
-         var question_type = Item.getAttribute('data-question-type') ;
-         // ==> Remove current gost
-         var isScaleRating = null ;
-         if( question_type == 3 ){
-            isScaleRating = Item.getAttribute('data-is-scale');
-          }
-          $rootScope.add_new_question ( question_type , evt.newIndex ,  isScaleRating ) ;
-         $timeout(function(){
-           $("#docQuestions").find("li.question_bult_in").remove();
-         } , 10);
-       }
-    })
-
-    Sortable.create( document.getElementById("docQuestions") , {
-       ghostClass: 'shadow_element' ,
-        group: "question-list" ,
-        disabled: false ,
-        animation: 250 ,
-        handle: '.drag-handler',
-        onStart : function (evt) {} ,
-        onEnd  : function (evt) {}
-    });
-
-  };
-$rootScope.step_number_of_rating_scale = (step_number) => {
-  $rootScope._questions_[$rootScope.question_index].answers_format[0].rating_scale_answers = new Array();
-
-  for (var i = 0; i < step_number ; i++) {
-    $rootScope._questions_[$rootScope.question_index].answers_format[0].rating_scale_answers.push({
-      _id : $rootScope._questions_[$rootScope.question_index].answers_format[0]._id + '_' +  (i + 1 )   ,
-      rat_scl_value : (i + 1 )
-    });
-    if( i == 10 ) break ;
-  }
-}
-$rootScope.select_rating_scale__ = function ( index , type , question_id = null  , answer_id = null , question_type = null ){
-    var thisElement = index ;
-
-
-    if(type == 1 ) { // ==> Rating
-        var highlighted_stars = $('.fa-star').length ;
-        if($('.start-o').children("li").eq(index).children("span").children("i").hasClass("fa-star")){
-           if((highlighted_stars - 1 ) == index){
-             $(".start-o li").each(function(i){
-               $(this).children("span").children("i").removeClass("fa-star");
-               $(this).children("span").children("i").addClass("fa-star-o");
-             });
-           }else {
-             $(".start-o li").each(function(i){
-                if($(this).children("span").children("i").hasClass('fa-star')){
-                    $(this).children("span").children("i").removeClass('fa-star');
-                    $(this).children("span").children("i").addClass("fa-star-o");
-                }
-                if(i <= thisElement){
-                    $(this).children("span").children("i").removeClass("fa-star-o");
-                     $(this).children("span").children("i").addClass('fa-star');
-                 }
-             });
-           }
-        }else {
-          $(".start-o li").each(function(i){
-            if(i <= thisElement){
-              $(this).children("span").children("i").removeClass("fa-star-o");
-              $(this).children("span").children("i").addClass("fa-star");
-            }
-          });
-        }
-     }
-     if( type == 0 ) { // ==> Scale .scalet-o li span
-        if($('.scalet-o').children("li").eq(index).children("span").hasClass("highlighted_scale")){
-          $('.scalet-o').children("li").eq(index).children("span").removeClass("highlighted_scale");
-        }else {
-          $('.scalet-o').children("li").each(function (){
-            $(this).children("span").removeClass("highlighted_scale");
-          });
-          $('.scalet-o').children("li").eq(index).children("span").addClass("highlighted_scale");
-        }
-     }
-
-
  };
- $rootScope.select_this_rating_value = (index , class_name , answer_id , question_id , rs_type  ) => {
-
-
-
-   var get_answers = $(".ul_scal_"+ question_id).children("li");
-   get_answers.each(function(){
-     $(this).children('.spanex').css({
-       background : 'transparent' ,
-       color :'#999'
-     })
-   });
-
-   get_answers.eq(index).children(".spanex").css({
-     background : '#c17c7e' ,
-     color :'#fff'
-   })
-
- };
-$rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
-  if( rat_scale_type == 1 ){
-    var object_in_jQuery = $(".rating-scale-list").children('li').eq(currIndex);
-    $(".rating-scale-list").children("li").each(function(i){
-      if( i <= currIndex ){
-        if($(this).children('span').hasClass("fa-star-o"))
-        $(this).children('span').removeClass("fa-star-o")
-        $(this).children('span').addClass("fa-star")
-      }else {
-        if($(this).children('span').hasClass("fa-star"))
-        $(this).children('span').removeClass("fa-star")
-        $(this).children('span').addClass("fa-star-o")
-      }
-    })
-  }else {
-    $(".rating-scale-list").children("li").each(function(){
-      $(this).children("span.scales").css({"background" : 'transparent' , color : "#222"});
-    })
-    $(".rating-scale-list").children("li").eq(currIndex).children("span.scales").css({"background" : '#00a8ff' , color : "#fff"});
-
-  }
-}
-  $rootScope.build_question_settings = (setting_name , setting_value , question_id) => {
-
-      $timeout(function(){
-        var question = $rootScope._questions_.find(x => x._id == question_id);
-        if( question == undefined ) return false;
-        console.log(question);
-        if( question.answer_settings == undefined ) question['answer_settings'] = new Object();
-        question.answer_settings[setting_name] = setting_value ;
-      })
-
-  };
-
-
-  $rootScope.nav_container_manager = ( nav_status ) => {
-    var question_list_left = $(".left_part");
-    var nav_menu = $(".nav-container");
-    var body_window = $(".row-x-body");
-    var fixed_number = 23 ;
-    var translate_number_negative = -(question_list_left.width() +fixed_number ) ;
-    var translate_number_positive =  0 ;
-    // ==> Open The nav menu
-    if(nav_status == 0 ){
-      body_window.css({ transform : 'translate3d('+translate_number_negative+'px , 0,0)'})
-      nav_menu.css({ transform : 'translate3d('+translate_number_positive+'px , 0,0)'})
-      // ==> Change Nav number of status
-      $rootScope.nav_status = 1;
-    }
-    // ==> Close The nav menu 19
-    if(nav_status == 1 ){
-      body_window.css({ transform : 'translate3d(0px , 0,0)'})
-      nav_menu.css({ transform : 'translate3d('+( question_list_left.width() + 17 )+'px , 0,0)'})
-      // ==> Change Nav number of status
-      $rootScope.nav_status = 0
-    }
-
-  };
-  $rootScope.navigation_menu_manger = () => {
-
-      // ==> Options
-      $rootScope.navigation_options = {
-        drag_drop_box_width : $('.qsdragged-list').width() ,
-        left_part_question_type : $('side-left-bar') ,
-        settings_menu : $('.slider_menu')
-      };
-
-
-
-  }
-
-  $rootScope.translate_number = 0
-
-  $rootScope.navbar_menu_init = () => {
-    // ==> Set Width
-    var nav_bar = $(".nav-container");
-    var question_lists = $(".left_part");
-    nav_bar.width(question_lists.width())
-    nav_bar.css({transform : "translate3d("+(question_lists.width() + 19 )+"px , 0 , 0)" , width : question_lists.width() + 23 + 'px' })
-    // ==> Change current translate3d
-  };
-
-  //     transform: rotate(90deg);
-  $rootScope.navbar_menu_init();
-
-  $(".nav-parent > a").on("click" , function(){
-    var current_navig = $(this);
-    var target_index = current_navig.parent().index();
-
-    $("li.nav-parent").each(function(iCounter){
-      if(target_index != iCounter){
-        $(this).children('a').children('.nav-next').css({
-          transform: 'rotate(0deg)'
-        })
-        $(this).children('.items').slideUp();
-      }
-    })
-     var this_item = $(this).next('.items');
-     $(this).children('.nav-next').css({
-       transform: 'rotate(90deg)'
-     })
-     this_item.slideDown();
-  });
-
-  $rootScope.select_this_answer=( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex , css_mode )=>{
-
-      if ( css_mode == true ) return false;
-     if( $rootScope.isEmpty( $rootScope.this_attendee_draft ) ){
-          $rootScope.this_attendee_draft = new Object();
-          $rootScope.this_attendee_draft['att_draft'] = new Array();
-          $rootScope.this_attendee_draft['application_id'] = $rootScope.app_id;
-          $rootScope.this_attendee_draft['questionnaire_info'] = $rootScope.app_id;
-          var cuIndex = $rootScope.this_attendee_draft.att_draft.findIndex (x => x.user_id == $rootScope.user_id) ;
-          if(cuIndex == -1 ){
-            var all_seconds = parseInt( $rootScope._settings_.time_settings.hours * 60 * 60 ) + parseInt(  $rootScope._settings_.time_settings.minutes * 60  ) + parseInt($rootScope._settings_.time_settings.seconds )
-            $rootScope._settings_.time_settings.value = all_seconds ;
-            $rootScope.this_attendee_draft.att_draft.push({
-              'questions_data' : new Array() ,
-              'is_loaded':true ,
-              'start_expiration_time' : new Date() ,
-              'user_id' : $rootScope.user_id ,
-              'user_info':$rootScope.user_id ,
-              'is_completed':false ,
-              'impr_application_object':$rootScope._application_
-            });
-          }
+ $scope.onclick_items = function (elementId){
+     var evt = {
+       item      :  $("#"+elementId) ,
+       newIndex  :  ( $("#docQuestions li" ).length > 0 ) ? $("#docQuestions li" ).length  : 0
      }
-     // => consider ( show results per qs setting ) => ?
-     var show_results_setting =  ( $rootScope._settings_ != undefined ) ?  $rootScope._settings_.show_results_per_qs : false ;
-     // => consider ( review setting )
-     var review_setting =  ( $rootScope._settings_ != undefined ) ?  $rootScope._settings_.review_setting : false ;
-     // => consider ( multi answers  )
-     var is_single_choice_setting = ( question.answer_settings.single_choice != undefined) ?  question.answer_settings.single_choice : true ;
-     // => consider auto slide when answer select if it only single answer
-     var auto_slide_setting = ( $rootScope._settings_ != undefined ) ?  $rootScope._settings_.auto_slide : false ;
+     return $scope.dragged_items(evt);
+   };
 
-     var answer_iu_list = $('#question_' + questionId).children('li');
-     var this_answer = $('.answer_'+answerId) ;
+   $scope.unsaved_question_x = function (new_vals , for_this_setting = null ){
+        $scope.unsaved_question = true;
+        $scope.questions_list[$scope.questionIndex].answer_settings = $scope.question_settings;
 
-     var stored_object = {
-                 question_id : questionId ,
-                 answer_id : answerId ,
-                 question : question ,
-                 answer: answer ,
-                 app_id : app_id ,
-                 user_id : user_id ,
-                 is_correct : is_correct ,
-                 answer_index : answerIndex
+        // ==> Show it in preview
+
+        var questionSettings = $scope.questions_list.find(x => x._id == $scope.question_id).answer_settings ;
+        //+++++ $scope.iframe_access.view_question_answer($scope.question_id , questionSettings);
     };
 
-    if( question.question_type == 0 || question.question_type == 1 )
-                        {
-                            if( is_single_choice_setting ){ // 1 - case this question has single answer
-                                            // =====> Single Answer
-                                  if(review_setting && show_results_setting == false ){
-                                                /* Many clicks ! */
-                                               // => Delete the-old highlited answer and Highlight the new selected answer
-                                               answer_iu_list.removeClass('selected_answer animated shake');
-                                               this_answer.addClass('selected_answer animated shake');
+    $scope.randomize_option_change = function (new_vals , for_this_setting = null ){
+        $scope.unsaved_question = true;
+        $scope.questions_list[$scope.questionIndex].answer_settings = $scope.question_settings;
+        var questionSettings = $scope.questions_list.find(x => x._id == $scope.question_id).answer_settings ;
 
-                                                if($rootScope.this_attendee_draft.att_draft != undefined){
-                                                  // remove old answer answer_ids
-                                                  var question_id = stored_object.question_id ;
-                                                  // question_id
-                                                  var attendee_part = $rootScope.this_attendee_draft.att_draft.find(x => x.user_id == $rootScope.user_id);
-                                                  if(attendee_part != undefined){
-                                                    var target_question = attendee_part.questions_data.find(x => x.question_id == question_id);
-                                                    if(target_question != undefined)
-                                                    target_question.answer_ids = new Array();
-                                                  }
-                                                }
-                                               // => No need to show the correct answer here
-                                               // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
-                                               // => Mongo status => move the data into mongo ( attendee draft )
-                                               $rootScope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
+        if(new_vals == true ){
+          // => Randomize
+          if($scope.questions_list[$scope.questionIndex].answers_format != undefined && $scope.questions_list[$scope.questionIndex].length != 0 ){
+            $scope.questions_list[$scope.questionIndex].answers_format = $scope.randomize_arries($scope.questions_list[$scope.questionIndex].answers_format);
+          }
+        }else {
+          // => ResrotIt
+          if($scope.questions_list[$scope.questionIndex].answers_format != undefined && $scope.questions_list[$scope.questionIndex].length != 0 ){
+            $scope.questions_list[$scope.questionIndex].answers_format = $scope.sorting_arries($scope.questions_list[$scope.questionIndex].answers_format , "_id");
+          }
+        }
+        //+++++ $scope.iframe_access.view_question_answer($scope.question_id , questionSettings);
+    };
 
-                                  }else if ( review_setting == false && show_results_setting ) {
-                                              /* One Click ! */
-                                              // => Highlight the selected answer for some moments ( timeframe )
-                                              var there_is_highlighted_answer = false ;
-                                              answer_iu_list.each(function (i){
-                                                var there = $(this).hasClass('selected_answer');
-                                                if(there) there_is_highlighted_answer = true;
-                                              });
-                                              if(there_is_highlighted_answer == false )
-                                              this_answer.addClass('selected_answer animated shake');
-                                              else
-                                                return false ; // => Prevent user from correct or edit his answer
+    $scope.create_new_answer = function (){
 
-                                              // => Show the correct answer if selected is wrong show the wrong style + right style ( answer )
-                                                  // if user select the correct answer only need to show the right style in the selected answer
-                                              var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
-                                              if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
-                                                // =>> Show The correct
-                                                this_answer.addClass('right_answer');
-                                              }else {
-                                                // => show wrong answer
-                                                this_answer.addClass('wrong_answer');
-                                                // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
-                                                answer_iu_list.each(function (i){
-                                                  var currentAnswer = $(this);
-                                                  var answers_inBackend = question.answers_format[i].is_correct ;
-                                                  if(answers_inBackend){
-                                                    currentAnswer.addClass('right_answer');
-                                                  }
-                                                });
-                                              }
-                                              // => Angular backend ( attendee_draft  ) do this ---> don't allow attendee change the selected answer
-                                              // => Mongo status => move the data into mongo ( attendee draft )
-                                              $rootScope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
-                                              // => Auto slide status ( true ) => move to next slide directly after few moments ( timeframe )
+   if($scope.question_id == null ){
+     console.log("Please select question from question list");
+   }
+   $scope.unsaved_question = true ;
+   var question_selected = $scope.questions_list.find($scope.callback_index);
+   var answer_length = question_selected.answers_format.length ;
+   // //(answer_length);
+   $scope.indexes = answer_length+1;
+   if($scope.unique_ids[$scope.indexes] == undefined)
+   {
+     $(".add-new-option").css({
+       background : "rgba(221,34,34,0.24)" ,
+       color : '#ff5252'
+     });
+     $(".add-new-option").html("You couldn't able create more answers !!");
+     return false ;
+   }
+   var new_answer  = {
+        is_correct: false,
+        _id : $scope.unique_ids[$scope.indexes]
+   };
 
-                                  } else if ( review_setting == false && show_results_setting == false ) {
-                                              /* One Click ! */
-                                              // => Highlight the selected answer
-                                              var there_is_highlighted_answer = false ;
-                                              answer_iu_list.each(function (i){
-                                                var there = $(this).hasClass('selected_answer');
-                                                if(there) there_is_highlighted_answer = true;
-                                              });
-                                              if(there_is_highlighted_answer == false )
-                                              this_answer.addClass('selected_answer animated shake');
-                                              else
-                                                return false ;
-                                              // => No need to show the correct answer here
-                                              // => Angular backend ( attendee_draft  ) do this ---> don't allow attendee change the selected answer
-                                              // => Mongo status => move the data into mongo ( attendee draft )
-                                              $rootScope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
-                                              // => Auto slide status ( true ) => move to next slide directly
+      if($scope.question_type == 0 )
+         new_answer['value'] = "Answer " + $scope.indexes;
 
-                                  } else if (review_setting   && show_results_setting ) {
-                                              /* Many clicks ! */
-                                              // => Delete the-old highlited answer and Highlight the new selected answer for some moments ( timeframe )
-                                              var there_is_highlighted_answer = false ;
-                                              answer_iu_list.each(function (i){
-                                                var there = $(this).hasClass('selected_answer');
-                                                if(there) there_is_highlighted_answer = true;
-                                              });
-                                              if(there_is_highlighted_answer == false )
-                                              this_answer.addClass('selected_answer animated shake');
-                                              // => Show the correct answer if selected is wrong show the wrong style + right style ( answer )
-                                              // if user select the correct answer only need to show the right style in the selected answer
-                                              var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
-                                              if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
-                                                // =>> Show The correct
-                                                this_answer.addClass('right_answer');
-                                              }else {
-                                                // => Show wrong answer
-                                                this_answer.addClass('wrong_answer');
-                                                // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
-                                                answer_iu_list.each(function (i){
-                                                  var currentAnswer = $(this);
-                                                  var answers_inBackend = question.answers_format[i].is_correct ;
-                                                  if(answers_inBackend){
-                                                    currentAnswer.addClass('right_answer');
-                                                  }
-                                                });
-                                              }
+      if( $scope.question_type == 1 )
+       new_answer['media_src'] = $scope.server_ip + "img/media-icon.png" ;
 
+   question_selected.answers_format.push(new_answer);
+   //+++++ $scope.iframe_access.add_data_to_view($scope.question_id , new_answer);
 
+ };
+ $scope.question_answer_deletion = function (answer_id){
 
-                                              // => Angular backend ( attendee_draft  ) do this ---> allow attendee change the selected answer
-                                              $rootScope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
-                                              // => Auto slide status ( true ) => move to next slide directly after few moments ( timeframe )
+    var question_selected = $scope.questions_list.find(x => x._id == $scope.question_id); //heeer
+    var answer_selected = question_selected.answers_format.find(x => x._id == answer_id );
 
-                                  }
+    var targetIndex = question_selected.answers_format.findIndex(x => x._id == answer_id );
 
-                            }else { // 2 - case this question has many answers
-                                          // =====> Many answer cases
-                                  if(review_setting && show_results_setting == false ){
-                                            /* Many clicks ! */
-                                            /*
-                                              if attendee clicked on selected answer
-                                                ( Delete the highlighted style ) => from { UI - AngulrBD  - Mongo }
-                                            */
-                                            /*
-                                              if attendee clicked on unselected answer
-                                                ( Add the highlighted style ) => into { UI - AngulrBD  - Mongo }
-                                            */
-                                            if(this_answer.hasClass('selected_answer animated shake')){
-                                              this_answer.removeClass('selected_answer animated shake');
-                                            }else {
-                                              this_answer.addClass('selected_answer animated shake');
-                                            }
+    if(targetIndex != -1 ){
+      question_selected.answers_format.splice(targetIndex, 1);
+      // ==> delete from iframe object ( Live Preview )
+      $timeout(function(){
+        $scope.$apply();
+        //+++++ $scope.iframe_access.model_deletion(1 , $scope.question_id , answer_id);
+      } , 350 );
+    }
+  };
+  $scope.question_answer_mark_it_correct = function (answer_id){
+      // ==> This Answer
 
-                                            // ===================> Updates
-
-                                            // => No need to show the correct answers
-                                            // => Angular backend ( attendee_draft  ) do this --->  allow attendee change or add the answer
-                                            // => Mongo status => move the data into mongo ( attendee draft )
-                                            $rootScope.store_into_attendee_draft( stored_object , false );
-                                            // => Auto slide status ( NO need to go to the next slide ) onlu continue button do this action
-                                  }else if(review_setting == false && show_results_setting ) {
-                                            /* One Click for each answer ! */
-                                            var has_wrong_answer = false ;
-                                            answer_iu_list.each(function(i){
-                                              var there = $(this);
-                                              if(there.hasClass('wrong_answer'))
-                                                has_wrong_answer = true;
-                                            });
-                                            if(has_wrong_answer ) return false ;
-                                            /*
-                                              if attendee clicked on selected answer
-                                              ( Add the highlighted style ) => into { UI } ==> consider ( timeframe )
-                                                Show the correct answers if attendee selected any wrong answer from many correct answers
-                                            */
-                                            if(!this_answer.hasClass('selected_answer'))
-                                            this_answer.addClass('selected_answer animated shake');
-                                            else return false ;
-
-
-                                            // => Show the correct answers ( Case all correct answers are selected ) without wrong style
-                                            var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
-                                            if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
-                                              // =>> Show The correct
-                                              this_answer.addClass('right_answer');
-                                            }else {
-                                              // => show wrong answer
-                                              this_answer.addClass('wrong_answer');
-                                              // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
-                                              answer_iu_list.each(function (i){
-                                                var currentAnswer = $(this);
-                                                var answers_inBackend = question.answers_format[i].is_correct ;
-                                                if(answers_inBackend){
-                                                  currentAnswer.addClass('right_answer');
-                                                }
-                                              });
-                                            }
-                                            // => Angular backend ( attendee_draft  ) do this ---> dont allow attendee change the selected answer only add new answer !
-                                            // => Mongo status => move the data into mongo ( attendee draft )
-                                            $rootScope.store_into_attendee_draft( stored_object , false );
-                                            // => Auto slide status ( NO need to go to the next slide ) only continue button do this action
-                                  } else if ( review_setting == false && show_results_setting == false ) {
-                                            /* One Click for each answer ! */
-                                            /*
-                                              if attendee clicked on selected answer
-                                              ( Add the highlighted style ) => into { UI }
-                                            */
-                                            if(!this_answer.hasClass('selected_answer'))
-                                            this_answer.addClass('selected_answer animated shake');
-                                            else return false ;
-                                            // => No need to show the correct answers
-                                            // => Angular backend ( attendee_draft  ) do this ---> dont allow attendee change the selected answer only add new answer !
-                                            // => Mongo status => move the data into mongo ( attendee draft )
-                                            $rootScope.store_into_attendee_draft( stored_object , false );
-                                            // => Auto slide status ( NO need to go to the next slide ) only continue button do this action
-                                  } else if (review_setting   && show_results_setting ) {
-                                            /* Many clicks ! */
-                                            /*
-                                              if attendee clicked on selected answer
-                                                ( Delete the highlighted style ) => from  { UI } => with timeframe
-
-                                                => case the sleceted answer is wrong - show the correct results with wrong answer style
-                                            */
-                                            /*
-                                              if attendee clicked on unselected answer
-                                                ( Add the highlighted style ) => into { UI } => with timeframe
-
-                                                => case the sleceted answer is right - show the correct results
-                                            */
-
-                                             if(!this_answer.hasClass('selected_answer'))
-                                              this_answer.addClass('selected_answer animated shake');
-                                              else this_answer.removeClass('selected_answer animated shake');
-
-                                              var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
-                                              if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
-                                                // =>> Show The correct
-                                                this_answer.addClass('right_answer');
-                                              }else {
-                                                // => show wrong answer
-                                                this_answer.addClass('wrong_answer');
-                                                // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
-                                                answer_iu_list.each(function (i){
-                                                  var currentAnswer = $(this);
-                                                  var answers_inBackend = question.answers_format[i].is_correct ;
-                                                  if(answers_inBackend){
-                                                    currentAnswer.addClass('right_answer');
-                                                  }
-                                                });
-                                              }
-                                            // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the selected answer Or add new answer !
-                                            // => Mongo status => move the data into mongo ( attendee draft )
-                                            $rootScope.store_into_attendee_draft( stored_object , false );
-                                            // => Auto slide status ( NO need to go to the next slide ) only continue button do this action
-                                  }
-                            }  //  => ( End multi answers With single answer )
+      $scope.answer_id = answer_id ;
+      var question_selected = $scope.questions_list.find($scope.callback_index);
+      var answer_selected = question_selected.answers_format.find($scope.callback_answer_index);
+      //(answer_selected);
+      if( question_selected.question_type == 2 ){
+        var all_answers = question_selected.answers_format;
+        for (var i = 0; i < all_answers.length; i++) {
+          all_answers[i].is_correct = false;
+        }
+        answer_selected.is_correct = !answer_selected.is_correct ;
+        //(answer_selected);
+        return false ;
       }
 
+      // let's excute our func here
+      if(question_selected.answer_settings.single_choice == true ) { // only one response
+        var all_answers = question_selected.answers_format;
+        //(all_answers);
+        for (var i = 0; i < all_answers.length; i++) {
+          all_answers[i].is_correct = false;
+        }
+        answer_selected.is_correct = !answer_selected.is_correct ;
+      }else { // multiple response
+        answer_selected.is_correct = !answer_selected.is_correct ;
+      }
+    };
 
-      if( question.question_type == 2 ){ // => True False
-                     if ( review_setting && show_results_setting ) {
-                         /* Many clicks ! */
-                         // => Delete the-old highlighted answer and Highlight the new selected answer
-                         if(!this_answer.hasClass('selected_answer')){
-                           answer_iu_list.each(function(i){
-                             var there = $(this);
-                              there.removeClass('selected_answer animated shake')
-                           });
-                          this_answer.addClass('selected_answer animated shake');
+    $scope.save_changes_in_angular_backend = function ( decline_next = null ){
+
+      // ==> Save the quiz settings
+      $scope.application_save_settings();
+
+      $scope.unsaved_question = false;
+
+      //($scope.questions_list); #editor-question-body , #editor-question-desc
+        // //($scope.questions_list);
+        if($scope.question_id == null ){
+          console.log("You should select question from question list to allow you edit it");
+          return false ;
+        }
+
+        if(decline_next != false ){
+          var changes_button = $(".save_changes");
+          changes_button.html("<span class='saving_option'></span> Saving Changes");
+          changes_button.css("padding-left","40px");
+        }
+        // Save change in db
+        $.getJSON($scope.json_apk_file , function(api_key_data){
+          $http({
+                url   : $scope.api_url_question_creation ,
+                method : "PATCH",
+                data  : {
+                  "sorted_question": $scope.questions_list ,
+                  "creator_id":$scope.user_id
+                } ,
+                headers: {
+                  "X-api-keys": api_key_data.API_KEY,
+                  "X-api-app-name": api_key_data.APP_NAME
+                }
+              }).then(function(resp){
+                $(".save_changes").css("padding-left","5px");
+                  changes_button.html("Save Changes");
+                  // //(old_question_list);
+                  // $scope.questions_list = resp.data.questions ;
+                  // $scope.mongodb_questions = resp.data.questions ;
+
+
+                  // ==> Ignore next question
+                  // if ( decline_next == null ){
+                  //       // GO TO NEXT Question
+                  //       var found_qs = $scope.questions_list.find($scope.callback_index);
+                  //       var targetIndex = $scope.questions_list.indexOf(found_qs);
+                  //       if(targetIndex != -1 ) {
+                  //         if($scope.questions_list.length > ( targetIndex ) ) {
+                  //           var next_question = targetIndex + 1 ;
+                  //           if ( $scope.questions_list[next_question] != undefined )
+                  //           $scope.edit_this_question($scope.questions_list[next_question]._id , next_question) ;
+                  //         }
+                  //       }
+                  // }
+
+                  // ("Save change button");
+                  // ($scope.questions_list);
+                  $scope.timeFrame = 0 ;
+              },function(err){
+                //(err);
+              });
+        });
+      };
+      $scope.open_settgins_menu = function (){
+
+        $(".side-left-bar").css({
+          left: '-150px' ,
+          display: 'none'
+        });
+         $(".left_part").css ({
+            left: '-80%',
+            display: 'none'
+          });
+
+          $(".setting-part").css({
+            right: '0px' ,
+            display: 'block'
+          });
+
+          $(".update-rows").css({
+            'margin-left': '0px'
+          });
+
+      };
+      $scope.close_settgins_menu = function (){
+      $timeout(function (){
+        $(".side-left-bar").css({
+          left: '0px'
+        });
+        $(".left_part").css ({
+           left: '0%'
+         });
+         $(".setting-part").css({
+           right: '-80%'
+         });
+
+      } , 1000) ;
+
+      $(".side-left-bar").css({
+        display: 'block'
+      });
+       $(".left_part").css ({
+         display: 'block'
+        });
+
+        $(".setting-part").css({
+          display: 'none'
+        });
+
+        $(".update-rows").css({
+          'margin-left': '130px'
+        });
+
+    };
+    $scope.application_save_settings = function (){
+
+   // => Check if there is an select border or not
+   var outlined_object = $(".outlined_object");
+   if(outlined_object.hasClass('outlined_object')) outlined_object.removeClass('outlined_object') ;
+   $("#welcome-screens,#goodbye-screens,#result-screens ,#question-screens").css({display:'none' });
+   // var redactor_start_text = $R(".screen-redactors-strt-txt" , "source.getCode");
+   // $scope.application_settings.settings.titles.title_start_with =redactor_start_text;
+   // var redactor_end_text = $R(".screen-redactors-end-txt", "source.getCode");
+   // $scope.application_settings.settings.titles.title_end_with = redactor_end_text ;
+   // var redactor_scs_text =  $R(".screen-redactors-scs-txt", "source.getCode");
+   // $scope.application_settings.settings.titles.title_success_with   = redactor_scs_text ;
+   // var redactor_fld_text = $R(".screen-redactors-fld-txt", "source.getCode");
+   // $scope.application_settings.settings.titles.title_failed_with = redactor_fld_text ;
+
+ var saving_settings = $(".saving-settings-changes");
+ saving_settings.html("<span class='saving_option'></span> Saving Changes");
+ saving_settings.css("padding-left","40px");
+
+   var hrs  = ( $scope.application_settings.settings.time_settings.hours == null ) ? 0 : parseInt($scope.application_settings.settings.time_settings.hours) ;
+   var mins = ( $scope.application_settings.settings.time_settings.minutes == null ) ? 0 : parseInt( $scope.application_settings.settings.time_settings.minutes );
+   var secs = ( $scope.application_settings.settings.time_settings.seconds == null ) ? 0 : parseInt( $scope.application_settings.settings.time_settings.seconds );
+   $scope.application_settings.settings.time_settings.value = ( parseInt( hrs * 60 * 60 )  + parseInt( mins * 60 ) + parseInt( secs ) );
+
+     // $scope.api_url_app_settings
+     // $scope.application_settings
+     $.getJSON( $scope.json_apk_file , function (api_key_data ){
+         $http({
+           method : "PATCH" ,
+           url    : $scope.api_url_app_settings ,
+           headers: {
+               "X-api-keys": api_key_data.API_KEY,
+               "X-api-app-name": api_key_data.APP_NAME
+           },
+           data: {
+             creator_id : $scope.user_id ,
+             settings : $scope.application_settings.settings,
+             questionnaire_title : $scope.application_settings.questionnaire_title
+           }
+             }).then(function(resp){
+               saving_settings.css("padding-left","5px");
+               saving_settings.html("Save changes")
+             //(resp);
+               } , function(err){
+             //(err);
+
+           });
+     });
+   };
+
+
+   $scope.media_is_changed = () => {
+     $scope.is_changed_media = true;
+   };
+   $scope.save_media_with = function ( type ) {
+
+
+      if($scope.file_object.file == null && $scope.file_object.link == null)
+      return false ;
+
+     var html_loader = '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>';
+     $('.button_updates').html(html_loader);
+
+     var headers = new Object();
+     if($scope.file_object.media_type == 0 ){
+                      // ==> Header
+                     $scope.headers["Content-Type"] = undefined ;
+                      // ==> Show Progression bar for uploading image
+                      var image_container  =  $(".emb-image-case") ;
+                      var upload_progeress = "<div class='progress_barx'>";
+                          upload_progeress += '<div class="loaderxcv">Loading...</div>';
+                         //  upload_progeress += "<center>Uploading Image</center>";
+                          upload_progeress += "</div>";
+                      image_container.html(upload_progeress);
+                 } else {
+                   // Set header as an empty to fix issue related video urls !!
+                   $scope.headers = new Object();
+                 }
+
+                 $scope.save_changes_in_angular_backend(false);
+
+                 $timeout(function (){
+                   $.getJSON( $scope.json_apk_file , function (api_key_data ){
+                     $scope.headers["X-api-keys"] = api_key_data.API_KEY ;
+                     $scope.headers["X-api-app-name"] = api_key_data.APP_NAME ;
+
+                       var url ;
+                       if($scope.model_type == 'questions')
+                         url =  $scope.api_url_edit_question ;
+                          else
+                            url = $scope.api_url_edit_answer = $scope.server_ip + "api/"+$scope.app_id+"/question/"+$scope.question_id+"/answer/edit";
+
+
+
+                      $http({
+                        method : "PATCH"           ,
+                        url :  url                 ,
+                        headers: $scope.headers    ,
+                        processData: false         ,
+                        contentType: false         ,
+                        data: $scope.data_object
+                      }).then(function(success_data){
+                        console.log({success_data_success_data : success_data});
+                        if($scope.model_type == 'questions'){
+                         $scope.quest_media_parts = success_data.data.Question_details.media_question ;
+                         $scope.question_id = success_data.data.Question_details._id;
+                         var qsItem = $scope.questions_list.find($scope.callback_index);
+                         var qsItemIndex = $scope.questions_list.findIndex($scope.callback_index);
+                         qsItem.media_question = success_data.data.Question_details.media_question ;
+                         $scope.question_media = qsItem.media_question ;
+                         // console.log({VVVVVVVVVVVVV : $scope.question_media });
+                         if(qsItemIndex == -1 ) return false ;
+
+                         var media_objects = qsItem.media_question ;
+                          // ==>>> MEDIA_DATA+++++++++
+
+                            // $(".image_case").css({
+                            //   backgroundImage : url('');
+                            // })
+
+                          $timeout(function (){
+                             $scope.$apply()
+                          },550);
+                         }else {
+                           // => Keep it loading
+
+                           // --------------------------------------------
+                           // 1 ===> Answers
+                           // --------------------------------------------
+                           var target_question = $scope.questions_list.find($scope.callback_index);
+                           // $scope.asnwers = target_question.answers_format ;
+                           //(target_question);
+                           var target_answer = target_question.answers_format.find($scope.callback_answer_index);
+                           //(target_answer);
+                           var required_obj = new Object();
+                           if( target_question.question_type == 1 ){
+                                 var answer_data = success_data.data ;
+
+                                 // Store it into scope object
+                                 $scope.answer_media = answer_data ;
+                                 // Store it into Array
+                                 target_answer = answer_data ;
+                                 // update the-array
+                                 var thisAnswer = $scope.questions_list.find($scope.callback_index).answers_format.find($scope.callback_answer_index);
+                                 //(thisAnswer);
+                                 var currIndex = $scope.questions_list.find($scope.callback_index).answers_format.indexOf(thisAnswer);
+                                 //(currIndex);
+                                 if(currIndex != -1 ){
+                                   $scope.questions_list.find($scope.callback_index).answers_format[currIndex] =
+                                   answer_data ;
+
+                                   //("ANSWER DATA");
+                                   //(answer_data);
+                                   var media_obk_data = new Object();
+                                   required_obj['style'] = target_question.answer_settings.choice_style
+                                   required_obj['answer'] = answer_data;
+                                   if(answer_data.media_type == 0) {
+                                     // => Image Type
+                                     media_obk_data['media_name'] = answer_data.media_name;
+                                     media_obk_data['media_src'] = answer_data.media_src;
+                                     media_obk_data['media_type'] = answer_data.media_type;
+                                   }
+                                   if(answer_data.media_type == 1){
+                                     // => Video Type
+                                     media_obk_data['Media_directory'] = answer_data.Media_directory;
+                                     media_obk_data['embed_path'] = answer_data.embed_path;
+                                     media_obk_data['media_name'] = answer_data.media_name;
+                                     media_obk_data['media_src'] = answer_data.media_src;
+                                     media_obk_data['media_type'] = answer_data.media_type;
+                                     media_obk_data['video_id'] = answer_data.video_id;
+                                     media_obk_data['video_type'] = answer_data.video_type;
+                                   }
+
+                                   $timeout(function(){
+                                     //+++++ $scope.iframe_access.change_data_in_answer_view ( $scope.question_id  , 2 , answer_data._id ,  null  , null  , media_obk_data );
+                                   } , 350);
+                                 }
+                             }
+                           if(target_question.question_type == 0 ){
+                                 var answer_data = success_data.data ;
+                                 var media_optional = answer_data.media_optional;
+                                 // //(answer_data);
+                                 //  //(media_optional);
+                                 // Store it into question list array
+                                 target_answer.media_optional = answer_data.media_optional ;
+                                 // Store it into scope object
+                                 $scope.answer_media = target_answer.media_optional ;
+
+                                 required_obj['style'] = target_question.answer_settings.choice_style
+                                 required_obj['answer'] = target_answer;
+
+                                 //  ==>>> MEDIA_DATA+++++++++
+                                 //  $timeout(function (){
+                                 //    //+++++ $scope.iframe_access.change_data_in_answer_view ($scope.question_id  ,  2  , answer_data._id , null  , null  , answer_data.media_optional );
+                                 //  },350);
+
+                             }
+
+                             if ( target_question.question_type == 0 || target_question.question_type == 1 )
+                                  {
+                                    $scope.save_cropped_images();
+                                    // $scope.blob_background_data ( required_obj.answer , required_obj.style );
+                                  }
                          }
+                       $(".button_updates").html("close");
+                       $(".mm-update").html("Save");
+                       $(".media-imgvid-uploader").fadeOut();
+                      } , function(error_data){
+                           //(error_data);
+                      });
+                    }); // End JSON File reader here !
 
-                         // => show the correct answer here
+                 } , 500 );
+
+
+
+      };
+
+     $scope.highlighted_question_and_show_data = function (newIndex , itemEl = null) {
+     // ==> Update highlighted question when update ( in sortable )
+     if ($(itemEl).hasClass("highlighted-question")) {
+         var new_index = newIndex ;
+         $timeout(function (){
+           $("#docQuestions").children("li").each(function (){
+             ($(this).hasClass("highlighted-question")) ?
+                $(this).removeClass("highlighted-question") : null ;
+           });
+           $("#docQuestions").children("li").eq(new_index).addClass("highlighted-question");
+         }, 200);
+      }
+   };
+   $scope.remove_media_from_target_model = function (modelType = null ){
+      if(modelType != null ) // question
+      {
+        if ($scope.question_id == null ) return false ;
+
+        var found_qs = $scope.questions_list.find($scope.callback_index);
+        var targetIndex = $scope.questions_list.indexOf(found_qs);
+
+        // Fill with null
+        $scope.question_media = null ;
+        // Remove From array
+        delete found_qs['media_question'];
+        // remove from view
+        delete $scope.quest_media_parts ;
+        // $scope.save_changes_in_angular_backend(true);
+        // //(found_qs);
+        // question_building["_id"] =
+      } else { // answer
+        // console.log("answer")
+      }
+  };
+
+  $scope.load_image_data_with_date = (dirImg) => {
+    return {
+      "background-image" : "url('"+dirImg + "?" + new Date() +"')"
+    }
+  }
+  $scope.status_of_questions = function (){
+     // -----------------------------------------------------
+     // ----------------- init questions from db
+     // -----------------------------------------------------
+     $.getJSON($scope.json_apk_file , function(api_key_data){
+       var urls = $scope.server_ip+ 'api/' + $scope.app_id+"/application/questions";
+       $http({
+             url   : urls ,
+             method : "POST",
+             data  : {
+               "creator_id":$scope.user_id
+             } ,
+             headers: {
+               "X-api-keys": api_key_data.API_KEY,
+               "X-api-app-name": api_key_data.APP_NAME
+             }
+           }).then(function (resp){
+               $scope.mongodb_questions  = resp.data ;
+           } , function (err){
+             //(err);
+           });
+     });
+   };
+
+
+   $scope.dragged_items = (evt) => {
+         // ======================================>
+         // => Generate New Ids
+         // ======================================>
+         $http({
+           url : $scope.api_url_init_id_date ,
+           method : "GET"
+         }).then(function(resp){
+
+           $scope.drag_drop_status = false;
+           $scope.mongoose_id = resp.data.id;
+           $scope.mongoose_answer_id = resp.data.id_1;
+           $scope.mongoose_date = resp.data.date;
+           $scope.drag_drop_status = false;
+
+           // ======================================>
+           // ==> html values
+           // ======================================>
+           var html_built_in = $("#docQuestions").find(evt.item);
+           $("#docQuestions").css({background : "transparent"});
+
+           // ======================================>
+           // ==> push and update indexes in array
+           // ======================================>
+           var itemType = $(evt.item).attr('data-type');
+           var questionType = $(evt.item).attr('data-question-type');
+           var questionId = html_built_in.attr("data-question-id");
+           var new_question = {
+                  _id:$scope.mongoose_id,
+                  question_type :questionType,
+                  question_body :"Add your question here !",
+                  enable_description : $scope.enable_description ,
+                  created_at :$scope.mongoose_date,
+                  answer_settings : {
+                            answer_char_max : 200 ,
+                            choice_style : false , // ==> inline or block
+                            is_randomized : false,
+                            is_required : false,
+                            single_choice : true,
+                            super_size : false
+                    },
+                  answers_format : []
+             };
+           var answer_obj = new Object() ;
+           if($scope.application_type == 0 )
+            answer_obj['is_correct'] = false ;
+
+           answer_obj['_id'] = $scope.mongoose_answer_id  ;
+           var obj_2_id = $scope.mongoose_answer_id.toString()+'12f' ;
+           if(questionType == 0 ){ answer_obj['value'] = 'Answer 1'; }
+           if(questionType == 1 ){ answer_obj['media_type'] = 0 ;  answer_obj['media_src'] = $scope.server_ip + "img/media-icon.png"; }
+           if(questionType == 2 ){ answer_obj['boolean_type'] = "true/false"; answer_obj['boolean_value'] = false; new_question.answers_format.push({ '_id': obj_2_id ,'creator_id' : $scope.user_id ,'is_correct' : true ,'boolean_type' : "true/false" ,'boolean_value': true });}
+           if(questionType == 3 ){
+             var rating_scale = $(evt.item).attr("data-asnwer-type") ;
+             answer_obj['ratscal_type'] = rating_scale ;
+             answer_obj['step_numbers'] = 5 ;
+             answer_obj['rating_scale_answers'] = [
+               {
+                 _id : answer_obj['_id'] + '_1' ,
+                 rat_scl_value : 1
+               },
+               {
+                 _id : answer_obj['_id'] + '_2' ,
+                 rat_scl_value : 2
+               },
+               {
+                 _id : answer_obj['_id'] + '_3' ,
+                 rat_scl_value : 3
+               },
+               {
+                 _id : answer_obj['_id'] + '_4' ,
+                 rat_scl_value : 4
+               },
+               {
+                 _id : answer_obj['_id'] + '_5' ,
+                 rat_scl_value : 5
+               }
+             ];
+             if( rating_scale == 0 ){
+               answer_obj['show_labels'] = false ;
+               answer_obj['started_at'] = "Left label" ;
+               answer_obj['centered_at'] = "Center label" ;
+               answer_obj['ended_at'] = "Right label" ;
+             }
+           }
+           if(questionType == 4 ){ new_question.answer_settings.answer_char_max = 500 ;  }
+           new_question.answers_format.push(answer_obj);
+           if($scope.mongoose_id == null ){
+             $http({
+               url : $scope.api_url_init_id_date ,
+               method : "GET"
+             }).then(function(resp){
+               new_question['_id'] = resp.data.id;
+               new_question['created_at'] = resp.data.date;
+               $scope.unique_ids = resp.data.list_of_ids;
+               new_question.answers_format[0]['_id'] = resp.data.id_1;
+               if(questionType == 2 ){
+                new_question.answers_format[1]['_id'] = resp.data.id_1+'12fd';
+               }
+             } , function(){});
+           }
+           $timeout(function (){
+             var index_in_array = evt.newIndex;
+             $scope.questions_list.splice(index_in_array,0, new_question );
+             // question_data_object.splice(index_in_array,0, new_question );
+             var index_in_array = evt.newIndex;
+             html_built_in.remove();
+             if(itemType == 'qst'){
+               $.getJSON($scope.json_apk_file , function(api_key_data){
+                 $http({
+                   url   : $scope.api_url_question_creation ,
+                   method : "PATCH",
+                   data  : {
+                     "sorted_question": $scope.questions_list ,
+                     "creator_id":$scope.user_id
+                   },
+                   headers: {
+                     "X-api-keys": api_key_data.API_KEY,
+                     "X-api-app-name": api_key_data.APP_NAME
+                   }
+                 }).then(function(resp){
+                   //+++++ $scope.iframe_access.player_questions(resp.data.questions , evt.newIndex );
+                   $scope.question_object_that_added = new_question ;
+                   $scope.question_id = new_question._id ;
+                   $scope.edit_this_question( new_question._id , evt.newIndex  );
+                 } , function (){});
+               });
+             }
+           } , 300 );
+         } , function(){});
+       };
+
+
+
+       $scope.store_into_attendee_draft = (object) => {
+
+           if (  $scope.this_attendee_draft != null && $scope.this_attendee_draft.application_id != undefined)
+              { // ==> attendee_draft is not empty
+
+                  var findAttendeeIndex = $scope.this_attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id );
+                  var findAttendee = $scope.this_attendee_draft.att_draft.find(x => x.user_id == $scope.user_id );
+
+                  if(findAttendeeIndex != - 1){
+                    // ==> Attendee Object [FOUND]
+                    var attendeeInfo = $scope.this_attendee_draft.att_draft[findAttendeeIndex];
+                    console.log({attendeeInfo : attendeeInfo});
+                    if(attendeeInfo.questions_data == undefined )
+                    attendeeInfo.questions_data = new Array();
+                    var findQuestionIndex = attendeeInfo.questions_data.findIndex(x => x.question_id == object.question_id);
+                    var findQuestion = attendeeInfo.questions_data.find(x => x.question_id == object.question_id);
+                    if(findQuestionIndex == -1){
+
+                      // ==> Question UNFOUND
+                      attendeeInfo.questions_data.push({
+                        question_id : object.question_id ,
+                        question_index : 0 ,
+                        question_type : object.question.question_type,
+                        question_text : object.question.question_body,
+                        answer_ids : new Array({answer_id : object.answer_id , is_correct : object.is_correct , answer_object : object.answer , answer_index : object.answer_index }) ,
+                        correct_answers : object.question.answers_format.filter(x => x.is_correct == true) ,
+                        updated_date : new Date()
+                      });
+
+
+                      // ==============================>> Report Questions ( all_questions , right_questions , wrong_questions )
+                      if(attendeeInfo.report_questions == undefined)
+                      attendeeInfo.report_questions = new Object();
+
+                      if(attendeeInfo.report_questions.all_questions == undefined )
+                        attendeeInfo.report_questions.all_questions = new Array();
+                        // ==> Store the questions here plz
+                        attendeeInfo.report_questions.all_questions.push(object.question_id);
+
+
+                      // ==> store correct answers that solved
+                      if(attendeeInfo.report_questions.right_questions == undefined )
+                        attendeeInfo.report_questions.right_questions = new Array();
+
+                      // ==> store wrong answers that solved
+                      if(attendeeInfo.report_questions.wrong_questions == undefined )
+                        attendeeInfo.report_questions.wrong_questions = new Array();
+
+
+                      var answerIndexVal = object.question.answers_format.findIndex(x => x._id == object.answer_id );
+                      if(answerIndexVal != -1 ){
+                        answerObject = object.question.answers_format.find(x => x._id == object.answer_id );
+                        if(answerObject.is_correct == true )
+                          attendeeInfo.report_questions.right_questions.push(object.question_id) ;
+                        else
+                          attendeeInfo.report_questions.wrong_questions.push(object.question_id) ;
+                      }
+
+                      // ==============================>> Report attendee_details
+                      if(attendeeInfo.report_attendee_details == undefined )
+                        attendeeInfo.report_attendee_details = new Object();
+
+                        // ==> Calculations
+                        if( $scope.__player_object.settings  == undefined || $scope.__player_object.settings == null )
+                          alert("Something went wrong !")
+
+                        var app_grade_value = parseInt($scope.__player_object.settings.grade_settings.value);
+                        var total_app_questions = parseInt($scope.__player_object.questions.length);
+                        var correct_questions = parseInt(attendeeInfo.report_questions.right_questions.length);
+                        var wrong_questions  = parseInt(attendeeInfo.report_questions.wrong_questions.length);
+                        var percentage = Math.round(correct_questions * 100 ) / total_app_questions ;
+                        var isPassed = ( percentage >= app_grade_value )? true : false ;
+                        var is_completed = ( total_app_questions == attendeeInfo.questions_data.length ) ? true : false ;
+
+                        attendeeInfo.is_completed = is_completed ;
+                        attendeeInfo.report_attendee_details.attendee_id = $scope.user_id ;
+                        attendeeInfo.report_attendee_details.attendee_information = $scope.user_id ;
+                        attendeeInfo.report_attendee_details.total_questions = attendeeInfo.questions_data.length ;
+                        attendeeInfo.report_attendee_details.pass_mark = isPassed ,
+                        attendeeInfo.report_attendee_details.correct_answers =  correct_questions ,
+                        attendeeInfo.report_attendee_details.wrong_answers = wrong_questions ;
+                        attendeeInfo.report_attendee_details.status= (isPassed == true ) ? "Passed": "Failed";
+                        attendeeInfo.report_attendee_details.score= percentage;
+                        attendeeInfo.report_attendee_details.completed_status= is_completed;
+                        attendeeInfo.report_attendee_details.created_at= new Date();
+                        attendeeInfo.report_attendee_details.completed_date= new Date();
+
+                        // ==============================>> Report report_attendees
+                        if(attendeeInfo.report_attendees == undefined )
+                          attendeeInfo.report_attendees = new Object();
+
+                          attendeeInfo.report_attendees.created_at = new Date()
+                          attendeeInfo.report_attendees.updated_at = new Date()
+                          attendeeInfo.report_attendees.attendee_id = $scope.user_id;
+                          attendeeInfo.report_attendees.user_information = $scope.user_id;
+                          attendeeInfo.report_attendees.is_completed = is_completed ;
+                          attendeeInfo.report_attendees.passed_the_grade = isPassed ;
+                          attendeeInfo.report_attendees.survey_quiz_answers = new Array();
+                          attendeeInfo.report_attendees.results = new Object();
+                          attendeeInfo.report_attendees.results['wrong_answers'] = wrong_questions;
+                          attendeeInfo.report_attendees.results['correct_answers'] = correct_questions ;
+                          attendeeInfo.report_attendees.results['count_of_questions'] = attendeeInfo.questions_data.length ;
+                          attendeeInfo.report_attendees.results['result'] = new Object();
+                          attendeeInfo.report_attendees.results['result']['percentage_value'] = percentage;
+                          attendeeInfo.report_attendees.results['result']['raw_value'] = correct_questions ;
+                          attendeeInfo.report_attendees.survey_quiz_answers.push({
+                            question_id :  object.question_id  ,
+                            questions : {
+                              question_id : object.question_id,
+                              question_body :object.question.question_body ,
+                              question_type : object.question.question_type
+                            } ,
+                            answers : {
+                              answer_id : new Array (object.answer_id) ,
+                              answer_body :  new Object() ,
+                              is_correct : object.is_correct
+                            }
+                          });
+                          attendeeInfo.report_attendees.survey_quiz_answers[attendeeInfo.report_attendees.survey_quiz_answers.length - 1 ].
+                          answers.answer_body["answer_id_"+object.answer_id] = {
+                                   answer_id : object.answer_id ,
+                                   answer_body : object.answer ,
+                                   is_correct : object.is_correct
+                           }
+                           console.log({attendeeInfo: attendeeInfo});
+                          // console.log(attendeeInfo);
+                    }else {
+                      // ==> Question FOUND ==> Update here !
+                       var findAnswer = findQuestion.answer_ids.find(x => x.answer_id == object.answer_id);
+                       var findAnswerIndex = findQuestion.answer_ids.findIndex(x => x.answer_id == object.answer_id);
+                       if(findAnswerIndex == -1 ){
+                         findQuestion.answer_ids.push({
+                            answer_id : object.answer_id , is_correct : object.is_correct , answer_object : object.answer , answer_index : object.answer_index
+                          });
+                       }else{
+                         findQuestion.answer_ids.splice(findAnswerIndex, 1);
+                       }
+
+
+                       var app_correct_answers =  findQuestion.correct_answers
+                       var attendee_solved_answers =  findQuestion.answer_ids
+
+                       var isCorrect =  question_status (app_correct_answers , attendee_solved_answers);
+
+                       if(findQuestion.answer_ids.length != 0){
+                               var all_report_questions_index = attendeeInfo.report_questions.all_questions.findIndex(x => x == object.question_id);
+                               if(all_report_questions_index != -1 ){
+
+                                 var wrong_exists =  attendeeInfo.report_questions.wrong_questions.findIndex(x => x == object.question_id);
+                                 var right_exists =  attendeeInfo.report_questions.right_questions.findIndex(x => x == object.question_id);
+
+                                 if(isCorrect == false ){
+                                   if( wrong_exists == -1 )  // add  here
+                                     attendeeInfo.report_questions.wrong_questions.push(object.question_id);
+
+                                   if(right_exists != -1 )  // delete it from here
+                                     attendeeInfo.report_questions.right_questions.splice(right_exists , 1 );
+                                 }else {
+                                   if(right_exists == -1 )  // add  here
+                                      attendeeInfo.report_questions.right_questions.push(object.question_id);
+
+                                   if( wrong_exists != -1 ){ // delete it from here
+                                      attendeeInfo.report_questions.wrong_questions.splice(wrong_exists , 1);
+                                   }
+                                 }
+                               } // => End all questions
+                        }else if(findQuestion.answer_ids.length == 0){
+                         var qsIndex_all = attendeeInfo.report_questions.all_questions.findIndex( x => x == object.question_id);
+                         var qsIndex_wrong = attendeeInfo.report_questions.wrong_questions.findIndex(x => x == object.question_id);
+                         var qsIndex_right = attendeeInfo.report_questions.right_questions.findIndex(x => x == object.question_id);
+
+                         if(qsIndex_wrong != -1)
+                         attendeeInfo.report_questions.wrong_questions.splice(qsIndex_wrong , 1);
+
+                         if(qsIndex_right != -1)
+                         attendeeInfo.report_questions.right_questions.splice(qsIndex_right , 1);
+
+                         if(qsIndex_all != -1)
+                         attendeeInfo.report_questions.all_questions.splice(qsIndex_all , 1);
+                       } // End store answer question
+
+
+
+                       var app_grade_value = parseInt($scope.__player_object.settings.grade_settings.value);
+                       var total_app_questions = parseInt($scope.__player_object.questions.length);
+                       var correct_questions = parseInt(attendeeInfo.report_questions.right_questions.length);
+                       var wrong_questions  = parseInt(attendeeInfo.report_questions.wrong_questions.length);
+                       var percentage = Math.round(correct_questions * 100 ) / total_app_questions ;
+                       var isPassed = ( percentage >= app_grade_value )? true : false ;
+                       var is_completed = ( total_app_questions == attendeeInfo.questions_data.length ) ? true : false ;
+
+                       attendeeInfo.is_completed = is_completed ;
+                       attendeeInfo.report_attendee_details.total_questions = attendeeInfo.questions_data.length ;
+                       attendeeInfo.report_attendee_details.pass_mark = isPassed ,
+                       attendeeInfo.report_attendee_details.correct_answers =  correct_questions ,
+                       attendeeInfo.report_attendee_details.wrong_answers = wrong_questions ;
+                       attendeeInfo.report_attendee_details.status= (isPassed == true ) ? "Passed": "Failed";
+                       attendeeInfo.report_attendee_details.score= percentage;
+                       attendeeInfo.report_attendee_details.completed_status= is_completed;
+                       attendeeInfo.report_attendee_details.completed_date= new Date();
+
+
+                       attendeeInfo.report_attendees.updated_at = new Date()
+                       attendeeInfo.report_attendees.attendee_id = $scope.user_id;
+                       attendeeInfo.report_attendees.user_information = $scope.user_id;
+                       attendeeInfo.report_attendees.is_completed = is_completed ;
+                       attendeeInfo.report_attendees.passed_the_grade = isPassed ;
+
+                       attendeeInfo.report_attendees.results['wrong_answers'] = wrong_questions;
+                       attendeeInfo.report_attendees.results['correct_answers'] = correct_questions ;
+                       attendeeInfo.report_attendees.results['count_of_questions'] = attendeeInfo.questions_data.length ;
+                       attendeeInfo.report_attendees.results['result']['percentage_value'] = percentage;
+                       attendeeInfo.report_attendees.results['result']['raw_value'] = correct_questions ;
+                       var qsIndex_x = attendeeInfo.report_attendees.survey_quiz_answers.findIndex(x => x.question_id == object.question_id);
+                       var question_obj_val ;
+                       if(qsIndex_x != -1 ){
+                          question_obj_val = {
+                            question_id :  object.question_id  ,
+                            questions : {
+                              question_id : object.question_id,
+                              question_body :object.question.question_body ,
+                              question_type : object.question.question_type
+                            } ,
+                            answers : {
+                              answer_id : new Array (object.answer_id) ,
+                              answer_body :  new Object() ,
+                              is_correct : object.is_correct
+                            }
+                          }; // end question object
+
+                           question_obj_val.answers.answer_body["answer_id_"+object.answer_id] = {
+                                   answer_id : object.answer_id ,
+                                   answer_body : object.answer ,
+                                   is_correct : object.is_correct
+                           }
+
+                           attendeeInfo.report_attendees.survey_quiz_answers[qsIndex_x] = question_obj_val ;
+
+                       }
+                    }
+                  }else {
+                    // ==> Attenee Object [UNFOUND]
+
+                  }
+              }else {
+                // ==> attendee_draft is empty
+
+              }
+
+              $timeout(function(){  $scope.$apply(); } , 300);
+              console.log({
+                currAttendee : $scope.this_attendee_draft
+              });
+         }   // ==> End the view array
+         $scope.go_to_this_question_data = (question_id  ) => {
+                var question_index = $scope.questions_list.findIndex(x => x._id == question_id );
+                if(question_index != -1 ){
+                     $scope.question = $scope.questions_list[question_index];
+                     $scope.index_value = question_index ;
+                     $scope.screen_type = 0 ;
+                }
+        };
+        $scope.select_this_answer = ( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex) => {
+          var user_id = window.location.toString().split("/").pop();
+          // ==> Register First Action
+
+          if( $scope.this_attendee_draft == null )
+                {
+                   $scope.this_attendee_draft = new Object();
+                   $scope.this_attendee_draft['att_draft'] = new Array();
+                   $scope.this_attendee_draft['application_id'] = $scope.app_id;
+                   $scope.this_attendee_draft['questionnaire_info'] = $scope.app_id;
+                   var cuIndex = $scope.this_attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) ;
+
+                      if(cuIndex == -1 ){
+                        var all_seconds = parseInt( $scope.__player_object.settings.time_settings.hours * 60 * 60 ) + parseInt(  $scope.__player_object.settings.time_settings.minutes * 60  ) + parseInt($scope.__player_object.settings.time_settings.seconds )
+                        $scope.__player_object.settings.time_settings.value = all_seconds ;
+                        $scope.this_attendee_draft.att_draft.push({
+                          'questions_data' : new Array() ,
+                          'is_loaded':true ,
+                          'start_expiration_time' : new Date() ,
+                          'user_id' : $scope.user_id ,
+                          'user_info':$scope.user_id ,
+                          'is_completed':false ,
+                          'impr_application_object':$scope.__player_object
+                        });
+                      }
+                }
+
+
+        // ==> Consider the followings :-
+        // => Make sure from require qs option
+
+        /*+++++++++++++++++++++++++++++++++++*/
+        // Givens ======= *****
+        /*+++++++++++++++++++++++++++++++++++*/
+        // => consider ( show results per qs setting ) => ?
+        var show_results_setting =  ( $scope.__player_object.settings != undefined ) ? $scope.__player_object.settings.show_results_per_qs : false ;
+        // => consider ( review setting )
+        var review_setting =  ( $scope.__player_object.settings != undefined ) ? $scope.__player_object.settings.review_setting : false ;
+        // => consider ( multi answers  )
+        var is_single_choice_setting = ( question.answer_settings.single_choice != undefined) ?  question.answer_settings.single_choice : true ;
+        // => consider auto slide when answer select if it only single answer
+        var auto_slide_setting = ( $scope.__player_object.settings != undefined ) ? $scope.__player_object.settings.auto_slide : false ;
+
+
+        var answer_iu_list = $('#question_' + questionId).children('li');
+        var this_answer = $('.answer_'+answerId) ;
+        var stored_object = {
+            question_id : questionId ,
+            answer_id : answerId ,
+            question : question ,
+            answer: answer ,
+            app_id : app_id ,
+            user_id : user_id ,
+            is_correct : is_correct ,
+            answer_index : answerIndex
+        };
+
+
+
+              //---------------------------------------------------------------
+              // ==============>> Multiple Choices ( Texts Or Media )
+              //---------------------------------------------------------------
+              if( question.question_type == 0 || question.question_type == 1 )
+                  {
+                      if( is_single_choice_setting ){ // 1 - case this question has single answer
+                                      // =====> Single Answer
+                            if(review_setting && show_results_setting == false ){
+                                          /* Many clicks ! */
+                                         // => Delete the-old highlited answer and Highlight the new selected answer
+                                         answer_iu_list.removeClass('selected_answer animated shake');
+                                         this_answer.addClass('selected_answer animated shake');
+
+                                          if($scope.this_attendee_draft.att_draft != undefined){
+                                            // remove old answer answer_ids
+                                            var question_id = stored_object.question_id ;
+                                            // question_id
+                                            var attendee_part = $scope.this_attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+                                            if(attendee_part != undefined){
+                                              var target_question = attendee_part.questions_data.find(x => x.question_id == question_id);
+                                              if(target_question != undefined)
+                                              target_question.answer_ids = new Array();
+                                            }
+                                          }
+                                         // => No need to show the correct answer here
+                                         // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
+                                         // => Mongo status => move the data into mongo ( attendee draft )
+                                         $scope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
+                                         // => Auto slide status ( true ) => move to next slide directly
+                                         if(auto_slide_setting) $scope.go_to_next_question();
+                            }else if(review_setting == false && show_results_setting ) {
+                                        /* One Click ! */
+                                        // => Highlight the selected answer for some moments ( timeframe )
+                                        var there_is_highlighted_answer = false ;
+                                        answer_iu_list.each(function (i){
+                                          var there = $(this).hasClass('selected_answer');
+                                          if(there) there_is_highlighted_answer = true;
+                                        });
+                                        if(there_is_highlighted_answer == false )
+                                        this_answer.addClass('selected_answer animated shake');
+                                        else
+                                          return false ; // => Prevent user from correct or edit his answer
+
+                                        // => Show the correct answer if selected is wrong show the wrong style + right style ( answer )
+                                            // if user select the correct answer only need to show the right style in the selected answer
+                                        var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                                        if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                                          // =>> Show The correct
+                                          this_answer.addClass('right_answer');
+                                        }else {
+                                          // => show wrong answer
+                                          this_answer.addClass('wrong_answer');
+                                          // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                                          answer_iu_list.each(function (i){
+                                            var currentAnswer = $(this);
+                                            var answers_inBackend = question.answers_format[i].is_correct ;
+                                            if(answers_inBackend){
+                                              currentAnswer.addClass('right_answer');
+                                            }
+                                          });
+                                        }
+                                        // => Angular backend ( attendee_draft  ) do this ---> don't allow attendee change the selected answer
+                                        // => Mongo status => move the data into mongo ( attendee draft )
+                                        $scope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
+                                        // => Auto slide status ( true ) => move to next slide directly after few moments ( timeframe )
+                                        if(auto_slide_setting) $scope.go_to_next_question();
+                            } else if ( review_setting == false && show_results_setting == false ) {
+                                        /* One Click ! */
+                                        // => Highlight the selected answer
+                                        var there_is_highlighted_answer = false ;
+                                        answer_iu_list.each(function (i){
+                                          var there = $(this).hasClass('selected_answer');
+                                          if(there) there_is_highlighted_answer = true;
+                                        });
+                                        if(there_is_highlighted_answer == false )
+                                        this_answer.addClass('selected_answer animated shake');
+                                        else
+                                          return false ;
+                                        // => No need to show the correct answer here
+                                        // => Angular backend ( attendee_draft  ) do this ---> don't allow attendee change the selected answer
+                                        // => Mongo status => move the data into mongo ( attendee draft )
+                                        $scope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
+                                        // => Auto slide status ( true ) => move to next slide directly
+                                        if(auto_slide_setting) $scope.go_to_next_question();
+                            } else if (review_setting   && show_results_setting ) {
+                                        /* Many clicks ! */
+                                        // => Delete the-old highlited answer and Highlight the new selected answer for some moments ( timeframe )
+                                        var there_is_highlighted_answer = false ;
+                                        answer_iu_list.each(function (i){
+                                          var there = $(this).hasClass('selected_answer');
+                                          if(there) there_is_highlighted_answer = true;
+                                        });
+                                        if(there_is_highlighted_answer == false )
+                                        this_answer.addClass('selected_answer animated shake');
+                                        // => Show the correct answer if selected is wrong show the wrong style + right style ( answer )
+                                        // if user select the correct answer only need to show the right style in the selected answer
+                                        var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                                        if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                                          // =>> Show The correct
+                                          this_answer.addClass('right_answer');
+                                        }else {
+                                          // => Show wrong answer
+                                          this_answer.addClass('wrong_answer');
+                                          // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                                          answer_iu_list.each(function (i){
+                                            var currentAnswer = $(this);
+                                            var answers_inBackend = question.answers_format[i].is_correct ;
+                                            if(answers_inBackend){
+                                              currentAnswer.addClass('right_answer');
+                                            }
+                                          });
+                                        }
+
+
+
+                                        // => Angular backend ( attendee_draft  ) do this ---> allow attendee change the selected answer
+                                        $scope.store_into_attendee_draft(stored_object); // => Mongo VS Angular
+                                        // => Auto slide status ( true ) => move to next slide directly after few moments ( timeframe )
+                                        if(auto_slide_setting) $scope.go_to_next_question();
+                            }
+
+                      }else { // 2 - case this question has many answers
+                                    // =====> Many answer cases
+                            if(review_setting && show_results_setting == false ){
+                                      /* Many clicks ! */
+                                      /*
+                                        if attendee clicked on selected answer
+                                          ( Delete the highlighted style ) => from { UI - AngulrBD  - Mongo }
+                                      */
+                                      /*
+                                        if attendee clicked on unselected answer
+                                          ( Add the highlighted style ) => into { UI - AngulrBD  - Mongo }
+                                      */
+                                      if(this_answer.hasClass('selected_answer animated shake')){
+                                        this_answer.removeClass('selected_answer animated shake');
+                                      }else {
+                                        this_answer.addClass('selected_answer animated shake');
+                                      }
+
+                                      // ===================> Updates
+
+                                      // => No need to show the correct answers
+                                      // => Angular backend ( attendee_draft  ) do this --->  allow attendee change or add the answer
+                                      // => Mongo status => move the data into mongo ( attendee draft )
+                                      $scope.store_into_attendee_draft( stored_object , false );
+                                      // => Auto slide status ( NO need to go to the next slide ) onlu continue button do this action
+                            }else if(review_setting == false && show_results_setting ) {
+                                      /* One Click for each answer ! */
+                                      var has_wrong_answer = false ;
+                                      answer_iu_list.each(function(i){
+                                        var there = $(this);
+                                        if(there.hasClass('wrong_answer'))
+                                          has_wrong_answer = true;
+                                      });
+                                      if(has_wrong_answer ) return false ;
+                                      /*
+                                        if attendee clicked on selected answer
+                                        ( Add the highlighted style ) => into { UI } ==> consider ( timeframe )
+                                          Show the correct answers if attendee selected any wrong answer from many correct answers
+                                      */
+                                      if(!this_answer.hasClass('selected_answer'))
+                                      this_answer.addClass('selected_answer animated shake');
+                                      else return false ;
+
+
+                                      // => Show the correct answers ( Case all correct answers are selected ) without wrong style
+                                      var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                                      if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                                        // =>> Show The correct
+                                        this_answer.addClass('right_answer');
+                                      }else {
+                                        // => show wrong answer
+                                        this_answer.addClass('wrong_answer');
+                                        // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                                        answer_iu_list.each(function (i){
+                                          var currentAnswer = $(this);
+                                          var answers_inBackend = question.answers_format[i].is_correct ;
+                                          if(answers_inBackend){
+                                            currentAnswer.addClass('right_answer');
+                                          }
+                                        });
+                                      }
+                                      // => Angular backend ( attendee_draft  ) do this ---> dont allow attendee change the selected answer only add new answer !
+                                      // => Mongo status => move the data into mongo ( attendee draft )
+                                      $scope.store_into_attendee_draft( stored_object , false );
+                                      // => Auto slide status ( NO need to go to the next slide ) only continue button do this action
+                            } else if ( review_setting == false && show_results_setting == false ) {
+                                      /* One Click for each answer ! */
+                                      /*
+                                        if attendee clicked on selected answer
+                                        ( Add the highlighted style ) => into { UI }
+                                      */
+                                      if(!this_answer.hasClass('selected_answer'))
+                                      this_answer.addClass('selected_answer animated shake');
+                                      else return false ;
+                                      // => No need to show the correct answers
+                                      // => Angular backend ( attendee_draft  ) do this ---> dont allow attendee change the selected answer only add new answer !
+                                      // => Mongo status => move the data into mongo ( attendee draft )
+                                      $scope.store_into_attendee_draft( stored_object , false );
+                                      // => Auto slide status ( NO need to go to the next slide ) only continue button do this action
+                            } else if (review_setting   && show_results_setting ) {
+                                      /* Many clicks ! */
+                                      /*
+                                        if attendee clicked on selected answer
+                                          ( Delete the highlighted style ) => from  { UI } => with timeframe
+
+                                          => case the sleceted answer is wrong - show the correct results with wrong answer style
+                                      */
+                                      /*
+                                        if attendee clicked on unselected answer
+                                          ( Add the highlighted style ) => into { UI } => with timeframe
+
+                                          => case the sleceted answer is right - show the correct results
+                                      */
+
+                                       if(!this_answer.hasClass('selected_answer'))
+                                        this_answer.addClass('selected_answer animated shake');
+                                        else this_answer.removeClass('selected_answer animated shake');
+
+                                        var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                                        if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                                          // =>> Show The correct
+                                          this_answer.addClass('right_answer');
+                                        }else {
+                                          // => show wrong answer
+                                          this_answer.addClass('wrong_answer');
+                                          // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                                          answer_iu_list.each(function (i){
+                                            var currentAnswer = $(this);
+                                            var answers_inBackend = question.answers_format[i].is_correct ;
+                                            if(answers_inBackend){
+                                              currentAnswer.addClass('right_answer');
+                                            }
+                                          });
+                                        }
+                                      // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the selected answer Or add new answer !
+                                      // => Mongo status => move the data into mongo ( attendee draft )
+                                      $scope.store_into_attendee_draft( stored_object , false );
+                                      // => Auto slide status ( NO need to go to the next slide ) only continue button do this action
+                            }
+                      }  //  => ( End multi answers With single answer )
+                  } // End multiple Choices OR Media answers
+              //---------------------------------------------------------------
+              // ==============>>  True False ( Questions )
+              //---------------------------------------------------------------
+              if( question.question_type == 2 ){ // => True False
+                 if ( review_setting && show_results_setting ) {
+                     /* Many clicks ! */
+                     // => Delete the-old highlighted answer and Highlight the new selected answer
+                     if(!this_answer.hasClass('selected_answer')){
+                       answer_iu_list.each(function(i){
+                         var there = $(this);
+                          there.removeClass('selected_answer animated shake')
+                       });
+                      this_answer.addClass('selected_answer animated shake');
+                     }
+
+                     // => show the correct answer here
+                     var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
+                     if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
+                       // =>> Show The correct
+                       this_answer.addClass('right_answer');
+                     }else {
+                       // => show wrong answer
+                       this_answer.addClass('wrong_answer');
+                       // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
+                       answer_iu_list.each(function (i){
+                         var currentAnswer = $(this);
+                         var answers_inBackend = question.answers_format[i].is_correct ;
+                         if(answers_inBackend){
+                           currentAnswer.addClass('right_answer');
+                         }
+                       });
+                     }
+
+                     var has_wrong_answer = false ;
+                     answer_iu_list.each(function(i){
+                       var there = $(this);
+                      if(there.hasClass('wrong_answer')) has_wrong_answer = true ;
+                     });
+                     if(has_wrong_answer) return false ;
+                     // => Review Old answer
+                     // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
+                     // => Mongo status => move the data into mongo ( attendee draft )
+                     $scope.store_into_attendee_draft( stored_object );
+                     // => Auto slide status ( true ) => move to next slide directly
+                     if(auto_slide_setting) $scope.go_to_next_question();
+                   } else if ( review_setting == false && show_results_setting ){
+                     /* One Click ! */
+                     // => Highlight the selected answer for some moments ( timeframe )
+                     var has_wrong_answer = false ;
+                     answer_iu_list.each(function(i){
+                       var there = $(this);
+                      if(there.hasClass('wrong_answer') || there.hasClass('right_answer')) has_wrong_answer = true ;
+                     });
+                     if(has_wrong_answer) return false;
+                     // => Show the correct answer if selected is wrong show the wrong style + right style ( answer )
+                         // if user select the correct answer only need to show the right style in the selected answer
                          var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
                          if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
                            // =>> Show The correct
@@ -1944,1451 +2665,2625 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
                            });
                          }
 
-                         var has_wrong_answer = false ;
-                         answer_iu_list.each(function(i){
-                           var there = $(this);
-                          if(there.hasClass('wrong_answer')) has_wrong_answer = true ;
-                         });
-                         if(has_wrong_answer) return false ;
-                         // => Review Old answer
-                         // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
-                         // => Mongo status => move the data into mongo ( attendee draft )
-                         $rootScope.store_into_attendee_draft( stored_object );
-                         // => Auto slide status ( true ) => move to next slide directly
+                     // => Angular backend ( attendee_draft  ) do this ---> don't allow attendee change the selected answer
+                     // => Mongo status => move the data into mongo ( attendee draft )
+                     $scope.store_into_attendee_draft( stored_object );
+                     // => Auto slide status ( true ) => move to next slide directly after few moments ( timeframe )
+                     if(auto_slide_setting) $scope.go_to_next_question();
+                   } else if ( review_setting && show_results_setting == false ){
+                     /* Many clicks ! */
+                    // => Delete the-old highlited answer and Highlight the new selected answer
+                     answer_iu_list.each(function(i){
+                        var there = $(this);
+                          if(there.hasClass('selected_answer'))
+                         there.removeClass('selected_answer animated shake')
+                     });
+                    this_answer.addClass('selected_answer animated shake');
 
-                       } else if ( review_setting == false && show_results_setting ){
-                         /* One Click ! */
-                         // => Highlight the selected answer for some moments ( timeframe )
-                         var has_wrong_answer = false ;
-                         answer_iu_list.each(function(i){
-                           var there = $(this);
-                          if(there.hasClass('wrong_answer') || there.hasClass('right_answer')) has_wrong_answer = true ;
-                         });
-                         if(has_wrong_answer) return false;
-                         // => Show the correct answer if selected is wrong show the wrong style + right style ( answer )
-                             // if user select the correct answer only need to show the right style in the selected answer
-                             var isCorrectAnswer = question.answers_format.find(x => x._id == answerId );
-                             if(isCorrectAnswer.is_correct != undefined && isCorrectAnswer.is_correct) {
-                               // =>> Show The correct
-                               this_answer.addClass('right_answer');
-                             }else {
-                               // => show wrong answer
-                               this_answer.addClass('wrong_answer');
-                               // => show the right answer ==> answer_5abd8c6a72eccf3923c9b4bd
-                               answer_iu_list.each(function (i){
-                                 var currentAnswer = $(this);
-                                 var answers_inBackend = question.answers_format[i].is_correct ;
-                                 if(answers_inBackend){
-                                   currentAnswer.addClass('right_answer');
-                                 }
-                               });
-                             }
+                    // ==> Review old Answer
+                    // ===================> Updates
+                    if($scope.this_attendee_draft.att_draft != undefined){
+                        // remove old answer answer_ids
+                        var question_id = stored_object.question_id ;
+                        // question_id
+                        var attendee_part = $scope.this_attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+                        var attendee_inx = $scope.this_attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id);
 
-                         // => Angular backend ( attendee_draft  ) do this ---> don't allow attendee change the selected answer
-                         // => Mongo status => move the data into mongo ( attendee draft )
-                         $rootScope.store_into_attendee_draft( stored_object );
-                         // => Auto slide status ( true ) => move to next slide directly after few moments ( timeframe )
-
-                       } else if ( review_setting && show_results_setting == false ){
-                         /* Many clicks ! */
-                        // => Delete the-old highlited answer and Highlight the new selected answer
-                         answer_iu_list.each(function(i){
-                            var there = $(this);
-                              if(there.hasClass('selected_answer'))
-                             there.removeClass('selected_answer animated shake')
-                         });
-                        this_answer.addClass('selected_answer animated shake');
-
-                        // ==> Review old Answer
-                        // ===================> Updates
-                        if($rootScope.this_attendee_draft.att_draft != undefined){
-                            // remove old answer answer_ids
-                            var question_id = stored_object.question_id ;
-                            // question_id
-                            var attendee_part = $rootScope.this_attendee_draft.att_draft.find(x => x.user_id == $rootScope.user_id);
-                            var attendee_inx = $rootScope.this_attendee_draft.att_draft.findIndex(x => x.user_id == $rootScope.user_id);
-
-                            if(attendee_inx != -1 ){
-                                var target_question = attendee_part.questions_data.find(x => x.question_id == question_id);
-                                if(target_question != undefined)
-                                  target_question.answer_ids = new Array();
-                             }
-                          }
-                        // => No need to show the correct answer here
-                        // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
-                        // => Mongo status => move the data into mongo ( attendee draft )
-                        $rootScope.store_into_attendee_draft( stored_object );
-                        // => Auto slide status ( true ) => move to next slide directly
-
-                     } else if ( review_setting == false && show_results_setting  == false ){
-                         var is_selected_answer = false ;
-                          answer_iu_list.each(function(){
-                            var there = $(this);
-                            if(there.hasClass('selected_answer')) is_selected_answer = true ;
-                          });
-                          if(is_selected_answer) return false ;
-                         this_answer.addClass('selected_answer animated shake');
-                         $rootScope.store_into_attendee_draft(stored_object);
-
-                     }
-              }
-
-      } ;
-      $rootScope.store_into_attendee_draft = (object) => {
-
-             if (  $rootScope.this_attendee_draft != null && $rootScope.this_attendee_draft.application_id != undefined)
-                { // ==> attendee_draft is not empty
-
-                    var findAttendeeIndex = $rootScope.this_attendee_draft.att_draft.findIndex(x => x.user_id == $rootScope.user_id );
-                    var findAttendee = $rootScope.this_attendee_draft.att_draft.find(x => x.user_id == $rootScope.user_id );
-
-                    if(findAttendeeIndex != - 1){
-                      // ==> Attendee Object [FOUND]
-                      var attendeeInfo = $rootScope.this_attendee_draft.att_draft[findAttendeeIndex];
-                      console.log({attendeeInfo : attendeeInfo});
-                      if(attendeeInfo.questions_data == undefined )
-                      attendeeInfo.questions_data = new Array();
-                      var findQuestionIndex = attendeeInfo.questions_data.findIndex(x => x.question_id == object.question_id);
-                      var findQuestion = attendeeInfo.questions_data.find(x => x.question_id == object.question_id);
-                      if(findQuestionIndex == -1){
-
-                        // ==> Question UNFOUND
-                        attendeeInfo.questions_data.push({
-                          question_id : object.question_id ,
-                          question_index : 0 ,
-                          question_type : object.question.question_type,
-                          question_text : object.question.question_body,
-                          answer_ids : new Array({answer_id : object.answer_id , is_correct : object.is_correct , answer_object : object.answer , answer_index : object.answer_index }) ,
-                          correct_answers : object.question.answers_format.filter(x => x.is_correct == true) ,
-                          updated_date : new Date()
-                        });
-
-
-                        // ==============================>> Report Questions ( all_questions , right_questions , wrong_questions )
-                        if(attendeeInfo.report_questions == undefined)
-                        attendeeInfo.report_questions = new Object();
-
-                        if(attendeeInfo.report_questions.all_questions == undefined )
-                          attendeeInfo.report_questions.all_questions = new Array();
-                          // ==> Store the questions here plz
-                          attendeeInfo.report_questions.all_questions.push(object.question_id);
-
-
-                        // ==> store correct answers that solved
-                        if(attendeeInfo.report_questions.right_questions == undefined )
-                          attendeeInfo.report_questions.right_questions = new Array();
-
-                        // ==> store wrong answers that solved
-                        if(attendeeInfo.report_questions.wrong_questions == undefined )
-                          attendeeInfo.report_questions.wrong_questions = new Array();
-
-
-                        var answerIndexVal = object.question.answers_format.findIndex(x => x._id == object.answer_id );
-                        if(answerIndexVal != -1 ){
-                          answerObject = object.question.answers_format.find(x => x._id == object.answer_id );
-                          if(answerObject.is_correct == true )
-                            attendeeInfo.report_questions.right_questions.push(object.question_id) ;
-                          else
-                            attendeeInfo.report_questions.wrong_questions.push(object.question_id) ;
-                        }
-
-                        // ==============================>> Report attendee_details
-                        if(attendeeInfo.report_attendee_details == undefined )
-                          attendeeInfo.report_attendee_details = new Object();
-
-                          // ==> Calculations
-                          if( $rootScope._settings_  == undefined || $rootScope._settings_ == null )
-                            alert("Something went wrong !")
-
-                          var app_grade_value = parseInt($rootScope._settings_.grade_settings.value);
-                          var total_app_questions = parseInt($rootScope._questions_.length);
-                          var correct_questions = parseInt(attendeeInfo.report_questions.right_questions.length);
-                          var wrong_questions  = parseInt(attendeeInfo.report_questions.wrong_questions.length);
-                          var percentage = Math.round(correct_questions * 100 ) / total_app_questions ;
-                          var isPassed = ( percentage >= app_grade_value )? true : false ;
-                          var is_completed = ( total_app_questions == attendeeInfo.questions_data.length ) ? true : false ;
-
-                          attendeeInfo.is_completed = is_completed ;
-                          attendeeInfo.report_attendee_details.attendee_id = $rootScope.user_id ;
-                          attendeeInfo.report_attendee_details.attendee_information = $rootScope.user_id ;
-                          attendeeInfo.report_attendee_details.total_questions = attendeeInfo.questions_data.length ;
-                          attendeeInfo.report_attendee_details.pass_mark = isPassed ,
-                          attendeeInfo.report_attendee_details.correct_answers =  correct_questions ,
-                          attendeeInfo.report_attendee_details.wrong_answers = wrong_questions ;
-                          attendeeInfo.report_attendee_details.status= (isPassed == true ) ? "Passed": "Failed";
-                          attendeeInfo.report_attendee_details.score= percentage;
-                          attendeeInfo.report_attendee_details.completed_status= is_completed;
-                          attendeeInfo.report_attendee_details.created_at= new Date();
-                          attendeeInfo.report_attendee_details.completed_date= new Date();
-
-
-                          // ==============================>> Report report_attendees
-                          if(attendeeInfo.report_attendees == undefined )
-                            attendeeInfo.report_attendees = new Object();
-
-                            attendeeInfo.report_attendees.created_at = new Date()
-                            attendeeInfo.report_attendees.updated_at = new Date()
-                            attendeeInfo.report_attendees.attendee_id = $rootScope.user_id;
-                            attendeeInfo.report_attendees.user_information = $rootScope.user_id;
-                            attendeeInfo.report_attendees.is_completed = is_completed ;
-                            attendeeInfo.report_attendees.passed_the_grade = isPassed ;
-                            attendeeInfo.report_attendees.survey_quiz_answers = new Array();
-                            attendeeInfo.report_attendees.results = new Object();
-                            attendeeInfo.report_attendees.results['wrong_answers'] = wrong_questions;
-                            attendeeInfo.report_attendees.results['correct_answers'] = correct_questions ;
-                            attendeeInfo.report_attendees.results['count_of_questions'] = attendeeInfo.questions_data.length ;
-                            attendeeInfo.report_attendees.results['result'] = new Object();
-                            attendeeInfo.report_attendees.results['result']['percentage_value'] = percentage;
-                            attendeeInfo.report_attendees.results['result']['raw_value'] = correct_questions ;
-                            attendeeInfo.report_attendees.survey_quiz_answers.push({
-                              question_id :  object.question_id  ,
-                              questions : {
-                                question_id : object.question_id,
-                                question_body :object.question.question_body ,
-                                question_type : object.question.question_type
-                              } ,
-                              answers : {
-                                answer_id : new Array (object.answer_id) ,
-                                answer_body :  new Object() ,
-                                is_correct : object.is_correct
-                              }
-                            });
-                            attendeeInfo.report_attendees.survey_quiz_answers[attendeeInfo.report_attendees.survey_quiz_answers.length - 1 ].
-                            answers.answer_body["answer_id_"+object.answer_id] = {
-                                     answer_id : object.answer_id ,
-                                     answer_body : object.answer ,
-                                     is_correct : object.is_correct
-                             }
-                             console.log({attendeeInfo: attendeeInfo});
-                            // console.log(attendeeInfo);
-                      }else {
-                        // ==> Question FOUND ==> Update here !
-                         var findAnswer = findQuestion.answer_ids.find(x => x.answer_id == object.answer_id);
-                         var findAnswerIndex = findQuestion.answer_ids.findIndex(x => x.answer_id == object.answer_id);
-                         if(findAnswerIndex == -1 ){
-                           findQuestion.answer_ids.push({
-                              answer_id : object.answer_id , is_correct : object.is_correct , answer_object : object.answer , answer_index : object.answer_index
-                            });
-                         }else{
-                           findQuestion.answer_ids.splice(findAnswerIndex, 1);
-                         }
-
-
-                         var app_correct_answers =  findQuestion.correct_answers
-                         var attendee_solved_answers =  findQuestion.answer_ids
-                         var question_status = function (a, b) {
-                              var correct_answers = a.map( function(x){ return x._id; } );
-                              var solved_answers = b.map( function(x){ return x.answer_id; } );
-                              var is_right_question =  (solved_answers.sort().join('') == correct_answers.sort().join(''));
-                              return is_right_question ;
-                            };
-                         var isCorrect =  question_status (app_correct_answers , attendee_solved_answers);
-
-                         if(findQuestion.answer_ids.length != 0){
-                                 var all_report_questions_index = attendeeInfo.report_questions.all_questions.findIndex(x => x == object.question_id);
-                                 if(all_report_questions_index != -1 ){
-
-                                   var wrong_exists =  attendeeInfo.report_questions.wrong_questions.findIndex(x => x == object.question_id);
-                                   var right_exists =  attendeeInfo.report_questions.right_questions.findIndex(x => x == object.question_id);
-
-                                   if(isCorrect == false ){
-                                     if( wrong_exists == -1 )  // add  here
-                                       attendeeInfo.report_questions.wrong_questions.push(object.question_id);
-
-                                     if(right_exists != -1 )  // delete it from here
-                                       attendeeInfo.report_questions.right_questions.splice(right_exists , 1 );
-                                   }else {
-                                     if(right_exists == -1 )  // add  here
-                                        attendeeInfo.report_questions.right_questions.push(object.question_id);
-
-                                     if( wrong_exists != -1 ){ // delete it from here
-                                        attendeeInfo.report_questions.wrong_questions.splice(wrong_exists , 1);
-                                     }
-                                   }
-                                 } // => End all questions
-                          }else if(findQuestion.answer_ids.length == 0){
-                           var qsIndex_all = attendeeInfo.report_questions.all_questions.findIndex( x => x == object.question_id);
-                           var qsIndex_wrong = attendeeInfo.report_questions.wrong_questions.findIndex(x => x == object.question_id);
-                           var qsIndex_right = attendeeInfo.report_questions.right_questions.findIndex(x => x == object.question_id);
-
-                           if(qsIndex_wrong != -1)
-                           attendeeInfo.report_questions.wrong_questions.splice(qsIndex_wrong , 1);
-
-                           if(qsIndex_right != -1)
-                           attendeeInfo.report_questions.right_questions.splice(qsIndex_right , 1);
-
-                           if(qsIndex_all != -1)
-                           attendeeInfo.report_questions.all_questions.splice(qsIndex_all , 1);
-                         } // End store answer question
-
-
-
-                         var app_grade_value = parseInt($rootScope._settings_.grade_settings.value);
-                         var total_app_questions = parseInt($rootScope._questions_.length);
-                         var correct_questions = parseInt(attendeeInfo.report_questions.right_questions.length);
-                         var wrong_questions  = parseInt(attendeeInfo.report_questions.wrong_questions.length);
-                         var percentage = Math.round(correct_questions * 100 ) / total_app_questions ;
-                         var isPassed = ( percentage >= app_grade_value )? true : false ;
-                         var is_completed = ( total_app_questions == attendeeInfo.questions_data.length ) ? true : false ;
-
-                         attendeeInfo.is_completed = is_completed ;
-                         attendeeInfo.report_attendee_details.total_questions = attendeeInfo.questions_data.length ;
-                         attendeeInfo.report_attendee_details.pass_mark = isPassed ,
-                         attendeeInfo.report_attendee_details.correct_answers =  correct_questions ,
-                         attendeeInfo.report_attendee_details.wrong_answers = wrong_questions ;
-                         attendeeInfo.report_attendee_details.status= (isPassed == true ) ? "Passed": "Failed";
-                         attendeeInfo.report_attendee_details.score= percentage;
-                         attendeeInfo.report_attendee_details.completed_status= is_completed;
-                         attendeeInfo.report_attendee_details.completed_date= new Date();
-
-
-                         attendeeInfo.report_attendees.updated_at = new Date()
-                         attendeeInfo.report_attendees.attendee_id = $rootScope.user_id;
-                         attendeeInfo.report_attendees.user_information = $rootScope.user_id;
-                         attendeeInfo.report_attendees.is_completed = is_completed ;
-                         attendeeInfo.report_attendees.passed_the_grade = isPassed ;
-
-                         attendeeInfo.report_attendees.results['wrong_answers'] = wrong_questions;
-                         attendeeInfo.report_attendees.results['correct_answers'] = correct_questions ;
-                         attendeeInfo.report_attendees.results['count_of_questions'] = attendeeInfo.questions_data.length ;
-                         attendeeInfo.report_attendees.results['result']['percentage_value'] = percentage;
-                         attendeeInfo.report_attendees.results['result']['raw_value'] = correct_questions ;
-                         var qsIndex_x = attendeeInfo.report_attendees.survey_quiz_answers.findIndex(x => x.question_id == object.question_id);
-                         var question_obj_val ;
-                         if(qsIndex_x != -1 ){
-                            question_obj_val = {
-                              question_id :  object.question_id  ,
-                              questions : {
-                                question_id : object.question_id,
-                                question_body :object.question.question_body ,
-                                question_type : object.question.question_type
-                              } ,
-                              answers : {
-                                answer_id : new Array (object.answer_id) ,
-                                answer_body :  new Object() ,
-                                is_correct : object.is_correct
-                              }
-                            }; // end question object
-
-                             question_obj_val.answers.answer_body["answer_id_"+object.answer_id] = {
-                                     answer_id : object.answer_id ,
-                                     answer_body : object.answer ,
-                                     is_correct : object.is_correct
-                             }
-
-                             attendeeInfo.report_attendees.survey_quiz_answers[qsIndex_x] = question_obj_val ;
-
+                        if(attendee_inx != -1 ){
+                            var target_question = attendee_part.questions_data.find(x => x.question_id == question_id);
+                            if(target_question != undefined)
+                              target_question.answer_ids = new Array();
                          }
                       }
-                    }else {
-                      // ==> Attenee Object [UNFOUND]
+                    // => No need to show the correct answer here
+                    // => Angular backend ( attendee_draft  ) do this --->  allow attendee change the answer
+                    // => Mongo status => move the data into mongo ( attendee draft )
+                    $scope.store_into_attendee_draft( stored_object );
+                    // => Auto slide status ( true ) => move to next slide directly
+                     if(auto_slide_setting) $scope.go_to_next_question();
+                 } else if ( review_setting == false && show_results_setting  == false ){
+                     var is_selected_answer = false ;
+                      answer_iu_list.each(function(){
+                        var there = $(this);
+                        if(there.hasClass('selected_answer')) is_selected_answer = true ;
+                      });
+                      if(is_selected_answer) return false ;
+                     this_answer.addClass('selected_answer animated shake');
+                     $scope.store_into_attendee_draft(stored_object);
+                     if(auto_slide_setting) $scope.go_to_next_question();
+                 }
+              } // => End true/false question
+
+              if($scope.is_submitted)
+                 $scope.fill_unsolved_question_counts();
+                else
+                $('.warning_case').css({display:'none'});
+
+        };
+    $scope.submit_this_qusu = () => {
+       if($scope.__player_object.app_type == 1 )
+         $scope.screen_type = 1 ;
+     };
+    $scope.back_to_first_question = () => {
+       if($scope.questions_list.length != 0){
+         var first_question = $scope.questions_list[0];
+         $scope.question = first_question ;
+         $scope.screen_type = 0 ;
+         $scope.index_value = 0
+         $scope.edit_this_question($scope.question._id , $scope.index_value);
+       }
+    }
+    $scope.back_to_last_question = () => {
+    if($scope.questions_list.length != 0){
+      var last_question = $scope.questions_list[$scope.questions_list.length -1 ];
+      $scope.question = last_question ;
+      $scope.screen_type = 0 ;
+      $scope.index_value = $scope.questions_list.length -1
+      $scope.edit_this_question($scope.question._id , $scope.index_value);
+    }
+  }
+  $scope.go_to_next_slide = (question_id) => {
+    if($scope.application_settings.settings.enable_screens == true ){
+    if( $scope.index_value + 1 < ( $scope.questions_list.length ))
+      {
+        $scope.index_value ++ ;
+        $scope.question = $scope.questions_list[$scope.index_value];
+        $scope.edit_this_question($scope.question._id , $scope.index_value);
+      }
+
+     var question_index = $scope.questions_list.findIndex(x => x._id == question_id );
+     if(question_index != -1 ){
+       if(($scope.questions_list.length - 1) ==  question_index ) {
+         $scope.screen_type = 2 ;
+         $("#docQuestions").children("li").each(function (){
+            ( $(this).hasClass("highlighted-question")  ) ?
+            $(this).removeClass("highlighted-question")
+            : null
+         });
+       };
+     }
+   }
+  };
+  $scope.join_this_quiz = (at_this_array_only = null ) => {
+    if($scope.this_attendee_draft != null && $scope.this_attendee_draft.att_draft != undefined && $scope.this_attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) != -1)
+      return false ;
+
+    if($scope.this_attendee_draft == null || $scope.this_attendee_draft.application_id == undefined){
+      $scope.this_attendee_draft = new Object();
+      $scope.this_attendee_draft['att_draft'] = new Array();
+      $scope.this_attendee_draft['application_id'] = $scope.app_id ;
+      $scope.this_attendee_draft['questionnaire_info'] = $scope.app_id ;
+    }
+
+      if($scope.this_attendee_draft.att_draft == undefined)
+        $scope.this_attendee_draft.att_draft = new Array();
+
+
+      var cuIndex = $scope.this_attendee_draft.att_draft.findIndex (x => x.user_id == $scope.user_id) ;
+      if(cuIndex == -1 ){
+        $scope.this_attendee_draft.att_draft.push({
+          'questions_data' : new Array() ,
+          'is_loaded':true ,
+          'start_expiration_time' : new Date() ,
+          'user_id' : $scope.user_id ,
+          'user_info':$scope.user_id ,
+          'is_completed':false ,
+          'impr_application_object':$scope.__player_object
+        });
+      }
+
+
+      // $scope.this_attendee_draft = $scope.this_attendee_draft.att_draft.find(x => x.user_id == $scope.user_id);
+        $scope.load_quiz_timer();
+  };
+  $scope.enable_screens = () => {
+    if($scope.application_settings.settings.enable_screens == false && $scope.screen_type != 0 )
+      $scope.screen_type = 0 ;
+  }
+  $scope.start_this_quiz = () => {
+    $scope.join_this_quiz();
+      if( $scope.questions_list.length != 0 ){
+        $scope.index_value = 0 ;
+        $scope.question = $scope.questions_list[$scope.index_value];
+        $scope.edit_this_question($scope.question._id , $scope.index_value);
+      }
+  };
+
+  $scope.load_template_timer = () => {
+     console.log({
+       settings : $scope.__player_object
+     });
+     if($scope.__player_object != undefined && $scope.__player_object != null && $scope.__player_object.settings != undefined ){
+     var timeSettings = $scope.__player_object.settings.time_settings;
+
+       if(timeSettings && timeSettings != undefined || timeSettings.is_with_time){
+         $scope.seconds = timeSettings.seconds;
+         $scope.minutes = timeSettings.minutes ;
+         $scope.hours   = timeSettings.hours;
+
+       }
+     }
+   }
+  $scope.load_time_tracker  = () => {
+
+          var sec  = $('.sec');
+          var mins = $('.min');
+          var hrs  = $('.hr');
+
+          var is_hourly = $scope.__player_object.settings.time_settings.timer_type ;
+          if(is_hourly){
+             if( $scope.seconds == 0 && $scope.minutes == 0 && $scope.hours == 0)
+                {
+                  // $scope.do_an_action_with_closest_time();
+                  return false ;
+                }
+             }else {
+                if( $scope.seconds == 0 && $scope.minutes == 0 )
+                    {
+                      // $scope.do_an_action_with_closest_time();
+                      return false ;
+                    }
+          }
+          $scope.seconds--;
+          if( $scope.seconds < 0 ){
+             $scope.seconds = 59;
+             $scope.minutes--;
+          }
+
+          if(is_hourly){
+               if($scope.minutes < 00 && $scope.hours > 0 ) {
+                 $scope.minutes = 59;
+                 $scope.hours--;
+               }
+          }
+
+        sec.html(($scope.seconds < 10 ) ? '0'+ $scope.seconds : $scope.seconds);
+        mins.html(($scope.minutes < 10 ) ? '0'+$scope.minutes:$scope.minutes );
+        if(is_hourly){
+            hrs.html( ( $scope.hours < 10 ) ? ''+$scope.hours : $scope.hours);
+        }
+        // Load time
+        $scope.$apply();
+        $scope.load_quiz_timer();
+
+  }
+  $scope.load_quiz_timer = () => {
+
+    if($scope.__player_object.settings != undefined ){
+       var timeSettings = $scope.__player_object.settings.time_settings;
+
+       if(timeSettings && timeSettings.is_with_time)
+          $scope.timer = setTimeout( $scope.load_time_tracker , 1000);
+
+     }
+  }
+  $scope.go_to_previouse_slide = (question_id) => {
+    if($scope.application_settings.settings.enable_screens == true ){
+      if(($scope.index_value - 1)  >= 0  )
+        {
+          $scope.index_value -- ;
+          $scope.question = $scope.questions_list[$scope.index_value];
+          $scope.edit_this_question($scope.question._id , $scope.index_value);
+        }
+
+        var question_index = $scope.questions_list.findIndex(x => x._id == question_id );
+        if(question_index != -1 ){
+          if( 0 ==  question_index ) {
+            $scope.screen_type = 3 ;
+            $("#docQuestions").children("li").each(function (){
+               ( $(this).hasClass("highlighted-question")  ) ?
+               $(this).removeClass("highlighted-question")
+               : null
+            });
+          };
+        }
+    }
+  };
+
+  $scope.edit_this_question = ( qs_id  , qsCurrIndex , nextIndex = null ) => {
+    var currentQuestion = $scope.questions_list.find(x => x._id == qs_id);
+    var question_index = $scope.questions_list.findIndex(x => x._id == qs_id);
+    if(currentQuestion != undefined){
+      $scope.question = currentQuestion ;
+      if(question_index != -1)
+      $scope.index_value = question_index;
+
+      // $timeout(function(){
+      //   $scope.$apply();
+      // } , 350 );
+      // ==> Check if previous Question save or not
+      if($scope.check_unsaved_data()) $scope.timeFrame = 10000000000003000;
+      else $scope.timeFrame = 0 ;
+
+      // ==> Highlight the current question
+      $("#docQuestions").children("li").each(function (){
+         ( $(this).hasClass("highlighted-question")  ) ?
+         $(this).removeClass("highlighted-question")
+         : null
+      });
+      $("#questoin_tag_"+qs_id).addClass("highlighted-question");
+      // console.log( $("#qs-"+qs_id).prop('className'));
+
+      var right_part = $(".right_part").css("display");
+      if(right_part == "none") $scope.hide_loader();
+
+      $scope.questionIndex = qsCurrIndex ;
+      $scope.question_id = currentQuestion._id
+      $scope.indexes = 1 ;
+      $scope.question_type = currentQuestion.question_type;
+
+     if( currentQuestion.answers_format.length > 1 )
+     $scope.indexes = currentQuestion.answers_format.length ;
+
+     $scope.question_media = currentQuestion.media_question ;
+     $scope.quest_media_parts = currentQuestion.media_question ;
+     $scope.asnwers = currentQuestion.answers_format;
+     if(currentQuestion.question_description != undefined)
+     $scope.questions_list[$scope.questionIndex].question_description = currentQuestion.question_description ;
+     else  $scope.questions_list[$scope.questionIndex].question_description = null ;
+     if($scope.question_type == 3 ){
+        //+++++ $scope.iframe_access.fill_rating_scale_values($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
+     }
+
+     if($scope.question_type == 3 ){
+      $timeout(function (){
+        if( $("#docQuestions").children('li').length <= 1  )
+        $scope.questionIndex = 0;
+        $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers, null , $scope.questionIndex , $scope.questions_list[$scope.questionIndex].answers_format);
+        //+++++ $scope.iframe_access.fill_rating_scale_values(5);
+      } , 50 );
+     }
+     $scope.question_settings = {
+            is_required           : currentQuestion.answer_settings.is_required ,
+            single_choice   : currentQuestion.answer_settings.single_choice ,
+            is_randomized          : currentQuestion.answer_settings.is_randomized ,
+            super_size         : currentQuestion.answer_settings.super_size ,
+            choice_style      : currentQuestion.answer_settings.choice_style
+     }
+     var media_block = $(".media-x-preview");
+     var show_media_link = $(".show_media_link");
+     media_block.html('');
+     show_media_link.val('') ;
+     show_media_link.css("display","none");
+
+     $scope.go_to_this_question_data(qs_id);
+     if($scope.question_media == undefined || $scope.question_media == null) {
+       var no_media = "<b class='no-media'>There is no media ! </b>";
+       media_block.html(no_media);
+     }else{
+       show_media_link.css("display","block");
+       var iframe = "<iframe width='100%' height='250px'></iframe>";
+       var image  = "<div class ='show-image'></div>";
+       var mp4    = '<video width="100%" height="auto" controls>' +
+        '<source src="'+$scope.question_media.media_field+'.mp4" type="video/mp4">'+
+        '<source src="'+$scope.question_media.media_field+'.ogg" type="video/ogg">'+
+        'Your browser does not support the video tag.' +
+        '</video>' ;
+      if($scope.question_media.media_type == 0 ) {
+        media_block.html(image);
+        show_media_link.val($scope.server_ip + $scope.question_media.media_field);
+        media_block.find('div').css({
+                "background-image":"url('"+$scope.server_ip + $scope.question_media.media_field + '?' + new Date() +"')"
+        });
+      }
+      if($scope.question_media.media_type == 1 ) {
+            media_block.html(iframe);
+
+            show_media_link.val($scope.question_media.media_name);
+            // youtube or vimeo
+            if($scope.question_media.video_type == 0 || $scope.question_media.video_type == 1)
+              media_block.find('iframe').attr("src" , $scope.question_media.video_source);
+            // mp4
+            if( $scope.question_media.video_type == 2 ) {
+              media_block.html(mp4)
+              }
+      }
+     }
+     // ==> Slide Into index in question
+     //+++++ $scope.iframe_access.slide_to_question_in_index_number(qsCurrIndex + 1);
+
+     $http({
+         url : $scope.api_url_init_id_date ,
+         method : "GET"
+       }).then(function(resp){
+         $scope.mongoose_id = resp.data.id;
+         $scope.mongoose_answer_id = resp.data.id_1;
+         $scope.mongoose_date = resp.data.date;;
+         $scope.unique_ids = resp.data.list_of_ids ;
+         // ==> Question Data
+        $('.redactor-in-0').html(currentQuestion.question_body);
+        // ==> Description Data
+        $('.redactor-in-1').html(currentQuestion.question_description);
+        // ==> Loading Answers
+        $scope.loading_application_redactors();
+        $timeout(function(){
+          $('.redactor-in').each(function(i){
+            var thisRedactorNumber = $(this).prop('className').split('-').pop();
+            if(thisRedactorNumber >= 6){
+
+              for (var i = 0; i < currentQuestion.answers_format.length; i++) {
+                var answerValue = currentQuestion.answers_format[i].value ;
+                $('.redactor-in').eq(6+i).html('');
+                $('.redactor-in').eq(6+i).html(answerValue);
+              }
+            }
+          });
+        } , 500 );
+        $scope.is_drag_drop_item = false;
+
+       },function(err){});
+    }
+
+
+  };
+  $scope.rating_scale_values = function (){
+    $timeout(function (){
+      if($scope.question_type == 3 ){
+         $scope.change_rating_scale_value($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers, null , $scope.questionIndex , $scope.questions_list[$scope.questionIndex].answers_format );
+      }
+    } , 5000 );
+  };
+  $scope.check_unsaved_data = function (){
+    if($scope.unsaved_question == true ){
+      $scope.swal_message();
+      $scope.unsaved_question = false;
+      return true ;
+    }else
+    return false ;
+  };
+
+
+
+  // ==> do an action with scope object
+  $scope.window_navigation.on("load" , function (){
+      $scope.close_iconx.trigger("click");
+      $timeout(function (){
+        $scope.settings_menu.css("display" , "block" );
+      }, 500);
+  });
+
+  $scope.close_settings_menu_handler.on("click" , function (){
+      var target_iconx = $(".close-menu-icon");
+      if(target_iconx.hasClass("fa-times") == true )
+        $scope.collapse_menu_settings(target_iconx) ;
+        else
+        $scope.expand_menu_settings(target_iconx) ;
+    });
+  $scope.window_navigation.resize(function(){
+    $scope.settings_menu.css({width:$scope.window.settings_menu});
+    });
+  $scope.window = {
+        current_window  : $(window).width()  ,
+        settings_menu   : $(".left_part").width() - 28
+  };
+  $scope.window_navigation.bind("load" , function (){
+      $timeout(function (){
+            ($scope.questions_list[0]);
+            if($scope.questions_list[0] != null && $scope.questions_list != null && $scope.questions_list.length > 0){
+              var first_question = $scope.questions_list[0];
+              // console.log(first_question._id);
+              $scope.edit_this_question  ( first_question._id  , 0 ) ;
+            }
+
+
+          } , 2000 );
+});
+$scope.expand_collapse_handler.on("click" , function (){
+     var target = $(this).next(".control-item-content") ;
+     var target_index = $(this).parent("li").index();
+
+    $scope.expand_collapse_handler.each(function(i){
+      var this_index = $(this).parent("li").index();
+      var this_item = $(this).next(".control-item-content") ;
+      if(this_item.css("display") == "block" && this_index != target_index ){
+        this_item.slideUp();
+      } else  if(this_item.css("display") == "block" && this_index == target_index ) {
+        target.slideUp();
+      }
+    });
+     if(target.css("display") == "none")
+         target.slideDown();
+   });
+
+
+   $scope.video_handler.on("click",function(){
+      $scope.file_object['media_type'] = 1 ;
+      $(".media-inputs").css({display:'block'});
+    });
+  $scope.image_handler.on("click", function (){
+      $(".image-uploader-x").trigger("click");
+    });
+  $scope.show_selected_text.on("keyup mousedown mousemove mouseup" , function (e){
+      var range = $(this).getSelection();
+      $scope.selected_text = range.text ;
+   });
+  $scope.upload_handler.on('change' , function (){
+    $scope.file_object['media_type'] = 0 ;
+    $scope.file_object['file'] = $(this)[0].files[0];
+    // ==> Question Type
+    if( $scope.model_type == 'questions' ){
+      var question_index = $scope.questions_list.findIndex( x => x._id == $scope.question_id );
+      if(question_index != -1 ) {
+          $scope.data_object = null ;
+          $scope.data_object = new FormData();
+          $scope.data_object.append("creator_id" , $scope.user_id );
+          $scope.data_object.append("question_id" , $scope.question_id );
+          $scope.data_object.append("media_field" , $scope.file_object.file );
+          $scope.headers["Content-Type"] = undefined ;
+      }
+    }else {
+      $scope.headers["Content-Type"] = undefined ;
+      $scope.data_object = null ;
+      $scope.data_object = new FormData();
+      $scope.data_object.append("creator_id" , $scope.user_id );
+      $scope.data_object.append("question_id" , $scope.question_id );
+      $scope.data_object.append("answer_id" , $scope.answer_id );
+      $scope.data_object.append("media_src" , $scope.file_object.file );
+      // =>> Calling cropper here
+      var  question_object = $scope.questions_list.find(x => x._id == $scope.question_id );
+      if(question_object != undefined)
+       {
+         $timeout(function(){
+         $scope.excute_the_cropping( $scope.question_id ,$scope.answer_id , question_object );
+         } , 300)
+       }
+    }
+
+    // ===> Uploading Image
+    if($scope.file_object['file'] != null ) {
+      var reader = new FileReader();
+      var thisReader = reader.readAsDataURL($scope.file_object['file']);
+      reader.onload = function (e){
+        var image_src = e.target.result ;
+        var  image_iframe = "<img id='img_cropping' style='width:100%;' src='"+image_src+"' />"
+        var preview_box = $(".media-x-preview");
+        preview_box.html(image_iframe);// her
+      }
+    }
+
+
+    // ==> Detect if this an image
+    if($scope.file_object.media_type == 0 ) {
+      // ==> Show Cropper
+
+    }
+  });
+  $("#editor-quest-data").on('input' , function (){
+       $scope.unsaved_question = true ;
+    });
+  $("#show-labels").on("input,change" , function (){
+      var checked_value = $scope.questions_list[$scope.questionIndex].answers_format[0].show_labels ;
+      //(checked_value);
+      if(checked_value == true ) { // show labels
+        $(".item-labels").slideDown();
+        $(".block-labels").css("display" , "block");
+      }else { // remove labels
+        $(".block-labels").css("display" , "none");
+        $scope.questions_list[$scope.questionIndex].answers_format[0].started_at  = '';
+        $scope.questions_list[$scope.questionIndex].answers_format[0].centered_at = '';
+        $scope.questions_list[$scope.questionIndex].answers_format[0].ended_at    = '';
+        // hide labels
+        $(".item-labels").slideUp();
+      }
+    });
+
+    $("#MultipleResponse-option , #Randomize-option , #SuperSize-option , #required-option").on("input change",function(){
+
+      if($scope.question_id == null )
+      {
+        console.log("Please select question first from question list !");
+        return false ;
+      }
+
+       var question_selected = $scope.questions_list.find($scope.callback_index);
+       question_selected.answer_settings = $scope.question_settings ;
+
+       var targetIndex = $scope.questions_list.indexOf(question_selected);
+       if(targetIndex != -1 ){
+         $scope.questions_list.splice(targetIndex, 1);
+       }
+
+       if(question_selected.answer_settings.single_choice == true ) {
+         var all_answers = question_selected.answers_format;
+         //(all_answers);
+         for (var i = 0; i < all_answers.length; i++) {
+             all_answers[i].is_correct = false;
+         }
+       }
+
+       $scope.questions_list.splice(targetIndex, 0, question_selected);
+       //($scope.questions_list);
+     });
+
+     $("#editor-desc-data").on('keydown change keypress keyup' , function (){
+       var question_value = $(this).val();
+       if($scope.question_id == null )
+         {
+           console.log("please select question to edit it first !");
+           return false ;
+         }
+
+       // Select Question From Array
+         var question_selected = $scope.questions_list.find($scope.callback_index);
+         if(question_selected)
+            question_selected.question_description = question_value;
+    });
+
+    $(".show_media_link").on("change keyup keydown keypress", function (){
+          var currentValue =$(this).val();
+
+          $scope.change_media_link_by_system = false;
+          if($scope.change_media_link_by_system == false ){
+            // case it image => decline this  !
+
+            // case it youtube
+            if( currentValue.toLowerCase().includes("youtube")    == true ){
+              $scope.file_object['media_type'] = 1 ;
+            }
+            // case it vimeo
+            if( currentValue.toLowerCase().includes("vimeo")    == true ){
+              $scope.file_object['media_type'] = 1 ;
+            }
+            // case it mp4
+            if( currentValue.toLowerCase().includes(".mp4")    == true ){
+              $scope.file_object['media_type'] = 1 ;
+            }
+          } // else => means this is changed by system
+      });
+      $(".media-changeable-img-case").on("click" , function (){
+      $(".box-overlay").fadeIn();
+    });
+
+
+    $(".show_media_link").on("change" , function (){
+          // ====>>> Uploading media
+          $scope.file_object['media_type'] = 1 ;
+          $scope.file_object['link'] = $(this).val();
+
+          // LOADING PAGE
+          var loader = '<div class="media-loader-spinner"><div class="spinner">'+
+                        '<div class="rect1"></div>'+
+                        '<div class="rect2"></div>'+
+                        '<div class="rect3"></div>'+
+                        '<div class="rect4"></div>'+
+                        '<div class="rect5"></div>'+
+                      '</div>' +
+                      '<span class="title-loader">Please wait while extract video url !</span></div>';
+
+          var preview_box = $(".media-x-preview");
+          preview_box.html(loader);
+
+          $timeout(function (){
+            var video ;
+            if($scope.model_type == 'questions'){ // => Question
+              $scope.data_object = null ;
+              $scope.data_object = new Object();
+              $scope.data_object['creator_id']  =  $scope.user_id ;
+              $scope.data_object['question_id'] =  $scope.question_id ;
+              $scope.data_object['media_field'] =  $scope.file_object.link ;
+              video = $scope.data_object['media_field'] ;
+            } else { // => Answer
+              $scope.data_object = null ;
+              $scope.data_object = new Object();
+              $scope.data_object['creator_id']  =  $scope.user_id ;
+              $scope.data_object['question_id'] =  $scope.question_id ;
+              $scope.data_object['answer_id'] =  $scope.answer_id ;
+              $scope.data_object['media_src'] =  $scope.file_object.link ;
+              video = $scope.data_object['media_src'] ;
+            }
+
+
+            var videoType = null ;
+            var videoId = null ;
+            var video_src_value = null;
+            if( video.toLowerCase().includes("youtube")    == true   ) {
+              videoType = 0 ; // => youtube
+              var idWithLastSplit = video.lastIndexOf('?');
+              var videos = video.substr(idWithLastSplit + 1);
+              var lastId = videos.substr(0, videos.indexOf('&'));
+
+              if(lastId != '' || lastId )
+                videoId = lastId ;
+              else
+                videoId = videos ;
+
+              var afterEqualChar = videoId.lastIndexOf('=');
+              videoId = videoId.substring(afterEqualChar + 1);
+              video_src_value = "http://youtube.com/embed/"+ videoId ;
+            }
+            else if( video.includes("vimeo") == true   ) {
+              videoType = 1 ; // => vimeo
+              var n = video.lastIndexOf('/');
+              videoId = video.substring(n + 1);
+              video_src_value = "https://player.vimeo.com/video/"+ videoId;;
+            }
+            else if( video.includes(".mp4")  == true   ) {
+              videoType = 2 ;
+              videoId = null;
+
+              video_src_value = video.substring(0, video.lastIndexOf('.'));
+            }
+
+            var media_iframe ;
+            switch (videoType) {
+              case 0 : // youtube
+                  media_iframe = '<iframe class="iframe" width="100%" src="'+video_src_value+'"    height="250px" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
+              break;
+
+              case 1 : // Vimeo
+                  media_iframe = '<iframe class="iframe" width="100%" src="'+video_src_value+'"    height="250px" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>' ;
+              break;
+
+              case 2 : // mp4
+                  media_iframe = '<video width="100%" height="auto" controls>'
+                                 + '<source src="'+video_src_value+'.mp4" type="video/mp4">'
+                                 + '<source src="'+video_src_value+'.ogg" type="video/ogg">'
+                                 + 'Your browser does not support the video tag.'
+                                 + '</video>'
+              break;
+            }
+            preview_box.html(media_iframe);
+          } , 1200 );
+
+  });
+  $(".text-loader , .loading-data").delay(6000).fadeOut();
+  $timeout(function (){
+  $('input[type=range]').on('change input click' , function (){
+      $scope.unsaved_question = true ;
+  });
+  $scope.style_of_answers = ($scope.question_settings.choice_style ) ? "Two columns per row" : "One column per row";
+  } , 1500 );
+  $scope.change_rating_scale_value = function (val , is_changed = null , questionIndex = null , answer_object = null ){
+
+      //+++++ $scope.iframe_access.fill_rating_scale_values($scope.questions_list[$scope.questionIndex].answers_format[0].step_numbers);
+
+      if(is_changed != null && is_changed == true ){
+        $scope.unsaved_question = true ;
+      }
+      var rating_value = val;
+      $scope.rating_scale_elements = [];
+      var array = new Array();
+      for( i=0; i< rating_value; i++){
+
+        $scope.rating_scale_elements.push({
+           index : i
+        });
+          array.push({
+            _id : answer_object._id + '_'+ (i + 1)  ,
+            rat_scl_value :  i + 1
+          })
+
+      }
+
+      // ==> Fill answer object
+      if(answer_object != null && questionIndex != null ){
+        $scope.questions_list[questionIndex].answers_format[0].rating_scale_answers = array ;
+      }
+    };
+    // ==> Do an action
+  $scope.status_of_questions();
+
+  $scope.rating_scale_values();
+  $scope.settings_menu.css({width:$scope.window.settings_menu});
+  Sortable.create($scope.sort_handler , {
+     ghostClass: 'shadow_element' ,
+     group: "question-list" ,
+     disabled: false ,
+     animation: 250 ,
+     handle: '.drag-handler',
+     onStart : function (evt){
+       $scope.hide_loader ();
+
+     } ,
+     onEnd : function (evt){
+
+       var itemEl = evt.item;
+       var newIndex = evt.newIndex;
+       var oldIndex = evt.oldIndex;
+
+
+       $scope.question_id = $(itemEl).attr("data-question-id");
+       var question_sor = $scope.questions_list.find($scope.callback_index);
+       //  console.log($scope.question_id);
+       $scope.edit_this_question ( $scope.question_id  , newIndex ) ;
+
+       $scope.highlighted_question_and_show_data (newIndex , itemEl);
+
+       var newPosition = question_sor;
+       // remove old index
+       $scope.questions_list.splice(oldIndex, 1);
+       // relocate new position
+       $scope.questions_list.splice( newIndex ,0,  newPosition );
+       // question resortable
+       //+++++ $scope.iframe_access.new_sorting_for_questions (oldIndex , newIndex , newPosition );
+       // Save change in db
+       $.getJSON($scope.json_apk_file , function(api_key_data){
+         $http({
+               url   : $scope.api_url_question_creation ,
+               method : "PATCH",
+               data  : {
+                 "sorted_question": $scope.questions_list ,
+                 "creator_id":$scope.user_id
+               } ,
+               headers: {
+                 "X-api-keys": api_key_data.API_KEY,
+                 "X-api-app-name": api_key_data.APP_NAME
+               }
+             }).then(function(provider){
+               console.log( provider );
+             },function(err){
+               //(err);
+             });
+       });
+     }
+   }); // end sortable
+
+
+
+   Sortable.create($scope.sortble_draggable_handler , {
+       sort: false,
+       disabled: false,
+       animation: 180 ,
+        group: {
+           name: "question-list",
+           pull: "clone",
+           revertClone: false,
+       },
+       onStart : function (evt){
+
+          $scope.hide_loader();
+          // ---------------------------------------------------
+          // ------->> Get Id from mongoDB
+          // ---------------------------------------------------
+          $http({
+              url : $scope.api_url_init_id_date ,
+              method : "GET"
+            }).then(function(resp){
+              $scope.mongoose_id = resp.data.id;
+              $scope.mongoose_answer_id = resp.data.id_1;
+              $scope.mongoose_date = resp.data.date;;
+              $scope.unique_ids = resp.data.list_of_ids ;
+
+            },function(err){
+              //(err);
+          });
+         var qsLength = $("#docQuestions").children("li").length ;
+         if(qsLength == 0 ){
+           $("#docQuestions").css({
+             minHeight:"20px" ,
+             background:"ghostwhite"
+           });
+         }
+
+        } ,
+        onEnd : function (evt){
+          $scope.is_drag_drop_item = true ;
+          return $scope.dragged_items(evt);
+        },
+        onMove : function (evt){
+
+           var dragged = evt.dragged;
+               var draggedRect = evt.draggedRect;
+               var related = evt.related;
+               var relatedRect = evt.relatedRect;
+
+           var ParentID = $(dragged).parent().prop("id");
+           var ParentEl = $(dragged).parent();
+           if(ParentID == "qs-sortable") {
+             ParentEl.find(dragged).html("");
+             // set animation
+             ParentEl.find(dragged).addClass("animated wobble");
+
+             ParentEl.find(dragged).css({
+               minHeight : '40px' ,
+               background : "ghostwhite"
+             });
+           }
+
+        } ,
+      });
+
+
+  $scope.init_answer_preview = (redactorElement) => {
+    $timeout(function () {
+        var answer_id = redactorElement.parent().parent().parent().parent().attr('data-answer-id').split('_').pop() ;
+        var answer_index = redactorElement.parent().parent().parent().parent().index();
+        var answer_value = answer_xx[answer_index];
+        //+++++ $scope.iframe_access.change_data_in_answer_view($scope.question_id , 2 , answer_id , answer_index , answer_value );
+    }, 250);
+  };
+
+  $scope.classes_for_this_answer = ( quiz_settings , question_id , answer_id ) => {
+    var classes = '';
+    // => Two blocks per row or else
+    if(quiz_settings.choice_style)
+        classes += 'ng_inline_block';
+        else
+        classes += 'ng_block';
+
+    // => check if this is selected answer or not from attendee
+    if( $scope.this_attendee_draft != null && $scope.this_attendee_draft.user_id != undefined ){
+        var drft_question = $scope.this_attendee_draft.questions_data.find(x => x.question_id == question_id ) ;
+        if(drft_question != undefined ){
+          var drft_selected_answer = drft_question.answer_ids.findIndex(x => x.answer_id == answer_id );
+        if (drft_selected_answer != -1 ){ // => Add ( selected_answers )
+          classes += ' selected_answer'
+              }
+          }
+     }
+
+    // => Get Classes according to database
+    if($scope.this_attendee_draft != null && $scope.this_attendee_draft.questions_data != undefined ){
+      var thisQuestion = $scope.this_attendee_draft.questions_data.find(x => x.question_id == question_id) ;
+      if(thisQuestion != undefined) {
+        var answers_array = thisQuestion.answer_ids ;
+        var answer_object_index = answers_array.findIndex(x => x.answer_id == answer_id);
+        if( answer_object_index != -1 ){
+          var selected_answer = answers_array[answer_object_index];
+          if($scope.__player_object.settings.show_results_per_qs){ // => true
+            // =>> check if show the right answer option is true
+            if(selected_answer.is_correct){
+              classes += ' right_answer';
+            }else {
+              classes += ' wrong_answer';
+            }
+          } else classes += ' selected_answer';
+        }
+      }
+    }
+    // $timeout( function(){ $scope.$apply() } , 300 )
+    return classes ;
+  };
+
+  $scope.change_values_in_redactor_in_answers = (new__Answer = null ) => {
+    var this_question = $scope.questions_list.find(x => x._id == $scope.question_id);
+    if(this_question == undefined) return false ;
+
+    if( this_question.question_type == 0 ){
+
+      if(new__Answer != null ){
+        // (new__Answer);
+        var answer_ui_list = $($scope.iframe_object).find('ul#question_'+$scope.question_id);
+
+        var this_question = $scope.questions_list.find(x => x._id == $scope.question_id);
+        if(this_question == undefined) return false ;
+      }
+
+      // ==> Case it with redactors
+      $timeout(function(){
+        // $('.redactor-in').each(function(i){
+        //   var redactor_in = $(this);
+        //   var is_answer_list = redactor_in.parent().parent().parent().parent().hasClass('answers_x');
+        //   if(is_answer_list){
+        //     redactor_in.on("keyup , input , change" , function (){
+        //       $scope.init_answer_preview(redactor_in);
+        //     });
+        //   }
+        // });
+      } , 120);
+    }
+    if(this_question.question_type == 2 ){
+      // ==> Case it with boolean choices
+      var answer_ui_list = $($scope.iframe_object).find('ul#question_'+ $scope.question_id);
+      // ==> Get the data from boolean question type
+      var boolean_type = $('.choices-part');
+      boolean_type.children("li").each(function(i){
+         $(this).find("input.true-false-value").on("change , input" , function (){
+           var boolean_value = $(this).val();
+           answer_ui_list.children('li').eq(i).find('.text-values').html(boolean_value);
+        });
+      });
+    }
+  };
+
+  $scope.swape_editor = () => {
+
+    $(".editor-container").css({
+      position: 'relative' ,
+      right: '0%'
+    });
+    $(".preview-container").css({
+      position: 'relative' ,
+      left: '-105%'
+    });
+      $('.question-editor , .question-preview').addClass('overflow_hidden');
+      $timeout(function () {
+          $('.question-editor , .question-preview').removeClass("overflow_hidden");
+      }, 400);
+    $timeout(function(){
+      $(".editor-container").css({display: 'block'});
+      $(".preview-container").css({display: 'none'});
+
+    } , 200 );
+
+
+    $('.swipper-container-block').css ({ 'background' : "#fff" } );
+
+  }
+  $scope.swape_view = () => {
+    $(".editor-container").css({
+      position: 'relative' ,
+      right: '-105%'
+    });
+    $(".preview-container").css({
+      position: 'relative' ,
+      left: '0%'
+    });
+
+    $timeout(function(){
+      $(".editor-container").css({display: 'none'});
+      $(".preview-container").css({display: 'block'});
+      $('.question-editor , .question-preview').removeClass("overflow_hidden");
+      $scope.update_settings_in_view();
+    } , 200 );
+
+    $timeout(function(){
+      if( $scope.switching_editor_preview_value == true )
+        $('.swipper-container-block').css ($scope.default_bg_of_view);
+    } , 400 );
+
+  }
+  $scope.switching_editor_preview = () => {
+      if($scope.switching_editor_preview_value == false ) { // => Editor
+        $scope.swape_editor();
+      }else { // => Preview
+        $scope.swape_view();
+      }
+      // alert($(".preview-container").css('display'));
+  };
+
+
+  $scope.change_data_in_answer_view = (question_id  , model_type = 0 , model_id = null , model_index = null  , model_value  = null  , media_data = null ) => {
+        var this_question_data = $scope.__player_object.questions.find(x => x._id == question_id);
+        var questionIndex = $scope.__player_object.questions.findIndex(x => x._id == question_id);
+        console.log(model_type);
+        if(model_type == 0){ // =>> Question
+            if(questionIndex != -1){
+              if(model_value != null)
+                $scope.__player_object.questions[questionIndex].question_body = model_value;
+
+              if(media_data != null ){
+                if($scope.__player_object.questions[questionIndex].media_question == undefined)
+                $scope.__player_object.questions[questionIndex].media_question  = new Object() ;
+                $scope.__player_object.questions[questionIndex].media_question = media_data ;
+              }
+            }
+        }else if (model_type == 1 ){ // =>> Description
+          if(questionIndex != -1){
+            if(model_value != null)
+              $scope.__player_object.questions[questionIndex].question_description = model_value;
+          }
+        }else if (model_type == 2 ){ // =>> Answer
+          if(questionIndex != -1){
+
+              var answerIndex = $scope.__player_object.questions[questionIndex].answers_format.findIndex( x => x._id ==  model_id );
+              if(answerIndex != -1 ){
+                if(model_value != null)
+                $scope.__player_object.questions[questionIndex].answers_format[answerIndex].value = model_value;
+
+                if(media_data != null ){
+                  var question_object = $scope.__player_object.questions[questionIndex] ;
+                  var thisAnswer = $scope.__player_object.questions[questionIndex].answers_format[answerIndex];
+
+
+                  if(question_object.question_type == 0 ){
+                    // => Text optional with media optional
+                      thisAnswer.media_optional = media_data
+                  }
+
+                  if(question_object.question_type == 1 ){
+
+                    if( media_data.media_type == 0 ){
+                        if(thisAnswer.media_name == undefined )
+                          thisAnswer.media_name = null ;
+                        if(thisAnswer.media_src == undefined )
+                          thisAnswer.media_src = null ;
+                        if(thisAnswer.media_type == undefined )
+                          thisAnswer.media_type = null
+
+                        thisAnswer.media_name = media_data.media_name;
+                        thisAnswer.media_src= media_data.media_src;
+                        thisAnswer.media_type= media_data.media_type;
+                        thisAnswer.Media_directory = $scope.server_ip + media_data.media_src;
+                    }
+                    if( media_data.media_type == 1 ){
+                      if(thisAnswer.media_name == undefined )
+                      thisAnswer.media_name = null ;
+                      if(thisAnswer.media_src == undefined )
+                      thisAnswer.media_src = null ;
+                      if(thisAnswer.media_type == undefined )
+                      thisAnswer.media_type = null
+
+                      if(thisAnswer.Media_directory == undefined )
+                      thisAnswer.Media_directory = null
+                      if(thisAnswer.embed_path == undefined )
+                      thisAnswer.embed_path = null
+                      if(thisAnswer.video_id == undefined )
+                      thisAnswer.video_id = null
+                      if(thisAnswer.video_type == undefined )
+                      thisAnswer.video_video_typeid = null
+
+                      thisAnswer.Media_directory = media_data.Media_directory;
+                      thisAnswer.embed_path= media_data.embed_path;
+                      thisAnswer.video_id= media_data.video_id;
+                      thisAnswer.video_type= media_data.video_type;
+                      thisAnswer.media_name = media_data.media_name;
+                      thisAnswer.media_src= media_data.media_src;
+                      thisAnswer.media_type= media_data.media_type;
+                      thisAnswer.Media_directory =  media_data.media_src;
 
                     }
-                }else {
-                  // ==> attendee_draft is empty
 
+                  }
+
+                    console.log({QUESTION_OBJECT__VF__TT : question_object});
                 }
-
-                $timeout(function(){  $rootScope.$apply(); } , 300);
-                console.log({
-                  currAttendee : $rootScope.this_attendee_draft
-                });
-    }
-
-  $rootScope.back_to_previouse_slide = (css_mode) => {
-    if ( css_mode == true ) return false;
-      var question_index = $rootScope.question_index;
-
-
-
-    // if( question_index == ( $rootScope._questions_.length - 1 ) ) $rootScope.screen_type = 1;
-    if( question_index != 0  && ( question_index == ( $rootScope._questions_.length - 1 ) && $rootScope.screen_type == 3 ))
-      $rootScope.question_index = $rootScope.question_index - 1;
-      if( question_index != 0 &&  question_index < ( $rootScope._questions_.length - 1 ) )
-      $rootScope.question_index = $rootScope.question_index - 1;
-      if(question_index != 0 )
-        $rootScope.highlighted_by_color_only();
-
-        if ( $rootScope.screen_type == 1 )
-        {
-          $rootScope.question_index = ( $rootScope._questions_.length - 1 );
-          $rootScope.screen_type = 3 ;
-          $rootScope.is_view = true;
-        }
-        if ( question_index == 0 ) {
-          if($rootScope._settings_.enable_screens == true ){
-            $rootScope.screen_type = 0;
-            $rootScope.is_view = true;
-            $("#docQuestions > li").each(function(){
-              $(this).removeClass('marked_question');
-            })
+              }
           }
-        };
-        $(".preview-page , .swiper-wrapper").css({  height : 'auto'});
+        }
+        $scope.$apply();
+
+        // ==> Expand the iframe according to content height !
+        if(window.location != window.parent.location){
+            $timeout(function (){
+              console.log(window.parent);
+            } , 1000 );
+        }
+  };
+
+  $scope.slide_to_question_in_index_number = (slideNumber) => {
+    $scope.screen_type = slideNumber ;
   }
-  $rootScope.go_to_next_slide = (css_mode) => {
-    if(css_mode == true ) return false;
-    var question_index = $rootScope.question_index;
-    console.log(question_index == ( $rootScope._questions_.length - 1 ) );
-    if( question_index == ( $rootScope._questions_.length - 1 ) )
+  $scope.change_editor_model = () => {
+      $scope.in_app_editor = true ;
+  }
+  $scope.hide_this_access = (thisModel) => {
+    if(thisModel == 4 ) // => Success screen
       {
-        if($rootScope._settings_.enable_screens == true )
-          {
-            $rootScope.is_view = true;
-            $rootScope.screen_type = 1;
-            $("#docQuestions").children("li").each(function(){
-               if( $(this).hasClass('marked_question') )
-               $(this).removeClass('marked_question');
-            });
-          }
+        $('.title_failed_with').css({display : 'none'});
+        $('.title_success_with').css({display : 'block'});
       }
-    else
-    {
-      $rootScope.question_index = $rootScope.question_index + 1;
-      $rootScope.highlighted_by_color_only();
-    }
-    $(".preview-page , .swiper-wrapper").css({  height : 'auto'});
-    $timeout(function(){$rootScope.$apply()} , 300);
-  }
-  $rootScope.start_the_quiz = (css_mode) => {
-      if(css_mode == true ) return false;
-      $rootScope.screen_type = 3 ;
-      $rootScope.is_view = true;
-      $rootScope.question_index = 0 ;
-      $rootScope.highlighted_by_color_only();
-      $timeout(function(){$rootScope.$apply()} , 300);
-      $(".preview-page, .swiper-wrapper").css({  height : 'auto'});
-  }
-  $rootScope.submit_the_quiz = (css_mode) => {
-    if(css_mode == true ) return false;
-    if( $rootScope.screen_type == 1 ){
-      $rootScope.is_view = true;
-      $rootScope.screen_type = 2;
-    }
-    $(".preview-page , .swiper-wrapper").css({  height : 'auto'});
-  }
-  $rootScope.go_back_to_first_qs = (css_mode) => {
-    if(css_mode == true ) return false;
-    if($rootScope._questions_.length != 0 )
-    $rootScope.question_index = 0 ;
-    $rootScope.screen_type = 3;
-  }
-  $rootScope.highlighted_by_color_only = () => {
-    var questionId = $rootScope._questions_[$rootScope.question_index]._id;
-
-    $("#docQuestions").children("li").each(function(){
-       if( $(this).hasClass('marked_question') )
-       $(this).removeClass('marked_question');
-    });
-    $timeout(function(){
-      $("#docQuestions").children('li.qs-'+questionId.toString()).addClass('marked_question');
-    });
-  }
-  $rootScope.timer_is_enabled = (is_enabeld) => {
-    if(is_enabeld == true )
-    $(".time-frames > input, .time-frames > input , .time-frames > span").css("color" , "#fff")
-    else $(".time-frames > input, .time-frames > input  , .time-frames > span").css("color" , "#b3b3b3")
-  }
-  $rootScope.enable_screen_func = (is_enabled_screen) => {
-    if( is_enabled_screen == false )
-      $rootScope.screen_type = 3 ;
-      else
-      $rootScope.screen_type = 0 ;
-  };
-  $rootScope.enable_css_mode_func = ( is_enabled ) => {
-    $("#enabled_css").val( is_enabled );
-
-   if(is_enabled == true ){
-      $('body , html').bind('mouseover' , function(e){
-        var target = e.target;
-        $('.selector').each(function(){
-          $(this).removeClass('selector_line');
-        });
-
-        if( typeof(target.className) == 'object')
-        return false;
-
-        if(target.className.indexOf('selector') != -1 ){  ;
-          $(target).addClass('selector_line');
-        }
-      });
-      $('body , html').click(function(e){
-        // box-svg-container
-        if( typeof(e.target.className) == 'object')
-        return false;
-
-        if(e.target.className.indexOf('selector') != -1 ){
-
-            $( '.selector' ).prop('contenteditable', false );
-            $( '*' ).each(function(e){
-              $(this).css ({outlineColor : "transparent"});
-            })
-            e.target.contentEditable = true ;
-            e.target.setAttribute("onkeydown","if(event.metaKey) return true; return false;");
-            e.target.style.outline = "#20fdb9 solid 3px";
-            if(e.target.getAttribute('box-target-type') == 'box-player')
-            e.target.style.outlineOffset = "-4px";
-            else
-            e.target.style.outlineOffset = "4px";
-            e.target.focus();
-            $( '.selector' ).attr('disabled');
-
-
-            var current_class = $("."+e.target.getAttribute('box-target-class')) ;
-            $rootScope.selector_class = "." + e.target.getAttribute('box-target-class')
-            // ==> Show Options
-            if(e.target.getAttribute('box-target-type') == 'box-buttons'){
-
-              $rootScope.border_models_color = current_class.css("border-color");
-              $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
-
-              $rootScope.color_models = current_class.css("color");
-              $('.color_models').spectrum('set' , $rootScope.color_models );
-
-              $rootScope.background_models = current_class.css("background-color");
-              $('.background_models').spectrum('set' , $rootScope.background_models );
-
-              $rootScope.font_size_models = parseInt(current_class.css("font-size"));
-              var current_class = $("."+e.target.getAttribute('box-target-class')) ;;
-
-              $rootScope.font_family_models = current_class.css("font-family").toString().toLowerCase();
-
-              $rootScope.border_style_models = current_class.css("border-style").toString();
-              $rootScope.border_left_models = current_class.css("border-left-width").toString();
-              $rootScope.border_right_models = current_class.css("border-right-width").toString();
-              $rootScope.border_top_models = current_class.css("border-top-width").toString();
-              $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
-
-              $rootScope.selecotor_name = ".Buttons";
-              $rootScope.css_pellet_mode.background = true;
-              $rootScope.css_pellet_mode.border = true;
-              $rootScope.css_pellet_mode.color = true ;
-              $rootScope.css_pellet_mode.fontSize = true ;
-              $rootScope.css_pellet_mode.fontFamily = true ;
-              $rootScope.css_pellet_mode.width = false ;
-
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
-
-              $rootScope.css_pellet_mode.radial_strock = false ;
-              $rootScope.css_pellet_mode.radial_fill = false ;
-              $rootScope.css_pellet_mode.radial_text_color = false ;
-            }
-            if(e.target.getAttribute('box-target-type') == 'box-player'){
-              // ==> fill colors
-              $rootScope.background_models = current_class.css("background-color");
-              $('.background_models').spectrum('set' , $rootScope.background_models );
-
-              // ==> show inputs
-              $rootScope.selecotor_name = ".Player-Page";
-              $rootScope.css_pellet_mode.background = true;
-              $rootScope.css_pellet_mode.border = false;
-              $rootScope.css_pellet_mode.color = false ;
-              $rootScope.css_pellet_mode.fontSize = false ;
-              $rootScope.css_pellet_mode.fontFamily = false ;
-              $rootScope.css_pellet_mode.width = false ;
-
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
-
-              $rootScope.css_pellet_mode.radial_strock = false ;
-              $rootScope.css_pellet_mode.radial_fill = false ;
-              $rootScope.css_pellet_mode.radial_text_color = false ;
-
-            }
-            if(e.target.getAttribute('box-target-type') == 'box-containers'){
-              // ==> fill colors
-
-              $rootScope.background_models = current_class.css("background-color");
-              $rootScope.border_models_color = current_class.css("border-color");
-
-              $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
-              $('.background_models').spectrum('set' , $rootScope.background_models );
-              if(current_class.css("border-style") == undefined ) {
-
-                alert("is Working only when you set 'Single Response' to false !");
-                return false ;
-              }
-              $rootScope.border_style_models = current_class.css("border-style").toString();
-              $rootScope.border_left_models = current_class.css("border-left-width").toString();
-              $rootScope.border_right_models = current_class.css("border-right-width").toString();
-              $rootScope.border_top_models = current_class.css("border-top-width").toString();
-              $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
-
-              // ==> show inputs
-              $rootScope.selecotor_name = ".Container";
-              $rootScope.css_pellet_mode.background = true;
-              $rootScope.css_pellet_mode.border = true;
-              $rootScope.css_pellet_mode.width = false ;
-              $rootScope.css_pellet_mode.color = false ;
-              $rootScope.css_pellet_mode.fontSize = false ;
-              $rootScope.css_pellet_mode.fontFamily = false ;
-
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
-
-              $rootScope.css_pellet_mode.radial_strock = false ;
-              $rootScope.css_pellet_mode.radial_fill = false ;
-              $rootScope.css_pellet_mode.radial_text_color = false ;
-            }
-            if(e.target.getAttribute('box-target-type') == 'box-answers'){
-                // ==> Fetch Style results
-
-                // Basic answers
-                // var current_class = e.target.getAttribute('box-target-class');
-                // console.log(current_class);
-                $rootScope.selecotor_name = ".Answers";
-                $rootScope.background_models = current_class.css("background-color");
-                $rootScope.border_models_color = current_class.css("border-color");
-                $rootScope.color_models = current_class.css("color");
-                $rootScope.font_size_models = parseInt(current_class.css("font-size"));
-
-                $rootScope.font_family_models = (current_class.css("font-family") != undefined )? current_class.css("font-family").toString().toLowerCase():'';
-                $rootScope.border_style_models = (current_class.css("border-style") != undefined ) ? current_class.css("border-style").toString() : '';
-                $rootScope.border_left_models = (current_class.css("border-left-width") != undefined ) ? current_class.css("border-left-width").toString() : '';
-                $rootScope.border_right_models = (current_class.css("border-right-width") != undefined ) ? current_class.css("border-right-width").toString() : '';
-                $rootScope.border_top_models = (current_class.css("border-top-width") != undefined ) ? current_class.css("border-top-width").toString() : '';
-                $rootScope.border_bottom_models = (current_class.css("border-bottom-width") != undefined ) ? current_class.css("border-bottom-width").toString() : '';
-                $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
-                $('.background_models').spectrum('set' , $rootScope.background_models );
-                $('.color_models').spectrum('set' , $rootScope.color_models );
-
-
-                // ==> Hover answers
-                var hover_classes = $('.'+e.target.getAttribute('box-target-class') +':hover');
-                $rootScope.hover_border_models_color = hover_classes.css('border-color');
-                $rootScope.hover_background_models  = hover_classes.css('background-color');
-                $rootScope.hover_color_models = hover_classes.css('color');
-                $rootScope.hover_border_style_models = hover_classes.css('border-style');
-                $rootScope.hover_border_left_models = hover_classes.css('border-left-width');
-                $rootScope.hover_border_right_models = hover_classes.css('border-right-width');
-                $rootScope.hover_border_top_models = hover_classes.css('border-top-width');
-                $rootScope.hover_border_bottom_models = hover_classes.css('border-bottom-width');
-                $('.hover_border_models_color').spectrum('set' , $rootScope.hover_border_models_color );
-                $('.hover_background_models').spectrum('set' , $rootScope.hover_background_models );
-                $('.hover_color_models').spectrum('set' , $rootScope.hover_color_models );
-
-                // ==> Selected Answers (selected_answer) =>
-                var selected_classes = $('.'+e.target.getAttribute('box-target-class') +'.selected_answer');
-                $rootScope.selected_border_models_color = selected_classes.css('border-color');
-                $rootScope.selected_background_models  = selected_classes.css('background-color');
-                $rootScope.selected_color_models = selected_classes.css('color');
-                $rootScope.selected_border_style_models = selected_classes.css('border-style');
-                $rootScope.selected_border_left_models = selected_classes.css('border-left-width');
-                $rootScope.selected_border_right_models = selected_classes.css('border-right-width');
-                $rootScope.selected_border_top_models = selected_classes.css('border-top-width');
-                $rootScope.selected_border_bottom_models = selected_classes.css('border-bottom-width');
-                $('.selected_border_models_color').spectrum('set' , $rootScope.selected_border_models_color );
-                $('.selected_background_models').spectrum('set' , $rootScope.selected_background_models );
-                $('.selected_color_models').spectrum('set' , $rootScope.selected_color_models );
-
-
-                var question_type = $rootScope._questions_[$rootScope.question_index].question_type ;
-                if(question_type == undefined) return false ;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.background = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.border = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.color = true ;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.fontSize = true ;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.fontFamily = true ;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.width = false ;
-
-
-                /* Consider the following cases +++++ */
-                // ==> Case Hover in answer
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.hover_background = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.hover_border = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.hover_color = true ;
-
-                // ==> Case select answer
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.selected_background = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.selected_border = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.selected_color = true ;
-
-                // ==> Case correct answer
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.correct_background = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.correct_border = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.correct_color = true ;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.correct_icon_background = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.correct_icon_border = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.correct_icon_color = true ;
-
-                // ==> Case wrong answer
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.wrong_background = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.wrong_border = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.wrong_color = true ;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.wrong_icon_background = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.wrong_icon_border = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.wrong_icon_color = true ;
-
-                // ==> rating and scale answers
-                if( question_type == 3 )
-                $rootScope.css_pellet_mode.rating_color = false;
-                // ==> Do border for scale answers
-                if( question_type == 3 )
-                $rootScope.css_pellet_mode.scale_color = false ;
-                if( question_type == 3 )
-                $rootScope.css_pellet_mode.scale_hover_color = false ;
-                if( question_type == 3 )
-                $rootScope.css_pellet_mode.scale_background = false;
-                if( question_type == 3 )
-                $rootScope.css_pellet_mode.scale_hover_background = false;
-
-                // ==> Free texts answers
-                if( question_type == 4 )
-                $rootScope.css_pellet_mode.free_boxtext_background = false;
-                if( question_type == 4 )
-                $rootScope.css_pellet_mode.free_boxtext_color = false;
-                // ==> consider to set border in this option
-
-
-                $rootScope.css_pellet_mode.radial_strock = false ;
-                $rootScope.css_pellet_mode.radial_fill = false ;
-                $rootScope.css_pellet_mode.radial_text_color = false ;
-            }
-            if(e.target.getAttribute('box-target-type') == 'box-texts'){
-              // ==> fill colors
-              $rootScope.color_models = current_class.css("color");
-              $('.color_models').spectrum('set' , $rootScope.color_models );
-
-              $rootScope.font_size_models = parseInt(current_class.css("font-size"));
-              $rootScope.font_family_models = current_class.css("font-family").toString().toLowerCase();
-
-              $rootScope.selecotor_name = ".Texts";
-              $rootScope.css_pellet_mode.background = false;
-              $rootScope.css_pellet_mode.border = false;
-              $rootScope.css_pellet_mode.color = true ;
-              $rootScope.css_pellet_mode.fontSize = true ;
-              $rootScope.css_pellet_mode.fontFamily = true ;
-              $rootScope.css_pellet_mode.width = false ;
-
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
-
-              $rootScope.css_pellet_mode.radial_strock = false ;
-              $rootScope.css_pellet_mode.radial_fill = false ;
-              $rootScope.css_pellet_mode.radial_text_color = false ;
-            }
-            if(e.target.getAttribute('box-target-type') == "box-media"){
-              $rootScope.selecotor_name = ".Media Container";
-              $rootScope.media_container = parseInt(current_class.width());
-
-              $rootScope.css_pellet_mode.background = false;
-              $rootScope.css_pellet_mode.border = false;
-              $rootScope.css_pellet_mode.color = false ;
-              $rootScope.css_pellet_mode.fontSize = false ;
-              $rootScope.css_pellet_mode.fontFamily = false ;
-              $rootScope.css_pellet_mode.width = true ;
-
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
-
-              $rootScope.css_pellet_mode.radial_strock = false ;
-              $rootScope.css_pellet_mode.radial_fill = false ;
-              $rootScope.css_pellet_mode.radial_text_color = false ;
-            }
-            if(e.target.getAttribute('box-target-type') == 'box-labels'){
-
-              $rootScope.border_models_color = current_class.css("border-color");
-              $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
-
-              $rootScope.color_models = current_class.css("color");
-              $('.color_models').spectrum('set' , $rootScope.color_models );
-
-              $rootScope.background_models = current_class.css("background-color");
-              $('.background_models').spectrum('set' , $rootScope.background_models );
-
-              $rootScope.selecotor_name = ".Box";
-              $rootScope.css_pellet_mode.background = true;
-              $rootScope.css_pellet_mode.border = true;
-              $rootScope.css_pellet_mode.color = true ;
-              $rootScope.css_pellet_mode.fontSize = false ;
-              $rootScope.css_pellet_mode.fontFamily = false ;
-              $rootScope.css_pellet_mode.width = false ;
-
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
-
-              $rootScope.css_pellet_mode.radial_strock = false ;
-              $rootScope.css_pellet_mode.radial_fill = false ;
-              $rootScope.css_pellet_mode.radial_text_color = false ;
-            }
-            if(e.target.getAttribute('box-target-type') == 'box-svg-container'){
-              $rootScope.selecotor_name = ".Radial";
-              $rootScope.css_pellet_mode.background = false;
-              $rootScope.css_pellet_mode.border = false;
-              $rootScope.css_pellet_mode.color = false ;
-              $rootScope.css_pellet_mode.fontSize = false ;
-              $rootScope.css_pellet_mode.fontFamily = false ;
-              $rootScope.css_pellet_mode.width = false ;
-
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
-
-              // ==> Fill colors
-              // HERE++++++
-              var number = e.target.getAttribute('box-target-number') ;
-              var class_text_color = ".track-text";
-              var class_fill_track = ".track-progress";
-              var class_stroke_track = ".track-all";
-
-              var target_class_text = class_text_color+'-'+number;
-              var target_fill_track = class_fill_track+'-'+number;
-              var target_stroke_track = class_stroke_track+'-'+number;
-
-              // ==> Case it Progress
-              $rootScope.radial_text_colors = $(target_class_text).css("fill");
-              $('.radial_text_colors').spectrum('set' , $rootScope.radial_text_colors );
-
-              $rootScope.radial_fill_colors = $(target_fill_track).css("fill");
-              $('.radial_fill_colors').spectrum('set' , $rootScope.radial_fill_colors );
-
-              $rootScope.radial_storck_colors = $(target_stroke_track).css("fill");
-              $('.radial_storck_colors').spectrum('set' , $rootScope.radial_storck_colors );
-
-
-              $rootScope.css_pellet_mode.radial_strock = true ;
-              $rootScope.css_pellet_mode.radial_fill = true ;
-              $rootScope.css_pellet_mode.radial_text_color = true ;
-            }
-            if(e.target.getAttribute('box-target-type') == 'box-timer'){
-              $rootScope.selecotor_name = ".Timer";
-              $rootScope.css_pellet_mode.background = true;
-              $rootScope.css_pellet_mode.border = true;
-              $rootScope.css_pellet_mode.color = true ;
-              $rootScope.css_pellet_mode.fontSize = false ;
-              $rootScope.css_pellet_mode.fontFamily = false ;
-              $rootScope.css_pellet_mode.width = false ;
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
-
-              // ==> Get current colors
-              $rootScope.color_models = current_class.css("color");
-              $('.color_models').spectrum('set' , $rootScope.color_models );
-              $rootScope.background_models = current_class.css("background-color");
-              $rootScope.border_models_color = current_class.css("border-color");
-
-              $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
-              $('.background_models').spectrum('set' , $rootScope.background_models );
-
-              $rootScope.border_style_models = current_class.css("border-style").toString();
-              $rootScope.border_left_models = current_class.css("border-left-width").toString();
-              $rootScope.border_right_models = current_class.css("border-right-width").toString();
-              $rootScope.border_top_models = current_class.css("border-top-width").toString();
-              $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
-
-            }
-            $timeout(function(){
-              $rootScope.$apply();
-            } , 10);
-        }
-      });
-
-    }else {
-      $("body , html , .selector").unbind('mouseenter mouseover mouseleave');
-      $("body , html").unbind('click');
-      $( '.selector , .selector_line' ).prop('contenteditable', false );
-      $( '.selector , .selector_line' ).removeClass('selector_line');
-
-      $( '*' ).each(function(e){
-        $(this).css ({outlineColor : "transparent"});
-      })
-    }
-  }
-
-
-
-  // ==> Upload Image
-  $rootScope.storing_image_with_cropped_data = () => {
-    if ( $rootScope.media_for == 'questions' ) {
-      if ( $rootScope.media_type == 0 ) $rootScope.storing_cropped_image_for_media_question();
-      if ( $rootScope.media_type == 1 ) $rootScope.storing_video_for_media_question();
-     }
-    if ( $rootScope.media_for == 'answer' ) {
-      if ( $rootScope.media_type == 0 ) $rootScope.storing_cropped_image_for_media_answer();
-      if ( $rootScope.media_type == 1 ) $rootScope.storing_video_for_media_answer( );
-    }
-  };
-  $rootScope.grep_progress_width = () => {
-
-    // {> ( question_index + 1 ) * 100 /  _questions_.length | math_around_it <} %
-    var percentage_value = Math.round(( parseInt( $rootScope.question_index + 1 ) * 100  ) / $rootScope._questions_.length )  ;
-    // alert(percentage_value)
-    if( $rootScope.screen_type == 0 )
-      percentage_value = 0;
-    return {
-      width : percentage_value + '%'
-    }
-  }
-  $rootScope.storing_cropped_image_for_media_question = () => {
-    $("#file_extension").val( $rootScope.media_image_uploader[0].files[0].name.split('.').pop());
-    var questionId = $("#question_id").val();
-    var x = $('#cropping-image-x').val();
-    var y = $('#cropping-image-y').val();
-    var width = $('#cropping-image-width').val();
-    var height = $('#cropping-image-height').val();
-    var after_uploaded_image_callback = (media) => {
-     var current_question = $rootScope._questions_[$rootScope.question_index] ;
-       if(current_question.media_question == undefined )
-        current_question['media_question'] = new Object();
-       current_question.media_question = media ;
-       $timeout(function(){ $rootScope.$apply(); });
-    };
-    var formImageData = new FormData();
-    formImageData.append('media_field' , $rootScope.media_image_uploader[0].files[0]   );
-    formImageData.append('height' , height  );
-    formImageData.append('width' , width  );
-    formImageData.append('x' ,x  );
-    formImageData.append('y' , y  );
-    formImageData.append('questions' , $rootScope._questions_ );
-    var cropping_url = $rootScope.server_ip + "api/" + $rootScope.app_id + "/question/" + questionId + "/cropping_system" ;
-    $http({
-      url : cropping_url,
-      method : "POST" ,
-      data : formImageData ,
-      headers : { 'Content-Type' : undefined} ,
-      uploadEventHandlers : {
-        progress : ( event ) => {
-          var percent = Math.round (event.loaded / event.total) * 100;
-          $('.highlighted_progress').css({width : percent + '%' });
-          if (event.loaded == event.total) {
-            // upload_image_is_completed()
-          }
-        }
+    if(thisModel == 5 ) // => Failed screen
+      {
+        $('.title_failed_with').css({display : 'block'});
+        $('.title_success_with').css({display : 'none'});
       }
-    }).then((respons)=>{
-      var questions = respons.data.questions ;
-      var current_qs = questions.find(x => x._id == questionId );
-      if(current_qs.media_question != undefined ){
+  };
+
+
+  $scope.edit_model_data = (model_type) => {
         $timeout(function(){
-            after_uploaded_image_callback(current_qs.media_question);
-            $timeout(function(){
-              $rootScope.close_current_image_uploader();
-              $timeout(function(){ $(".progrbar > .highlighted_progress").css('width' , 0 ); } , 500);
-            },100);
-        } , 500 );
-      }
-    }).catch((err)=>{ console.log(err);});
-  }
-  $rootScope.storing_cropped_image_for_media_answer = () => {
-      $("#file_extension").val( $rootScope.media_image_uploader[0].files[0].name.split('.').pop() );
-      var questionId = $("#question_id").val();
-      var answerId = $rootScope.current_answer_id ;
-      var x = $('#cropping-image-x').val();
-      var y = $('#cropping-image-y').val();
-      var width = $('#cropping-image-width').val();
-      var height = $('#cropping-image-height').val();
-      var formImageData = new FormData();
-      var after_uploaded_image_callback = ( media_object ) => {
-        var current_question = $rootScope._questions_[$rootScope.question_index] ;
-        var answer_obka =   current_question.answers_format.find(x => x._id == answerId )
+          var question = $scope.questions_list.find(x => x._id == $scope.question_id);
+          var questionIndex = $scope.questions_list.findIndex(x => x._id == $scope.question_id);
+          if(question == undefined) return false;
 
-        if(answer_obka != undefined  ){
-          if(current_question.question_type == 0 ){
-           if(answer_obka.media_optional == undefined )
-            answer_obka['media_optional'] = new Object();
-            answer_obka.media_optional = media_object;
+          if( model_type == 0 ){ // Question
+            $scope.unsaved_question = true ;
+            // ==> Storing Data
+            var question_data = $R("#editor-quest-data" , "source.getCode");
+            question.question_body = question_data ;
+            // ==> Show in View ui
+            $scope.change_data_in_answer_view ($scope.question_id  , 0 , $scope.question_id , questionIndex  , question_data );
           }
-          if(current_question.question_type == 1 ){
-            answer_obka['Media_directory'] = media_object.Media_directory
-            answer_obka['image_cropped'] = media_object.image_cropped
-            answer_obka['image_full'] = media_object.image_full
-            answer_obka['image_updated_date'] = media_object.image_updated_date
-            answer_obka['media_name'] = media_object.media_name;
-            answer_obka['media_src'] = media_object.media_src;
-            answer_obka['media_type'] = media_object.media_type ;
-            answer_obka['is_correct'] = media_object.is_correct;
+          if( model_type == 1 ){ // Description
+            $scope.unsaved_question = true ;
+            // ==> Storing Data
+            var question_description = $R("#editor-desc-data" , "source.getCode");
+            question.question_description = question_description;
+            // ==> Show in View ui
+            $scope.change_data_in_answer_view ($scope.question_id  , 1 , $scope.question_id , questionIndex  , question_description );
           }
-        }
-        $timeout(function(){ $rootScope.$apply(); });
+          if( model_type == 2 ){ // Welcome Screen
+            $scope.unsaved_question = true ;
+            // ==> Storing Data
+            var app_setting_strt_message = $R("#editor-strt-txt" , "source.getCode");
+            $scope.application_settings.settings.titles.title_start_with = app_setting_strt_message ;
+            // ==> Slide to This screen
+             $scope.slide_to_question_in_index_number(3);
+             $scope.set_application_settings($scope.application_settings.settings);
+          }
+          if( model_type == 3 ){ // GoodBye Screen
+            $scope.unsaved_question = true ;
+            // ==> Storing Data
+            var app_setting_end_message = $R("#editor-end-txt" , "source.getCode");
+            $scope.application_settings.settings.titles.title_end_with = app_setting_end_message ;
+            // ==> Slide to screen
+            $scope.slide_to_question_in_index_number(2);
+            $scope.set_application_settings($scope.application_settings.settings);
+          }
+          if( model_type == 4 ){ // Success Screen
+            $scope.unsaved_question = true ;
+            // ==> Storing Data
+            var app_setting_scs_message = $R("#editor-scs-txt" , "source.getCode");
+            $scope.application_settings.settings.titles.title_success_with = app_setting_scs_message ;
+            // ==> You're in editor
+            $scope.change_editor_model();
+            // ==> Hide success case it failed screen
+            $scope.hide_this_access(model_type);
+            // ==> slide to screen
+              $scope.slide_to_question_in_index_number(1);
+             $scope.set_application_settings($scope.application_settings.settings);
+          }
+          if( model_type == 5 ){ // Failed Screen
+            // ==> Storing Data
+            var app_setting_fld_message = $R("#editor-fld-txt" , "source.getCode");
+            $scope.application_settings.settings.titles.title_failed_with = app_setting_fld_message ;
+            // ==> You're in editor
+             $scope.change_editor_model();
+            // ==> Hide success case it failed screen
+             $scope.hide_this_access(model_type);
+            // ==> Slide to screen
+             $scope.slide_to_question_in_index_number(1);
+             $scope.set_application_settings($scope.application_settings.settings);
+          }
+          if( model_type > 5 ){ // Answers
+            // ==> Storing Data
+            var answerIndex =  $('.redactor-in-'+model_type).parent('.redactor-box').parent('.text-answers').parent('div').parent('li').index();
+            var currentAnswer = question.answers_format[answerIndex];
+            ({currentAnswercurrentAnswer: currentAnswer , answerIndex_ : answerIndex , model_type_x : model_type });
+            if(currentAnswer != undefined ){
+              var answer_data = $R(".editor-all-ans-data" , "source.getCode");
+              currentAnswer.value = answer_data[answerIndex];
+              // ==> Show in View ui
+             $scope.change_data_in_answer_view ( $scope.question_id  , 2 , currentAnswer._id , answerIndex  , currentAnswer.value );
+            }
+          }
+        } , 300);
+         $timeout(function(){$scope.$apply();} , 500 );
       };
-      formImageData.append('media_field' , $rootScope.media_image_uploader[0].files[0]   );
-      formImageData.append('height' , height  );
-      formImageData.append('width' , width  );
-      formImageData.append('x' ,x  );
-      formImageData.append('y' , y  );
-      formImageData.append('questions' , $rootScope._questions_ );
-      var cropping_url = $rootScope.server_ip + "api/" + $rootScope.app_id +"/question/"+ questionId +  "/answer/" + answerId + "/cropping_system" ;
-      $http({
-        url : cropping_url ,
-        method : "POST" ,
-        data : formImageData ,
-        headers : { 'Content-Type' : undefined} ,
-        uploadEventHandlers : {
-          progress : (event) => {
-              var percent = Math.round (event.loaded / event.total) * 100;
-              $('.highlighted_progress').css({width : percent + '%' });
-              if (event.loaded == event.total) {
 
+
+      $scope.edit_model_data = (model_type) => {
+            $timeout(function(){
+              var question = $scope.questions_list.find(x => x._id == $scope.question_id);
+              var questionIndex = $scope.questions_list.findIndex(x => x._id == $scope.question_id);
+              if(question == undefined) return false;
+
+              if( model_type == 0 ){ // Question
+                $scope.unsaved_question = true ;
+                // ==> Storing Data
+                var question_data = $R("#editor-quest-data" , "source.getCode");
+                question.question_body = question_data ;
+                // ==> Show in View ui
+                $scope.change_data_in_answer_view ($scope.question_id  , 0 , $scope.question_id , questionIndex  , question_data );
               }
-          }
-        }
-      }).then(( response )=>{
-        var questions = response.data.questions ;
-        var current_qs = questions.find(x => x._id == questionId );
-        if(current_qs != undefined){
-          var current_answer = current_qs.answers_format.find(x => x._id == answerId );
-          if( current_answer != undefined ){
-            if(current_answer.media_optional != undefined && current_qs.question_type == 0 ){
-              $timeout(function(){
-                    after_uploaded_image_callback(current_answer.media_optional);
-                    $timeout(function(){
-                      $rootScope.close_current_image_uploader();
-                      $timeout(function(){ $(".progrbar > .highlighted_progress").css('width' , 0 ); } , 500);
-                    },100);
-                } , 500 );
-            }
-            if(current_answer.media_type != undefined && current_qs.question_type == 1 ){
-              $timeout(function(){
-                  var media_okh = new Object();
+              if( model_type == 1 ){ // Description
+                $scope.unsaved_question = true ;
+                // ==> Storing Data
+                var question_description = $R("#editor-desc-data" , "source.getCode");
+                question.question_description = question_description;
+                // ==> Show in View ui
+                $scope.change_data_in_answer_view ($scope.question_id  , 1 , $scope.question_id , questionIndex  , question_description );
+              }
+              if( model_type == 2 ){ // Welcome Screen
+                $scope.unsaved_question = true ;
+                // ==> Storing Data
+                var app_setting_strt_message = $R("#editor-strt-txt" , "source.getCode");
+                $scope.application_settings.settings.titles.title_start_with = app_setting_strt_message ;
+                // ==> Slide to This screen
+                 $scope.slide_to_question_in_index_number(3);
+                 $scope.set_application_settings($scope.application_settings.settings);
+              }
+              if( model_type == 3 ){ // GoodBye Screen
+                $scope.unsaved_question = true ;
+                // ==> Storing Data
+                var app_setting_end_message = $R("#editor-end-txt" , "source.getCode");
+                $scope.application_settings.settings.titles.title_end_with = app_setting_end_message ;
+                // ==> Slide to screen
+                $scope.slide_to_question_in_index_number(2);
+                $scope.set_application_settings($scope.application_settings.settings);
+              }
+              if( model_type == 4 ){ // Success Screen
+                $scope.unsaved_question = true ;
+                // ==> Storing Data
+                var app_setting_scs_message = $R("#editor-scs-txt" , "source.getCode");
+                $scope.application_settings.settings.titles.title_success_with = app_setting_scs_message ;
+                // ==> You're in editor
+                $scope.change_editor_model();
+                // ==> Hide success case it failed screen
+                $scope.hide_this_access(model_type);
+                // ==> slide to screen
+                  $scope.slide_to_question_in_index_number(1);
+                 $scope.set_application_settings($scope.application_settings.settings);
+              }
+              if( model_type == 5 ){ // Failed Screen
+                // ==> Storing Data
+                var app_setting_fld_message = $R("#editor-fld-txt" , "source.getCode");
+                $scope.application_settings.settings.titles.title_failed_with = app_setting_fld_message ;
+                // ==> You're in editor
+                 $scope.change_editor_model();
+                // ==> Hide success case it failed screen
+                 $scope.hide_this_access(model_type);
+                // ==> Slide to screen
+                 $scope.slide_to_question_in_index_number(1);
+                 $scope.set_application_settings($scope.application_settings.settings);
+              }
+              if( model_type > 5 ){ // Answers
+                // ==> Storing Data
+                var answerIndex =  $('.redactor-in-'+model_type).parent('.redactor-box').parent('.text-answers').parent('div').parent('li').index();
+                var currentAnswer = question.answers_format[answerIndex];
+                ({currentAnswercurrentAnswer: currentAnswer , answerIndex_ : answerIndex , model_type_x : model_type });
+                if(currentAnswer != undefined ){
+                  var answer_data = $R(".editor-all-ans-data" , "source.getCode");
+                  currentAnswer.value = answer_data[answerIndex];
+                  // ==> Show in View ui
+                 $scope.change_data_in_answer_view ( $scope.question_id  , 2 , currentAnswer._id , answerIndex  , currentAnswer.value );
+                }
+              }
+            } , 300);
+             $timeout(function(){$scope.$apply();} , 500 );
+    };
 
-                  media_okh['Media_directory'] = current_answer.Media_directory
-                  media_okh['image_cropped'] = current_answer.image_cropped
-                  media_okh['image_full'] = current_answer.image_full
-                  media_okh['image_updated_date'] = current_answer.image_updated_date
-                  media_okh['media_name'] = current_answer.media_name;
-                  media_okh['media_src'] = current_answer.media_src;
-                  media_okh['media_type'] = current_answer.media_type ;
-                  media_okh['is_correct'] = current_answer.is_correct;
+    $scope.loading_event_handler_for_redactors = () => {
+    // redactor-in
+    $(".redactor-in").on("keyup keydown change input" , function(){
+      var currentRedactor = $(this).prop('className').split(' ').pop().split('-').pop();
+      ({currIndexValue : currentRedactor});
+      $scope.edit_model_data(parseInt(currentRedactor));
+    });
 
-                    after_uploaded_image_callback(media_okh);
-                    $timeout(function(){
-                      $rootScope.close_current_image_uploader();
-                      $timeout(function(){ $(".progrbar > .highlighted_progress").css('width' , 0 ); } , 500);
-                    },100);
-                } , 500 );
-            }
-          }
-        }
+  };
+  $scope.set_application_settings = (settings) => {
 
-        // if(current_qs.media_question != undefined ){
-        //   $timeout(function(){
-        //       after_uploaded_image_callback(current_qs.media_question);
-        //       $timeout(function(){
-        //         $rootScope.close_current_image_uploader();
-        //         $timeout(function(){ $(".progrbar > .highlighted_progress").css('width' , 0 ); } , 500);
-        //       },100);
-        //   } , 500 );
-        // }
-      }).catch((err)=>{ console.log(err); });
+    if($scope.__player_object.settings == undefined )
+      $scope.__player_object.settings = new Object();
+
+    $scope.__player_object.settings = settings;
+
+  };
+  $scope.change_time_type = () => {
+      if ( $scope.application_settings.settings.time_settings.timer_type == false )
+      $scope.application_settings.settings.time_settings.hours = 0 ;
+      $scope.set_application_settings($scope.application_settings.settings);
+  }
+  $scope.update_grade_settings = () => {
+     $scope.is_disabled_act = ! $scope.application_settings.settings.grade_settings.is_graded ;
+     $scope.set_application_settings($scope.application_settings.settings);
+  }
+  $scope.update_settings_in_view_with_hrs = () => {
+    $scope.set_application_settings($scope.application_settings.settings);
+  }
+  $scope.update_settings_in_view = ()=> {
+      $scope.set_application_settings($scope.application_settings.settings);
+  }
+  $scope.update_settings_in_view_show_type_of_results = ()=> {
+
+    //+++++ $scope.iframe_access.set_application_settings_with_ui_view($scope.application_settings.settings);
+    if($scope.application_settings.settings == undefined ) return false ;
+    var quiz_settings = $scope.application_settings.settings;
+
+    //+++++ $scope.iframe_access.change_answer_style_view(quiz_settings.show_results_per_qs);
+
   }
 
-
-
-  $rootScope.storing_video_for_media_question = (   )         => {
-    var video_object = $rootScope.current_media_video ;
-    var target_question = $rootScope._questions_[$rootScope.question_index] ;
-    if( target_question.media_question == undefined ) target_question['media_question'] = new Object();
-    target_question.media_question = video_object.media_question;
-
-    // ==> Saving Data
-    $timeout(function(){
-      $rootScope.storing_questions_into_database();
-      $timeout(function(){ $rootScope.close_current_image_uploader() } , 300)
-    } , 300);
+  $scope.update_labels_in_question_buttons_mnu_settings = () => {
+    //+++++ $scope.iframe_access.set_application_settings($scope.application_settings.settings);
+    //+++++ $scope.iframe_access.slideToThisIndex(1);
+    $timeout(function(){ $scope.$apply() } , 300 );
+  };
+  $scope.update_labels_in_srt_menu_settings = () => {
+    //+++++ $scope.iframe_access.set_application_settings($scope.application_settings.settings);
+    //+++++ $scope.iframe_access.slideToThisIndex(0);
+    $timeout(function(){ $scope.$apply() } , 300 );
+  };
+  $scope.update_labels_in_retk_menu_settings = () => {
+    //+++++ $scope.iframe_access.set_application_settings($scope.application_settings.settings);
+    //+++++ $scope.iframe_access.slideToThisIndex($scope.questions_list.length + 2);
+    $timeout(function(){ $scope.$apply() } , 300 );
   };
 
-  $rootScope.storing_video_for_media_answer = (   )           => {
- var video_object = $rootScope.current_media_video ;
- var target_question = $rootScope._questions_[$rootScope.question_index] ;
- var answerId = $rootScope.current_answer_id ;
- var current_answer = target_question.answers_format.find(x => x._id == answerId);
- if( current_answer == undefined ) return false ;
+  $scope.update_current_label = (text_name) => {
+    //+++++ $scope.iframe_access.set_application_settings($scope.application_settings.settings);
+    var thisIndex ;
+    if(text_name == 'back') thisIndex = $scope.questions_list.length - 1;
+    if(text_name == 'finish') thisIndex =   $scope.questions_list.length ;
+    if(text_name == 'submt-quiz') thisIndex = $scope.questions_list.length +1 ;
+    if(text_name == 'score-text') thisIndex = $scope.questions_list.length + 2 ;
+    if(text_name == 'grade-text') thisIndex = $scope.questions_list.length + 2 ;
 
- if( target_question.question_type == 0 ){
-   if( current_answer.media_optional == undefined ) current_answer['media_optional'] = new Object();
-   current_answer.media_optional['media_src'] = video_object.media_optional.media_src;
-   current_answer.media_optional['Media_directory'] = video_object.media_optional.Media_directory;
-   current_answer.media_optional['media_type'] = video_object.media_optional.media_type;
-   current_answer.media_optional['media_name'] = video_object.media_optional.media_name;
-   current_answer.media_optional['video_id'] = video_object.media_optional.video_id;
-   current_answer.media_optional['video_type'] = video_object.media_optional.video_type;
-   current_answer.media_optional['embed_path'] = video_object.media_optional.embed_path;
-   if ( video_object.media_optional.video_type == 2 )
-     current_answer.media_optional['mp4_option'] =  video_object.media_optional.mp4_option;
- }
- if( target_question.question_type == 1 ){
-   current_answer['media_src'] = video_object.media_src;
-   current_answer['Media_directory'] = video_object.Media_directory;
-   current_answer['media_type'] = video_object.media_type;
-   current_answer['media_name'] = video_object.media_name;
-   current_answer['video_id'] = video_object.video_id;
-   current_answer['video_type'] = video_object.video_type;
-   current_answer['embed_path'] = video_object.embed_path ;
-   if ( video_object.video_type == 2 )
-     current_answer['mp4_option'] =  video_object.mp4_option;
- }
+    //+++++ $scope.iframe_access.slideToThisIndex(thisIndex);
+    $timeout(function(){ $scope.$apply() } , 300 );
+  };
+  $scope.randomize_all_questions =() => {
 
- // ==> Saving Data
- $timeout(function(){
-   $rootScope.storing_questions_into_database();
-   $timeout(function(){ $rootScope.close_current_image_uploader() } , 300)
- } , 300);
-};
+    if($scope.application_settings.settings.randomize_settings )
+        $scope.questions_list =  $scope.randomize_arries ($scope.questions_list);
+      else
+        $scope.questions_list =  $scope.sorting_arries( $scope.questions_list , "_id");
 
-  // ==> Draw Progress Radial
-  var svg ;
-  $rootScope.draw_radial_progression = (precentage_value) => {
-    d3.select("svg").remove()
-				  if(svg){
-				  svg.selectAll("*").remove();
-
-				}
-				var wrapper = document.getElementById('radialprogress');
-				var start = 0;
-
-				var colours = {
-				  fill: "#c17c7e" ,
-				  track: '#c17c7e36',
-				  text: '#c17c7e',
-				  stroke: 'transparent',
-				}
-
-				var radius = 25;
-				var border = 2;
-				var strokeSpacing = 5;
-				var endAngle = Math.PI * 2;
-				var formatText = d3.format('.0%');
-				var boxSize = radius * 2;
-				var count = precentage_value;
-				var progress = start;
-				var step = precentage_value < start ? -0.01 : 0.01;
-
-				//Define the circle
-				var circle = d3.svg.arc()
-				  .startAngle(0)
-				  .innerRadius(radius)
-				  .outerRadius(radius - border);
-
-				//setup SVG wrapper
-				svg = d3.select(wrapper)
-				  .append('svg')
-				  .attr('width', boxSize)
-				  .attr('height', boxSize);
-
-
-				// ADD Group container
-				var g = svg.append('g')
-				  .attr('transform', 'translate(' + boxSize / 2 + ',' + boxSize / 2 + ')');
-
-				//Setup track
-				var track = g.append('g').attr('class', 'radial-progress');
-				track.append('path')
-          .attr("class" , "track-all-1")
-          .attr('d', circle.endAngle(endAngle))
-				  // .attr('fill', colours.track)
-				  // .attr('stroke', colours.stroke)
-				  // .attr('stroke-width', strokeSpacing + 'px');
-
-
-
-				//Add colour fill
-				var value = track.append('path')
-          .attr("class" , "track-progress-1");
-				  // .attr('fill', colours.fill)
-				  // .attr('stroke', colours.stroke)
-				  // .attr('stroke-width', strokeSpacing + 'px');
-
-				//Add text value
-				var numberText = track.append('text')
-        .attr("class" , "track-text-1")
-        .attr('text-anchor', 'middle')
-        .attr('dy', '.5rem')
-				// .attr('fill', colours.text);
-
-				  //update position of endAngle
-				  value.attr('d', circle.endAngle(endAngle * precentage_value));
-				  //update text value
-				  numberText.text(formatText(precentage_value));
   }
-  $rootScope.store_in_root_stylesheet_object = (class_name , property_name , property_value ) => {
-      /*
-      [
-        {
-        class_name
-        properties : [
-          {
-            property_name : '' ,
-            property_value : ''
-          }
-        ]
-       }
-      ]
-      */
-      var style_exists = $rootScope.theme_stylesheet.find( x => x.class_name ==  class_name );
-
-      if(style_exists == undefined){
-        var new_cls = {
-          class_name :class_name ,
-          properties : [{ property_name : property_name , property_value : property_value  }]
+  $scope.load_application_for_preview = () => {
+    // console.log($scope.url_application );
+        $http({
+          url : $scope.url_application ,
+          type : "GET" ,
+          headers : $scope.api_key_headers
+        }).then(function(resp){
+          $scope.__player_object = resp.data ;
+          $scope.load_template_timer();
+        },function(err){ (err); });
+    };
+    $scope.load_application_keys = function (){
+      $.getJSON( $scope.json_source , function (apk_keys){
+        $scope.api_key_headers = {
+          "X-api-app-name":apk_keys.APP_NAME ,
+          "X-api-keys":apk_keys.API_KEY
         }
-        $rootScope.theme_stylesheet.push(new_cls);
-      }else {
-        // ==> it there
-        var  property_existing = style_exists.properties.find(x => x.property_name == property_name );
-        if(property_existing == undefined ){
-          style_exists.properties.push({
-            property_name : property_name , property_value : property_value
-          })
-        }else {
-          // it there
-          property_existing.property_name = property_name
-          property_existing.property_value = property_value
-        }
-      }
+         $scope.api_key_headers ;
+         // ==> calling funcstionalities
+         $scope.load_application_for_preview();
+         // ==> Calling redactors
+         $timeout(function(){
+           $scope.loading_application_redactors();
+         } , 6000)
+      });
+  }
 
-      // $rootScope.theme_stylesheet
-  };
-  $rootScope.apply_stylesheet_in_views = ( css_attribute ,  css_value , type = null , selected_class = null ) => {
-    // $rootScope.theme_stylesheet
-    if($rootScope.selector_class != undefined)
-    {
-      /*
-      [
-        {
-        class_name
-        properties : [
-          {
-            property_name : '' ,
-            property_value : ''
-          }
-        ]
+  $scope.load_application_keys();
+  $scope.this_iframe.load(function() {
+    // this.style.height =
+    var iframeObject = this.contentWindow.document.body.offsetHeight
+    $scope.player_elements = this.contentWindow.document.body ;
+
+    var iframe_element = $($scope.player_elements);
+
+  });
+  $scope.hover_select_are_box = (this_el) => {
+    // // alert();
+    this_el.css({outline : '3px solid blue' , padding : '5px'})
+  }
+  $scope.unhover_select_are_box = (this_el) => {
+    // // alert();
+    this_el.css({outline : '0px solid blue' , padding : '0px'})
+  }
+ $scope.editor_page = "0";
+
+
+     $scope.show_selected_element = (element_in_block) => {
+       var _e = element_in_block ;
+       var _b = $scope.editor_page;
+
+       $(".outlined_object").removeClass("outlined_object");
+
+
+       if( _b == 0 ){ //=> Welcome Screen
+         //+++++ $scope.iframe_access.slide_to_question_in_index_number(0);
+
+         if(_e == 'page-player'){
+             $scope.current_element = '.player-body-screen';
+             $('.player-body-block').addClass("outlined_object");
+           }
+         if(_e == 'box'){
+           $scope.current_element = '.box-welcome-screen';
+           $('.welcome-screen-block').addClass("outlined_object");
+         }
+         if(_e == 'screen-text'){
+           $scope.current_element = '.welcome-screen-text';
+           $('.welcome-screen-text-block').addClass("outlined_object");
+         }
+         if(_e == 'button'){
+           $scope.current_element = '.welcome-screen-button';
+           $('.welcome-screen-button-block').addClass("outlined_object");
+         }
        }
-      ]
-      */
+       if( _b == 1 ){ //=> GoodBye Screen
+           //+++++ $scope.iframe_access.slide_to_question_in_index_number($scope.questions_list.length + 1 );
+         // //+++++ $scope.iframe_access.slide_to_question_in_index_number($scope.);
 
-       // ==> Custom Selector case property is hover , selected_class , etc
-      if(selected_class =='selected_answer')
-        $rootScope.selector_class = ".answer-container ul li.selected_answer, .answer-container ul li.selected_answer:hover";
+         if( _e == 'box'){
+             $scope.current_element = '.box-goodbye-screen';
+             $('.goodbye-screen-block').addClass("outlined_object");
+         }
+         if(_e == 'screen-text'){
+             $scope.current_element = '.goodbye-screen-text';
+             $('.goodbye-screen-text-block').addClass("outlined_object");
+         }
+         if(_e == 'warning-text'){
+           $scope.current_element = '.goodbye-screen-warning-text';
+           $('.goodbye-screen-text-warning-block').addClass("outlined_object");
+         }
+         if(_e == 'button'){
+            $scope.current_element = '.back-button-goodbye-screen , .submit-button-goodbye-screen';
+           // $('.welcome-screen-text-block').addClass("outlined_object");
+           $('.back-button-goodbye-screen-block').addClass("outlined_object");
+           $('.submit-button-goodbye-screen-block').addClass("outlined_object");
+         }
+       }
+       if( _b == 2 ){ //=> Result Screen
+         if(_e == 'box'){
+           $scope.current_element = ".box-result-screen";
+           $('.result-screen-block').addClass("outlined_object");
+         }
+         if(_e == 'screen-text'){
+           $scope.current_element = ".result-screen-text";
+           $('.result-screen-text-block').addClass("outlined_object");
+         }
+         if(_e == 'score-text'){
+           $scope.current_element = ".result-screen-score-text";
+           $('.result-screen-score-text-block').addClass("outlined_object");
+         }
+         if(_e == 'grade-text'){
+           $scope.current_element = ".result-screen-grade-text";
+           $('.result-screen-grade-text-block').addClass("outlined_object");
+         }
+         if(_e == 'button'){
+           $scope.current_element = ".review-result-box , .retake-result-box";
+           $('.retake-result-box-block , .review-result-box-block').addClass("outlined_object");
+         }
+       }
+       if( _b == 3 ){ //=> Question Screens
 
-      if(type == 'hover')
-        $rootScope.selector_class = ".answer-container ul li:hover" ;
+           if (_e == 'box'){
+             $scope.current_element = ".question-screen-box";
+             $('.question-screen-block').addClass("outlined_object");
+           }
+           if (_e == 'question-text'){
+             $scope.current_element = ".question-box-text";
+             $('.question-box-block').addClass("outlined_object");
+           }
+           if (_e == 'answer-text'){
+             $scope.current_element = ".answer-text-box-area";
+             $('.answer-block-selector').addClass("outlined_object");
+           }
+           if (_e == 'required-text'){
+             $scope.current_element = ".question-text-required-text";
+             $('.question-text-required-block').addClass("outlined_object");
+           }
+           if (_e == 'warning-text'){
+              $scope.current_element = ".question-label-box";
+             $('.question-warnning-block').addClass("outlined_object");
+           }
+           if (_e == 'button'){
+             $scope.current_element = ".back-answer-question-button-block, .continue-answer-question-button";
+             $('.back-answer-question-button-block, .continue-answer-question-button').addClass("outlined_object");
+           }
+       }
+       if( _b == 4 ){ //=> Quiz Time & Progress bar
 
-      if(css_attribute == 'font-size' || css_attribute == 'width')
-      css_value = css_value +'px';
+       }
 
-      $( $rootScope.selector_class ).css (css_attribute , css_value)  ;
-      if($rootScope.selector_class == '.question-label-box' && css_attribute != 'color'){
-        $('.question-label-box-brd').css('border-left-color' , css_value);
-        $rootScope.store_in_root_stylesheet_object(".question-label-box-brd" ,"border-left-color" , css_value);
-      }
-      $rootScope.store_in_root_stylesheet_object($rootScope.selector_class , css_attribute , css_value );
+     };
+
+     $('ul.css_properties li .property-name').on('click' , function(){
+     var currentElement = $(this);
+     var target_block_property = currentElement.next(".property-blocks") ;
+     var all_block_elements = $('ul.css_properties li').children(".property-blocks");
+
+     $('ul.css_properties li').each(function(){
+       var block_element = $(this);
+
+       if( block_element.children(".property-blocks").css("display") == "block" && target_block_property.css('display') == 'none' ){
+         block_element.children(".property-blocks").css("display" , "none");
+       }
+     });
+
+     if(target_block_property.css('display') == 'block' )
+      target_block_property.css('display' , 'none');
+      else
+        target_block_property.css('display' , 'block');
+  });
+  $scope.spectrum_property = {
+          color: "#ECC",
+          flat: false,
+          showInput: true,
+          className: "full-spectrum",
+          showInitial: true,
+          showPalette: true,
+          showSelectionPalette: true,
+          maxPaletteSize: 10,
+          preferredFormat: "hex",
+          localStorageKey: "spectrum.demo" ,
+          palette: [
+              ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
+              "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
+              ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+              "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"],
+              ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)",
+              "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)",
+              "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)",
+              "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)",
+              "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)",
+              "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+              "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+              "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+              "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)",
+              "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
+          ]
+      };
+
+      $timeout(function(){
+      $(".color_picker").spectrum($scope.spectrum_property);
+    } , 3000 );
+
+
+    $scope.changed_buttons = (button_type) => {
+    var property_value = $scope[button_type] ;
+    $scope.current_element == ".back-button-goodbye-screen , .submit-button-goodbye-screen"
+
+    // => Group 1
+    if ( button_type == 'back_button_background_screen_goodbye' ){
+      $($scope.iframe_object).find('.back-button-goodbye-screen').css({background : property_value });
+     }
+    if ( button_type == 'back_button_color_screen_goodbye' ){
+      $($scope.iframe_object).find('.back-button-goodbye-screen').css({color : property_value });
+     }
+    if ( button_type == 'start_button_background_screen_goodbye' ){
+      $($scope.iframe_object).find('.submit-button-goodbye-screen').css({background : property_value });
+     }
+    if ( button_type == 'start_button_color_screen_goodbye' ){
+      $($scope.iframe_object).find('.submit-button-goodbye-screen').css({color : property_value });
+     }
+
+    // => Group 2
+    if ( button_type == 'review_button_background_screen_result' ){
+      $($scope.iframe_object).find('.review-result-box').css({background : property_value });
     }
-  };
-  // ==> Calling all function according timeout
-  $timeout(function(){
-    $rootScope.draw_radial_progression(0/100);
-    // $rootScope.init_swiperJs();
-    $rootScope.init_bootstrap_tooltip();
-    $rootScope.init_drag_drop();
-    $rootScope.load_spectrum_plugin();
+    if ( button_type == 'review_button_color_screen_result' ){
+     $($scope.iframe_object).find('.review-result-box').css({color : property_value });
+    }
+    if ( button_type == 'retake_button_background_screen_result' ){
+     $($scope.iframe_object).find('.retake-result-box').css({background : property_value });
+    }
+    if ( button_type == 'retake_button_color_screen_result' ){
+     $($scope.iframe_object).find('.retake-result-box').css({color : property_value });
+    }
 
-  }, 500 );
+    // => Group 3
+    if ( button_type == 'continue_question_button_color' ) {
+        $($scope.iframe_object).find('.back-answer-question-button').css({background : property_value });
+     }
+    if ( button_type == 'continue_question_button_background' ) {
+        $($scope.iframe_object).find('.back-answer-question-button').css({color : property_value });
+     }
+    if ( button_type == 'back_question_button_color' ) {
+        $($scope.iframe_object).find('.continue-answer-question-button-block').css({background : property_value });
+     }
+    if ( button_type == 'back_question_button_background' ) {
+        $($scope.iframe_object).find('.continue-answer-question-button-block').css({color : property_value });
+     }
+  }
+
+  $scope.change_this_answer_value_of_numbering = ( block_vals )=> {
+    if( block_vals == 'answer_screen_background_numbering' ) {
+      // // alert($($scope.iframe_object).find( '.answer-container' ).children('ul').children('li').children('.answer-contents').children('label.labels').css("background"));
+      $($scope.iframe_object).find( '.answer-container' ).children('ul').children('li').children('.answer-contents').children('label.labels').css("background" , $scope.answer_screen_background_numbering );
+     }
+    if( block_vals == 'answer_screen_color_numbering') {
+        $($scope.iframe_object).find( '.answer-container' ).children('ul').children('li').children('.answer-contents').children('label.labels').css({ 'color' : $scope.answer_screen_color_numbering   });
+     }
+    if( block_vals == 'answer_screen_font_size_numbering' ){
+      $($scope.iframe_object).find( '.answer-container' ).children('ul').children('li').children('.answer-contents').children('label.labels').css({ 'font-size' : $scope.answer_screen_font_size_numbering  +'px' });
+     }
+  }
+
+  $scope.stored_stylesheet = [];
+  $scope.stylesheet = {
+     current_selector : "player_opg_editor"  ,
+     old_selector : "player_opg_editor" ,
+     selector : function ( ){
+           ($(this.old_selector).hasClass("outlined_blocks")) ? $(this.old_selector).removeClass("outlined_blocks"):'';
+            $(this.current_selector).addClass("outlined_blocks");
+     }   , // => Show Body By Default
+
+     // ==> All selector
+     selected_items : $(".player_opg_editor , .screen_opg_editor , .question_opg_editor , .question_opg_editor_block , .answer_opg_editor ") ,
+     // ==> ALl Properties
+     property_block : $(".background-property-block , .color-property-block , .numbering-property-block , .font-family-property-block , .font-size-property-block , .font-type-property-block , .border-property-block") ,
+
+     // ==> ALl Blocks in css
+     player_page :$(".background-property-block, .font-family-property-block") ,
+     screens :$(".background-property-block, .border-property-block") ,
+     slider_box : $(".background-property-block, .border-property-block") ,
+     question_box : $(".background-property-block,.border-property-block ,.font-family-property-block , .font-size-property-block , .font-type-property-block , .color-property-block , .numbering-property-block"),
+     answer_box : $(".border-property-block ,.font-family-property-block ,.font-size-property-block ,.font-type-property-block , .color-property-block ,  .numbering-property-block ") ,
+
+     // ==> Stored Array & objects
+     applied_stylesheets : new Array ()
+ };
+
+
+ $scope.stylesheet_storage = [] ;
+ $scope.apply_stylesheets = (property) => { // data-property
+  //  var   stylesheet_object_data = new Object();
+
+   if(property == 'background'){
+     var background = $scope.background_property ;
+
+     if( $scope.stylesheet.current_selector == 'body' ){
+       $("body").css("background" , background );
+       // stylesheet_object_data["background"] = background ;
+     }
+
+     if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("background" , background );
+       // stylesheet_object_data["background"] = background ;
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+       $('.'+$scope.stylesheet.current_selector).css("background" , background );
+       // stylesheet_object_data["background"] = background ;
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("background" , background );
+       // stylesheet_object_data["background"] = background ;
+     }
+
+   }
+   if(property == 'border-color'){
+     if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-color" , $scope.border_color_property );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-color" , $scope.border_color_property );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-color" , $scope.border_color_property );
+     }
+     if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+       $('.'+$scope.stylesheet.current_selector).css("border-color" , $scope.border_color_property );
+     }
+
+     // stylesheet_object_data["border-color"] = $scope.border_color_property ;
+   }
+   if(property == 'border-left-width'){
+     // // alert($scope.border_width_property_left);
+     // // alert($scope.border_width_property_left);
+     if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-left-width" , $scope.border_width_property_left );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-left-width" , $scope.border_width_property_left );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-left-width" , $scope.border_width_property_left );
+     }
+     if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+       $('.'+$scope.stylesheet.current_selector).css("border-left-width" , $scope.border_width_property_left );
+     }
+
+      // stylesheet_object_data["border-left-width"] = $scope.border_width_property_left;
+   }
+   if(property == 'border-left-style'){
+     //  // alert($scope.border_type_property_left);
+     if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-left-style" , $scope.border_type_property_left );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-left-style" , $scope.border_type_property_left );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-left-style" , $scope.border_type_property_left );
+     }
+     if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+       $('.'+$scope.stylesheet.current_selector).css("border-left-style" , $scope.border_type_property_left );
+     }
+     // stylesheet_object_data["border-left-style"] = $scope.border_type_property_left;
+   }
+   if(property == 'border-right-width'){
+     $scope.border_width_property_right
+     if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-right-width" , $scope.border_width_property_right );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-right-width" , $scope.border_width_property_right );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-right-width" , $scope.border_width_property_right );
+     }
+     if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+       $('.'+$scope.stylesheet.current_selector).css("border-right-width" , $scope.border_width_property_right );
+     }
+     // stylesheet_object_data["border-right-width"] = $scope.border_width_property_right;
+   }
+   if(property == 'border-right-style'){
+     $scope.border_type_property_right
+     if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-right-style" , $scope.border_type_property_right );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-right-style" , $scope.border_type_property_right );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-right-style" , $scope.border_type_property_right );
+     }
+     if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+       $('.'+$scope.stylesheet.current_selector).css("border-right-style" , $scope.border_type_property_right );
+     }
+     // stylesheet_object_data["border-right-style"] = $scope.border_type_property_right;
+   }
+   if(property == 'border-bottom-width'){
+     $scope.border_width_property_bottom
+     if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-bottom-width" , $scope.border_width_property_bottom );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-bottom-width" , $scope.border_width_property_bottom );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-bottom-width" , $scope.border_width_property_bottom );
+     }
+     if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+       $('.'+$scope.stylesheet.current_selector).css("border-bottom-width" , $scope.border_width_property_bottom );
+     }
+     // stylesheet_object_data["border-bottom-width"] = $scope.border_width_property_bottom;
+   }
+   if(property == 'border-bottom-style'){
+     $scope.border_type_property_bottom
+     if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-bottom-style" , $scope.border_type_property_bottom );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-bottom-style" , $scope.border_type_property_bottom );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-bottom-style" , $scope.border_type_property_bottom );
+     }
+     if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+       $('.'+$scope.stylesheet.current_selector).css("border-bottom-style" , $scope.border_type_property_bottom );
+     }
+     // stylesheet_object_data["border-bottom-style"] = $scope.border_type_property_bottom;
+   }
+   if(property == 'border-top-width'){
+     $scope.border_width_property_top
+     if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-top-width" , $scope.border_width_property_top );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-top-width" , $scope.border_width_property_top );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-top-width" , $scope.border_width_property_top );
+     }
+     if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+       $('.'+$scope.stylesheet.current_selector).css("border-top-width" , $scope.border_width_property_top );
+     }
+     // stylesheet_object_data["border-top-width"] = $scope.border_width_property_top;
+   }
+   if(property == 'border-top-style'){
+     $scope.border_type_property_top
+     if( $scope.stylesheet.current_selector == 'screen_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-top-style" , $scope.border_type_property_top );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor_block' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-top-style" , $scope.border_type_property_top );
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css("border-top-style" , $scope.border_type_property_top );
+     }
+     if( $scope.stylesheet.current_selector == 'answer_opg_editor' ) {
+       $('.'+$scope.stylesheet.current_selector).css("border-top-style" , $scope.border_type_property_top );
+     }
+     // stylesheet_object_data["border-top-style"] = $scope.border_type_property_top;
+   }
+   if(property == 'color'){
+     $scope.color_property
+     if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css('color' , $scope.color_property);
+     }
+     if( $scope.stylesheet.current_selector == 'answer_opg_editor' ){
+       $('.'+$scope.stylesheet.current_selector).css('color' , $scope.color_property);
+     }
+     // stylesheet_object_data["color"] = $scope.color_property;
+   }
+   if(property == 'font-family'){
+
+     if( $scope.stylesheet.current_selector == 'body' ){
+       $("."+$scope.stylesheet.current_selector).css("font-family" , $scope.font_family_property)
+     }
+     if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+       $("."+$scope.stylesheet.current_selector).css("font-family"  , $scope.font_family_property )
+     }
+     if( $scope.stylesheet.current_selector == 'answer_opg_editor' ){
+       $("."+$scope.stylesheet.current_selector).css("font-family"  , $scope.font_family_property)
+     }
+      // stylesheet_object_data["font-family"] = $scope.font_family_property;
+   }
+   if(property == 'font-size'){
+     $scope.font_size_property
+
+     if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+       $(".qs-numericals , ."+$scope.stylesheet.current_selector).css("font-size"  , $scope.font_size_property + 'px')
+
+     }
+     if( $scope.stylesheet.current_selector == 'answer_opg_editor' ){
+       $("."+$scope.stylesheet.current_selector + " .text-values , .answer-contents .labels").css("font-size"  , $scope.font_size_property + 'px')
+     }
+     // stylesheet_object_data["font-size"] = $scope.font_size_property + 'px';
+   }
+   if(property == 'font-weight'){
+     $scope.font_type_property
+     if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+       $(".qs-numericals , ."+ $scope.stylesheet.current_selector).css("font-weight"  , $scope.font_type_property );
+
+     }
+     if( $scope.stylesheet.current_selector == 'answer_opg_editor' ){
+       $("."+$scope.stylesheet.current_selector + " .text-values , .answer-contents .labels").css("font-weight"  , $scope.font_type_property  );
+     }
+     // stylesheet_object_data["font-weight"] = $scope.font_type_property;
+   }
+   if(property == 'numbering'){
+     if( $scope.stylesheet.current_selector == 'question_opg_editor' ){
+       $(".default_theme_texts_bg").css("background" , $scope.numbering_property );
+       $(".default_theme_brd").css("border-left-color" , $scope.numbering_property );
+       // stylesheet_object_data["background"] = $scope.numbering_property;
+       // stylesheet_object_data["border-left-color"] = $scope.numbering_property;
+     }
+
+     if( $scope.stylesheet.current_selector == 'answer_opg_editor' ){
+       $(".labels").css("background" , $scope.numbering_property );
+       // stylesheet_object_data["background"] = $scope.numbering_property;
+       // $(".default_theme_brd").css("border-left-color" , $scope.numbering_property );
+     }
+   }
+
+   // alert();
+  //  console.log({ // stylesheet_object_data : // stylesheet_object_data });
+ };
+
+ $scope.show_hovred_element = (classNameO) => {};
+$scope.show_selecter_line = (element , on_slide ) => {
+
+};
+$scope.window_navigation.on('load' , function (){
+  if($window.parent.location != $window.location){
+
+      $scope.select_numbers = $(".select_numbers");
+      $scope.select_box = $(".select_box");
+      $scope.select_box_brd = $(".select_box_brd");
+      $scope.select_button = $(".select_button");
+      $scope.select_box_data = $(".select_box_data");
+      $scope.select_brd = $(".select_brd");
+
+  }
+});
+
+$scope.first_load_css_part = () => {
+  $scope.editor_page = "0" ;
+  $("#welcome-screens").css("display","block");
+   // ==> Slide To Target Element
+   //+++++ $scope.iframe_access.slide_to_question_in_index_number(0);
+  $(".welcome-screen-block").addClass("outlined_object");
+  $scope.screen_type = 3
+}
+$scope.block_selector = () => {
+     $("#welcome-screens,#goodbye-screens,#result-screens ,#question-screens").css({display:'none' });
+     //  $scope.editor_page
+     if($scope.editor_page == 0 ){ // => Welcome Screen
+       $("#welcome-screens").css("display","block");
+        // ==> Slide To Target Element
+        //+++++ $scope.iframe_access.slide_to_question_in_index_number(0);
+       $(".welcome-screen-block").addClass("outlined_object");
+       $scope.screen_type = 3
+     }
+     if($scope.editor_page == 1 ){ // => GoodBye Screen
+       $("#goodbye-screens").css("display","block");
+       // ==> Slide To Target Element
+       //+++++ $scope.iframe_access.slide_to_question_in_index_number($scope.questions_list.length + 1 );
+      $(".goodbye-screen-block").addClass("outlined_object");
+      $scope.screen_type = 2
+     }
+     if($scope.editor_page == 2 ){ // => Result Screen
+       $("#result-screens").css("display","block");
+       // ==> Slide To Target Element
+       // ==> outline it
+       //+++++ $scope.iframe_access.slide_to_question_in_index_number($scope.questions_list.length + 2);
+      $(".result-screen-block").addClass("outlined_object");
+      $scope.screen_type = 1
+     }
+     if($scope.editor_page == 3 ){ // => Question Screen
+       $("#question-screens").css("display","block");
+       // ==> Slide To Target Element
+       // ==> outline it
+       //+++++ $scope.iframe_access.slide_to_question_in_index_number(1);
+      $(".question-screen-block").addClass("outlined_object");
+      $scope.screen_type = 0
+     }
+     if($scope.editor_page == 4 ){ // => Time - progress Screen
+
+     }
+   };
+
+   $scope.apply_those_changes_right_now = function ( class_name , property_name , property_value ){
+     console.log(class_name +" => " +property_name + " : " + property_value);
+     if(class_name != null ){
+      var class_name_index =  $scope.stored_stylesheet.findIndex(x => x.class_name == class_name );
+      if( class_name_index == -1 ){
+        $scope.stored_stylesheet.push({
+            class_name :class_name ,
+            properties : new Array ({
+              property_name : property_name ,
+              property_value : property_value
+            })
+        });
+      }else {
+        if(property_name != undefined){
+          var element_index = $scope.stored_stylesheet[class_name_index].properties.findIndex(x => x.property_name == property_name );
+          if ( element_index == -1 ){
+            $scope.stored_stylesheet[class_name_index].properties.push({
+                 property_name :  property_name ,
+                 property_value : property_value
+            })
+          }else {
+              $scope.stored_stylesheet[class_name_index].properties[element_index].property_name =  property_name;
+              $scope.stored_stylesheet[class_name_index].properties[element_index].property_value = property_value;
+          }
+        }
+      }
+
+      $http({
+      url : $scope.server_ip + "api/" + $scope.app_id + "/stylesheet/add/files" ,
+      method : "POST",
+      data : {
+          styles : $scope.stored_stylesheet
+      }
+      }).then(function(provider){
+          $scope.reload_stylesheet_data();
+        } , function(error){
+        console.log(error);
+      });
+      }
+
+   };
+
+   $scope.question_screen_border_color_func = () => {
+      $scope.apply_those_changes_right_now( ".question-screen-box" , 'border-color' , $scope.question_screen_border_color );
+   };
+   $scope.page_player_background_func = function( ) {
+      if($scope.switching_editor_preview_value == true )
+      $( ".swipper-container-block" ).css({  background : $scope.page_player_background  });
+      $scope.default_bg_of_view = {  background : $scope.page_player_background  } ;
+      $scope.apply_those_changes_right_now( $scope.current_element , 'background' , $scope.page_player_background );
+   };
+   $scope.welcome_background_screen_box_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.welcome_background_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.welcome_background_screen_box );
+   }
+   $scope.welcome_border_color_screen_box_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-color' : $scope.welcome_border_color_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-color' , $scope.welcome_border_color_screen_box );
+   }
+   $scope.welcome_border_left_width_screen_box_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-left-width' : $scope.welcome_border_left_width_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-left-width' , $scope.welcome_border_left_width_screen_box );
+   }
+   $scope.welcome_border_left_style_screen_box_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-left-style' : $scope.welcome_border_left_style_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-left-style' , $scope.welcome_border_left_style_screen_box );
+   }
+   $scope.welcome_border_right_width_screen_box_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-right-width' : $scope.welcome_border_right_width_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-right-width' , $scope.welcome_border_right_width_screen_box );
+   }
+   $scope.welcome_border_right_style_screen_box_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-right-style' : $scope.welcome_border_right_style_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-right-style' , $scope.welcome_border_right_style_screen_box );
+   }
+   $scope.welcome_border_top_width_screen_box_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-top-width' : $scope.welcome_border_top_width_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-top-width' , $scope.welcome_border_top_width_screen_box );
+   }
+   $scope.welcome_border_top_style_screen_box_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-top-style' : $scope.welcome_border_top_style_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-top-style' , $scope.welcome_border_top_style_screen_box );
+   }
+   $scope.welcome_border_bottom_width_screen_box_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-bottom-width' : $scope.welcome_border_bottom_width_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-width' , $scope.welcome_border_bottom_width_screen_box );
+   }
+   $scope.welcome_border_bottom_style_screen_box_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-bottom-style' : $scope.welcome_border_bottom_style_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-style' , $scope.welcome_border_bottom_style_screen_box );
+   }
+   $scope.screen_text_color_welcome_screen_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.screen_text_color_welcome_screen  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.screen_text_color_welcome_screen );
+   }
+   $scope.screen_text_font_size_welcome_screen_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-size' : $scope.screen_text_font_size_welcome_screen + 'px'  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.screen_text_font_size_welcome_screen  + 'px');
+   }
+   $scope.screen_text_font_style_welcome_screen_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-weight' : $scope.screen_text_font_style_welcome_screen  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.screen_text_font_style_welcome_screen );
+   }
+   $scope.screen_text_font_family_welcome_screen_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-family' : $scope.screen_text_font_family_welcome_screen  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.screen_text_font_family_welcome_screen );
+   }
+   $scope.button_background_screen_welcome_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.button_background_screen_welcome  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.button_background_screen_welcome );
+   }
+   $scope.button_color_screen_welcome_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.button_color_screen_welcome  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.button_color_screen_welcome );
+   }
+   $scope.button_font_size_screen_welcome_func = function(){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-size' : $scope.button_font_size_screen_welcome + 'px' });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.button_font_size_screen_welcome + 'px');
+   }
+   $scope.goodbye_background_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.goodbye_background_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.goodbye_background_screen_box  );
+   }
+   $scope.goodbye_border_color_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-color' : $scope.goodbye_border_color_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-color' , $scope.goodbye_border_color_screen_box  );
+   }
+   $scope.goodbye_border_width_left_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-left-width' : $scope.goodbye_border_width_left_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-left-width' , $scope.goodbye_border_width_left_screen_box  );
+   }
+   $scope.goodbye_border_style_left_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-left-style' : $scope.goodbye_border_style_left_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-left-style' , $scope.goodbye_border_style_left_screen_box  );
+   }
+   $scope.goodbye_border_width_right_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-right-width' : $scope.goodbye_border_width_right_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-right-width' , $scope.goodbye_border_width_right_screen_box  );
+   }
+   $scope.goodbye_border_style_right_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-right-style' : $scope.goodbye_border_style_right_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-right-style' , $scope.goodbye_border_style_right_screen_box  );
+   }
+   $scope.goodbye_border_width_top_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-top-width' : $scope.goodbye_border_width_top_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-top-width' , $scope.goodbye_border_width_top_screen_box  );
+   }
+   $scope.goodbye_border_style_top_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-top-style' : $scope.goodbye_border_style_top_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-top-style' , $scope.goodbye_border_style_top_screen_box  );
+   }
+   $scope.goodbye_border_width_bottom_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-bottom-width' : $scope.goodbye_border_width_bottom_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-width' , $scope.goodbye_border_width_bottom_screen_box  );
+   }
+   $scope.goodbye_border_style_bottom_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-bottom-style' : $scope.goodbye_border_style_bottom_screen_box  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-style' , $scope.goodbye_border_style_bottom_screen_box  );
+   }
+   $scope.screen_text_color_goodbye_screen_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.screen_text_color_goodbye_screen  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.screen_text_color_goodbye_screen  );
+   }
+   $scope.screen_text_font_size_goodbye_screen_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-size' : $scope.screen_text_font_size_goodbye_screen +'px'  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.screen_text_font_size_goodbye_screen +'px'  );
+   }
+   $scope.screen_text_font_style_goodbye_screen_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-weight' : $scope.screen_text_font_style_goodbye_screen });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.screen_text_font_style_goodbye_screen  );
+   }
+   $scope.screen_text_font_family_goodbye_screen_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-family' : $scope.screen_text_font_family_goodbye_screen });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.screen_text_font_family_goodbye_screen  );
+   }
+   $scope.warning_text_font_size_screen_goodbye_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-size' : $scope.warning_text_font_size_screen_goodbye+'px' });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.warning_text_font_size_screen_goodbye +'px' );
+   }
+   $scope.warning_text_color_screen_goodbye_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.warning_text_color_screen_goodbye });
+     $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.warning_text_color_screen_goodbye );
+   }
+   $scope.warning_text_background_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.warning_text_background_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.warning_text_background_screen_box );
+   }
+   $scope.button_buttons_font_size_screen_goodbye_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-size' : $scope.button_buttons_font_size_screen_goodbye +'px'});
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.button_buttons_font_size_screen_goodbye +'px' );
+   }
+   $scope.result_background_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.result_background_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.result_background_screen_box );
+   }
+   $scope.result_border_color_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-color' : $scope.result_border_color_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-color' , $scope.result_border_color_screen_box );
+   }
+   $scope.question_text_screen_border_color_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-color' : $scope.question_text_screen_border_color});
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-color' , $scope.question_text_screen_border_color );
+   };
+   $scope.resule_border_width_left_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-left-width' : $scope.resule_border_width_left_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-left-width' , $scope.resule_border_width_left_screen_box );
+   }
+   $scope.resule_border_style_left_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-left-style' : $scope.resule_border_style_left_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-left-style' , $scope.resule_border_style_left_screen_box );
+   }
+   $scope.resule_border_width_right_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-right-width' : $scope.resule_border_width_right_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-right-width' , $scope.resule_border_width_right_screen_box );
+   }
+   $scope.resule_border_style_right_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-right-style' : $scope.resule_border_style_right_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-right-style' , $scope.resule_border_style_right_screen_box );
+   }
+   $scope.resule_border_width_top_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-top-width' : $scope.resule_border_width_top_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-top-width' , $scope.resule_border_width_top_screen_box );
+   }
+   $scope.resule_border_style_top_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-top-style' : $scope.resule_border_style_top_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-top-style' , $scope.resule_border_style_top_screen_box );
+   }
+   $scope.resule_border_width_bottom_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-bottom-width' : $scope.resule_border_width_bottom_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-width' , $scope.resule_border_width_bottom_screen_box );
+   }
+   $scope.resule_border_style_bottom_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-bottom-style' : $scope.resule_border_style_bottom_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-style' , $scope.resule_border_style_bottom_screen_box );
+   }
+   $scope.screen_text_color_result_screen_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.screen_text_color_result_screen });
+     $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.screen_text_color_result_screen );
+   }
+   $scope.screen_text_font_size_result_screen_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-size' : $scope.screen_text_font_size_result_screen + 'px'});
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.screen_text_font_size_result_screen + 'px');
+   }
+   $scope.screen_text_font_style_result_screen_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-weight' : $scope.screen_text_font_style_result_screen });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.screen_text_font_style_result_screen );
+   }
+   $scope.screen_text_font_family_result_screen_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-family' : $scope.screen_text_font_family_result_screen });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.screen_text_font_family_result_screen );
+   }
+   $scope.score_result_text_color_func = function (){
+    $($scope.current_element).css({  'color' : $scope.score_result_text_color });
+     $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.score_result_text_color );
+   }
+   $scope.score_result_text_font_size_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-size' : $scope.score_result_text_font_size + 'px' });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.score_result_text_font_size + 'px' );
+   }
+   $scope.score_result_text_font_style_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-weight' : $scope.score_result_text_font_style });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.score_result_text_font_style  );
+   }
+   $scope.score_result_text_font_family_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-family' : $scope.score_result_text_font_family });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.score_result_text_font_family  );
+   }
+   $scope.grade_result_text_color_func = function (){
+     $($scope.current_element).css({  'color' : $scope.grade_result_text_color });
+     $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.grade_result_text_color  );
+   }
+   $scope.grade_result_text_font_size_func = function (){
+     $($scope.current_element).css({  'font-size' : $scope.grade_result_text_font_size +'px' });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.grade_result_text_font_size +'px'  );
+   }
+   $scope.grade_result_text_font_style_func = function (){
+     $($scope.current_element).css({  'font-weight' : $scope.grade_result_text_font_style });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.grade_result_text_font_style  );
+   }
+   $scope.grade_result_text_font_family_func = function (){
+     $($scope.current_element).css({  'font-family' : $scope.grade_result_text_font_family });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.grade_result_text_font_family  );
+   }
+   $scope.button_buttons_font_size_screen_result_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-size' : $scope.button_buttons_font_size_screen_result +'px'});
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.button_buttons_font_size_screen_result +'px'  );
+   }
+   $scope.question_screen_background_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.question_screen_background });
+     $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.question_screen_background  );
+   }
+   $scope.question_border_width_left_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-left-width' : $scope.question_border_width_left_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-left-width' , $scope.question_border_width_left_screen_box  );
+   }
+   $scope.question_border_style_left_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-left-style' : $scope.question_border_style_left_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-left-style' , $scope.question_border_style_left_screen_box  );
+   }
+   $scope.question_border_width_right_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-right-width' : $scope.question_border_width_right_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-right-width' , $scope.question_border_width_right_screen_box  );
+   }
+   $scope.question_border_style_right_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-right-style' : $scope.question_border_style_right_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-right-style' , $scope.question_border_style_right_screen_box  );
+   }
+   $scope.question_border_width_top_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-top-width' : $scope.question_border_width_top_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-top-width' , $scope.question_border_width_top_screen_box  );
+   }
+   $scope.question_border_style_top_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-top-style' : $scope.question_border_style_top_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-top-style' , $scope.question_border_style_top_screen_box  );
+   }
+   $scope.question_border_width_bottom_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-bottom-width' : $scope.question_border_width_bottom_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-width' , $scope.question_border_width_bottom_screen_box  );
+   }
+   $scope.question_border_style_bottom_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-bottom-style' : $scope.question_border_style_bottom_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-style' , $scope.question_border_style_bottom_screen_box  );
+   }
+   $scope.screen_text_color_question_screen_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.screen_text_color_question_screen });
+     $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.screen_text_color_question_screen  );
+   }
+   $scope.screen_text_font_size_question_screen_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-size' : $scope.screen_text_font_size_question_screen +'px'});
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.screen_text_font_size_question_screen +'px'  );
+   }
+   $scope.screen_text_font_style_question_screen_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-weight' : $scope.screen_text_font_style_question_screen });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.screen_text_font_style_question_screen  );
+   }
+   $scope.screen_text_font_family_question_screen_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-family' : $scope.screen_text_font_family_question_screen });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.screen_text_font_family_question_screen  );
+   }
+   $scope.question_text_border_width_left_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-left-width' : $scope.question_text_border_width_left_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-left-width' , $scope.question_text_border_width_left_screen_box  );
+   }
+   $scope.question_text_border_style_left_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-left-style' : $scope.question_text_border_style_left_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-left-style' , $scope.question_text_border_style_left_screen_box  );
+   }
+   $scope.question_text_border_width_right_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-right-width' : $scope.question_text_border_width_right_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-right-width' , $scope.question_text_border_width_right_screen_box  );
+   }
+   $scope.question_text_border_style_right_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-right-style' : $scope.question_text_border_style_right_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-right-style' , $scope.question_text_border_style_right_screen_box  );
+   }
+   $scope.question_text_border_width_top_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-top-width' : $scope.question_text_border_width_top_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-top-width' , $scope.question_text_border_width_top_screen_box  );
+   }
+   $scope.question_text_border_style_top_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-top-style' : $scope.question_text_border_style_top_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-top-style' , $scope.question_text_border_style_top_screen_box  );
+   }
+   $scope.question_text_border_width_bottom_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-bottom-width' : $scope.question_text_border_width_bottom_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-width' , $scope.question_text_border_width_bottom_screen_box  );
+   }
+   $scope.question_text_border_style_bottom_screen_box_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-bottom-style' : $scope.question_text_border_style_bottom_screen_box });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-bottom-style' , $scope.question_text_border_style_bottom_screen_box  );
+   }
+   $scope.question_screen_numbering_background_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.question_screen_numbering_background });
+     $scope.apply_those_changes_right_now( ".question-label-box" , 'background' , $scope.question_screen_numbering_background  );
+
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-left-color' : $scope.question_screen_numbering_background });
+     $scope.apply_those_changes_right_now( ".question-label-box-brd , .question-label-box" , 'border-left-color' , $scope.question_screen_numbering_background   );
+   }
+   $scope.question_screen_numbering_color_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.question_screen_numbering_color });
+     $scope.apply_those_changes_right_now( ".question-label-box" , 'color' , $scope.question_screen_numbering_color  );
+   }
+   $scope.answer_screen_background_func = function (){
+     $scope.current_element = "ul.question-list > li" ;
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.answer_screen_background });
+     $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.answer_screen_background  );
+   }
+   $scope.answer_row_colors_func = function () {
+     $scope.apply_those_changes_right_now( ".text-values ,.no-media-here" , 'color' , $scope.answer_row_colors  );
+   }
+   $scope.answer_row_font_size_func = function () {
+      $scope.apply_those_changes_right_now( ".text-values ,.no-media-here" , 'font-size' , $scope.answer_row_font_size + 'px'  );
+   }
+   $scope.answer_row_font_style_func = function () {
+      $scope.apply_those_changes_right_now( ".text-values ,.no-media-here" , 'font-weight' , $scope.answer_row_font_style );
+   }
+   $scope.answer_row_font_family_func = function () {
+      $scope.apply_those_changes_right_now( ".text-values ,.no-media-here" , 'font-family' , $scope.answer_row_font_family );
+   }
+   $scope.numbering_in_answer_background_func = function () {
+      $scope.apply_those_changes_right_now( ".answer-container ul li > .answer-contents > label.labels" , 'background' , $scope.numbering_in_answer_background );
+    }
+   $scope.numbering_in_answer_color_func = function () {
+      $scope.apply_those_changes_right_now( ".answer-container ul li > .answer-contents > label.labels" , 'color' , $scope.numbering_in_answer_color );
+    }
+   $scope.numbering_in_answer_font_size_func = function () {
+      $scope.apply_those_changes_right_now( ".answer-container ul li > .answer-contents > label.labels" , 'font-size' , $scope.numbering_in_answer_font_size + 'px' );
+    }
+   $scope.numbering_in_answer_font_family_func = function () {
+      $scope.apply_those_changes_right_now( ".answer-container ul li > .answer-contents > label.labels" , 'font-family' , $scope.numbering_in_answer_font_family );
+    }
+   $scope.numbering_in_answer_border_color_func = function () {
+      $scope.apply_those_changes_right_now( ".labels" , 'border-color' , $scope.numbering_in_answer_border_color );
+    }
+   $scope.numbering_in_answer_border_width_func = function () {
+      $scope.apply_those_changes_right_now( ".labels" , 'border-width' , $scope.numbering_in_answer_border_width );
+    }
+   $scope.numbering_in_answer_border_style_func = function () {
+      $scope.apply_those_changes_right_now( ".labels" , 'border-style' , $scope.numbering_in_answer_border_style );
+    }
+   $scope.numbering_in_answer_border_radius_func  = function () {
+      $scope.apply_those_changes_right_now( ".labels" , 'border-radius' , $scope.numbering_in_answer_border_radius + 'px' );
+    }
+
+  //  $scope.answer_screen_color_func = function (){
+  //    $scope.current_element = "ul.question-list > li > div .text-values , ul.question-list > li > div > .no-media-here" ;
+  //    //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.answer_screen_color });
+  //    $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.answer_screen_color  );
+  //  }
+  //  $scope.answer_screen_font_size_func = function (){
+  //    $scope.current_element = "ul.question-list > li > div .text-values , ul.question-list > li > div > .no-media-here" ;
+  //    //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-size' : $scope.answer_screen_font_size_x +'px'});
+  //    $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.answer_screen_font_size_x +'px' );
+  //  }
+  //  $scope.answer_screen_font_style_func = function (){
+  //    $scope.current_element = "ul.question-list > li > div .text-values , ul.question-list > li > div > .no-media-here" ;
+  //    //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-weight' : $scope.answer_screen_font_style });
+  //    $scope.apply_those_changes_right_now($scope.current_element , 'font-weight' , $scope.answer_screen_font_style  );
+  //  }
+   $scope.answer_screen_font_family_func = function (){
+     $scope.current_element = "ul.question-list > li > div .text-values , ul.question-list > li > div > .no-media-here" ;
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-family' : $scope.answer_screen_font_family });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-family' , $scope.answer_screen_font_family  );
+   }
+   $scope.answer_select_screen_background_func = function (){
+
+     $scope.current_element = "ul li.selected_answer, ul li.selected_answer:hover" ;
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.answer_select_screen_background });
+     $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.answer_select_screen_background  );
+   }
+   $scope.answer_select_screen_color_func = function (){
+      $scope.current_element = "ul li.selected_answer , .selected_answer:hover" ;
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.answer_select_screen_color });
+     $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.answer_select_screen_color  );
+   }
+   $scope.answer_select_screen_border_func = function (){
+     $scope.current_element = "ul li.selected_answer , ul li.selected_answer:hover" ;
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-color' : $scope.answer_select_screen_border });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-color' , $scope.answer_select_screen_border  );
+   }
+   $scope.correct_select_screen_background_func = function (){
+    $scope.current_element = "ul li.right_answer , ul li.right_answer:hover" ;
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.correct_select_screen_background });
+     $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.correct_select_screen_background  );
+   }
+   $scope.correct_select_screen_color_func = function (){
+     $scope.current_element = "ul li.right_answer" ;
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.correct_select_screen_color });
+     $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.correct_select_screen_color  );
+   }
+   $scope.wrong_select_screen_background_func = function (){
+      $scope.current_element = "ul li.wrong_answer , ul li.wrong_answer:hover" ;
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.wrong_select_screen_background });
+     $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.wrong_select_screen_background  );
+   }
+   $scope.wrong_select_screen_color_func = function (){
+    $scope.current_element = "ul li.wrong_answer" ;
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.wrong_select_screen_color });
+     $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.wrong_select_screen_color  );
+   }
+   $scope.wrong_select_screen_border_func = function (){
+     $scope.current_element = "ul li.wrong_answer" ;
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'border-color' : $scope.wrong_select_screen_border });
+     $scope.apply_those_changes_right_now($scope.current_element , 'border-color' , $scope.wrong_select_screen_border  );
+   }
+   $scope.question_screen_font_size_required_text_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-size' : $scope.question_screen_font_size_required_text + 'px'  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.question_screen_font_size_required_text + 'px'  );
+   }
+   $scope.question_screen_color_required_text_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.question_screen_color_required_text   });
+     $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.question_screen_color_required_text   );
+   }
+   $scope.question_screen_warning_text_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-size' : $scope.question_screen_warning_text + 'px'  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.question_screen_warning_text  + 'px' );
+   }
+   $scope.question_screen_warning_color_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.question_screen_warning_color  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.question_screen_warning_color  );
+
+   }
+
+   $scope.question_didnot_warning_text_font_size_func = function () {
+    //  $scope.question_didnot_warning_text_font_size
+     $scope.apply_those_changes_right_now( '.warning-message-answer' , 'font-size' , $scope.question_didnot_warning_text_font_size +'px !important'  );
+   }
+   $scope.question_didnot_warning_text_color_func = function () {
+    //  $scope.question_didnot_warning_text_color
+     $scope.apply_those_changes_right_now( '.warning-message-answer' , 'color' , $scope.question_didnot_warning_text_color +' !important'  );
+   }
+   $scope.question_didnot_warning_text_background_func = function () {
+    //  $scope.question_didnot_warning_text_background
+     $scope.apply_those_changes_right_now( '.warning-message-answer' , 'background' , $scope.question_didnot_warning_text_background + ' !important'  );
+   }
+
+   $scope.question_screen_warning_background_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.question_screen_warning_background  });
+    //  $scope.apply_those_changes_right_now( $scope.current_element , 'background' , $scope.question_screen_warning_background  );
+     // => .question-label-box-brd
+    //  $($scope.iframe_object).find('.question-label-box-brd').css({  'border-left-color' : $scope.question_screen_warning_background  });
+    //  $scope.apply_those_changes_right_now('.question-label-box-brd' , 'border-left-color' , $scope.question_screen_warning_background  );
+
+   }
+   $scope.back_button_background_screen_goodbye_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.back_button_background_screen_goodbye  });
+     $scope.apply_those_changes_right_now( ".back-button-goodbye-screen" , 'background' , $scope.back_button_background_screen_goodbye  );
+   }
+   $scope.back_button_color_screen_goodbye_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.back_button_color_screen_goodbye  });
+     $scope.apply_those_changes_right_now( ".back-button-goodbye-screen" , 'color' , $scope.back_button_color_screen_goodbye  );
+   }
+   $scope.start_button_background_screen_goodbye_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.start_button_background_screen_goodbye  });
+     $scope.apply_those_changes_right_now( ".submit-button-goodbye-screen" , 'background' , $scope.start_button_background_screen_goodbye  );
+   }
+   $scope.start_button_color_screen_goodbye_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.start_button_color_screen_goodbye  });
+     $scope.apply_those_changes_right_now( ".submit-button-goodbye-screen" , 'color' , $scope.start_button_color_screen_goodbye  );
+   }
+   $scope.review_button_background_screen_result_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.review_button_background_screen_result  });
+     $scope.apply_those_changes_right_now( ".review-result-box" , 'background' , $scope.review_button_background_screen_result  );
+   }
+   $scope.review_button_color_screen_result_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.review_button_color_screen_result  });
+     $scope.apply_those_changes_right_now( ".review-result-box" , 'color' , $scope.review_button_color_screen_result  );
+   }
+   $scope.retake_button_background_screen_result_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.retake_button_background_screen_result  });
+     $scope.apply_those_changes_right_now( ".retake-result-box" , 'background' , $scope.retake_button_background_screen_result  );
+   }
+   $scope.retake_button_color_screen_result_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.retake_button_color_screen_result  });
+     $scope.apply_those_changes_right_now( ".retake-result-box" , 'color' , $scope.retake_button_color_screen_result  );
+   }
+   $scope.answer_screen_background_numbering_func = function (){
+     $scope.current_element = "ul.question-list > li > div > .labels" ;
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.answer_screen_background_numbering  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'background' , $scope.answer_screen_background_numbering  );
+   }
+   $scope.answer_screen_color_numbering_func = function (){
+     $scope.current_element = "ul.question-list > li > div > .labels" ;
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.answer_screen_color_numbering  });
+     $scope.apply_those_changes_right_now($scope.current_element , 'color' , $scope.answer_screen_color_numbering  );
+   }
+    //  $scope.answer_screen_font_size_numbering_func = function (){
+    //    $scope.current_element = "ul.question-list > li > div > .labels" ;
+    //    //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-size' : $scope.answer_screen_font_size_numbering +'px' });
+    //    $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.answer_screen_font_size_numbering +'px'  );
+    //  }
+   $scope.question_screen_warning_text_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'font-size' : $scope.question_screen_warning_text +'px' });
+     $scope.apply_those_changes_right_now($scope.current_element , 'font-size' , $scope.question_screen_warning_text +'px'  );
+   }
+   $scope.back_question_button_bg_action = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.back_question_button_background  });
+     $scope.apply_those_changes_right_now( '.back-answer-question-button-block' , 'background' , $scope.back_question_button_background_v  );
+   }
+   $scope.back_question_button_color_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.back_question_button_color  });
+     $scope.apply_those_changes_right_now( '.back-answer-question-button-block' , 'color' , $scope.back_question_button_color  );
+   }
+   $scope.continue_question_button_background_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'background' : $scope.continue_question_button_background  });
+     $scope.apply_those_changes_right_now( '.continue-answer-question-button' , 'background' , $scope.continue_question_button_background  );
+   }
+   $scope.continue_question_button_color_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.continue_question_button_color  });
+     $scope.apply_those_changes_right_now( '.continue-answer-question-button' , 'color' , $scope.continue_question_button_color  );
+   }
+
+   $scope.progress_bar_default_background_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.continue_question_button_color  });
+     if( $scope.time_progress_models  == 3 )
+      {
+        $scope.apply_those_changes_right_now( '.base-circle' , 'stroke' , $scope.progress_bar_default_background  );
+
+      }
+     $scope.apply_those_changes_right_now( '.empty-progress-bar' , 'background' , $scope.progress_bar_default_background  );
+   }
+
+   $scope.progress_bar_default_text_color_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.continue_question_button_color  });
+     $scope.apply_those_changes_right_now( '.progress-bar-text' , 'color' , $scope.progress_bar_default_text_color  );
+   }
+   $scope.timer_text_color_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.continue_question_button_color  });
+
+     if( $scope.time_progress_models  == 3 )
+      {
+         $scope.apply_those_changes_right_now( '.timer-text-numbers , .time-data , .timeobjx > ul li.hrs > span' , 'fill' , $scope.timer_text_color  );
+      }
+      $scope.apply_those_changes_right_now( '.timer-text-numbers , .time-data , .timeobjx > ul li.hrs > span' , 'color' , $scope.timer_text_color  );
+
+   }
+   $scope.minute_color_word_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.continue_question_button_color  });
+    //  alert($scope.__player_object.settings.time_settings.timer_layout);
+     if( $scope.time_progress_models  == 3 )
+      {
+
+        // $scope.apply_those_changes_right_now( '.timer-text-numbers , .timeobjx > ul li.hrs > span' , 'color' , $scope.timer_text_color  );
+          $scope.apply_those_changes_right_now( '.time-data-type' , 'fill' , $scope.minute_color_word  );
+      }
+     $scope.apply_those_changes_right_now( '.timer-text-type , .timeobjx > ul li.hrs span:last-child' , 'color' , $scope.minute_color_word  );
+   }
+   $scope.highlighted_background_func = function (){
+
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.continue_question_button_color  });
+     if( $scope.__player_object.settings.time_settings.timer_layout   == 3 )
+      {
+        $scope.apply_those_changes_right_now( '.current-progress' , 'stroke' , $scope.highlighted_background  );
+      }
+     $scope.apply_those_changes_right_now( '.highlighted-frame-bar , .timeobjx > ul li.hrs' , 'background' , $scope.highlighted_background  );
+   }
+   $scope.highlighted_borders_func = function (){
+     //+++++>>>   $($scope.iframe_object).find($scope.current_element)..css({  'color' : $scope.continue_question_button_color  });
+     $scope.apply_those_changes_right_now( '.border-frame-bar , .timeobjx > ul li.hrs' , 'border-color' , $scope.highlighted_borders  );
+   }
+
+
+   $scope.reload_stylesheet_data = () => {
+      $("#stylesheet-editor-css").attr("href" , $scope.server_ip + "themes/stylesheet_of_app_" + $scope.app_id +".css" );
+   }
+
+
+   try {
+     $scope.reload_stylesheet_data();
+     $scope.swape_editor();
+   } catch (e) {}
+//
+// $scope.page_b = $("body");
+// $scope.stored_question_values = '';
+// $scope.page_b.on("click" , function(eve){
+//   var cl = $(eve.target.parentNode);
+//
+//
+//   // if(cl.hasClass ('redactor-in-0')){
+//   //   cl.html('<p></p>')
+//   // }
+//
+//   //   cl.html('');
+//   // }else {
+//   //   cl.html(value);
+//   // }
+// })
+$scope.answer_in_ui_view =   ( answer_val , index , answer_id ) => {
+
+     //answer_value.value
+       var target_question = $scope.questions_list.find( x => x._id == $scope.question_id );
+       if(target_question != undefined){
+         var currAnswer =  target_question.answers_format.find( x => x._id == answer_id ) ;
+         if(  currAnswer != undefined ){
+
+            $scope.questions_list.find( x => x._id == $scope.question_id ).answers_format.find( x => x._id == answer_id ).value = answer_val;
+         }
+
+       }
+
+       console.log(  $scope.questions_list[0]);
+}
+
+
 }]);

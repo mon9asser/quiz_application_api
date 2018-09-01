@@ -1,5 +1,8 @@
 @import "fonts.css";
 
+/* Start description of application
+  =================================================
+*/
 .players-container{
     width: 100%;
     min-height: 120px;
@@ -16,8 +19,8 @@
   position: relative;
   margin-top: 10%;
   width: 60%;
-  min-height: 120px;
-  padding: 35px 20px;
+  min-height: 120;
+  padding: 35px;
   margin: 0px auto;
 }
 .buttons-container {
@@ -106,8 +109,29 @@
   min-height: 100px;
 }
 
-
-
+.swiper-slide {
+      text-align: inherit;
+      font-size: 18px;
+      background: #fff;
+      /* Center slide text vertically */
+    ebkit-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+    }
+.container-fluid-x , .quizapp-tools {
+  display: block;
+  position: relative;
+  width: 100%;
+}
 .quizapp-tools {
   height: auto;
 }
@@ -118,7 +142,6 @@
   width: 98.4%;
   display: block;
   position: relative;
-      margin: 0px auto;
   /*border-bottom: 1px dashed #ddd;*/
 }
 .question-body {
@@ -139,7 +162,7 @@
 }
 
 .question-media {
-  width: 30%;
+  width: 60%;
   display: block;
   position: relative;
   margin: 15px 0px;
@@ -170,9 +193,41 @@
   width: 100%;
   /*overflow: hidden;*/
 }
+/* .survey_questions */
+.answer-container ul {
+  display: block;
+  position: relative;
+  /*overflow: hidden;*/
+  width: 100%;
+  padding: 0px;
+  margin: 15px auto 0px auto;
+  text-align: left;
 
+}
+.answer-container ul li {
+  padding: 8px;
+  /*border: 1px dashed #ececec;*/
+  border-style: dashed;
+  border-color: #ececec;
+  border-width: 1px;
+  margin: 3px;
+  text-align: left;
+  /*box-shadow: 0px 0px 1px 0px #eee;*/
+  list-style: none;
+  cursor: pointer;
+}
+.answer-container ul li.ng_block {
+  width: 98%;
+  display: block;
+  position: relative;
+  margin-top: 7px;
+}
 
-
+.answer-container ul li:hover {
+    border: 1px solid #e6d4da;
+    /*box-shadow: 0px 0px 1px 0px #81c784;*/
+    /*background: #fdfdfd;*/
+}
 
 .success_answer {
   border: 1px solid #81c784 !important;
@@ -185,13 +240,17 @@
 }
 
 
+.answer-container ul li.ng_inline_block{
+  width: 48%;
+  display: inline-block;
+  position: relative;
+}
 
 .answer-contents{
   display: block;
   position: relative;
   width: 100%;
 }
-
 .text-values {
   width: auto;
   display: inline;
@@ -222,7 +281,6 @@
   overflow: hidden;
   width: 100%
 }
-
 .media-options{
   display: block;
   position: relative;
@@ -266,9 +324,31 @@
   overflow: hidden;
   width: 98.5%;
   margin-top: 25px;
-  line-height: 2.8;
 }
 
+.swiper-container {
+  width: 100%;
+  height: 100%;
+  margin: 15px auto;
+}
+.swiper-slide {
+  text-align: inherit;
+  font-size: 18px;
+  background: transparent;
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
 .label-question {
   display: inline;
   float: left;
@@ -340,7 +420,6 @@
     max-width: 70%;
   }
 }
-
 .required_option {
     display: inline-block;
     position: absolute;
@@ -373,6 +452,13 @@
   margin-top: 8%;
   border-top: 5px solid #222 !important;
 }
+/*
+  ==========================> Question type cases !!
+*/
+
+
+/* Consider some cases inside ui design ! */
+/* =====================>>>>> Selected Answers */
 
 .loading-player{
   position: absolute;
@@ -421,16 +507,14 @@
 
 .notes {
   font-size: 12px;
-  margin-top: 0px;
+  margin-top: 25px;
   display: block;
   margin-bottom: -5px;
   font-weight: bold;
   padding-left: 1px;
   width: 98%;
   margin-left: -3px;
-  color: #c17c7e ;
 }
-
 .case_many_answers {
   border-left-width:  2px !important;
   border-left-style: dashed !important;
@@ -517,6 +601,8 @@
 .question_type_fre_tex_qs_brd {
   border-color: chocolate;
 }
+
+
 
 /* - ----------------------------------------------------------------------------- */
 .expired-app{
@@ -741,6 +827,9 @@
 }
 
 
+
+
+
 @keyframes blend-anim {
 	0% {
 		transform: scale(0.01, 0.01) rotateY(0);
@@ -880,6 +969,11 @@
   background: #bdbad8 !important;
 }
 
+
+
+
+
+
 .survey-player-questions {
     background: #fbfafa ;
     box-shadow: 0px 0px 5px 0px #eee !important;
@@ -992,6 +1086,8 @@
   color: #999;
   border-radius: 10px;
 }
+
+ /*  #c17c7e =======================================>>>>>>>  fa-star" */
 
  .start-o , .scalet-o{
    display: block;
@@ -1241,102 +1337,10 @@ select.select-current-element , select.select-current-element:focus , select.sel
 .player-block {
   z-index: 2000;
 }
-.ther_is_many{
-  display: inline-block;
-}
-.question-editor-media{
-  width: 100% !important;
-}
-.question-data-media{
-  width: 30%;
-  display: block;
-  position: relative;
-  margin: 15px 0px;
-}
-.video-data-media {
-  width: 100%;
-  display: block;
-}
+
 .qusu-details > button {
     margin-top: 5px;
     border-radius: unset;
     margin-left: 3px;
     margin-right: 4px;
-}
-.answer_text{
-  display: block;
-  position: relative;
-  /* color: #999; */
-  font-size: 15px;
-}
-
-/* .survey_questions */
-.answer-container ul {
-  display: block;
-  position: relative;
-  /*overflow: hidden;*/
-  width: 100%;
-  padding: 0px;
-  margin: 15px auto 0px auto;
-  text-align: center;
-  list-style: none;
-  margin-left: 5px;
-  margin-top: 15px;
-  padding-bottom: 5px;
-  padding-top: 5px;
-}
-
-.answer-container ul li{
-    padding: 8px;
-    margin: 3px;
-    text-align: left;
-    cursor: pointer;
-    border-style: dashed;
-    border-width: 1px;
-    border-color: #e6d4da;
-    width: 30%;
-    color: #999;
-    display: inline-block ;
-}
-.start-o li, .start-o li:hover, .start-o li:focus{
-  display: inline-block !important;
-}
-.answer-container ul li:hover {
-  /* border: 1px solid #e6d4da; */
-  padding: 8px;
-  margin: 3px;
-}
-.answer-container ul li.super_size_class{
-  width: 48%;
-  display: inline-block;
-}
-button {
-  font-family: RobotoRegular;
-}
-.question-data-text-bdy
-{
-  display: inline !important;
-  margin-top: 0px !important;
-  vertical-align: middle;
-}
-.questiondescdata {
-   padding: 15px 2px 0px 2px;
-}
-.question-description-data {
-      color: #999999b3;
-      text-align: left;
-}
-.description-block-box > span , .description-block-box > i {
-  display: inline;
-}
-.description-block-box > i {
-  float: left;
-  margin-right: 10px;
-  margin-top: 3px;
-}
-.image-responsive {
-  width: 95%;
-  height: auto;
-  display: block;
-  margin: 5px auto;
 }

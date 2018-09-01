@@ -56,12 +56,10 @@ var Questionnaire_settings = {
         title_end_with: { type : String , trim : true },
         title_success_with: { type : String , trim : true },
         title_failed_with: { type : String , trim : true },
-        title_resume : { type : String , trim : true }
     }
   },
   label_btns :  { type : {
       lbl_start_with : { type : String , trim : true } ,
-      lbl_resume_with : { type : String , trim : true } ,
       lbl_continue_with  : { type : String , trim : true },
       lbl_retake_with  : { type : String , trim : true },
       lbl_review_with  : { type : String , trim : true },
@@ -104,10 +102,8 @@ var Questionnaire_settings = {
   expiration : { type : {
     is_set : { type :  Boolean } ,
     through_time: { type : Number  } ,
-    expire_warning :  { type : String , trim : true } ,
-    expire_message :  { type : String , trim : true }
-  }
-  },
+    title :  { type : String , trim : true }
+  } },
   randomize_settings : { type : Boolean },
   step_type : { type :  Boolean },
   auto_slide : { type :  Boolean },
@@ -315,7 +311,7 @@ var Questionnaire_questions = {
         created_at :              { type : Date     } ,
         updated_at:               { type : Date     } ,
         question_body:            { type : String   } ,
-        question_description :    { type : { is_enabled : { type : Boolean} , value  : { type : String}  } },
+        question_description :    { type : String },
         enable_description  :     { type : Boolean },
         answers_format :            answer_bo , // Under Updateing
         media_question :          { type : { media_type :{ type : Number } , media_name : { type : String } , media_field:{ type : String } , video_type : {type : String} , video_id : {type : String} , video_source : {type : String} } } ,  //  /* url of video */ } } ,

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Unica+One');
+
 @font-face {
   font-family: 'icomoon';
   src:  url('../fonts/icomoon/icomoon.eot?xgs8s');
@@ -166,19 +166,4 @@
 @font-face {
   font-family: 'arcon';
   src:url('../fonts/arcon/Arcon-Regular.otf') ;
-}
-
-
-
-
-
-
-
-
-
-
-
-@font-face {
-  font-family: 'Bitter';
-  src:url('../fonts/Bitter/Bitter-Regular.ttf') ;
 }
