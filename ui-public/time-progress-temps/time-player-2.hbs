@@ -1,0 +1,28 @@
+<!-- Time 2 -->
+    <div class="time-container option-container text-right">
+      <!-- completed time -->
+      <div ng:if="( _user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true) ">
+        <div class="tick-group">
+            <div class="completed-time">
+              Completed
+            </div>
+            <sup class="min-word">In</sup>
+            <span ng:cloak>
+              {> calculating_completed_time() | filter_completed_time <}
+            </span>
+            <sub ng:if="calculating_completed_time().type == 0" class="min-word">Mins</sub>
+            <sub ng:if="calculating_completed_time().type == 1" class="min-word">Secs</sub>
+        </div>
+      </div>
+      <div ng:cloak ng:if="_settings_.time_settings.timer_type == true" class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
+        {>_settings_.time_settings.hours | time_style <}
+      </div>
+      <span ng:if="_settings_.time_settings.timer_type == true" box-target-class="dotted-hrs" box-target-type="box-texts" class="dotted-hrs selector">:</span>
+      <div ng:cloak class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
+          {>_settings_.time_settings.minutes  | time_style <}
+      </div>
+      <span box-target-class="dotted-hrs" box-target-type="box-texts" class="dotted-hrs selector">:</span>
+      <div ng:cloak class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
+        {>_settings_.time_settings.seconds | time_style <}
+      </div>
+</div>

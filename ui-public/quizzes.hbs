@@ -1,4 +1,30 @@
-{{> attendee_head }}
+<!DOCTYPE html>
+<html  ng:app="applications" ng:controller="attendee-controller" id="body_view">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <!-- Styles -->
+    <!--
+    ==========================>>>>>> Public
+    -->
+    <link href="{{ server_ip }}ext/frameworks/css/bootstrap.min.css" rel="stylesheet">
+    <!--  >>>>>Custom css -->
+    <link ng:if="page_name == 'quizzes'" rel="stylesheet" href="{{ server_ip }}ext/css/quizzes-app.css">
+
+    <!-- scripts -->
+    <!--
+    ==========================>>>>>> Public
+    -->
+    <script src="{{ server_ip }}ext/frameworks/js/jquery.min.js" charset="utf-8"></script>
+    <script src="{{ server_ip }}ext/frameworks/js/bootstrap.min.js"></script>
+    <script src="{{ server_ip }}ext/frameworks/js/angular.min.js"></script>
+  </head>
+  <body>
+    <!-- User Id -->
+   <input id="userId" type="hidden" name="" value="{{ user.id }}">
+   <input id="appId" type="hidden" name="" value="{{app._id}}">
+
 
   {{> navbar }}
   <!-- {> __applications <} -->
@@ -50,31 +76,20 @@
                      Take this {> ( app_val.app_type == 0 ) ? "Survey" : "Quiz" <}
                    </a>
                 </li>
-
+                
               </ul>
           </div>
         </div>
       </div>
   </div>
 
- 
 
 
 
 
-
-
-
-
-
-
-      <!-- Swiper slider -->
-      <script src="{{ server_ip }}ext/frameworks/js/swiper.min.js"></script>
-      <!-- <script src="{{ server_ip }}ext/frameworks/slick/slick.js"></script> -->
-      <!-- The parent application -->
-      <script src="{{ server_ip }}ext/js/a-application.js"></script>
+      <script src="{{ server_ip }}ext/js/aa-application.js"></script>
       <!-- App ( attendee => quizzes or surveys) list -->
-      <script ng:if="page_name == 'quizzes'" src="{{ server_ip }}ext/js/quiz-app-quizzes.js"></script>
+      <script src="{{ server_ip }}ext/js/quiz-app-quizzes.js"></script>
 
     </body>
   </html>

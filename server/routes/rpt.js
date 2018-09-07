@@ -529,6 +529,101 @@ rptRouters.post("/:app_id/add/attended/quiz" ,api_key_report_auth , (req , res)=
 
     }); // end report object
 }); // end api
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+rptRouters.post("/:app_id/add/attended/quiz/report"  , (req , res)=>{
+    var online_report_data = req.body.user_activity ;
+    var application_id = req.params.app_id ;
+    rpt.findOne({"questionnaire_id":application_id} , (error , rptDocument)=>{
+      if(error){
+        res.send("an error occurred");
+        return false;
+      }
+
+      if( rptDocument == null || !rptDocument ){
+            var reportObject = new Object();
+            reportObject['attendees'] = new Array();
+            // reportObject['history']  = new Array();
+            // reportObject['statistics'] = new Array();
+            reportObject['attendee_details'] = new Array();
+            reportObject['questionnaire_id'] = application_id;
+            reportObject['questionnaire_info'] = application_id;
+            reportObject['app_type'] = online_report_data.impr_application_object.app_type
+            reportObject['creator_id'] = online_report_data.impr_application_object.app_type
+            reportObject['created_at'] = new Date();
+            reportObject['updated_at'] = new Date();
+
+            reportObject.attendees.push(online_report_data.report_attendees);
+            // reportObject.history
+            // reportObject.statistics
+            reportObject.attendee_details.push(online_report_data.report_attendee_details);
+            reportObject.questionnaire_id = application_id ;
+            reportObject.questionnaire_info =  application_id ;
+            reportObject.app_type = online_report_data.impr_application_object.app_type;
+            reportObject.creator_id = online_report_data.impr_application_object.creator_id;
+            reportObject.created_at = new Date();
+            reportObject.updated_at = new Date();
+
+            rptDocument = reportObject
+            var reportx = new rpt(reportObject);
+            reportx.save().then(function(reprt){
+              // ==> Updating the id for quationnaire
+              qtnr.findById({_id :application_id }, function (err, doc) {
+                    if (err) console.log(err);
+                    doc.app_report = reprt._id;
+                    doc.save();
+              });
+                res.send(reprt);
+                return false;
+            });
+      }else {
+        // ==> Attendees
+        var attendee_exists = rptDocument.attendees.findIndex(x => x.attendee_id == online_report_data.report_attendees.attendee_id );
+        if(attendee_exists == -1)
+          rptDocument.attendees.push(online_report_data.report_attendees);
+        else {
+          rptDocument.attendees.splice(attendee_exists , 1);
+          rptDocument.attendees.push(online_report_data.report_attendees);
+        }
+
+        // ==> Attendee Details
+        var attendee_detail_exists = rptDocument.attendee_details.findIndex(x => x.attendee_id == online_report_data.report_attendees.attendee_id );
+        if(attendee_detail_exists == -1 )
+        rptDocument.attendee_details.push(online_report_data.report_attendee_details);
+        else {
+          rptDocument.attendee_details.splice(attendee_detail_exists , 1);
+          rptDocument.attendee_details.push(online_report_data.report_attendee_details );
+        }
+
+        // ==> History Args
+
+        rptDocument.markModified('attendees')
+        rptDocument.save().then((reqs)=>{
+          res.send(reqs);
+        });
+
+      }
+
+    });
+}); // end api
+
+
+
 //==> ADd answer by answer
 rptRouters.post("/:app_id/report/add" , api_key_report_auth , helper , ( req , res ) => {
   // => attendee id | questions id | answer ids |
@@ -1801,7 +1896,7 @@ rptRouters.post("/:app_id/report_collection/:user_id" , (req , res) => {
     if(attendee_object_index != -1){
         var attendee_obka = attendee_draft.att_draft.find( x => x.user_id == user_id );
         var rptObject = new Object();
-        if(attendee_obka != undefined )
+        if(attendee_obka != undefined && attendee_obka.report_attendees != undefined )
          {
            attendee_obka.report_attendees.is_completed = true
          }
@@ -3237,10 +3332,12 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
       }else if( QS.question_type == 3 ){
 
         var qs_id = QS.question_id ;
+        // var attendee_answer_value = QS.answer_ids[0].answer_object.answer_value ;
         var attendee_answer_value = QS.answer_ids[0].answer_object.answer_value ;
         var attendee_idx = QS.attendee_id ;
 
         var question_acc = question_access.find(x => x.question_id == qs_id);
+
         if( question_acc == undefined ){
 
           question_access.push({
@@ -3307,6 +3404,7 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
     var get_rat_scale_percentage_attendee_counts = (question_id , rat_scale_val ) => {
       var rat_counts = 0;
        var get_question_data = question_access.find(x => x.question_id == question_id );
+
        if(get_question_data != undefined ){
         var leng_attendees = get_question_data.answers.find(x => x.answer_id == rat_scale_val ) ;
          var count_it_right_now = ( xAnswer ) => {
@@ -3333,6 +3431,7 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
        var get_question_data = question_access.find(x => x.question_id == question_id );
        if(get_question_data != undefined ){
          var clength = get_question_data.answers.find(x => x.answer_id == rat_scale_val ) ;
+
          if(clength == undefined ) rat_counts = 0 ;
          else
           rat_counts = clength.attendees.length;
@@ -3355,6 +3454,7 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
       var question_finder = _questions_.find(x => x._id == question_id );
       var answer_arguments = new Array() ;
       if( question_finder != undefined ){
+
         var anwer_id = question_finder.answers_format[0]._id ;
         var get_all_free_text_questions = (QS) => {
            if( QS.question_id == question_id ){
@@ -3771,7 +3871,7 @@ rptRouters.post(
             atte_ndee = [] ;
             att_detls = [] ;
           }
-          
+
 
           if( applications.app_type == 1 )
             all_items['total_passed'] = filter_by_total_passed ( atte_ndee  , att_detls , date_object.date_from , date_object.date_to  )  //  (total_passed.true != null )? total_passed.true : 0

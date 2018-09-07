@@ -1,0 +1,35 @@
+<!-- Time 1 -->
+    <div class="time-container option-container text-right">
+
+      <div>
+          <div ng:hide="(_settings_.time_settings.timer_type == false)" ng:disabled="( _settings_.time_settings.timer_type == false || _settings_.time_settings.is_with_time == false)" class="tick-group">
+              <span ng:cloak class="selector" box-target-class="tick-group > span" box-target-type="box-texts">{>_settings_.time_settings.hours <}</span>
+              <sub class="selector" box-target-class="tick-group > sub" box-target-type="box-texts">h</sub>
+          </div>
+          <div class="tick-group">
+              <span ng:cloak class="selector" box-target-class="tick-group > span" box-target-type="box-texts">{>_settings_.time_settings.minutes <}</span>
+              <sub class="selector" box-target-class="tick-group > sub" box-target-type="box-texts">m</sub>
+          </div>
+          <div class="tick-group">
+              <span ng:cloak class="selector"  box-target-type="box-texts" box-target-class="tick-group > sub">{>_settings_.time_settings.seconds <}</span>
+              <sub  class="selector" box-target-class="tick-group > sub" box-target-type="box-texts">s</sub>
+          </div>
+      </div>
+
+
+
+
+      <!-- <span>
+        <span box-target-class="timer" box-target-type="box-timer" ng:if="_settings_.time_settings.timer_type == true" class="timer selector">
+          {>_settings_.time_settings.hours <}
+        </span>
+        <span ng:if="_settings_.time_settings.timer_type == true" >:</span>
+        <span box-target-class="timer" box-target-type="box-timer" class="timer selector">
+          {>_settings_.time_settings.minutes <}
+        </span>
+        <span>:</span>
+        <span box-target-class="timer" box-target-type="box-timer" class="timer selector">
+          {>_settings_.time_settings.seconds <}
+        </span>
+      </span> -->
+    </div>

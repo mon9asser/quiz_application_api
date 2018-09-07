@@ -7,6 +7,8 @@ const bcrypt = require('bcryptjs');
 const http = require('http');
 const _ = require('lodash');
 const session = require("express-session");
+const stringify = require('json-stringify-safe')
+
 // const zip = new require('node-zip')();
 
 //const simplePassword = require('simple-password');
@@ -210,83 +212,62 @@ drft.findOne({application_id: app_id } , (err , draftDocument) => {
 
 
 // => server_ip/api/:app_id/attendee_collection/:user_id
+// http://localhost:9000/api/5b8edc55aea5bf606d5a62e3/attendee_collection/5b73412725aab524b49e6c49
 drftRouter.post("/:app_id/attendee_collection/:user_id" , (req , res) => {
-  var attendee_draft = req.body.attendee_draft;
-
-  var attendee_id = req.params.user_id;
+  // att_draft
   var app_id = req.params.app_id ;
+  var user_activity = req.body.user_activity ;
+  var usr_id = req.params.user_id ;
 
-  if(req.body.attendee_draft == null){
-    new Promise(function(resolve, reject) {
-      res.status(404).send("attendee_draft unfound !");
-      return false ;
-    });
-  }
+  drft.findOne({ "application_id" : app_id }).then((response)=>{
+    if(response == null || !response ) {
+      // ==> Storing For First Time
+      drf_data = {
+        att_draft : new Array(user_activity) ,
+        application_id : app_id ,
+        questionnaire_info :  app_id
+      }
+      var activity = new drft(drf_data);
+      activity.save().then((resp)=>{
 
-  drft.findOne({ "application_id":app_id } , ( err , draftDoc ) => {
-   if( draftDoc == null  || !draftDoc ){
-      var drf = new drft(attendee_draft);
-      drf.save().then((respData)=>{
+        // ==> Updating the id for quationnaire
         qtnr.findById({_id :app_id }, function (err, doc) {
-            if (err) console.log(err);
-            doc.att__draft = respData._id;
-            doc.save();
+              if (err) console.log(err);
+              doc.att__draft = resp._id;
+              doc.save();
         });
 
-        res.send(respData);
+        res.send(resp);
+        return false;
       }).catch((err)=>{
-        res.send({error : err});
+        res.send(err);
+        return false ;
       });
-   }else {
-     if(attendee_draft.att_draft != undefined ){
-         var this_attendee_index = draftDoc.att_draft.findIndex(x => x.user_id == attendee_id);
-         var received_attendee_data = attendee_draft.att_draft.find(x => x.user_id == attendee_id);
-         if(this_attendee_index != -1){
-           draftDoc.att_draft[this_attendee_index] = received_attendee_data
-         }else {
-           draftDoc.att_draft.push(received_attendee_data);
-         }
-       }
-
-       draftDoc.markModified('att_draft');
-       draftDoc.save().then((respData)=>{
-
-         qtnr.findById({_id :app_id }, function (err, doc) {
-           if (err) console.log(err);
-           doc.att__draft = respData._id;
-           doc.save();
-         });
-
-         res.send(respData);
-       }).catch((err)=>{
-         res.send({error : err});
-       });
-   }
-
-       setTimeout(function (){
-         if(draftDoc != null ){
-           if( req.body.statistics != null ){
-
-               if(draftDoc.statistics == undefined)
-                 draftDoc.statistics = new Array();
-
-                 draftDoc.statistics = req.body.statistics ;
-                 draftDoc.markModified('statistics');
-                 draftDoc.save();
-             }
-         }
-       }, 800);
-
-  }).catch((error)=> {
-    console.log(error);
-  });
 
 
+    }else {
+      // ==> we found this app in our db
+      var user_app = response;
+      var usr_act_ind = user_app.att_draft.findIndex(x => x.user_id == usr_id );
+      if(usr_act_ind != -1 ){
+          user_app.att_draft.splice(usr_act_ind , 1 );
+      }
+      // ==> Add New Uer
+      user_app.att_draft.push(user_activity);
 
-
-
-
-
+      // ==> Saveing
+      response.markModified("att_draft");
+      response.save().then((resp)=>{
+        res.send(resp);
+        return false;
+      }).catch((err)=>{
+        res.send(err);
+        return false ;
+      });
+    }
+    res.send(response);
+    return false;
+  }).catch(function(err){ res.send(err); })
 });
 
 

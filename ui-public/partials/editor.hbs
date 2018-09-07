@@ -1,440 +1,286 @@
 
-<style media="screen">
-  .saving_option{
-     margin-left: 15px;
-  }
-</style>
-<div class="editor-block">
   <div class="editor-blocker">
     <ul class="tab-editor">
       <li>
-        <div class="x-editor-x-title question-opener"  ng:click="expand_collapsed_items('#question-pt')" >
-          Question
-        </div>
-        <div class="clearFix"></div>
-        <div style="display:none;" class="x-editor-x-body open-this-tab" id="question-pt">
-          <div id="dynamic-layer" class="col-sm-8 top-margins">
-            <textarea id="editor-quest-data" placeholder="{> questions_list[questionIndex].question_body <}" ng:model="questions_list[questionIndex].question_body" class="form-control quest-title-edit textarea-qs redactor-editor"></textarea>
-          </div>
-          <div class="col-sm-4 media-uploads top-margins media-parts-x">
-            <div class="ques-media-container">
-              <!-- No Media Cases -->
-              <div ng:if="quest_media_parts == null" ng:click="show_media_uploader('question_media_type')"  style="background-image:url({>server_ip<}img/media-icon.png)"  class="media-changeable media-changeable-img-case has-no-media">
-                Add Media
+         <div class="x-editor-x-title question-opener"  ng:click="expand_collapsed_items('#question-pt')" >
+           Question
+         </div>
+         <div class="clearFix"></div>
+         <div style="display:none;" class="x-editor-x-body open-this-tab" id="question-pt">
+           <div id="dynamic-layer" class="col-sm-9 top-margins">
+             <textarea ng:model="_questions_[question_index].question_body" placeholder="Add your question here !"  redactor = "{buttons: ['formatting', '|','html' , 'bold', 'italic' , 'underline' , 'deleted' , 'link'  ] , plugins: ['fontcolor']}" id="editor-quest-data" class="form-control quest-title-edit textarea-qs redactor-editor"></textarea>
+           </div>
+           <!-- Media  -->
+
+           <div class="col-sm-4 media-uploads top-margins media-parts-x">
+             <!--  Case there is no image -->
+             <div ng:if="_questions_[question_index].media_question == undefined " class="case-there-is-no-img" ng:click="add_new_media_for_question()">
+               <ul>
+                 <li>
+                   <span class="fa fa-plus"></span>
+                 </li>
+               </ul>
+               <span class="ima-size">145 x 145</span>
+             </div>
+
+             <!-- Case it is an Image  -->
+             <!-- _questions_[question_index].media_question.Media_directory  -->
+             <!-- <div ng:if="_questions_[question_index].media_question != undefined  && _questions_[question_index].media_question.media_type == 0" ng:style="load_image_media()" class="question-image question-media"></div> -->
+             <img ng:if="_questions_[question_index].media_question != undefined  && _questions_[question_index].media_question.media_type == 0" ng:src="{> _questions_[question_index].media_question | read_image <}" class="image-responsive" alt="Image">
+
+             <!--  Case Video -->
+             <div ng:if="_questions_[question_index].media_question != undefined  && _questions_[question_index].media_question.media_type == 1" class="question-media question-video question-editor-media" style="height:auto;">
+               <!-- case it vimeo or youtube  -->
+               <iframe ng:src="{> _questions_[question_index].media_question.embed_path | trust_iframe_url <}" ng:if="_questions_[question_index].media_question.video_type == 1 || _questions_[question_index].media_question.video_type == 0" width="100%" height="auto"></iframe>
+               <!-- case it mp4  -->
+               <video ng:if="_questions_[question_index].media_question.video_type == 2" controls>
+                 <source ng:src="{> _questions_[question_index].media_question.mp4_option.mp4_url | trust_iframe_url <}" type="video/mp4">
+                 <source ng:src="{> _questions_[question_index].media_question.mp4_option.ogg_url | trust_iframe_url <}" type="video/ogg">
+               </video>
+             </div>
+
+             <!-- Controlling on this media  -->
+             <div ng:if="_questions_[question_index].media_question != undefined " class="meddia-qs-cont">
+               <ul>
+                 <li ng:click="add_new_media_for_question()">
+                   <span class="fa fa-pencil"></span>
+                 </li>
+                 <li>
+                   <span ng:click="remove_question_media(_questions_[question_index]._id)" class="fa fa-close"></span>
+                 </li>
+               </ul>
+               <span class="ima-size">145 x 145</span>
               </div>
-              <!-- Image Cases -->
-              <div ng:if="quest_media_parts.media_type == 0" ng:style="load_image_data_with_date(server_ip+quest_media_parts.media_field)" class="image_case">
-                  <!-- Load image here -->
-              </div>
-              <!-- Video Cases -->
-              <div ng:if="quest_media_parts.media_type == 1" ng-bind-html="quest_media_parts | set_iframe"  class="video_cases">
-                <!-- Loading videos here -->
-              </div>
-            </div>
-            <!-- Media controller -->
-            <div ng:if="quest_media_parts != null" class="media-controller">
-                <ul>
-                  <li>
-                    <!-- ng:click="show_media_uploader('question_media_type')" -->
-                    <span ng:click="show_media_uploader('question_media_type')" class="fa fa-pencil"></span>
-                  </li>
-                  <li>
-                    <span ng:click="remove_media_from_target_model('question')" class="fa fa-close"></span>
-                  </li>
-                </ul>
-            </div>
-        </div>
-        </div>
+
+
+           </div>
+         </div>
       </li>
       <li>
-          <div class="x-editor-x-title" ng:click="expand_collapsed_items('#Description-pt')">
-            Description
-          </div>
-          <div style="display:none;" class="x-editor-x-body" id="Description-pt">
-            <div class="col-xs-12 col-md-12">
-              <div class="row-cols margin-top">
-                 <textarea ng:model="questions_list[questionIndex].question_description" id="editor-desc-data" name="name" class="form-control descriptions description-field description-field-x redactor-editor" placeholder="Description ..." rows="3" cols="80"></textarea>
+         <div class="x-editor-x-title" ng:click="expand_collapsed_items('#Description-pt')">
+           Description
+         </div>
+         <div style="display:none; margin-top: 12px;" class="x-editor-x-body" id="Description-pt">
+           <div class="col-xs-12 col-md-12">
+             <div class="enable-description-values">
+               <label style="font-size:15px;" id="enable-desc-data">Enabel Description</label>
+               <input style="float: right; margin-bottom: 10px; margin-top: 0px; margin-left: 15px;" ng:model="_questions_[question_index].question_description.is_enabled" type="checkbox" for="enable-desc-data" class="switch_1 input-checkboxes ">
+             </div>
+              <!-- ng:if="_questions_[question_index].question_description.is_enabled == true" -->
+             <div ng:show="_questions_[question_index].question_description.is_enabled" class="row-cols margin-top" style="padding-bottom: 5px;">
+               <textarea style="background:#eee;" ng:model="_questions_[question_index].question_description.value"  id="editor-desc-data" name="name" class="form-control descriptions description-field description-field-x redactor-editor" placeholder="Description ..."  redactor = "{buttons: ['formatting', '|','html' , 'bold', 'italic' , 'underline' , 'deleted' , 'link'  ] , plugins: ['fontcolor']}"></textarea>
+             </div>
+           </div>
+         </div>
+       </li>
+      <li ng:if="_questions_[question_index].question_type != 4">
+         <div class="x-editor-x-title" ng:click="expand_collapsed_items('#answers-pt')">
+             Answers
+         </div>
+         <div style="display:none;"class="x-editor-x-body" id="answers-pt">
+           <!-- Multiple Choices and Media choices -->
+           <div ng:if="_questions_[question_index].question_type <= 1" class="multi-answers-part">
+              <ul class="choices-part" id="block-answers">
+                 <li data-answer-id="{>answer_value._id<}" class="answers_x" ng:repeat="(answer_key , answer_value) in _questions_[question_index].answers_format track by $index" ng:class="make_answer_classes(answer_value , _questions_[question_index].question_type)">
+                    <span class="fa fa-bars drag-tools"  data-toggle="tooltip" title="Move" ></span>
+                   <!-- Answer Controlling -->
+                   <ul class="answer-pt-controller">
+                     <li  ng:if="answer_value.is_correct != undefined" data-toggle="tooltip" title="Correct Answer" ng:click="make_this_correct_incorrect_answer(answer_value._id)">
+                       <span class="fa fa-check"></span>
+                     </li>
+                     <li data-toggle="tooltip" title="Delete" ng:click="delete_this_answer(answer_value._id)">
+                       <span class="fa fa-trash"></span>
+                     </li>
+                     <li data-toggle="tooltip" title="Media Options"  ng:click="add_new_media_for_answer(answer_value._id , this)">
+                       <span class="fa fa-file-image-o"></span>
+                     </li>
+                   </ul>
+                   <!-- answer media for 0 -->
+                   <div ng:if="_questions_[question_index].question_type == 0" class="media-data-answer">
+                     <!-- Case it Image -->
+                     <img ng:if=" answer_value.media_optional != undefined &&  answer_value.media_optional.media_type ==0" ng:src="{>answer_value.media_optional.Media_directory + '?' + answer_value.media_optional.image_updated_date <}" class="image-responsive" alt="Image">
+                     <!-- Case it video  -->
+                     <div ng:if="answer_value.media_optional != undefined && answer_value.media_optional.media_type ==1" class="video_case text-center">
+                        <!-- Case video iframes => youtube/ vimeo -->
+                        <iframe class="iframe-selector" ng:if="(answer_value.media_optional.video_type == 0 || answer_value.media_optional.video_type == 1 )" ng:src="{> answer_value.media_optional.embed_path | trust_iframe_url <}" width="100%" height="120px"></iframe>
+                        <!-- Case video tags => html mp4 video -->
+                        <video ng:if="answer_value.media_optional.video_type == 2 " width="100%" height="120px" controls>
+                            <source ng:if="answer_value.media_optional.mp4_option != undefined" ng:src="{>answer_value.media_optional.mp4_option.mp4_url | trust_iframe_url <}" type="video/mp4">
+                            <source ng:if="answer_value.media_optional.mp4_option != undefined" ng:src="{>answer_value.media_optional.mp4_option.ogg_url | trust_iframe_url <}" type="video/ogg">
+                        </video>
+                     </div>
+                   </div>
+                   <!-- answer media for 1 -->
+                   <div ng:if="_questions_[question_index].question_type == 1" class="media-data-answer">
+                     <!-- Case There is not any media  -->
+                     <div ng:if='answer_value.media_type == undefined' ng:click="add_new_media_for_answer(answer_value._id , this)" class="not-media-there">
+                        <img ng:src="{> server_ip + 'img/media-default-icone.jpg'<}" class="image-responsive" alt="Image">
+                     </div>
+                     <!-- Case it Image -->
+                     <img ng:if="answer_value.Media_directory != undefined && answer_value.media_type == 0" ng:src="{>answer_value.Media_directory + '?' + answer_value.image_updated_date <}" alt="Image"  class="image-responsive">
+                     <!-- Case it video  -->
+                     <div ng:if="answer_value.embed_path != undefined && answer_value.media_type ==1" class="video_case text-center">
+                        <!-- Case video iframes => youtube/ vimeo -->
+                        <iframe class="iframe-selector" ng:if="(answer_value.video_type == 0 || answer_value.video_type == 1 )" ng:src="{> answer_value.embed_path | trust_iframe_url <}" width="100%" height="120px"></iframe>
+                        <!-- Case video tags => html mp4 video -->
+                        <video ng:if="answer_value.video_type == 2 " class="video-mp4" controls>
+                            <source ng:if="answer_value.mp4_option != undefined" ng:src="{>answer_value.mp4_option.mp4_url | trust_iframe_url <}" type="video/mp4">
+                            <source ng:if="answer_value.mp4_option != undefined" ng:src="{>answer_value.mp4_option.ogg_url | trust_iframe_url <}" type="video/ogg">
+                        </video>
+                     </div>
+                   </div>
+                   <!-- Answer Text -->
+                   <div ng:class="(answer_value.media_optional != undefined)?'add_dashed_border':''"  ng:if="answer_value.value != undefined" class="text-answers">
+                     <input placeholder="{> answer_value.value <}" ng:model="answer_value.value" type="text" class="writanswer-input editor-all-ans-data">
+                   </div>
+                 </li>
+              </ul>
+
+              <div class="add-new-option" ng:click="add_new_answer(_questions_[question_index]._id)">
+                     Add new option
               </div>
-            </div>
-          </div>
-        </li>
-        <li ng:if="questions_list[questionIndex].question_type == 0 || questions_list[questionIndex].question_type ==1 || questions_list[questionIndex].question_type ==2 || questions_list[questionIndex].question_type ==3">
-            <div class="x-editor-x-title" ng:click="expand_collapsed_items('#answers-pt')">
-              Answers
-            </div>
-            <div style="display:none;"class="x-editor-x-body" id="answers-pt">
-                <div class="multi-answers-part">
-                  <!-- Repeating answers -->
-                  <ul ng:if="question_type <= 2" class="choices-part">
-                    <li ng:class="class_data_func( answer_value.is_correct , question_settings.choice_style )" ng:repeat="(answer_key , answer_value) in asnwers track by $index" class="answers_x" data-answer-id="answer_id_{>answer_value._id<}" data-answer-index="{>$index<}">
+           </div>
 
-                        <!-- text options value -->
-                        <div ng:if="question_type == 0" class="">
-                           <ul class="answer-pt-controller">
+           <!-- True and false choices -->
+           <div ng:if="_questions_[question_index].question_type == 2" class="multi-answers-part">
+             <ul class="answer-list-booleans">
+               <li ng:repeat="(answer_key , answer_value) in _questions_[question_index].answers_format track by $index" ng:class="make_answer_classes(answer_value , _questions_[question_index].question_type)" class="answer-classes">
+                 <!-- Answer Controlling -->
+                 <ul class="answer-pt-controller">
+                   <li  ng:if="answer_value.is_correct != undefined" data-toggle="tooltip" title="Correct Answer" ng:click="make_this_correct_incorrect_answer(answer_value._id)">
+                     <span class="fa fa-check"></span>
+                   </li>
+                 </ul>
+                 <input type="text" name="" value="" ng:model="answer_value.boolean_value">
+               </li>
+             </ul>
+           </div>
 
+           <!-- Rating Scale Answer -->
+           <div ng:if="_questions_[question_index].question_type == 3" class="multi-answers-part">
+              <ul class="rating-scale-list">
+                <li ng:click="mark_rating_scale(_questions_[question_index].answers_format[0].ratscal_type , $index )" ng:mouseover="hover_rating_scale(_questions_[question_index].answers_format[0].ratscal_type , $index )" ng:repeat="(answer_key , answer_value ) in _questions_[question_index].answers_format[0].rating_scale_answers track by $index">
+                  <span ng:if="_questions_[question_index].answers_format[0].ratscal_type == 1" class="fa fa-star-o ratings"></span>
+                  <span ng:if="_questions_[question_index].answers_format[0].ratscal_type == 0" class="scales"> {> answer_value.rat_scl_value <}</span>
+                </li>
+              </ul>
+              <ul  class="rating-scale-list text-center" ng:if="_questions_[question_index].answers_format[0].ratscal_type == 0 && _questions_[question_index].answers_format[0].show_labels == true">
+                <li style="margin-left: 20px;font-size: 15px;">
+                  {> _questions_[question_index].answers_format[0].started_at <}
+                </li>
+                <li style="margin-left: 20px;font-size: 15px;">
+                  {> _questions_[question_index].answers_format[0].centered_at <}
+                </li>
+                <li style="margin-left: 20px;font-size: 15px;">
+                  {> _questions_[question_index].answers_format[0].ended_at <}
+                </li>
+              </ul>
+           </div>
+         </div>
+       </li>
+      <li>
+        <div class="x-editor-x-title" ng:click="expand_collapsed_items('#Settings-pt')">
+           Answer Settings
+        </div>
+        <div style="display:none;" class="x-editor-x-body" id="Settings-pt">
+          <div class="col-sm-12">
+            <div class="row-cols margin-top">
+              <div class="question-settings">
+                <ul class="listSettings-qs">
 
-
-                             <!-- is correct answer -->
-                             <li ng:if="{{app.app_type }} == 1" ng:if="answer_value.is_correct == false" title="Make it Correct Answer">
-                               <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
-                             </li>
-                             <!-- <li style="padding: 3px 8px;" ng:if="answer_value.media_optional.media_type == 0" title="Make it Correct Answer">
-                               <span ng:click="cropping_this_image_right_now(answer_value._id)" class="fa fa-crop"></span>
-                             </li> -->
-                             <!-- <li ng:if="{{app.app_type }} == 1" ng:if="answer_value.is_correct == true" title="Remove Correct Answer">
-                               <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
-                             </li> -->
-                             <!-- Edit This Answer -->
-                             <li ng:click="show_media_uploader('answers' ,  answer_value._id  )" title="Edit it with media">
-                               <span class="fa fa-file-image-o edit-options-answer"></span>
-                             </li>
-                             <!-- Delete This Answer -->
-                             <li ng:click="question_answer_deletion(answer_value._id)" title="Delete this answer">
-                               <span class="fa fa-trash"></span>
-                             </li>
-                           </ul>
-
-                           <div class="text-answers">
-                             <!-- Answer Texts -->
-                             <!-- <input class="writanswer-input" type="text" name="" ng:model="answer_value.value"> -->
-                             <input class="writanswer-input editor-all-ans-data" ng:model="answer_value_obk[$index].value" placeholder="{> answer_value.value <}" ng:change="answer_in_ui_view( answer_value_obk[$index].value , $index ,  answer_value._id )" />
-
-                             <div ng:if="answer_value.media_optional != null" class="media-options">
-                               <!-- Case it an image -->
-                               <div ng:if="answer_value.media_optional.media_type == 0" class="image_case" ng:style="blob_background_data(answer_value , question_settings.choice_style)"></div>
-
-                               <!-- Case it Video -->
-                               <div ng-bind-html="answer_value.media_optional | set_iframe" ng:if="answer_value.media_optional.media_type == 1"  class="video_case answer_video_case">
-                                  <!-- Append answer media here -->
-                                  Loading Media
-                               </div>
-                             </div>
-                           </div>
-                         </div>
-
-                        <!-- Media choices value -->
-                        <div ng:if="question_type == 1" class="">
-
-                          <ul class="answer-pt-controller ">
-
-                            <li  ng:if="{{app.app_type }} == 1"  title="Make it Correct Answer">
-                              <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
-                            </li>
-                            <li ng:click="show_media_uploader('answers' ,  answer_value._id)" title="Edit it with media">
-                              <span class="fa fa-file-image-o edit-options-answer"></span>
-                            </li>
-                            <!-- <li ng:if="answer_value.media_type != null && answer_value.media_type == 0">
-                              <span ng:click="cropping_this_image_right_now(answer_value._id)" class="fa fa-crop"></span>
-                            </li> -->
-                            <li ng:click="question_answer_deletion(answer_value._id)" title="Delete this answer">
-                              <span class="fa fa-trash"></span>
-                            </li>
-                          </ul>
-
-                          <div class="text-answers">
-                            <div class="media-answers">
-                              <div class="media-options">
-                                <!-- {>answer_value<} -->
-                                <!-- Case it a defaultimage -->
-                                <div ng:if="answer_value.media_type == null" style="background-image:url('{>answer_value.media_src<}'); margin: 10px auto !important;"  class="image_case"></div>
-
-                                <div ng:if="answer_value.media_type != null"  class="image_case">
-                                  <!-- <div ng:if="answer_value.media_type == 0" style="background-image:url('{>  answer_value.media_src |   image_w_server <}')"  class="image_case"></div> -->
-                                  <div ng:if="answer_value.media_type == 0" ng:style="blob_background_data ( answer_value , question_settings.choice_style )"  style="margin: 10px auto" class="image_case"></div>
-
-
-                                  <!-- Case it Video -->
-                                  <div ng-bind-html="answer_value | set_iframe" ng:if="answer_value.media_type == 1"  class="video_case answer_video_case">
-                                     <!-- Append answer media here -->
-                                     Loading Media
-                                  </div>
-                                </div>
-
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- true false value -->
-                        <div ng:if="question_type == 2" class="">
-                            <ul ng:if="{{app.app_type }} == 1"  class="answer-pt-controller ">
-                              <li data-toggle="asnwers-options" title="Make it Correct Answer">
-                                <span ng:click="question_answer_mark_it_correct(answer_value._id)" class="fa fa-check"></span>
-                              </li>
-                            </ul>
-                            <div class="text-answers">
-                                <span class="text-field-inpu">
-                                 <input class="true-false-value" type="text" ng:change="unsaved_question_x()" ng:model="answer_value.boolean_value" name="" value="">
-                                </span>
-                            </div>
-                        </div>
-
+                    <li class="required_qs">
+                      <div class="checkbox-toggle answer-settins">
+                         <input ng:model="_questions_[question_index].answer_settings.is_required" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                         <span class="title-checkbox" data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
+                           Required
+                             <i class="help-links">?</i>
+                         </span>
+                      </div>
                     </li>
-                  </ul>
-                  <!-- Only one row answer -->
-                  <div ng:if="question_type > 2" class="survey-answers">
-
-                      <div class="survey-answer">
-                        <!-- Rating Case -->
-                        <div class=""> <!--  -->
-                          <!-- Ratings  -->
-                          <ul ng:if="questions_list[questionIndex].answers_format[0].ratscal_type == 1 " class="start-o" >
-                            <li data-index='0' ng:repeat="(key_ , val_) in rating_scale_elements">
-                              <span ng:click="select_rating_scale__($index , 1)" href="#">
-                                  <i class="fa fa-star-o"></i>
-                              </span>
-                            </li>
-                          </ul>
-                          <!-- Scale -->
-                          <center>
-                            <div class="scale-optn" ng:if="questions_list[questionIndex].answers_format[0].ratscal_type == 0 ">
-                              <ul class="scalet-o" >
-                                <li data-index='0' ng:repeat="(key_ , val_) in rating_scale_elements">
-                                  <span ng:click="select_rating_scale__($index , 0 )" href="#">
-                                      {> $index + 1 <}
-                                  </span>
-                                </li>
-                              </ul>
-                              <div class="clearFix"></div>
-
-                              <div class="block-labels text-center"  ng:show="questions_list[questionIndex].answers_format[0].show_labels == true">
-                                <span class="first-lbl">
-                                  {>questions_list[questionIndex].answers_format[0].started_at | show_chars<}
-                                </span>
-                                <span class="second-lbl">
-                                  {>questions_list[questionIndex].answers_format[0].centered_at | show_chars <}
-                                </span>
-                                <span class="third-lbl">
-                                  {>questions_list[questionIndex].answers_format[0].ended_at | show_chars <}
-                                </span>
-                              </div>
-                            </div>
-                          </center>
+                    <li class="single_response_qs" ng:if="_questions_[question_index].question_type <= 1">
+                      <div class="checkbox-toggle answer-settins">
+                         <input ng:model="_questions_[question_index].answer_settings.single_choice" ng:change="change_answer_of_single_choices(_questions_[question_index].answer_settings.single_choice)" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                         <span class="title-checkbox"  data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
+                           Single Response
+                           <i class="help-links">?</i>
+                         </span>
+                      </div>
+                   </li>
+                   <li class="randomize_qs" ng:if="_questions_[question_index].question_type <= 1">
+                     <div class="checkbox-toggle answer-settins">
+                         <input ng:model="_questions_[question_index].answer_settings.is_randomized" ng:change="is_randomized_answer_with(_questions_[question_index].answer_settings.is_randomized)" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                         <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
+                           Randomize
+                           <i class="help-links">?</i>
+                         </span>
+                      </div>
+                   </li>
+                   <li class="super_sizer_qs" ng:if="_questions_[question_index].question_type <= 1">
+                     <div class="checkbox-toggle answer-settins">
+                         <input ng:model="_questions_[question_index].answer_settings.super_size" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                         <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
+                           Super Size
+                           <i class="help-links">?</i>
+                         </span>
+                      </div>
+                   </li>
+                   <!-- <li class="answer_stylish_qs">
+                     <div class="checkbox-toggle answer-settins">
+                        <input type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                        <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
+                          Style of Answer
+                          <i class="help-links">?</i>
+                        </span>
+                     </div>
+                   </li> -->
+                   <li class="show_lbls_qs" ng:if="_questions_[question_index].question_type == 3 && _questions_[question_index].answers_format[0].ratscal_type == 0 ">
+                      <div class="scale-options">
+                        <div class="checkbox-toggle answer-settins">
+                          <input ng:model="_questions_[question_index].answers_format[0].show_labels" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                          <span class="title-checkbox">Show labels</span>
                         </div>
                       </div>
-                  </div>
-                   <!-- <pre ng:if="question_type > 2">
-                    {> questions_list[questionIndex] <}
-                  </pre> -->
-                  <!--  ng:if="question_type == 0" -->
-                  <div ng:click="create_new_answer()" ng:if="question_type == 0 || question_type == 1" class="add-new-option">
-                      Add new option
-                  </div>
-                </div>
-              </div>
-      </li>
-      <li>
-    <div class="x-editor-x-title" ng:click="expand_collapsed_items('#Settings-pt')">
-      Question Settings
-    </div>
-    <div style="display:none;" class="x-editor-x-body" id="Settings-pt">
-      <div class="col-sm-12">
-        <div class="row-cols margin-top">
-          <!-- <label class="titles-question"> Question Settings  : </label> -->
-          <div class="question-settings">
-             <ul class="listSettings-qs">
-                <li class="show_lbls_qs" ng:if="questions_list[questionIndex].question_type == 3 && questions_list[questionIndex].answers_format[0].ratscal_type == 0">
-
-                    <div class="scale-options">
-
-                      <!-- <div class="input_wrapper" style="margin-top:0px;">
-                          <input ng:change="unsaved_question_x(questions_list[questionIndex].answers_format[0].show_labels , 'show_labels')" ng:model="questions_list[questionIndex].answers_format[0].show_labels" type="checkbox" class="switch_4">
-                          <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
-                            <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
-                          </svg>
-                          <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
-                            <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
-                          </svg>
-                      </div> -->
-
-
-                         <div class="checkbox-toggle answer-settins">
-                            <input ng:change="unsaved_question_x()" ng:model="questions_list[questionIndex].answers_format[0].show_labels" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                            <span class="title-checkbox">Show labels</span>
-                         </div>
-
-
-                      <!-- <div class="slideThree on-off-checkbox-settings">
-                         <input  type="checkbox" id="show-labels" name="check" ng:change="unsaved_question_x()" ng:model="questions_list[questionIndex].answers_format[0].show_labels">
-                         <label for="show-labels"></label>
-                         <span class="off-value"></span>
-                      </div> -->
-                    </div>
-                    <div ng:show="questions_list[questionIndex].answers_format[0].show_labels == true" class="scale-options item-labels">
-                        <input ng:change="unsaved_question_x(questions_list[questionIndex].answers_format[0].started_at , null )" class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].started_at" placeholder="Left">
-                        <input ng:change="unsaved_question_x(questions_list[questionIndex].answers_format[0].centered_at, null )" class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].centered_at" name="" value="" placeholder="Center">
-                        <input ng:change="unsaved_question_x(questions_list[questionIndex].answers_format[0].ended_at , null )" class="lab" type="text" ng:model="questions_list[questionIndex].answers_format[0].ended_at" name="" value="" placeholder="Right">
-                    </div>
-                 </li>
-                <li class="required_qs">
-                  <style media="screen">
-                    .help-links {
-                      border: 1px solid #cecaca;
-                      /* padding: 5px; */
-                      border-radius: 11px;
-                      width: 18px;
-                      height: 18px;
-                      line-height: 7px;
-                      line-height: 16px;
-                      vertical-align: baseline;
-                      margin-left: 4px;
-                      margin-top: -1px;
-                      font-size: 10px;
-                      font-style: normal;
-                      text-align: center;
-                      display: inline-block;
-                      font-weight: bold;
-                      cursor: pointer;
-                      color: #999;
-                    }
-                  </style>
-                   <div class="checkbox-toggle answer-settins">
-                      <input ng:change="unsaved_question_x(question_settings.is_required)" ng:model="question_settings.is_required" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                      <span class="title-checkbox">
-                        Required
-                          <i class="help-links">?</i>
-                      </span>
-                   </div>
-                   <!-- <div class="input_wrapper">
-                       <input ng:change="unsaved_question_x(question_settings.is_required)" ng:model="question_settings.is_required" type="checkbox" class="switch_4">
-                       <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
-                         <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
-                       </svg>
-                       <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
-                         <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
-                       </svg>
-                   </div> -->
-                   <!-- <div class="slideThree on-off-checkbox-settings">
-                      <input ng:change="unsaved_question_x()" ng:model="question_settings.is_required" type="checkbox" id="required-option" name="check" checked="">
-                      <label for="required-option"></label>
-                      <span class="off-value"></span>
-                   </div> -->
-                </li>
-                <li class="single_response_qs" ng:if="questions_list[questionIndex].question_type == 0 || questions_list[questionIndex].question_type == 1">
-
-                   <div class="checkbox-toggle answer-settins">
-                      <input ng:change="unsaved_question_x(question_settings.single_choice)" ng:model="question_settings.single_choice" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                      <span class="title-checkbox"  data-toggle="tooltip" data-placement="right" title="Tooltip on right">
-                        Single Response
-                        <i class="help-links">?</i>
-                      </span>
-                   </div>
-                   <!-- <div class="input_wrapper">
-                       <input ng:change="unsaved_question_x(question_settings.single_choice)" ng:model="question_settings.single_choice" type="checkbox" class="switch_4">
-                       <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
-                         <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
-                       </svg>
-                       <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
-                         <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
-                       </svg>
-                   </div> -->
-                   <!-- <div class="slideThree on-off-checkbox-settings">
-                      <input ng:change="unsaved_question_x()" ng:model="question_settings.single_choice" type="checkbox" id="MultipleResponse-option" name="check" checked="">
-                      <label for="MultipleResponse-option"></label>
-                      <span class="off-value"></span>
-                   </div> -->
-                </li>
-                <li class="randomize_qs" ng:if="questions_list[questionIndex].question_type == 0 || questions_list[questionIndex].question_type == 1 || questions_list[questionIndex].question_type == 2">
-
-                   <div class="checkbox-toggle answer-settins">
-                      <input ng:change="randomize_option_change(question_settings.is_randomized)" ng:model="question_settings.is_randomized" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                      <span class="title-checkbox">
-                        Randomize
-                        <i class="help-links">?</i>
-                      </span>
-                   </div>
-                   <!-- <div class="input_wrapper">
-                       <input ng:change="unsaved_question_x(question_settings.is_randomized)" ng:model="question_settings.is_randomized" type="checkbox" class="switch_4">
-                       <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
-                         <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
-                       </svg>
-                       <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
-                         <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
-                       </svg>
-                   </div> -->
-                   <!-- <div class="slideThree on-off-checkbox-settings">
-                      <input ng:change="unsaved_question_x()" ng:model="question_settings.is_randomized" type="checkbox" id="Randomize-option" name="check" checked="">
-                      <label for="Randomize-option"></label>
-                      <span class="off-value"></span>
-                   </div> -->
-                </li>
-                <li class="super_sizer_qs" ng:if="questions_list[questionIndex].question_type == 0 || questions_list[questionIndex].question_type == 1">
-
-                   <div class="checkbox-toggle answer-settins">
-                      <input ng:change="unsaved_question_x(question_settings.super_size)" ng:model="question_settings.super_size" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                      <span class="title-checkbox">
-                        Super Size
-                        <i class="help-links">?</i>
-                      </span>
-                   </div>
-                   <!-- <div class="input_wrapper">
-                       <input ng:change="unsaved_question_x(question_settings.super_size)" ng:model="question_settings.super_size" type="checkbox" class="switch_4">
-                       <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
-                         <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
-                       </svg>
-                       <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
-                         <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
-                       </svg>
-                   </div> -->
-                   <!-- <div class="slideThree on-off-checkbox-settings">
-                      <input ng:change="unsaved_question_x()" ng:model="question_settings.super_size" type="checkbox"  id="SuperSize-option" name="check" checked="">
-                      <label for="SuperSize-option"></label>
-                      <span class="off-value"></span>
-                   </div> -->
-                </li>
-                <li class="answer_stylish_qs" ng:if="questions_list[questionIndex].question_type == 0 || questions_list[questionIndex].question_type == 1 || questions_list[questionIndex].question_type == 2">
-
-                  <div class="checkbox-toggle answer-settins">
-                     <input ng:change="unsaved_question_x(question_settings.choice_style)" ng:model="question_settings.choice_style" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                     <span class="title-checkbox">
-                       Style of Answer ( {>(question_settings.choice_style ) ? "Two columns per row" : "One column per row"<} )
+                      <div class="scale-options item-labels" ng:if="_questions_[question_index].answers_format[0].show_labels == true">
+                         <input ng:model="_questions_[question_index].answers_format[0].started_at" class="lab" type="text" placeholder="Left">
+                         <input ng:model="_questions_[question_index].answers_format[0].centered_at" class="lab" type="text" placeholder="Center">
+                         <input ng:model="_questions_[question_index].answers_format[0].ended_at" class="lab" type="text" placeholder="Right">
+                      </div>
+                    </li>
+                   <li class="steps_qs" ng:if="_questions_[question_index].question_type == 3 ">
+                         <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
+                           Steps ( {> _questions_[question_index].answers_format[0].step_numbers<} )
+                            <i class="help-links">?</i>
+                         </span>
+                         <div class="rating_scale_options">
+                             <input ng:model="_questions_[question_index].answers_format[0].step_numbers" ng:change="step_number_of_rating_scale(_questions_[question_index].answers_format[0].step_numbers)"  id="step_slider" min="2" max="10" type="range" name="">
+                         </div> <!-- Slide Range -->
+                    </li>
+                    <li  ng:if="_questions_[question_index].question_type == 4 ">
+                      <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
+                        Max characters ( ... )
                        <i class="help-links">?</i>
                      </span>
-                  </div>
-                  <!-- <div class="input_wrapper">
-                      <input ng:change="unsaved_question_x(question_settings.choice_style)" ng:model="question_settings.choice_style" type="checkbox" class="switch_4">
-                      <svg class="is_checked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.67 426.67">
-                        <path d="M153.504 366.84c-8.657 0-17.323-3.303-23.927-9.912L9.914 237.265c-13.218-13.218-13.218-34.645 0-47.863 13.218-13.218 34.645-13.218 47.863 0l95.727 95.727 215.39-215.387c13.218-13.214 34.65-13.218 47.86 0 13.22 13.218 13.22 34.65 0 47.863L177.435 356.928c-6.61 6.605-15.27 9.91-23.932 9.91z"/>
-                      </svg>
-                      <svg class="is_unchecked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982">
-                        <path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/>
-                      </svg>
-                  </div> -->
-                   <!-- <div class="slideThree on-off-checkbox-settings">
-                      <input ng:change="unsaved_question_x()" ng:model="question_settings.choice_style" type="checkbox" id="SingleResponse-option" name="check" checked="">
-                      <label for="SingleResponse-option"></label>
-                      <span class="off-value"></span>
-                   </div> -->
-                </li>
-                <li class="steps_qs" ng:if="questions_list[questionIndex].question_type == 3">
-                    <span class="title-checkbox"> Steps ( {>questions_list[questionIndex].answers_format[0].step_numbers<} )</span>
-                    <div class="rating_scale_options">
-                        <input ng:change="change_rating_scale_value(questions_list[questionIndex].answers_format[0].step_numbers , true , questionIndex , questions_list[questionIndex].answers_format[0]  )" ng:model="questions_list[questionIndex].answers_format[0].step_numbers" id="step_slider" min="2" max="10" type="range" name="">
-                    </div> <!-- Slide Range -->
-                </li>
-                <li ng:if="questions_list[questionIndex].question_type == 4">
-                 <span class="title-checkbox"> Max characters ( {>questions_list[questionIndex].answer_settings.answer_char_max<} ) </span>
-                 <div class="rating_scale_options">
-                     <input ng:change="unsaved_question_x(questions_list[questionIndex].answer_settings.answer_char_max , 'answer_char_max')" ng:model="questions_list[questionIndex].answer_settings.answer_char_max" id="char_max_slider" min="100" max="2000" type="range" name="">
-                 </div> <!-- Slide Range -->
-                </li>
-             </ul>
+                      <div class="rating_scale_options">
+                          <input id="char_max_slider" min="100" max="2000" type="range" name="">
+                      </div> <!-- Slide Range -->
+                     </li>
+
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
+      </li>
+    </ul>
+    <!--  Save Changes -->
+    <div class="editor-block btn-0-container">
+       <div class="buttons-container text-right">
+           <button ng:click="delete_the_current_question()" style="float:left;"  class="btn btn-danger-outline" type="button" name="button">
+                 Delete
+           </button>
+           <button ng:click="saving_this_question()" id="saving-changes" class="btn btn-primary-outline save_changes " type="button" name="button">
+                 Save Changes
+           </button>
        </div>
     </div>
-  </li>
-    </ul>
   </div>
-  <div class="clearFix"></div>
-</div>
-<div class="editor-block" style="padding-bottom:15px;">
-  <div class="buttons-container text-right">
-      <button style="float:left;" ng:click="delete_this_question()" class="btn btn-danger-outline" type="button" name="button">
-            Delete
-      </button>
-      <button id="saving-changes" ng:click="save_changes_in_angular_backend()" class="btn btn-primary-outline save_changes " type="button" name="button">
-            Save Changes
-      </button>
-  </div>
-</div>

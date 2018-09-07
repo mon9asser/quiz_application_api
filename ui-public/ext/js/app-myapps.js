@@ -15,7 +15,8 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
              title_start_with : "Write Starting Text"  ,
              title_end_with: "Write Ending Text" ,
              title_success_with : " Success quiz Text" ,
-             title_failed_with : "Quiz Failed Text"
+             title_failed_with : "Quiz Failed Text" ,
+             title_resume : "Quiz Resume Text"
            } ,
          label_btns : {
            lbl_start_with:"Start" ,
@@ -24,6 +25,7 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
            lbl_review_with : "Review" ,
            lbl_back_with : "Back",
            lbl_finish_with : "Finish",
+           lbl_resume_with : "Resume" ,
            lbl_submit_quiz_with : "Submit Quiz",
            lbl_score_with :"Score",
            lbl_grade_with :"Grade" ,
@@ -52,12 +54,13 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
          enable_screens : true ,
          progression_bar : {
            is_available:false ,
-           progression_bar_layout:0
+           progression_bar_layout:1
          } ,
          expiration : {
            is_set : false  ,
            through_time : 3 , // => it will be per day
-           title : "This quiz will expire after"
+           expire_warning : "This quiz will expire in next {{ date | long }} after {{ hour_counts }} hour(s)" ,
+           expire_message : "This Quiz is Expired from {{ time_ago }}  hour(s) ago !"
          } ,
         //  theme_style : [] ,
          randomize_settings : false ,

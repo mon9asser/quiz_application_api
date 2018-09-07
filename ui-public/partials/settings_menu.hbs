@@ -1,1507 +1,612 @@
-<!-- Redactor for texts  -->
-<div class="setting-text-redactor" id="redactor-editor-menu"></div>
-<div class="settings_menu">
-              <div class="setting-title">
-                  <span class="setting-iconx">
-                    <i class="fa fa-times close-menu-icon"></i>
-                  </span>
-                  <!-- <span class="setting-title-x">
-                    Settings
-                  </span> -->
-              </div>
-               <div class="right-menu-settings">
+<!-- Menu Navugation -->
+<div class="nav-container">
+    <div class="nav-wrapper">
+        <!-- Close Open  -->
+        <div ng:click="nav_container_manager(nav_status)" class="close_open_navbar_handler">
+          <span class="fa fa-cog"></span>
+        </div>
+        <!-- Nav header -->
+        <div class="navbar-header">
+          <span class="setting-title-x">
+            Settings
+          </span>
+        </div>
+        <!-- Sections -->
+        <ul class="second-nav">
 
-                         <ul class="app-settings">
-                           <li class="tasks" ng:click="first_load_css_part()">
-                              <div class="control-item-header">
-                                 <a href="#" class="icon-toggle">
-                                   <span class="caret-down fa fa-caret-down"></span>
-                                 </a>
-                                 <span class="text">Stylesheets</span>
-                              </div>
-                              <div class="control-item-content" >
-
-                               <div class="checkbox-toggle" style="
-                                   vertical-align: baseline;
-                                   display: inline-block;
-                                   width: 88%;
-                                   overflow: hidden;
-                                   display: block;
-                                   margin: 0px auto;
-                                   margin-top: 25px;
-                               ">
-                                  Block
-                                 <select ng:change="block_selector()" ng:model="editor_page" id="select-current-element" class="select-current-element">
-                                    <option data-target="welcome-screens" value="0">Welcome Screen</option>
-                                    <option data-target="goodbye-screens" value="1">GoodBye Screen</option>
-                                    <option data-target="result-screens" value="2">Result Screen</option> <!-- Case it quiz only -->
-
-                                    <option data-target="question-screens" value="3">Questions</option>
-                                    <!-- <option data-target="time-progress-box" value="4">Quiz Time & Progress bar</option>
-                                    <option data-target="player-page" value="5">Player Page</option> -->
-                                 </select>
-                               </div>
-
-                             <ul id="welcome-screens" class="stylesheet-properties-ul-block css_properties">
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('page-player')">
-                                  Player Page
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <div class="prop-item">
-                                     <span>Background</span>
-                                     <input ng:change="page_player_background_func()" class="color_picker" ng:model="page_player_background" type="text" name="" value="">
-                                   </div>
-                                 </div>
-                               </li>
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('page-player')">
-                                  Progress bar
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <div class="prop-item">
-                                     <span>Background</span>
-                                     <input ng:change="progress_bar_default_background_func()" class="color_picker" ng:model="progress_bar_default_background" type="text" name="" value="">
-                                   </div>
-                                   <div class="prop-item">
-                                     <span>Text Color</span>
-                                     <input ng:change="progress_bar_default_text_color_func()" class="color_picker" ng:model="progress_bar_default_text_color" type="text" name="" value="">
-                                   </div>
-                                   <div class="prop-item">
-                                     <span>Minutes Color</span>
-                                     <input ng:change="minute_color_word_func()" class="color_picker" ng:model="minute_color_word" type="text" name="" value="">
-                                   </div>
-                                   <div class="prop-item">
-                                     <span>Highlighted background</span>
-                                     <input ng:change="highlighted_background_func()" class="color_picker" ng:model="highlighted_background" type="text" name="" value="">
-                                   </div>
-                                   <div class="prop-item">
-                                     <span>Highlighted Borders</span>
-                                     <input ng:change="highlighted_borders_func()" class="color_picker" ng:model="highlighted_borders" type="text" name="" value="">
-                                   </div>
-                                 </div>
-                               </li>
-
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('page-player')">
-                                  Timer
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <div class="prop-item">
-                                     <span>Text Color</span>
-                                     <input ng:change="timer_text_color_func()" class="color_picker" ng:model="timer_text_color" type="text" name="" value="">
-                                   </div>
-                                   <div class="prop-item">
-                                     <span>Minutes Color</span>
-                                     <input ng:change="minute_color_word_func()" class="color_picker" ng:model="minute_color_word" type="text" name="" value="">
-                                   </div>
-                                   <div class="prop-item">
-                                     <span>Highlighted background</span>
-                                     <input ng:change="highlighted_background_func()" class="color_picker" ng:model="highlighted_background" type="text" name="" value="">
-                                   </div>
-                                   <div class="prop-item">
-                                     <span>Highlighted Borders</span>
-                                     <input ng:change="highlighted_borders_func()" class="color_picker" ng:model="highlighted_borders" type="text" name="" value="">
-                                   </div>
-                                 </div>
-                               </li>
-
-                               <li class="collapsed_properties">
-
-                                 <div class="property-name" ng:click="show_selected_element('box')">
-                                  Screen Box
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <!-- Colors  -->
-                                   <div class="prop-item">
-                                     <span>Background</span>
-                                     <input class="color_picker" ng:model="welcome_background_screen_box" ng:change="welcome_background_screen_box_func()" type="text" name="" value="">
-                                   </div>
-                                   <!-- Font size  -->
-                                   <div class="prop-item">
-                                     <span>Border</span>
-                                     <input class="color_picker" ng:model="welcome_border_color_screen_box" ng:change="welcome_border_color_screen_box_func()" type="text" name="" value="">
-                                     <div class="border-list">
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Left : </span>
-                                           <select ng:model="welcome_border_left_width_screen_box" ng:change="welcome_border_left_width_screen_box_func()" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:model="welcome_border_left_style_screen_box" ng:change="welcome_border_left_style_screen_box_func()" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Right : </span>
-                                           <select ng:model="welcome_border_right_width_screen_box" ng:change="welcome_border_right_width_screen_box_func()" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:model="welcome_border_right_style_screen_box" ng:change="welcome_border_right_style_screen_box_func()"  name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Top : </span>
-                                           <select ng:model="welcome_border_top_width_screen_box" ng:change="welcome_border_top_width_screen_box_func()" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:model="welcome_border_top_style_screen_box" ng:change="welcome_border_top_style_screen_box_func()" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Bottom : </span>
-                                           <select ng:model="welcome_border_bottom_width_screen_box" ng:change="welcome_border_bottom_width_screen_box_func()" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:model="welcome_border_bottom_style_screen_box" ng:change="welcome_border_bottom_style_screen_box_func()" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-                                     </div>
-                                   </div>
-                                 </div>
-                               </li>
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('screen-text')">
-                                  Screen Text
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <!-- Colors  -->
-                                   <div class="prop-item">
-                                     <span>Color</span>
-                                     <input class="color_picker" ng:model="screen_text_color_welcome_screen" ng:change="screen_text_color_welcome_screen_func()" type="text" name="" value="">
-                                   </div>
-                                   <!-- Font size  -->
-                                   <div class="prop-item">
-                                     <span>Font Size</span>
-                                     <input ng:model="screen_text_font_size_welcome_screen" ng:change="screen_text_font_size_welcome_screen_func()" type="range" name="" value="">
-                                   </div>
-                                   <!-- Font style  -->
-                                   <div class="prop-item">
-                                     <span>Font Style</span>
-                                     <select ng:change="screen_text_font_style_welcome_screen_func()" ng:model="screen_text_font_style_welcome_screen" class="" name="">
-                                       <option value="100">Regular</option>
-                                       <option value="bold">Bold</option>
-                                     </select>
-                                   </div>
-                                   <!-- Font Family  -->
-                                   <div class="prop-item">
-                                     <span>Font Family</span>
-                                     <select ng:change="screen_text_font_family_welcome_screen_func()" ng:model="screen_text_font_family_welcome_screen" class="" name="">
-                                        <option value="Roboto Regular">Roboto</option>
-                                        <option value="Open Sans">Open Sans</option>
-                                        <option value="Numbans Regular">Numbans Regular</option>
-                                        <option value="Petit Formal Script">Petit Formal Script</option>
-                                        <option value="coolvetica">coolvetica</option>
-                                        <option value="caliban">caliban</option>
-                                        <option value="aspergit">aspergit</option>
-                                        <option value="arctik">arctik</option>
-                                        <option value="arcon">arcon</option>
-                                        <option value="Tahoma">Tahoma</option>
-                                        <option value="sans-serif">Sans Serif</option>
-                                    </select>
-                                   </div>
-                                 </div>
-                               </li>
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('button')">
-                                   Buttons
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <!-- Colors  -->
-                                   <div class="prop-item">
-                                     <span>Background</span>
-                                     <input ng:change="button_background_screen_welcome_func()" class="color_picker" ng:model="button_background_screen_welcome" type="text" name="" value="">
-                                   </div>
-                                   <!-- Colors  -->
-                                   <div class="prop-item">
-                                     <span>Color</span>
-                                     <input ng:change="button_color_screen_welcome_func()" class="color_picker" ng:model="button_color_screen_welcome" type="text" name="" value="">
-                                   </div>
-                                   <!-- Font size  -->
-                                   <div class="prop-item">
-                                     <span>Font Size</span>
-                                     <input ng:change="button_font_size_screen_welcome_func()" ng:model="button_font_size_screen_welcome" type="range" name="" value="">
-                                   </div>
-                                 </div>
-                               </li>
-                             </ul>
-
-                             <!-- Goodbye Screen  -->
-                             <ul id="goodbye-screens" class="stylesheet-properties-ul-block css_properties">
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('box')">
-                                  Screen Box
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <!-- Colors  -->
-                                   <div class="prop-item">
-                                     <span>Background</span>
-                                     <input ng:change="goodbye_background_screen_box_func()" class="color_picker" ng:model="goodbye_background_screen_box" type="text" name="" value="">
-                                   </div>
-                                   <!-- Font size  -->
-                                   <div class="prop-item">
-                                     <span>Border</span>
-                                     <input ng:change="goodbye_border_color_screen_box_func()" class="color_picker" ng:model="goodbye_border_color_screen_box" type="text" name="" value="">
-                                     <div class="border-list">
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Left : </span>
-                                           <select ng:change="goodbye_border_width_left_screen_box_func()" ng:model="goodbye_border_width_left_screen_box" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:change="goodbye_border_style_left_screen_box_func()" ng:model="goodbye_border_style_left_screen_box" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Right : </span>
-                                           <select ng:change="goodbye_border_width_right_screen_box_func()" ng:model="goodbye_border_width_right_screen_box" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:change="goodbye_border_style_right_screen_box_func()" ng:model="goodbye_border_style_right_screen_box" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Top : </span>
-                                           <select ng:change="goodbye_border_width_top_screen_box_func()" ng:model="goodbye_border_width_top_screen_box" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:change="goodbye_border_style_top_screen_box_func()" ng:model="goodbye_border_style_top_screen_box" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Bottom : </span>
-                                           <select ng:change="goodbye_border_width_bottom_screen_box_func()" ng:model="goodbye_border_width_bottom_screen_box" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:change="goodbye_border_style_bottom_screen_box_func()" ng:model="goodbye_border_style_bottom_screen_box" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-                                     </div>
-                                   </div>
-                                 </div>
-                               </li>
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('screen-text')">
-                                  Screen Text
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <!-- Colors  -->
-                                   <div class="prop-item">
-                                     <span>Color</span>
-                                     <input ng:change="screen_text_color_goodbye_screen_func()" class="color_picker" ng:model="screen_text_color_goodbye_screen" type="text" name="" value="">
-                                   </div>
-                                   <!-- Font size  -->
-                                   <div class="prop-item">
-                                     <span>Font Size</span>
-                                     <input ng:change="screen_text_font_size_goodbye_screen_func()" ng:model='screen_text_font_size_goodbye_screen' type="range" name="" value="">
-                                   </div>
-                                   <!-- Font style  -->
-                                   <div class="prop-item">
-                                     <span>Font Style</span>
-                                     <select ng:change="screen_text_font_style_goodbye_screen_func()" ng:model="screen_text_font_style_goodbye_screen" class="" name="">
-                                       <option value="100">Regular</option>
-                                       <option value="bold">Bold</option>
-                                     </select>
-                                   </div>
-                                   <!-- Font Family  -->
-                                   <div class="prop-item">
-                                     <span>Font Family</span>
-                                     <select ng:change="screen_text_font_family_goodbye_screen_func()" ng:model="screen_text_font_family_goodbye_screen" class="" name="">
-                                       <option value="Roboto Regular">Roboto</option>
-                                       <option value="Open Sans">Open Sans</option>
-                                       <option value="Numbans Regular">Numbans Regular</option>
-                                       <option value="Petit Formal Script">Petit Formal Script</option>
-                                       <option value="coolvetica">coolvetica</option>
-                                       <option value="caliban">caliban</option>
-                                       <option value="aspergit">aspergit</option>
-                                       <option value="arctik">arctik</option>
-                                       <option value="arcon">arcon</option>
-                                       <option value="Tahoma">Tahoma</option>
-                                       <option value="sans-serif">Sans Serif</option>
-                                     </select>
-                                   </div>
-                                 </div>
-                               </li>
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('warning-text')">
-                                   Warning Text
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <div class="prop-item">
-                                     <span>Font Size</span>
-                                     <input ng:change="warning_text_font_size_screen_goodbye_func()" ng:model="warning_text_font_size_screen_goodbye" type="range" name="" value="">
-                                    </div>
-                                    <div class="prop-item">
-                                     <span>Color</span>
-                                    <input ng:change="warning_text_color_screen_goodbye_func()" class="color_picker" ng:model="warning_text_color_screen_goodbye" type="text" name="" value="">
-                                    </div>
-                                    <div class="prop-item">
-                                      <span>Background</span>
-                                      <input ng:change="warning_text_background_screen_box_func()" class="color_picker" ng:model="warning_text_background_screen_box" type="text" name="" value="">
-                                    </div>
-                                 </div>
-                               </li>
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('button')">
-                                   Buttons
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <!-- Font size  -->
-                                   <div class="prop-item">
-                                     <span>Font Size</span>
-                                     <input ng:change="button_buttons_font_size_screen_goodbye_func()" ng:model="button_buttons_font_size_screen_goodbye" type="range" name="" value="">
-                                    </div>
-                                    <div class="button-name">
-                                      <div class="button-containers">
-                                        <span>Back Button</span>
-                                        <div class="btn-porperties">
-                                          <span>Background</span>
-                                          <input ng:change="back_button_background_screen_goodbye_func()" class="color_picker" ng:model="back_button_background_screen_goodbye" type="text" name="" value="">
-                                        </div>
-                                        <div class="btn-porperties">
-                                          <span>Color</span>
-                                          <input ng:change="back_button_color_screen_goodbye_func()" class="color_picker" ng:model="back_button_color_screen_goodbye" type="text" name="" value="">
-                                        </div>
-                                      </div>
-                                      <div class="button-containers">
-                                        <span>Start Button</span>
-                                        <div class="btn-porperties">
-                                          <span>Background</span>
-                                          <input ng:change="start_button_background_screen_goodbye_func()" class="color_picker" ng:model="start_button_background_screen_goodbye" type="text" name="" value="">
-                                        </div>
-                                        <div class="btn-porperties">
-                                          <span>Color</span>
-                                          <input ng:change="start_button_color_screen_goodbye_func()" class="color_picker" ng:model="start_button_color_screen_goodbye" type="text" name="" value="">
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                 </div>
-                               </li>
-                             </ul>
-
-
-                             <!-- Result Screen  -->
-                             <ul id="result-screens" class="stylesheet-properties-ul-block css_properties">
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('box')">
-                                  Screen Box
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <!-- Colors  -->
-                                   <div class="prop-item">
-                                     <span>Background</span>
-                                     <input ng:change="result_background_screen_box_func()" class="color_picker" ng:model="result_background_screen_box" type="text" name="" value="">
-                                   </div>
-                                   <!-- Font size  -->
-                                   <div class="prop-item">
-                                     <span>Border</span>
-                                     <input ng:change="result_border_color_screen_box_func()" class="color_picker" ng:model="result_border_color_screen_box" type="text" name="" value="">
-                                     <div class="border-list">
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Left : </span>
-                                           <select ng:change="resule_border_width_left_screen_box_func()" ng:model="resule_border_width_left_screen_box" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:change="resule_border_style_left_screen_box_func()" ng:model="resule_border_style_left_screen_box" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Right : </span>
-                                           <select ng:change="resule_border_width_right_screen_box_func()" ng:model="resule_border_width_right_screen_box" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:change="resule_border_style_right_screen_box_func()" ng:model="resule_border_style_right_screen_box" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Top : </span>
-                                           <select ng:change="resule_border_width_top_screen_box_func()" ng:model="resule_border_width_top_screen_box" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:change="resule_border_style_top_screen_box_func()" ng:model="resule_border_style_top_screen_box" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Bottom : </span>
-                                           <select ng:change="resule_border_width_bottom_screen_box_func()" ng:model="resule_border_width_bottom_screen_box" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:change="resule_border_style_bottom_screen_box_func()" ng:model="resule_border_style_bottom_screen_box" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-                                     </div>
-                                   </div>
-                                 </div>
-                               </li>
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('screen-text')">
-                                  Resule Text
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <!-- Colors  -->
-                                   <div class="prop-item">
-                                     <span>Color</span>
-                                     <input class="color_picker" ng:change="screen_text_color_result_screen_func()" ng:model="screen_text_color_result_screen" type="text" name="" value="">
-                                   </div>
-                                   <!-- Font size  -->
-                                   <div class="prop-item">
-                                     <span>Font Size</span>
-                                     <input ng:change="screen_text_font_size_result_screen_func()" ng:model="screen_text_font_size_result_screen" type="range" name="" value="">
-                                   </div>
-                                   <!-- Font style  -->
-                                   <div class="prop-item">
-                                     <span>Font Style</span>
-                                     <select ng:change="screen_text_font_style_result_screen_func()" ng:model="screen_text_font_style_result_screen" class="" name="">
-                                       <option value="100">Regular</option>
-                                       <option value="bold">Bold</option>
-                                     </select>
-                                   </div>
-                                   <!-- Font Family  -->
-                                   <div class="prop-item">
-                                     <span>Font Family</span>
-                                     <select ng:change="screen_text_font_family_result_screen_func()" ng:model="screen_text_font_family_result_screen" class="" name="">
-                                       <option value="Roboto Regular">Roboto</option>
-                                       <option value="Open Sans">Open Sans</option>
-                                       <option value="Numbans Regular">Numbans Regular</option>
-                                       <option value="Petit Formal Script">Petit Formal Script</option>
-                                       <option value="coolvetica">coolvetica</option>
-                                       <option value="caliban">caliban</option>
-                                       <option value="aspergit">aspergit</option>
-                                       <option value="arctik">arctik</option>
-                                       <option value="arcon">arcon</option>
-                                       <option value="Tahoma">Tahoma</option>
-                                       <option value="sans-serif">Sans Serif</option>
-                                     </select>
-                                   </div>
-                                 </div>
-                               </li>
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('score-text')">
-                                 Score Text
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <!-- Colors  -->
-                                   <div class="prop-item">
-                                     <span>Color</span>
-                                     <input ng:change="score_result_text_color_func()" class="color_picker" ng:model="score_result_text_color" type="text" name="" value="">
-                                   </div>
-                                   <!-- Font size  -->
-                                   <div class="prop-item">
-                                     <span>Font Size</span>
-                                     <input ng:change="score_result_text_font_size_func()" ng:model="score_result_text_font_size" type="range" name="" value="">
-                                   </div>
-                                   <!-- Font style  -->
-                                   <div class="prop-item">
-                                     <span>Font Style</span>
-                                     <select ng:change="score_result_text_font_style_func()" ng:model="score_result_text_font_style" class="" name="">
-                                       <option value="100">Regular</option>
-                                       <option value="bold">Bold</option>
-                                     </select>
-                                   </div>
-                                   <!-- Font Family  -->
-                                   <div class="prop-item">
-                                     <span>Font Family</span>
-                                     <select ng:change="score_result_text_font_family_func()" ng:model="score_result_text_font_family" class="" name="">
-                                       <option value="Roboto Regular">Roboto</option>
-                                       <option value="Open Sans">Open Sans</option>
-                                       <option value="Numbans Regular">Numbans Regular</option>
-                                       <option value="Petit Formal Script">Petit Formal Script</option>
-                                       <option value="coolvetica">coolvetica</option>
-                                       <option value="caliban">caliban</option>
-                                       <option value="aspergit">aspergit</option>
-                                       <option value="arctik">arctik</option>
-                                       <option value="arcon">arcon</option>
-                                       <option value="Tahoma">Tahoma</option>
-                                       <option value="sans-serif">Sans Serif</option>
-                                     </select>
-                                   </div>
-                                 </div>
-                               </li>
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('grade-text')">
-                                  Grade Text
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <!-- Colors  -->
-                                   <div class="prop-item">
-                                     <span>Color</span>
-                                     <input ng:change="grade_result_text_color_func()" class="color_picker" ng:model="grade_result_text_color" type="text" name="" value="">
-                                   </div>
-                                   <!-- Font size  -->
-                                   <div class="prop-item">
-                                     <span>Font Size</span>
-                                     <input ng:change="grade_result_text_font_size_func()" ng:model="grade_result_text_font_size" type="range" name="" value="">
-                                   </div>
-
-                                   <!-- Font style  -->
-                                   <div class="prop-item">
-                                     <span>Font Style</span>
-                                     <select ng:change="grade_result_text_font_style_func()" ng:model="grade_result_text_font_style" class="" name="">
-                                       <option value="100">Regular</option>
-                                       <option value="bold">Bold</option>
-                                     </select>
-                                   </div>
-                                   <!-- Font Family  -->
-                                   <div class="prop-item">
-                                     <span>Font Family</span>
-                                     <select ng:change="grade_result_text_font_family_func()" ng:model="grade_result_text_font_family" class="" name="">
-                                       <option value="Roboto Regular">Roboto</option>
-                                       <option value="Open Sans">Open Sans</option>
-                                       <option value="Numbans Regular">Numbans Regular</option>
-                                       <option value="Petit Formal Script">Petit Formal Script</option>
-                                       <option value="coolvetica">coolvetica</option>
-                                       <option value="caliban">caliban</option>
-                                       <option value="aspergit">aspergit</option>
-                                       <option value="arctik">arctik</option>
-                                       <option value="arcon">arcon</option>
-                                       <option value="Tahoma">Tahoma</option>
-                                       <option value="sans-serif">Sans Serif</option>
-                                     </select>
-                                   </div>
-                                 </div>
-                               </li>
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('button')">
-                                   Buttons
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <!-- Font size  -->
-                                   <div class="prop-item">
-                                     <span>Font Size</span>
-                                     <input ng:change="button_buttons_font_size_screen_result_func()" ng:model="button_buttons_font_size_screen_result" type="range" name="" value="">
-                                    </div>
-                                    <div class="button-name">
-                                      <div class="button-containers">
-                                        <span>Review Button</span>
-                                        <div class="btn-porperties">
-                                          <span>Background</span>
-                                          <input ng:change="review_button_background_screen_result_func()" class="color_picker" ng:model="review_button_background_screen_result" type="text" name="" value="">
-                                        </div>
-                                        <div class="btn-porperties">
-                                          <span>Color</span>
-                                          <input ng:change="review_button_color_screen_result_func()" class="color_picker" ng:model="review_button_color_screen_result" type="text" name="" value="">
-                                        </div>
-                                      </div>
-                                      <div class="button-containers">
-                                        <span>Retake Button</span>
-                                        <div class="btn-porperties">
-                                          <span>Background</span>
-                                          <input ng:change="retake_button_background_screen_result_func()" class="color_picker" ng:model="retake_button_background_screen_result" type="text" name="" value="">
-                                        </div>
-                                        <div class="btn-porperties">
-                                          <span>Color</span>
-                                          <input ng:change="retake_button_color_screen_result_func()" class="color_picker" ng:model="retake_button_color_screen_result" type="text" name="" value="">
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                 </div>
-                               </li>
-                             </ul>
-
-                             <!-- Question Screens -->
-                             <ul id="question-screens" class="stylesheet-properties-ul-block css_properties">
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('box')">
-                                  Screen Box
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <!-- Background  -->
-                                   <div class="prop-item">
-                                     <span>Background</span>
-                                     <input ng:change="question_screen_background_func()" class="color_picker" ng:model="question_screen_background" type="text" name="" value="">
-                                   </div>
-                                   <!-- Font size  -->
-                                   <div class="prop-item">
-                                     <span>Border</span>
-                                     <input class="color_picker" ng:change="question_screen_border_color_func()" ng:model="question_screen_border_color" type="text" name="" value="">
-                                     <div class="border-list">
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Left : </span>
-                                           <select ng:change="question_border_width_left_screen_box_func()" ng:model="question_border_width_left_screen_box" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:change="question_border_style_left_screen_box_func()" ng:model="question_border_style_left_screen_box" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Right : </span>
-                                           <select ng:change="question_border_width_right_screen_box_func()" ng:model="question_border_width_right_screen_box" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:change="question_border_style_right_screen_box_func()" ng:model="question_border_style_right_screen_box" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Top : </span>
-                                           <select ng:change="question_border_width_top_screen_box_func()" ng:model="question_border_width_top_screen_box" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:change="question_border_style_top_screen_box_func()" ng:model="question_border_style_top_screen_box"  name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Bottom : </span>
-                                           <select ng:change="question_border_width_bottom_screen_box_func()" ng:model="question_border_width_bottom_screen_box" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:change="question_border_style_bottom_screen_box_func()" ng:model="question_border_style_bottom_screen_box"  name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-                                     </div>
-                                   </div>
-                                 </div>
-                               </li>
-                               <li class="collapsed_properties">
-                                  <div class="property-name" ng:click="show_selected_element('question-text')">
-                                    Question Text
-                                   </div>
-                                   <div class="property-blocks text-right">
-                                     <!-- Colors  -->
-                                     <div class="prop-item">
-                                       <span>Color</span>
-                                       <input ng:change="screen_text_color_question_screen_func()" class="color_picker" ng:model="screen_text_color_question_screen" type="text" name="" value="">
-                                     </div>
-                                     <!-- Font size  -->
-                                     <div class="prop-item">
-                                       <span>Font Size</span>
-                                       <input ng:change="screen_text_font_size_question_screen_func()" ng:model="screen_text_font_size_question_screen" type="range" name="" value="">
-                                     </div>
-                                     <!-- Font style  -->
-                                     <div class="prop-item">
-                                       <span>Font Style</span>
-                                       <select  ng:change="screen_text_font_style_question_screen_func()" ng:model="screen_text_font_style_question_screen" class="" name="">
-                                         <option value="100">Regular</option>
-                                         <option value="bold">Bold</option>
-                                       </select>
-                                     </div>
-                                     <!-- Font Family  -->
-                                     <div class="prop-item">
-                                       <span>Font Family</span>
-                                       <select ng:change="screen_text_font_family_question_screen_func()" ng:model="screen_text_font_family_question_screen" class="" name="">
-                                         <option value="Roboto Regular">Roboto</option>
-                                         <option value="Open Sans">Open Sans</option>
-                                         <option value="Numbans Regular">Numbans Regular</option>
-                                         <option value="Petit Formal Script">Petit Formal Script</option>
-                                         <option value="coolvetica">coolvetica</option>
-                                         <option value="caliban">caliban</option>
-                                         <option value="aspergit">aspergit</option>
-                                         <option value="arctik">arctik</option>
-                                         <option value="arcon">arcon</option>
-                                         <option value="Tahoma">Tahoma</option>
-                                         <option value="sans-serif">Sans Serif</option>
-                                       </select>
-                                     </div>
-                                     <!-- Border -->
-                                     <div class="prop-item">
-                                       <span>Border</span>
-                                       <input class="color_picker" ng:change="question_text_screen_border_color_func()" ng:model="question_text_screen_border_color" type="text" name="" value="">
-                                       <div class="border-list">
-                                         <div style="margin-top:5px;" class="border-actx">
-                                             <span> - Left : </span>
-                                             <select ng:change="question_text_border_width_left_screen_box_func()" ng:model="question_text_border_width_left_screen_box" name="" class="select-box border-width-property-top">
-                                               <option value="0px">None</option>
-                                               <option value="1px">1px</option>
-                                               <option value="2px">2px</option>
-                                               <option value="3px">3px</option>
-                                               <option value="4px">4px</option>
-                                               <option value="5px">5px</option>
-                                             </select>
-                                             <select ng:change="question_text_border_style_left_screen_box_func()" ng:model="question_text_border_style_left_screen_box" name="" class="select-box border-type-property-top">
-                                               <option value="solid">Solid</option>
-                                               <option value="dashed">Dashed</option>
-                                               <option value="dotted">Dotted</option>
-                                             </select>
-                                         </div>
-                                       </div>
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Right : </span>
-                                           <select ng:change="question_text_border_width_right_screen_box_func()" ng:model="question_text_border_width_right_screen_box" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:change="question_text_border_style_right_screen_box_func()" ng:model="question_text_border_style_right_screen_box" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Top : </span>
-                                           <select ng:change="question_text_border_width_top_screen_box_func()" ng:model="question_text_border_width_top_screen_box" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:change="question_text_border_style_top_screen_box_func()" ng:model="question_text_border_style_top_screen_box" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-                                       <div style="margin-top:5px;" class="border-actx">
-                                           <span> - Bottom : </span>
-                                           <select ng:change="question_text_border_width_bottom_screen_box_func()" ng:model="question_text_border_width_bottom_screen_box" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                           <select ng:change="question_text_border_style_bottom_screen_box_func()" ng:model="question_text_border_style_bottom_screen_box" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                       </div>
-                                     </div>
-                                     <!-- Numerical Properties  -->
-                                     <div class="button-name">
-                                       <div class="button-containers" style="width: 100%;">
-                                         <span>Numbering</span>
-                                         <div class="btn-porperties">
-                                           <span>Background</span>
-                                           <input ng:change="question_screen_numbering_background_func()" class="color_picker" ng:model="question_screen_numbering_background" type="text" name="" value="">
-                                         </div>
-                                         <div class="btn-porperties">
-                                           <span>Color</span>
-                                           <input ng:change="question_screen_numbering_color_func()" class="color_picker" ng:model="question_screen_numbering_color" type="text" name="" value="">
-                                         </div>
-                                         <!-- <div class="btn-porperties">
-                                           <span>Font Size</span>
-                                           <input ng:change="apply_these_stylesheet()" ng:model="question_screen_numbering_font_size" type="range" name="" value="" style="    margin-top: 19px;">
-                                         </div> -->
-                                       </div>
-                                     </div>
-                                   </div>
-                               </li>
-                               <li class="collapsed_properties">
-                                  <div class="property-name" ng:click="show_selected_element('answer-text')">
-                                    Answer Text
-                                   </div>
-                                   <div class="property-blocks text-right">
-                                     <!-- Colors  -->
-                                     <div class="prop-item">
-                                       <span>Background</span>
-                                       <input ng:change="answer_screen_background_func()" class="color_picker" ng:model="answer_screen_background" type="text" name="" value="">
-                                     </div>
-                                     <!-- Colors  -->
-                                     <div class="prop-item">
-                                       <span>Color</span>
-                                       <input ng:change="answer_row_colors_func()" class="color_picker" ng:model="answer_row_colors" type="text" name="" value="">
-                                     </div>
-                                     <!-- Font size  -->
-                                     <div class="prop-item">
-                                       <span>Font Size</span>
-                                       <input ng:change="answer_row_font_size_func()" ng:model="answer_row_font_size" type="number" name="" min="10" max="25" value="12">
-                                     </div>
-                                     <!-- Font style  -->
-                                     <div class="prop-item">
-                                       <span>Font Style</span>
-                                       <select ng:change="answer_row_font_style_func()" ng:model="answer_row_font_style" class="" name="">
-                                          <option value="100">Regular</option>
-                                          <option value="bold">Bold</option>
-                                       </select>
-                                     </div>
-                                     <!-- Font Family  -->
-                                     <div class="prop-item">
-                                       <span>Font Family</span>
-                                       <select ng:change="answer_row_font_family_func()" ng:model="answer_row_font_family" class="" name="">
-                                         <option value="Roboto Regular">Roboto</option>
-                                         <option value="Open Sans">Open Sans</option>
-                                         <option value="Numbans Regular">Numbans Regular</option>
-                                         <option value="Petit Formal Script">Petit Formal Script</option>
-                                         <option value="coolvetica">coolvetica</option>
-                                         <option value="caliban">caliban</option>
-                                         <option value="aspergit">aspergit</option>
-                                         <option value="arctik">arctik</option>
-                                         <option value="arcon">arcon</option>
-                                         <option value="Tahoma">Tahoma</option>
-                                         <option value="sans-serif">Sans Serif</option>
-                                       </select>
-                                     </div>
-                                     <!-- Numerical Properties  -->
-                                     <div class="button-name">
-                                       <div class="button-containers" style="width: 100%;">
-                                         <span>Numbering</span>
-                                         <div class="btn-porperties x-change-mtop">
-                                           <span>Background</span>
-                                           <input ng:change="numbering_in_answer_background_func()" class="color_picker" ng:model="numbering_in_answer_background" type="text" name="" value="">
-                                         </div>
-                                         <div class="btn-porperties x-change-mtop">
-                                           <span>Color</span>
-                                           <input ng:change="numbering_in_answer_color_func()" class="color_picker" ng:model="numbering_in_answer_color" type="text" name="" value="">
-                                         </div>
-                                         <div class="btn-porperties x-change-mtop">
-                                           <span>Font Size</span>
-                                           <input ng:change="numbering_in_answer_font_size_func()" ng:model="numbering_in_answer_font_size" style="width:auto;" type="number" name="" value="" min="10" max="25">
-                                         </div>
-                                         <div class="btn-porperties x-change-mtop">
-                                           <span>Font Family</span>
-                                           <select ng:change="numbering_in_answer_font_family_func()" ng:model="numbering_in_answer_font_family" class="x-font-famselectbox" name="">
-                                              <option value="Roboto Regular">Roboto</option>
-                                              <option value="Open Sans">Open Sans</option>
-                                              <option value="Numbans Regular">Numbans Regular</option>
-                                              <option value="Petit Formal Script">Petit Formal Script</option>
-                                              <option value="coolvetica">coolvetica</option>
-                                              <option value="caliban">caliban</option>
-                                              <option value="aspergit">aspergit</option>
-                                              <option value="arctik">arctik</option>
-                                              <option value="arcon">arcon</option>
-                                              <option value="Tahoma">Tahoma</option>
-                                              <option value="sans-serif">Sans Serif</option>
-                                          </select>
-                                         </div>
-                                         <div class="btn-porperties x-change-mtop">
-                                           <span>Border Color</span>
-                                           <input ng:change="numbering_in_answer_border_color_func()" class="color_picker" ng:model="numbering_in_answer_border_color" type="text" name="" value="">
-                                         </div>
-                                         <div class="btn-porperties x-change-mtop">
-                                           <span>Border Width</span>
-                                           <select ng:model="numbering_in_answer_border_width" ng:change="numbering_in_answer_border_width_func()" name="" class="select-box border-width-property-top">
-                                             <option value="0px">None</option>
-                                             <option value="1px">1px</option>
-                                             <option value="2px">2px</option>
-                                             <option value="3px">3px</option>
-                                             <option value="4px">4px</option>
-                                             <option value="5px">5px</option>
-                                           </select>
-                                         </div>
-                                         <div class="btn-porperties x-change-mtop">
-                                           <span>Border Style</span>
-                                           <select ng:change="numbering_in_answer_border_style_func()" ng:model="numbering_in_answer_border_style" name="" class="select-box border-type-property-top">
-                                             <option value="solid">Solid</option>
-                                             <option value="dashed">Dashed</option>
-                                             <option value="dotted">Dotted</option>
-                                           </select>
-                                         </div>
-                                         <div class="btn-porperties x-change-mtop">
-                                           <span>Border Radius</span>
-                                           <input ng:change="numbering_in_answer_border_radius_func()" ng:model="numbering_in_answer_border_radius" style="width:auto;" type="number" name="" value="" min="0" max="50">
-                                         </div>
-
-                                       </div>
-                                     </div>
-                                     <!-- Select Answer  -->
-                                     <!-- <div class="button-name">
-                                       <div class="button-containers" style="width: 100%;">
-                                         <span>Selected answer</span>
-                                         <div class="btn-porperties">
-                                           <span>Background</span>
-                                           <input ng:change="answer_select_screen_background_func()" class="color_picker" ng:model="answer_select_screen_background" type="text" name="" value="">
-                                         </div>
-                                         <div class="btn-porperties">
-                                           <span>Color</span>
-                                           <input ng:change="answer_select_screen_color_func()" class="color_picker" ng:model="answer_select_screen_color" type="text" name="" value="">
-                                         </div>
-                                         <div class="btn-porperties">
-                                           <span>Border Color</span>
-                                           <input ng:change="answer_select_screen_border_func()" class="color_picker" ng:model="answer_select_screen_border" type="text" name="" value="">
-                                         </div>
-                                       </div>
-                                     </div> -->
-                                     <!-- Select Answer  -->
-                                     <!-- <div class="button-name">
-                                       <div class="button-containers" style="width: 100%;">
-                                         <span>Correct answer</span>
-                                         <div class="btn-porperties">
-                                           <span>Background</span>
-                                           <input ng:change="correct_select_screen_background_func()" class="color_picker" ng:model="correct_select_screen_background" type="text" name="" value="">
-                                         </div>
-                                         <div class="btn-porperties">
-                                           <span>Color</span>
-                                           <input ng:change="correct_select_screen_color_func()" class="color_picker" ng:model="correct_select_screen_color" type="text" name="" value="">
-                                         </div>
-                                         <div class="btn-porperties">
-                                           <span>Border Color</span>
-                                           <input ng:change="correct_select_screen_border_func()" class="color_picker" ng:model="correct_select_screen_border" type="text" name="" value="">
-                                         </div>
-                                       </div>
-                                     </div> -->
-
-                                     <!-- Wrong Answer  -->
-                                     <!-- <div class="button-name">
-                                       <div class="button-containers" style="width: 100%;">
-                                         <span>Wrong answer</span>
-                                         <div class="btn-porperties">
-                                           <span>Background</span>
-                                           <input ng:change="wrong_select_screen_background_func()" class="color_picker" ng:model="wrong_select_screen_background" type="text" name="" value="">
-                                         </div>
-                                         <div class="btn-porperties">
-                                           <span>Color</span>
-                                           <input ng:change="wrong_select_screen_color_func()" class="color_picker" ng:model="wrong_select_screen_color" type="text" name="" value="">
-                                         </div>
-                                         <div class="btn-porperties">
-                                           <span>Border Color</span>
-                                           <input ng:change="wrong_select_screen_border_func()" class="color_picker" ng:model="wrong_select_screen_border" type="text" name="" value="">
-                                         </div>
-                                       </div>
-                                     </div> -->
-                                   </div>
-                               </li>
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('required-text')">
-                                   Required Text
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <!-- Font size  -->
-                                    <div class="prop-item">
-                                     <span>Font Size</span>
-                                     <input ng:change="question_screen_font_size_required_text_func()" ng:model="question_screen_font_size_required_text" type="range" name="" value="">
-                                    </div>
-                                    <div class="prop-item">
-                                     <span>Color</span>
-                                    <input ng:change="question_screen_color_required_text_func()" class="color_picker" ng:model="question_screen_color_required_text" type="text" name="" value="">
-                                    </div>
-                                 </div>
-                               </li>
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('warning-text')">
-                                   Warning Text
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <!-- Font size  -->
-                                    <div class="prop-item">
-                                     <span>Font Size</span>
-                                     <input ng:change="question_didnot_warning_text_font_size_func()" ng:model="question_didnot_warning_text_font_size" style="width:auto;" min="12" max="25" type="number" name="" value="">
-                                    </div>
-                                    <div class="prop-item">
-                                     <span>Color</span>
-                                    <input ng:change="question_didnot_warning_text_color_func()" class="color_picker" ng:model="question_didnot_warning_text_color" type="text" name="" value="">
-                                    </div>
-                                    <div class="prop-item">
-                                     <span>Background</span>
-                                     <input ng:change="question_didnot_warning_text_background_func()" class="color_picker" ng:model="question_didnot_warning_text_background" type="text" name="" value="">
-                                    </div>
-                                 </div>
-                               </li>
-                               <li class="collapsed_properties">
-                                 <div class="property-name" ng:click="show_selected_element('button')">
-                                   Buttons
-                                 </div>
-                                 <div class="property-blocks text-right">
-                                   <!-- Font size  -->
-                                   <!-- <div class="prop-item">
-                                     <span>Font Size</span>
-                                     <input ng:change="apply_these_stylesheet()" ng:model="question_screen_font_size_button" type="range" name="" value="">
-                                    </div> -->
-                                    <div class="button-name">
-                                      <div class="button-containers">
-                                        <span>Back Button</span>
-                                        <div class="btn-porperties">
-                                          <span>Background</span>
-                                          <input ng:change="back_question_button_bg_action()" class="color_picker" ng:model="back_question_button_background_v" type="text" name="" value="">
-                                        </div>
-                                        <div class="btn-porperties">
-                                          <span>Color</span>
-                                          <input ng:change="back_question_button_color_func()" class="color_picker" ng:model="back_question_button_color" type="text" name="" value="">
-                                        </div>
-                                      </div>
-                                      <div class="button-containers">
-                                        <span>Continue Button</span>
-                                        <div class="btn-porperties">
-                                          <span>Background</span>
-                                          <input ng:change="continue_question_button_background_func()" class="color_picker" ng:model="continue_question_button_background" type="text" name="" value="">
-                                        </div>
-                                        <div class="btn-porperties">
-                                          <span>Color</span>
-                                          <input ng:change="continue_question_button_color_func()"   class="color_picker" ng:model="continue_question_button_color" type="text" name="" value="">
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                 </div>
-                               </li>
-                             </ul>
-
-
-
-
-                              </div>
-                           </li>
-                          <li class="tasks">
-                             <div class="control-item-header">
-                                <a href="#" class="icon-toggle">
-                                  <span class="caret-down fa fa-caret-down"></span>
-                                </a>
-                                <span class="text">General</span>
-                             </div>
-                             <div class="control-item-content open" style="height: auto;">
-                                <!-- <div class="control-item-content-text">
-                                   <span>Quiz Name</span>
-                                   <input ng:change="update_settings_in_view()" class="quiz-titlex " type="text" name="" value="" placeholder="Quiz Title">
-                                   </div> -->
-                                <div class="control-item-content-text">
-                                  <div class="passing-grad-block">
-                                    <div class="checkbox-toggle">
-                                        <label class="labels-options lblxoption"> {> (application_settings.app_type == 0 ) ? "Survey" :"Quiz" <} Title</label>
-                                        <input ng:change="update_settings_in_view()" class="checkbox-toggle input-app-title" type="text" placeholder="App title" name="" ng:model="application_settings.questionnaire_title">
-                                    </div>
-                                  </div>
-                                  <div class="passing-grad-block">
-                                     <div class="checkbox-toggle">
-                                        <input style="margin-top: 11px;" ng:change="update_grade_settings()" ng:model="application_settings.settings.grade_settings.is_graded" type="checkbox" id="check-toggle-2xxxx" ng:checked='is_disabled' class="switch_1 input-checkboxes">
-                                        <label style="margin-top: 12px; margin-left: 15px;" class="labels-options" for="check-toggle-2xxxx">Passing Grade</label>
-                                        <input max="100" min="50" ng:change="update_settings_in_view()" ng:model="application_settings.settings.grade_settings.value" id="pass-grade-value" type="number" value="" name="demo1" class="form-control number-pass-grade" placeholder="Ex. 85%" ng:disabled="is_disabled_act" style="display: block;">
-                                     </div>
-                                  </div>
-
-                                   <!-- <div class="form-group">
-                                      <div class="input-group bootstrap-touchspin xbootstrap-touchspin">
-                                         <span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-                                      </div>
-                                   </div> -->
-                                   <!--
-                                   +++++++++++++++++++++++++++++++++++++++++++
-                                    ==============>>> Question Labels
-                                   +++++++++++++++++++++++++++++++++++++++++++
-                                  -->
-                                  <div class="passing-grad-block">
-                                     <div class="checkbox-toggle">
-                                        <table class="label-table">
-                                          <tr>
-                                            <td>
-                                              Indexes
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td>
-                                              <label class="labels-options" for="check-toggle-2">For questions</label>
-                                            </td>
-                                            <td>
-                                              <select ng:change="update_settings_in_view()" ng:model="application_settings.settings.indexes.questions" class="select-numbers">
-                                                  <option value="0">Numberical</option>
-                                                  <option value="1">Alphabetical</option>
-                                              </select>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td>
-                                              <label class="labels-options" for="check-toggle-2">For Answers</label>
-                                            </td>
-                                            <td>
-                                              <select ng:change="update_settings_in_view()" ng:model="application_settings.settings.indexes.answers" class="select-numbers">
-                                                  <option value="0">Numberical</option>
-                                                  <option value="1">Alphabetical</option>
-                                              </select>
-                                            </td>
-                                          </tr>
-                                        </table>
-                                     </div>
-                                  </div>
-
-                                </div>
-                                <div class="control-item-content-text">
-                                   <div class="passing-grad-block">
-                                      <div class="checkbox-toggle">
-                                         <input ng:change="update_settings_in_view_show_type_of_results()" ng:model="application_settings.settings.show_results_per_qs" type="checkbox" id="show-qs-pr" checked="" class="switch_1 input-checkboxes">
-                                         <label for="show-qs-pr" class="show-qs-pr labels-options">
-                                           Show result on each question
-                                         </label>
-                                      </div>
-                                   </div>
-                                   <div class="passing-grad-block">
-                                      <div class="checkbox-toggle">
-                                         <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.navigation_btns" type="checkbox" id="navigation-buttons" class="input-checkboxes switch_1">
-                                         <label for="navigation-buttons" class="show-qs-pr labels-options">
-                                           Enable navigation buttons
-                                         </label>
-                                      </div>
-                                   </div>
-                                   <div class="passing-grad-block">
-                                       <div class="checkbox-toggle">
-                                          <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.auto_slide" type="checkbox" id="check-toggle-e2" class="switch_1 input-checkboxes">
-                                          <label class="labels-options" for="check-toggle-e2">Auto slide when select answers</label>
-                                       </div>
-                                   </div>
-                                   <div class="passing-grad-block">
-                                       <div class="checkbox-toggle">
-                                          <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.allow_touch_move" type="checkbox" id="check-toggle-e2xx" class="switch_1 input-checkboxes">
-                                          <label class="labels-options" for="check-toggle-e2xx">Allow touch move (Sliding) </label>
-                                       </div>
-                                   </div>
-                                   <div class="passing-grad-block">
-                                      <div class="checkbox-toggle">
-                                         <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.retake_setting" class="input-checkboxes switch_1" type="checkbox" id="enable-button-retak">
-                                         <label for="enable-button-retak" class="labels-options show-qs-pr">
-                                         Enable Retake
-                                         </label>
-                                      </div>
-                                   </div>
-                                   <div class="passing-grad-block">
-                                      <div class="checkbox-toggle">
-                                         <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.review_setting" class="input-checkboxes switch_1" type="checkbox" id="enable-button-Review">
-                                         <label for="enable-button-Review" class="show-qs-pr labels-options">
-                                         Enable Review
-                                         </label>
-                                      </div>
-                                   </div>
-                                   <div class="passing-grad-block">
-                                      <div class="checkbox-toggle">
-                                         <input ng:change="randomize_all_questions()" ng:model="application_settings.settings.randomize_settings" class="input-checkboxes switch_1" type="checkbox" id="Randomize-Questions">
-                                         <label for="Randomize-Questions" class="show-qs-pr labels-options">
-                                         Randomize Questions
-                                         </label>
-                                      </div>
-                                   </div>
-                                   <div class="passing-grad-block">
-                                      <div class="checkbox-toggle">
-                                         <input ng:change="enable_screens()" ng:model="application_settings.settings.enable_screens" class="input-checkboxes switch_1" type="checkbox" id="enbscreen">
-                                         <label for="enbscreen" class="show-qs-pr labels-options">
-                                          Enable Goodbye and welcome Screens
-                                         </label>
-                                      </div>
-                                   </div>
-                                   <div class="passing-grad-block">
-                                      <div class="checkbox-toggle">
-                                         <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.progression_bar.is_available" class="input-checkboxes switch_1" type="checkbox" id="Randomize-Progress">
-                                         <label for="Randomize-Progress" class="show-qs-pr labels-options">
-                                           Use Progress bar
-                                         </label>
-                                         <div class="labels-options" style="position:relative; float:right; cursor:pointer;">
-                                            <!-- Models <i class="fa fa-caret-down"></i> -->
-                                            <!-- <select ng:change="time_progress_models_changer()" ng:model="time_progress_models" class="time-models" name="">
-                                              <option value="0">Model 1</option>
-                                              <option value="1">Model 2</option>
-                                            </select> -->
-                                         </div>
-                                      </div>
-                                   </div>
-                                </div>
-
-                             </div>
-                          </li>
-                          <li class="tasks">
-                             <div class="control-item-header">
-                                <a href="#" class="icon-toggle">
-                                <span class="caret-down fa fa-caret-down"></span>
-                                </a>
-                                <span class="text">Quiz Timer</span>
-                             </div>
-                             <div class="control-item-content" >
-                                <div class="control-item-content-text">
-                                   <div class="passing-grad-block">
-                                      <div class="checkbox-toggle" style="overflow:visible;">
-                                         <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.time_settings.is_with_time" class="input-checkboxes switch_1" type="checkbox" id="check-Timer-2" checked="">
-                                         <label class="labels-options" for="check-Timer-2">Require Timeframe</label>
-                                         <div class="labels-options" style="position:relative; float:right; cursor:pointer;">
-                                            <div class="dropdown">
-                                              <span  data-toggle="dropdown" style="margin-top: -5px;">
-                                                Styles
-                                                <!-- <span class="caret"></span> -->
-                                              </span>
-                                              <ul class="dropdown-menu mm-menulist">
-                                                <li ng:class="( __player_object.settings.time_settings.timer_layout == 1 ) ? 'selectd_style' :''" ng:click="choose_time_model_(1)" style="background-image:url('{> server_ip + 'img/model-1.png' <}'); background-size:unset;"></li>
-                                                <li ng:class="( __player_object.settings.time_settings.timer_layout == 2 ) ? 'selectd_style' :''" ng:click="choose_time_model_(2)" style="background-image:url('{> server_ip + 'img/model-2.png' <}')"></li>
-                                                <li ng:class="( __player_object.settings.time_settings.timer_layout == 3 ) ? 'selectd_style' :''"  ng:click="choose_time_model_(3)" style="background-image:url('{> server_ip + 'img/model-3.png' <}')"></li>
-                                              </ul>
-                                            </div>
-                                            <!-- Models <i class="fa fa-caret-down"></i> -->
-                                              <!-- <select ng:change="time_progress_models_changer()" ng:model="time_progress_models" class="time-models" name="">
-                                                <option value="1">Model 1</option>
-                                                <option value="2">Model 2</option>
-                                                <option value="3">Model 3</option>
-                                              </select> -->
-                                         </div>
-
-                                      </div>
-                                   </div>
-                                   <div class="time-fram-slidest">
-                                     <span class="labels-options">Time Type :</span>
-                                      <div class="checkbox-slide xheckbox-timframe">
-                                        <label class="labels-options" for="time-type-slide">mins</label>
-                                         <input ng:change="change_time_type()" ng:model="application_settings.settings.time_settings.timer_type"  class="input-checkboxes switch_1" type="checkbox" id="time-type-slide">
-                                         <label class="labels-options" for="time-type-slide">hrs</label>
-                                      </div>
-                                   </div>
-                                   <div class="form-group input-group input-groupx">
-                                      <input ng:change="update_settings_in_view_with_hrs()" ng:show="application_settings.settings.time_settings.timer_type" max="9" ng:model="application_settings.settings.time_settings.hours" id="time-mask-input" type="number" class="form-control time-tracker-elem" aria-label="Text input with dropdown button" placeholder="hrs">
-                                      <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.time_settings.minutes" max="59" id="time-mask-inputx" type="number" class="form-control time-tracker-elem" aria-label="Text input with dropdown button" placeholder="mins">
-                                      <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.time_settings.seconds" max="59" id="time-mask-inputxsd" type="number" class="form-control time-tracker-elem" aria-label="Text input with dropdown button" placeholder="secs">
-                                   </div>
-
-                                </div>
-
-                             </div>
-                          </li>
-                          <li class="tasks">
-                             <div class="control-item-header">
-                                <a href="#" class="icon-toggle">
-                                <span class="caret-down fa fa-caret-down"></span>
-                                </a>
-                                <span class="text">Expiration</span>
-                             </div>
-                             <div class="control-item-content" >
-                                <div class="control-item-content-text">
-                                   <div class="passing-grad-block">
-                                      <div class="checkbox-toggle">
-                                         <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.expiration.is_set" class="input-checkboxes switch_1" type="checkbox" id="check-Timer-2xxf" checked="">
-                                         <label class="labels-options" for="check-Timer-2xxf">Allow expiration date</label>
-                                      </div>
-                                   </div>
-                                   <div class="form-group input-group input-groupx text-left for-x-daf">
-                                      <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.expiration.through_time" max="15" type="number" class="expire-though form-control " aria-label="Text input with dropdown button" placeholder="3 days">
-                                      <span class="equal-this">days</span>
-                                   </div>
-                                   <div class="form-group input-group input-groupx text-left for-x-daf">
-                                      <span class="equal-this">Expiration message</span>
-                                      <input ng:change="update_settings_in_view()" ng:model="application_settings.settings.expiration.title"   type="text" class="expire-title form-control " aria-label="Text input with dropdown button">
-                                   </div>
-                                </div>
-                             </div>
-                          </li>
-                          <li class="tasks">
-                             <div class="control-item-header">
-                                <a href="#" class="icon-toggle">
-                                <span class="caret-down fa fa-caret-down"></span>
-                                </a>
-                                <span class="text">Message and Texts</span>
-                             </div>
-                             <div class="control-item-content" >
-                                <div class="control-item-content-text">
-                                   <span class="screen-texts">Welcome Page:</span>
-                                   <textarea ng:change="update_settings_in_view()" ng:model="application_settings.settings.titles.title_start_with" id="editor-strt-txt" class="quiz-titlex screen-redactors-strt-txt">Writ start Quiz</textarea>
-                                </div>
-                                <div class="control-item-content-text">
-                                   <span class="screen-texts">Goodbye and Thank you Page :</span>
-                                   <!-- <input ng:change="update_settings_in_view()"  type="text" name="" value="" placeholder=""> -->
-                                   <textarea ng:change="update_settings_in_view()" ng:model="application_settings.settings.titles.title_end_with" id="editor-end-txt" class="quiz-titlex screen-redactors-end-txt">You have successfully completed the this quizs</textarea>
-                                </div>
-                                <div class="control-item-content-text">
-                                   <span class="screen-texts">Quiz Pass Screen:</span>
-                                   <textarea ng:change="update_settings_in_view()" ng:model="application_settings.settings.titles.title_success_with" id="editor-scs-txt" class="quiz-titlex screen-redactors-scs-txt">You have passed this quiz</textarea>
-                                </div>
-                                <div class="control-item-content-text">
-                                   <span class="screen-texts">Quiz Fail Screen:</span>
-                                   <textarea ng:change="update_settings_in_view()" ng:model="application_settings.settings.titles.title_failed_with" id="editor-fld-txt" class="quiz-titlex screen-redactors-fld-txt">You have failed this quiz</textarea>
-                                 </div>
-
-                             </div>
-                          </li>
-                          <li class="tasks">
-                             <div class="control-item-header">
-                                <a href="#" class="icon-toggle">
-                                <span class="caret-down fa fa-caret-down"></span>
-                                </a>
-                                <span class="text">Labels</span>
-                             </div>
-                             <div class="control-item-content" >
-                                <div class="control-item-content-text">
-                                   <span>Quiz Start Button:</span>
-                                   <input ng:change="update_labels_in_srt_menu_settings()" ng:model="application_settings.settings.label_btns.lbl_start_with" class="quiz-titlex " type="text" name="" value="" placeholder=" Start Quiz">
-                                </div>
-                                <div class="control-item-content-text">
-                                   <span>Restart Button</span>
-                                   <input ng:change="update_labels_in_retk_menu_settings()" ng:model="application_settings.settings.label_btns.lbl_retake_with" class="quiz-titlex " type="text" name="" value="" placeholder="Retake Quiz">
-                                </div>
-                                <div class="control-item-content-text">
-                                   <span>Continue Button</span>
-                                   <input ng:change="update_labels_in_question_buttons_mnu_settings()" ng:model="application_settings.settings.label_btns.lbl_continue_with" class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
-                                </div>
-
-                                <div class="control-item-content-text">
-                                   <span>Review Button</span>
-                                   <input ng:change="update_labels_in_retk_menu_settings()" ng:model="application_settings.settings.label_btns.lbl_review_with" class="quiz-titlex " type="text" name="" value="" placeholder="Continue">
-                                </div>
-
-
-                                <div class="control-item-content-text">
-                                   <span>Back Button</span>
-                                   <input ng:change="update_current_label('back')" ng:model="application_settings.settings.label_btns.lbl_back_with" class="quiz-titlex " type="text" name="" value="" placeholder="Back">
-                                </div>
-                                <div class="control-item-content-text">
-                                   <span>Finish Button</span>
-                                   <input ng:change="update_current_label('finish')" ng:model="application_settings.settings.label_btns.lbl_finish_with" class="quiz-titlex " type="text" name="" value="" placeholder="Finish">
-                                </div>
-                                <div class="control-item-content-text">
-                                   <span>Submit Quiz Button</span>
-                                   <input ng:change="update_current_label('submt-quiz')" ng:model="application_settings.settings.label_btns.lbl_submit_quiz_with" class="quiz-titlex " type="text" name="" value="" placeholder="Submit Text">
-                                </div>
-                                <div class="control-item-content-text">
-                                   <span>Score Text</span>
-                                   <input ng:change="update_current_label('score-text')" ng:model="application_settings.settings.label_btns.lbl_score_with" class="quiz-titlex " type="text" name="" value="" placeholder="Score Text">
-                                </div>
-                                <div class="control-item-content-text">
-                                   <span>Grade Text</span>
-                                   <input ng:change="update_current_label('grade-text')" ng:model="application_settings.settings.label_btns.lbl_grade_with" class="quiz-titlex " type="text" name="" value="" placeholder="Grade Text">
-                                </div>
-
-                                <div class="control-item-content-text">
-                                   <span>Warning Message when no questions has been attempted </span>
-                                   <input ng:change="update_current_label('didnnot-yet')" ng:model="application_settings.settings.label_btns.didnot_yet" class="quiz-titlex " type="text" name="" value="" placeholder="Warning Message">
-                                </div>
-
-                                <div class="control-item-content-text">
-                                   <span>Unsolved questions </span>
-                                   <input ng:change="update_current_label('unsolved-question')" ng:model="application_settings.settings.label_btns.unsolved_question" class="quiz-titlex " type="text" name="" value="" placeholder="Warning Message">
-                                </div>
-
-                                <div class="control-item-content-text">
-                                   <span>When you solve this question next one will come( Note )</span>
-                                   <input ng:change="update_current_label('when-you-solve')" ng:model="application_settings.settings.label_btns.when_you_solve" class="quiz-titlex " type="text" name="" value="" placeholder="Warning Message">
-                                </div>
-
-                                <div class="control-item-content-text">
-                                   <span>You have many answers in this question( Note )</span>
-                                   <input ng:change="update_current_label('there-are-many-options')" ng:model="application_settings.settings.label_btns.there_are_many_options" class="quiz-titlex " type="text" name="" value="" placeholder="Note Message">
-                                </div>
-
-                             </div>
-                          </li>
-
-
-                         </ul>
-                         <div class="quiz-setting-handler">
-                           <button ng:click="application_save_settings()" class="btn btn-primary btn-primary-outline saving-settings-changes" type="button" name="button">Apply Changes</button>
+          <li  ng:hide="enable_css_mode"  class="nav-parent">
+            <a href="#" class="head-items">
+              General
+              <span class="nav-next"></span>
+            </a>
+            <div class="items">
+              <ul>
+                <li>
+                  <span>Quiz Title</span>
+                  <input ng:model="_application_.questionnaire_title" type="text" name="" value="">
+                </li>
+                <li ng:show="_application_.app_type == 1">
+                  <input ng:change="change_in_view( 2 )" ng:model="_settings_.grade_settings.is_graded" type="checkbox" id="passing-grade" class="switch_1 input-checkboxes">
+                  <label for="passing-grade" style=" margin-left: 10px;" >Passing Grade</label>
+                  <input ng:model="_settings_.grade_settings.value" min="40" max="100" type="number" name="" value="" style="width:80px; float:right;">
+                </li>
+                <li ng:show="_application_.app_type == 1" class="righ-check-box">
+                  <label for="show-qs-resulat" style=" margin-left: 10px;" >Show Result on each question</label>
+                  <input ng:model="_settings_.show_results_per_qs" type="checkbox" id="show-qs-resulat" class="switch_1 input-checkboxes">
+                </li>
+                <li class="righ-check-box">
+                  <label for="buttons-enable" style=" margin-left: 10px;" >Enable navigation buttons</label>
+                  <input ng:change="change_in_view( 3 )" ng:model="_settings_.navigation_btns" type="checkbox" id="buttons-enable" class="switch_1 input-checkboxes">
+                </li>
+                <li class="righ-check-box">
+                  <label for="auto-slide-answer" style=" margin-left: 10px;" >Auto slide when select answer</label>
+                  <input ng:change="change_in_view( 3 )" ng:model="_settings_.auto_slide" type="checkbox" id="auto-slide-answer" class="switch_1 input-checkboxes">
+                </li>
+                <!--  ... -->
+                <li class="righ-check-box">
+                  <label for="touch-move-sliding" style=" margin-left: 10px;" >Enable touch move(sliding)</label>
+                  <input ng:change="change_in_view( 3 )" ng:model="_settings_.allow_touch_move" type="checkbox" id="touch-move-sliding" class="switch_1 input-checkboxes">
+                </li>
+                <li class="righ-check-box">
+                  <label for="enable-retake" style=" margin-left: 10px;" >Enable Retake</label>
+                  <input ng:change="change_in_view( 2 )" ng:model="_settings_.retake_setting" type="checkbox" id="enable-retake" class="switch_1 input-checkboxes">
+                </li>
+                <li class="righ-check-box">
+                  <label for="enable-review" style=" margin-left: 10px;" >Enable Review</label>
+                  <input ng:change="change_in_view( 2 )" ng:model="_settings_.review_setting" type="checkbox" id="enable-review" class="switch_1 input-checkboxes">
+                </li>
+                <li class="righ-check-box">
+                  <label for="rendomize-question" style=" margin-left: 10px;" >Randomize Questions</label>
+                  <input ng:change="change_in_view( 3 , null , 'randomize' , _settings_.randomize_settings )" ng:model="_settings_.randomize_settings" ng:change="randomize_sorting_questions(_settings_.randomize_settings)" type="checkbox" id="rendomize-question" class="switch_1 input-checkboxes">
+                </li>
+                <li class="righ-check-box">
+                  <label for="goodby-screen-we-enable" style=" margin-left: 10px;">Enable Goodbye and welcome screen</label>
+                  <input ng:model="_settings_.enable_screens" ng:change="change_in_view( 3 )" type="checkbox" id="goodby-screen-we-enable" class="switch_1 input-checkboxes">
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li  ng:hide="enable_css_mode"  class="nav-parent">
+            <a href="#">
+              Progress bar Options
+              <span class="nav-next"></span>
+            </a>
+            <div class="items">
+              <ul>
+                <li class="righ-check-box">
+                  <label for="enable-progress-bar" style=" margin-left: 10px;" >Enable Progress bar</label>
+                  <input ng:model="_settings_.progression_bar.is_available" type="checkbox" id="enable-progress-bar" class="switch_1 input-checkboxes">
+                </li>
+                <li class="righ-check-box dropdown">
+                  <label style=" margin-left: 10px;" >Styles</label>
+                  <i class="fa fa-caret-down i-icons" data-toggle="dropdown" aria-hidden="true"></i>
+                  <ul class="dropdown-menu">
+                    <li ng:click ="set_model_type(1 , 0)">
+                      <a href="#" class="text-center" style="padding: 10px 20px;">
+                        <div class="progress-bx" style="outline-color: transparent;">
+                           <span box-target-type="box-texts" box-target-class="progress-bar-txt" class="progress-bar-txt selector" contenteditable="false" style="outline: transparent solid 3px; outline-offset: 4px;" onkeydown="if(event.metaKey) return true; return false;">50%</span>
+                           <div style="width: 140px;" class="progress-ctmain selector" box-target-type="box-containers" box-target-class="progress-ctmain" contenteditable="false" style="outline: transparent solid 3px; outline-offset: 4px;" onkeydown="if(event.metaKey) return true; return false;">
+                             <div box-target-type="box-containers" box-target-class="highlighted-progress" class="highlighted-progress selector" contenteditable="false" style="outline-color: transparent;"></div>
+                           </div>
                          </div>
+                      </a>
+                    </li>
+                    <li ng:click ="set_model_type(2 , 0)">
+                      <a href="#" class="text-center" style="float: none;">
+                        <div class="progress-container option-container text-left" style="margin:0px auto; float:none;">
+                          <div class="progress-bx">
+                            <span box-target-type="box-texts" box-target-class="progress-text2" class="progress-text2">
+                              <i class="fa fa-sliders"></i>
+                              <span class="marsds">{> (question_index + 1) + " / "+ _questions_.length <}</span>
+                            </span>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li ng:hide="enable_css_mode || _application_.app_type == 0"  class="nav-parent">
+            <a href="#">
+              Timer Options
+              <span class="nav-next"></span>
+            </a>
+            <div class="items">
+              <ul>
+                <li>
+                  <div class="time-frames">
+                    <input style="color:#b3b3b3;" ng:hide="(_settings_.time_settings.timer_type == false)" ng:disabled="( _settings_.time_settings.timer_type == false || _settings_.time_settings.is_with_time == false)" ng:model="_settings_.time_settings.hours" ng:change="time_hrs_is_changed(_settings_.time_settings.hours)" type="number" min="00" max="9" name="" value="00">
+                    <span  style="color:#b3b3b3;" ng:hide="(_settings_.time_settings.timer_type == false)">:</span>
+                    <input style="color:#b3b3b3;" ng:disabled="_settings_.time_settings.is_with_time == false" ng:model="_settings_.time_settings.minutes"ng:change="time_mins_is_changed(_settings_.time_settings.minutes)" type="number" min="00" max="59" name="" value="00">
+                    <span style="color:#b3b3b3;" >:</span>
+                    <input style="color:#b3b3b3;" ng:disabled="_settings_.time_settings.is_with_time == false" ng:model="_settings_.time_settings.seconds" ng:change="time_hrs_is_changed(_settings_.time_settings.seconds)" type="number" min="00" max="59" name="" value="00">
+                  </div>
+                </li>
+                <li class="righ-check-box">
+                  <label for="enable-timer" style=" margin-left: 10px;" >Enable Timer</label>
+                  <input ng:change="timer_is_enabled(_settings_.time_settings.is_with_time)" ng:model="_settings_.time_settings.is_with_time" type="checkbox" id="enable-timer" class="switch_1 input-checkboxes">
+                </li>
+                <li class="righ-check-box">
+                  <label for="time-types" style=" margin-left: 10px;" >Enable Hours</label>
+                  <input ng:model="_settings_.time_settings.timer_type" type="checkbox" id="time-types" class="switch_1 input-checkboxes">
+                </li>
+                <li class="righ-check-box dropdown">
+                  <label style=" margin-left: 10px;" >Styles</label>
+                  <i class="fa fa-caret-down i-icons" data-toggle="dropdown" aria-hidden="true"></i>
+                  <ul class="dropdown-menu">
+                    <li ng:click ="set_model_type(1 , 1)">
+                      <a href="#" class="text-center" style="padding: 10px 20px;">
+                        <div>
+                            <div ng:hide="(_settings_.time_settings.timer_type == false)" ng:disabled="( _settings_.time_settings.timer_type == false )" class="tick-group">
+                                <span ng:bind="_settings_.time_settings.hours"></span>
+                                <sub>h</sub>
+                            </div>
+                            <div class="tick-group">
+                              <span ng:bind="_settings_.time_settings.minutes"></span>
+                              <sub>m</sub>
+                            </div>
+                            <div class="tick-group">
+                              <span ng:bind="_settings_.time_settings.seconds"></span>
+                              <sub>s</sub>
+                            </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <a ng:click ="set_model_type(2 , 1)" href="#" class="text-center" style="float: none;">
+                        <div class="time-container option-container text-right"  style="overflow: hidden;width: auto;padding: 9px 0px; float:none;">
+                            <div class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
+                              05
+                            </div>
+                            <span box-target-class="dotted-hrs" box-target-type="box-texts" class="dotted-hrs selector">:</span>
+                            <div class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
+                              30
+                            </div>
+                            <span box-target-class="dotted-hrs" box-target-type="box-texts" class="dotted-hrs selector">:</span>
+                            <div class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
+                              45
+                            </div>
+                          </div>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
 
+              </ul>
+            </div>
+          </li>
+          <li  ng:hide="enable_css_mode || _application_.app_type == 0"  class="nav-parent">
+            <a href="#">
+              Expiration Options
+              <span class="nav-next"></span>
+            </a>
+            <div class="items">
+              <ul>
+                <li class="righ-check-box">
+                  <label for="allow-expiration-date" style=" margin-left: 10px;" >
+                    Enable Expiration System
+                  </label>
+                  <input ng:model="_settings_.expiration.is_set" type="checkbox" id="allow-expiration-date" class="switch_1 input-checkboxes">
+                </li>
+                <li class="righ-check-box">
+                  <label style="margin-left: 10px;" >
+                    Number Of Days
+                  </label>
+                  <input  ng:change="changed_day_numbers(_settings_.expiration.through_time)" max="50" min="1" ng:model="_settings_.expiration.through_time" type="number" name="" value="" style="width:80px; float:right;">
+                </li>
+                <li class="righ-check-box marked_instructions">
+                  <label style="margin-left: 10px;">
+                    Expire Warning
+                  </label>
+                  <textarea ng:change="change_in_view( 4 )"  style="min-height: 100px; resize: vertical;" ng:model="_settings_.expiration.expire_warning" class="text-area-style set_redactor" name="name"></textarea>
+                </li>
+                <li class="righ-check-box marked_instructions">
+                  <label style=" margin-left: 10px;">Expire Message</label>
+                  <textarea ng:change="change_in_view( 5 )" style="min-height: 100px; resize: vertical;" ng:model="_settings_.expiration.expire_message" class="text-area-style set_redactor" name="name"></textarea>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li  ng:hide="enable_css_mode"  class="nav-parent">
+            <a href="#">
+              Messages and Texts
+              <span class="nav-next"></span>
+            </a>
+            <div class="items">
+              <ul>
+                <li class="righ-check-box">
+                  <label class="redactor-xxxx" style=" margin-left: 10px;">Welcome Page </label>
+                  <textarea ng:keyup="go_to_screen_number(0)" ng:model="_settings_.titles.title_start_with" class="text-area-style set_redactor" name="name"></textarea>
+                </li>
+                <li class="righ-check-box">
+                  <label class="redactor-xxxx"  style=" margin-left: 10px;">Goodbye and Thank you Page </label>
+                  <textarea ng:keyup="go_to_screen_number(1)" ng:model="_settings_.titles.title_end_with" class="text-area-style set_redactor" name="name"></textarea>
+                </li>
+                <li ng:show="_application_.app_type == 1" class="righ-check-box">
+                  <label class="redactor-xxxx"  style=" margin-left: 10px;">Quiz Pass Page  </label>
+                  <textarea  ng:keyup="go_to_screen_number(2)" ng:model="_settings_.titles.title_success_with" class="text-area-style set_redactor" name="name"></textarea>
+                </li>
+                <li ng:show="_application_.app_type == 1" class="righ-check-box">
+                  <label class="redactor-xxxx"  style=" margin-left: 10px;">Quiz Fail Page </label>
+                  <textarea ng:keyup="go_to_screen_number(2)" ng:model="_settings_.titles.title_failed_with" class="text-area-style set_redactor" name="name"></textarea>
+                </li>
+                <li class="righ-check-box">
+                  <label class="redactor-xxxx"  style=" margin-left: 10px;">Resume Page</label>
+                  <textarea ng:keyup="go_to_screen_number(4)" ng:model="_settings_.titles.title_resume"  class="text-area-style set_redactor" name="name"></textarea>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li  ng:hide="enable_css_mode"  class="nav-parent">
+            <a href="#">
+              Labels and Buttons
+              <span class="nav-next"></span>
+            </a>
+            <div class="items">
+              <ul>
+                <li class="righ-check-box input-x list-of-labels" style="    padding-bottom: 30px;">
+                  <div class="label-manger">
+                    <label style=" margin-left: 10px;">Question Labels</label>
+                    <ul class="labels_">
+                      <li ng:click="active_this_label(0)" ng:class="( _settings_.indexes.questions == 0) ? 'selected_labels' :''">
+                        <span>
+                          A<i>b</i><b>c</b>
+                        </span>
+                      </li>
+                      <li ng:click="active_this_label(1)"  ng:class="( _settings_.indexes.questions == 1) ? 'selected_labels' :''">
+                        <span>
+                          1<i>2</i><b>3</b>
+                        </span>
+                      </li>
+                    </ul>
+                    <!-- <div class="style-block">
+                      Styles
+                      <span class="fa fa-caret-down"></span>
+                    </div> -->
+                  </div>
+                  <div class="label-manger">
+                    <label style=" margin-left: 10px;">Answer Labels</label>
+                    <ul class="labels_">
+                      <li ng:click="active_this_answer_label(0)" ng:class="( _settings_.indexes.answers == 0) ? 'selected_labels' :''">
+                        <span>
+                          A<i>b</i><b>c</b>
+                        </span>
+                      </li>
+                      <li ng:click="active_this_answer_label(1)" ng:class="( _settings_.indexes.answers == 1) ? 'selected_labels' :''">
+                        <span>
+                          1<i>2</i><b>3</b>
+                        </span>
+                      </li>
+                    </ul>
+                    <!-- <div class="style-block">
+                      Styles
+                      <span class="fa fa-caret-down"></span>
+                    </div> -->
+                  </div>
+                </li>
+                <li class="righ-check-box input-x">
+                  <label style=" margin-left: 10px;">Quiz Start Button</label>
+                  <input ng:change="change_in_view( 0 )" ng:model="_settings_.label_btns.lbl_start_with" type="text" name="" value="">
+                </li>
+                <li class="righ-check-box input-x">
+                  <label style=" margin-left: 10px;">Review Button</label>
+                  <input ng:change="change_in_view( 2 )" ng:model="_settings_.label_btns.lbl_review_with" type="text" name="" value="">
+                </li>
+                <li class="righ-check-box input-x">
+                  <label style=" margin-left: 10px;">Restart Button</label>
+                  <input ng:change="change_in_view( 2 )" ng:model="_settings_.label_btns.lbl_retake_with" type="text" name="" value="">
+                </li>
+                <li class="righ-check-box input-x">
+                  <label style=" margin-left: 10px;">Continue Button</label>
+                  <input ng:change="change_in_view( 3 )" ng:model="_settings_.label_btns.lbl_continue_with" type="text" name="" value="">
+                </li>
+                <li class="righ-check-box input-x">
+                  <label style=" margin-left: 10px;">Back Button</label>
+                  <input ng:change="change_in_view( 3 )" ng:model="_settings_.label_btns.lbl_back_with" type="text" name="" value="">
+                </li>
+                <li class="righ-check-box input-x">
+                  <label style=" margin-left: 10px;">Finish Button</label>
+                  <input ng:change="change_in_view( 3  , (  _questions_.length - 1 )  )" ng:model="_settings_.label_btns.lbl_finish_with" type="text" name="" value="">
+                </li>
+                <li class="righ-check-box input-x">
+                  <label style=" margin-left: 10px;">Resume Button</label>
+                  <input ng:change="change_in_view( 4 )" ng:model="_settings_.label_btns.lbl_resume_with" type="text" name="" value="">
+                </li>
+                <li class="righ-check-box input-x">
+                  <label style=" margin-left: 10px;">Submit Quiz Button</label>
+                  <input ng:change="change_in_view( 1 )" ng:model="_settings_.label_btns.lbl_submit_quiz_with" type="text" name="" value="">
+                </li>
+                <li ng:show="_application_.app_type == 1" class="righ-check-box input-x">
+                  <label style=" margin-left: 10px;">Score Text</label>
+                  <input ng:change="change_in_view( 2 )"  ng:model="_settings_.label_btns.lbl_score_with" type="text" name="" value="">
+                </li>
+                <li ng:show="_application_.app_type == 1" class="righ-check-box input-x">
+                  <label style=" margin-left: 10px;">Grade Text</label>
+                  <input ng:change="change_in_view( 2 )" ng:model="_settings_.label_btns.lbl_grade_with" type="text" name="" value="">
+                </li>
+                <li ng:show="_application_.app_type == 1" class="righ-check-box input-x">
+                  <label style=" margin-left: 10px;">Warning Message when no questions has been attempted</label>
+                  <input ng:change="change_in_view( 3 )" ng:model="_settings_.label_btns.didnot_yet" type="text" name="" value="">
+                </li>
+                <li ng:show="_application_.app_type == 1" class="righ-check-box input-x">
+                  <label style=" margin-left: 10px;">Unsolved questions</label>
+                  <input ng:change="change_in_view( 3 )" ng:model="_settings_.label_btns.unsolved_question" type="text" name="" value="">
+                </li>
+                <li class="righ-check-box input-x">
+                  <label style=" margin-left: 10px;">When you solve this question next one will come( Note )</label>
+                  <input ng:change="change_in_view( 3 )" ng:model="_settings_.label_btns.when_you_solve" type="text" name="" value="">
+                </li>
+                <li class="righ-check-box input-x">
+                  <label style=" margin-left: 10px;">You have many answers in this question( Note )</label>
+                  <input ng:change="change_in_view( 3 )" ng:model="_settings_.label_btns.there_are_many_options" type="text" name="" value="">
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-parent">
+            <a href="#">
+              Stylesheet
+              <span class="nav-next"></span>
+            </a>
+            <div class="items">
+              <ul>
+                <li class="righ-check-box">
+                  <label for="enable-css-mode" style=" margin-left: 10px;">Enable Css Mode</label>
+                  <input ng:change="enable_css_mode_func(enable_css_mode)" ng:model="enable_css_mode" type="checkbox" id="enable-css-mode" class="switch_1 input-checkboxes">
+                </li>
+              </ul>
+              <div class="container-of-classes" ng:show="enable_css_mode == true">
+                <code>Player > Style > {> selecotor_name <}</code>
+              </div>
+              <div class="pellet-containerz"  ng:show="enable_css_mode == true">
+                <h4 class="element_types" ng:if="selecotor_name == '.Answers'">Basic</h4>
+                <ul>
+                  <li ng:show="css_pellet_mode.radial_text_color == true">
+                    <span>Text Color</span>
+                    <input ng:change="apply_stylesheet_in_views( 'fill', radial_text_colors)" ng:model="radial_text_colors" class="radial_text_colors" type="text" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.radial_fill == true">
+                    <span>Track Progress Color</span>
+                    <input ng:change="apply_stylesheet_in_views('fill', radial_fill_colors)" ng:model="radial_fill_colors" class="radial_fill_colors" type="text" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.radial_strock == true">
+                    <span>Track Stroke Color</span>
+                    <input ng:change="apply_stylesheet_in_views('stoke', radial_storck_colors)" ng:model="radial_storck_colors" class="radial_storck_colors" type="text" name="" value="">
+                  </li>
 
-                   <!-- +++++++++++++++++++++++ -->
-               </div>
+                  <li  ng:show="css_pellet_mode.background == true">
+                    <span>Background</span>
+                    <input  ng:change="apply_stylesheet_in_views('background-color',background_models)"  ng:model="background_models" class="background_models" type="text" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.color == true">
+                    <span>Color</span>
+                    <input  ng:change="apply_stylesheet_in_views('color' , color_models)" ng:model="color_models" class="color_models" type="text" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.fontSize == true">
+                    <span>Font Size</span>
+                    <input ng:change="apply_stylesheet_in_views('font-size' , font_size_models)" ng:model="font_size_models" style="width:60px; color:#999;" value="15" type="number" min="15" max="25" name="">
+                  </li>
+                  <li ng:show="css_pellet_mode.fontFamily == true">
+                    <span>Font Family</span>
+                    <select  ng:change="apply_stylesheet_in_views('font-family' , font_family_models)" ng:model="font_family_models" class="select_borders">
+                      <option value="arial">Arial</option>
+                      <option value='"helvetica neue", helvetica, arial, sans-serif'>Helvetica</option>
+                      <option value="RobotoRegular">Roboto Regular</option>
+                      <option value="opensansregular">Open Sans Regular</option>
+                      <option value="OpenSansSemiBold">Open Sans Semi Bold</option>
+                    </select>
+                  </li>
+                  <li ng:show="css_pellet_mode.width == true">
+                    <span>Width</span>
+                    <input style="width:60px; color:#999;" ng:change="apply_stylesheet_in_views('width' , media_container)" ng:model="media_container" type="number" min="180" max="500" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.border == true">
+                    <span>Border</span>
+                    <input ng:change="apply_stylesheet_in_views('border-color' , border_models_color)" ng:model="border_models_color" class="border_models_color" type="text" name="" value="">
+                    <select style="margin-right:10px;" ng:change="apply_stylesheet_in_views('border-style' , border_style_models)"  ng:model="border_style_models">
+                      <option value="none">None</option>
+                      <option value="solid">Solid</option>
+                      <option value="dashed">Dashed</option>
+                      <option value="dotted">Dotted</option>
+                    </select>
+                      <ul class="border-lists">
+                        <li>
+                          <span>Left</span>
+                          <select ng:change="apply_stylesheet_in_views('border-left-width' , border_left_models)" ng:model="border_left_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Right</span>
+                          <select ng:change="apply_stylesheet_in_views('border-right-width' , border_right_models)" ng:model="border_right_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Top</span>
+                          <select ng:change="apply_stylesheet_in_views('border-top-width' , border_top_models)"  ng:model="border_top_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Bottom</span>
+                          <select ng:change="apply_stylesheet_in_views('border-bottom-width' , border_bottom_models)" ng:model="border_bottom_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                      </ul>
+                  </li>
+                </ul>
+                <!--  Hover Cases -->
+                <h4 class="element_types" ng:if="selecotor_name == '.Answers'">Hover Cases</h4>
+                <ul>
+                  <li ng:show="css_pellet_mode.hover_background == true">
+                    <span>Background</span>
+                    <input ng:change="apply_stylesheet_in_views('background-color' , hover_background_models , 'hover')" ng:model="hover_background_models" class="hover_background_models" type="text" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.hover_color == true">
+                    <span>Color</span>
+                    <input ng:change="apply_stylesheet_in_views('color' , hover_color_models , 'hover')" ng:model="hover_color_models" class="hover_color_models" type="text" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.hover_border == true">
+                    <span>Border</span>
+                    <input ng:change="apply_stylesheet_in_views('border-color' , hover_border_models_color  , 'hover')" ng:model="hover_border_models_color" class="hover_border_models_color" type="text" name="" value="">
+                    <select style="margin-right:10px;" ng:change="apply_stylesheet_in_views('border-style' , hover_border_style_models  , 'hover')" ng:model="hover_border_style_models">
+                      <option value="none">None</option>
+                      <option value="solid">Solid</option>
+                      <option value="dashed">Dashed</option>
+                      <option value="dotted">Dotted</option>
+                    </select>
+                      <ul class="border-lists">
+                        <li>
+                          <span>Left</span>
+                          <select  ng:change="apply_stylesheet_in_views('border-left-width' , hover_border_left_models , 'hover')" ng:model="hover_border_left_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Right</span>
+                          <select ng:change="apply_stylesheet_in_views('border-right-width' , hover_border_right_models , 'hover')" ng:model="hover_border_right_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Top</span>
+                          <select ng:change="apply_stylesheet_in_views('border-top-width' , hover_border_top_models , 'hover')" ng:model="hover_border_top_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Bottom</span>
+                          <select ng:change="apply_stylesheet_in_views('border-bottom-width' , hover_border_bottom_models , 'hover')" ng:model="hover_border_bottom_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                      </ul>
+                  </li>
+                </ul>
+                <!--  Selected Cases -->
+                <h4 class="element_types" ng:if="selecotor_name == '.Answers'">Selected Answer Cases</h4>
+                <ul>
+                  <li ng:show="css_pellet_mode.selected_background == true">
+                    <span>Background</span>
+                    <input ng:change="apply_stylesheet_in_views('background-color' , selected_background_models , null , 'selected_answer')" ng:model="selected_background_models" class="selected_background_models" type="text" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.selected_color == true">
+                    <span>Color</span>
+                    <input ng:change="apply_stylesheet_in_views('color' , selected_color_models, null , 'selected_answer')" ng:model="selected_color_models" class="selected_color_models" type="text" name="" value="">
+                  </li>
+                  <li ng:show="css_pellet_mode.selected_border == true">
+                    <span>Border</span>
+                    <input  ng:change="apply_stylesheet_in_views('border-color' , selected_border_models_color, null , 'selected_answer')" ng:model="selected_border_models_color" class="selected_border_models_color" type="text" name="" value="">
+                    <select style="margin-right:10px;" ng:change="apply_stylesheet_in_views('border-style' , selected_border_style_models, null , 'selected_answer')" ng:model="selected_border_style_models">
+                      <option value="none">None</option>
+                      <option value="solid">Solid</option>
+                      <option value="dashed">Dashed</option>
+                      <option value="dotted">Dotted</option>
+                    </select>
+                      <ul class="border-lists">
+                        <li>
+                          <span>Left</span>
+                          <select ng:change="apply_stylesheet_in_views( 'border-left-width', selected_border_left_models, null , 'selected_answer')" ng:model="selected_border_left_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Right</span>
+                          <select ng:change="apply_stylesheet_in_views('border-right-width' , selected_border_right_models, null , 'selected_answer')" ng:model="selected_border_right_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Top</span>
+                          <select  ng:change="apply_stylesheet_in_views('border-top-width' , selected_border_top_models, null , 'selected_answer')" ng:model="selected_border_top_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                        <li>
+                          <span>Bottom</span>
+                          <select ng:change="apply_stylesheet_in_views('border-bottom-width' , selected_border_bottom_models, null , 'selected_answer')" ng:model="selected_border_bottom_models" class="select_borders">
+                            <option value="0px">None</option>
+                            <option value="1px">1px</option>
+                            <option value="2px">2px</option>
+                            <option value="3px">3px</option>
+                            <option value="4px">4px</option>
+                            <option value="5px">5px</option>
+                          </select>
+                        </li>
+                      </ul>
+                  </li>
+                </ul>
+                <!-- <h4 class="element_types" ng:if="selecotor_name == '.Answers'">Correct Answer Cases</h4>
+                <h4 class="element_types" ng:if="selecotor_name == '.Answers'">Wrong Answer Cases</h4> -->
+              </div>
+            </div>
+          </li>
+        </ul>
+        <div class="button-container">
+          <!-- <span class="title-editor-option">Editor Saving Option</span>
+          <input type="checkbox" id="passing-grade" class="switch_1 input-checkboxes">
+          <label for="passing-grade" style=" margin-left: 10px;">Auto save</label> -->
+          <button ng:if="enable_css_mode == false" id="save_setting_change" ng:click="saving_quiz_settings();" type="button" class="btn btn-primary" name="button"> Apply Changes</button>
+          <button ng:if="enable_css_mode == true"  id="save_css_change" ng:click="saving_quiz_stylesheet();" type="button" class="btn btn-danger" name="button"> Apply Changes</button>
+        </div>
+    </div>
 </div>

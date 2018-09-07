@@ -1,0 +1,7 @@
+<!-- Progress -2 -->
+    <div ng:if="(  _user_activity_.user_completed_status == undefined || _user_activity_.user_completed_status == false )" class="progress-container option-container text-left">
+       <span class="selector progress-text2" class="progress-text2">
+         <i class="fa fa-sliders"></i>
+         <span ng:cloak class="marsds">{> ( question_number ) + " / "+ _questions_.length <}</span>
+       </span>
+    </div>

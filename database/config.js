@@ -1,15 +1,15 @@
 const mongoose = require("mongoose");
 const _ = require("lodash");
 var config = {
-    server_ip:             'http://localhost:3000/'  , // http://54.187.251.111/
+    server_ip:             'http://localhost:9000/'  , // http://34.218.239.214/
     port :                  ':27017' ,
     database_name :         '/todo' ,
     host_name:              'mongodb://localhost' ,
     options :               { useMongoClient:true }   ,
-    server_port :           process.env.port || 3000  ,
+    server_port :           process.env.port || 9000  ,
     session_access : false ,
     default_records_per_page : 5 ,
-    token_expiration_time : 9 , // means 9 hours  // => can be 500 hrs also
+    token_expiration_time : 50 , // means 9 hours  // => can be 500 hrs also
     show_header : false ,
     secretCode :             "@5rU5d@!tsd&$90f*&#5$~1100sdk$oprFRTgkjfddY1%js",
     apiSecret :              "DRdsd542sder@sds&%4sd854sd=+sds54sderSSfdf##$%@sd",

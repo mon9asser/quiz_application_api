@@ -1,4 +1,9 @@
-var apps = angular.module("applications" , []);
+
+var apps ;
+ 
+apps = angular.module("applications" , ['angular-redactor']);
+
+
   "use strict";
 
 apps.config([

@@ -1,307 +1,345 @@
-<link rel="stylesheet" href="{{ server_ip }}ext/css/default-player.css">
-<link rel="stylesheet" href="{{ server_ip }}ext/css/default-themes.css">
-<link rel="stylesheet" id="stylesheet-editor-css">
-
-
-<!--  Input of these information then going to show the part of this page accorgin    -->
-<input type="hidden" id="server_ip" name="" value="{{server_ip}}">
-<input type="hidden" id="user_id" name="" value="{{user.id}}">
-<input type="hidden" id="app-id" name="" value="{{app._id}}">
-<style media="screen">
-    .preview-container { height: auto; }
-    .player-body-screen {
-      position: relative;
-      width: 100%;
-      height: auto;
-    }
-    /*.swiper-slide {    margin: 15px auto; }*/
-    .about-quiz , .screen-container { width: 95%; }
-    .object-layouts-container-layout-1{
-          width: 100%;
-    }
-</style>
-<!--
----------------------------------------------------------
-=============================>>> Timer And Progress
----------------------------------------------------------
--->
-   <div ng:include="loading_target_header"></div>
-
-
-   <style media="screen">
-   .object-layouts-container-layout-1  {
-         width: 100%;
+ <link rel="stylesheet" ng:href="{> default_player  <}">
+ <link rel="stylesheet" ng:href="{> default_theme  <}">
+ <link ng:href="{>stylesheet_uri<}">
+ <input type="hidden" id="enabled_css" value="false">
+ <style>
+   .x-widther{
+      width: 95%;
+      margin-top: 20px;
+      margin-bottom: 20px;
    }
-   .object-layouts-container {
-        width: 95%;
-    }
-    .keep-it-padding {
-      padding: 20px 0px;
-    }
-   </style>
+   .keep-it-padding{
+     display: inline-block;
+     width: 100%;
+     position: relative;
+   }
+   .player-body-screen
+   {
+      border-left: 1px solid #e4e4e6;
+      border-bottom: 1px solid #e4e4e6;
+      border-right: 1px solid #e4e4e6;
+   }
+ </style>
 
-<!--
----------------------------------------------------------
-=============================>>> Welcome Screen
----------------------------------------------------------
- -->
-<div class="swiper-wrapper quiz-contents keep-it-padding" ng:if="screen_type == 3 && application_settings.settings.enable_screens == true">
-  <div class="swiper-slide welcoming-screen-x">
-    <div data-selected-block="question-slide" ng:class="load_quiz_status_theme()" class="container screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-welcome-screen">
-       <div>
-           <div class="description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text" ng:bind:html="__player_object.settings.titles.title_start_with | trust_html"></div>
-           <div class="qusu-details text-right">
-              <button ng:click="start_this_quiz()" class="button-take-this select_button welcome-screen-button-block welcome-screen-button" type="button" name="button">
-                  <i class="fa fa-sign-in" aria-hidden="true"></i>
-                    {> __player_object.settings.label_btns.lbl_start_with <}
-              </button>
-           </div>
+
+
+
+<div box-target-class="player-body-screen" box-target-type="box-player"  class="selector keep-it-padding  player-body-screen" style="outline-offset:-4px;">
+
+  <!--
+ ---------------------------------------------------------
+ =============================>>> Time and progress bar
+ ---------------------------------------------------------
+  -->
+<div ng:if="_settings_.time_settings.is_with_time == true || _settings_.progression_bar.is_available == true" box-target-type="box-containers" box-target-class="quiz-option-container" class="quiz-option-container selector">
+  <!-- Progress -1 -->
+  <div ng:if="_settings_.progression_bar.is_available == true" ng:include="progressbar_models"></div>
+  <!-- Time 1 -->
+  <div ng:if="_settings_.time_settings.is_with_time == true" ng:include="time_models"></div>
+
+</div>
+
+   <!--
+   ---------------------------------------------------------
+   =============================>>> Question  Screen => {> question <}
+   ---------------------------------------------------------
+   -->
+
+    <div ng:if="screen_type == 3" box-target-type="box-containers" box-target-class="question-screen-box" class="selector x-widther container screen-container survey-player-questions question_typeco_object question_opg_editor_block select_box_brd question-screen-block question-screen-box">
+       <div box-target-type="box-containers" box-target-class="question-box-text" class="selector text-left question-body load_qs_theme question_opg_editor select_box_brd question-box-block question-box-text">
+          <span box-target-type="box-labels" box-target-class="question-label-box" class="selector label-question default_theme_texts_bg select_box_brd question-label-block question-label-box">
+            <span class="qs-numericals select_numbers">
+              {> show_question_answer_serials(question_index , _settings_.indexes.questions )| uppercase <}
+            </span>
+            <!-- <span class="qs-numericals select_numbers">1</span> -->
+            <div class="arrow-right default_theme_brd select_box_brd  question-label-box-brd"></div>
+          </span>
+          <span box-target-type="box-texts" box-target-class="question-data-text-bdy" class="selector question-body-text select_texts question-data-text-bdy" ng:bind:html='_questions_[question_index].question_body | apply_html'></span>
+
+          <span class="selector required_option question_type__colr select_texts question-text-required-block question-text-required-text selector" box-target-type="box-texts" box-target-class="required_option" ng:if="_questions_[question_index].answer_settings.is_required == true">
+            Required
+          </span>
+       </div>
+       <!--      margin-left: 10px;
+    margin-top: -2px;
+    display: inline-block; -->
+       <div ng:if="_questions_[question_index].question_description.is_enabled == true && _questions_[question_index].question_description.value != ''" box-target-type="box-texts" box-target-class="question-description-data"  class="question-description-data questiondescdata">
+         <p style="display: inline-flex;" class="description-block-box">
+           <!-- <span class="fa fa-dot-circle-o desc-icon-z-x selector" box-target-class="desc-icon-z-x" box-target-type="box-texts" aria-hidden="true"></span> -->
+           <span style="margin-left: 10px;margin-top: -2px; display: inline-block;" ng:cloak data:ng:bind:html="_questions_[question_index].question_description.value | apply_html"></span>
+         </p>
+       </div>
+       <!--  Questin Media Cases-->
+       <div box-target-class="question-data-media" box-target-type="box-media" ng:if="_questions_[question_index].media_question != undefined" class="selector question-data-media">
+         <!-- Case it an image  -->
+         <img class="image-responsive" ng:if="_questions_[question_index].media_question.media_type == 0 " ng:src="{> _questions_[question_index].media_question.Media_directory <}" alt="">
+         <!-- Case it video -->
+         <div ng:if="_questions_[question_index].media_question != undefined  && _questions_[question_index].media_question.media_type == 1" class="video-data-media question-video image-responsive">
+           <!-- case it vimeo or youtube  -->
+           <iframe ng:src="{> _questions_[question_index].media_question.embed_path | trust_iframe_url <}" ng:if="_questions_[question_index].media_question.video_type == 1 || _questions_[question_index].media_question.video_type == 0" width="100%" height="120px"></iframe>
+           <!-- case it mp4  -->
+           <video ng:if="_questions_[question_index].media_question.video_type == 2" controls>
+             <source ng:src="{> _questions_[question_index].media_question.mp4_option.mp4_url | trust_iframe_url <}" type="video/mp4">
+             <source ng:src="{> _questions_[question_index].media_question.mp4_option.ogg_url | trust_iframe_url <}" type="video/ogg">
+           </video>
+         </div>
+       </div>
+       <!--  Case use has to select many answer-->
+       <div class=" notes select_box_brd question-warnning-block question-warnning-box" >
+        <span box-target-type="box-texts" box-target-class="question_type__colr" class="selector text-left question_type__colr select_texts ther_is_many" ng:if="_questions_[question_index].answer_settings.single_choice == false">
+           <!-- There're many correct choices , You've to select them  to pass this question -->
+           {> _settings_.label_btns.there_are_many_options <}
+        </span>
+       </div>
+
+       <!-- Answer container -->
+       <div class="answer-container answer-block-selector">
+         <ul box-target-type="box-containers" box-target-class="border_line" id="question_{>_questions_[question_index]._id<}" class="question-list question-list-preview-quta selector" ng:if="_questions_[question_index].question_type <= 2" ng:class="( (_questions_[question_index].question_type == 0 || _questions_[question_index].question_type == 1 ) && _questions_[question_index].answer_settings.single_choice == false )? 'border_line' : '' ">
+           <li ng:click="select_this_answer ( _questions_[question_index]._id , answer_value._id , _questions_[question_index] , answer_value , app_id , user_id , answer_value.is_correct , $index , enable_css_mode )" box-target-class="answer-container ul li" box-target-type="box-answers" ng:class="list_answer_classes()" class="selector answer_opg_editor select_box_brd question-answer-row-select-blk question-answer-row-select answer_{>answer_value._id<}" ng:repeat="(anskey , answer_value) in _questions_[question_index].answers_format">
+             <!-- Answer label -->
+             <!-- {> question_labels['label_' + _settings_.indexes.questions.toString()][question_index] | uppercase <} -->
+             <!-- <span box-target-type="box-labels" box-target-class="answer_label"  class="answer_label selector">{> question_labels['label_' + _settings_.indexes.answers.toString()][$index] | uppercase <}</span> -->
+             <label box-target-type="box-labels" box-target-class="answer_numbering_block_box"  class="selector labels select_box_brd answer_numbering_block answer_numbering_block_box">
+               <!-- {> show_question_answer_serials(question_index , _settings_.indexes.questions )| uppercase <} -->
+               {> show_question_answer_serials( $index , _settings_.indexes.answers )| uppercase <}
+             </label>
+
+            <!-- Answer Media  -->
+             <!-- answer media for 0 -->
+             <div ng:if="answer_value.media_optional != undefined && _questions_[question_index].question_type == 0" class="media-data-answer">
+               <!-- Case it Image -->
+               <img ng:if=" answer_value.media_optional != undefined &&  answer_value.media_optional.media_type ==0" ng:src="{>answer_value.media_optional.Media_directory + '?' + answer_value.media_optional.image_updated_date <}" class="image-responsive" alt="Image">
+               <!-- Case it video  -->
+               <div ng:if="answer_value.media_optional != undefined && answer_value.media_optional.media_type ==1" class="video_case text-center">
+                  <!-- Case video iframes => youtube/ vimeo -->
+                  <iframe class="iframe-selector" ng:if="(answer_value.media_optional.video_type == 0 || answer_value.media_optional.video_type == 1 )" ng:src="{> answer_value.media_optional.embed_path | trust_iframe_url <}" width="100%" height="120px"></iframe>
+                  <!-- Case video tags => html mp4 video -->
+                  <video ng:if="answer_value.media_optional.video_type == 2 " width="100%" height="120px" controls>
+                      <source ng:if="answer_value.media_optional.mp4_option != undefined" ng:src="{>answer_value.media_optional.mp4_option.mp4_url | trust_iframe_url <}" type="video/mp4">
+                      <source ng:if="answer_value.media_optional.mp4_option != undefined" ng:src="{>answer_value.media_optional.mp4_option.ogg_url | trust_iframe_url <}" type="video/ogg">
+                  </video>
+               </div>
+             </div>
+             <!-- answer media for 1 -->
+             <div ng:if="_questions_[question_index].question_type == 1" class="media-data-answer">
+               <!-- Case There is not any media  -->
+               <div ng:if='answer_value.media_type == undefined' class="not-media-there">
+                  <img ng:src="{> server_ip + 'img/media-default-icone.jpg'<}" class="image-responsive" alt="Image">
+               </div>
+               <!-- Case it Image -->
+               <img ng:if="answer_value.Media_directory != undefined && answer_value.media_type == 0" ng:src="{>answer_value.Media_directory + '?' + answer_value.image_updated_date <}" alt="Image"  class="image-responsive">
+               <!-- Case it video  -->
+               <div ng:if="answer_value.embed_path != undefined && answer_value.media_type ==1" class="video_case text-center">
+                  <!-- Case video iframes => youtube/ vimeo -->
+                  <iframe class="iframe-selector" ng:if="(answer_value.video_type == 0 || answer_value.video_type == 1 )" ng:src="{> answer_value.embed_path | trust_iframe_url <}" width="100%" height="120px"></iframe>
+                  <!-- Case video tags => html mp4 video -->
+                  <video ng:if="answer_value.video_type == 2 " class="video-mp4" controls>
+                      <source ng:if="answer_value.mp4_option != undefined" ng:src="{>answer_value.mp4_option.mp4_url | trust_iframe_url <}" type="video/mp4">
+                      <source ng:if="answer_value.mp4_option != undefined" ng:src="{>answer_value.mp4_option.ogg_url | trust_iframe_url <}" type="video/ogg">
+                  </video>
+               </div>
+             </div>
+              <!-- Answer Texts  -->
+              <div ng:if="_questions_[question_index].question_type == 0" class="answer-texts answer_txt_val">
+                <span class="answer_text">{> answer_value.value <}</span>
+              </div>
+              <!-- Case Boolean questions -->
+              <div class="answer_txt_val" ng:if="_questions_[question_index].question_type == 2">
+                <span class="answer_text">{> answer_value.boolean_value <}</span>
+              </div>
+
+              <span class="iconxs-correct-answers fa fa-times wrong-ico"></span>
+              <span class="iconxs-correct-answers fa fa-check correct-ico"></span>
+
+           </li>
+         </ul>
+         <!--  Rating Scale answers  -->
+         <div ng:if="(_questions_[question_index].question_type == 3) && (_questions_[question_index].answers_format[0].ratscal_type == 0)" class="block-of-scale">
+             <!-- Case it 3 => Scale -->
+             <div class="survey-answer">
+                 <!-- Rating Case -->
+                 <div class=""> <!--  -->
+
+                   <!-- Scale -->
+                   <center>
+
+                     <div class="scale-optn" ng:if="_questions_[question_index].answers_format[0].ratscal_type == 0 ">
+                       <ul box-target-type="box-containers" box-target-class="scalet-o li span" class=" selector scalet-o ul_scal_{>_questions_[question_index]._id<}" ng:cloak >
+                         <li style="width: auto;" data-index='0' ng:repeat="(key_ , val_) in _questions_[question_index].answers_format[0].rating_scale_answers track by $index"> <!-- index , class_name , answer_id , question_id , rs_type -->
+                           <span box-target-type="box-texts" box-target-class="scalet-o li span" class=" selector spanex scale_value_{>_questions_[question_index].answers_format[0]._id<}" ng:click="select_this_rating_value( $index , 'scale_value_'+_questions_[question_index].answers_format[0]._id  , _questions_[question_index].answers_format[0]._id , _questions_[question_index]._id , _questions_[question_index].answers_format[0].ratscal_type )">
+                               {> $index + 1 <}
+                           </span>
+                         </li>
+                       </ul>
+                       <div class="clearFix"></div>
+
+                       <div class="block-labels text-center"  ng:show="_questions_[question_index].answers_format[0].show_labels == true">
+                         <span class="first-lbl" ng:cloak>
+                           {>_questions_[question_index].answers_format[0].started_at <}
+                         </span>
+                         <span class="second-lbl" ng:cloak>
+                           {>_questions_[question_index].answers_format[0].centered_at  <}
+                         </span>
+                         <span class="third-lbl" ng:cloak>
+                           {>_questions_[question_index].answers_format[0].ended_at  <}
+                         </span>
+                       </div>
+                     </div>
+                   </center>
+                 </div>
+               </div>
+         </div>
+         <div ng:if="(_questions_[question_index].question_type == 3) && (_questions_[question_index].answers_format[0].ratscal_type == 1)" class="block-of-ratings">
+           <!-- Ratings  -->
+           <ul box-target-type="box-texts" box-target-class="start-o li span" class=" selector start-o rating_scale_block">
+             <!--  Ratings  -->
+             <li style="width: auto;" data-index='0' ng:repeat="(ratingscale_keys , ratingscale_vale)  in _questions_[question_index].answers_format[0].rating_scale_answers track by $index">
+               <span style="font-size:35px" ng:click="select_rating_scale__($index , 1 , _questions_[question_index]._id , _questions_[question_index].answers_format[0]._id , _questions_[question_index].question_type )" href="#">
+                   <i class="fa fa-star-o"></i>
+               </span>
+             </li>
+           </ul>
+         </div>
+         <!--  End Rating Answers-->
+         <div ng:if="_questions_[question_index].question_type == 4" class="block-of-fre-txts">
+           <!-- Case it 4 => Free texts -->
+           <textarea class="free-text-values" placeholder="Write your answer here !"></textarea>
+         </div>
+       </div>
+       <!--  End Answer Container -->
+
+       <!-- Messages and warnings -->
+
+       <div box-target-class="answer-alarm-text-box" box-target-type="box-texts" ng:if="_settings_.auto_slide == true && _questions_[question_index].question_type <= 2 && _questions_[question_index].answer_settings.single_choice == true" class="selector question_notes answer-alarm-text answer-alarm-text-box " >
+          <span class="fa fa-info-circle"></span>
+          <span>{> _settings_.label_btns.when_you_solve <} </span>
+       </div>
+
+       <!-- Button Container  -->
+       <div ng:if ="_settings_.navigation_btns == true" class="qusu-details ques-questions text-right">
+           <span data-tpco box-target-class="back-answer-question-button" box-target-type="box-buttons" ng:click="back_to_previouse_slide(enable_css_mode)" class="selector button-take-this select_button back-answer-question-button back-answer-question-button-block" type="button" name="button">
+                 <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                 {> _settings_.label_btns.lbl_back_with <}
+           </span>
+           <span data-tpco style="margin-right:10px;" box-target-class="continue-answer-question-button" box-target-type="box-buttons" ng:click="go_to_next_slide(enable_css_mode)" class="selector button-take-this select_button continue-answer-question-button continue-answer-question-button-block" type="button" name="button">
+               <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+               <span>{> _settings_.label_btns.lbl_continue_with <}</span>
+               <!-- <span ng:if="$index != (__player_object.questions.length - 1)">{> _settings_.label_btns.lbl_continue_with <}</span> -->
+               <!-- <span ng:if="$index == (__player_object.questions.length - 1)">{> _settings_.label_btns.lbl_finish_with <}</span> -->
+           </span>
        </div>
     </div>
-  </div>
-  </div>
 
-<!--
----------------------------------------------------------
-=============================>>> Ending Screen
----------------------------------------------------------
--->
-<div  class="swiper-slide keep-it-padding" ng:if="screen_type == 2  && application_settings.settings.enable_screens == true">
-    <div data-selected-block ="question-slide" class="screen_opg_editor container screen-container about-quiz screen-ending-starting select_box_brd goodbye-screen-block box-goodbye-screen">
-        <div class="description-body redactor-styles select_texts goodbye-screen-text-block goodbye-screen-text" ng:bind:html="__player_object.settings.titles.title_end_with | trust_html"></div>
-        <div class="warning_case select_box_data goodbye-screen-text-warning-block goodbye-screen-warning-text" ng:class="load_slide_theme(question.question_type)" ng:click="go_to_not_attended_question()"></div>
-        <div class="qusu-details ques-questions text-right">
-            <button ng:click="back_to_last_question()" class="button-take-this select_button back-button-goodbye-screen-block back-button-goodbye-screen" type="button" name="button">
-                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-                {> __player_object.settings.label_btns.lbl_back_with <}
-            </button>
-            <button data:ng:click="submit_this_qusu()" class="button-take-this submi_the_quiz_handler select_button submit-button-goodbye-screen submit-button-goodbye-screen-block" type="button" name="button">
-                <i class="fa fa-arrow-right fac-icon-submit" aria-hidden="true"></i>
-                <span>
-                    {> __player_object.settings.label_btns.lbl_submit_quiz_with <}
-                </span>
-            </button>
-        </div>
-    </div>
-  </div>
-
-<!--
----------------------------------------------------------
-=============================>>> Result  Screen
----------------------------------------------------------
--->
-<div class="swiper-slide welcoming-screen-x keep-it-padding" ng:if="__player_object.app_type == 1 && screen_type == 1">
-    <div data-selected-block ="question-slide"  ng:class="(is_resume == null)?'about-quiz':'result-slide'" class="container screen-container screen-ending-starting screen_opg_editor select_box_brd box-result-screen result-screen-block">
-      <div>
-        <div ng:if="in_app_editor || this_attendee_draft.att_draft[0].report_attendee_details.status != 'Failed'" class="description-body redactor-styles title_success_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="__player_object.settings.titles.title_success_with | trust_html"></div>
-        <div ng:if="in_app_editor || this_attendee_draft.att_draft[0].report_attendee_details.status == 'Failed'" class="description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="__player_object.settings.titles.title_failed_with | trust_html"></div>
-        <div class="quiz-grade">
-           <div class="quiz-grade grade-score text-center">
-               <h3 class="select_texts result-screen-score-text-block result-screen-score-text" ng:mouseover="show_hovred_element('select_texts')">{> __player_object.settings.label_btns.lbl_score_with <} : {> this_attendee_draft.att_draft[0].report_attendee_details.correct_answers  + "/" + __player_object.questions.length <}</h3>
-           </div>
-           <div ng:if="__player_object.settings.grade_settings.is_graded" class="quiz-grade grade-score text-center">
-               <h5 class="select_texts result-screen-grade-text-block result-screen-grade-text" ng:mouseover="show_hovred_element('select_texts')">{> __player_object.settings.label_btns.lbl_grade_with <} : {> this_attendee_draft.att_draft[0].report_attendee_details.score | math_around_it <}%</h5>
-           </div>
-        </div>
-        <div class="qusu-details text-right">
-              <button ng:if="__player_object.settings.review_setting == true" ng:click="back_to_first_question()" class="button-take-this select_button review-result-box-block review-result-box" type="button" name="button">
-                <i class="fa fa-reply-all" aria-hidden="true"></i>
-                {> __player_object.settings.label_btns.lbl_review_with <}
-              </button>
-              <button  ng:if="__player_object.settings.retake_setting == true" ng:click="back_to_first_question()" class="button-take-this retake-this-quiz select_button retake-result-box-block retake-result-box" type="button" name="button">
-                <i class="fa fa-repeat" aria-hidden="true"></i>
-                <span>
-                {> __player_object.settings.label_btns.lbl_retake_with <}
-                </span>
-              </button>
-         </div>
-      </div>
-    </div>
-  </div>
-
-<!--
----------------------------------------------------------
-=============================>>> Question  Screen => {> question <}
----------------------------------------------------------
--->
-<div ng:if="screen_type == 0" class="keep-it-padding">
-  <!-- Question Container -->
-  <div data-selected-block ="question-slide" class="container screen-container survey-player-questions question_typeco_object question_opg_editor_block select_box_brd question-screen-block question-screen-box">
-      <div class="question-body load_qs_theme question_opg_editor select_box_brd question-box-block question-box-text">
-         <span class="label-question default_theme_texts_bg select_box_brd question-label-block question-label-box">
-           <span ng:if="__player_object.settings.indexes.questions == 0 " class="qs-numericals select_numbers">{> question_indexes.numberical[index_value] <}</span>
-           <span ng:if="__player_object.settings.indexes.questions == 1 " class="qs-numericals select_numbers">{> question_indexes.alphabetical[index_value] | uppercase <}</span>
-           <div class="arrow-right default_theme_brd select_box_brd  question-label-box-brd"></div>
-         </span>
-         <span class="question-body-text select_texts" ng:bind:html='question.question_body | trust_html'></span>
-         <span class="required_option question_type__colr select_texts question-text-required-block question-text-required-text" ng:if="question.answer_settings.is_required == true"> Required </span>
-      </div>
-      <div ng:if="(question.question_type == 0 || question.question_type == 1 ) && question.answer_settings.single_choice == false" class="notes select_box_brd question-warnning-block question-warnning-box" >
-          <span class="question_type__colr select_texts"> There're many correct choices , You've to select them  to pass this question </span>
-      </div>
-      <div data:ng:if="question.media_question != null" class="question-media" ng:class="(question.answer_settings.super_size)? 'super-size':''">
-         <!-- Case : image type  -->
-         <div data:ng:if="question.media_question.media_type == 0" class="image-media-case img-cases select_brd" ng:style="set_image_background(question.media_question.media_field)"></div>
-         <!-- <div data:ng:if="question.media_question.media_type == 0" class="image-media-case img-cases" style="background-image:url('{> server_ip + question.media_question.media_field <}');"></div> -->
-         <!-- Case : Video type -->
-         <div data:ng:if="question.media_question.media_type == 1" class="video-media-case select_brd">{> question.media_question | set_iframe <}</div>
-      </div>
-
-      <!-- Answer container -->
-      <div class="answer-container answer-block-selector">
-
-        <ul id="question_{>question._id<}" ng:class="load_case_many_answer_option(question.question_type , question.answer_settings.single_choice)" class="question-list question-list-preview-quta" ng:if="question.question_type <= 2"> <!-- Question id , answer id  -->
-              <li  class="answer_{>ansvalue._id<} answer_opg_editor select_box_brd question-answer-row-select-blk question-answer-row-select"
-                       data:ng:class="classes_for_this_answer(question.answer_settings , question._id , ansvalue._id)"
-                       data:ng:click="select_this_answer(question._id , ansvalue._id , question , ansvalue , __player_object._id , '{{user.id}}' , ansvalue.is_correct , $index)"
-                       data:ng:repeat="(anskey , ansvalue) in question.answers_format">
-
-                        <!-- Cases with question type-->
-                          <!-- Case it 0 => Text choices -->
-                          <div ng:if="question.question_type == 0" class="answer-contents">
-                             <div ng:if="ansvalue.media_optional != null" class="media-options">
-                                <!--  image case  -->
-                                <!--  ng:style="set_image_background(ansvalue.media_optional.media_src)"  -->
-                                <div ng:if="ansvalue.media_optional.media_type == 0" ng:style="blob_background_data(ansvalue , question_settings.choice_style)"  class="image_case"></div>
-                                <!-- <div ng:if="ansvalue.media_optional.media_type == 0" style="background-image:url('{>server_ip+ansvalue.media_optional.media_src<}')"  class="image_case"></div> -->
-                                <!-- Video Cases -->
-                                <div ng-bind-html="ansvalue.media_optional | set_iframe" ng:if="ansvalue.media_optional.media_type == 1"  class="video_case">
-                                   <!-- Append answer media here -->
-                                   Loading Media
-                               </div>
-                             </div>
-                             <!-- Text values -->
-                             <label ng:if="__player_object.settings.indexes.answers == 0 " class="labels select_box_brd answer_numbering_block answer_numbering_block_box">{> answer_indexes.numberical[$index]  <}</label>
-                             <label ng:if="__player_object.settings.indexes.answers == 1 " class="labels select_box_brd answer_numbering_block answer_numbering_block_box">{> answer_indexes.alphabetical[$index] | uppercase <}</label>
-
-                             <div class="text-values select_texts"> {> ansvalue.value | trust_this_html_values <} </div>
-                             <!-- Case it wrong answer -->
-                             <span class="answer-results-wrong select_box_brd">
-                               <i class="fa fa-close"></i>
-                             </span>
-                             <!-- Case it right answer -->
-                             <span class="answer-results-right select_box_brd">
-                               <i class="fa fa-check"></i>
-                             </span>
-                          </div>
-                          <!-- Case it 1 => Media choices -->
-                          <div ng:if="question.question_type == 1" class="answer-contents">
-                            <label ng:if="__player_object.settings.indexes.answers == 0 " class="labels select_box_data answer_numbering_block answer_numbering_block_box">{> answer_indexes.numberical[$index] <}</label>
-                            <label ng:if="__player_object.settings.indexes.answers == 1 " class="labels select_box_data answer_numbering_block answer_numbering_block_box">{> answer_indexes.alphabetical[$index] | uppercase  <}</label>
-                            <!-- Case it wrong answer -->
-                            <span class="answer-results-wrong select_box_brd">
-                              <i class="fa fa-close"></i>
-                            </span>
-                            <!-- Case it right answer -->
-                            <span class="answer-results-right select_box_brd">
-                              <i class="fa fa-check"></i>
-                            </span>
-                            <!--  Image Case  -->
-                            <div ng:if="ansvalue.Media_directory == null || ansvalue.Media_directory == undefined" class="image_case no-media-here select_texts answer-text-box-area answer-text-box-area">
-                              No Media here !
-                            </div>
-                            <!-- <div ng:if="ansvalue.media_type == 0 && ansvalue.Media_directory != null" ng:style="set_image_background(ansvalue.media_src )"  class="image_case select_box_brd"></div> -->
-                            <div ng:if="ansvalue.media_type == 0 && ansvalue.Media_directory != null" ng:style="blob_background_data ( ansvalue , question_settings.choice_style )"  class="image_case select_box_brd"></div>
-                            <!-- <div ng:if="ansvalue.media_type == null" style="background-image:url('{>ansvalue.media_src<}')"  class="image_case"></div> -->
-                            <!--  Video Case  -->
-                            <div ng-bind-html="ansvalue | set_iframe" ng:if="ansvalue.media_type == 1"  class="video_case select_box_brd">
-                              <!-- Append answer media here -->
-                              Loading Media
-                            </div>
-                          </div>
-                          <!-- Case it 2 => True/false choices -->
-                          <div ng:if="question.question_type == 2" class="answer-contents">
-                            <label ng:if="__player_object.settings.indexes.answers == 0 " class="labels select_box_data answer_numbering_block answer_numbering_block_box">{> answer_indexes.numberical[$index] <}</label>
-                            <label ng:if="__player_object.settings.indexes.answers == 1 " class="labels select_box_data answer_numbering_block answer_numbering_block_box">{> answer_indexes.alphabetical[$index] | uppercase  <}</label>
-                            <!-- Case it wrong answer -->
-                            <span class="answer-results-wrong select_box_brd">
-                              <i class="fa fa-close"></i>
-                            </span>
-                            <!-- Case it right answer -->
-                            <span class="answer-results-right select_box_brd">
-                              <i class="fa fa-check"></i>
-                            </span>
-                            <div class="text-values select_texts answer-text-box-area answer-text-box-area-block">
-                              {> ansvalue.boolean_value <}
-                            </div>
-                          </div>
-             </li>
-          </ul>
-          <div class="answer-container survey-block" ng:if="question.question_type >= 3">
-                   <div ng:if="(question.question_type == 3) && (question.answers_format[0].ratscal_type == 0)" class="block-of-scale">
-                      <div class="survey-answer">
-                        <div class="">
-                          <center>
-                            <div class="scale-optn" ng:if="question.answers_format[0].ratscal_type == 0 ">
-                              <ul ng:init="rating_scale_elements" class="scalet-o ul_scal_{>question._id<}" >
-                                <li data-index='0' ng:repeat="(key_ , val_) in rating_scale_elements"> <!-- index , class_name , answer_id , question_id , rs_type -->
-                                  <span class="scale_value_{>question.answers_format[0]._id<}" ng:click="select_this_rating_value( $index , 'scale_value_'+question.answers_format[0]._id  , question.answers_format[0]._id , question._id , question.answers_format[0].ratscal_type )">
-                                      {> $index + 1 <}
-                                  </span>
-                                </li>
-                              </ul>
-                              <div class="clearFix"></div>
-                               <div class="block-labels text-center"  ng:show="question.answers_format[0].show_labels == true">
-                                 <span class="first-lbl">
-                                   {>question.answers_format[0].started_at <}
-                                 </span>
-                                 <span class="second-lbl">
-                                   {>question.answers_format[0].centered_at <}
-                                 </span>
-                                 <span class="third-lbl">
-                                   {>question.answers_format[0].ended_at <}
-                                 </span>
-                               </div>
-                            </div>
-                          </center>
-                        </div>
-                      </div>
-                   </div>
-
-                   <div ng:if="(question.question_type == 3) && (question.answers_format[0].ratscal_type == 1)" class="block-of-ratings">
-                     <!-- Ratings  -->
-                     <ul class="start-o rating_scale_block">
-                       <!--  Ratings  -->
-                       <li data-index='0' ng:repeat="(ratingscale_keys , ratingscale_vale) in rating_scale_elements track by $index">
-                         <span ng:click="select_rating_scale__($index , 1 , question._id , question.answers_format[0]._id , question.question_type )" href="#">
-                             <i class="fa fa-star-o"></i>
-                         </span>
-                       </li>
-                     </ul>
-                   </div>
-
-                   <div ng:if="question.question_type == 4" class="block-of-fre-txts">
-                     <!-- Case it 4 => Free texts -->
-                     <textarea ng:change="free_texts_question_type_changes(question._id , question)" ng:model="question.answers_format[0].free_text_value" class="free-text-values" placeholder="Write your answer here !"></textarea>
-                   </div>
+     <!--
+    ---------------------------------------------------------
+    =============================>>> Welcome Screen
+    ---------------------------------------------------------
+     -->
+     <div ng:if="screen_type == 0 && _settings_.enable_screens == true"  class="swiper-slide welcoming-screen-x">
+       <div box-target-class="box-welcome-screen" box-target-type="box-containers" data-selected-block="question-slide" class="container  x-widther screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-welcome-screen selector">
+          <div>
+              <div box-target-class="w-screen-text" box-target-type="box-texts" box-target-class="player-body-screen" box-target-type="box-player" class="selector description-body redactor-styles select_texts welcome-screen-text-block w-screen-text" ng:bind:html="_settings_.titles.title_start_with | apply_html"></div>
+              <div class="qusu-details text-right">
+                 <span data-tpco ng:click="start_the_quiz(enable_css_mode)" box-target-class="welcome-screen-button" box-target-type="box-buttons" class="selector button-take-this select_button welcome-screen-button-block welcome-screen-button" type="button" name="button">
+                     <i class="fa fa-sign-in" aria-hidden="true"></i>
+                       {> _settings_.label_btns.lbl_start_with <}
+                 </span>
+              </div>
           </div>
+       </div>
+     </div>
+
+
+     <!--
+    ---------------------------------------------------------
+    =============================>>> Resume Screen && expire page
+    ---------------------------------------------------------
+     -->
+     <div ng:if="screen_type == 4 && _settings_.enable_screens == true"  class="swiper-slide welcoming-screen-x">
+       <div box-target-class="box-resume-screen" box-target-type="box-containers" data-selected-block="question-slide" class="container  x-widther screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-resume-screen selector">
+          <div>
+            <div box-target-class="box-resume-text" box-target-type="box-texts" class="resume-text selector description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text" ng:bind:html="_settings_.titles.title_resume  | apply_html_with_date_filtering"></div>
+            <div ng:if="_settings_.expiration.is_set == true" box-target-class="box-resume-text" box-target-type="box-texts" class="expire-warning-text selector description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text" ng:bind:html="_settings_.expiration.expire_warning  | apply_html_with_date_filtering"></div>
+              <div class="qusu-details text-right">
+                 <span data-tpco ng:click="start_the_quiz(enable_css_mode)" box-target-class="resume-screen-button" box-target-type="box-buttons" class="selector button-take-this select_button welcome-screen-button-block resume-screen-button" type="button" name="button">
+                     <i class="fa fa-sign-in" aria-hidden="true"></i>
+                       {> _settings_.label_btns.lbl_resume_with <}
+                 </span>
+              </div>
+          </div>
+       </div>
+     </div>
 
 
 
-          <!-- End Answer container -->
+
+     <!--
+    ---------------------------------------------------------
+    =============================>>> Expired screen page
+    ---------------------------------------------------------
+     -->
+     <div ng:if="screen_type == 5 && _settings_.enable_screens == true"  class="swiper-slide welcoming-screen-x">
+       <div box-target-class="box-welcome-screen" box-target-type="box-containers" data-selected-block="question-slide" class="container  x-widther screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-welcome-screen selector">
+          <div>
+            <div box-target-class="welcome-screen-text" box-target-type="box-texts" class="expired_message_block expire-warning-text selector description-body redactor-styles select_texts welcome-screen-text-block welcome-screen-text" ng:bind:html="_settings_.expiration.expire_message  | apply_html_with_date_filtering"></div>
+          </div>
+       </div>
+     </div>
 
 
-      </div>
+     <!--
+     ---------------------------------------------------------
+     =============================>>> Ending Screen
+     ---------------------------------------------------------
+     -->
+     <div ng:if="screen_type == 1 && _settings_.enable_screens == true" box-target-class="box-goodbye-screen" box-target-type="box-containers" data-selected-block ="question-slide" class="selector screen_opg_editor container screen-container about-quiz screen-ending-starting select_box_brd goodbye-screen-block box-goodbye-screen x-widther ">
+         <div box-target-class="goodbye-screen-text" box-target-type="box-texts" class="selector description-body redactor-styles select_texts goodbye-screen-text-block goodbye-screen-text" ng:bind:html="_settings_.titles.title_end_with | apply_html"></div>
+         <div box-target-class="goodbye-screen-text" box-target-type="box-texts"  class="selector warning_case select_box_data goodbye-screen-text-warning-block goodbye-screen-warning-text goodbye-screen-text "></div>
+         <div class="qusu-details ques-questions text-right">
+             <span box-target-class="back-button-goodbye-screen" box-target-type="box-buttons" data-tpco ng:click="back_to_previouse_slide(enable_css_mode)" class="selector button-take-this select_button back-button-goodbye-screen-block back-button-goodbye-screen" type="button" name="button">
+                 <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                 {> _settings_.label_btns.lbl_back_with <}
+             </span>
+             <span box-target-class="submit-button-goodbye-screen" box-target-type="box-buttons" data-tpco ng:click="submit_the_quiz(enable_css_mode)" class="selector button-take-this submi_the_quiz_handler select_button submit-button-goodbye-screen submit-button-goodbye-screen-block" type="button" name="button">
+                 <i class="fa fa-arrow-right fac-icon-submit" aria-hidden="true"></i>
+                 <span>
+                     {> _settings_.label_btns.lbl_submit_quiz_with <}
+                 </span>
+             </span>
+         </div>
+     </div>
 
 
-      <div ng:if="__player_object.settings.auto_slide == true && question.question_type <= 2 && question.answer_settings.single_choice == true" class="question_notes question_type__colr select_box_brd answer-alarm-text answer-alarm-text-box">
-          <span class="fa fa-info-circle"></span>
-          <span class="select_texts ">Note : When you solve  this question the next one will come directly after few moments </span>
-      </div>
-      <div class="warning_case default_theme_texts_bg select_box_data warning-message-answer-box warning-message-answer question-label-box question-label-block warning_case_didnot_solve_question" ng:click="go_to_not_attended_question()"></div>
-      <div ng:if ="__player_object.settings.navigation_btns == true" class="qusu-details ques-questions text-right">
-          <button ng:click="go_to_previouse_slide(question._id)" class="button-take-this select_button back-answer-question-button back-answer-question-button-block" ng:class="load_slide_theme(question.question_type)" type="button" name="button">
-                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-                {> __player_object.settings.label_btns.lbl_back_with <}
-          </button>
-          <button ng:click="go_to_next_slide(question._id)" ng:class="load_slide_theme(question.question_type)" class="button-take-this select_button continue-answer-question-button continue-answer-question-button-block" type="button" name="button">
-              <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-              <span ng:if="$index != (__player_object.questions.length - 1)">{> __player_object.settings.label_btns.lbl_continue_with <}</span>
-              <span ng:if="$index == (__player_object.questions.length - 1)">{> __player_object.settings.label_btns.lbl_finish_with <}</span>
-          </button>
-      </div>
+     <!--
+   ---------------------------------------------------------
+   =============================>>> Result  Screen
+   ---------------------------------------------------------
+   -->
+   <div ng:if="screen_type == 2 && _settings_.enable_screens == true && _application_.app_type == 1 " box-target-class="box-result-screen" box-target-type="box-containers" data-selected-block ="question-slide" style="margin-bottom:20px;" class="selector x-widther container screen-container screen-ending-starting screen_opg_editor select_box_brd box-result-screen result-screen-block">
+     <div>
 
-  </div>
-  <!-- End Question Container -->
-
+       <div box-target-class="result-screen-text" box-target-type="box-texts" ng:show="text_result_screens" class="selector description-body redactor-styles title_success_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
+       <div box-target-class="result-screen-text" box-target-type="box-texts" ng:hide="text_result_screens" class="selector description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
+       <div class="quiz-grade">
+          <div class="quiz-grade grade-score text-center">
+              <h3 box-target-class="result-screen-score-text" box-target-type="box-texts" class="selector select_texts result-screen-score-text-block result-screen-score-text" ng:mouseover="show_hovred_element('select_texts')">{> _settings_.label_btns.lbl_score_with <} :  {> this_attendee_draft.att_draft[0].report_attendee_details.correct_answers  + "/" + _questions_.length <} </h3>
+          </div>
+          <div class="quiz-grade grade-score text-center">
+              <h5 box-target-class="result-screen-grade-text" box-target-type="box-texts" class="selector select_texts result-screen-grade-text-block result-screen-grade-text" ng:mouseover="show_hovred_element('select_texts')">{> _settings_.label_btns.lbl_grade_with <} : {> this_attendee_draft.att_draft[0].report_attendee_details.score | math_around_it <}%</h5>
+          </div>
+       </div>
+       <div class="qusu-details text-right">
+             <span data-tpco box-target-class="review-result-box" box-target-type="box-buttons"  ng:click="go_back_to_first_qs(enable_css_mode)" class="selector button-take-this select_button review-result-box-block review-result-box" type="button" name="button">
+               <i class="fa fa-reply-all" aria-hidden="true"></i>
+               {> _settings_.label_btns.lbl_review_with <}
+             </span>
+             <span data-tpco  box-target-class="retake-result-box" box-target-type="box-buttons" ng:click="go_back_to_first_qs(enable_css_mode)" class="selector button-take-this retake-this-quiz select_button retake-result-box-block retake-result-box" type="button" name="button">
+               <i class="fa fa-repeat" aria-hidden="true"></i>
+               <span>
+               {> _settings_.label_btns.lbl_retake_with <}
+               </span>
+             </span>
+        </div>
+     </div>
+   </div>
 </div>

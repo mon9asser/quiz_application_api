@@ -1,0 +1,39 @@
+<!-- Time 1 -->
+<style media="screen">
+  .min-word{
+    display: inline-block;
+    font-family: arial;
+  }
+</style>
+    <div class="time-container option-container text-right">
+      <!-- completed time -->
+      <div ng:if="( _user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true) ">
+        <div class="tick-group">
+            <div class="completed-time">
+              Completed
+            </div>
+            <sup class="min-word">In</sup>
+            <span ng:cloak>
+              {> calculating_completed_time() | filter_completed_time <}
+            </span>
+            <sub ng:if="calculating_completed_time().type == 0" class="min-word">Mins</sub>
+            <sub ng:if="calculating_completed_time().type == 1" class="min-word">Secs</sub>
+        </div>
+      </div>
+
+      <div ng:if="(  _user_activity_.user_completed_status == undefined || _user_activity_.user_completed_status == false ) ">
+          <div ng:hide="(_settings_.time_settings.timer_type == false)" ng:disabled="( _settings_.time_settings.timer_type == false || _settings_.time_settings.is_with_time == false)" class="tick-group">
+              <span ng:cloak>{> _settings_.time_settings.hours | time_style <}</span>
+              <sub>h</sub>
+          </div>
+          <div class="tick-group">
+              <span ng:cloak>{> _settings_.time_settings.minutes | time_style <}</span>
+              <sub>m</sub>
+          </div>
+          <div class="tick-group">
+              <span ng:cloak>{> _settings_.time_settings.seconds | time_style <}</span>
+              <sub>s</sub>
+          </div>
+      </div>
+
+    </div>

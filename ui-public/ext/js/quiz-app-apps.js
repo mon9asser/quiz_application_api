@@ -114,6 +114,8 @@ apps.controller("players" , [
   ( $scope, $rootScope, $timeout , $http , settings , $window ) => {
 
     // ====> Scope Variables
+    $rootScope.progressbar_models = "/time-progress-temps/progressbar-player-1.hbs";
+    $rootScope.time_models = "/time-progress-temps/time-player-1.hbs";
      $scope.quiz_time_status_is_counting = true ;
      $scope.show_submitter_button = false ;
      $scope.is_submitted = false ;
@@ -160,32 +162,38 @@ apps.controller("players" , [
        number_1 : 0 ,
        number_2 : 0
      };
+     $scope.set_question_background = (answerObject) => {
+       return {
+         "background-image" : "url('"+answerObject+"')"
+       }
+     }
      $scope.blob_background_data = ( answer_value , style_type ) => {
        // server_ip+answer_value.media_optional.media_src
        // alert($scope.server_ip + answer_value.media_optional.media_src);
        // => Cropping Image ( DataBlob )
-       var img_vlox_data ;
+       // var img_vlox_data ;
+       //
+       // if(answer_value.coppied_data != undefined){
+       //
+       //   if( answer_value.coppied_data.column_style != undefined && style_type == true )
+       //   {
+       //     if( answer_value.coppied_data.column_style.blob_data != undefined)
+       //     img_vlox_data = answer_value.coppied_data.column_style.blob_data;
+       //     else
+       //     img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src ;
+       //   }
+       //   if(answer_value.coppied_data.rawly_style != undefined && style_type == false) {
+       //     if(answer_value.coppied_data.rawly_style.blob_data != undefined)
+       //     img_vlox_data = answer_value.coppied_data.rawly_style.blob_data;
+       //     else
+       //     img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src ;
+       //
+       //   }
+       // }else {
+       //     img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src  ;
+       // }
+       var img_vlox_data = answer_value.media_optional.Media_directory ;
 
-       if(answer_value.coppied_data != undefined){
-
-         if( answer_value.coppied_data.column_style != undefined && style_type == true )
-         {
-           if( answer_value.coppied_data.column_style.blob_data != undefined)
-           img_vlox_data = answer_value.coppied_data.column_style.blob_data;
-           else
-           img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src ;
-         }
-         if(answer_value.coppied_data.rawly_style != undefined && style_type == false) {
-           if(answer_value.coppied_data.rawly_style.blob_data != undefined)
-           img_vlox_data = answer_value.coppied_data.rawly_style.blob_data;
-           else
-           img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src ;
-
-         }
-       }else {
-           img_vlox_data = $scope.server_ip + answer_value.media_optional.media_src  ;
-       }
-       // alert(img_vlox_data);
        return {
          backgroundImage : 'url(' + img_vlox_data + ')'
        }
@@ -194,6 +202,7 @@ apps.controller("players" , [
        if($scope.__player_object != undefined && $scope.__player_object != null ){
        var timeSettings = $scope.__player_object.settings.time_settings;
          if(timeSettings && timeSettings != undefined || timeSettings.is_with_time){
+
            $scope.seconds = timeSettings.seconds;
            $scope.minutes = timeSettings.minutes ;
            $scope.hours   = timeSettings.hours;
@@ -255,6 +264,7 @@ apps.controller("players" , [
      };
      $scope.load_time_tracker  = () => {
        if( $scope.quiz_time_status_is_counting){
+         console.log("::::::MINS" + $scope.minutes);
              var sec  = $('.sec');
              var mins = $('.min');
              var hrs  = $('.hr');
@@ -291,6 +301,7 @@ apps.controller("players" , [
                }
              }
              // ==> Html Values
+
              sec.html(($scope.seconds < 10 ) ? '0'+ $scope.seconds : $scope.seconds);
              mins.html(($scope.minutes < 10 ) ? '0'+$scope.minutes:$scope.minutes );
              if(is_hourly){
@@ -307,6 +318,7 @@ apps.controller("players" , [
        if($scope.attendee_draft != null && $scope.attendee_draft.att_draft != undefined ) {
          var current_attendee_index = $scope.attendee_draft.att_draft.findIndex(x => x.user_id == $scope.user_id );
          if(current_attendee_index != -1 ){
+
            var current_attendee = $scope.attendee_draft.att_draft.find(x => x.user_id == $scope.user_id );
            current_attendee.impr_application_object.settings.time_settings.hours    = $scope.hours;
            current_attendee.impr_application_object.settings.time_settings.minutes  = $scope.minutes;
@@ -319,7 +331,7 @@ apps.controller("players" , [
          var timeSettings = $scope.__player_object.settings.time_settings;
 
          if(timeSettings && timeSettings.is_with_time)
-            $scope.timer = setTimeout($scope.load_time_tracker , 1000);
+            $scope.timer = setTimeout( $scope.load_time_tracker , 1000);
        }
      };
 
@@ -523,27 +535,45 @@ apps.controller("players" , [
         url : $scope.url_main_application_get ,
         type : "GET"
       }).then(function(resp){
+
         // ==> Setup data
         $scope.application_data_object = resp.data ;
         $scope.__player_object = resp.data ;
-        $scope.loading_target_header = '/head-models/model-' +  $scope.__player_object.settings.time_settings.timer_layout + '.hbs' ;
+        //  $scope.loading_target_header = '/head-models/model-' +  $scope.__player_object.settings.time_settings.timer_layout + '.hbs' ;
+        var model_index = $scope.__player_object.settings.progression_bar.is_available ;
+        var time_model_index = $scope.__player_object.settings.time_settings.timer_layout
 
         // Loading time
+
         if($scope.__player_object.settings != null ){
           if( $scope.__player_object.settings.time_settings.is_with_time){
+
             $scope.seconds = $scope.__player_object.settings.time_settings.seconds ;
             $scope.minutes = $scope.__player_object.settings.time_settings.minutes;
             $scope.hours = $scope.__player_object.settings.time_settings.hours ;
           }
         }
+
+
+        $rootScope.progressbar_models = "/time-progress-temps/progressbar-player-"+progress_model_index+".hbs";
+        $rootScope.time_models = "/time-progress-temps/time-player-"+time_model_index+".hbs";
+
       } , function(err){console.log(err);})
     }
+    $scope.grep_progress_width = () => {
+      //   {> curren_question_slide * 100 /  __player_object.questions.length <} %
+      // {> ( question_index + 1 ) * 100 /  _questions_.length | math_around_it <} %
+      var percentage_value = Math.round(( parseInt(  $scope.curren_question_slide ) * 100  ) / $scope.__player_object.questions.length )  ;
 
+      return {
+        width : percentage_value + '%'
+      }
+    }
     $scope.classes_for_this_answer = ( quiz_settings , question_id , answer_id ) => {
       var classes = '';
       // => Two blocks per row or else
-      if(quiz_settings.choice_style)
-          classes += 'ng_inline_block';
+      if(quiz_settings.super_size)
+          classes += 'super_size_class';
           else
           classes += 'ng_block';
 
@@ -1907,7 +1937,7 @@ apps.controller("players" , [
       if(image_sourc == set_server_ip+image_sourc)
         set_server_ip = '';
       return {
-        "background-image" : "url('"+set_server_ip+image_sourc+"')"
+        "background-image" : "url('"+image_sourc+"')"
       }
     }
 
@@ -2061,5 +2091,81 @@ apps.controller("players" , [
     try {
       $("#stylesheet_link").attr("href" , $scope.server_ip + "themes/stylesheet_of_app_" + $scope.application_id +".css" );
     }catch(e){}
+
+
+
+
+
+
+    // ==> Draw Progress Radial
+    var svg ;
+    $rootScope.draw_radial_progression = (precentage_value) => {
+      d3.select("svg").remove()
+            if(svg){
+            svg.selectAll("*").remove();
+
+          }
+          var wrapper = document.getElementById('radialprogress');
+          var start = 0;
+
+          var colours = {
+            fill: "#c17c7e" ,
+            track: '#c17c7e36',
+            text: '#c17c7e',
+            stroke: 'transparent',
+          }
+
+          var radius = 40;
+          var border = 4;
+          var strokeSpacing = 5;
+          var endAngle = Math.PI * 2;
+          var formatText = d3.format('.0%');
+          var boxSize = radius * 2;
+          var count = precentage_value;
+          var progress = start;
+          var step = precentage_value < start ? -0.01 : 0.01;
+
+          //Define the circle
+          var circle = d3.svg.arc()
+            .startAngle(0)
+            .innerRadius(radius)
+            .outerRadius(radius - border);
+
+          //setup SVG wrapper
+          svg = d3.select(wrapper)
+            .append('svg')
+            .attr('width', boxSize)
+            .attr('height', boxSize);
+
+
+          // ADD Group container
+          var g = svg.append('g')
+            .attr('transform', 'translate(' + boxSize / 2 + ',' + boxSize / 2 + ')');
+
+          //Setup track
+          var track = g.append('g').attr('class', 'radial-progress');
+          track.append('path')
+            .attr('fill', colours.track)
+            .attr('stroke', colours.stroke)
+            .attr('stroke-width', strokeSpacing + 'px')
+            .attr('d', circle.endAngle(endAngle));
+
+          //Add colour fill
+          var value = track.append('path')
+            .attr('fill', colours.fill)
+            .attr('stroke', colours.stroke)
+            .attr('stroke-width', strokeSpacing + 'px');
+
+          //Add text value
+          var numberText = track.append('text')
+            .attr('fill', colours.text)
+            .attr('text-anchor', 'middle')
+            .attr('dy', '.4rem');
+
+            //update position of endAngle
+            value.attr('d', circle.endAngle(endAngle * precentage_value));
+            //update text value
+            numberText.text(formatText(precentage_value));
+    }
   } // => end controller functionality
 ]);
