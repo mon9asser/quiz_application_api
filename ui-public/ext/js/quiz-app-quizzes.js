@@ -51,6 +51,7 @@ apps.controller('list-apps' , [
          }).then(function (resps){
           //  console.log(resps);
            $scope.__applications = resps.data ;
+           console.log($scope.__applications);
           //  console.log($scope.__applications);
          } , function (err){
               console.log(err);
