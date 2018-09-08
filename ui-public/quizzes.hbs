@@ -27,7 +27,7 @@
 
 
   {{> navbar }}
-  <!-- {> __applications <} -->
+  <!-- {> _applications_ <} -->
   <!-- {> message <}  -->
   <div ng:controller="list-apps" class="container app-container">
       <div class="search-ctr disabled-block">
@@ -65,7 +65,7 @@
           <div class="clearFix"></div>
           <div class="list-apps">
               <ul class="my-qusu">
-                <li ng:repeat="(app_key , app_val )  in __applications">
+                <li ng:repeat="(app_key , app_val )  in _applications_">
                   <span href="#">
                       <span>{> app_val.questionnaire_title <}</span>
                       <!-- <span>{> app_val.creator_id.email <}</span> -->
