@@ -40,7 +40,8 @@ apps.controller('list-apps' , [
       //  alert( settings.server_ip + 'api/applications/list');
       //  alert($scope.json_source);
        $.getJSON( $scope.json_source , function (keys_object){
-
+         console.log(keys_object);
+          console.log(settings.server_ip + 'api/applications/list') ;
          $http({
            url : settings.server_ip + 'api/applications/list' ,
            type : "GET" ,
