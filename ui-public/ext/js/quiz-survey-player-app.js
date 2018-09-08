@@ -206,52 +206,61 @@ apps.controller("player", [
       }
       return true;
     };
-    $rootScope.select_rating_scale__ = function ( index , type , question_id = null  , answer_id = null , question_type = null ){
-        var thisElement = index ;
+    $scope.list_classes_of_this_rating = (question_id , answer_id , rating_object ) => {
+      var classes = {
+        'fa-star-o' : true,
+        'fa-star':false
+      };
 
-        if(type == 1 ) { // ==> Rating
-            var highlighted_stars = $('.fa-star').length ;
-            if($('.start-o').children("li").eq(index).children("span").children("i").hasClass("fa-star")){
-               if((highlighted_stars - 1 ) == index){
-                 $(".start-o li").each(function(i){
-                   $(this).children("span").children("i").removeClass("fa-star");
-                   $(this).children("span").children("i").addClass("fa-star-o");
-                 });
-               }else {
-                 $(".start-o li").each(function(i){
-                    if($(this).children("span").children("i").hasClass('fa-star')){
-                        $(this).children("span").children("i").removeClass('fa-star');
-                        $(this).children("span").children("i").addClass("fa-star-o");
-                    }
-                    if(i <= thisElement){
-                        $(this).children("span").children("i").removeClass("fa-star-o");
-                         $(this).children("span").children("i").addClass('fa-star');
-                     }
-                 });
-               }
-            }else {
-              $(".start-o li").each(function(i){
-                if(i <= thisElement){
-                  $(this).children("span").children("i").removeClass("fa-star-o");
-                  $(this).children("span").children("i").addClass("fa-star");
-                }
-              });
-            }
-         }
-         if( type == 0 ) { // ==> Scale .scalet-o li span
-            if($('.scalet-o').children("li").eq(index).children("span").hasClass("highlighted_scale")){
-              $('.scalet-o').children("li").eq(index).children("span").removeClass("highlighted_scale");
-            }else {
-              $('.scalet-o').children("li").each(function (){
-                $(this).children("span").removeClass("highlighted_scale");
-              });
-              $('.scalet-o').children("li").eq(index).children("span").addClass("highlighted_scale");
-            }
-         }
+      if($scope._user_activity_ == null || $scope._user_activity_.questions_data == null || $scope._user_activity_.questions_data == undefined )
+       return classes ;
+
+      var questions_data_index = $scope._user_activity_.questions_data.findIndex(x => x.question_id == question_id );
+      if( questions_data_index != -1 ){
+
+       var this_question_data = $scope._user_activity_.questions_data[questions_data_index];
+       var this_answer_index = this_question_data.answer_ids.findIndex(x => x.answer_id_val == answer_id );
+       var answer_v = 0;
+       if(this_answer_index != -1){
+         classes['fa-star-o']=false
+         classes['fa-star']= true ;
+       }
+
+      }
+
+
+      return classes ;
+    }
+
+
+    $scope.list_classes_of_this_scale = (question_id , answer_id , rating_object ) => {
+      var classes = "";
+
+      if($scope._user_activity_ == null || $scope._user_activity_.questions_data == null || $scope._user_activity_.questions_data == undefined )
+       return classes ;
+
+      var questions_data_index = $scope._user_activity_.questions_data.findIndex(x => x.question_id == question_id );
+      if( questions_data_index != -1 ){
+        var question_data = $scope._user_activity_.questions_data[questions_data_index] ;
+       var this_answer = question_data.answer_ids.find(x => x.answer_id_val == answer_id);
+
+       if(this_answer != undefined )
+        classes ="selected-scale-number";
+
+      }
+      
+      return classes ;
+    }
+
+
+    $scope.select_rating_scale__ = function ( index , type , question_id = null  , answer_id = null , question_type = null ){
          var question = $scope._questions_.find(x => x._id == question_id)
          var answer = question.answers_format.find(x => x._id == answer_id );
          var rat_answer_val = (index + 1 );
-          $scope.select_answer(question , answer  , rat_answer_val )
+         $scope.select_answer(question , answer  , rat_answer_val );
+         $timeout(function(){
+           $scope.$apply();
+         },300)
      };
     $scope.select_this_rating_value = (index , class_name , answer_id , question_id , rs_type  ) => {
 
@@ -854,7 +863,7 @@ apps.controller("player", [
           var answer_ratScale = $scope._questions_[questionIndex].answers_format[0].rating_scale_answers.find(x => x.rat_scl_value == rat_scale_answer_val) ;
           var ratsclaeoptions = $scope._questions_[questionIndex].answers_format[0] ;
           ratsclaeoptions['answer_value'] = answer_ratScale.rat_scl_value ;
-          var rating_scale_answer = {answer_id : ratsclaeoptions._id ,  answer_object : ratsclaeoptions , answer_index : 0}
+          var rating_scale_answer = {answer_id : ratsclaeoptions._id , answer_id_val :  answer_ratScale._id ,  answer_object :   ratsclaeoptions , answer_index : 0}
           var question_exists = usr.questions_data.findIndex(x => x._id == question_id );
           if(question_exists == -1){
             usr.questions_data.push({

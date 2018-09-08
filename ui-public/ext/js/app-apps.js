@@ -743,10 +743,12 @@ apps.controller("apps-controller" , [
   $rootScope.switching_editor_preview = (is_view) => {
     var checkbox = document.getElementById("switch-editor") ;
     if( is_view == true ){
+      if(checkbox != null )
       checkbox.checked = true ;
       $(".editor-page").css({ "transform" : "translate3d(-100% , 0 , 0)" , height : '0px'});
       $(".preview-page").css({ "transform" : "translate3d(-100%, 0px, 0px)" ,  height : 'auto'});
     }else {
+      if(checkbox != null )
       checkbox.checked = false ;
       $(".editor-page").css({"transform" : "translate3d(0% , 0 , 0)" , height : 'auto'});
       $(".preview-page").css({"transform" : "translate3d(0% , 0 , 0)" , height : '0px'});

@@ -692,3 +692,10 @@ ul li.right_answer > .correct-ico {
   font-size: 14px;
   position: relative;
 }
+.start-o li span.selected_rating_number {
+  color: #c17c7e;
+}
+.scalet-o li span.selected-scale-number {
+  background: rgb(193, 124, 126);
+    color: rgb(255, 255, 255);
+}

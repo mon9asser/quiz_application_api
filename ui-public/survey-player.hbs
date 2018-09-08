@@ -204,7 +204,7 @@
                            <div class="scale-optn" ng:if="obj_val.answers_format[0].ratscal_type == 0 ">
                              <ul box-target-type="box-containers" box-target-class="scalet-o li span" class=" selector scalet-o ul_scal_{>obj_val._id<}" ng:cloak >
                                <li style="width: auto;" data-index='0' ng:repeat="(key_ , val_) in obj_val.answers_format[0].rating_scale_answers track by $index"> <!-- index , class_name , answer_id , question_id , rs_type -->
-                                 <span ng:click="select_rating_scale__($index , 1 , obj_val._id , obj_val.answers_format[0]._id , obj_val.question_type )" box-target-type="box-texts" box-target-class="scalet-o li span" class=" selector spanex scale_value_{>obj_val.answers_format[0]._id<}" ng:click="select_this_rating_value( $index , 'scale_value_'+obj_val.answers_format[0]._id  , obj_val.answers_format[0]._id , obj_val._id , obj_val.answers_format[0].ratscal_type )">
+                                 <span ng:class="list_classes_of_this_scale(obj_val._id , val_._id , val_)" ng:click="select_rating_scale__($index , 1 , obj_val._id , obj_val.answers_format[0]._id , obj_val.question_type )" box-target-type="box-texts" box-target-class="scalet-o li span" class=" selector spanex scale_value_{>obj_val.answers_format[0]._id<}" ng:click="select_this_rating_value( $index , 'scale_value_'+obj_val.answers_format[0]._id  , obj_val.answers_format[0]._id , obj_val._id , obj_val.answers_format[0].ratscal_type )">
                                      {> $index + 1 <}
                                  </span>
                                </li>
@@ -232,8 +232,8 @@
                  <ul box-target-type="box-texts" box-target-class="start-o li span" class=" selector start-o rating_scale_block">
                    <!--  Ratings  -->
                    <li style="width: auto;" data-index='0' ng:repeat="(ratingscale_keys , ratingscale_vale)  in obj_val.answers_format[0].rating_scale_answers track by $index">
-                     <span style="font-size:35px" ng:click="select_rating_scale__($index , 1 , obj_val._id , obj_val.answers_format[0]._id , obj_val.question_type )" href="#">
-                         <i class="fa fa-star-o"></i>
+                     <span  style="font-size:35px" ng:click="select_rating_scale__($index , 1 , obj_val._id , obj_val.answers_format[0]._id , obj_val.question_type )" href="#">
+                         <i class="fa stars_{> obj_val._id <}" ng:class="list_classes_of_this_rating(obj_val._id , ratingscale_vale._id , ratingscale_vale  )"></i>
                      </span>
                    </li>
                  </ul>
@@ -270,7 +270,7 @@
                 </button>
 
                 <button ng:click="submit_the_quiz_into_reports()" ng:if ="(_user_activity_.is_completed != undefined || _user_activity_.is_completed == true) && unsolved_questions.length == 0 && finished_is_clicked == true" class="button-take-this continue-answer-question-button-block submit-in-qsa" type="button" name="button">
-                  <i class="fa fa-arrow-right"></i>
+                  <i class="fa fa-arrow-right x-isc-up"></i>
                   <span>
                       {> _settings_.label_btns.lbl_submit_quiz_with <}
                   </span>
@@ -289,7 +289,7 @@
                       {> _settings_.label_btns.lbl_back_with <}
                  </button>
                  <button  ng:click="submit_the_quiz_into_reports()" class="selector button-take-this submi_the_quiz_handler select_button submit-button-goodbye-screen submit-button-goodbye-screen-block" type="button" name="button">
-                     <i class="fa fa-arrow-right fac-icon-submit" aria-hidden="true"></i>
+                     <i class="fa fa-arrow-right fac-icon-submit x-isc-up" aria-hidden="true"></i>
                      <span ng:cloak class="ng-binding">
                          {> _settings_.label_btns.lbl_submit_quiz_with <}
                      </span>

@@ -27,6 +27,22 @@ apps.filter('math_around_it' , [
     }
   }
 ]);
+apps.filter("filter_completed_time" , ($sce) => {
+  return (time_object) => {
+    var timer = '';
+    if(time_object.type == 0 ) // => Mins
+      timer = ( time_object.time.toString().length > 1 ) ? time_object.time :  "0" + time_object.time ;
+    if(time_object.type == 1 ) // => Secs
+      timer =   ( time_object.time.toString().length > 1 ) ? time_object.time :  "0" + time_object.time;
+
+      if(time_object.type == 0 )
+      timer = timer.toString() + ":00";
+      if(time_object.type == 1 )
+      timer = "00:" + timer.toString() ;
+
+      return timer;
+  }
+});
 apps.filter("time_style" , () => {
   return (time) => {
     // // // console.log(time.toString().length);
@@ -135,10 +151,7 @@ apps.filter("apply_html_with_date_filtering" , ['$sce'  , ( $sce  ) => {
 }]);
 apps.filter("apply_html" , ($sce) => {
   return (val) => {
-
-    if( val == '' )
-       val = "Add your question here !";
-
+    if( val == '' ) val = "Add your question here !";
     return $sce.trustAsHtml(val)
   };
 });
@@ -149,18 +162,17 @@ apps.filter('trust_iframe_url' , ( $sce ) => {
 });
 apps.controller("player", [
 '$rootScope','$scope' , '$http' , '$timeout' , 'settings' , function ( $rootScope , $scope , $http , $timeout , settings ) {
-    console.log(); // live_preview
-    var url_data =  window.location.href.split("/");
 
     $scope.server_ip = settings.server_ip ;
+    var url_data = window.location.href.split("/");
+    $scope.user_id = url_data[url_data.indexOf('live_preview') + 1];
     $scope.application_id = url_data[url_data.indexOf('live_preview') - 1];
     $rootScope.stylesheet_url = $scope.server_ip + "themes/stylesheet_of_app_"+url_data[url_data.indexOf('live_preview') - 1]+".css" ;
-    $scope.user_id = url_data[url_data.indexOf('live_preview') + 1];
+
     $scope.auto_slide_delay = 0 ;
     $scope.current_slide = 0 ;
     $scope.chars = ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'] ;
 
-    console.log(( Math.round (27 * $scope.chars.length) ) / 500);
 
     $scope.question_labels = {
       label_0 : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'] ,
@@ -173,6 +185,7 @@ apps.controller("player", [
     }
 
     // ==> Veriable scopes
+    $scope.timer_proc = null ;
     $scope.unsolved_questions = [] ;
     $scope.finished_is_clicked = false ;
     $scope.percentage_progress = 0 ;
@@ -196,53 +209,61 @@ apps.controller("player", [
       }
       return true;
     };
-    $rootScope.select_rating_scale__ = function ( index , type , question_id = null  , answer_id = null , question_type = null ){
-        var thisElement = index ;
+    $scope.list_classes_of_this_rating = (question_id , answer_id , rating_object ) => {
+      var classes = {
+        'fa-star-o' : true,
+        'fa-star':false
+      };
+
+      if($scope._user_activity_ == null || $scope._user_activity_.questions_data == null || $scope._user_activity_.questions_data == undefined )
+       return classes ;
+
+      var questions_data_index = $scope._user_activity_.questions_data.findIndex(x => x.question_id == question_id );
+      if( questions_data_index != -1 ){
+
+       var this_question_data = $scope._user_activity_.questions_data[questions_data_index];
+       var this_answer_index = this_question_data.answer_ids.findIndex(x => x.answer_id_val == answer_id );
+       var answer_v = 0;
+       if(this_answer_index != -1){
+         classes['fa-star-o']=false
+         classes['fa-star']= true ;
+       }
+
+      }
 
 
-        if(type == 1 ) { // ==> Rating
-            var highlighted_stars = $('.fa-star').length ;
-            if($('.start-o').children("li").eq(index).children("span").children("i").hasClass("fa-star")){
-               if((highlighted_stars - 1 ) == index){
-                 $(".start-o li").each(function(i){
-                   $(this).children("span").children("i").removeClass("fa-star");
-                   $(this).children("span").children("i").addClass("fa-star-o");
-                 });
-               }else {
-                 $(".start-o li").each(function(i){
-                    if($(this).children("span").children("i").hasClass('fa-star')){
-                        $(this).children("span").children("i").removeClass('fa-star');
-                        $(this).children("span").children("i").addClass("fa-star-o");
-                    }
-                    if(i <= thisElement){
-                        $(this).children("span").children("i").removeClass("fa-star-o");
-                         $(this).children("span").children("i").addClass('fa-star');
-                     }
-                 });
-               }
-            }else {
-              $(".start-o li").each(function(i){
-                if(i <= thisElement){
-                  $(this).children("span").children("i").removeClass("fa-star-o");
-                  $(this).children("span").children("i").addClass("fa-star");
-                }
-              });
-            }
-         }
-         if( type == 0 ) { // ==> Scale .scalet-o li span
-            if($('.scalet-o').children("li").eq(index).children("span").hasClass("highlighted_scale")){
-              $('.scalet-o').children("li").eq(index).children("span").removeClass("highlighted_scale");
-            }else {
-              $('.scalet-o').children("li").each(function (){
-                $(this).children("span").removeClass("highlighted_scale");
-              });
-              $('.scalet-o').children("li").eq(index).children("span").addClass("highlighted_scale");
-            }
-         }
+      return classes ;
+    }
+
+
+    $scope.list_classes_of_this_scale = (question_id , answer_id , rating_object ) => {
+      var classes = "";
+
+      if($scope._user_activity_ == null || $scope._user_activity_.questions_data == null || $scope._user_activity_.questions_data == undefined )
+       return classes ;
+
+      var questions_data_index = $scope._user_activity_.questions_data.findIndex(x => x.question_id == question_id );
+      if( questions_data_index != -1 ){
+        var question_data = $scope._user_activity_.questions_data[questions_data_index] ;
+       var this_answer = question_data.answer_ids.find(x => x.answer_id_val == answer_id);
+
+       if(this_answer != undefined )
+        classes ="selected-scale-number";
+
+      }
+
+      return classes ;
+    }
+
+
+    $scope.select_rating_scale__ = function ( index , type , question_id = null  , answer_id = null , question_type = null ){
          var question = $scope._questions_.find(x => x._id == question_id)
          var answer = question.answers_format.find(x => x._id == answer_id );
          var rat_answer_val = (index + 1 );
-          $scope.select_answer(question , answer  , rat_answer_val )
+         $scope.select_answer(question , answer  , rat_answer_val );
+         $timeout(function(){
+           $scope.$apply();
+         },300)
      };
     $scope.select_this_rating_value = (index , class_name , answer_id , question_id , rs_type  ) => {
 
@@ -262,10 +283,14 @@ apps.controller("player", [
       })
 
     };
+
     // ==> Loading Application
     $scope.loading_application_data = () => {
+      var url =   $scope.server_ip + 'api/'+ $scope.application_id +'/player/data' ;
+
         $http({
-          url :  $scope.server_ip + 'api/'+ $scope.application_id +'/player/data'
+          url :url ,
+          type :"POST"
         }).then((results) => {
             var app = results.data;
             $scope._application_ = app;
@@ -354,10 +379,8 @@ apps.controller("player", [
                     if( $scope._settings_.allow_touch_move == true && $scope._settings_.navigation_btns == false )
                       {
                         // ==> case it first slide
-                          if( current_index == 1 && previous_index == 0 ) $scope.join_this_quiz();
-
-                        // ==> case it in second slide
-
+                        if( current_index == 1 && previous_index == 0 )
+                        $scope.join_this_quiz();
                       }
                   });
               } catch (e){}
@@ -389,6 +412,7 @@ apps.controller("player", [
           'user_id' : $scope.user_id ,
           'user_info':$scope.user_id ,
           'is_completed':false ,
+          'user_completed_status' : false ,
           'impr_application_object': $scope._application_
         });
       }
@@ -402,13 +426,18 @@ apps.controller("player", [
     }
     $scope.progress_proccess = (currentIndex) => {
       var question = $scope._questions_ ;
-      var currentWidth ;
-      var currentIndex = currentIndex  ;
+      var currentWidth , currentIndex;
+
+      if( $scope._settings_.enable_screens == true )
+        currentIndex = currentIndex + 1  ;
+        else currentIndex = currentIndex ;
+
       var counts = question.length;
-      currentWidth = (Math.round (currentIndex * 100 / ( counts + 1 ))) ;
+      currentWidth = (Math.round (currentIndex * 100 / ( counts  ))) ;
       // ==> Fill Questin Number
+
       if(currentIndex < ( question.length + 1 ))
-      $scope.question_number = currentIndex  ;
+        $scope.question_number = currentIndex  ;
       // => Progress Graphic
       $(".highlighted-progress").css({
         width : currentWidth  + '%'
@@ -432,21 +461,29 @@ apps.controller("player", [
     $scope.truncate_attendee_data = (currentIndex) => {
 
       // ==> Truncate From database right now
-      // ==> Truncate from two views ( offline + online )
-      $scope._application_.att__draft = null ;
-      $scope._application_.app_report = null;
-      $scope._user_activity_ = undefined ;
-      $scope._online_report_ = undefined ;
-
-
-      $timeout(function(){
-        $scope.$apply();
-        $scope.swipperJs.slideTo(currentIndex);
-      } , 300 );
-
+      // var url = $scope.server_ip + 'api/'+ $scope.application_id  +'/truncate/attendee/data/object';
+      // $http({
+      //   url : url ,
+      //   method : "POST" ,
+      //   data : { user_id : $scope.user_id }
+      // }).then((res)=>{
+      //   $(".retake-result-box").children("i.fa").removeClass("fa-spin")
+      //   // ==> Truncate from two views ( offline + online )
+      //   $scope._application_.att__draft = null ;
+      //   $scope._application_.app_report = null;
+      //   $scope._user_activity_ = undefined ;
+      //   $scope._online_report_ = undefined ;
+      //   $timeout(function(){
+      //     $scope.$apply();
+      //     $scope.swipperJs.slideTo(currentIndex);
+      //   } , 300 );
+      //
+      // }).catch((err)=>{
+      //   console.log(err);
+      // })
     };
     $scope.timer_proccess = () => {
-      var timer_proc ;
+
      var start_the_quiz_timer = () => {
 
        $scope._settings_.time_settings.seconds-- ;
@@ -469,7 +506,7 @@ apps.controller("player", [
        // ==> Update Settings of this user
 
        // Timer machine
-        timer_proc = $timeout(function(){
+        $scope.timer_proc = $timeout(function(){
           // ==> Case Time is completed
           if(( $scope._settings_.time_settings.timer_type == false || ($scope._settings_.time_settings.timer_type == true && $scope._settings_.time_settings.hours == 0)) &&  $scope._settings_.time_settings.minutes == 0 && $scope._settings_.time_settings.seconds == 0 )
            {
@@ -492,7 +529,20 @@ apps.controller("player", [
     };
     $scope._offline_report_collection = () => {
 
-
+      // var url = $scope.server_ip + 'api/'+ $scope.application_id  +'/add/attended/quiz/report';
+      // return $http({
+      //    url : url ,
+      //    method: "POST",
+      //    data : { "user_activity" : $scope._user_activity_ } ,
+      //    headers : $scope.api_key_headers
+      // }).then(function(resp){
+      //   if( $scope._user_activity_.user_completed_status != undefined  )
+      //       $scope._user_activity_.user_completed_status = true ;
+      //
+      //   $scope._online_report_collection();
+      // } , function(err){
+      //
+      // });
     };
     $scope._online_report_collection = () => {
       // console.log($scope._online_report_);
@@ -500,8 +550,44 @@ apps.controller("player", [
        var dataString = new Object();
        $scope._user_activity_.impr_application_object.att__draft = "5b8f9358cebcae44a0c1514e" ;
 
+        // $http({
+        //   "url" : url ,
+        //   "method" : "POST"  ,
+        //   "data" : {  "user_activity" : $scope._user_activity_ }
+        // }).then(function(res){
+        //   console.log(res.data);
+        // }).catch(function(err){ console.log(err);})
+
 
     };
+    $scope.resume_and_go_to_unsolved_question = () => {
+      // ==> Go to next unsolved question
+      if($scope._user_activity_.report_questions == undefined )
+      $scope.swipperJs.slideNext();
+      else {
+          var solved_questions = $scope._user_activity_.report_questions.question_answers ;
+          var questions = $scope._questions_ ;
+          var solved_questions = $scope._user_activity_.report_questions.question_answers ;
+          var unsolved_questions = questions.are_all_questions_tracked(solved_questions);
+          if(unsolved_questions.length != 0 ){
+            var qs_id = unsolved_questions[0]._id ;
+            var question_index =  $scope._questions_.findIndex(x => x._id == qs_id);
+
+            var at_this_index = ( question_index  + 1 );
+            if($scope._settings_.enable_screens == false )
+              at_this_index = ( question_index  );
+            $scope.swipperJs.slideTo(at_this_index);
+          }
+          else
+              $scope.swipperJs.slideTo($scope._questions_.length + 1 );
+
+
+          if( $scope._settings_.time_settings.is_with_time == true )
+            $scope.timer_proccess();
+
+      }
+    };
+
     $scope.go_to_next_unsolved_question = () => {
       // ==> Go to next unsolved question
       if($scope._user_activity_.report_questions == undefined )
@@ -520,6 +606,10 @@ apps.controller("player", [
               at_this_index = ( question_index  );
             $scope.swipperJs.slideTo(at_this_index);
           }
+          else
+              $scope.swipperJs.slideTo($scope._questions_.length + 1 );
+
+
       }
     };
     $scope.start_the_quiz = () => {
@@ -573,6 +663,7 @@ apps.controller("player", [
             "user_id" : $scope.user_id ,
             "user_info":$scope.user_id ,
             "is_completed":false ,
+            "user_completed_status":false ,
             "impr_application_object": $scope._application_
            })
         }
@@ -778,7 +869,7 @@ apps.controller("player", [
           var answer_ratScale = $scope._questions_[questionIndex].answers_format[0].rating_scale_answers.find(x => x.rat_scl_value == rat_scale_answer_val) ;
           var ratsclaeoptions = $scope._questions_[questionIndex].answers_format[0] ;
           ratsclaeoptions['answer_value'] = answer_ratScale.rat_scl_value ;
-          var rating_scale_answer = {answer_id : ratsclaeoptions._id ,  answer_object : ratsclaeoptions , answer_index : 0}
+          var rating_scale_answer = {answer_id : ratsclaeoptions._id , answer_id_val :  answer_ratScale._id ,  answer_object :   ratsclaeoptions , answer_index : 0}
           var question_exists = usr.questions_data.findIndex(x => x._id == question_id );
           if(question_exists == -1){
             usr.questions_data.push({
@@ -1213,16 +1304,22 @@ apps.controller("player", [
 
     };
     $scope.submit_the_quiz_into_reports = () => {
-      $(".button-take-this").children(".fa").removeClass("fa-arrow-right");
-      $(".button-take-this").children(".fa").addClass("fa-refresh fa-spin");
+      $(".button-take-this").children(".x-isc-up").removeClass("fa-arrow-right");
+      $(".button-take-this").children(".x-isc-up").addClass("fa-refresh fa-spin");
 
-      $(".submit-in-qsa").children(".fa").removeClass("fa-arrow-right");
-      $(".submit-in-qsa").children(".fa").addClass("fa-refresh fa-spin");
+      $(".submit-in-qsa").children(".x-isc-up").removeClass("fa-arrow-right");
+      $(".submit-in-qsa").children(".x-isc-up").addClass("fa-refresh fa-spin");
 
-      // ==> Online Report ...
-      $scope._online_report_collection();
+
       // ==> Offline Report ...
       $scope._offline_report_collection();
+
+
+
+
+      if( $scope._settings_.time_settings.is_with_time == true )
+      $timeout.cancel($scope.timer_proc);
+
       $timeout(function(){
         $(".button-take-this").children(".fa").removeClass("fa-refresh fa-spin");
         $(".button-take-this").children(".fa").addClass("fa-arrow-right");
@@ -1239,9 +1336,35 @@ apps.controller("player", [
       // ==> submit-btn-qusu
       $scope.finished_is_clicked = false;
       // console.log("Submit the quiz into report and attedee draft");
+      $scope.submit_the_quiz_into_reports();
     };
     $scope.storing_excuted_time_in_db = () => {
-        // // console.log("Storing excuted time into mongo database!");
+       $scope._online_report_collection();
     }
+    $scope.calculating_completed_time = () => {
+      var excuted_sec , excuted_min_to_sec , excuted_hr_to_sec = 0 , main_time_in_sec , time_proceed;
 
+       main_time_in_sec = $scope._settings_.time_settings.value;
+
+       excuted_sec = $scope._settings_.time_settings.seconds;
+       excuted_min_to_sec = ( $scope._settings_.time_settings.minutes * 60 ) ;
+       if( $scope._settings_.time_settings.timer_type == true )
+       excuted_hr_to_sec = ( $scope._settings_.time_settings.hours * 60 ) * 60 ;
+
+       var exuted_time_in_scs = (excuted_sec + excuted_min_to_sec + excuted_hr_to_sec);
+       var some_clcs = main_time_in_sec -  exuted_time_in_scs ;
+       time_proceed = some_clcs / 60 ;
+       var time_object = new Object();
+
+       time_object['time'] = parseInt(time_proceed)  ;
+       time_object['type'] = 0 ;
+
+       if ( time_proceed < 1 ){
+         time_object['time'] = parseInt (some_clcs)  ;
+         time_object['type'] = 1  ;
+       }
+
+
+       return time_object ;
+    }
 }]);
