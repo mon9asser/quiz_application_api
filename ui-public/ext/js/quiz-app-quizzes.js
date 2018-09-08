@@ -33,28 +33,18 @@ apps.controller('list-apps' , [
      $scope.__applications = [] ;
      $scope.__reports = null ;
 
-     // ==> Functionalities
-     // ==>> Load all applications into angular object
-     $scope.load_attendee_application = function (){
 
-      //  alert( settings.server_ip + 'api/applications/list');
-      //  alert($scope.json_source);
+     $http({
+       url : settings.server_ip + 'api/applications/list/data' ,
+       method : "GET"
+     }).then(function (resps){
+      //  console.log(resps);
+       $scope.__applications = resps.data ;
+       console.log( resps.data );
+      //  console.log($scope.__applications);
+     } , function (err){
+          console.log(err);
+     });
 
-         $http({
-           url : settings.server_ip + 'api/applications/list/data' ,
-           type : "GET"  
-         }).then(function (resps){
-          //  console.log(resps);
-           $scope.__applications = resps.data ;
-           console.log($scope.__applications);
-          //  console.log($scope.__applications);
-         } , function (err){
-              console.log(err);
-         });
-
-     };
-
-     // ==> Calling Functionalities
-     $scope.load_attendee_application();
   }
 ]);
