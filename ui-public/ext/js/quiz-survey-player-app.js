@@ -248,7 +248,7 @@ apps.controller("player", [
         classes ="selected-scale-number";
 
       }
-      
+
       return classes ;
     }
 
@@ -285,6 +285,9 @@ apps.controller("player", [
         $http({
           url :  $scope.server_ip + 'api/'+ $scope.application_id +'/player/data'
         }).then((results) => {
+          $timeout(function(){
+            $(".Loading-contents").fadeOut();
+          } , 1000);
             var app = results.data;
             $scope._application_ = app;
             $scope._questions_ = $scope._application_.questions;

@@ -44,6 +44,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.5/js/swiper.min.js" charset="utf-8"></script>
   </head>
   <body ng:controller="player" id="bddf">
+
+    <!-- Loading App Contents -->
+    <div class="Loading-contents">
+      <div class="sk-folding-cube">
+        <div class="sk-cube1 sk-cube"></div>
+        <div class="sk-cube2 sk-cube"></div>
+        <div class="sk-cube4 sk-cube"></div>
+        <div class="sk-cube3 sk-cube"></div>
+      </div>
+    </div>
+    
     <input id="userId" type="hidden" name="" value="{{ user.id }}">
     <input id="appId" type="hidden" name="" value="{{ app._id }}">
     <!-- Time and Progress bar -->

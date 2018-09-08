@@ -292,6 +292,9 @@ apps.controller("player", [
           url :url ,
           type :"POST"
         }).then((results) => {
+          $timeout(function(){
+            $(".Loading-contents").fadeOut();
+           } , 1000)
             var app = results.data;
             $scope._application_ = app;
             $scope._questions_ = $scope._application_.questions;
