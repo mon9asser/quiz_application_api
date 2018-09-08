@@ -39,16 +39,10 @@ apps.controller('list-apps' , [
 
       //  alert( settings.server_ip + 'api/applications/list');
       //  alert($scope.json_source);
-       $.getJSON( $scope.json_source , function (keys_object){
-         console.log(keys_object);
-          console.log(settings.server_ip + 'api/applications/list') ;
+
          $http({
-           url : settings.server_ip + 'api/applications/list' ,
-           type : "GET" ,
-           headers: {
-             "X-api-keys": keys_object.API_KEY,
-             "X-api-app-name": keys_object.APP_NAME
-           }
+           url : settings.server_ip + 'api/applications/list/data' ,
+           type : "GET"  
          }).then(function (resps){
           //  console.log(resps);
            $scope.__applications = resps.data ;
@@ -57,7 +51,7 @@ apps.controller('list-apps' , [
          } , function (err){
               console.log(err);
          });
-       }); // End JSON
+
      };
 
      // ==> Calling Functionalities

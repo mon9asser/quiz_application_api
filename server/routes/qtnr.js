@@ -2502,6 +2502,19 @@ qtnrRouters.get("/applications/list" , auth_api_keys_only , (req , res )=>{
 
 });
 
+qtnrRouters.get("/applications/list/data"  , (req , res )=>{
+  qtnr.find().populate("creator_id").exec((error , doc)=>{
+    if(!doc || error){
+      return new Promise((resolve, reject) => {
+         res.status(404).send("There are no any applications");
+        });
+    }
+    //console.log(doc);
+    res.send(doc);
+  });
+
+});
+
 qtnrRouters.get("/:creator_id/applications/list"  , (req , res )=>{
   var creator_id = req.params.creator_id ;
 
