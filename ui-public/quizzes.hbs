@@ -68,8 +68,8 @@
                 <li ng:repeat="(app_key , app_val )  in _applications_">
                   <span href="#">
                       <span>{> app_val.questionnaire_title <}</span>
-                      <!-- <span>{> app_val.creator_id.email <}</span> -->
-                      <!-- 12 <i class="fa fa-user"></i> take this quiz -->
+                      <span>{> app_val.creator_id.email <}</span>
+                       
                   </span>
                    <!-- localhost:9000/api/:app_id/:player_type/player/:token -->
                    <a href="{{server_ip}}api/{> app_val._id <}/{> ( app_val.app_type == 0 ) ? 'survey' : 'quiz' <}/player/{{user.token}}/data">
