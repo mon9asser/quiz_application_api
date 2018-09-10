@@ -216,12 +216,12 @@
             </a>
             <div class="items">
               <ul>
-                <li class="righ-check-box">
+                <li ng:show="_settings_.enable_screens" class="righ-check-box">
                   <label class="redactor-xxxx" style=" margin-left: 10px;">Welcome Page </label>
                   <textarea ng:keyup="go_to_screen_number(0)" ng:model="_settings_.titles.title_start_with" class="text-area-style set_redactor" name="name"></textarea>
                 </li>
-                <li class="righ-check-box">
-                  <label class="redactor-xxxx"  style=" margin-left: 10px;">Goodbye and Thank you Page </label>
+                <li ng:show="_settings_.enable_screens" class="righ-check-box">
+                  <label class="redactor-xxxx"  style=" margin-left: 10px;">Thank you Page </label>
                   <textarea ng:keyup="go_to_screen_number(1)" ng:model="_settings_.titles.title_end_with" class="text-area-style set_redactor" name="name"></textarea>
                 </li>
                 <li ng:show="_application_.app_type == 1" class="righ-check-box">
@@ -353,12 +353,12 @@
             <div class="items">
               <ul>
                 <li class="righ-check-box">
-                  <label for="enable-css-mode" style=" margin-left: 10px;">Enable Css Mode</label>
+                  <label for="enable-css-mode" style=" margin-left: 10px;">Edit Styles</label>
                   <input ng:change="enable_css_mode_func(enable_css_mode)" ng:model="enable_css_mode" type="checkbox" id="enable-css-mode" class="switch_1 input-checkboxes">
                 </li>
               </ul>
               <div class="container-of-classes" ng:show="enable_css_mode == true">
-                <code>Player > Style > {> selecotor_name <}</code>
+                <code>Hover over element you want to change the style and you can then edit them</code>
               </div>
               <div class="pellet-containerz"  ng:show="enable_css_mode == true">
                 <h4 class="element_types" ng:if="selecotor_name == '.Answers'">Basic</h4>
