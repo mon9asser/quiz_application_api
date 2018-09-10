@@ -3691,8 +3691,9 @@ rptRouters.post(
 
       };
       var atendee_searched_by_date = (object) => {
-          if(from != null && to != null ) {
-            object.att__draft.att_draft.map(zoom_in_this_date_object)
+          if( from != null && to != null ) {
+            if(object.att__draft != undefined )
+              object.att__draft.att_draft.map(zoom_in_this_date_object)
           }
       }
 
@@ -3748,6 +3749,7 @@ rptRouters.post(
           if(completed_date_in_one >= started_at_date && completed_date_in_one <= ended_at_date )
             atts_x.push(current_object);
         }
+        if(apps.att__draft != undefined)
         apps.att__draft.att_draft.map(zoome_in_quiz_students);
         counts = atts_x.length ;
         return counts ;

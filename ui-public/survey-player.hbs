@@ -108,7 +108,9 @@
                 <div class="question-body question_opg_editor question-box-text">
                   <!-- Question Label (Serial number) -->
                   <span  class="label-question question-label-box">
-                    <span ng:cloak class="qs-numericals">{> $index + 1 <}</span>
+                    <span ng:cloak class="qs-numericals">
+                      {> show_question_answer_serials($index , _settings_.indexes.questions )| uppercase <}
+                    </span>
                     <div class="arrow-right question-label-box-brd"></div>
                   </span>
                   <!-- Question Text -->
@@ -118,7 +120,7 @@
                 <!-- Question description -->
                  <div ng:if="obj_val.question_description.is_enabled == true" class="question-description-data questiondescdata">
                    <p class="description-block-box">
-                     <i class="fa fa-dot-circle-o desc-icon-z-x" aria-hidden="true"></i>
+                     <!-- <i class="fa fa-dot-circle-o desc-icon-z-x" aria-hidden="true"></i> -->
                      <span ng:cloak data:ng:bind:html="obj_val.question_description.value | apply_html"></span>
                    </p>
                  </div>
@@ -150,7 +152,9 @@
                    <!-- Answer label -->
                    <!-- {> question_labels['label_' + _settings_.indexes.questions.toString()][question_index] | uppercase <} -->
                    <!-- <span box-target-type="box-labels" box-target-class="answer_label"  class="answer_label selector">{> question_labels['label_' + _settings_.indexes.answers.toString()][$index] | uppercase <}</span> -->
-                   <label ng:cloak class="selector labels select_box_brd answer_numbering_block answer_numbering_block_box">{> question_labels['label_' + _settings_.indexes.answers.toString()][$index] | uppercase <}</label>
+                   <label ng:cloak class="selector labels select_box_brd answer_numbering_block answer_numbering_block_box">
+                      {> show_question_answer_serials( $index , _settings_.indexes.answers )| uppercase <}
+                   </label>
 
                   <!-- Answer Media  -->
                    <!-- answer media for 0 -->

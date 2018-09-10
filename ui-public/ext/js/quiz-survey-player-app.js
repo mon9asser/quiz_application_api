@@ -9,8 +9,15 @@ Array.prototype.is_completed_quiz_option = function (question_answers){
     return question_answers.findIndex(x => x.question_id == i._id ) === -1 ;
   });
 }
+// Array.prototype.are_all_questions_tracked = function( solved_questions ){
+//   return this.filter(function(i){
+//     return solved_questions.findIndex(x => x.question_id == i._id ) === -1 ;
+//   });
+// }
+
 Array.prototype.are_all_questions_tracked = function( solved_questions ){
-  return this.filter(function(i){
+  var required_questions =  this.filter(x => x.answer_settings.is_required == true );
+  return required_questions.filter(function(i){
     return solved_questions.findIndex(x => x.question_id == i._id ) === -1 ;
   });
 }
@@ -296,6 +303,7 @@ apps.controller("player", [
             $scope._offline_report_ = $scope._application_.app_report;
             $rootScope._stylesheet_ = $scope.server_ip + "themes/stylesheet_of_app_" + $scope.application_id +'.css';
 
+            $scope.randomize_sorting_questions($scope._settings_.randomize_settings);
 
 
             // ==> Storing current attendee draft
@@ -369,6 +377,23 @@ apps.controller("player", [
                     var previous_index = this_slide[0].previousIndex;
                     $scope.current_slide = current_index ;
 
+                    var current_slider = $(".swiper-wrapper").find(".swiper-slide-active");
+                    var element_id = current_slider.prop("id") ;
+                    if(element_id != ''){
+                      if(element_id.split("-") != undefined && element_id.split("-").pop() != undefined ){
+                        var questionId = element_id.split("-").pop();
+                        var thisQuestion  = $scope._questions_.find(x => x._id == questionId);
+                        var thisQuestionIndex  = $scope._questions_.findIndex(x => x._id == questionId);
+                        if(thisQuestionIndex != -1 ){
+                          if(thisQuestion.question_type == 0 || thisQuestion.question_type == 1 ){
+                            var answer_settings = thisQuestion.answer_settings ;
+                            // answer_settings.is_randomized
+                            $scope.is_randomized_answer_with(answer_settings.is_randomized ,thisQuestionIndex );
+                          }
+                        }
+                      }
+                    }
+
                     if( $scope._settings_.progression_bar.is_available == true )
                       $scope.progress_proccess(current_index);
 
@@ -387,6 +412,73 @@ apps.controller("player", [
     };
     // ==> Loading Application
     $scope.loading_application_data();
+    $rootScope.is_randomized_answer_with = (is_randomizing , qs_index) => {
+      if( is_randomizing == true )
+        $scope._questions_[qs_index].answers_format = $scope.randomize_arries( $scope._questions_[qs_index].answers_format );
+      else
+        $scope._questions_[qs_index].answers_format = $scope.sorting_arries( $scope._questions_[qs_index].answers_format , "_id");
+    }
+    $scope.show_question_answer_serials = (serial , type ) =>{
+      // {> question_labels['label_' + _settings_.indexes.questions.toString()][question_index] | uppercase <}
+      if(type == 0 )
+        return $scope.serial_letters(serial) ;
+        else
+        return $scope.serial_numbers(serial) ;
+    }
+    $scope.serial_letters = (serial) =>{
+      var charset , times , at_serial , new_serial
+      new_serial = "a"
+      charset  = "abcdefghijklmnopqrstuvwxyz";
+      times = parseInt(serial / charset.length);
+      at_serial = serial - ( times * charset.length ) ;
+      new_serial = charset.charAt(times) + charset.charAt(at_serial) ;
+      if( times == 0 ) new_serial = charset.charAt(at_serial) ;
+      return new_serial;
+    }
+    $scope.serial_numbers = (serial) => {
+        return serial + 1 ;
+    };
+    $scope.randomize_sorting_questions = (setting_changes) => {
+
+      if(setting_changes == true) {
+        // ==> Randmoize it
+        $scope._questions_ = $scope.randomize_arries( $scope._questions_);
+
+      }else {
+        // => sorting it
+        $scope._questions_ = $scope.sorting_arries( $scope._questions_  , "_id");
+
+      }
+      $timeout(function(){
+        $scope.$apply();
+      } , 300 )
+    }
+    $scope.sorting_arries = function (arr , propert_field){
+      var compare = (a,b) => {
+        if (a[propert_field] < b[propert_field])
+          return -1;
+        if (a[propert_field] > b[propert_field])
+          return 1;
+        return 0;
+      }
+
+      return arr.sort(compare);
+    }
+    $scope.randomize_arries = function (array) {
+        var currentIndex = array.length, temporaryValue, randomIndex;
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+        }
+
+        return array;
+      }
     $scope.join_this_quiz = () => {
 
       if( $scope.isEmpty( $scope._online_report_ ) == true ) {

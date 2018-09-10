@@ -1,7 +1,19 @@
+Array.prototype.are_all_questions_tracked = function( solved_questions ){
+  var required_questions =  this.filter(x => x.answer_settings.is_required == true );
+  return required_questions.filter(function(i){
+    return solved_questions.findIndex(x => x.question_id == i._id ) === -1 ;
+  });
+}
+
 // var start_expiration_date , expiration_day_counts ;
 var time_epiration = {
     expiration_day_counts : 0
 };
+// Array.track_unsolved_and_required_questions = function( solved_questions ) {
+//   return this.filter(function(i){
+//     return solved_questions.findIndex ( x => x.answer_settings.is_required == true && x => x._id == i._id ) === -1
+//   });
+// }
 apps.filter( 'apply_html' , ['$sce' , ( $sce ) => {
   return ( returned_values ) => {
     if(returned_values  == '' ) returned_values = "Add your question here !"
@@ -246,6 +258,7 @@ apps.controller("apps-controller" , [
   $rootScope.changed_day_numbers = (number) => {
     time_epiration.expiration_day_counts = number ;
    };
+  $rootScope.unsolved_questions = [];
   $rootScope.theme_stylesheet = new Array();
   $rootScope.progressbar_models = "/time-progress-temps/progressbar-1.hbs" ;
   $rootScope.time_models = "/time-progress-temps/time-1.hbs" ;
@@ -259,7 +272,7 @@ apps.controller("apps-controller" , [
   $rootScope.serial_numbers = (serial) => {
       return serial + 1 ;
   };
-  console.log($rootScope.serial_numbers(12));
+ 
   $rootScope.serial_letters = (serial) =>{
     var charset , times , at_serial , new_serial
     new_serial = "a"
@@ -387,7 +400,11 @@ apps.controller("apps-controller" , [
     $rootScope._settings_    =  $rootScope._application_.settings;
     $rootScope.question_ids  =  $rootScope._application_.question_ids;
     $rootScope.answer_ids    =  $rootScope._application_.answer_ids;
+
     $rootScope._questions_   =  $rootScope._application_.questions;
+    $rootScope.randomize_sorting_questions($rootScope._settings_.randomize_settings);
+
+
     if($rootScope._application_.theme_style != undefined )
     $rootScope.theme_stylesheet = $rootScope._application_.theme_style;
 
@@ -968,7 +985,8 @@ apps.controller("apps-controller" , [
             $timeout(function(){
               $rootScope.$apply();
             });
-
+            if($rootScope._questions_[$rootScope.question_index].answer_settings.is_randomized != undefined )
+            $rootScope.is_randomized_answer_with($rootScope._questions_[$rootScope.question_index].answer_settings.is_randomized);
           }
   //==> Show Media Link in input
   $rootScope.show_media_link = () => {
@@ -1468,6 +1486,7 @@ sort: false  */
         handle: '.drag-tools',
         ghostClass: 'shadow_element' ,
         onEnd : (evt) => {
+
           var old_index = evt.oldIndex ;
           var new_index = evt.newIndex;
           var target_answer = answers[old_index];
@@ -1485,24 +1504,24 @@ sort: false  */
   // ==> Sorting Questions
   $rootScope.init_drag_drop = () => {
     Sortable.create (document.getElementById("qs-sortable") , {
-      sort: false,
        disabled: false,
+       sort: false,
        animation: 180 ,
-        group: {
+       group: {
            name: "question-list",
            pull: "clone",
            revertClone: false,
        },
        onMove : function (evt){
 
-           var dragged = evt.dragged;
-               var draggedRect = evt.draggedRect;
-               var related = evt.related;
-               var relatedRect = evt.relatedRect;
+          var dragged = evt.dragged;
+          var draggedRect = evt.draggedRect;
+          var related = evt.related;
 
-           var ParentID = $(dragged).parent().prop("id");
-           var ParentEl = $(dragged).parent();
-           if(ParentID == "qs-sortable") {
+          var relatedRect = evt.relatedRect;
+          var ParentID = $(dragged).parent().prop("id");
+          var ParentEl = $(dragged).parent();
+          if(ParentID == "qs-sortable") {
              ParentEl.find(dragged).html("");
              // set animation
              // ParentEl.find(dragged).addClass("animated wobble");
@@ -1515,25 +1534,24 @@ sort: false  */
 
         } ,
        onEnd  : function (evt) {
-
-         var Item = evt.item;
-         evt.oldIndex;
-		     evt.newIndex;
-         var question_type = Item.getAttribute('data-question-type') ;
-         // ==> Remove current gost
-         var isScaleRating = null ;
-         if( question_type == 3 ){
-            isScaleRating = Item.getAttribute('data-is-scale');
-          }
-          $rootScope.add_new_question ( question_type , evt.newIndex ,  isScaleRating ) ;
-         $timeout(function(){
-           $("#docQuestions").find("li.question_bult_in").remove();
-         } , 10);
+           var Item = evt.item;
+           evt.oldIndex;
+  		     evt.newIndex;
+           var question_type = Item.getAttribute('data-question-type') ;
+           // ==> Remove current gost
+           var isScaleRating = null ;
+           if( question_type == 3 ){
+              isScaleRating = Item.getAttribute('data-is-scale');
+            }
+            $rootScope.add_new_question ( question_type , evt.newIndex ,  isScaleRating ) ;
+           $timeout(function(){
+             $("#docQuestions").find("li.question_bult_in").remove();
+           } , 10);
        }
     })
 
     Sortable.create( document.getElementById("docQuestions") , {
-       ghostClass: 'shadow_element' ,
+        ghostClass: 'shadow_element' ,
         group: "question-list" ,
         disabled: false ,
         animation: 250 ,
@@ -2455,6 +2473,20 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
   }
   $rootScope.submit_the_quiz = (css_mode) => {
     if(css_mode == true ) return false;
+    // ==> if There a required question
+    // are_all_questions_tracked
+    if($rootScope.this_attendee_draft == undefined || $rootScope.this_attendee_draft.att_draft == undefined ){
+      $rootScope.unsolved_questions = $rootScope._questions_ ;
+    }
+    else {
+      var usr = $rootScope.this_attendee_draft.att_draft.find(x => x.user_id == $rootScope.user_id );
+      if(usr != undefined ){
+        $rootScope.unsolved_questions = $rootScope._questions_.are_all_questions_tracked( usr.questions_data );
+      }
+    }
+    if($rootScope.unsolved_questions.length != 0 )
+      return false;
+    // ==> Go to screen
     if( $rootScope.screen_type == 1 ){
       $rootScope.is_view = true;
       $rootScope.screen_type = 2;
