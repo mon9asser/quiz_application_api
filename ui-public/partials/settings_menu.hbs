@@ -14,7 +14,7 @@
         <!-- Sections -->
         <ul class="second-nav">
 
-          <li  ng:hide="enable_css_mode"  class="nav-parent">
+          <li class="nav-parent">
             <a href="#" class="head-items">
               General
               <span class="nav-next"></span>
@@ -60,13 +60,13 @@
                   <input ng:change="change_in_view( 3 , null , 'randomize' , _settings_.randomize_settings )" ng:model="_settings_.randomize_settings" ng:change="randomize_sorting_questions(_settings_.randomize_settings)" type="checkbox" id="rendomize-question" class="switch_1 input-checkboxes">
                 </li>
                 <li class="righ-check-box">
-                  <label for="goodby-screen-we-enable" style=" margin-left: 10px;">Enable Goodbye and welcome screen</label>
-                  <input ng:model="_settings_.enable_screens" ng:change="change_in_view( 3 )" type="checkbox" id="goodby-screen-we-enable" class="switch_1 input-checkboxes">
+                  <label for="goodby-screen-we-enable" style=" margin-left: 10px;">Enable Welcome and Thank you page</label>
+                  <input ng:model="_settings_.enable_screens" ng:change="changing_into_we_screen( _settings_.enable_screens )" type="checkbox" id="goodby-screen-we-enable" class="switch_1 input-checkboxes">
                 </li>
               </ul>
             </div>
           </li>
-          <li  ng:hide="enable_css_mode"  class="nav-parent">
+          <li class="nav-parent">
             <a href="#">
               Progress bar Options
               <span class="nav-next"></span>
@@ -108,7 +108,7 @@
               </ul>
             </div>
           </li>
-          <li ng:hide="enable_css_mode || _application_.app_type == 0"  class="nav-parent">
+          <li ng:hide="_application_.app_type == 0"  class="nav-parent">
             <a href="#">
               Timer Options
               <span class="nav-next"></span>
@@ -177,7 +177,7 @@
               </ul>
             </div>
           </li>
-          <li  ng:hide="enable_css_mode || _application_.app_type == 0"  class="nav-parent">
+          <li  ng:hide="_application_.app_type == 0"  class="nav-parent">
             <a href="#">
               Expiration Options
               <span class="nav-next"></span>
@@ -209,7 +209,7 @@
               </ul>
             </div>
           </li>
-          <li  ng:hide="enable_css_mode"  class="nav-parent">
+          <li class="nav-parent">
             <a href="#">
               Messages and Texts
               <span class="nav-next"></span>
@@ -239,7 +239,7 @@
               </ul>
             </div>
           </li>
-          <li  ng:hide="enable_css_mode"  class="nav-parent">
+          <li class="nav-parent">
             <a href="#">
               Labels and Buttons
               <span class="nav-next"></span>
@@ -347,7 +347,7 @@
           </li>
           <li class="nav-parent">
             <a href="#">
-              Stylesheet
+              Styles
               <span class="nav-next"></span>
             </a>
             <div class="items">
@@ -357,10 +357,10 @@
                   <input ng:change="enable_css_mode_func(enable_css_mode)" ng:model="enable_css_mode" type="checkbox" id="enable-css-mode" class="switch_1 input-checkboxes">
                 </li>
               </ul>
-              <div class="container-of-classes" ng:show="enable_css_mode == true">
+              <div class="container-of-classes">
                 <code>Hover over element you want to change the style and you can then edit them</code>
               </div>
-              <div class="pellet-containerz"  ng:show="enable_css_mode == true">
+              <div class="pellet-containerz">
                 <h4 class="element_types" ng:if="selecotor_name == '.Answers'">Basic</h4>
                 <ul>
                   <li ng:show="css_pellet_mode.radial_text_color == true">

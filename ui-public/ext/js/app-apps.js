@@ -272,7 +272,7 @@ apps.controller("apps-controller" , [
   $rootScope.serial_numbers = (serial) => {
       return serial + 1 ;
   };
- 
+
   $rootScope.serial_letters = (serial) =>{
     var charset , times , at_serial , new_serial
     new_serial = "a"
@@ -2521,11 +2521,16 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
       else
       $rootScope.screen_type = 0 ;
   };
+  $rootScope.changing_into_we_screen = (scType) => {
+    if(scType == false ) $rootScope.screen_type = 3 ;
+    else $rootScope.screen_type = 0 ;
+  }
   $rootScope.change_in_view = (screen_number , question_index = null , setting_name = null , setting_val = null ) => {
     if(setting_name != null && setting_val != null ){
       if(setting_name == 'randomize')
       $rootScope.randomize_sorting_questions(setting_val);
     }
+
     $rootScope.screen_type = screen_number ;
     $rootScope.switching_editor_preview(true);
     if(question_index != null ){
@@ -2690,7 +2695,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
               $('.background_models').spectrum('set' , $rootScope.background_models );
               if(current_class.css("border-style") == undefined ) {
 
-                alert("is Working only when you set 'Single Response' to false !");
+                // alert("is Working only when you set 'Single Response' to false !");
                 return false ;
               }
               $rootScope.border_style_models = current_class.css("border-style").toString();
@@ -3520,6 +3525,16 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
       $rootScope.store_in_root_stylesheet_object($rootScope.selector_class , css_attribute , css_value );
     }
   };
+  $rootScope.build_answer_text_value = (answer_value , answer_id , className ) => {
+    var current_question = $rootScope._questions_[$rootScope.question_index];
+    if(current_question != undefined){
+      var answer = current_question.answers_format.find(x => x._id == answer_id );
+      answer.value = answer_value ;
+      $timeout(function(){
+        $(className).focus();
+       } , 5)
+    }
+  }
   // ==> Calling all function according timeout
   $timeout(function(){
     $rootScope.draw_radial_progression(0/100);

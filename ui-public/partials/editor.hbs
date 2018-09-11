@@ -131,7 +131,8 @@
                    </div>
                    <!-- Answer Text -->
                    <div ng:class="(answer_value.media_optional != undefined)?'add_dashed_border':''"  ng:if="answer_value.value != undefined" class="text-answers">
-                     <input placeholder="{> answer_value.value <}" ng:model="answer_value.value" type="text" class="writanswer-input editor-all-ans-data">
+                     <input ng:if="answer_value.value != 'Answer '+($index+1)" placeholder="{> answer_value.value <}" ng:model="answer_value.value" type="text" class="writanswer-input editor-all-ans-data {> 'text_'+$index+1 <}">
+                     <input ng:if="answer_value.value == 'Answer '+($index+1)" placeholder="{> answer_value.value <}" ng:change="build_answer_text_value(data_answer[$index].value , answer_value._id , '.text_'+$index+1 )" ng:model="data_answer[$index].value" type="text" class="writanswer-input editor-all-ans-data {> 'text__'+$index+1 <}">
                    </div>
                  </li>
               </ul>
