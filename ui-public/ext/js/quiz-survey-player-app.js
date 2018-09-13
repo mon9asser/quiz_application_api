@@ -16,10 +16,15 @@ Array.prototype.is_completed_quiz_option = function (question_answers){
 // }
 
 Array.prototype.are_all_questions_tracked = function( solved_questions ){
-  var required_questions =  this.filter(x => x.answer_settings.is_required == true );
-  return required_questions.filter(function(i){
-    return solved_questions.findIndex(x => x.question_id == i._id ) === -1 ;
-  });
+  try {
+
+      var required_questions =  this.filter(x => x.answer_settings.is_required == true );
+      return required_questions.filter(function(i){
+        return solved_questions.findIndex(x => x.question_id == i._id ) === -1 ;
+      });
+  } catch (e) {
+
+  }
 }
 var application_exception = {
   expire_through : 0 ,
@@ -618,19 +623,20 @@ apps.controller("player", [
     $scope._offline_report_collection = () => {
 
       var url = $scope.server_ip + 'api/'+ $scope.application_id  +'/add/attended/quiz/report';
+      $scope._user_activity_.is_completed = true
       return $http({
          url : url ,
          method: "POST",
-         data : { "user_activity" : $scope._user_activity_ } ,
-         headers : $scope.api_key_headers
+         data : { "user_activity" : $scope._user_activity_ }
       }).then(function(resp){
+        console.log($scope._user_activity_);
         if( $scope._user_activity_.user_completed_status != undefined  )
-            $scope._user_activity_.user_completed_status = true ;
+          $scope._user_activity_.user_completed_status = true ;
 
-        // ==> Online Report ...
-        $scope._online_report_collection();
+            // ==> Online Report ...
+            $scope._online_report_collection();
       } , function(err){
-        // console.log(err); return false;
+        console.log(err);
       });
     };
     $scope._online_report_collection = () => {
@@ -686,7 +692,7 @@ apps.controller("player", [
           var questions = $scope._questions_ ;
           var solved_questions = $scope._user_activity_.report_questions.question_answers ;
           var unsolved_questions = questions.are_all_questions_tracked(solved_questions);
-          if(unsolved_questions.length != 0 ){
+          if( unsolved_questions != undefined && unsolved_questions.length != 0 ){
             var qs_id = unsolved_questions[0]._id ;
             var question_index =  $scope._questions_.findIndex(x => x._id == qs_id);
 

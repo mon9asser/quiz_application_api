@@ -816,7 +816,7 @@ apps.controller("apps-controller" , [
        answer_object = new Object();
        answer_object['_id'] = $rootScope.answer_ids[ 'id_' + question_object.answers_format.length ] + '' + $rootScope._questions_.length +'_a';
        answer_object['boolean_type'] = "true/false";
-       answer_object['boolean_value'] = true ;
+       answer_object['boolean_value'] = "True" ;
        if ( $rootScope._application_.app_type == 1 )
        answer_object['is_correct'] = false ;
        // => Push To Answer Array
@@ -825,7 +825,7 @@ apps.controller("apps-controller" , [
        var answer_object_2 = new Object();
        answer_object_2['_id'] = $rootScope.answer_ids[ 'id_' + question_object.answers_format.length ] + '' + $rootScope._questions_.length +'_b';;
        answer_object_2['boolean_type'] = "true/false";
-       answer_object_2['boolean_value'] = false ;
+       answer_object_2['boolean_value'] = "False" ;
        if ( $rootScope._application_.app_type == 1 )
        answer_object_2['is_correct'] = true ;
        $rootScope.build_question_settings ( 'is_randomized' , false , question_object._id );

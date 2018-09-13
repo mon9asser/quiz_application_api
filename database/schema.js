@@ -362,11 +362,11 @@ var build_attendees = {
   is_completed                : { type:Boolean }  ,
   passed_the_grade            : { type:Boolean }  ,
   results                     : { type : { wrong_answers:{ type:Number } , correct_answers : { type:Number }  , count_of_questions : { type:Number } , result:{ type:{ percentage_value :{type:Number} , raw_value:{type:Number} } } } }  ,
-  survey_quiz_answers         : { type : [ builde_survey_quiz_answers ] } ,
+  // survey_quiz_answers         : { type : [ builde_survey_quiz_answers ] } ,
   created_at                  : { type : Date } ,
   updated_at                  : { type : Date } ,
   user_information            : { type:String ,   unique : false , ref : "users"}
-} ;
+};
 var reportDataTypes = {
    questionnaire_id   : { type:String , unique : true } ,
    questionnaire_info : { type:String , ref : "questionnaire"  } ,

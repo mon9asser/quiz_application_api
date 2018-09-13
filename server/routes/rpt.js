@@ -362,7 +362,7 @@ rptRouters.post("/:app_id/add/attended/quiz" ,api_key_report_auth , (req , res)=
                     question_object['answers']['answer_id'] = new Array(); // fill it right now
                     question_object['answers']['answer_body'] = new Object();  // fill it
                 question_object['is_correct'] = true ; // fill it
-
+                console.log(question_data);
                 // ==> II - Answer data
                 var answer_obj = question_data.answer_ids;
                 for (var ix = 0; ix < answer_obj.length; ix++) {
@@ -547,7 +547,9 @@ rptRouters.post("/:app_id/add/attended/quiz" ,api_key_report_auth , (req , res)=
 
 
 rptRouters.post("/:app_id/add/attended/quiz/report"  , (req , res)=>{
+
     var online_report_data = req.body.user_activity ;
+    online_report_data.report_attendees['is_completed'] = true ;
     var application_id = req.params.app_id ;
     rpt.findOne({"questionnaire_id":application_id} , (error , rptDocument)=>{
       if(error){
@@ -556,6 +558,7 @@ rptRouters.post("/:app_id/add/attended/quiz/report"  , (req , res)=>{
       }
 
       if( rptDocument == null || !rptDocument ){
+
             var reportObject = new Object();
             reportObject['attendees'] = new Array();
             // reportObject['history']  = new Array();
@@ -563,7 +566,7 @@ rptRouters.post("/:app_id/add/attended/quiz/report"  , (req , res)=>{
             reportObject['attendee_details'] = new Array();
             reportObject['questionnaire_id'] = application_id;
             reportObject['questionnaire_info'] = application_id;
-            reportObject['app_type'] = online_report_data.impr_application_object.app_type
+            reportObject['app_type']   = online_report_data.impr_application_object.app_type
             reportObject['creator_id'] = online_report_data.impr_application_object.app_type
             reportObject['created_at'] = new Date();
             reportObject['updated_at'] = new Date();
@@ -582,6 +585,7 @@ rptRouters.post("/:app_id/add/attended/quiz/report"  , (req , res)=>{
             rptDocument = reportObject
             var reportx = new rpt(reportObject);
             reportx.save().then(function(reprt){
+              console.log(reprt);
               // ==> Updating the id for quationnaire
               qtnr.findById({_id :application_id }, function (err, doc) {
                     if (err) console.log(err);
@@ -590,14 +594,18 @@ rptRouters.post("/:app_id/add/attended/quiz/report"  , (req , res)=>{
               });
                 res.send(reprt);
                 return false;
+            }).catch((err) => {
+              console.log(err);
             });
+
+
       }else {
         // ==> Attendees
         var attendee_exists = rptDocument.attendees.findIndex(x => x.attendee_id == online_report_data.report_attendees.attendee_id );
         if(attendee_exists == -1)
           rptDocument.attendees.push(online_report_data.report_attendees);
         else {
-          rptDocument.attendees.splice(attendee_exists , 1);
+          rptDocument.attendees.splice( attendee_exists , 1 );
           rptDocument.attendees.push(online_report_data.report_attendees);
         }
 
@@ -1813,6 +1821,7 @@ rptRouters.post("/:app_id/statistics/report/v1.1" , api_key_report_auth , (req ,
     for (var i = 0; i < statistics.length; i++) {
          var qs_object = new Object();
           qs_object['question_id'] = statistics[i].question_id;
+
           qs_object['question'] = statistics[i].question_body;
           qs_object['count_of_attendees'] = statistics[i].attendee_info.length;
           qs_object['answers'] = new Array();
@@ -2343,16 +2352,82 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
           var online_report  = ( detailed_report.att__draft == null) ? new Array() : detailed_report.att__draft.att_draft;
           var offline_report = ( detailed_report.app_report == null ) ? new Array() : detailed_report.app_report.attendees;
           var questionnaire  = creatorQuestionnaires;
-
+          var att_lists = new Array();
           var unreported = online_report.find_reported_attendees(offline_report);
-          // // console.log(unreported.length);
-          var started_not_started = _.countBy( unreported , { report_attendees : Object() });
+          var unreported_filter = unreported.filter((eData) => {
+           var completed_date = new Date(eData.start_expiration_time);
+           if( req.body.date != null ){
+               if( req.body.date.date_from == null  || req.body.date.date_to == null  ){
+                 return  new Promise((resolve, reject) => {
+                     res.send(notes.notifications.catch_fields("`date_from` && `date_to` are required ! in side date object"));
+                 });
+                     return false ;
+                }
 
-          var total_attendee_objects = online_report.length ;
+                var from = new Date(req.body.date.date_from);
+                var to = new Date(req.body.date.date_to);
+                if ( completed_date >= from && completed_date <= to ) {
+                  return eData ;
+                }
+            }else
+            return eData ;
+          });
+          // // console.log(unreported.length);
+          var started_not_started = _.countBy( unreported_filter , { report_attendees : Object() });
+          var filtered_online_report = () => {
+            var filters = online_report.filter((eData) => {
+
+                var completed_date = ( eData.report_attendee_details != undefined ) ? new Date(eData.report_attendee_details.completed_date) : new Date(eData.start_expiration_time);
+                if( req.body.date.date_from == null  || req.body.date.date_to == null  ){
+                  return new Promise((resolve, reject) => {
+                      res.send(notes.notifications.catch_fields("`date_from` && `date_to` are required ! in side date object"));
+                  });
+                      return false ;
+                 }
+
+                var from = new Date( req.body.date.date_from );
+                var to = new Date( req.body.date.date_to );
+
+                if (completed_date >= from && completed_date <= to){
+
+                  return eData ;
+                }
+            });
+            return filters.length ;
+          }
+          var completed_quiz_ACC_date = () => {
+             if(detailed_report.app_report == null ) return 0 ;
+            var filtred = detailed_report.app_report.attendee_details.filter((OFF)=>{
+
+
+                var completed_date = new Date(OFF.completed_date); // completed_status
+
+                if( req.body.date.date_from == null  || req.body.date.date_to == null  ){
+                  return new Promise((resolve, reject) => {
+                      res.send(notes.notifications.catch_fields("`date_from` && `date_to` are required ! in side date object"));
+                  });
+                      return false ;
+                 }
+
+                var from = new Date( req.body.date.date_from );
+                var to = new Date( req.body.date.date_to );
+                console.log("$$$$$$$$$$$$$$$$$$$$$$$$");
+                console.log(OFF);
+                if ((completed_date >= from && completed_date <= to) ){
+
+                  return OFF ;
+                }
+            });
+            return filtred.length ;
+          };
+
+          var total_attendee_objects = (req.body.date == null )? online_report.length : filtered_online_report();
+
           var started_attendees = (started_not_started.true == undefined ) ? 0 :  started_not_started.true;
 
           var not_started_attendees = (started_not_started.false == undefined ) ? 0 :  started_not_started.false;
-          var completed_apps = offline_report.length ;
+
+          var completed_apps = (req.body.date == null ) ? offline_report.length : completed_quiz_ACC_date() ;
 
           detailes_report['overview'] = new Object();
 
@@ -2362,18 +2437,87 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
           detailes_report.overview['completed'] = completed_apps ;
 
           if(req.body.pagination != null )
-          detailes_report['paging'] = new Object();
+            detailes_report['paging'] = new Object();
 
           // var is_passed = _.countBy( online_report , { 'report_attendees.passed_the_grade': true  }) ;
-          var is_passed = _ .countBy( offline_report , ( e ) => {
-                if( e.passed_the_grade != undefined )
-                  return e.passed_the_grade;
-          });
+          // var is_passed = _ .countBy( offline_report , ( e ) => {
+          //       if( e.passed_the_grade != undefined )
+          //         return e.passed_the_grade;
+          // });
+          //
+          // if(questionnaire.app_type == 1)
+          //   detailes_report.overview['passed'] = ( is_passed.true != undefined ) ? is_passed.true : 0 ;
+          // if(questionnaire.app_type == 1)
+          //   detailes_report.overview['failed'] = ( is_passed.false != undefined ) ? is_passed.false : 0  ;
+          //
 
+          var is_passed_the_grade = () => {
+           var passed = offline_report.filter((is_passed)=>{
+             var this_attendee = is_passed.attendee_id;
+
+              if( is_passed.passed_the_grade == true ){
+                if( req.body.date != null ){
+                  var usr_act = detailed_report.app_report.attendee_details.find(x => x.attendee_id == this_attendee ) ;
+                  if( usr_act == undefined ) return 0 ;
+
+                  var completed_date = new Date(usr_act.completed_date);
+                  if( req.body.date.date_from == null  || req.body.date.date_to == null  ){
+                    return new Promise((resolve, reject) => {
+                        res.send(notes.notifications.catch_fields("`date_from` && `date_to` are required ! in side date object"));
+                    });
+                        return false ;
+                   }
+
+                  var from = new Date( req.body.date.date_from );
+                  var to = new Date( req.body.date.date_to );
+                  if ((completed_date >= from && completed_date <= to) ){
+                    return is_passed;
+                  }
+
+                }else
+                return is_passed ;
+              }
+           }) ;
+
+            return passed.length ;
+          };
+
+
+          var is_failed_the_grade = () => {
+           var passed = offline_report.filter((is_passed)=>{
+             var this_attendee = is_passed.attendee_id;
+
+              if( is_passed.passed_the_grade == false ){
+                if( req.body.date != null ){
+                  var usr_act = detailed_report.app_report.attendee_details.find(x => x.attendee_id == this_attendee ) ;
+                  if( usr_act == undefined ) return 0 ;
+
+                  var completed_date = new Date(usr_act.completed_date);
+                  if( req.body.date.date_from == null  || req.body.date.date_to == null  ){
+                    return new Promise((resolve, reject) => {
+                        res.send(notes.notifications.catch_fields("`date_from` && `date_to` are required ! in side date object"));
+                    });
+                        return false ;
+                   }
+
+                  var from = new Date( req.body.date.date_from );
+                  var to = new Date( req.body.date.date_to );
+                  if ((completed_date >= from && completed_date <= to) ){
+
+                    return is_passed;
+                  }
+
+                }else
+                return is_passed ;
+              }
+           }) ;
+
+            return passed.length ;
+          };
           if(questionnaire.app_type == 1)
-            detailes_report.overview['passed'] = ( is_passed.true != undefined ) ? is_passed.true : 0 ;
+            detailes_report.overview['passed'] = is_passed_the_grade();
           if(questionnaire.app_type == 1)
-            detailes_report.overview['failed'] = ( is_passed.false != undefined ) ? is_passed.false : 0  ;
+            detailes_report.overview['failed'] = is_failed_the_grade() ;
 
           detailes_report['app_info'] = new Object();
           detailes_report['items'] = new Object();
@@ -2389,7 +2533,12 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
           detailes_report.app_info['total_questions']    = questionnaire.questions.length;
           if ( questionnaire.app_type == 1 )
           detailes_report.app_info['pass_grade']         = questionnaire.settings.grade_settings.value;
+          var filter_question_texts = (question) => {
+            if(question.question_text == '') question.question_text = "Add your question here !";
+            question.question_text = striptags(question.question_text).replace("&nbsp;",'');
 
+            return question ;
+          }
 
           // ==> Case attendee id found
           if ( req.body.attendee_id != null ) {
@@ -2438,7 +2587,10 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
                if( req.body.questions != null && req.body.questions == true ){
                     if( an_online_report.attendee_questions != undefined  ){
                       if(an_online_report.attendee_questions.length != 0 )
-                      detailes_report.items['questions'] = an_online_report.attendee_questions
+                        {
+
+                          detailes_report.items['questions'] = an_online_report.attendee_questions.filter(filter_question_texts);
+                        }
                       else
                       detailes_report.items['questions'] ="No questions meet your selected criteria" ;
                     }else detailes_report.items['questions'] ="No questions meet your selected criteria"
@@ -2452,85 +2604,135 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
           // ==> Case All Attendees
           if ( req.body.attendee_id == null ) {
-            for (var i = 0; i < online_report.length; i++) {
-                var an_online_rpt = online_report[i];
 
-                var attendee_object = new Object ();
-                var status_cases ;
-                var user_index = usrDoc.findIndex( x => x._id == an_online_rpt.user_id );
-                if(user_index != -1)
-                var user_info = usrDoc.find( x => x._id == an_online_rpt.user_id );
-                var detailed_online_report = an_online_rpt.report_attendee_details;
-                var an_offline = offline_report.findIndex(x => x.attendee_id == an_online_rpt.user_id )
-                if ( questionnaire.app_type == 1 ){
-                  if ( an_online_rpt.report_attendee_details == undefined ) status_cases = "Enrolled";
-                  else if ( an_offline == -1 && an_online_rpt.report_attendee_details != undefined ) status_cases = "Uncompleted";
-                  else if ( an_offline != -1 ) {
-                    var offline_rpt_dtl = detailed_report.app_report.attendee_details.find(x => x.attendee_id == an_online_rpt.user_id );
-                     if(offline_rpt_dtl != undefined )
-                      status_cases =  offline_rpt_dtl.status;
-                  }
-                }
+            if(online_report.length != 0){
 
+              for (var i = 0; i < online_report.length; i++) {
+                  var an_online_rpt = online_report[i];
 
+                  var attendee_object = new Object ();
+                  var status_cases ;
 
+                  var user_index = usrDoc.findIndex( x => x._id == an_online_rpt.user_id );
+                  if(user_index != -1)
+                  var user_info = usrDoc.find( x => x._id == an_online_rpt.user_id );
+                  var detailed_online_report = an_online_rpt.report_attendee_details;
+                  var an_offline = offline_report.findIndex(x => x.attendee_id == an_online_rpt.user_id )
 
-
-
-                var is_completed_or = offline_report.findIndex(x => x.attendee_id == an_online_rpt.user_id) ;
-                attendee_object['attendee_id'] =  an_online_rpt.user_id ;
-                attendee_object['name'] = (user_index != -1) ? user_info.name: 'unkonwn';
-                attendee_object['email'] = (user_index != -1) ? user_info.email : 'unkonwn';
-                if( questionnaire.app_type == 1 )
-                attendee_object['correct_answers'] = ( detailed_online_report == undefined ) ? 0 : detailed_online_report.correct_answers ;
-                if( questionnaire.app_type == 1 )
-                attendee_object['wrong_answers'] = ( detailed_online_report == undefined ) ? 0 : detailed_online_report.wrong_answers ;
-                if( questionnaire.app_type == 1 )
-                attendee_object['status'] = status_cases
-                if( questionnaire.app_type == 1 )
-                attendee_object['score'] = ( detailed_online_report == undefined ) ? 0: detailed_online_report.score;
-                attendee_object['completed_status'] = ( is_completed_or == -1 ) ? false : true ;
-                attendee_object['created_at'] = ( detailed_online_report != undefined ) ?  detailed_online_report.created_at : "unkonwn date";
-                attendee_object['completed_date'] = ( detailed_online_report != undefined ) ?  detailed_online_report.completed_date : "unkonwn date";
-
-                 if( req.body.questions != null && req.body.questions == true ){
-                      if( an_online_rpt.attendee_questions != undefined ){
-                        if ( an_online_rpt.attendee_questions.length != 0 )
-                        attendee_object['questions'] = an_online_rpt.attendee_questions;
-                        else
-                        attendee_object['questions'] = "No questions meet your selected criteria"
-                      }else
-                       attendee_object['questions'] = "No questions meet your selected criteria"
-                 }
-
-
-
-
-                 if( req.body.date != null ){
-                   if( req.body.date.date_from == null  || req.body.date.date_to == null  ){
-                     return  new Promise((resolve, reject) => {
-                         res.send(notes.notifications.catch_fields("`date_from` && `date_to` are required ! in side date object"));
-                     });
-                         return false ;
+                  if ( questionnaire.app_type == 1 ){
+                    if ( an_online_rpt.report_attendee_details == undefined ) status_cases = "Enrolled";
+                    else if ( an_offline == -1 && an_online_rpt.report_attendee_details != undefined ) status_cases = "Uncompleted";
+                    else if ( an_offline != -1 ) {
+                      var offline_rpt_dtl = detailed_report.app_report.attendee_details.find(x => x.attendee_id == an_online_rpt.user_id );
+                       if(offline_rpt_dtl != undefined )
+                        status_cases =  offline_rpt_dtl.status;
                     }
-
-                    var from = new Date(req.body.date.date_from);
-                    var to = new Date(req.body.date.date_to);
-
-                   var date_passed = new Date(attendee_object.completed_date);
-                   if (date_passed >= from && date_passed <= to) {
-                          detailes_report.items.push(attendee_object);
-                          // dtls_rpt['items']['attendees'].push(attendee_object);
-                        }
-                 }else
-                detailes_report.items.push(attendee_object);
+                  }
 
 
-                //detailes_report.items
+
+
+
+
+                  var is_completed_or = offline_report.findIndex(x => x.attendee_id == an_online_rpt.user_id) ;
+                  attendee_object['attendee_id'] =  an_online_rpt.user_id ;
+                  attendee_object['name'] = (user_index != -1) ? user_info.name: 'unkonwn';
+                  attendee_object['email'] = (user_index != -1) ? user_info.email : 'unkonwn';
+                  if( questionnaire.app_type == 1 )
+                  attendee_object['correct_answers'] = ( detailed_online_report == undefined ) ? 0 : detailed_online_report.correct_answers ;
+                  if( questionnaire.app_type == 1 )
+                  attendee_object['wrong_answers'] = ( detailed_online_report == undefined ) ? 0 : detailed_online_report.wrong_answers ;
+                  if( questionnaire.app_type == 1 )
+                  attendee_object['status'] = status_cases
+                  if( questionnaire.app_type == 1 )
+                  attendee_object['score'] = ( detailed_online_report == undefined ) ? 0: detailed_online_report.score;
+                  attendee_object['completed_status'] = ( is_completed_or == -1 ) ? false : true ;
+                  attendee_object['created_at'] = ( detailed_online_report != undefined ) ?  detailed_online_report.created_at : "unkonwn date";
+                  attendee_object['completed_date'] = ( detailed_online_report != undefined ) ?  detailed_online_report.completed_date : "unkonwn date";
+
+                   if( req.body.questions != null && req.body.questions == true ){
+                        if( an_online_rpt.attendee_questions != undefined ){
+                          if ( an_online_rpt.attendee_questions.length != 0 )
+                          {
+                            // attendee_object['questions'] = an_online_rpt.attendee_questions;
+
+                            attendee_object['questions'] = an_online_rpt.attendee_questions.filter(filter_question_texts);
+
+                          }
+                          else
+                          attendee_object['questions'] = "No questions meet your selected criteria"
+                        }else
+                         attendee_object['questions'] = "No questions meet your selected criteria"
+                   }
+
+
+
+
+                   if( req.body.date != null ){
+                     if( req.body.date.date_from == null  || req.body.date.date_to == null  ){
+                       return  new Promise((resolve, reject) => {
+                           res.send(notes.notifications.catch_fields("`date_from` && `date_to` are required ! in side date object"));
+                       });
+                           return false ;
+                      }
+
+                      var from = new Date(req.body.date.date_from);
+                      var to = new Date(req.body.date.date_to);
+
+                     var date_passed = new Date(attendee_object.completed_date);
+                     if ( date_passed >= from && date_passed <= to ) {
+                        detailes_report.items.push(attendee_object);
+                      }
+
+                     // if(detailes_report.items.length == 0 ){
+                     //    detailes_report.overview['total_attendees']  = 0 ;
+                     //    detailes_report.overview['started'] = 0 ;
+                     //    detailes_report.overview['not_started'] = 0 ;
+                     //    detailes_report.overview['completed'] = 0 ;
+                     //    if(questionnaire.app_type == 1){
+                     //      detailes_report.overview['failed'] = 0 ;
+                     //      detailes_report.overview['passed'] = 0 ;
+                     //    }
+                     // }
+                    /*
+                    "total_attendees": 1,
+                    "started": 0,
+                    "not_started": 0,
+                    "completed": 1,
+                    "passed": 0,
+                    "failed": 1
+                    */
+                   }else
+                  detailes_report.items.push(attendee_object);
+                  //detailes_report.items
+              }
             }
 
             // ==============================>>> Time And Paging
 
+
+            // if( req.body.date != null && detailes_report.items.length != 0 ){
+            //
+            //     var attendees = detailes_report.items ;
+            //     var is_completed = _.countBy(attendees , ( e )=>{
+            //       if( e.completed_status == true) return e.completed_status ;
+            //     });
+            //     var is_failed = _.countBy(attendees , ( e )=>{
+            //       if( e.status == "Failed") return e.status ;
+            //     });
+            //     var is_passed = _.countBy(attendees , ( e )=>{
+            //       if( e.status == "Passed") return e.status ;
+            //     });
+            //     console.log(is_failed);
+            //     detailes_report.overview['total_attendees']  = detailes_report.items.length ;
+            //     detailes_report.overview['started'] = "---" ;
+            //     detailes_report.overview['not_started'] = "---" ;
+            //     detailes_report.overview['completed'] = (is_completed.true == undefined ) ? 0 : is_completed.true ;
+            //     if(questionnaire.app_type == 1){
+            //       detailes_report.overview['failed'] = (is_failed.Failed == undefined ) ? 0 : is_failed.Failed ;
+            //       detailes_report.overview['passed'] = (is_passed.Passed  == undefined ) ? 0 : is_passed.Passed ;
+            //     }
+            // }
 
              if ( req.body.pagination != null && req.body.attendee_id == undefined  ) {
                  if( req.body.pagination.page_number == null || req.body.pagination.records_per_page == null ){
@@ -2556,14 +2758,15 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
                 detail_rpts = detail_reports[page_number] ;
 
-
-                detailes_report.paging['items_count']    = detail_rpts.length ;
+                detailes_report.paging['items_count']    = (detail_rpts != undefined ) ? detail_rpts.length : 0 ;
                 detailes_report.paging['item_per_page']  = pages ;
+
                 detailes_report.paging['total_items']    = all_attendees.length
-                detailes_report.paging['page_index']     = page_number
+                detailes_report.paging['page_index']     =  ( page_number < 0 ) ? 0  : page_number ;
                 detailes_report.paging['total_pages']    = detail_reports.length ;
 
                 detailes_report.items = detail_rpts ;
+
               }
             // ==============================>>>
 
@@ -3270,13 +3473,14 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
           }
       };
       var show_attendee_with_times = ( AT ) => {
-        var completed_date = new Date ( AT.report_attendee_details.completed_date );
-        var date_from = new Date (req.body.date.date_from);
-        var date_to = new Date (req.body.date.date_to);
-        // // // console.log(completed_date >= date_from && completed_date <= date_to);
-        if( completed_date >= date_from && completed_date <= date_to )
-          _online_report_.push(AT);
-
+        if(AT.report_attendee_details != undefined ){
+          var completed_date = new Date ( AT.report_attendee_details.completed_date );
+          var date_from = new Date (req.body.date.date_from);
+          var date_to = new Date (req.body.date.date_to);
+          // // // console.log(completed_date >= date_from && completed_date <= date_to);
+          if( completed_date >= date_from && completed_date <= date_to )
+            _online_report_.push(AT);
+        }
       };
       if(_document_.att__draft != undefined)
        _document_.att__draft.att_draft.map(show_attendee_with_times);
@@ -3548,9 +3752,10 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
 
        // ==> Questions
        var question_invocation = ( QS ) => {
+
          var question_object = {
              question_id : QS._id ,
-             question : striptags(QS.question_body).replace("&nbsp;",'')  ,
+             question : (QS.question_body == '') ? "Add your question here !" :  striptags(QS.question_body).replace("&nbsp;",'')  ,
              question_type : QS.question_type ,
              count_of_attendees : get_question_attendee_counts( QS._id )
          };
@@ -3674,18 +3879,23 @@ rptRouters.post(
            quizzes : new Array() ,
            surveys : new Array()
          }
-         var completed_date = new Date (date_object.report_attendee_details.completed_date) ;
-         var date_from = new Date (from);
-         var date_to = new Date (to);
 
-         if(completed_date >= date_from && completed_date <= date_to ){
-           if(date_object.impr_application_object.app_type == 1 ){
-             attendee_atgs.quizzes.push(date_object);
-             all_attendees.quizzes.push(attendee_atgs.quizzes.length);
-            }else {
-             attendee_atgs.surveys.push(date_object);
-             all_attendees.surveys.push(attendee_atgs.surveys.length);
-           }
+         if(date_object.report_attendee_details != undefined ){
+
+             var completed_date = new Date (date_object.report_attendee_details.completed_date) ;
+             var date_from = new Date (from);
+             var date_to = new Date (to);
+             // console.log( completed_date >= date_from  );
+             // console.log( completed_date +" - " +  date_from );
+             if(completed_date >= date_from && completed_date <= date_to ){
+               if(date_object.impr_application_object.app_type == 1 ){
+                 attendee_atgs.quizzes.push(date_object);
+                 all_attendees.quizzes.push(attendee_atgs.quizzes.length);
+                }else {
+                 attendee_atgs.surveys.push(date_object);
+                 all_attendees.surveys.push(attendee_atgs.surveys.length);
+               }
+             }
          }
 
 
@@ -3743,11 +3953,14 @@ rptRouters.post(
         var counts = 0 ;
         var atts_x = new Array ();
         var zoome_in_quiz_students = (current_object) => {
+          if(current_object.report_attendee_details != undefined ) {
           var completed_date_in_one =  new Date (current_object.report_attendee_details.completed_date) ;
           var started_at_date = new Date(req.body.date.date_from);
           var ended_at_date = new Date(req.body.date.date_to);
           if(completed_date_in_one >= started_at_date && completed_date_in_one <= ended_at_date )
             atts_x.push(current_object);
+            }
+
         }
         if(apps.att__draft != undefined)
         apps.att__draft.att_draft.map(zoome_in_quiz_students);
@@ -3842,8 +4055,8 @@ rptRouters.post(
           total_passed =   _.countBy( applications.app_report.attendees , {'passed_the_grade': true}) ;
 
           if(applications.app_report != undefined)
-          total_completed = _.countBy(applications.app_report.attendees , {'is_completed': true})   ;
-
+          total_completed = _.countBy( applications.app_report.attendees , {'is_completed': true})   ;
+          // console.log(applications.app_report.attendees);
           var all_items = {
               app_id : applications._id,
               app_name: applications.questionnaire_title,
