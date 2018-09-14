@@ -5285,3 +5285,33 @@ padding-top: 0px;
   width: 0;
   height: 0;
 }
+.mobile-question-list{
+  display: inline-block;
+  position: relative;
+  height: 100%;
+  width: 50px;
+  width: 5%;
+  float: right;
+}
+ul.all-mobile-question-lists {
+  list-style: none;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  padding: 0px;
+  margin: 0px;
+  border-left: 1px dashed #eee;
+}
+ul.all-mobile-question-lists > li {
+  margin: 0px;
+  text-align: center;
+  padding: 10px 0px;
+  cursor: pointer;
+  background: #fff;
+  color: #999;
+  border-bottom: 1px dashed #eee;
+  border-right: 1px dashed #eee;
+}
+ul.all-mobile-question-lists > li:hover {
+  background: #fbfbfb;
+}

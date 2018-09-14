@@ -915,13 +915,13 @@ apps.controller("apps-controller" , [
         if( questionIndex == -1 ) return false ;
 
 
-        $("#docQuestions").children("li").each(function(){
+        $("#docQuestions , ul.all-mobile-question-lists").children("li").each(function(){
            if( $(this).hasClass('marked_question') )
            $(this).removeClass('marked_question');
         });
 
         $timeout(function(){
-          $("#docQuestions").children('li.qs-'+questionId.toString()).addClass('marked_question');
+          $("#docQuestions , ul.all-mobile-question-lists").children('li.qs-'+questionId.toString()).addClass('marked_question');
         });
 
         $rootScope.question_index = questionIndex ;
