@@ -20,6 +20,14 @@ apps.filter( 'apply_html' , ['$sce' , ( $sce ) => {
     return $sce.trustAsHtml(returned_values);
    };
 }]);
+apps.filter("make_it_zero" , () => {
+  return (score_value) => {
+    console.log(score_value);
+     if ( score_value == undefined )
+     return 0 ;
+     else return score_value ;
+  }
+});
 apps.filter("apply_html_with_date_filtering" , ['$sce'  , ( $sce  ) => {
   return ( returned_values ) => {
     var time_hr = (date) => {
@@ -878,9 +886,9 @@ apps.controller("apps-controller" , [
           }, 10 );
           // ==> Storing Question into DB
            $rootScope.storing_questions_into_database();
-           $timeout(function(){
-             $rootScope.$apply();
-           } , 300 )
+           // $timeout(function(){
+           //   $rootScope.$apply();
+           // } , 300 )
         });
 
   };

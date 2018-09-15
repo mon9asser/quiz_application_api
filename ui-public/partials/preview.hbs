@@ -330,21 +330,21 @@
        <div box-target-class="result-screen-text" box-target-type="box-texts" ng:hide="text_result_screens" class="selector description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
        <div class="quiz-grade">
           <div class="quiz-grade grade-score text-center">
-              <h3 box-target-class="result-screen-score-text" box-target-type="box-texts" class="selector select_texts result-screen-score-text-block result-screen-score-text" ng:mouseover="show_hovred_element('select_texts')">{> _settings_.label_btns.lbl_score_with <} :  {> this_attendee_draft.att_draft[0].report_attendee_details.correct_answers  + "/" + _questions_.length <} </h3>
+              <h3 box-target-class="result-screen-score-text" box-target-type="box-texts" class="selector select_texts result-screen-score-text-block result-screen-score-text" ng:mouseover="show_hovred_element('select_texts')">{> _settings_.label_btns.lbl_score_with <} :  {>this_attendee_draft.att_draft[0].report_attendee_details.correct_answers | make_it_zero<}/{> _questions_.length <} </h3>
           </div>
-          <div class="quiz-grade grade-score text-center">
+          <div ng:show="_settings_.grade_settings.is_graded" class="quiz-grade grade-score text-center">
               <h5 box-target-class="result-screen-grade-text" box-target-type="box-texts" class="selector select_texts result-screen-grade-text-block result-screen-grade-text" ng:mouseover="show_hovred_element('select_texts')">{> _settings_.label_btns.lbl_grade_with <} : {> this_attendee_draft.att_draft[0].report_attendee_details.score | math_around_it <}%</h5>
           </div>
        </div>
        <div class="qusu-details text-right">
-             <span data-tpco box-target-class="review-result-box" box-target-type="box-buttons"  ng:click="go_back_to_first_qs(enable_css_mode)" class="selector button-take-this select_button review-result-box-block review-result-box" type="button" name="button">
+             <span ng:show="_settings_.review_setting" data-tpco box-target-class="review-result-box" box-target-type="box-buttons"  ng:click="go_back_to_first_qs(enable_css_mode)" class="selector button-take-this select_button review-result-box-block review-result-box" type="button" name="button">
                <i class="fa fa-reply-all" aria-hidden="true"></i>
-               {> _settings_.label_btns.lbl_review_with <}
+                 {> _settings_.label_btns.lbl_review_with <}
              </span>
-             <span data-tpco  box-target-class="retake-result-box" box-target-type="box-buttons" ng:click="go_back_to_first_qs(enable_css_mode)" class="selector button-take-this retake-this-quiz select_button retake-result-box-block retake-result-box" type="button" name="button">
+             <span ng:show="_settings_.retake_setting" data-tpco  box-target-class="retake-result-box" box-target-type="box-buttons" ng:click="go_back_to_first_qs(enable_css_mode)" class="selector button-take-this retake-this-quiz select_button retake-result-box-block retake-result-box" type="button" name="button">
                <i class="fa fa-repeat" aria-hidden="true"></i>
                <span>
-               {> _settings_.label_btns.lbl_retake_with <}
+                 {> _settings_.label_btns.lbl_retake_with <}
                </span>
              </span>
         </div>
