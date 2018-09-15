@@ -886,9 +886,9 @@ apps.controller("apps-controller" , [
           }, 10 );
           // ==> Storing Question into DB
            $rootScope.storing_questions_into_database();
-           // $timeout(function(){
-           //   $rootScope.$apply();
-           // } , 300 )
+           $timeout(function(){
+             $rootScope.$apply();
+           } , 300 )
         });
 
   };
@@ -1471,7 +1471,7 @@ apps.controller("apps-controller" , [
       method : "POST" ,
       data : { data : $rootScope._questions_ }
      }).then((response)=>{
-       $rootScope._questions_ = response.data ;
+       // $rootScope._questions_ = response.data ;
        $timeout(function(){
          $rootScope.$apply();
        } , 300 );
