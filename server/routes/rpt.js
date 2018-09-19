@@ -549,7 +549,15 @@ rptRouters.post("/:app_id/add/attended/quiz" ,api_key_report_auth , (req , res)=
 rptRouters.post("/:app_id/add/attended/quiz/report"  , (req , res)=>{
 
     var online_report_data = req.body.user_activity ;
+
+    if( online_report_data.report_attendees == undefined )
+    {
+      res.send("An error occured !");
+      return false;
+    }
+
     online_report_data.report_attendees['is_completed'] = true ;
+
     var application_id = req.params.app_id ;
     rpt.findOne({"questionnaire_id":application_id} , (error , rptDocument)=>{
       if(error){

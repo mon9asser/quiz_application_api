@@ -254,7 +254,7 @@ apps.controller("apps-controller" , [
       $rootScope._settings_.progression_bar.progression_bar_layout = model_index;
       $rootScope.progressbar_models = "/time-progress-temps/progressbar-"+model_index+".hbs";
       if(model_index == 2 ){
-        $rootScope.draw_radial_progression(0/100);
+        // $rootScope.draw_radial_progression(0/100);
       }
     }
     if(model_type == 1){
@@ -408,9 +408,10 @@ apps.controller("apps-controller" , [
     $rootScope._settings_    =  $rootScope._application_.settings;
     $rootScope.question_ids  =  $rootScope._application_.question_ids;
     $rootScope.answer_ids    =  $rootScope._application_.answer_ids;
-
+    console.log($rootScope.retrieve_data_url);
     $rootScope._questions_   =  $rootScope._application_.questions;
-    $rootScope.randomize_sorting_questions($rootScope._settings_.randomize_settings);
+    // $rootScope.randomize_sorting_questions($rootScope._settings_.randomize_settings);
+
 
 
     if($rootScope._application_.theme_style != undefined )
@@ -893,25 +894,13 @@ apps.controller("apps-controller" , [
 
   };
   // ==> Expan collapse between editor
-  $rootScope.expand_collapsed_items = function (id){
-          var targetId = $(id) ;
-          var all_edit_sections = $("#question-pt , #Description-pt , #answers-pt , #Settings-pt");
-          $("#question-pt , #Description-pt , #answers-pt , #Settings-pt").each(function(){
-            var this_element = $(this);
-            if(this_element.prop('id') != targetId.prop('id')){
-                this_element.slideUp();
-            }else {
-               targetId.slideDown();
-            }
-
-          });
-
-          if(targetId.prop('id') == 'Settings-pt'){
-            $('html , body').animate({
-              scrollTop: 1000000000000
-            }, 500 );
-          }
-        };
+  $rootScope.expand_collapsed_items = function ( id ){
+    var targetId = $(id) ;
+    if(targetId.css("display") == 'none')
+      targetId.slideDown();
+      else
+      targetId.slideUp();
+  };
   $rootScope.image_source_link = (src) => {
     return src ;
   }
@@ -1117,7 +1106,7 @@ apps.controller("apps-controller" , [
             if($rootScope._questions_.length != 0 ){
               $timeout(function(){
                 $rootScope.highlighted_question($rootScope._questions_[0]._id);
-                $rootScope.expand_collapsed_items('#question-pt');
+
                  $rootScope.fill_boxes_with_question_objects($rootScope._questions_[$rootScope.question_index]._id);
                 if($rootScope._questions_[$rootScope.question_index].question_type != 2 )
                  {
@@ -1466,15 +1455,14 @@ apps.controller("apps-controller" , [
   };
   // => Storing Data of questions into db
   $rootScope.storing_questions_into_database = () => {
+
      $http({
       url : $rootScope.server_ip + 'api/' + $rootScope.app_id + "/add/questions" ,
       method : "POST" ,
       data : { data : $rootScope._questions_ }
      }).then((response)=>{
-       // $rootScope._questions_ = response.data ;
-       $timeout(function(){
-         $rootScope.$apply();
-       } , 300 );
+       console.log(response);
+        console.log("Updated +++++++++++++++");
     });
   };
 /*,
@@ -1564,8 +1552,23 @@ sort: false  */
         disabled: false ,
         animation: 250 ,
         handle: '.drag-handler',
-        onStart : function (evt) {} ,
-        onEnd  : function (evt) {}
+        onStart : function (evt) { } ,
+        onEnd  : function (evt) {
+          var block = evt
+          var new_index = block.newIndex ;
+          var old_index = block.oldIndex ;
+          var question_id = block.item.getAttribute('id').split('_').pop();
+          var question_object = $rootScope._questions_.find(x => x._id == question_id );
+          if( question_object != undefined ){
+            var question_index = $rootScope._questions_.findIndex(x => x._id == question_id );
+            $rootScope._questions_.splice(question_index , 1 );
+            $timeout(function(){
+              $rootScope._questions_.splice( new_index ,  0 ,  question_object );
+              $rootScope.highlighted_question( question_id );
+              $rootScope.storing_questions_into_database();
+            } , 30 );
+          }
+        }
     });
 
   };
@@ -3544,8 +3547,10 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     }
   }
   // ==> Calling all function according timeout
+
   $timeout(function(){
-    $rootScope.draw_radial_progression(0/100);
+    $("#question-pt , #answers-pt").slideDown();
+    // $rootScope.draw_radial_progression(0/100);
     // $rootScope.init_swiperJs();
     $rootScope.init_bootstrap_tooltip();
     $rootScope.init_drag_drop();

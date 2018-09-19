@@ -222,7 +222,7 @@ html , body {
 /* ( 2 ) => Submit button */
 .submit-button-goodbye-screen { background: #c17c7e ;}
 .submit-button-goodbye-screen { color: #fff ; }
-.submit-button-goodbye-screen { font-size: 15px ;}
+.submit-button-goodbye-screen { font-size: 13px ;}
 /* D => Warning Stylesheets */
 .goodbye-screen-warning-text{ font-size: 15px; }
 .goodbye-screen-warning-text{ color: #fff ; }

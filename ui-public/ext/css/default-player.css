@@ -329,6 +329,7 @@
     margin-top: 3px;
    display: inline-block;
    max-width: 87%;
+       line-height: 1.9;
 }
 @media only screen and (max-width:1000px ){
   .question-body-text{
