@@ -196,6 +196,7 @@
              <div class="answer-container">
                <!-- Boolean && multiple choices && Media Choices -->
                <ul id="question-ul-{>obj_val._id<}"  ng:class="( (obj_val.question_type == 0 || obj_val.question_type == 1 ) && obj_val.answer_settings.single_choice == false )? 'border_line' : '' " class="answer_opg_editor question-list" ng:if="obj_val.question_type <= 2">
+                 <div style="top:0px;bottom:0px;left:0px;right:0px; position:absolute; background:transparent ; z-index:10000;" ng:show="disable_funcs"></div>
                  <li class="selector answer_opg_editor question-answer-row-select-blk question-answer-row-select answer-{>answer_value._id<}" ng:repeat="(anskey , answer_value) in obj_val.answers_format track by $index"  ng:class="show_solved_answers($parent.$index , obj_val._id ,answer_value._id , answer_value.is_correct )" ng:click="select_answer ( obj_val , answer_value )">
                    <!-- Answer label -->
                    <!-- {> question_labels['label_' + _settings_.indexes.questions.toString()][question_index] | uppercase <} -->
@@ -316,24 +317,28 @@
              </div>
              <!-- Quiz Buttons -->
              <div ng:if ="_settings_.navigation_btns == true" class="qusu-details ques-questions text-right">
-                <button ng:cloak ng:click="go_to_prev()" class="button-take-this back-answer-question-button"  type="button" name="button">
-                      <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-                      {> _settings_.label_btns.lbl_back_with <}
-                </button>
-                <button ng:click="next_finish_the_quiz($index)"  class="button-take-this continue-answer-question-button-block" type="button" name="button">
-                  <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                  <span ng:cloak ng:if="$index != ( _questions_.length - 1 )">
-                      {> _settings_.label_btns.lbl_continue_with <}
-                  </span>
-                  <span ng:cloak ng:if="$index == ( _questions_.length - 1 )">
-                      {> _settings_.label_btns.lbl_finish_with <}
-                  </span>
-                </button>
+               <button ng:cloak ng:click="go_to_prev()" class="button-take-this back-answer-question-button"  type="button" name="button">
+                     <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                     {> _settings_.label_btns.lbl_back_with <}
+               </button>
+               <button ng:if="( _settings_.enable_screens == true && $index == ( _questions_.length - 1 ) ) || ( $index != ( _questions_.length - 1 ) ) || ( $index == ( _questions_.length - 1 && _settings_.enable_screens == true ))" ng:click="next_finish_the_quiz($index)"  class="button-take-this continue-answer-question-button-block" type="button" name="button">
+                 <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                 <span ng:cloak ng:if="$index != ( _questions_.length - 1 )">
+                     {> _settings_.label_btns.lbl_continue_with <}
+                 </span>
+                 <span ng:cloak ng:if="$index == ( _questions_.length - 1 )">
+                     {> _settings_.label_btns.lbl_finish_with <}
+                 </span>
+               </button>
 
-                <button ng:click="submit_the_quiz_into_reports()" ng:if ="(_user_activity_.is_completed != undefined || _user_activity_.is_completed == true) && unsolved_questions.length == 0 && finished_is_clicked == true" class="button-take-this continue-answer-question-button-block submit-in-qsa" type="button" name="button">
-                  <i class="fa fa-arrow-right x-isc-up"></i>
-                  <span>
+                <button ng:style="(_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true) ? { opacity : '0.5' , cursor: 'none' } : { opacity : '1' ,  cursor: 'pointer' }" ng:disabled='(_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true ) || ( _user_activity_.attendee_questions == undefined || _user_activity_.attendee_questions.length == 0 )'  ng:if="( _settings_.enable_screens == false && $index == ( _questions_.length - 1 )  )" ng:click="submit_the_quiz_into_reports($index)" class="selector button-take-this submi_the_quiz_handler select_button submit-button-goodbye-screen submit-button-goodbye-screen-block" type="button" name="button">
+                  <i ng:if="_user_activity_.user_completed_status == undefined || _user_activity_.user_completed_status == false " class="fa fa-arrow-right fac-icon-submit x-isc-up" aria-hidden="true"></i>
+                  <i ng:if="_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true " class="fa fa-check fac-icon-submit x-isc-up" aria-hidden="true"></i>
+                  <span ng:cloak ng:if="_user_activity_.user_completed_status == undefined || _user_activity_.user_completed_status == false">
                       {> _settings_.label_btns.lbl_submit_quiz_with <}
+                  </span>
+                  <span ng:cloak ng:if="_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true ">
+                       Submitted
                   </span>
                 </button>
               </div>
@@ -376,7 +381,7 @@
                                 <div class="quiz-grade grade-score text-center result-screen-score-text">
                                   <h3 ng:cloak> {> _settings_.label_btns.lbl_score_with <} : {> _user_activity_.report_attendee_details.correct_answers  + "/" + _questions_.length <}</h3>
                                 </div>
-                                <div class="quiz-grade grade-score text-center result-screen-grade-text">
+                                <div ng:if="_settings_.grade_settings.is_graded" class="quiz-grade grade-score text-center result-screen-grade-text">
                                   <h5 ng:cloak>{> _settings_.label_btns.lbl_grade_with <} : {> _user_activity_.report_attendee_details.score | math_around_it <}%</h5>
                                 </div>
                               </div>

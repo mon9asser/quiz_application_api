@@ -93,7 +93,7 @@
                                     <i class="fa fa-reply-all" aria-hidden="true"></i>
                                     {> _settings_.label_btns.lbl_review_with <}
                                 </button>
-                                <button ng:click="retake_the_quiz(0)" ng:click="" ng:cloak  ng:if="_settings_.retake_setting == true" class="button-take-this retake-this-quiz retake-result-box" type="button" name="button">
+                                <button ng:click="retake_the_quiz(0)" ng:cloak  ng:if="_settings_.retake_setting == true" class="button-take-this retake-this-quiz retake-result-box" type="button" name="button">
                                     <i class="fa fa-repeat" aria-hidden="true"></i>
                                     <span>
                                     {> _settings_.label_btns.lbl_retake_with <}
@@ -109,7 +109,7 @@
            <div class="container screen-container screen_opg_editor box-welcome-screen">
               <div ng:cloak class="description-body redactor-styles welcome-screen-text-block w-screen-text" ng:bind:html="_settings_.titles.title_start_with | apply_html"></div>
               <div class="qusu-details text-right">
-                <button ng:if="_questions_.length != 0" ng:cloak ng:click="start_the_quiz()" class="button-take-this welcome-screen-button" type="button" name="button">
+                <button ng:if="_questions_.length != 0" ng:cloak ng:click="start_this_quiz()" class="button-take-this welcome-screen-button" type="button" name="button">
                     <i class="fa fa-sign-in" aria-hidden="true"></i>
                     {> _settings_.label_btns.lbl_start_with <}
                 </button>
@@ -124,7 +124,7 @@
                 <div ng:cloak class="resume-text   description-body redactor-styles select_texts welcome-screen-text-block box-resume-text" ng:bind:html="_settings_.titles.title_resume  | apply_html_with_date_filtering"></div>
                 <div ng:if="_settings_.expiration.is_set == true" class="expire-warning-text   description-body redactor-styles select_texts welcome-screen-text-block box-resume-text" ng:bind:html="_settings_.expiration.expire_warning  | apply_html_with_date_filtering"></div>
                   <div class="qusu-details text-right">
-                    <button ng:if="_questions_.length != 0" ng:cloak ng:click="go_to_next_question()" style="border-radius:5px;" class="selector button-take-this select_button welcome-screen-button-block resume-screen-button ng-binding selector_line" type="button" name="button">
+                    <button ng:if="_questions_.length != 0" ng:cloak ng:click="resume_current_quiz()" style="border-radius:5px;" class="selector button-take-this select_button welcome-screen-button-block resume-screen-button ng-binding selector_line" type="button" name="button">
                         <i class="fa fa-sign-in" aria-hidden="true" style="outline-color: transparent;"></i>
                           {> _settings_.label_btns.lbl_resume_with <}
                     </button>
