@@ -414,7 +414,7 @@ apps.controller("player", [
                       if($scope._settings_.navigation_btns == false && ( $scope._user_activity_ == null ))
                        {
                          // $scope.start_the_quiz();
-                       }
+                       } 
                     }
                     if($scope._user_activity_ != null && $scope._user_activity_.is_completed == true ){
                       if( $scope._settings_.time_settings.is_with_time == true )
