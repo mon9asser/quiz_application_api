@@ -1279,8 +1279,13 @@ apps.controller("player", [
 
         // ==> List super size
         var classes = "";
-        if( $scope._questions_[index] != undefined && $scope._questions_[index].answer_settings.super_size == true || ( $scope._questions_[index] != undefined && $scope._questions_[index].question_type == 2))
+
+        index = $scope._questions_.findIndex(x => x._id == question_id );
+
+
+        if( index != -1 && $scope._questions_[index].answer_settings.super_size == true || ( $scope._questions_[index] != undefined && $scope._questions_[index].question_type == 2 ) )
         classes += "super_size_class ";
+
 
         // ==> List solved questions
         if( $scope._online_report_ != undefined && $scope._online_report_.att_draft != undefined && $scope._online_report_.att_draft != null ){
@@ -1635,7 +1640,7 @@ apps.controller("player", [
 
     };
     $scope.submit_the_quiz_into_reports = () => {
-      
+
       $scope.finished_is_clicked = true ;
       var solved_questions = ( $scope._user_activity_ != null && $scope._user_activity_.report_questions != undefined )  ? $scope._user_activity_.report_questions.question_answers : [] ;
       var questions = $scope._questions_ ;
