@@ -1617,6 +1617,7 @@ apps.controller("player", [
       }
     }
     $scope.go_to_this_unsolved_question = () => {
+
       if($scope.unsolved_questions.length > 0 ){
         var question_id = $scope.unsolved_questions[0]._id ;
         var question_index = $scope._questions_.findIndex ( x => x._id == question_id )
@@ -1624,16 +1625,23 @@ apps.controller("player", [
           var next_unsolved_question_index =   (question_index + 1);
           if($scope._settings_.enable_screens == false )
           next_unsolved_question_index = question_index ;
-          // $scope.swipperJs.slideTo(next_unsolved_question_index);
+          $scope.swipperJs.slideTo(next_unsolved_question_index);
         }
       }
-    }
+    };
     $scope.storing_answer_into_online_report = () => {
       // ==> Online Report ...
       $scope._online_report_collection();
 
     };
     $scope.submit_the_quiz_into_reports = () => {
+      
+      $scope.finished_is_clicked = true ;
+      var solved_questions = ( $scope._user_activity_ != null && $scope._user_activity_.report_questions != undefined )  ? $scope._user_activity_.report_questions.question_answers : [] ;
+      var questions = $scope._questions_ ;
+      $scope.unsolved_questions = questions.are_all_questions_tracked(solved_questions);
+      if( $scope.unsolved_questions.length != 0 )
+      return false;
 
       if( $scope._settings_.enable_screens == false )
         {

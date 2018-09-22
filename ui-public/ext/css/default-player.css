@@ -1349,18 +1349,18 @@ button {
 }
 
 .not-solved_questions{
-      display: block;
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-      margin: 0px auto;
-      color: #fff;
-      background: #c17c7e;
-      margin: 15px auto 0px auto;
-      padding: 3px 10px;
-      border-radius: 2px;
-      text-align: center;
-      cursor: pointer;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin: 0px auto;
+  color: #fff;
+  background: #c17c7e;
+  margin: 30px auto 0px auto;
+  padding: 3px 10px;
+  border-radius: 2px;
+  text-align: center;
+  cursor: pointer;
 }
 .completed-time {
   text-align: center;

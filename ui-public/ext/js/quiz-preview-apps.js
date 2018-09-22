@@ -474,8 +474,8 @@ apps.controller("player", [
 
 
             $timeout(function(){
-              // if( $scope._settings_.enable_screens == false && $scope.isEmpty($scope._user_activity_) )
-              //     $scope.start_the_quiz();
+              if( $scope._settings_.enable_screens == false && $scope.isEmpty($scope._user_activity_) )
+                  $scope.start_the_quiz_();
             } , 1000 );
         }).catch((error) => {
           // // // console.log(error);
@@ -728,6 +728,7 @@ apps.controller("player", [
       // $scope.start_the_quiz();
       $scope.go_to_next();
     };
+
     $scope.resume_and_go_to_unsolved_question = () => {
       // ==> Go to next unsolved question
       if($scope._user_activity_.report_questions == undefined )
@@ -784,6 +785,14 @@ apps.controller("player", [
 
       }
     };
+    $scope.start_the_quiz_ = () => {
+      $scope.is_resume = true ;
+      // ==> Joing to quiz
+      $scope.join_this_quiz();
+      // ==> Start timer
+      if( $scope._settings_.time_settings.is_with_time == true )
+      $scope.timer_proccess();
+    }
     $scope.start_the_quiz = () => {
       $scope.is_resume = true ;
       // ==> Joing to quiz
@@ -1593,7 +1602,28 @@ apps.controller("player", [
       $scope._online_report_collection();
 
     };
+    $scope.go_to_this_unsolved_question = () => {
+
+      if($scope.unsolved_questions.length != 0 ){
+
+        var question_id = $scope.unsolved_questions[0]._id ;
+        var question_index = $scope._questions_.findIndex ( x => x._id == question_id )
+        if(question_index != -1){
+          var next_unsolved_question_index =   (question_index + 1);
+          if($scope._settings_.enable_screens == false )
+          next_unsolved_question_index = question_index ;
+          $scope.swipperJs.slideTo(next_unsolved_question_index);
+        }
+      }
+    };
     $scope.submit_the_quiz_into_reports = () => {
+
+      $scope.finished_is_clicked = true ;
+      var solved_questions = ( $scope._user_activity_ != null && $scope._user_activity_.report_questions != undefined )  ? $scope._user_activity_.report_questions.question_answers : [] ;
+      var questions = $scope._questions_ ;
+      $scope.unsolved_questions = questions.are_all_questions_tracked(solved_questions);
+      if( $scope.unsolved_questions.length != 0 )
+      return false;
 
       if( $scope._settings_.enable_screens == false )
         {

@@ -282,6 +282,11 @@
            <div class="selector screen_opg_editor container screen-container about-quiz screen-ending-starting select_box_brd goodbye-screen-block box-goodbye-screen x-widther">
              <div class="selector description-body redactor-styles select_texts goodbye-screen-text-block goodbye-screen-text ng-binding" ng:bind:html="_settings_.titles.title_end_with | apply_html"></div>
              <div  class="selector warning_case select_box_data goodbye-screen-text-warning-block goodbye-screen-warning-text goodbye-screen-text "></div>
+
+             <div ng:click="go_to_this_unsolved_question()" ng:if ="(_user_activity_.is_completed == undefined || _user_activity_.is_completed == false) && unsolved_questions.length > 0 && finished_is_clicked == true" class="not-solved_questions">
+               <span>{> unsolved_questions.length <} {> _settings_.label_btns.unsolved_question <}</span>
+             </div>
+             
              <div class="qusu-details ques-questions text-right">
                  <button ng:cloak ng:click="go_to_prev()" class="selector button-take-this select_button back-button-goodbye-screen-block back-button-goodbye-screen ng-binding" type="button" name="button">
                      <i class="fa fa-angle-double-left" aria-hidden="true"></i>
