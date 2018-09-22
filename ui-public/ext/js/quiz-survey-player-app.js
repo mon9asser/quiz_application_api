@@ -1279,7 +1279,7 @@ apps.controller("player", [
 
         // ==> List super size
         var classes = "";
-        if( $scope._questions_[index] != undefined && $scope._questions_[index].answer_settings.super_size == true || $scope._questions_[index].question_type == 2)
+        if( $scope._questions_[index] != undefined && $scope._questions_[index].answer_settings.super_size == true || ( $scope._questions_[index] != undefined && $scope._questions_[index].question_type == 2))
         classes += "super_size_class ";
 
         // ==> List solved questions
