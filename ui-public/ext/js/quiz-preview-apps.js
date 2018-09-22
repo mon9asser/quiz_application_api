@@ -464,8 +464,8 @@ apps.controller("player", [
                     if( $scope._settings_.allow_touch_move == true && $scope._settings_.navigation_btns == false )
                       {
                         // ==> case it first slide
-                        // if( current_index == 1 && previous_index == 0 )
-                        //   $scope.join_this_quiz();
+                        if( current_index == 1 && previous_index == 0 )
+                          $scope.join_this_quiz();
                       }
                   });
               } catch (e){}
@@ -474,8 +474,8 @@ apps.controller("player", [
 
 
             $timeout(function(){
-              if( $scope._settings_.enable_screens == false && $scope.isEmpty($scope._user_activity_) )
-                  $scope.start_the_quiz();
+              // if( $scope._settings_.enable_screens == false && $scope.isEmpty($scope._user_activity_) )
+              //     $scope.start_the_quiz();
             } , 1000 );
         }).catch((error) => {
           // // // console.log(error);
