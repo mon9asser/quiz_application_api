@@ -412,9 +412,7 @@ apps.controller("player", [
                     var previous_index = this_slide[0].previousIndex;
                     if(current_index == 1 && previous_index == 0 && ( $scope._user_activity_ != null && $scope._user_activity_.user_completed_status != undefined || $scope._user_activity_.user_completed_status == false )){
                       if($scope._settings_.navigation_btns == false && ( $scope._user_activity_ == null ))
-                       {
-                         // $scope.start_the_quiz();
-                       } 
+                       $scope.start_the_quiz();
                     }
                     if($scope._user_activity_ != null && $scope._user_activity_.is_completed == true ){
                       if( $scope._settings_.time_settings.is_with_time == true )
@@ -466,8 +464,8 @@ apps.controller("player", [
                     if( $scope._settings_.allow_touch_move == true && $scope._settings_.navigation_btns == false )
                       {
                         // ==> case it first slide
-                        if( current_index == 1 && previous_index == 0 )
-                          $scope.join_this_quiz();
+                        // if( current_index == 1 && previous_index == 0 )
+                        //   $scope.join_this_quiz();
                       }
                   });
               } catch (e){}
