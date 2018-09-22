@@ -494,7 +494,17 @@ ul li.right_answer > .correct-ico {
   font-family: 'Bitter';
   color: #c17c7e;
 }
+sub.timer-type {
+    position: absolute;
+    bottom: 9px;
+    left: 33%;
+    font-weight: normal;
+    font-size: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
 .time-models-act{
+  position: relative;
     display: inline-block;
     background: #c17c7e;
     color: #fff;

@@ -81,7 +81,7 @@
            <!-- Multiple Choices and Media choices -->
            <div ng:if="_questions_[question_index].question_type <= 1" class="multi-answers-part">
               <ul class="choices-part" id="block-answers">
-                 <li data-answer-id="{>answer_value._id<}" class="answers_x" ng:repeat="(answer_key , answer_value) in _questions_[question_index].answers_format track by $index" ng:class="make_answer_classes(answer_value , _questions_[question_index].question_type)">
+                 <li data-answer-id="{>answer_value._id<}" class="answers_x" ng:if="answer_value != null" ng:repeat="(answer_key , answer_value) in _questions_[question_index].answers_format track by $index" ng:class="make_answer_classes(answer_value , _questions_[question_index].question_type)">
                     <span class="fa fa-bars drag-tools"  data-toggle="tooltip" title="Move" ></span>
                    <!-- Answer Controlling -->
                    <ul class="answer-pt-controller">

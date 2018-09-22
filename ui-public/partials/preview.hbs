@@ -95,7 +95,9 @@
        <!-- Answer container -->
        <div class="answer-container answer-block-selector">
          <ul box-target-type="box-containers" box-target-class="border_line" id="question_{>_questions_[question_index]._id<}" class="question-list question-list-preview-quta selector" ng:if="_questions_[question_index].question_type <= 2" ng:class="( (_questions_[question_index].question_type == 0 || _questions_[question_index].question_type == 1 ) && _questions_[question_index].answer_settings.single_choice == false )? 'border_line' : '' ">
-           <li ng:click="select_this_answer ( _questions_[question_index]._id , answer_value._id , _questions_[question_index] , answer_value , app_id , user_id , answer_value.is_correct , $index , enable_css_mode )" box-target-class="answer-container ul li" box-target-type="box-answers" ng:class="list_answer_classes()" class="selector answer_opg_editor select_box_brd question-answer-row-select-blk question-answer-row-select answer_{>answer_value._id<}" ng:repeat="(anskey , answer_value) in _questions_[question_index].answers_format">
+           <li ng:click="select_this_answer ( _questions_[question_index]._id , answer_value._id , _questions_[question_index] , answer_value , app_id , user_id , answer_value.is_correct , $index , enable_css_mode )" box-target-class="answer-container ul li" box-target-type="box-answers" ng:class="list_answer_classes()" class="selector answer_opg_editor select_box_brd question-answer-row-select-blk question-answer-row-select answer_{>answer_value._id<}" ng:if="answer_value != null" ng:repeat="(anskey , answer_value) in _questions_[question_index].answers_format">
+
+
              <!-- Answer label -->
              <!-- {> question_labels['label_' + _settings_.indexes.questions.toString()][question_index] | uppercase <} -->
              <!-- <span box-target-type="box-labels" box-target-class="answer_label"  class="answer_label selector">{> question_labels['label_' + _settings_.indexes.answers.toString()][$index] | uppercase <}</span> -->
@@ -337,11 +339,11 @@
           </div>
        </div>
        <div class="qusu-details text-right">
-             <span ng:show="_settings_.review_setting" data-tpco box-target-class="review-result-box" box-target-type="box-buttons"  ng:click="go_back_to_first_qs(enable_css_mode)" class="selector button-take-this select_button review-result-box-block review-result-box" type="button" name="button">
+             <span ng:show="_settings_.review_setting" data-tpco box-target-class="review-result-box" box-target-type="box-buttons" class="selector button-take-this select_button review-result-box-block review-result-box" type="button" name="button">
                <i class="fa fa-reply-all" aria-hidden="true"></i>
                  {> _settings_.label_btns.lbl_review_with <}
              </span>
-             <span ng:show="_settings_.retake_setting" data-tpco  box-target-class="retake-result-box" box-target-type="box-buttons" ng:click="go_back_to_first_qs(enable_css_mode)" class="selector button-take-this retake-this-quiz select_button retake-result-box-block retake-result-box" type="button" name="button">
+             <span ng:show="_settings_.retake_setting" data-tpco  box-target-class="retake-result-box" box-target-type="box-buttons" class="selector button-take-this retake-this-quiz select_button retake-result-box-block retake-result-box" type="button" name="button">
                <i class="fa fa-repeat" aria-hidden="true"></i>
                <span>
                  {> _settings_.label_btns.lbl_retake_with <}

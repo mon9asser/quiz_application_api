@@ -621,7 +621,7 @@ apps.controller("player", [
       $scope.percentage_progress = currentWidth ;
     }
     $scope.review_the_quiz = (currentIndex) => {
-      $scope.disable_funcs = true ; 
+      $scope.disable_funcs = true ;
       $(".review-result-box").children(".fa").removeClass("fa-reply-all fa-arrow-right");
       $(".review-result-box").children(".fa").addClass("fa-spin fa-refresh");
       $timeout(function(){
@@ -997,7 +997,7 @@ apps.controller("player", [
                  report_questions.question_answers.splice(qs_index , 1 );
 
 
-                 if( app_type == 1 && report_questions.question_answers.length != 0 ){
+                 if( app_type == 1 && report_questions.question_answers.length != 0 &&  report_questions.question_answers[qs_index] != undefined){
                      // ==> Mark if this question is right
 
                      var filter_wrong_answers = report_questions.question_answers[qs_index].user_answers.filter(x => x.is_correct == false ) ;
