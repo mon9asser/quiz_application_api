@@ -1213,12 +1213,14 @@ apps.controller("player", [
           }
        }
 
+
+       // $scope.auto_slide_delay = 700;
        // ==> auto slide case
        if(autoslide_when_answer){
          $timeout(function(){
            if ( ( is_single_choice && ( question_type == 0 || question_type == 1 ) ) || (question_type == 2 ) || (question_type == 3)  )
               $scope.swipperJs.slideNext();
-         } , $scope.auto_slide_delay)
+         } , 1000 )
        }
 
        if(question_type != 3 && question_type != 4)
