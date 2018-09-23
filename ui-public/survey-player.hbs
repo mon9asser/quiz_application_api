@@ -148,7 +148,7 @@
              <div class="answer-container">
                <!-- Boolean && multiple choices && Media Choices -->
                <ul id="question-ul-{>obj_val._id<}"  ng:class="( (obj_val.question_type == 0 || obj_val.question_type == 1 ) && obj_val.answer_settings.single_choice == false )? 'border_line' : '' " class="answer_opg_editor question-list" ng:if="obj_val.question_type <= 2">
-                 <li ng:if="answer_value != null" class="selector answer_opg_editor question-answer-row-select-blk question-answer-row-select answer-{>answer_value._id<}" ng:repeat="(anskey , answer_value) in obj_val.answers_format track by $index"  ng:class="show_solved_answers($parent.$index , obj_val._id ,answer_value._id , answer_value.is_correct )" ng:click="select_answer ( obj_val , answer_value )">
+                 <li ng:style="(obj_val.question_type == 2 ) ? { width : '48%'}:'' " ng:if="answer_value != null" class="selector answer_opg_editor question-answer-row-select-blk question-answer-row-select answer-{>answer_value._id<}" ng:repeat="(anskey , answer_value) in obj_val.answers_format track by $index"  ng:class="show_solved_answers($parent.$index , obj_val._id ,answer_value._id , answer_value.is_correct )" ng:click="select_answer ( obj_val , answer_value )">
                    <!-- Answer label -->
                    <!-- {> question_labels['label_' + _settings_.indexes.questions.toString()][question_index] | uppercase <} -->
                    <!-- <span box-target-type="box-labels" box-target-class="answer_label"  class="answer_label selector">{> question_labels['label_' + _settings_.indexes.answers.toString()][$index] | uppercase <}</span> -->

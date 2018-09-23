@@ -272,15 +272,17 @@ apps.filter('trust_iframe_url' , ( $sce ) => {
 apps.controller("apps-controller" , [
 '$scope','$http' , '$timeout','$window','$rootScope' , '$sce' ,
 ( $scope , $http , $timeout , $window , $rootScope , $sce  ) => {
-  $scope.question_labels = {
+  $rootScope.question_labels = {
     label_0 : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ],
     label_1 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50]
   }
-  $scope.answer_labels = {
+  $rootScope.answer_labels = {
     label_0 : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ],
     label_1 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50]
   }
-  $scope.numbers = [0];
+  $rootScope.is_submitted = false ;
+  $rootScope.is_reviewed  = false ;
+  $rootScope.numbers = [0];
   $rootScope.isEmpty = (obj) => {
       for(var key in obj) {
           if(obj.hasOwnProperty(key))
@@ -305,6 +307,7 @@ apps.controller("apps-controller" , [
   $rootScope.changed_day_numbers = (number) => {
     time_epiration.expiration_day_counts = number ;
    };
+  $rootScope._user_activity_ = null ;
   $rootScope.is_view = false ;
   $rootScope.unsolved_questions = [];
   $rootScope.theme_stylesheet = new Array();
@@ -1023,8 +1026,10 @@ apps.controller("apps-controller" , [
             $timeout(function(){
               $rootScope.$apply();
             });
-            if($rootScope._questions_[$rootScope.question_index].answer_settings.is_randomized != undefined )
-            $rootScope.is_randomized_answer_with($rootScope._questions_[$rootScope.question_index].answer_settings.is_randomized);
+            if($rootScope._questions_[$rootScope.question_index].question_type ==0 || $rootScope._questions_[$rootScope.question_index].question_type == 1){
+              if($rootScope._questions_[$rootScope.question_index].answer_settings.is_randomized != undefined )
+              $rootScope.is_randomized_answer_with($rootScope._questions_[$rootScope.question_index].answer_settings.is_randomized);
+            }
           }
   //==> Show Media Link in input
   $rootScope.show_media_link = () => {
@@ -1792,13 +1797,14 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
      this_item.slideDown();
   });
 
-  $scope.build_question_lists = ( question , answer , question_reports ) => {
+  $rootScope.build_question_lists = ( question , answer , question_reports ) => {
 
 
-
+    console.log( $rootScope._user_activity_ );
 
     // ==> Get solved questions
-    var usr = $scope._online_report_.att_draft.find(x => x.user_id == $scope.user_id );
+    var usr = ( $rootScope._user_activity_ == undefined ||  $rootScope._user_activity_ == null) ?  undefined : $rootScope._user_activity_ ;
+    console.log(usr);
     if( usr == undefined ) return false ;
 
     // ==> Report questions
@@ -1806,7 +1812,8 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     // usr.report_questions.right_questions = new Array();
     // usr.report_questions.wrong_questions = new Array();
     // ==> Question Data
-    var question_data = usr.questions_data ;
+    var question_data = $rootScope._user_activity_.questions_data ;
+
     var question_and_answers = usr.report_questions.question_answers;
     var qs_data_exists = question_data.find(x => x.question_id == question._id );
     if(qs_data_exists != undefined ){
@@ -1842,234 +1849,324 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
 
 
 
-    var zoom_in_usr_answers = (solved_answer) => {
+      var zoom_in_usr_answers = (solved_answer) => {
 
-      // ==> Start zooming
-      var answer_id = solved_answer._id ;
-      var answer_object = question.answers_format.find(x => x._id == answer_id );
-      var question_object = question ;
-      if(answer_object == undefined ) return false;
+        // ==> Start zooming
+        var answer_id = solved_answer._id ;
+        var answer_object = question.answers_format.find(x => x._id == answer_id );
+        var question_object = question ;
+        if(answer_object == undefined ) return false;
 
-       // =========================[ report_questions ]
-        var question_answer_exists = usr.report_questions.question_answers
-        var qs_exists_aq = question_answer_exists.find(x => x.question_id == question_object._id );
-        if(qs_exists_aq == undefined ) return false ;
-        var isWrong_solved_answer = ( qs_exists_aq.user_answers.filter(x => x.is_correct == false ).length > 0 ) ;
-        if(isWrong_solved_answer ){
-          // ==> Wrong Answers
-          if(usr.report_questions.wrong_questions.indexOf(question_object._id) == -1)
-            usr.report_questions.wrong_questions.push(question_object._id);
-          if(usr.report_questions.right_questions.indexOf(question_object._id) != -1)
-            usr.report_questions.right_questions.splice(usr.report_questions.right_questions.indexOf(question_object._id) , 1 );
-        }else {
-          // ==> Correct Answers
-          var app_question = $scope._questions_.find(x => x._id == question_object._id);
-          var user_question = usr.report_questions.question_answers.find(x => x.question_id == question_object._id );
-          var correct_answers = app_question.answers_format.filter(x => x.is_correct == true );
-          var user_answers = user_question.user_answers
-          var is_correct_answer = correct_answers.is_tracked(user_answers);
-          if(is_correct_answer.length != 0 ){
-            // wrong answer
+         // =========================[ report_questions ]
+          var question_answer_exists = usr.report_questions.question_answers
+          var qs_exists_aq = question_answer_exists.find(x => x.question_id == question_object._id );
+          if(qs_exists_aq == undefined ) return false ;
+          var isWrong_solved_answer = ( qs_exists_aq.user_answers.filter(x => x.is_correct == false ).length > 0 ) ;
+          if(isWrong_solved_answer ){
             // ==> Wrong Answers
             if(usr.report_questions.wrong_questions.indexOf(question_object._id) == -1)
               usr.report_questions.wrong_questions.push(question_object._id);
             if(usr.report_questions.right_questions.indexOf(question_object._id) != -1)
               usr.report_questions.right_questions.splice(usr.report_questions.right_questions.indexOf(question_object._id) , 1 );
           }else {
-            // right answer
-            if(usr.report_questions.right_questions.indexOf(question_object._id) == -1 )
-              usr.report_questions.right_questions.push(question_object._id);
-            if(usr.report_questions.wrong_questions.indexOf(question_object._id) != -1)
-              usr.report_questions.wrong_questions.splice(usr.report_questions.wrong_questions.indexOf(question_object._id) , 1 );
+            // ==> Correct Answers
+            var app_question = $rootScope._questions_.find(x => x._id == question_object._id);
+            var user_question = usr.report_questions.question_answers.find(x => x.question_id == question_object._id );
+            var correct_answers = app_question.answers_format.filter(x => x.is_correct == true );
+            var user_answers = user_question.user_answers
+            var is_correct_answer = correct_answers.is_tracked(user_answers);
+            if(is_correct_answer.length != 0 ){
+              // wrong answer
+              // ==> Wrong Answers
+              if(usr.report_questions.wrong_questions.indexOf(question_object._id) == -1)
+                usr.report_questions.wrong_questions.push(question_object._id);
+              if(usr.report_questions.right_questions.indexOf(question_object._id) != -1)
+                usr.report_questions.right_questions.splice(usr.report_questions.right_questions.indexOf(question_object._id) , 1 );
+            }else {
+              // right answer
+              if(usr.report_questions.right_questions.indexOf(question_object._id) == -1 )
+                usr.report_questions.right_questions.push(question_object._id);
+              if(usr.report_questions.wrong_questions.indexOf(question_object._id) != -1)
+                usr.report_questions.wrong_questions.splice(usr.report_questions.wrong_questions.indexOf(question_object._id) , 1 );
+            }
+
+          }
+          if(usr.report_questions.all_questions.indexOf(question_object._id) == -1 )
+            usr.report_questions.all_questions.push(question_object._id);
+
+          // ===========================[Question Data]
+          // ==> Question Data
+          var question_dt_exists = question_data.find(x => x.question_id == question_object._id ) ;
+          if(question_dt_exists == undefined ){
+
+            var question_data_object = {
+              "question_id" : question_object._id ,
+              "question_index" : 0 ,
+              "question_type" : question_object.question_type ,
+              "question_text" : question_object.question_body  ,
+              "answer_ids" : new Array({answer_id : answer_id , is_correct : answer_object.is_correct , answer_object : answer_object , answer_index : 0 }) ,
+              "correct_answers" : question_object.answers_format.filter(x => x.is_correct == true)  ,
+              "updated_date" :  new Date()
+            };
+            question_data.push(question_data_object);
+          }else {
+            if(question_dt_exists.answer_ids.find(x => x.answer_id == answer_id ) == undefined )
+            question_dt_exists.answer_ids.push({answer_id : answer_id , is_correct : answer_object.is_correct , answer_object : answer_object , answer_index : 0 });
+          }
+          // ===========================[Attendee question]
+          var att_question_dt_exists = attendee_questions.find(x => x.question_id == question_object._id ) ;
+          if(att_question_dt_exists == undefined ){
+            var answer_value ;
+            if(question_object.question_type == 0 ) answer_value = answer_object.value;
+            if(question_object.question_type == 1 ) answer_value = answer_object.Media_directory;
+            if(question_object.question_type == 2 ) answer_value = answer_object.boolean_value;
+
+            var question_data_object = {
+              "question_id" : question_object._id ,
+              "question_type" : question_object.question_type ,
+              "question_text" : question_object.question_body  ,
+              "attendee_answers" : new Array({answer_id : answer_id , is_correct : answer_object.is_correct , answer_object : answer_object , answer_value : answer_value })
+            };
+            attendee_questions.push(question_data_object);
+          }else {
+            if(att_question_dt_exists.attendee_answers.find(x => x.answer_id == answer_id ) == undefined )
+            att_question_dt_exists.attendee_answers.push({answer_id : answer_id , is_correct : answer_object.is_correct , answer_object : answer_object , answer_value : answer_value });
           }
 
-        }
-        if(usr.report_questions.all_questions.indexOf(question_object._id) == -1 )
-          usr.report_questions.all_questions.push(question_object._id);
-
-        // ===========================[Question Data]
-        // ==> Question Data
-        var question_dt_exists = question_data.find(x => x.question_id == question_object._id ) ;
-        if(question_dt_exists == undefined ){
-
-          var question_data_object = {
-            "question_id" : question_object._id ,
-            "question_index" : 0 ,
-            "question_type" : question_object.question_type ,
-            "question_text" : question_object.question_body  ,
-            "answer_ids" : new Array({answer_id : answer_id , is_correct : answer_object.is_correct , answer_object : answer_object , answer_index : 0 }) ,
-            "correct_answers" : question_object.answers_format.filter(x => x.is_correct == true)  ,
-            "updated_date" :  new Date()
-          };
-          question_data.push(question_data_object);
-        }else {
-          if(question_dt_exists.answer_ids.find(x => x.answer_id == answer_id ) == undefined )
-          question_dt_exists.answer_ids.push({answer_id : answer_id , is_correct : answer_object.is_correct , answer_object : answer_object , answer_index : 0 });
-        }
-        // ===========================[Attendee question]
-        var att_question_dt_exists = attendee_questions.find(x => x.question_id == question_object._id ) ;
-        if(att_question_dt_exists == undefined ){
-          var answer_value ;
-          if(question_object.question_type == 0 ) answer_value = answer_object.value;
-          if(question_object.question_type == 1 ) answer_value = answer_object.Media_directory;
-          if(question_object.question_type == 2 ) answer_value = answer_object.boolean_value;
-
-          var question_data_object = {
-            "question_id" : question_object._id ,
-            "question_type" : question_object.question_type ,
-            "question_text" : question_object.question_body  ,
-            "attendee_answers" : new Array({answer_id : answer_id , is_correct : answer_object.is_correct , answer_object : answer_object , answer_value : answer_value })
-          };
-          attendee_questions.push(question_data_object);
-        }else {
-          if(att_question_dt_exists.attendee_answers.find(x => x.answer_id == answer_id ) == undefined )
-          att_question_dt_exists.attendee_answers.push({answer_id : answer_id , is_correct : answer_object.is_correct , answer_object : answer_object , answer_value : answer_value });
-        }
 
 
+         // // // // console.log(solved_question_id);
+         // // // // console.log(solved_questions);
+         // // // console.log(usr.report_questions);
+        // ==> End Zooming
+      }
+      solved_questions.user_answers.map(zoom_in_usr_answers)
+      // // // console.log("Bulding attendee online report");
+      }
+    // ==> Storing Anwers
+  $rootScope.show_solved_answers  = (  question_id , answer_id , is_correct ) => {
+    var app_settings = $rootScope._settings_ ;
 
-       // // // // console.log(solved_question_id);
-       // // // // console.log(solved_questions);
-       // // // console.log(usr.report_questions);
-      // ==> End Zooming
-    }
-    solved_questions.user_answers.map(zoom_in_usr_answers)
-    // // // console.log("Bulding attendee online report");
-  }
-  // ==> Storing Anwers
-  $rootScope.select_answer = ( question , answer , rat_scale_answer_val = null ) => {
-     // ==> Givens
-     var app_type = $scope._application_.app_type;
-     var app_settings = $scope._settings_;
-     var question_settings = question.answer_settings ;
-     var question_type = question.question_type ;
-     var question_id = question._id ;
-     var answer_id = answer._id ;
-     var user_id = $scope.user_id ;
-     var app_id = $scope.application_id ;
-
-     // ==> Build application in online reportObject
-     if( $scope._online_report_  == null || $scope._online_report_ == undefined ) {
-       $scope._online_report_ = new Object();
-       $scope._online_report_['att_draft'] = new Array();
-       $scope._online_report_['application_id'] = app_id;
-       $scope._online_report_['questionnaire_info'] = app_id;
-     }
-     if( $scope._online_report_.att_draft == undefined )
-      $scope._online_report_['att_draft'] = new Array();
-     var user_activity = $scope._online_report_.att_draft.find  ( x => x.user_id == user_id ) ;
-     if( user_activity == undefined ){
-          $scope._online_report_.att_draft.push({
-          "questions_data" : new Array() ,
-          "is_loaded":true ,
-          "start_expiration_time" : new Date() ,
-          "user_id" : $scope.user_id ,
-          "user_info":$scope.user_id ,
-          "is_completed":false ,
-          "user_completed_status":false ,
-          "impr_application_object": $scope._application_
-         })
-     }
-
-     // ==> Building Objects and array
-     var attendee_index = $scope._online_report_.att_draft.findIndex(x => x.user_id == user_id );
-     if(attendee_index == -1 ) return false ;
-
-     if( $scope._online_report_.att_draft[attendee_index].questions_data == undefined )
-     $scope._online_report_.att_draft[attendee_index]['questions_data'] = new Array();
-     if( $scope._online_report_.att_draft[attendee_index].report_questions == undefined )
-     $scope._online_report_.att_draft[attendee_index]['report_questions'] = new Object();
-     if( $scope._online_report_.att_draft[attendee_index].attendee_questions == undefined )
-     $scope._online_report_.att_draft[attendee_index]['attendee_questions'] = new Array();
-     if( $scope._online_report_.att_draft[attendee_index].report_attendee_details == undefined )
-     $scope._online_report_.att_draft[attendee_index]['report_attendee_details'] = new Object();
-     if( $scope._online_report_.att_draft[attendee_index].report_attendees == undefined )
-     $scope._online_report_.att_draft[attendee_index]['report_attendees'] = new Object();
-
-     // ==> Building Answers
-     var is_show_result = app_settings.show_results_per_qs;
-     var is_enable_review = app_settings.review_setting;
-     var is_single_choice ;
-     if(question_settings != undefined)
-       is_single_choice = question_settings.single_choice;
-     var autoslide_when_answer = app_settings.auto_slide; // => completed
-
-     // ==> Building question status (report_questions)
-     var report_questions = $scope._online_report_.att_draft[attendee_index].report_questions ;
-     if( report_questions.all_questions == undefined )
-     report_questions['all_questions'] = new Array();
-     if( report_questions.right_questions == undefined )
-     report_questions['right_questions'] = new Array();
-     if( report_questions.wrong_questions == undefined )
-     report_questions['wrong_questions'] = new Array();
-     if( report_questions.question_answers == undefined )
-     report_questions['question_answers'] = new Array();
-
-     var all_questions = report_questions.all_questions ;
-     var right_questions = report_questions.right_questions;
-     var wrong_questions = report_questions.wrong_questions;
-
-     var qs_index = report_questions.question_answers.findIndex(x => x.question_id == question_id);
-
-     if( $scope._user_activity_ != null && $scope._user_activity_.user_completed_status != undefined && $scope._user_activity_.user_completed_status == true)
-     return false;
-
-     if( $scope._user_activity_ != undefined && $scope._user_activity_.report_questions != undefined){
-       var solved_questions = $scope._user_activity_.report_questions.question_answers.find(x => x.question_id == question_id );
-       var answer_exists = -1 ;
-       if( solved_questions != undefined )
-       answer_exists =  solved_questions.user_answers.findIndex(x => x._id == answer_id );
-
-       if ( $scope._settings_.show_results_per_qs == true  && solved_questions != undefined && question_type == 2 && solved_questions.user_answers.length != 0 ) return false;
-       if ( $scope._settings_.show_results_per_qs == true  && solved_questions != undefined && ( question_type == 1 || question_type == 0  ) && solved_questions.user_answers.length != 0  && is_single_choice == true ) return false;
-       if ( $scope._settings_.show_results_per_qs == true  && solved_questions != undefined && ( question_type == 1 || question_type == 0  ) && solved_questions.user_answers.length != 0  && is_single_choice == false && answer_exists != -1 ) return false;
-     }
+    // ==> List super size
+    var classes = "";
 
 
-     /**** ======================== Questions ****/
-     // ==> Multiple choices && Media choices
-     if( question_type == 0 || question_type == 1 ){
-
-       // ==> Attendee answers
-       if( is_single_choice ){
-         if( qs_index == -1 ){
-             var answer_bd = {
-               question_id : question_id ,
-               user_answers : [{ _id : answer_id }]
-             }
+    index = $rootScope._questions_.findIndex(x => x._id == question_id );
 
 
-             if( app_type == 1 )
-             answer_bd.user_answers[answer_bd.user_answers.length - 1]['is_correct'] = answer.is_correct ;
+    if( index != -1 && $rootScope._questions_[index].answer_settings.super_size == true || ( $rootScope._questions_[index] != undefined && $rootScope._questions_[index].question_type == 2 ) )
+    classes += "super_size_class ";
 
-             report_questions.question_answers.push(answer_bd);
-             if( app_type == 1 ){
-                 // ==> Mark if this question is right
-                 var filter_wrong_answers = answer_bd.user_answers.filter(x => x.is_correct == false ) ;
-                 if(filter_wrong_answers.length != 0){
-                    // wrong question
-                    if( answer_bd.is_correct == undefined )
-                      answer_bd['is_correct'] = false;
-                      answer_bd.is_correct = false;
+    // ==> List solved questions
+    if( $rootScope._user_activity_ != undefined && $rootScope._user_activity_ != null ){
+      var user_index =   $rootScope._user_activity_;
+      if( user_index != -1 ){
+        var usr_act = $rootScope._user_activity_ ;
+        if(usr_act.report_questions != undefined )
+        {
+          var current_question = usr_act.report_questions.question_answers.find(x => x.question_id == question_id );
+          if(current_question != undefined )
+          {
+
+            if( app_settings.show_results_per_qs && $rootScope._user_activity_.report_questions != undefined ){
+
+               var this_question = $rootScope._user_activity_.report_questions.question_answers.find(x => x.question_id == question_id );
+               if(this_question != undefined){
+                 if( this_question.is_correct == false ){
+                   // ==> Solved "wrong answers";
+                    // .... Show all right answers
+                    var basic_question = $rootScope._questions_.find(x => x._id == question_id) ;
+                    var basic_answer = basic_question.answers_format.find(x => x._id == answer_id ) ;
+                    if( basic_answer.is_correct == true ) classes += "right_answer ";
+                    // .... Show Solved wrong answer
+                    var all_wrong_answers = this_question.user_answers.filter(x => x.is_correct == false );
+                    var these_wrong_answers = all_wrong_answers.find(x => x._id == answer_id) ;
+                    if(these_wrong_answers != undefined) classes += "wrong_answer ";
                  }else {
-                   // correct answer
-                   if( answer_bd.is_correct == undefined )
-                     answer_bd['is_correct'] = true;
-                     answer_bd.is_correct = true;
+                   // ==> Solved "right answers";
+                   // .... Show only solved answer
+                   var basic_question = $rootScope._questions_.find(x => x._id == question_id) ;
+                   var basic_answer = basic_question.answers_format.find(x => x._id == answer_id ) ;
+                   // if( basic_answer.is_correct == true ) classes += "right_answer ";
+                   var solved_right_answers = this_question.user_answers.filter(x => x.is_correct == true );
+                    var these_right_answers = solved_right_answers.find(x => x._id == answer_id) ;
+                    if(these_right_answers != undefined ) classes += "right_answer ";
                  }
-             }
-           }else {
-             var ans_index = report_questions.question_answers[qs_index].user_answers.findIndex( x => x._id == answer_id );
-             if( ans_index == -1 ){
-               var answer_obk = { _id : answer_id  }
+               }
+            }else {
+              var current_answer = current_question.user_answers.find(x => x._id == answer_id) ;
+              if(current_answer != undefined )
+                classes += "selected_answer ";
+            }
+          }
+        }
+      }
+    }
 
-               if(app_type == 1 )
-                 answer_obk['is_correct'] = answer.is_correct;
-                report_questions.question_answers[qs_index].user_answers =[answer_obk] ;
+
+   return classes ;
+  };
+  $rootScope.select_answer = ( question , answer , css_mode) => {
+    if ( css_mode == true ) return false;
+
+       var app_type = $rootScope._application_.app_type;
+       var app_settings = $rootScope._settings_;
+       var question_settings = question.answer_settings ;
+       var question_type = question.question_type ;
+       var question_id = question._id ;
+       var answer_id = answer._id ;
+       var user_id = $rootScope.user_id ;
+       var app_id = $rootScope.application_id ;
+
+       if( $rootScope.isEmpty( $rootScope.this_attendee_draft ) ){
+            $rootScope.this_attendee_draft = new Object();
+            $rootScope.this_attendee_draft['att_draft'] = new Array();
+            $rootScope.this_attendee_draft['application_id'] = $rootScope.app_id;
+            $rootScope.this_attendee_draft['questionnaire_info'] = $rootScope.app_id;
+            var cuIndex = $rootScope.this_attendee_draft.att_draft.findIndex (x => x.user_id == $rootScope.user_id) ;
+            if(cuIndex == -1 ){
+              var all_seconds = parseInt( $rootScope._settings_.time_settings.hours * 60 * 60 ) + parseInt(  $rootScope._settings_.time_settings.minutes * 60  ) + parseInt($rootScope._settings_.time_settings.seconds )
+              $rootScope._settings_.time_settings.value = all_seconds ;
+              $rootScope.this_attendee_draft.att_draft.push({
+                'questions_data' : new Array() ,
+                'is_loaded':true ,
+                'start_expiration_time' : new Date() ,
+                'user_id' : $rootScope.user_id ,
+                'user_info':$rootScope.user_id ,
+                'is_completed':false ,
+                'impr_application_object':$rootScope._application_
+              });
+            }
+       }
+
+       $rootScope._user_activity_ = $rootScope.this_attendee_draft.att_draft[0];
 
 
-                if( app_type == 1 ){
+
+
+       if( $rootScope._user_activity_.questions_data == undefined )
+       $rootScope._user_activity_['questions_data'] = new Array();
+       if( $rootScope._user_activity_.report_questions == undefined )
+       $rootScope._user_activity_['report_questions'] = new Object();
+       if( $rootScope._user_activity_.attendee_questions == undefined )
+       $rootScope._user_activity_['attendee_questions'] = new Array();
+       if( $rootScope._user_activity_.report_attendee_details == undefined )
+       $rootScope._user_activity_['report_attendee_details'] = new Object();
+       if( $rootScope._user_activity_.report_attendees == undefined )
+       $rootScope._user_activity_['report_attendees'] = new Object();
+
+
+       // ==> Building Answers
+       var is_show_result = app_settings.show_results_per_qs;
+       var is_enable_review = app_settings.review_setting;
+       var is_single_choice ;
+       if(question_settings != undefined)
+         is_single_choice = question_settings.single_choice;
+       var autoslide_when_answer = app_settings.auto_slide; // => completed
+
+
+       // ==> Building question status (report_questions)
+       var report_questions = $rootScope._user_activity_.report_questions ;
+       if( report_questions.all_questions == undefined )
+       report_questions['all_questions'] = new Array();
+       if( report_questions.right_questions == undefined )
+       report_questions['right_questions'] = new Array();
+       if( report_questions.wrong_questions == undefined )
+       report_questions['wrong_questions'] = new Array();
+       if( report_questions.question_answers == undefined )
+       report_questions['question_answers'] = new Array();
+
+       var all_questions = report_questions.all_questions ;
+       var right_questions = report_questions.right_questions;
+       var wrong_questions = report_questions.wrong_questions;
+
+       var qs_index = report_questions.question_answers.findIndex(x => x.question_id == question_id);
+
+
+       if( $rootScope._user_activity_ != null && $rootScope._user_activity_.user_completed_status != undefined && $rootScope._user_activity_.user_completed_status == true)
+       return false;
+
+
+       if( $rootScope._user_activity_ != undefined && $rootScope._user_activity_.report_questions != undefined){
+          var solved_questions = $rootScope._user_activity_.report_questions.question_answers.find(x => x.question_id == question_id );
+          var answer_exists = -1 ;
+          if( solved_questions != undefined )
+          answer_exists =  solved_questions.user_answers.findIndex(x => x._id == answer_id );
+
+          if ( $rootScope._settings_.show_results_per_qs == true  && solved_questions != undefined && question_type == 2 && solved_questions.user_answers.length != 0 ) return false;
+          if ( $rootScope._settings_.show_results_per_qs == true  && solved_questions != undefined && ( question_type == 1 || question_type == 0  ) && solved_questions.user_answers.length != 0  && is_single_choice == true ) return false;
+          if ( $rootScope._settings_.show_results_per_qs == true  && solved_questions != undefined && ( question_type == 1 || question_type == 0  ) && solved_questions.user_answers.length != 0  && is_single_choice == false && answer_exists != -1 ) return false;
+      }
+
+
+
+
+      // ==> Multiple choices && Media choices
+      if( question_type == 0 || question_type == 1 ){
+
+        // ==> Attendee answers
+        if( is_single_choice ){
+          if( qs_index == -1 ){
+              var answer_bd = {
+                question_id : question_id ,
+                user_answers : [{ _id : answer_id }]
+              }
+
+
+              if( app_type == 1 )
+              answer_bd.user_answers[answer_bd.user_answers.length - 1]['is_correct'] = answer.is_correct ;
+
+              report_questions.question_answers.push(answer_bd);
+              if( app_type == 1 ){
+                  // ==> Mark if this question is right
+                  var filter_wrong_answers = answer_bd.user_answers.filter(x => x.is_correct == false ) ;
+                  if(filter_wrong_answers.length != 0){
+                     // wrong question
+                     if( answer_bd.is_correct == undefined )
+                       answer_bd['is_correct'] = false;
+                       answer_bd.is_correct = false;
+                  }else {
+                    // correct answer
+                    if( answer_bd.is_correct == undefined )
+                      answer_bd['is_correct'] = true;
+                      answer_bd.is_correct = true;
+                  }
+              }
+            }else {
+              var ans_index = report_questions.question_answers[qs_index].user_answers.findIndex( x => x._id == answer_id );
+              if( ans_index == -1 ){
+                var answer_obk = { _id : answer_id  }
+
+                if(app_type == 1 )
+                  answer_obk['is_correct'] = answer.is_correct;
+                 report_questions.question_answers[qs_index].user_answers =[answer_obk] ;
+
+
+                 if( app_type == 1 ){
+                     // ==> Mark if this question is right
+                     var filter_wrong_answers = report_questions.question_answers[qs_index].user_answers.filter(x => x.is_correct == false ) ;
+                     if(filter_wrong_answers.length != 0){
+                        // wrong question
+                        if( report_questions.question_answers[qs_index].is_correct == undefined )
+                          report_questions.question_answers[qs_index]['is_correct'] = false;
+                          report_questions.question_answers[qs_index].is_correct = false;
+                     }else {
+                       // correct answer
+                       if( report_questions.question_answers[qs_index].is_correct == undefined )
+                         report_questions.question_answers[qs_index]['is_correct'] = true;
+                         report_questions.question_answers[qs_index].is_correct = true;
+                     }
+                 }
+
+              }else {
+                report_questions.question_answers[qs_index].user_answers.splice( ans_index , 1 )
+                if(report_questions.question_answers[qs_index].user_answers.length == 0 )
+                report_questions.question_answers.splice(qs_index , 1 );
+
+
+                if( app_type == 1 && report_questions.question_answers.length != 0 &&  report_questions.question_answers[qs_index] != undefined){
                     // ==> Mark if this question is right
+
                     var filter_wrong_answers = report_questions.question_answers[qs_index].user_answers.filter(x => x.is_correct == false ) ;
                     if(filter_wrong_answers.length != 0){
                        // wrong question
@@ -2083,232 +2180,206 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
                         report_questions.question_answers[qs_index].is_correct = true;
                     }
                 }
+              }
+            }
+        }else{
+           if( qs_index == -1 ){
+              var answer_obj = { _id : answer_id  };
+              if(app_type == 1 ) answer_obj['is_correct'] = answer.is_correct
+              var ans_data = {
+                question_id : question_id ,
+                user_answers : [answer_obj]
+              };
+              report_questions.question_answers.push(ans_data);
 
-             }else {
-               report_questions.question_answers[qs_index].user_answers.splice( ans_index , 1 )
-               if(report_questions.question_answers[qs_index].user_answers.length == 0 )
-               report_questions.question_answers.splice(qs_index , 1 );
-
-
-               if( app_type == 1 && report_questions.question_answers.length != 0 ){
-                   // ==> Mark if this question is right
-
-                   var filter_wrong_answers = report_questions.question_answers[qs_index].user_answers.filter(x => x.is_correct == false ) ;
-                   if(filter_wrong_answers.length != 0){
-                      // wrong question
-                      if( report_questions.question_answers[qs_index].is_correct == undefined )
-                        report_questions.question_answers[qs_index]['is_correct'] = false;
-                        report_questions.question_answers[qs_index].is_correct = false;
-                   }else {
-                     // correct answer
-                     if( report_questions.question_answers[qs_index].is_correct == undefined )
-                       report_questions.question_answers[qs_index]['is_correct'] = true;
-                       report_questions.question_answers[qs_index].is_correct = true;
-                   }
-               }
-             }
-           }
-       }else{
-          if( qs_index == -1 ){
-             var answer_obj = { _id : answer_id  };
-             if(app_type == 1 ) answer_obj['is_correct'] = answer.is_correct
-             var ans_data = {
-               question_id : question_id ,
-               user_answers : [answer_obj]
-             };
-             report_questions.question_answers.push(ans_data);
-
-             if( app_type == 1 ){
-               var this_question = report_questions.question_answers.find(x => x.question_id == question_id );
-               if(this_question != undefined ){
-                 // ==> Mark if this question is right
-                 var filter_wrong_answers = this_question.user_answers.filter(x => x.is_correct == false ) ;
-                 if(filter_wrong_answers.length != 0){
-                    // wrong question
-                    if( this_question.is_correct == undefined )
-                      this_question['is_correct'] = false;
-                      this_question.is_correct = false;
-                 }else {
-                   // correct answer
-                   if(this_question.is_correct == undefined )
-                     this_question['is_correct'] = true;
-                     this_question.is_correct = true;
-                 }
-               }
-
-             }
-           }else {
-             var ans_index = report_questions.question_answers[qs_index].user_answers.findIndex( x => x._id == answer_id );
-             if( ans_index == -1 ){
-               var answer_obj = { _id : answer_id  };
-               if(app_type == 1 ) answer_obj['is_correct'] = answer.is_correct
-
-               report_questions.question_answers[qs_index].user_answers.push(answer_obj);
-             }else {
-               report_questions.question_answers[qs_index].user_answers.splice( ans_index , 1 )
-               if(report_questions.question_answers[qs_index].user_answers.length == 0 )
-               report_questions.question_answers.splice(qs_index , 1 );
-             }
-           }
-
-
-           if( app_type == 1 ){
-             var this_question = report_questions.question_answers.find(x => x.question_id == question_id );
-             if(this_question != undefined ){
-               // ==> Mark if this question is right
-               var filter_wrong_answers = this_question.user_answers.filter(x => x.is_correct == false ) ;
-               if(filter_wrong_answers.length != 0){
-                  // wrong question
-                  if( this_question.is_correct == undefined )
-                    this_question['is_correct'] = false;
-                    this_question.is_correct = false;
-               }else {
-                 // correct answer
-                 if(this_question.is_correct == undefined )
-                   this_question['is_correct'] = true;
-                   this_question.is_correct = true;
-               }
-             }
-
-           }
-       }
-     }
-     // ==> True And false
-     if( question_type == 2 ){
-          if( qs_index == -1 ){
-             var answer_obj = { _id : answer_id  };
-             if(app_type == 1 ) answer_obj['is_correct'] = answer.is_correct
-
-             report_questions.question_answers.push({
-               question_id : question_id ,
-               user_answers : [answer_obj]
-             });
-           }else {
-             var ans_index = report_questions.question_answers[qs_index].user_answers.findIndex( x => x._id == answer_id );
-             if( ans_index == -1 ){
-               var answer_obj = { _id : answer_id  };
-               if(app_type == 1 ) answer_obj['is_correct'] = answer.is_correct
-
-               report_questions.question_answers[qs_index].user_answers =[answer_obj] ;
-             }else {
-               report_questions.question_answers[qs_index].user_answers.splice( ans_index , 1 )
-               if(report_questions.question_answers[qs_index].user_answers.length == 0 )
-               report_questions.question_answers.splice(qs_index , 1 );
-             }
-           }
-
-
-
-           if( app_type == 1 ){
-             var this_question = report_questions.question_answers.find(x => x.question_id == question_id );
-             if(this_question != undefined ){
-               // ==> Mark if this question is right
-               var filter_wrong_answers = this_question.user_answers.filter(x => x.is_correct == false ) ;
-               if(filter_wrong_answers.length != 0){
-                  // wrong question
-                  if( this_question.is_correct == undefined )
-                    this_question['is_correct'] = false;
-                    this_question.is_correct = false;
-               }else {
-                 // correct answer
-                 if(this_question.is_correct == undefined )
-                   this_question['is_correct'] = true;
-                   this_question.is_correct = true;
-               }
-             }
-
-           }
-      }
-
-
-      if( question_type == 3 ){ // question_id
-       // BUILD QUESTION_ REPORT
-        // => answer value ( rat_scale_answer_val )
-        var questionIndex= $scope._questions_.findIndex(x => x._id == question_id );
-        if(questionIndex != -1){
-            var answer_ratScale = $scope._questions_[questionIndex].answers_format[0].rating_scale_answers.find(x => x.rat_scl_value == rat_scale_answer_val) ;
-            if(answer_ratScale != undefined){
-                // => {_id: "5b904d575faa2a368f1ae5225_3", rat_scl_value: 3}
-                var report_question = report_questions.question_answers.findIndex(x => x.question_id == question_id );
-                if(report_question == -1){
-                  report_questions.all_questions.push(question_id)
-                  report_questions.question_answers.push({ question_id :question_id , user_answers : new Array({ _id : answer_ratScale._id }) })
-                }else {
-                  report_questions.question_answers[report_question].user_answers = new Array();
-                  report_questions.question_answers[report_question].user_answers.push({ _id : answer_ratScale._id });
+              if( app_type == 1 ){
+                var this_question = report_questions.question_answers.find(x => x.question_id == question_id );
+                if(this_question != undefined ){
+                  // ==> Mark if this question is right
+                  var filter_wrong_answers = this_question.user_answers.filter(x => x.is_correct == false ) ;
+                  if(filter_wrong_answers.length != 0){
+                     // wrong question
+                     if( this_question.is_correct == undefined )
+                       this_question['is_correct'] = false;
+                       this_question.is_correct = false;
+                  }else {
+                    // correct answer
+                    if(this_question.is_correct == undefined )
+                      this_question['is_correct'] = true;
+                      this_question.is_correct = true;
+                  }
                 }
+
+              }
+            }else {
+              var ans_index = report_questions.question_answers[qs_index].user_answers.findIndex( x => x._id == answer_id );
+              if( ans_index == -1 ){
+                var answer_obj = { _id : answer_id  };
+                if(app_type == 1 ) answer_obj['is_correct'] = answer.is_correct
+
+                report_questions.question_answers[qs_index].user_answers.push(answer_obj);
+              }else {
+                report_questions.question_answers[qs_index].user_answers.splice( ans_index , 1 )
+                if(report_questions.question_answers[qs_index].user_answers.length == 0 )
+                report_questions.question_answers.splice(qs_index , 1 );
+              }
+            }
+
+
+            if( app_type == 1 ){
+              var this_question = report_questions.question_answers.find(x => x.question_id == question_id );
+              if(this_question != undefined ){
+                // ==> Mark if this question is right
+                var filter_wrong_answers = this_question.user_answers.filter(x => x.is_correct == false ) ;
+                if(filter_wrong_answers.length != 0){
+                   // wrong question
+                   if( this_question.is_correct == undefined )
+                     this_question['is_correct'] = false;
+                     this_question.is_correct = false;
+                }else {
+                  // correct answer
+                  if(this_question.is_correct == undefined )
+                    this_question['is_correct'] = true;
+                    this_question.is_correct = true;
+                }
+              }
+
             }
         }
+      }
+      // ==> True And false
+      if( question_type == 2 ){
+           if( qs_index == -1 ){
+              var answer_obj = { _id : answer_id  };
+              if(app_type == 1 ) answer_obj['is_correct'] = answer.is_correct
 
+              report_questions.question_answers.push({
+                question_id : question_id ,
+                user_answers : [answer_obj]
+              });
+            }else {
+              var ans_index = report_questions.question_answers[qs_index].user_answers.findIndex( x => x._id == answer_id );
+              if( ans_index == -1 ){
+                var answer_obj = { _id : answer_id  };
+                if(app_type == 1 ) answer_obj['is_correct'] = answer.is_correct
 
-        // ==> Build Question Data
-        console.log(answer_ratScale);
-        var usr = $scope._online_report_.att_draft[attendee_index];
-        var question_data_index = usr.questions_data.findIndex(x => x.question_id == question_id);
-        var answer_ratScale = $scope._questions_[questionIndex].answers_format[0].rating_scale_answers.find(x => x.rat_scl_value == rat_scale_answer_val) ;
-        var ratsclaeoptions = $scope._questions_[questionIndex].answers_format[0] ;
-        ratsclaeoptions['answer_value'] = answer_ratScale.rat_scl_value ;
-        var rating_scale_answer = {answer_id : ratsclaeoptions._id , answer_id_val :  answer_ratScale._id ,  answer_object :   ratsclaeoptions , answer_index : 0}
-        var question_exists = usr.questions_data.findIndex(x => x._id == question_id );
-        if(question_exists == -1){
-          usr.questions_data.push({
-            question_id: question_id,
-            question_index:0 ,
-            question_type: question_type,
-            question_text: question.question_body ,
-            updated_date : new Date(),
-            answer_ids :  [rating_scale_answer]
-          })
-        }else {
-          usr.questions_data[question_exists].answer_ids = new Array();
-          usr.questions_data[question_exists].answer_ids.push(rating_scale_answer);
-        }
-     }
-
-     // ==> auto slide case
-     if(autoslide_when_answer){
-       $timeout(function(){
-         if ( ( is_single_choice && ( question_type == 0 || question_type == 1 ) ) || (question_type == 2 ) || (question_type == 3)  )
-            $scope.go_to_next_unsolved_question();
-       } , $scope.auto_slide_delay)
-     }
-
-     if(question_type != 3 && question_type != 4)
-     $scope.build_question_lists(question , answer , report_questions);
+                report_questions.question_answers[qs_index].user_answers =[answer_obj] ;
+              }else {
+                report_questions.question_answers[qs_index].user_answers.splice( ans_index , 1 )
+                if(report_questions.question_answers[qs_index].user_answers.length == 0 )
+                report_questions.question_answers.splice(qs_index , 1 );
+              }
+            }
 
 
 
+            if( app_type == 1 ){
+              var this_question = report_questions.question_answers.find(x => x.question_id == question_id );
+              if(this_question != undefined ){
+                // ==> Mark if this question is right
+                var filter_wrong_answers = this_question.user_answers.filter(x => x.is_correct == false ) ;
+                if(filter_wrong_answers.length != 0){
+                   // wrong question
+                   if( this_question.is_correct == undefined )
+                     this_question['is_correct'] = false;
+                     this_question.is_correct = false;
+                }else {
+                  // correct answer
+                  if(this_question.is_correct == undefined )
+                    this_question['is_correct'] = true;
+                    this_question.is_correct = true;
+                }
+              }
+
+            }
+       }
 
 
-    $timeout(function(){
-      $scope.build_attendee_reports(question , answer , report_questions);
-      if($scope._online_report_.att_draft != undefined )
-          {
-            var usr = $scope._online_report_.att_draft.find(x => x.user_id == $scope.user_id );
-            $scope._user_activity_ = usr ;
+       if( question_type == 3 ){
+               var questionIndex= $rootScope._questions_.findIndex(x => x._id == question_id );
+               if(questionIndex != -1){
+                   var answer_ratScale = $rootScope._questions_[questionIndex].answers_format[0].rating_scale_answers.find(x => x.rat_scl_value == rat_scale_answer_val) ;
+                   if(answer_ratScale != undefined){
+                       // => {_id: "5b904d575faa2a368f1ae5225_3", rat_scl_value: 3}
+                       var report_question = report_questions.question_answers.findIndex(x => x.question_id == question_id );
+                       if(report_question == -1){
+                         report_questions.all_questions.push(question_id)
+                         report_questions.question_answers.push({ question_id :question_id , user_answers : new Array({ _id : answer_ratScale._id }) })
+                       }else {
+                         report_questions.question_answers[report_question].user_answers = new Array();
+                         report_questions.question_answers[report_question].user_answers.push({ _id : answer_ratScale._id });
+                       }
+                   }
+               }
 
-            if( $scope.finished_is_clicked == true && $scope._application_.app_type == 1)
-               $scope.show_unsolved_question_message();
-          }
 
-     }, 100 );
+               // ==> Build Question Data
+               console.log(answer_ratScale);
+               var usr = $rootScope._user_activity_[attendee_index];
+               var question_data_index = usr.questions_data.findIndex(x => x.question_id == question_id);
+               var answer_ratScale = $rootScope._questions_[questionIndex].answers_format[0].rating_scale_answers.find(x => x.rat_scl_value == rat_scale_answer_val) ;
+               var ratsclaeoptions = $rootScope._questions_[questionIndex].answers_format[0] ;
+               ratsclaeoptions['answer_value'] = answer_ratScale.rat_scl_value ;
+               var rating_scale_answer = {answer_id : ratsclaeoptions._id , answer_id_val :  answer_ratScale._id ,  answer_object :   ratsclaeoptions , answer_index : 0}
+               var question_exists = usr.questions_data.findIndex(x => x._id == question_id );
+               if(question_exists == -1){
+                 usr.questions_data.push({
+                   question_id: question_id,
+                   question_index:0 ,
+                   question_type: question_type,
+                   question_text: question.question_body ,
+                   updated_date : new Date(),
+                   answer_ids :  [rating_scale_answer]
+                 })
+               }else {
+                 usr.questions_data[question_exists].answer_ids = new Array();
+                 usr.questions_data[question_exists].answer_ids.push(rating_scale_answer);
+               } }
 
-     $timeout(function(){
-       $scope.storing_answer_into_online_report();
-     } , 150 );
+
+
+               if(question_type != 3 && question_type != 4)
+               $rootScope.build_question_lists(question , answer , report_questions);
+               $timeout(function(){
+        $rootScope.build_attendee_reports(question , answer , report_questions);
+        if($rootScope._user_activity_ != undefined )
+            {
+              var usr = $rootScope._user_activity_ ;
+              $rootScope._user_activity_ = usr ;
+
+              if( $rootScope.finished_is_clicked == true && $rootScope._application_.app_type == 1)
+                 $rootScope.show_unsolved_question_message();
+            }
+
+       }, 100 );
+
   };
-  $scope.build_attendee_reports = ( question , answer , question_reports ) => {
-    if($scope._online_report_ == null) return false ;
+  $rootScope.show_unsolved_question_message = () => {
+    // if( $rootScope._user_activity_.report_questions == undefined ){
+    //   // $rootScope.join_this_quiz();
+    //   var is_required = $rootScope._questions_.filter(x => x.answer_settings.is_required == true ) ;
+    //   if(is_required.length != 0 ){
+    //     $rootScope.unsolved_questions = is_required ;
+    //   }
+    // } else {
+    //   $rootScope.unsolved_questions = new Array();
+    //   var questions = $rootScope._questions_ ;
+    //   var solved_questions = $rootScope._user_activity_.report_questions.question_answers ;
+    //   $rootScope.unsolved_questions = questions.are_all_questions_tracked(solved_questions);
+    // }
+  };
+  $rootScope.build_attendee_reports = ( question , answer , question_reports ) => {
+    if($rootScope._user_activity_ == null) return false ;
 
     // ======================================[report_attendee_details]
-    var usr = $scope._online_report_.att_draft.find(x => x.user_id == $scope.user_id );
+    var usr = $rootScope._user_activity_;
     if( usr == undefined ) return false ;
 
     if(usr.report_attendee_details == undefined || usr.report_attendee_details == null )
       usr.report_attendee_details  = new Object();
 
-      var app_grade_value = parseInt($scope._settings_.grade_settings.value);
-      var total_app_questions = parseInt($scope._questions_.length);
+      var app_grade_value = parseInt($rootScope._settings_.grade_settings.value);
+      var total_app_questions = parseInt($rootScope._questions_.length);
       var correct_questions = parseInt(question_reports.right_questions.length);
       var wrong_questions  = parseInt(question_reports.wrong_questions.length);
       var percentage = Math.round(correct_questions * 100 ) / total_app_questions ;
@@ -2316,19 +2387,19 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
       // var is_completed =  ( total_app_questions == question_reports.question_answers.length )   ;
 
 
-      usr.report_attendee_details['attendee_id'] = $scope.user_id ;
-      usr.report_attendee_details['attendee_information'] = $scope.user_id ;
+      usr.report_attendee_details['attendee_id'] = $rootScope.user_id ;
+      usr.report_attendee_details['attendee_information'] = $rootScope.user_id ;
       usr.report_attendee_details['total_questions'] = question_reports.question_answers.length ;
-      if($scope._application_.app_type == 1 )
+      if( $rootScope._application_.app_type == 1 )
       usr.report_attendee_details['pass_mark'] = isPassed
-      if($scope._application_.app_type == 1 )
+      if( $rootScope._application_.app_type == 1 )
       usr.report_attendee_details['correct_answers'] = correct_questions ;
-      if($scope._application_.app_type == 1 )
+      if( $rootScope._application_.app_type == 1 )
       usr.report_attendee_details['wrong_answers'] = wrong_questions ;
-      if($scope._application_.app_type == 1 )
+      if( $rootScope._application_.app_type == 1 )
       usr.report_attendee_details['status'] = ( isPassed == true ) ? "Passed": "Failed";
       usr.report_attendee_details['completed_status'] = is_completed ;
-      if($scope._application_.app_type == 1 )
+      if($rootScope._application_.app_type == 1 )
       usr.report_attendee_details['score'] = percentage;
       usr.report_attendee_details['created_at'] = new Date();
       usr.report_attendee_details['completed_date'] = new Date();
@@ -2338,41 +2409,45 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
       if(usr.report_attendees == undefined || usr.report_attendees == null )
         usr.report_attendees  = new Object();
 
-        var dif_question_is_completed = $scope._questions_.is_completed_quiz_option(question_reports.question_answers);
+        var dif_question_is_completed = $rootScope._questions_.is_completed_quiz_option(question_reports.question_answers);
         var is_completed =  ( dif_question_is_completed.length == 0 )   ;
 
         usr.report_attendees['created_at'] = new Date();
         usr.report_attendees['updated_at'] = new Date();
-        usr.report_attendees['attendee_id'] = $scope.user_id ;
-        usr.report_attendees['user_information'] = $scope.user_id;
+        usr.report_attendees['attendee_id'] = $rootScope.user_id ;
+        usr.report_attendees['user_information'] = $rootScope.user_id;
         usr.report_attendees['is_completed'] = is_completed ;
-        if($scope._application_.app_type == 1)
+        if($rootScope._application_.app_type == 1)
         usr.report_attendees['passed_the_grade'] = isPassed ;
-        if($scope._application_.app_type == 1)
+        if($rootScope._application_.app_type == 1)
         usr.report_attendees['results'] = new Object()
         if(usr.report_attendees.survey_quiz_answers == undefined )
         usr.report_attendees['survey_quiz_answers'] = new Array();
-        if($scope._application_.app_type == 1)
+        if($rootScope._application_.app_type == 1)
         usr.report_attendees.results['wrong_answers'] = wrong_questions ;
-        if($scope._application_.app_type == 1)
+        if($rootScope._application_.app_type == 1)
         usr.report_attendees.results['correct_answers'] = correct_questions ;
-        if($scope._application_.app_type == 1)
+        if($rootScope._application_.app_type == 1)
         usr.report_attendees.results['count_of_questions'] = question_reports.question_answers.length ;
-        if($scope._application_.app_type == 1)
+        if($rootScope._application_.app_type == 1)
         usr.report_attendees.results['result'] =  new Object();
 
-        if($scope._application_.app_type == 1)
+        if($rootScope._application_.app_type == 1)
         usr.report_attendees.results.result = new Object();
-        if($scope._application_.app_type == 1)
+        if($rootScope._application_.app_type == 1)
         usr.report_attendees.results.result.percentage_value = percentage ;
-        if($scope._application_.app_type == 1)
+        if($rootScope._application_.app_type == 1)
         usr.report_attendees.results.result.raw_value = correct_questions ;
         usr.is_completed = is_completed ;
-        $scope._user_activity_ = usr ;
-        // // console.log($scope._user_activity_);
-        $timeout(function(){ $scope.$apply(); } , 50 );
+        $rootScope._user_activity_ = usr ;
+        // // console.log($rootScope._user_activity_);
+        if( $rootScope.is_submitted == true ){
+            var usr_ = $rootScope._user_activity_ ;
+            $rootScope.unsolved_questions = $rootScope._questions_.are_all_questions_tracked( usr_.questions_data );
+        }
+        $timeout(function(){ $rootScope.$apply(); } , 50 );
   };
-  $scope.storing_answer_into_online_report = () => {
+  $rootScope.storing_answer_into_online_report = () => {
     console.log("storing is disabled !");
   }
   $rootScope.select_this_answer=( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex , css_mode )=>{
@@ -3083,10 +3158,13 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
           {
             $rootScope.is_view = true;
             $rootScope.screen_type = 1;
-            $("#docQuestions").children("li").each(function(){
-               if( $(this).hasClass('marked_question') )
-               $(this).removeClass('marked_question');
-            });
+            // $("#docQuestions").children("li").each(function(){
+            //    if( $(this).hasClass('marked_question') )
+            //    $(this).removeClass('marked_question');
+            // });
+          }else {
+            $rootScope.is_view = true;
+            $rootScope.screen_type = 2;
           }
       }
     else
@@ -3106,28 +3184,73 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
       $timeout(function(){$rootScope.$apply()} , 300);
       $(".preview-page, .swiper-wrapper").css({  height : 'auto'});
   }
-  $rootScope.submit_the_quiz = (css_mode) => {
-    if(css_mode == true ) return false;
-    // ==> if There a required question
-    // are_all_questions_tracked
-    if($rootScope.this_attendee_draft == undefined || $rootScope.this_attendee_draft.att_draft == undefined ){
-      $rootScope.unsolved_questions = $rootScope._questions_ ;
+  $rootScope.review_this_quiz = (css_mode) => {
+    if ( css_mode == true ) return false;
+    $rootScope.is_reviewed = true ;
+    $rootScope._settings_.show_results_per_qs = true ;
+    $(".review-result-box").children(".fa").removeClass("fa-reply-all");
+    $(".review-result-box").children(".fa").addClass("fa-refresh fa-spin");
+
+    $timeout(function(){
+      $rootScope.screen_type = 3 ;
+      $rootScope.question_index = 0 ;
+      $rootScope.is_submitted = false ;
+      $rootScope.highlighted_question($rootScope._questions_[0]._id);
+      $(".review-result-box").children(".fa").addClass("fa-reply-all");
+      $(".review-result-box").children(".fa").removeClass("fa-refresh fa-spin");
+    } , 1000 );
+  };
+  $rootScope.retake_this_quiz = (css_mode) => {
+      if ( css_mode == true ) return false;
+    $(".retake-result-box").children(".fa").addClass("fa-spin");
+    // ==> Randmoize Questions
+    $rootScope.randomize_sorting_questions(true);
+    // ==> Randomize answers
+    $rootScope._questions_.filter((object) => {
+      return object.answers_format = $rootScope.randomize_arries(object.answers_format);
+    });
+
+    $timeout(function(){
+      $rootScope.this_attendee_draft = undefined ;
+      $rootScope.screen_type = 3 ;
+      $rootScope.question_index = 0 ;
+      $rootScope.is_submitted = false ;
+      $rootScope.highlighted_question($rootScope._questions_[0]._id);
+      $rootScope._user_activity_ = null ;
+      $(".retake-result-box").children(".fa").removeClass("fa-spin");
+    } , 1000 );
+  };
+  $rootScope.go_to_unsolved_questions = (css_mode) => {
+    if ( css_mode == true ) return false;
+    if($rootScope.unsolved_questions.length == 0 ) return false ;
+    // get index
+    var this_index = $rootScope.unsolved_questions[0];
+    var target_index = $rootScope._questions_.findIndex( x => x._id == this_index._id );
+    if(target_index != -1 ){
+      $rootScope.highlighted_question(this_index._id);
+      $rootScope.question_index = target_index ;
+      $rootScope.screen_type = 3 ;
     }
-    else {
-      var usr = $rootScope.this_attendee_draft.att_draft.find(x => x.user_id == $rootScope.user_id );
-      if(usr != undefined ){
-        $rootScope.unsolved_questions = $rootScope._questions_.are_all_questions_tracked( usr.questions_data );
-      }
-    }
-    if($rootScope.unsolved_questions.length != 0 )
+  }
+   $rootScope.submit_the_quiz = ( css_mode ) => {
+     // disable answer if there is unsolved questions
+     if ( css_mode == true ) return false;
+     $rootScope.is_submitted = true ;
+      var usr = $rootScope._user_activity_ ;;
+      var is_required_qs = $rootScope._questions_.filter(x => x.answer_settings.is_required == true ) ;
+      if( is_required_qs.length != 0 && ( usr == null || usr == undefined ) ){
+        $rootScope.unsolved_questions  = is_required_qs ;
+      }else
+      $rootScope.unsolved_questions = $rootScope._questions_.are_all_questions_tracked( usr.questions_data );
+
+      if($rootScope.unsolved_questions.length != 0 )
       return false;
-    // ==> Go to screen
-    if( $rootScope.screen_type == 1 ){
+
       $rootScope.is_view = true;
       $rootScope.screen_type = 2;
-    }
-    $(".preview-page , .swiper-wrapper").css({  height : 'auto'});
-  }
+      $(".preview-page , .swiper-wrapper").css({  height : 'auto'});
+     // $rootScope._questions_.are_all_questions_tracked( attended_questions );
+   };
   $rootScope.go_back_to_first_qs = (css_mode) => {
     if(css_mode == true ) return false;
     if($rootScope._questions_.length != 0 )
@@ -3174,8 +3297,11 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
   }
   $rootScope.enable_css_mode_func = ( is_enabled ) => {
     $("#enabled_css").val( is_enabled );
+    // $rootScope.switching_editor_preview(true);
+
    if(is_enabled == true ){
-     $rootScope.switching_editor_preview(true)
+     $(".switch").trigger('click');
+     $rootScope.switching_editor_preview(true);
      $rootScope.enable_css_mode = true;
       $('body , html').bind('mouseover' , function(e){
         var target = e.target;
