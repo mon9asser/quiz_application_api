@@ -1185,7 +1185,7 @@ apps.controller("player", [
        if(autoslide_when_answer){
          $timeout(function(){
            if ( ( is_single_choice && ( question_type == 0 || question_type == 1 ) ) || (question_type == 2 ) || (question_type == 3)  )
-              $scope.go_to_next_unsolved_question();
+              $scope.swipperJs.slideNext();
          } , $scope.auto_slide_delay)
        }
 
