@@ -321,7 +321,7 @@ apps.controller("player", [
             $scope._online_report_ = $scope._application_.att__draft;
             $scope._offline_report_ = $scope._application_.app_report;
             $rootScope._stylesheet_ = $scope.server_ip + "themes/stylesheet_of_app_" + $scope.application_id +'.css';
-
+           
             if( $scope.isEmpty($scope._user_activity_) == true || $scope.is_retake == true )
             {
               // ==> Questions
