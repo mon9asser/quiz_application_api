@@ -403,7 +403,7 @@ apps.controller("player", [
                     var this_slide  = $(this);
                     var current_index = this_slide[0].activeIndex;
                     var previous_index = this_slide[0].previousIndex;
-                    if(current_index == 1 && previous_index == 0 && ( $scope._user_activity_ != null && $scope._user_activity_.user_completed_status != undefined || $scope._user_activity_.user_completed_status == false )){
+                    if(current_index == 1 && previous_index == 0 && ( $scope._user_activity_ != null && ( $scope._user_activity_ != null && $scope._user_activity_.user_completed_status != undefined) || ($scope._user_activity_  == null || $scope._user_activity_.user_completed_status == false) )){
                       if($scope._settings_.navigation_btns == false && ( $scope._user_activity_ == null ))
                        $scope.start_the_quiz();
                     }
@@ -597,9 +597,9 @@ apps.controller("player", [
       if(currentIndex == undefined )
         {
           currentWidth = 0;
-          $(".highlighted-progress").css({
-            width : currentWidth  + '%'
-          }) ;
+          // $(".highlighted-progress").css({
+          //   width : currentWidth  + '%'
+          // }) ;
           $scope.percentage_progress = currentWidth ;
           return false ;
         }
@@ -608,9 +608,9 @@ apps.controller("player", [
       var currentWidth , currentIndex;
       var counts = question.length;
       currentWidth = (Math.round (currentIndex * 100 / ( counts  ))) ;
-      $(".highlighted-progress").css({
-        width : currentWidth  + '%'
-      }) ;
+      // $(".highlighted-progress").css({
+      //   width : currentWidth  + '%'
+      // }) ;
       $scope.percentage_progress = currentWidth ;
     }
     $scope.review_the_quiz = (currentIndex) => {
@@ -663,20 +663,32 @@ apps.controller("player", [
       }).then((res)=>{
         $(".retake-result-box").children("i.fa").removeClass("fa-spin")
         // ==> Truncate from two views ( offline + online )
-        $scope._application_.att__draft = null ;
-        $scope._application_.app_report = null;
-        $scope._user_activity_ = null ;
-        $scope._online_report_ = undefined ;
+        // $scope._application_.att__draft = null ;
+        // $scope._application_.app_report = null;
+        // $scope._user_activity_ = null ;
+        // $scope._online_report_ = undefined ;
+        $scope.loading_application_data();
         $timeout(function(){
-          $scope.loading_application_data();
+          $scope._application_.att__draft = null ;
+          $scope._application_.app_report = null;
+          $scope._user_activity_ = null ;
+          $scope._online_report_ = undefined ;
+          $scope.randomize_sorting_questions(true);
+        } , 1000)
+        $timeout(function(){
+
+
           $scope.$apply();
 
           $scope.swipperJs.slideTo(currentIndex);
 
           $timeout(function(){
-            $scope.start_the_quiz();
+            $scope.finished_is_clicked = false ;
+            if($scope._user_activity_ == null )
+            $scope._user_activity_ = new Object();
             $scope._user_activity_['user_completed_status'] = false;
-          } , 1000 );
+            $scope.start_the_quiz();
+          } , 2000 );
 
         } , 300 );
 
@@ -1214,13 +1226,13 @@ apps.controller("player", [
        }
 
 
-       // $scope.auto_slide_delay = 700;
+        $scope.auto_slide_delay = 500;
        // ==> auto slide case
        if(autoslide_when_answer){
          $timeout(function(){
            if ( ( is_single_choice && ( question_type == 0 || question_type == 1 ) ) || (question_type == 2 ) || (question_type == 3)  )
               $scope.swipperJs.slideNext();
-         } , 1000 )
+         } ,   $scope.auto_slide_delay )
        }
 
        if(question_type != 3 && question_type != 4)
@@ -1247,6 +1259,8 @@ apps.controller("player", [
          $scope.storing_answer_into_online_report();
        } , 150 );
     };
+
+
 
     $scope.build_free_text_data = (question) => {
       var question_ = $scope._user_activity_.questions_data.find(x => x.question_id == question._id );
@@ -1291,7 +1305,10 @@ apps.controller("player", [
 
         // ==> List solved questions
         if( $scope._online_report_ != undefined && $scope._online_report_.att_draft != undefined && $scope._online_report_.att_draft != null ){
-          var user_index =   $scope._online_report_.att_draft.findIndex(x => x.user_id == $scope.user_id );
+          var users = $scope._online_report_.att_draft.filter(x => x != null );
+        // console.log($scope._online_report_.att_draft.findIndex(null));
+
+          var user_index =  $scope._online_report_.att_draft.findIndex(x => x.user_id == $scope.user_id ) ;
           if( user_index != -1 ){
             var usr_act = $scope._online_report_.att_draft[user_index];
             if(usr_act.report_questions != undefined )
@@ -1746,4 +1763,22 @@ apps.controller("player", [
 
        return time_object ;
     }
+
+
+
+    $scope.current_progress = function ( type = 1 ) {
+      var all_questions = $scope._questions_;
+      var solved_questions = $scope._user_activity_;
+      if( solved_questions == null ) return  { current_score : 0 , main_score : all_questions.length } ;
+      var solved = ( solved_questions.report_questions == undefined ) ? [] : solved_questions.report_questions.question_answers ;
+
+      if(type == 1 ){
+        var calcs = Math.round(solved.length * 100 / all_questions.length );
+        return  { current_score : calcs  , main_score : 100 } ;
+      }
+      if(type == 2 ){
+        return  { current_score : solved.length , main_score : all_questions.length } ;
+      }
+
+    };
 }]);

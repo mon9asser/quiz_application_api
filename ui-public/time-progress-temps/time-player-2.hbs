@@ -14,18 +14,20 @@
             <sub ng:if="calculating_completed_time().type == 1" class="min-word">Secs</sub>
         </div>
       </div>
-      <div ng:cloak ng:if="_settings_.time_settings.timer_type == true" class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
-        {>_settings_.time_settings.hours | time_style <}
-        <sub class="timer-type">hr</sub>
-      </div>
-      <span ng:if="_settings_.time_settings.timer_type == true" box-target-class="dotted-hrs" box-target-type="box-texts" class="dotted-hrs selector">:</span>
-      <div ng:cloak class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
-          {>_settings_.time_settings.minutes  | time_style <}
-          <sub class="timer-type">min</sub>
-      </div>
-      <span box-target-class="dotted-hrs" box-target-type="box-texts" class="dotted-hrs selector">:</span>
-      <div ng:cloak class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
-        {>_settings_.time_settings.seconds | time_style <}
-        <sub class="timer-type">sec</sub>
+      <div class="" ng:if="(  _user_activity_.user_completed_status == undefined || _user_activity_.user_completed_status == false ) ">
+          <div ng:cloak ng:if="_settings_.time_settings.timer_type == true" class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
+            {>_settings_.time_settings.hours | time_style <}
+            <sub class="timer-type">hr</sub>
+          </div>
+          <span ng:if="_settings_.time_settings.timer_type == true" box-target-class="dotted-hrs" box-target-type="box-texts" class="dotted-hrs selector">:</span>
+          <div ng:cloak class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
+              {>_settings_.time_settings.minutes  | time_style <}
+              <sub class="timer-type">min</sub>
+          </div>
+          <span box-target-class="dotted-hrs" box-target-type="box-texts" class="dotted-hrs selector">:</span>
+          <div ng:cloak class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
+            {>_settings_.time_settings.seconds | time_style <}
+            <sub class="timer-type">sec</sub>
+          </div>
       </div>
 </div>

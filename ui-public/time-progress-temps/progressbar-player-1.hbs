@@ -10,12 +10,13 @@
           <span ng:cloak ng:if="screen_type == 3">
               {> ( question_index + 1 ) * 100 /  _questions_.length | math_around_it <} %
           </span>
-          <span ng:cloak>
-              {>percentage_progress<}%
+          <span ng:cloak >
+            <!-- {> current_progress(1).current_score <} -->
+            {> current_progress(1).current_score <}%
           </span>
         </span>
         <div class="progress-ctmain selector" box-target-type="box-containers" box-target-class="progress-ctmain">
-          <div ng:cloak class="highlighted-progress"></div>
+          <div ng:style="{width : current_progress(1).current_score + '%'}" ng:cloak class="highlighted-progress"></div>
         </div>
       </div>
     </div>

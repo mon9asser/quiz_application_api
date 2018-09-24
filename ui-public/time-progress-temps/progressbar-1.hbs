@@ -4,8 +4,9 @@
         <div style="display: inline-block;" box-target-type="box-texts" box-target-class="progress-bar-txt" class="selector">
           <span  class="progress-bar-txt selector">
             <span ng:cloak ng:if="screen_type == 3">
-                {> ( question_index + 1 ) * 100 /  _questions_.length | math_around_it <} %
-            </span> 
+              {> current_progress(1).current_score <}%
+                <!-- {> ( question_index + 1 ) * 100 /  _questions_.length | math_around_it <} % -->
+            </span>
             <span ng:if="screen_type == 0">
                 0%
             </span>
@@ -18,7 +19,7 @@
           </span>
         </div>
         <div class="progress-ctmain selector" box-target-type="box-containers" box-target-class="progress-ctmain">
-          <div ng:cloak ng:style="grep_progress_width()" box-target-type="box-containers" box-target-class="highlighted-progress" class="highlighted-progress selector"></div>
+          <div ng:cloak ng:style="{width : current_progress(1).current_score + '%' }" box-target-type="box-containers" box-target-class="highlighted-progress" class="highlighted-progress selector"></div>
         </div>
       </div>
     </div>

@@ -14,6 +14,7 @@ Array.prototype.is_completed_quiz_option = function (question_answers){
     return question_answers.findIndex(x => x.question_id == i._id ) === -1 ;
   });
 }
+
 // Array.prototype.are_all_questions_tracked = function( solved_questions ){
 //   return this.filter(function(i){
 //     return solved_questions.findIndex(x => x.question_id == i._id ) === -1 ;
@@ -283,6 +284,21 @@ apps.controller("apps-controller" , [
   $rootScope.is_submitted = false ;
   $rootScope.is_reviewed  = false ;
   $rootScope.numbers = [0];
+  $rootScope.current_progress = ( type = 1 ) => {
+    var all_questions = $rootScope._questions_;
+    var solved_questions = $rootScope._user_activity_;
+    if( solved_questions == null ) return  { current_score : 0 , main_score : all_questions.length } ;
+    var solved = ( solved_questions.report_questions.question_answers == undefined ) ? [] : solved_questions.report_questions.question_answers ;
+
+    if(type == 1 ){
+      var calcs = Math.round(solved.length * 100 / all_questions.length );
+      return  { current_score : calcs  , main_score : 100 } ;
+    }
+    if(type == 2 ){
+      return  { current_score : solved.length , main_score : all_questions.length } ;
+    }
+
+  };
   $rootScope.isEmpty = (obj) => {
       for(var key in obj) {
           if(obj.hasOwnProperty(key))
@@ -2445,6 +2461,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
             var usr_ = $rootScope._user_activity_ ;
             $rootScope.unsolved_questions = $rootScope._questions_.are_all_questions_tracked( usr_.questions_data );
         }
+        $timeout(function(){   console.log($rootScope.current_progress());; } , 100)
         $timeout(function(){ $rootScope.$apply(); } , 50 );
   };
   $rootScope.storing_answer_into_online_report = () => {
@@ -4307,4 +4324,6 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     $rootScope.load_spectrum_plugin();
     // $rootScope.switching_editor_preview(true);
   }, 500 );
+
+
 }]);

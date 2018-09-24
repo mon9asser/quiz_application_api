@@ -601,23 +601,23 @@ apps.controller("player", [
       $scope.question_number = $scope._questions_.length ;
 
 
-      if(currentIndex == undefined )
-        {
-          currentWidth = 0;
-          $(".highlighted-progress").css({
-            width : currentWidth  + '%'
-          }) ;
-          $scope.percentage_progress = currentWidth ;
-          return false ;
-        }
+      // if(currentIndex == undefined )
+      //   {
+      //     currentWidth = 0;
+      //     $(".highlighted-progress").css({
+      //       width : currentWidth  + '%'
+      //     }) ;
+      //     $scope.percentage_progress = currentWidth ;
+      //     return false ;
+      //   }
       currentIndex = currentIndex + 1 ;
       var question = $scope._questions_ ;
       var currentWidth , currentIndex;
       var counts = question.length;
       currentWidth = (Math.round (currentIndex * 100 / ( counts  ))) ;
-      $(".highlighted-progress").css({
-        width : currentWidth  + '%'
-      }) ;
+      // $(".highlighted-progress").css({
+      //   width : currentWidth  + '%'
+      // }) ;
       $scope.percentage_progress = currentWidth ;
     }
     $scope.review_the_quiz = (currentIndex) => {
@@ -663,6 +663,7 @@ apps.controller("player", [
 
     $scope.truncate_attendee_data = (currentIndex) => {
       console.log("Retake , truncate data ... ");
+      $scope.finished_is_clicked = false ;
       $scope._user_activity_ = new Object();
       $scope._online_report_ = undefined ;
       $scope.loading_application_data();
@@ -1182,6 +1183,7 @@ apps.controller("player", [
        }
 
        // ==> auto slide case
+       $scope.auto_slide_delay = 500;
        if(autoslide_when_answer){
          $timeout(function(){
            if ( ( is_single_choice && ( question_type == 0 || question_type == 1 ) ) || (question_type == 2 ) || (question_type == 3)  )
@@ -1428,6 +1430,7 @@ apps.controller("player", [
           usr.is_completed = is_completed ;
           $scope._user_activity_ = usr ;
           // // console.log($scope._user_activity_);
+
           $timeout(function(){ $scope.$apply(); } , 50 );
     };
     $scope.build_question_lists = ( question , answer , question_reports ) => {
@@ -1726,4 +1729,22 @@ apps.controller("player", [
 
        return time_object ;
     }
+
+
+    $scope.current_progress = ( type = 1 ) => {
+      var all_questions = $scope._questions_;
+      var solved_questions = $scope._user_activity_;
+      console.log(solved_questions);
+      if( solved_questions == null ) return  { current_score : 0 , main_score : all_questions.length } ;
+      var solved = ( solved_questions.report_questions == undefined ) ? [] : solved_questions.report_questions.question_answers ;
+
+      if(type == 1 ){
+        var calcs = Math.round(solved.length * 100 / all_questions.length );
+        return  { current_score : calcs  , main_score : 100 } ;
+      }
+      if(type == 2 ){
+        return  { current_score : solved.length , main_score : all_questions.length } ;
+      }
+
+    };
 }]);
