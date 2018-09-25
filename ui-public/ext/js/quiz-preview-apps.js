@@ -242,44 +242,36 @@ apps.controller("player", [
         'fa-star':false
       };
 
-      if($scope._user_activity_ == null || $scope._user_activity_.questions_data == null || $scope._user_activity_.questions_data == undefined )
-       return classes ;
-
-      var questions_data_index = $scope._user_activity_.questions_data.findIndex(x => x.question_id == question_id );
-      if( questions_data_index != -1 ){
-
-       var this_question_data = $scope._user_activity_.questions_data[questions_data_index];
-       var this_answer_index = this_question_data.answer_ids.findIndex(x => x.answer_id_val == answer_id );
-       var answer_v = 0;
-       if(this_answer_index != -1){
-         classes['fa-star-o']=false
-         classes['fa-star']= true ;
-       }
-
+      if($scope._user_activity_.questions_data != undefined && $scope._user_activity_.questions_data.length != 0){
+         var current_question = $scope._user_activity_.questions_data.find( x => x.question_id == question_id );
+         if( current_question != undefined ){
+            var answer_rat_scale_id = current_question.answer_ids[0].answer_id_val;
+            var answer_scale_value = current_question.answer_ids[0].answer_object.rating_scale_answers.find(x => x._id == answer_rat_scale_id ).rat_scl_value ;
+             if (rating_object.rat_scl_value <= answer_scale_value) {
+               classes = {
+                 'fa-star-o' : false ,
+                 'fa-star': true
+               };
+             }
+         }
       }
-
 
       return classes ;
     }
 
 
     $scope.list_classes_of_this_scale = (question_id , answer_id , rating_object ) => {
-      var classes = "";
+      var classes = '';
+        if($scope._user_activity_.questions_data != undefined && $scope._user_activity_.questions_data.length != 0){
+           var current_question = $scope._user_activity_.questions_data.find( x => x.question_id == question_id );
+           if( current_question != undefined ){
+              var answer_rat_scale_id = current_question.answer_ids[0].answer_id_val;
+              var answer_scale_value = current_question.answer_ids[0].answer_object.rating_scale_answers.find(x => x._id == answer_rat_scale_id ).rat_scl_value ;
+              if (rating_object.rat_scl_value == answer_scale_value) classes  = "selected-scale-number"
+           }
+        }
 
-      if($scope._user_activity_ == null || $scope._user_activity_.questions_data == null || $scope._user_activity_.questions_data == undefined )
-       return classes ;
-
-      var questions_data_index = $scope._user_activity_.questions_data.findIndex(x => x.question_id == question_id );
-      if( questions_data_index != -1 ){
-        var question_data = $scope._user_activity_.questions_data[questions_data_index] ;
-       var this_answer = question_data.answer_ids.find(x => x.answer_id_val == answer_id);
-
-       if(this_answer != undefined )
-        classes ="selected-scale-number";
-
-      }
-
-      return classes ;
+        return classes ;
     }
 
 
@@ -287,10 +279,11 @@ apps.controller("player", [
          var question = $scope._questions_.find(x => x._id == question_id)
          var answer = question.answers_format.find(x => x._id == answer_id );
          var rat_answer_val = (index + 1 );
+
          $scope.select_answer(question , answer  , rat_answer_val );
-         $timeout(function(){
+         $timeout( function(){
            $scope.$apply();
-         },300)
+         },300 )
      };
     $scope.select_this_rating_value = (index , class_name , answer_id , question_id , rs_type  ) => {
 
@@ -313,7 +306,7 @@ apps.controller("player", [
     // ==> Loading Application
     $scope.loading_application_data = () => {
       var url =  $scope.server_ip + 'api/'+ $scope.application_id +'/player/data' ;
-      console.log(url);
+      // console.log(url);
         $http({
           url : url
         }).then((results) => {
@@ -321,7 +314,7 @@ apps.controller("player", [
             $(".Loading-contents").fadeOut();
           } , 1000);
             var app = results.data;
-            console.log(app);
+            // console.log(app);
             $scope._application_ = app;
             $scope._questions_ = $scope._application_.questions;
             $scope._settings_ = $scope._application_.settings;
@@ -662,7 +655,7 @@ apps.controller("player", [
 
 
     $scope.truncate_attendee_data = (currentIndex) => {
-      console.log("Retake , truncate data ... ");
+      // console.log("Retake , truncate data ... ");
       $scope.finished_is_clicked = false ;
       $scope._user_activity_ = new Object();
       $scope._online_report_ = undefined ;
@@ -714,7 +707,7 @@ apps.controller("player", [
         $scope.swipperJs.slideNext();
     };
     $scope._offline_report_collection = () => {
-      console.log("Offline report ...");
+      // console.log("Offline report ...");
     };
     $scope._online_report_collection = () => {
       // console.log($scope._online_report_);
@@ -1135,51 +1128,37 @@ apps.controller("player", [
                }
 
              }
-        }
+           }
+       // ==> Rating | Scale Answers
+       if( question_type == 3 ){ // question_id
+         if( attendee_index == -1 )
+          return false ;
+          // console.log("----------------------------------");
+          var questionIndex = $scope._questions_.findIndex(x => x._id == question_id );
 
+          // ===> Question Report ...
+          var answer_ratScale = $scope._questions_[questionIndex].answers_format[0]
+          var rat_scale_answer = $scope._questions_[questionIndex].answers_format[0].rating_scale_answers.find(x => x.rat_scl_value == rat_scale_answer_val) ;
+          if( report_questions.all_questions.indexOf(question_id) != -1 )
+            report_questions.all_questions.splice( report_questions.all_questions.indexOf(question_id) , 1 );
+          report_questions.all_questions.push(question_id);
 
-        if( question_type == 3 ){ // question_id
-         // BUILD QUESTION_ REPORT
-          // => answer value ( rat_scale_answer_val )
-          var questionIndex= $scope._questions_.findIndex(x => x._id == question_id );
-          if(questionIndex != -1){
-              var answer_ratScale = $scope._questions_[questionIndex].answers_format[0].rating_scale_answers.find(x => x.rat_scl_value == rat_scale_answer_val) ;
-              if(answer_ratScale != undefined){
-                  // => {_id: "5b904d575faa2a368f1ae5225_3", rat_scl_value: 3}
-                  var report_question = report_questions.question_answers.findIndex(x => x.question_id == question_id );
-                  if(report_question == -1){
-                    report_questions.all_questions.push(question_id)
-                    report_questions.question_answers.push({ question_id :question_id , user_answers : new Array({ _id : answer_ratScale._id }) })
-                  }else {
-                    report_questions.question_answers[report_question].user_answers = new Array();
-                    report_questions.question_answers[report_question].user_answers.push({ _id : answer_ratScale._id });
-                  }
-              }
-          }
-
-
-          // ==> Build Question Data
-          console.log(answer_ratScale);
+          // ===> Questions Data ...
           var usr = $scope._online_report_.att_draft[attendee_index];
-          var question_data_index = usr.questions_data.findIndex(x => x.question_id == question_id);
-          var answer_ratScale = $scope._questions_[questionIndex].answers_format[0].rating_scale_answers.find(x => x.rat_scl_value == rat_scale_answer_val) ;
-          var ratsclaeoptions = $scope._questions_[questionIndex].answers_format[0] ;
-          ratsclaeoptions['answer_value'] = answer_ratScale.rat_scl_value ;
-          var rating_scale_answer = {answer_id : ratsclaeoptions._id , answer_id_val :  answer_ratScale._id ,  answer_object :   ratsclaeoptions , answer_index : 0}
-          var question_exists = usr.questions_data.findIndex(x => x._id == question_id );
-          if(question_exists == -1){
-            usr.questions_data.push({
-              question_id: question_id,
-              question_index:0 ,
-              question_type: question_type,
-              question_text: question.question_body ,
-              updated_date : new Date(),
-              answer_ids :  [rating_scale_answer]
-            })
-          }else {
-            usr.questions_data[question_exists].answer_ids = new Array();
-            usr.questions_data[question_exists].answer_ids.push(rating_scale_answer);
-          }
+          var question_data_exists = usr.questions_data.findIndex(x => x.question_id == question_id);
+          if( question_data_exists != -1 )
+          usr.questions_data.splice(question_data_exists , 1 );
+          var answer_object = $scope._questions_[questionIndex].answers_format[0] ;
+          var answer_rating_scale_object = $scope._questions_[questionIndex].answers_format[0].rating_scale_answers.find(x => x.rat_scl_value == rat_scale_answer_val) ;
+
+          usr.questions_data.push({
+            question_id : question_id ,
+            question_index : 0 ,
+            question_type : question_type,
+            question_text : question.question_body ,
+            updated_date : new Date(),
+            answer_ids : new Array({ answer_id : answer_object._id , answer_id_val :  answer_rating_scale_object._id ,  answer_object :   answer_object  , answer_index : 0 })
+          })
        }
 
        // ==> auto slide case
@@ -1190,6 +1169,8 @@ apps.controller("player", [
               $scope.swipperJs.slideNext();
          } , $scope.auto_slide_delay)
        }
+
+
 
        if(question_type != 3 && question_type != 4)
        $scope.build_question_lists(question , answer , report_questions);
@@ -1630,7 +1611,8 @@ apps.controller("player", [
       var solved_questions = ( $scope._user_activity_ != null && $scope._user_activity_.report_questions != undefined )  ? $scope._user_activity_.report_questions.question_answers : [] ;
       var questions = $scope._questions_ ;
       $scope.unsolved_questions = questions.are_all_questions_tracked(solved_questions);
-      if( $scope.unsolved_questions.length != 0 )
+
+      if( $scope.unsolved_questions != undefined && $scope.unsolved_questions.length != 0 )
       return false;
 
       if( $scope._settings_.enable_screens == false )
@@ -1734,7 +1716,7 @@ apps.controller("player", [
     $scope.current_progress = ( type = 1 ) => {
       var all_questions = $scope._questions_;
       var solved_questions = $scope._user_activity_;
-      console.log(solved_questions);
+      // console.log(solved_questions);
       if( solved_questions == null ) return  { current_score : 0 , main_score : all_questions.length } ;
       var solved = ( solved_questions.report_questions == undefined ) ? [] : solved_questions.report_questions.question_answers ;
 
