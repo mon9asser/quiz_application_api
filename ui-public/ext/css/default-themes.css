@@ -709,3 +709,9 @@ sub.timer-type {
   background: rgb(193, 124, 126);
     color: rgb(255, 255, 255);
 }
+
+ul.scalet-o > div li:last-child > span {
+  border-right-width:  1px ; /*solid#c17c7e*/
+  border-right-style: solid ; /*solid#c17c7e*/
+  border-radius: 0px 10px 10px 0px;
+ }

@@ -22,7 +22,8 @@
             <div class="items">
               <ul>
                 <li>
-                  <span>Quiz Title</span>
+                  <span ng:if="_application_.app_type == 1">Quiz Title</span>
+                  <span ng:if="_application_.app_type == 0">Survey Title</span>
                   <input ng:model="_application_.questionnaire_title" type="text" name="" value="">
                 </li>
                 <li ng:show="_application_.app_type == 1">
@@ -287,7 +288,8 @@
                   </div>
                 </li>
                 <li class="righ-check-box input-x">
-                  <label style=" margin-left: 10px;">Quiz Start Button</label>
+                  <label  ng:if="_application_.app_type == 1" style=" margin-left: 10px;">Quiz Start Button</label>
+                  <label  ng:if="_application_.app_type == 0" style=" margin-left: 10px;">Survey Start Button</label>
                   <input ng:change="change_in_view( 0 )" ng:model="_settings_.label_btns.lbl_start_with" type="text" name="" value="">
                 </li>
                 <li class="righ-check-box input-x">
@@ -315,7 +317,8 @@
                   <input ng:change="change_in_view( 4 )" ng:model="_settings_.label_btns.lbl_resume_with" type="text" name="" value="">
                 </li>
                 <li class="righ-check-box input-x">
-                  <label style=" margin-left: 10px;">Submit Quiz Button</label>
+                  <label ng:if="_application_.app_type == 1" style=" margin-left: 10px;">Submit Quiz Button</label>
+                  <label ng:if="_application_.app_type == 0" style=" margin-left: 10px;">Submit Survey Button</label>
                   <input ng:change="change_in_view( 1 )" ng:model="_settings_.label_btns.lbl_submit_quiz_with" type="text" name="" value="">
                 </li>
                 <li ng:show="_application_.app_type == 1" class="righ-check-box input-x">

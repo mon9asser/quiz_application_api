@@ -1501,6 +1501,8 @@ apps.controller("apps-controller" , [
       answer_object_data['value'] = "Answer " + ( question.answers_format.length + 1 )
       if ( $rootScope._application_.app_type == 1 )
       answer_object_data['is_correct'] = false ;
+
+      $rootScope.create_answer_redactors();
     }
     if ( question.question_type == 1 ){
       answer_object_data['media_src'] = "No Media Here !";
@@ -4314,8 +4316,11 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     }
   }
   // ==> Calling all function according timeout
-
+  $rootScope.create_answer_redactors = () => {
+      // $R(".answer-redactors" , { air: true } );
+  };
   $timeout(function(){
+
     $("#question-pt , #answers-pt").slideDown();
     // $rootScope.draw_radial_progression(0/100);
     // $rootScope.init_swiperJs();

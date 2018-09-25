@@ -265,25 +265,29 @@
 
                            <div class="scale-optn" ng:if="obj_val.answers_format[0].ratscal_type == 0 ">
                              <ul box-target-type="box-containers" box-target-class="scalet-o li span" class=" selector scalet-o ul_scal_{>obj_val._id<}" ng:cloak >
-                               <li style="width: auto;" data-index='0' ng:repeat="(key_ , val_) in obj_val.answers_format[0].rating_scale_answers track by $index"> <!-- index , class_name , answer_id , question_id , rs_type -->
-                                 <span ng:class="list_classes_of_this_scale(obj_val._id , val_._id , val_)" ng:click="select_rating_scale__($index , 1 , obj_val._id , obj_val.answers_format[0]._id , obj_val.question_type )" box-target-type="box-texts" box-target-class="scalet-o li span" class=" selector spanex scale_value_{>obj_val.answers_format[0]._id<}" ng:click="select_this_rating_value( $index , 'scale_value_'+obj_val.answers_format[0]._id  , obj_val.answers_format[0]._id , obj_val._id , obj_val.answers_format[0].ratscal_type )">
-                                     {> $index + 1 <}
-                                 </span>
-                               </li>
+                               <div class="">
+                                 <li style="width: auto;" data-index='0' ng:repeat="(key_ , val_) in obj_val.answers_format[0].rating_scale_answers track by $index"> <!-- index , class_name , answer_id , question_id , rs_type -->
+                                   <span ng:class="list_classes_of_this_scale(obj_val._id , val_._id , val_)" ng:click="select_rating_scale__($index , 1 , obj_val._id , obj_val.answers_format[0]._id , obj_val.question_type )" box-target-type="box-texts" box-target-class="scalet-o li span" class=" selector spanex scale_value_{>obj_val.answers_format[0]._id<}" ng:click="select_this_rating_value( $index , 'scale_value_'+obj_val.answers_format[0]._id  , obj_val.answers_format[0]._id , obj_val._id , obj_val.answers_format[0].ratscal_type )">
+                                       {> $index + 1 <}
+                                   </span>
+                                 </li>
+
+                                 <div class="block-labels text-center"  ng:show="obj_val.answers_format[0].show_labels == true">
+                                   <span class="first-lbl" ng:cloak>
+                                     {>obj_val.answers_format[0].started_at <}
+                                   </span>
+                                   <span class="second-lbl" ng:cloak>
+                                     {>obj_val.answers_format[0].centered_at  <}
+                                   </span>
+                                   <span class="third-lbl" ng:cloak>
+                                     {>obj_val.answers_format[0].ended_at  <}
+                                   </span>
+                                 </div>
+                               </div>
                              </ul>
                              <div class="clearFix"></div>
 
-                             <div class="block-labels text-center"  ng:show="obj_val.answers_format[0].show_labels == true">
-                               <span class="first-lbl" ng:cloak>
-                                 {>obj_val.answers_format[0].started_at <}
-                               </span>
-                               <span class="second-lbl" ng:cloak>
-                                 {>obj_val.answers_format[0].centered_at  <}
-                               </span>
-                               <span class="third-lbl" ng:cloak>
-                                 {>obj_val.answers_format[0].ended_at  <}
-                               </span>
-                             </div>
+
                            </div>
                          </center>
                        </div>

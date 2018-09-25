@@ -1484,3 +1484,10 @@ button {
   .redactor-toolbar a.re-button-icon { font-size: 10px;}
   .choices-part > li { width: 90%;}
 }
+ .block-labels {
+   width: 70%;
+   color: #999;
+   margin: 25px auto;
+ }
+ .block-labels > .first-lbl{ float: left; }
+ .block-labels > .third-lbl{ float: right; }
