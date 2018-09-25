@@ -1235,7 +1235,7 @@ select.select-current-element , select.select-current-element:focus , select.sel
   left: 0px;
   right: 0px;
   display: block;
-  overflow: hidden;
+  overflow-y:auto;
   z-index: 1;
 }
 
