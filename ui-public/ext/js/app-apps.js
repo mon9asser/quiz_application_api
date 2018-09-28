@@ -3307,7 +3307,10 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
       if( is_required_qs.length != 0 && ( usr == null || usr == undefined ) ){
         $rootScope.unsolved_questions  = is_required_qs ;
       }else
-      $rootScope.unsolved_questions = $rootScope._questions_.are_all_questions_tracked( usr.questions_data );
+      {
+        if(usr != null )
+        $rootScope.unsolved_questions = $rootScope._questions_.are_all_questions_tracked( usr.questions_data );
+      }
 
       if($rootScope.unsolved_questions.length != 0 )
       return false;
