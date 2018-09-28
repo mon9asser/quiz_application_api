@@ -4028,7 +4028,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
          // ==> Show loader spinner
          $rootScope.media_current_upload = true ;
        } ,
-       success : (response) => {
+       success : (response) => { 
          // ==> Fill ui data
 
          // = 1 uploaded object
