@@ -5086,8 +5086,8 @@ qtnrRouters.post("/:app_id/question/:question_id/cropping_system"  , question_an
 
     gm( main_file_path)
     .crop(300, 300, 150, 130)
-    .write("_________________________________.jpg", function (err) {
-      console.log(err);
+    .write(new_file_path, function (err) {
+      if(err) console.log(err);
     })
   res.send("Yess ......................... ++++ ")
 });
