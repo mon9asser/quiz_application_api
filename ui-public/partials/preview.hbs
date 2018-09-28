@@ -72,7 +72,7 @@
        <!--  Questin Media Cases-->
        <div box-target-class="question-data-media" box-target-type="box-media" ng:if="_questions_[question_index].media_question != undefined" class="selector question-data-media">
          <!-- Case it an image  -->
-         <img class="image-responsive" ng:if="_questions_[question_index].media_question.media_type == 0 " ng:src="{> _questions_[question_index].media_question.Media_directory <}" alt="">
+         <img class="image-responsive" ng:if="_questions_[question_index].media_question.media_type == 0 " ng:src="{> _questions_[question_index].media_question.Media_directory  + '?' + _questions_[question_index].media_question.image_updated_date <}" alt="">
          <!-- Case it video -->
          <div ng:if="_questions_[question_index].media_question != undefined  && _questions_[question_index].media_question.media_type == 1" class="video-data-media question-video image-responsive">
            <!-- case it vimeo or youtube  -->

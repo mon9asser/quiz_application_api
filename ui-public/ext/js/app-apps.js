@@ -1443,7 +1443,7 @@ apps.controller("apps-controller" , [
                $('.box-overlay').height($(document).height() + 50);
                $rootScope.$apply();
 
-             
+
                // ==> Calling Cropping liberary
                $rootScope.init_cropping_image();
 
@@ -4164,7 +4164,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     } , 300);
   };
 
-  $rootScope.storing_video_for_media_answer = (   )           => {
+  $rootScope.storing_video_for_media_answer = (   ) => {
  var video_object = $rootScope.current_media_video ;
  var target_question = $rootScope._questions_[$rootScope.question_index] ;
  var answerId = $rootScope.current_answer_id ;

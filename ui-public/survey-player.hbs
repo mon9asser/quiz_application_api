@@ -127,7 +127,7 @@
                  <!-- Question Media Cases -->
                  <div  ng:if="obj_val.media_question != undefined" class="question-data-media">
                    <!-- Case it an image  -->
-                   <img ng:cloak class="image-responsive" ng:if="obj_val.media_question.media_type == 0 " ng:src="{> obj_val.media_question.Media_directory <}" alt="">
+                   <img ng:cloak class="image-responsive" ng:if="obj_val.media_question.media_type == 0 " ng:src="{> obj_val.media_question.Media_directory + '?' + obj_val.media_question.image_updated_date <}" alt="">
                    <!-- Case it video -->
                    <div ng:if="obj_val.media_question != undefined  && obj_val.media_question.media_type == 1" class="video-data-media question-video image-responsive">
                      <!-- case it vimeo or youtube  -->
