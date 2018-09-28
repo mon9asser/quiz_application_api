@@ -5084,16 +5084,11 @@ qtnrRouters.post("/:app_id/question/:question_id/cropping_system"  , question_an
   var new_file_path = file_path + new_filename ;
   var main_file_path = file_path  + req.file.originalname ;
 
-    gm(main_file_path)
-  .flip()
-  .magnify()
-  .rotate('green', 45)
-  .blur(7, 3)
-  .crop(300, 300, 150, 130)
-  .edge(3)
-  .write(new_file_path, function (err) {
-    if (!err) console.log('crazytown has arrived');
-  })
+    gm( main_file_path)
+    .crop(300, 300, 150, 130)
+    .write(new_file_path, function (err) {
+      console.log("error +++++++++++++++++++++++++++++");
+    })
   res.send("Yess ......................... ++++ ")
 });
 
