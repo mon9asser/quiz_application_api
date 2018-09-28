@@ -62,7 +62,7 @@ apps.filter( 'apply_html' , ['$sce' , ( $sce ) => {
 }]);
 apps.filter("make_it_zero" , () => {
   return (score_value) => {
-    console.log(score_value);
+    // console.log(score_value);
      if ( score_value == undefined )
      return 0 ;
      else return score_value ;
@@ -468,7 +468,7 @@ apps.controller("apps-controller" , [
     $rootScope._settings_    =  $rootScope._application_.settings;
     $rootScope.question_ids  =  $rootScope._application_.question_ids;
     $rootScope.answer_ids    =  $rootScope._application_.answer_ids;
-    console.log($rootScope.retrieve_data_url);
+    // console.log($rootScope.retrieve_data_url);
     $rootScope._questions_   =  $rootScope._application_.questions;
     // $rootScope.randomize_sorting_questions($rootScope._settings_.randomize_settings);
 
@@ -593,7 +593,7 @@ apps.controller("apps-controller" , [
            $rootScope.switching_editor_preview(true);
             var title_resume = $R(".set_redactor" , "source.getCode")[6];
             $rootScope._settings_.titles.title_resume = title_resume;
-            $timeout(function(){ console.log($rootScope._settings_.titles);} , 201);
+            $timeout(function(){ /*console.log($rootScope._settings_.titles);*/ } , 201);
          }, 200 );
       });
 
@@ -632,7 +632,7 @@ apps.controller("apps-controller" , [
   }
   // ==> Check if answer with media for Tooltip
   $rootScope.case_it_with_media = ( question , answer ) => {
-    console.log(answer);
+    // console.log(answer);
     if(question.question_type == 0 ){
 
       var value ;
@@ -688,7 +688,7 @@ apps.controller("apps-controller" , [
     $rootScope.video_object['video_type'] = videoType ;
     $rootScope.video_object['video_id'] = videoId ;
     $rootScope.video_object['embed_url'] = video_src_value ;
-    console.log($rootScope.video_object);
+    // console.log($rootScope.video_object);
     $rootScope.extracting_videos( video_src_value , videoType , video , videoId );
 
   }
@@ -1106,7 +1106,7 @@ apps.controller("apps-controller" , [
   }
   // => Show Image
   $rootScope.image_uploader_is_touched = () => {
-      console.log($rootScope.media_image_model[0].files[0]);
+      // console.log($rootScope.media_image_model[0].files[0]);
   }
 
   $rootScope.collect_hour_params = () => {
@@ -1331,7 +1331,7 @@ apps.controller("apps-controller" , [
         }
       }
 
-      console.log($rootScope.media_data);
+      // console.log($rootScope.media_data);
    }
   // => Close Current window
   $rootScope.close_current_image_uploader = () => {
@@ -1466,13 +1466,13 @@ apps.controller("apps-controller" , [
 
 
   $rootScope.loading_answer_media_image = (image , date) => {
-    console.log(image + ' ' +  date);
+    // console.log(image + ' ' +  date);
     return {
       backgroundImage : 'url("'+image +'?' + date +'")'
     } ;
   }
   $rootScope.loading_answer_media_image_media_choices = (image , date) => {
-    console.log(image + ' ' +  date);
+    // console.log(image + ' ' +  date);
     return {
       backgroundImage : 'url("'+image +'?' + date +'")'
     } ;
@@ -1572,8 +1572,8 @@ apps.controller("apps-controller" , [
       method : "POST" ,
       data : { data : $rootScope._questions_ }
      }).then((response)=>{
-       console.log(response);
-        console.log("Updated +++++++++++++++");
+       // console.log(response);
+       //  console.log("Updated +++++++++++++++");
     });
   };
 /*,
@@ -1785,7 +1785,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
       $timeout(function(){
         var question = $rootScope._questions_.find(x => x._id == question_id);
         if( question == undefined ) return false;
-        console.log(question);
+        // console.log(question);
         if( question.answer_settings == undefined ) question['answer_settings'] = new Object();
         question.answer_settings[setting_name] = setting_value ;
       })
@@ -1865,11 +1865,11 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
   $rootScope.build_question_lists = ( question , answer , question_reports ) => {
 
 
-    console.log( $rootScope._user_activity_ );
+    // console.log( $rootScope._user_activity_ );
 
     // ==> Get solved questions
     var usr = ( $rootScope._user_activity_ == undefined ||  $rootScope._user_activity_ == null) ?  undefined : $rootScope._user_activity_ ;
-    console.log(usr);
+    // console.log(usr);
     if( usr == undefined ) return false ;
 
     // ==> Report questions
@@ -2379,7 +2379,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
 
 
                // ==> Build Question Data
-               console.log(answer_ratScale);
+               // console.log(answer_ratScale);
                var usr = $rootScope._user_activity_[attendee_index];
                var question_data_index = usr.questions_data.findIndex(x => x.question_id == question_id);
                var answer_ratScale = $rootScope._questions_[questionIndex].answers_format[0].rating_scale_answers.find(x => x.rat_scl_value == rat_scale_answer_val) ;
@@ -2510,11 +2510,11 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
             var usr_ = $rootScope._user_activity_ ;
             $rootScope.unsolved_questions = $rootScope._questions_.are_all_questions_tracked( usr_.questions_data );
         }
-        $timeout(function(){   console.log($rootScope.current_progress());; } , 100)
+        $timeout(function(){  $rootScope.current_progress();  } , 100)
         $timeout(function(){ $rootScope.$apply(); } , 50 );
   };
   $rootScope.storing_answer_into_online_report = () => {
-    console.log("storing is disabled !");
+    // console.log("storing is disabled !");
   }
   $rootScope.select_this_answer=( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex , css_mode )=>{
 
@@ -2933,7 +2933,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
                     if(findAttendeeIndex != - 1){
                       // ==> Attendee Object [FOUND]
                       var attendeeInfo = $rootScope.this_attendee_draft.att_draft[findAttendeeIndex];
-                      console.log({attendeeInfo : attendeeInfo});
+                      // console.log({attendeeInfo : attendeeInfo});
                       if(attendeeInfo.questions_data == undefined )
                       attendeeInfo.questions_data = new Array();
                       var findQuestionIndex = attendeeInfo.questions_data.findIndex(x => x.question_id == object.question_id);
@@ -3047,7 +3047,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
                                      answer_body : object.answer ,
                                      is_correct : object.is_correct
                              }
-                             console.log({attendeeInfo: attendeeInfo});
+                             // console.log({attendeeInfo: attendeeInfo});
                             // console.log(attendeeInfo);
                       }else {
                         // ==> Question FOUND ==> Update here !
@@ -3178,9 +3178,9 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
                 }
 
                 $timeout(function(){  $rootScope.$apply(); } , 300);
-                console.log({
-                  currAttendee : $rootScope.this_attendee_draft
-                });
+                // console.log({
+                //   currAttendee : $rootScope.this_attendee_draft
+                // });
     }
 
   $rootScope.back_to_previouse_slide = (css_mode) => {
@@ -3217,7 +3217,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
   $rootScope.go_to_next_slide = (css_mode) => {
     if(css_mode == true ) return false;
     var question_index = $rootScope.question_index;
-    console.log(question_index == ( $rootScope._questions_.length - 1 ) );
+    // console.log(question_index == ( $rootScope._questions_.length - 1 ) );
     if( question_index == ( $rootScope._questions_.length - 1 ) )
       {
         if($rootScope._settings_.enable_screens == true )
@@ -4035,6 +4035,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
        success : (response) => {
          // ==> Fill ui data
          $timeout(function(){
+           console.log(response);
            // = 1 uploaded object
            if( response.questions == undefined ) return false ;
            var all_questions = response.questions ;
