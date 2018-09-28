@@ -224,7 +224,7 @@
 
         <!-- Media View -->
         <!-- Image Case -->
-        <div ng:if="media_data != undefined">
+        <div ng:if="media_data != undefined && media_current_upload == false">
           <div class="media-part-controller live_preview_image">
             <img ng:if="media_data.media_type == 0" id="cropping_system" class="isCropperImage" ng:src="{> media_data.media_src | trust_iframe_url <}" alt="Image">
             <iframe ng:if="media_data.media_type == 1 && ( media_data.video_type == 1 || media_data.video_type == 0)" ng:src="{> media_data.media_src | trust_iframe_url <}" width="100%" height="auto"></iframe>
@@ -235,6 +235,10 @@
           </div>
         </div>
 
+        <!-- Uploader Spinner -->
+        <div class="" ng:if="media_current_upload == true && media_data == undefined ">
+          loading Image ...
+        </div>
 
         <div class="preview-media-part butns-part">
           <button ng:click="close_current_image_uploader()" class="button_updates btn btn-danger btn-close-media" type="button" name="button">

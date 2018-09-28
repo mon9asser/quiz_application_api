@@ -281,6 +281,7 @@ apps.controller("apps-controller" , [
     label_0 : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ],
     label_1 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50]
   }
+  $rootScope.media_current_upload = false ;
   $rootScope.is_submitted = false ;
   $rootScope.is_reviewed  = false ;
   $rootScope.numbers = [0];
@@ -3997,19 +3998,17 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     }
   }
   $rootScope.storing_cropped_image_for_media_question = () => {
+
+    // storing_image_with_cropped_data()
     $("#file_extension").val( $rootScope.media_image_uploader[0].files[0].name.split('.').pop());
+
     var questionId = $("#question_id").val();
     var x = $('#cropping-image-x').val();
     var y = $('#cropping-image-y').val();
     var width = $('#cropping-image-width').val();
     var height = $('#cropping-image-height').val();
-    var after_uploaded_image_callback = (media) => {
-     var current_question = $rootScope._questions_[$rootScope.question_index] ;
-       if(current_question.media_question == undefined )
-        current_question['media_question'] = new Object();
-       current_question.media_question = media ;
-       $timeout(function(){ $rootScope.$apply(); });
-    };
+
+    var cropping_url = $rootScope.server_ip + "api/" + $rootScope.app_id + "/question/" + questionId + "/cropping_system" ;
     var formImageData = new FormData();
     formImageData.append('media_field' , $rootScope.media_image_uploader[0].files[0]   );
     formImageData.append('height' , height  );
@@ -4017,35 +4016,41 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     formImageData.append('x' ,x  );
     formImageData.append('y' , y  );
     formImageData.append('questions' , $rootScope._questions_ );
-    var cropping_url = $rootScope.server_ip + "api/" + $rootScope.app_id + "/question/" + questionId + "/cropping_system" ;
-    $http({
-      url : cropping_url,
-      method : "POST" ,
-      data : formImageData ,
-      headers : { 'Content-Type' : undefined} ,
-      uploadEventHandlers : {
-        progress : ( event ) => {
-          var percent = Math.round (event.loaded / event.total) * 100;
-          $('.highlighted_progress').css({width : percent + '%' });
-          if (event.loaded == event.total) {
-            // upload_image_is_completed()
-          }
-        }
-      }
-    }).then((respons)=>{
-      var questions = respons.data.questions ;
-      var current_qs = questions.find(x => x._id == questionId );
-      if(current_qs.media_question != undefined ){
-        $timeout(function(){
-            after_uploaded_image_callback(current_qs.media_question);
-            $timeout(function(){
-              $rootScope.close_current_image_uploader();
-              $timeout(function(){ $(".progrbar > .highlighted_progress").css('width' , 0 ); } , 500);
-            },100);
-        } , 500 );
-      }
-    }).catch((err)=>{ console.log(err);});
-  }
+
+     $.ajax({
+       type:'POST',
+       url:cropping_url,
+       data: formImageData ,
+       cache:false,
+       contentType: false,
+       processData: false,
+       beforeSend : () => {
+         // ==> Show loader spinner
+         $rootScope.media_current_upload = true ;
+       } ,
+       success : (response) => {
+         // ==> Fill ui data
+
+         // = 1 uploaded object
+         if( response.questions == undefined ) return false ;
+         var all_questions = response.questions ;
+         var target_question = all_questions.find(x => x._id == questionId ) ;
+         if(target_question == undefined && target_question.media_question == undefined ) return false ;
+
+         // = 2 ui question object
+         var ui_question = $rootScope._questions_.find(x => x._id == questionId );
+         if(ui_question == undefined ) return false ;
+         if(ui_question.media_question == undefined )  ui_question['media_question'] = target_question.media_question ;
+         ui_question['media_question'] = target_question.media_question
+         $timeout(function(){  $rootScope.media_current_upload = false ; } , 100 );
+         $timeout(function(){ $rootScope.$apply(); } , 150 );
+
+         // = 3 close uploader window
+         $timeout(function(){ $rootScope.close_current_image_uploader(); } , 300);
+       } ,
+       error : (error) => { console.log(error); }
+     });
+  };
   $rootScope.storing_cropped_image_for_media_answer = () => {
       $("#file_extension").val( $rootScope.media_image_uploader[0].files[0].name.split('.').pop() );
       var questionId = $("#question_id").val();
