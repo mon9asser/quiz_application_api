@@ -4028,25 +4028,26 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
          // ==> Show loader spinner
          $rootScope.media_current_upload = true ;
        } ,
-       success : (response) => { 
+       success : (response) => {
          // ==> Fill ui data
+         $timeout(function(){
+           // = 1 uploaded object
+           if( response.questions == undefined ) return false ;
+           var all_questions = response.questions ;
+           var target_question = all_questions.find(x => x._id == questionId ) ;
+           if(target_question == undefined && target_question.media_question == undefined ) return false ;
 
-         // = 1 uploaded object
-         if( response.questions == undefined ) return false ;
-         var all_questions = response.questions ;
-         var target_question = all_questions.find(x => x._id == questionId ) ;
-         if(target_question == undefined && target_question.media_question == undefined ) return false ;
+           // = 2 ui question object
+           var ui_question = $rootScope._questions_.find(x => x._id == questionId );
+           if(ui_question == undefined ) return false ;
+           if(ui_question.media_question == undefined )  ui_question['media_question'] = target_question.media_question ;
+           ui_question['media_question'] = target_question.media_question ;
+           $timeout( function(){ $rootScope.$apply(); } , 150 );
 
-         // = 2 ui question object
-         var ui_question = $rootScope._questions_.find(x => x._id == questionId );
-         if(ui_question == undefined ) return false ;
-         if(ui_question.media_question == undefined )  ui_question['media_question'] = target_question.media_question ;
-         ui_question['media_question'] = target_question.media_question
-         $timeout(function(){  $rootScope.media_current_upload = false ; } , 100 );
-         $timeout(function(){ $rootScope.$apply(); } , 150 );
-
-         // = 3 close uploader window
-         $timeout(function(){ $rootScope.close_current_image_uploader(); } , 300);
+           // = 3 close uploader window
+           $timeout( function(){ $rootScope.close_current_image_uploader();  } , 300);
+           $timeout( function(){ $rootScope.media_current_upload = false ; } , 500 );
+         } , 1000 );
        } ,
        error : (error) => { console.log(error); }
      });
