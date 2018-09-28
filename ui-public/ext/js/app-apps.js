@@ -4027,7 +4027,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
        beforeSend : () => {
          // ==> Show loader spinner
          $rootScope.media_current_upload = true ;
-         $("html , body").css({ cursor : 'none' });
+         $("html , body , .button_updates").css({ cursor : 'none' });
        } ,
        success : (response) => {
          // ==> Fill ui data
@@ -4047,7 +4047,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
 
            // = 3 close uploader window
            $timeout( function(){ $rootScope.close_current_image_uploader();  } , 300);
-           $timeout( function(){ $rootScope.media_current_upload = false ;  $("html , body").css({ cursor : 'auto' }); } , 500 );
+           $timeout( function(){ $rootScope.media_current_upload = false ;  $("html , body , .button_updates").css({ cursor : 'auto' }); } , 500 );
          } , 1000 );
        } ,
        error : (error) => { console.log(error); }
