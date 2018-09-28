@@ -197,7 +197,7 @@
                     <li class="required_qs">
                       <div class="checkbox-toggle answer-settins">
                          <input ng:model="_questions_[question_index].answer_settings.is_required" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                         <span class="title-checkbox" data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
+                         <span class="title-checkbox" data-toggle="tooltip" data-placement="right" title="This question need to be answered by the attendee before continuing to the next question">
                            Required
                              <i class="help-links">?</i>
                          </span>
@@ -206,7 +206,7 @@
                     <li class="single_response_qs" ng:if="_questions_[question_index].question_type <= 1">
                       <div class="checkbox-toggle answer-settins">
                          <input ng:model="_questions_[question_index].answer_settings.single_choice" ng:change="change_answer_of_single_choices(_questions_[question_index].answer_settings.single_choice)" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                         <span class="title-checkbox"  data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
+                         <span class="title-checkbox"  data-toggle="tooltip" data-placement="right" title="Allow attendee to select only 'one' answer">
                            Single Response
                            <i class="help-links">?</i>
                          </span>
@@ -215,7 +215,7 @@
                    <li class="randomize_qs" ng:if="_questions_[question_index].question_type <= 1">
                      <div class="checkbox-toggle answer-settins">
                          <input ng:model="_questions_[question_index].answer_settings.is_randomized" ng:change="is_randomized_answer_with(_questions_[question_index].answer_settings.is_randomized)" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                         <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
+                         <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Show the answers in a random order , so each attendee will see a different sequence of answers for each question">
                            Randomize
                            <i class="help-links">?</i>
                          </span>
@@ -224,7 +224,7 @@
                    <li class="super_sizer_qs" ng:if="_questions_[question_index].question_type <= 1">
                      <div class="checkbox-toggle answer-settins">
                          <input ng:model="_questions_[question_index].answer_settings.super_size" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
-                         <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
+                         <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Show Image/Video in larger size">
                            Super Size
                            <i class="help-links">?</i>
                          </span>

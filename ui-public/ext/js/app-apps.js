@@ -1382,6 +1382,7 @@ apps.controller("apps-controller" , [
                         // $rootScope.cropper_results['scaleY'] = evt.detail.scaleY;
                       };
   // ==> Reading current Image then blob
+
   $rootScope.read_image_file = (image_file) => {
 
         $rootScope.image_view_source = null ;
@@ -1392,16 +1393,64 @@ apps.controller("apps-controller" , [
           $rootScope.media_data = new Object();
           var reader = new FileReader();
           var read_file = reader.readAsDataURL(file);
+
            if( file.type != "image/jpeg" && file.type != "image/png" && file.type != "image/jpg" )
             return false;
+
+
+
+
           reader.onload = ( e ) => {
-            $rootScope.image_view_source =  e.target.result  ;
-            // ==> Preview Image
-            $rootScope.media_data['media_type'] = 0 ;
-            $rootScope.media_data['media_src'] = e.target.result;
-            $('.loading_data').fadeOut(1000);
-            $('.box-overlay').height($(document).height() + 50);
-            $rootScope.$apply();
+
+
+            // ======================= Testing images
+            var imgd = document.createElement("img")
+            imgd.src = e.target.result ;
+
+            imgd.onload = function (){
+
+              // ==> Resize and Storing
+               var scaler = 2 ;
+               if(imgd.width < 1000 ) scaler = 2 ;
+               if(imgd.width > 1000  && imgd.width < 2000) scaler = 4 ;
+               if(imgd.width > 2000  && imgd.width < 3000 ) scaler = 8 ;
+               if(imgd.width > 3000  && imgd.width < 4000 ) scaler = 12 ;
+               if(imgd.width > 4000  && imgd.width < 5000 ) scaler = 16 ;
+               if(imgd.width > 5000   ) scaler = 25 ;
+
+               var new_width = imgd.width / scaler ;
+               var new_height = imgd.height / scaler ;
+
+               var block =  e.target.result.split(";");
+               var contentType = block[0].split(":")[1];// In this case "image/gif"
+               var realData = block[1].split(",")[1];// In this case "R0lGODlhPQBEAPeoAJosM...."
+
+               /*
+               var canvas = document.createElement("canvas");
+               canvas.width = width;
+               canvas.height = height;
+               var context = canvas.getContext("2d");
+               img.src =   "data:image/gif;base64," + base64  ;
+               context.drawImage(img, 0, 0, width, height);
+               console.log(context);
+               */
+
+               $rootScope.image_view_source =  e.target.result  ;
+               // ==> Preview Image
+               $rootScope.media_data['media_type'] = 0 ;
+               $rootScope.media_data['media_src'] = e.target.result;
+               $('.loading_data').fadeOut(1000);
+               $('.box-overlay').height($(document).height() + 50);
+               $rootScope.$apply();
+
+             
+               // ==> Calling Cropping liberary
+               $rootScope.init_cropping_image();
+
+            };
+            // ========================== End Testing
+
+
           }
 
         // console.log($rootScope.media_image_uploader[0].files[0]);
@@ -1440,9 +1489,6 @@ apps.controller("apps-controller" , [
 
           $rootScope.read_image_file($(this));
 
-
-          // ==> Calling Cropping liberary
-          $rootScope.init_cropping_image();
 
           $timeout(function(){
             $rootScope.$apply();
