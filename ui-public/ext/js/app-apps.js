@@ -4049,6 +4049,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
            var image_object = new Image();
            image_object.src = target_question.media_question.Media_directory ;
            image_object.onload = () => {
+             alert(image_object.src);
              console.log(response);
              ui_question['media_question'] = target_question.media_question ;
              $timeout( function(){ $rootScope.$apply(); } , 150 );
@@ -4056,7 +4057,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
              // = 3 close uploader window
              $timeout( function(){ $rootScope.close_current_image_uploader();  } , 300);
              $timeout( function(){ $rootScope.media_current_upload = false ;  $("html , body , .button_updates").css({ cursor : 'auto' }); } , 500 );
-             
+
            };
          } , 1000 );
        } ,
