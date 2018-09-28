@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path') ;
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
-const Jimp = require('jimp');
+// const Jimp = require('jimp');
 
 
 // const im = require('imagemagick');
