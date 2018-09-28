@@ -5084,11 +5084,12 @@ qtnrRouters.post("/:app_id/question/:question_id/cropping_system"  , question_an
   var new_file_path = file_path + new_filename ;
   var main_filename = req.file.originalname ;
   var main_file_path = file_path  + req.file.originalname ;
-
+  console.log("No issue here => 1 ");
   if(! fs.existsSync(main_file_path)){
     res.send({ status_code : 0 , message : 'Failed' , error : { message : "You didn't upload this image , please try later ..."}  });
     return false ;
   }
+    console.log("No issue here => 2 ");
   console.log(main_file_path);
   res.send(main_file_path);
 });
