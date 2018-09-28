@@ -4019,7 +4019,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     formImageData.append('x' ,x  );
     formImageData.append('y' , y  );
     formImageData.append('questions' , $rootScope._questions_ );
-
+    // alert(cropping_url);
      $.ajax({
        type:'POST',
        url:cropping_url,

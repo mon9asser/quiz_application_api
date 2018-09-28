@@ -5069,6 +5069,28 @@ qtnrRouters.get("/:app_id/application/get/all"  , ( req , res )=>{
 });
 
 
+
+
+
+
+qtnrRouters.post("/:app_id/question/:question_id/cropping_system"  , question_answer_images.single("media_field") , ( req , res )=>{
+  var appId = req.params.app_id ;
+  var questionId = req.params.question_id;
+
+  var imagePath =  req.file.path ;
+  var fileExtension = path.extname(imagePath);
+  var file_path = 'ui-public/themeimages/';
+  var new_filename = "question_"+questionId+fileExtension.toLowerCase();
+  var new_file_path = file_path + new_filename ;
+  var main_filename = req.file.originalname ;
+  var main_file_path = file_path  + req.file.originalname ;
+
+  if(! fs.existsSync(main_file_path)){
+    res.send({ status_code : 0 , message : 'Failed' , error : { message : "You didn't upload this image , please try later ..."}  });
+    return false ;
+  }
+  console.log(main_file_path);
+});
 // http://localhost:9000/api/5b6b512976144b09ca46a362/question/5b6b512a76144b09ca46a4f5/answer/5b6b512a76144b09ca46a4f60/cropping_system
 qtnrRouters.post("/:app_id/question/:question_id/answer/:answer_id/cropping_system"  , question_answer_images.single("media_field") , ( req , res )=> {
   var questionId = req.params.question_id;
@@ -5157,7 +5179,7 @@ qtnrRouters.post("/:app_id/question/:question_id/answer/:answer_id/cropping_syst
       });
    });
 });
-qtnrRouters.post("/:app_id/question/:question_id/cropping_system"  , question_answer_images.single("media_field") , ( req , res )=>{
+qtnrRouters.post("/:app_id/question/:question_id/cropping_system_"  , question_answer_images.single("media_field") , ( req , res )=>{
   var appId = req.params.app_id ;
   var questionId = req.params.question_id;
 
@@ -5219,6 +5241,11 @@ qtnrRouters.post("/:app_id/question/:question_id/cropping_system"  , question_an
       });
    });
 });
+
+
+
+
+
 
 qtnrRouters.get("/:app_id/player/data" , ( req , res ) => {
   var app_id = req.params.app_id;
