@@ -1,6 +1,6 @@
 
 var apps ;
- 
+
 apps = angular.module("applications" , ['angular-redactor']);
 
 
@@ -23,7 +23,7 @@ apps.controller("page-controller",[ "$scope" , "$rootScope" , function( $scope ,
 apps.factory("settings" , [
   function (){
      var applications = {
-        server_ip : (window.location.toString().includes('localhost')) ? "http://localhost:9000/" : "http://54.187.251.111/" ,
+        server_ip : (window.location.toString().includes('localhost')) ? "http://localhost:9000/" : "http://35.166.78.187/" ,
         json_source : "ext/json/json-keys.json" ,
         server_url : window.location.toString() ,
         page_name : window.location.pathname.replace(/^\/([^\/]*).*$/, '$1')
