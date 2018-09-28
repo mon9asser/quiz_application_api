@@ -4035,7 +4035,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
        success : (response) => {
          // ==> Fill ui data
          $timeout(function(){
-           console.log(response);
+
            // = 1 uploaded object
            if( response.questions == undefined ) return false ;
            var all_questions = response.questions ;
@@ -4046,12 +4046,18 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
            var ui_question = $rootScope._questions_.find(x => x._id == questionId );
            if(ui_question == undefined ) return false ;
            if(ui_question.media_question == undefined )  ui_question['media_question'] = target_question.media_question ;
-           ui_question['media_question'] = target_question.media_question ;
-           $timeout( function(){ $rootScope.$apply(); } , 150 );
+           var image_object = new Image();
+           image_object.src = target_question.media_question.Media_directory ;
+           image_object.onload = () => {
+             console.log(response);
+             ui_question['media_question'] = target_question.media_question ;
+             $timeout( function(){ $rootScope.$apply(); } , 150 );
 
-           // = 3 close uploader window
-           $timeout( function(){ $rootScope.close_current_image_uploader();  } , 300);
-           $timeout( function(){ $rootScope.media_current_upload = false ;  $("html , body , .button_updates").css({ cursor : 'auto' }); } , 500 );
+             // = 3 close uploader window
+             $timeout( function(){ $rootScope.close_current_image_uploader();  } , 300);
+             $timeout( function(){ $rootScope.media_current_upload = false ;  $("html , body , .button_updates").css({ cursor : 'auto' }); } , 500 );
+             
+           };
          } , 1000 );
        } ,
        error : (error) => { console.log(error); }
