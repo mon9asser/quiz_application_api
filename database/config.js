@@ -5,7 +5,7 @@ var config = {
     port :                  ':27017' ,
     database_name :         '/todo' ,
     host_name:              'mongodb://localhost' ,
-    options :               { useMongoClient:true }   ,
+    options :               { useMongoClient : true  }   ,
     server_port :           process.env.port || 9000  ,
     session_access : false ,
     default_records_per_page : 5 ,
@@ -14,7 +14,7 @@ var config = {
     secretCode :             "@5rU5d@!tsd&$90f*&#5$~1100sdk$oprFRTgkjfddY1%js",
     apiSecret :              "DRdsd542sder@sds&%4sd854sd=+sds54sderSSfdf##$%@sd",
     apiSecretKey :           "s8Ee~$rV9%#t+T@y&9cY*c-!vJ^Pu" ,
-    restricted_api_header :   "dfV@%4$5v^xs)@5rY*c-!vJ^$90f*&amp;#5$~U5d@!tsd&amp;$90f*&amp;#(cY*c-56)}8$~1100sdk$oprFRTgkEe~$rV9%#t+T@y1DR2VG5YU4XS}+$+&amp;%*tY"
+    restricted_api_header :  "dfV@%4$5v^xs)@5rY*c-!vJ^$90f*&amp;#5$~U5d@!tsd&amp;$90f*&amp;#(cY*c-56)}8$~1100sdk$oprFRTgkEe~$rV9%#t+T@y1DR2VG5YU4XS}+$+&amp;%*tY"
 };
 var apis = {
   _dir_   : '/api' ,
