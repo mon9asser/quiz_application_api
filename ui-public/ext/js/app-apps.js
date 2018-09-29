@@ -281,6 +281,11 @@ apps.controller("apps-controller" , [
     label_0 : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ],
     label_1 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50]
   }
+  $rootScope.image_uploader_proceed = {
+    progress : 0 ,
+    status_code : undefined ,
+    message : undefined
+  };
   $rootScope.media_current_upload = false ;
   $rootScope.is_submitted = false ;
   $rootScope.is_reviewed  = false ;
@@ -4001,15 +4006,17 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     }
   }
   $rootScope.storing_cropped_image_for_media_question = () => {
-
-    // storing_image_with_cropped_data()
-    $("#file_extension").val( $rootScope.media_image_uploader[0].files[0].name.split('.').pop());
-
+    $rootScope.image_uploader_proceed = {
+        progress : 0 ,
+        status_code : undefined ,
+        message : undefined
+    };
     var questionId = $("#question_id").val();
     var x = $('#cropping-image-x').val();
     var y = $('#cropping-image-y').val();
     var width = $('#cropping-image-width').val();
     var height = $('#cropping-image-height').val();
+    $("#file_extension").val( $rootScope.media_image_uploader[0].files[0].name.split('.').pop());
 
     var cropping_url = $rootScope.server_ip + "api/" + $rootScope.app_id + "/question/" + questionId + "/cropping_system" ;
     var formImageData = new FormData();
@@ -4020,50 +4027,81 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     formImageData.append('y' , y  );
     formImageData.append('questions' , $rootScope._questions_ );
 
-     $.ajax({
-       type:'POST',
-       url:cropping_url,
-       data: formImageData ,
-       cache:false,
-       contentType: false,
-       processData: false,
-       beforeSend : () => {
-         // ==> Show loader spinner
-         $rootScope.media_current_upload = true ;
-         $("html , body , .button_updates").css({ cursor : 'none' });
-       } ,
-       success : (response) => {
-         console.log(response);
-         // ==> Fill ui data
-         $timeout(function(){
+    // ==> Http angular request
+    $http({
+      url : cropping_url,
+      method : "POST" ,
+      data : formImageData ,
+      headers : { 'Content-Type' : undefined} ,
+      uploadEventHandlers : {
+         progress : ( event ) => {
+           var percent = Math.round (event.loaded / event.total) * 100;
+           $rootScope.image_uploader_proceed['progress'] = percent ;
+         }
+      }
+    }).then((response) => {
+      console.log(response.data);
+         if(response.data.status_code != undefined){
+          // ==> Show it in ui
+          $rootScope.image_uploader_proceed['status_code'] = response.data.status_code ;
+          $rootScope.image_uploader_proceed['message'] = ( response.data.status_code == 0 ) ?  response.data.error :  response.data.data ;
 
-           // = 1 uploaded object
-           if( response.questions == undefined ) return false ;
-           var all_questions = response.questions ;
-           var target_question = all_questions.find(x => x._id == questionId ) ;
-           if(target_question == undefined && target_question.media_question == undefined ) return false ;
 
-           // = 2 ui question object
-           var ui_question = $rootScope._questions_.find(x => x._id == questionId );
-           if(ui_question == undefined ) return false ;
-           if(ui_question.media_question == undefined )  ui_question['media_question'] = target_question.media_question ;
-           var image_object = new Image();
-           image_object.src = target_question.media_question.Media_directory ;
-           image_object.onload = () => {
-             alert(image_object.src);
-             console.log(response);
-             ui_question['media_question'] = target_question.media_question ;
-             $timeout( function(){ $rootScope.$apply(); } , 150 );
+          // ==> show image in ui
+          if(response.data.status_code == 1 ){
+             // = 1 uploaded object
 
-             // = 3 close uploader window
-             $timeout( function(){ $rootScope.close_current_image_uploader();  } , 300);
-             $timeout( function(){ $rootScope.media_current_upload = false ;  $("html , body , .button_updates").css({ cursor : 'auto' }); } , 500 );
+             if( $rootScope.image_uploader_proceed.message.questions == undefined ) return false ;
 
-           };
-         } , 1000 );
-       } ,
-       error : (error) => { console.log(error); }
-     });
+
+             var all_questions = $rootScope.image_uploader_proceed.message.questions ;
+             var target_question = all_questions.find(x => x._id == questionId ) ;
+             if(target_question == undefined && target_question.media_question == undefined ) {
+               // ==> Show it in ui
+               $rootScope.image_uploader_proceed['status_code'] = 0 ;
+               $rootScope.image_uploader_proceed['progress'] = 0 ;
+               $rootScope.image_uploader_proceed['message'] = "Image not uploaded , please make sure from internet connection speed !";
+               return false ;
+             }
+
+
+             // = 2 ui question object
+             var ui_question = $rootScope._questions_.find(x => x._id == questionId );
+             if(ui_question == undefined ) return false ;
+             if(ui_question.media_question == undefined )  ui_question['media_question'] = target_question.media_question ;
+
+             // = 3 show image
+             var image_object = new Image();
+             image_object.src = target_question.media_question.Media_directory ;
+             image_object.onload = () => {
+
+               ui_question['media_question'] = target_question.media_question ;
+               $timeout( function(){ $rootScope.close_current_image_uploader();  } , 100 );
+             }
+
+          }
+
+
+          // ==> close window of uploader
+
+             console.log($rootScope.image_uploader_proceed);
+        }
+
+        if(response.data.status_code == undefined){
+          $rootScope.image_uploader_proceed['status_code'] = 0 ;
+          $rootScope.image_uploader_proceed['progress'] = 0 ;
+          $rootScope.image_uploader_proceed['message'] = "Image not uploaded please make sure from your internet connection speed!" ;
+        }
+
+
+    } , ( error ) => {
+      if( error ){
+        $rootScope.image_uploader_proceed['status_code'] = 0 ;
+        $rootScope.image_uploader_proceed['progress'] = 0 ,
+        $rootScope.image_uploader_proceed['message'] = "Image not uploaded please make sure from your internet connection speed!"
+        console.log(error);
+      }
+    })
   };
   $rootScope.storing_cropped_image_for_media_answer = () => {
       $("#file_extension").val( $rootScope.media_image_uploader[0].files[0].name.split('.').pop() );

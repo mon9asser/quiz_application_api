@@ -71,6 +71,9 @@ const question_answer_images = multer({
      var mimetype = filetypes.test(file.mimetype);
      var extname = filetypes.test(path.extname(file.originalname).toLowerCase());
 
+
+
+
      if (mimetype && extname) {
        req.file_status = true ;
        return cb(null, true);
@@ -5131,20 +5134,23 @@ qtnrRouters.post("/:app_id/question/:question_id/cropping_system"  , question_an
   }
 
   // ==> Change image name
+  var scaler ,  measurement = 250 , img_width = parseInt(req.body.width) ; // kb
+  var scaler =  ( img_width <= 250 ) ? 1 : parseInt( img_width /  measurement ) ;  // scaler per each 250px
 
 
   // ==> Delay
   setTimeout(function(){
     gm(main_file_path).
-    quality(60).
+    quality(70).
     crop(req.body.width, req.body.height, req.body.x , req.body.y ).
+    resize(req.body.width / scaler , req.body.height / scaler ).
     write( new_file_path , function( error){
 
       // ==> Show error if found it
       if(error){
         respond_object['status_code'] = 0 ;
         respond_object['message'] = "Failed";
-        respond_object['error'] = "Error an occured , cropping issue please try Later";
+        respond_object['error'] = "Error an occurred , cropping issue please try Later";
         res.send(respond_object);
         return false ;
       }
