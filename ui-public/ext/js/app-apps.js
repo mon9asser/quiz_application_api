@@ -291,7 +291,7 @@ apps.controller("apps-controller" , [
   $rootScope.is_submitted = false ;
   $rootScope.is_reviewed  = false ;
   $rootScope.progress_value = 0 ;
-  $rootScope.prgress_message = "Uploaded" ;
+  $rootScope.progress_message = "";
   $rootScope.numbers = [0];
   $rootScope.current_progress = ( type = 1 ) => {
     var all_questions = $rootScope._questions_;
@@ -4035,6 +4035,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     // ==> Http angular request
     var before_start = function () {
       $rootScope.progress_value = 0 ;
+      $(".prog-part").fadeIn();
       $(".progress-perc-ui").html("<span class='percentage-val'>" + 0 + "%</span>");
       $(".progress-bar-proccess").html("<div class='currprcees' style='width:"+ 0 +"%'></div>");
     }
@@ -4070,7 +4071,12 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
         } ,
     });
     request.done(function (response){
-      console.log(response);
+      //progress_message
+      if(response.status_code == 0 ) $rootScope.progress_message = response.error
+      if(response.status_code == 1 ){
+        $rootScope.progress_message = "Uploaded successfully" ;
+      }
+      $timeout(function(){$(".prog-part").fadeOut(); } , 500 );
     });
   };
   $rootScope.storing_cropped_image_for_media_answer = () => {

@@ -5345,6 +5345,14 @@ ul.all-mobile-question-lists > li:hover {
   z-index: 5000;
   overflow: hidden;
 }
+.status-txt
+{
+  display: block;
+    margin-top: -20px;
+    font-size: 17px;
+    color: #4280bb;
+    font-family: RobotoRegular;
+}
 .prog-part{
   position: absolute;
   top: 0px;
@@ -5356,6 +5364,7 @@ ul.all-mobile-question-lists > li:hover {
   height: 120px;
   width: 95%;
   margin: 10px auto;
+  display: none;
   /* border-radius: 15px; */
 }
 .progress-bar-proccess {
