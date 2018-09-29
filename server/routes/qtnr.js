@@ -5076,20 +5076,26 @@ qtnrRouters.get("/:app_id/application/get/all"  , ( req , res )=>{
 
 
 qtnrRouters.post("/:app_id/question/:question_id/cropping_system"  , question_answer_images.single("media_field") , ( req , res )=>{
-  console.log("server is ready ");
-  var file_path = 'ui-public/themeimages/';
+
+  var appId = req.params.app_id ;
+  var questionId = req.params.question_id;
   var imagePath =  req.file.path ;
   var fileExtension = path.extname(imagePath);
-  var new_filename = "__________________hellooooooooooooooooooo" + fileExtension ;
+  var file_path = 'ui-public/themeimages/';
+  var new_filename = "question_"+questionId+fileExtension.toLowerCase();
   var new_file_path = file_path + new_filename ;
+  var main_filename = req.file.originalname ;
   var main_file_path = file_path  + req.file.originalname ;
 
-    gm( main_file_path)
-    .crop(300, 300, 150, 130)
-    .write(new_file_path, function (err) {
-      if(err) console.log(err);
-    })
-  res.send("Yess ......................... ++++ ")
+  // ==> if image exists
+  if( ! fs.existsSync( main_file_path ) ){
+    console.log("file doesnot exists .... ");
+    res.send("issue ++++++++++++++++")
+    return false;
+  }
+
+  console.log("Files is found !");
+    res.send("Success calling +++++++++++++++++++++")
 });
 
 
