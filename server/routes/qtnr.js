@@ -5087,15 +5087,136 @@ qtnrRouters.post("/:app_id/question/:question_id/cropping_system"  , question_an
   var main_filename = req.file.originalname ;
   var main_file_path = file_path  + req.file.originalname ;
 
-  // ==> if image exists
-  if( ! fs.existsSync( main_file_path ) ){
-    console.log("file doesnot exists .... ");
-    res.send("issue ++++++++++++++++")
-    return false;
+  // ==> Error Object
+  var respond_object = new Object();
+  respond_object['status_code'] = 0 ;
+  respond_object['message'] = "Failed"; // error
+
+  // ==> image is exists
+  if(req.file.path == undefined || req.file.path == null || !req.file.path){
+    respond_object['status_code'] = 0 ;
+    respond_object['message'] = "Failed";
+    respond_object['error'] = "Image not found ! , please choose an image from your pc";
+    res.send(respond_object);
+    return false ;
   }
 
-  console.log("Files is found !");
-    res.send("Success calling +++++++++++++++++++++")
+  // ==> its not an image
+  var match_to = ['.png' , '.jpg' , '.jpeg' , '.gif'];
+  if(fileExtension == undefined || match_to.indexOf(fileExtension.toLowerCase()) == -1 ){
+    respond_object['status_code'] = 0 ;
+    respond_object['message'] = "Failed";
+    respond_object['error'] = "That's not an image , please upload an image with png , jpg or gif";
+    res.send(respond_object);
+    return false ;
+  }
+
+  // ==> if image exists
+  if( ! fs.existsSync( main_file_path ) ){
+    respond_object['status_code'] = 0 ;
+    respond_object['message'] = "Failed";
+    respond_object['error'] = "Image not uploaded , please try later";
+    res.send(respond_object);
+    return false ;
+  }
+
+
+  // ==> Image Coordinates
+  if(req.body.width == undefined || req.body.height == undefined ||req.body.x == undefined || req.body.y == undefined){
+    respond_object['status_code'] = 0 ;
+    respond_object['message'] = "Failed";
+    respond_object['error'] = "Image Coordinates are required !";
+    res.send(respond_object);
+    return false ;
+  }
+
+  // ==> Change image name
+
+
+  // ==> Delay
+  setTimeout(function(){
+    gm(main_file_path).
+    quality(60).
+    crop(req.body.width, req.body.height, req.body.x , req.body.y ).
+    write( new_file_path , function( error){
+
+      // ==> Show error if found it
+      if(error){
+        respond_object['status_code'] = 0 ;
+        respond_object['message'] = "Failed";
+        respond_object['error'] = "Error an occured , cropping issue please try Later";
+        res.send(respond_object);
+        return false ;
+      }
+
+      // ==> rename Main File
+      var new_file_path_ = file_path + '___' +new_filename ;
+       fs.rename( main_file_path  , new_file_path_  , ( err ) => {
+         if( err ) {
+           respond_object['status_code'] = 0 ;
+           respond_object['message'] = "Failed";
+           respond_object['error'] = "Internet connection is too slow , please try Later";
+           res.send(respond_object);
+           return false ;
+         }
+       });
+
+
+
+       // ==> Storing image in database
+       qtnr.findOne({ _id:appId }).then( (   qtnairsDocument ) => {
+
+         if(!qtnairsDocument || qtnairsDocument == null ){
+           respond_object['status_code'] = 0 ;
+           respond_object['message'] = "Failed";
+           respond_object['error'] = "Application does not exists !";
+           res.send(respond_object);
+           return false ;
+         }
+
+         var questions = qtnairsDocument.questions ;
+         var this_question = questions.find( x => x._id == questionId ) ;
+         if(this_question == undefined ){
+           respond_object['status_code'] = 0 ;
+           respond_object['message'] = "Failed";
+           respond_object['error'] = "Question does not exists !";
+           res.send(respond_object);
+           return false ;
+         }
+
+         if(this_question.media_question == undefined )
+         this_question['media_question'] = new Object();
+
+          this_question.media_question['media_type'] = 0;
+          this_question.media_question['media_name'] = new_filename
+          this_question.media_question['media_field'] = new_file_path ;
+          this_question.media_question['Media_directory'] = config.server_ip + 'themeimages/'+ new_filename;
+          this_question.media_question['image_cropped'] = new_filename;
+          this_question.media_question['image_full'] =   '___' +new_filename  ;
+          this_question.media_question['image_updated_date'] = new Date();
+
+          qtnairsDocument.markModified('questions');
+
+          qtnairsDocument.save().then((data)=>{
+            respond_object['status_code'] = 1 ;
+            respond_object['message'] = "Success";
+            respond_object['data'] = data;
+            res.send(respond_object);
+            return false ;
+          });
+
+       }).catch((err)=>{
+         respond_object['status_code'] = 0 ;
+         respond_object['message'] = "Failed";
+         respond_object['error'] = "Somethinf went wrong , please try Later";
+         res.send(respond_object);
+         return false ;
+       });
+    });
+  } , 100 );
+
+
+
 });
 
 
