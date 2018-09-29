@@ -4031,67 +4031,29 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     formImageData.append('questions' , $rootScope._questions_ );
 
     // ==> Http angular request
-    $http({
-      url : cropping_url,
-      method : "POST" ,
-      data : formImageData ,
-      headers : { 'Content-Type' : undefined} ,
-      uploadEventHandlers : {
-         progress : ( event ) => {
-           $rootScope.image_uploader_proceed['show_progress'] = true ;
-           var percent = Math.round (event.loaded / event.total) * 100;
-           console.log(percent);
-           $rootScope.image_uploader_proceed['progress'] = percent ;
-           $timeout(function(){$rootScope.$apply()} , 200);
-         }
-      }
-    }).then((response) => {
-      console.log(response.data);
-      if(response.data.status_code == 1 ){
-        // ==> Callback from database
-        var quiz_data = response.data.data;
-        var current_questions = quiz_data.questions ;
-        var target_question = current_questions.find(x => x._id == questionId );
-        if( target_question == undefined ) {
-          $rootScope.close_current_image_uploader();
-          return false;
-        }
+    var before_start = function () {  }
 
-        // ==> Callback from Scope Object
-        var ui_question = $rootScope._questions_.find(x => x._id == questionId );
-         if(ui_question == undefined ) {
-           $rootScope.close_current_image_uploader();
-           return false;
-         }
-         if(ui_question.media_question == undefined )
-          ui_question['media_question'] = target_question.media_question ;
-
-
-         // ==> List into image Object
-         var image = new Image();
-         image.src = target_question.media_question.Media_directory ;
-
-         image.onload = () => {
-            ui_question['media_question'] = target_question.media_question ;
-            $timeout( function(){ $rootScope.$apply(); } , 150 );
-            $timeout( function(){ $rootScope.close_current_image_uploader();  } , 300);
-         };
-      }else {
-        $rootScope.image_uploader_proceed = {
-            show_progress : true ,
-            progress : 0 ,
-            status_code : 0 ,
-            message : response.data.error
-        };
-      }
-    } , ( error ) => {
-      if( error ){
-        $rootScope.image_uploader_proceed['status_code'] = 0 ;
-        $rootScope.image_uploader_proceed['progress'] = 0 ,
-        $rootScope.image_uploader_proceed['message'] = "Image not uploaded please make sure from your internet connection speed!"
-        console.log(error);
-      }
-    })
+    var request = $.ajax({
+        url : cropping_url ,
+        type : "POST",
+        data : formImageData ,
+        contentType: false,
+        cache: false,
+        processData:false,
+        beforeSend : before_start ,
+        xhr : function () {
+          var xhr = $.ajaxSettings.xhr();
+          if (xhr.upload){
+              xhr.upload.addEventListener('progress' , function(event){
+                console.log(event.loaded + ' ' + event.total);
+              } , true );
+          }
+          return xhr ;
+        } ,
+    });
+    request.done(function (response){
+      console.log(response);
+    });
   };
   $rootScope.storing_cropped_image_for_media_answer = () => {
       $("#file_extension").val( $rootScope.media_image_uploader[0].files[0].name.split('.').pop() );
