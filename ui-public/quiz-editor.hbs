@@ -225,13 +225,32 @@
         <!-- Media View -->
         <!-- Image Case -->
         <div style="position: relative;" ng:if="media_data != undefined">
+          <!--  Progress Uploader -->
+          <div class="prog-part">
+            <!-- Status case and precentag -->
+            <div class="status-case text-center">
+              <ul>
+                <li class="progress-perc-ui">
+                  <span class="percentage-val"></span>
+                </li>
+
+
+                <div class="current-actions">
+                  <span>Cancel</span>
+                </div>
+              </ul>
+
+            </div>
+            <!-- Progression -->
+            <div class="progress-bar-proccess">
+              <div class="currprcees"></div>
+            </div>
+          </div>
+          <!--  Image Details -->
           <div class="media-part-controller live_preview_image">
             <img ng:if="media_data.media_type == 0" id="cropping_system" class="isCropperImage" ng:src="{> media_data.media_src | trust_iframe_url <}" alt="Image">
             <iframe ng:if="media_data.media_type == 1 && ( media_data.video_type == 1 || media_data.video_type == 0)" ng:src="{> media_data.media_src | trust_iframe_url <}" width="100%" height="auto"></iframe>
             <div class='loading_data'></div>
-          </div>
-          <div class="progrbar">
-            <div class="highlighted_progress"></div>
           </div>
 
           <!-- Uploader Spinner -->

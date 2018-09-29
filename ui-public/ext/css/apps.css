@@ -5345,6 +5345,79 @@ ul.all-mobile-question-lists > li:hover {
   z-index: 5000;
   overflow: hidden;
 }
+.prog-part{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  background: #fff;
+  z-index: 5000;
+  overflow: hidden;
+  height: 120px;
+  width: 95%;
+  margin: 10px auto;
+  /* border-radius: 15px; */
+}
+.progress-bar-proccess {
+    display: block;
+    position: absolute;
+    width: 100%;
+    margin: 0px auto;
+        height: 100%;
+    background: transparent;
+    bottom: 0px;
+    overflow: hidden;
+    z-index: 1;
+}
+.currprcees {
+  background: #4f87be42;
+  width: 0%;
+  height: 100%;
+  webkit-transition: width .2s linear ;
+  transition: width .2s linear ;
+  -moz-transition: width .2s linear  ;
+}
+.status-case {
+  display: block;
+  position: relative;
+  z-index: 5;
+}
+.status-case > ul {
+  display: block;
+  position: relative;
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
+}
+.status-case > ul > li {
+  display: inline;
+}
+ul li span.percentage-val {
+  font-family: 'Unica One', monospace;
+  font-size: 69px;
+  padding: 10px;
+  vertical-align: middle;
+  display: inline-block;
+  color: #4281bb;
+}
+ul li span.status-progress {
+  font-size: 18px;
+  font-family: RobotoRegular;
+  vertical-align: baseline;
+  display: inline-block;
+  color: #4280bb;
+}
+.current-actions {
+      display: inline-block;
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      padding: 5px 10px;
+      font-weight: bold;
+      color: red !important;
+      cursor: pointer;
+}
 .progress-image-bar {
     width: 80%;
       height: 9px;

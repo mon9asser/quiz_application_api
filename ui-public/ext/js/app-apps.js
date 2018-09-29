@@ -290,6 +290,8 @@ apps.controller("apps-controller" , [
   $rootScope.media_current_upload = false ;
   $rootScope.is_submitted = false ;
   $rootScope.is_reviewed  = false ;
+  $rootScope.progress_value = 0 ;
+  $rootScope.prgress_message = "Uploaded" ;
   $rootScope.numbers = [0];
   $rootScope.current_progress = ( type = 1 ) => {
     var all_questions = $rootScope._questions_;
@@ -4031,7 +4033,11 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     formImageData.append('questions' , $rootScope._questions_ );
 
     // ==> Http angular request
-    var before_start = function () {  }
+    var before_start = function () {
+      $rootScope.progress_value = 0 ;
+      $(".progress-perc-ui").html("<span class='percentage-val'>" + 0 + "%</span>");
+      $(".progress-bar-proccess").html("<div class='currprcees' style='width:"+ 0 +"%'></div>");
+    }
 
     var request = $.ajax({
         url : cropping_url ,
@@ -4044,8 +4050,20 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
         xhr : function () {
           var xhr = $.ajaxSettings.xhr();
           if (xhr.upload){
+
+             // ==> ui actions
+             $("html , body").animate({
+               scrollTop : $(".box-data").offset().top - 100
+             })
+
               xhr.upload.addEventListener('progress' , function(event){
-                console.log(event.loaded + ' ' + event.total);
+                var percent = 0 , position = event.loaded || event.position , total = event.total ;
+                if (event.lengthComputable) {
+                  percent = Math.ceil(position / total * 100);
+                }
+                $(".progress-perc-ui").html("<span class='percentage-val'>" + percent + "%</span>");
+                $(".progress-bar-proccess").html("<div class='currprcees' style='width:"+ percent +"%'></div>");
+
               } , true );
           }
           return xhr ;
