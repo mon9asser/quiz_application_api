@@ -4075,6 +4075,26 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
       if(response.status_code == 0 ) $rootScope.progress_message = response.error
       if(response.status_code == 1 ){
         $rootScope.progress_message = "Uploaded successfully" ;
+
+        // Fill and mark data
+        response = response.data;
+        if( response.questions == undefined ) return false ;
+        var all_questions = response.questions ;
+        var target_question = all_questions.find(x => x._id == questionId ) ;
+        if(target_question == undefined && target_question.media_question == undefined ) return false ;
+
+        // = 2 ui question object
+        var ui_question = $rootScope._questions_.find(x => x._id == questionId );
+        if(ui_question == undefined ) return false ;
+        if(ui_question.media_question == undefined )  ui_question['media_question'] = target_question.media_question ;
+
+        var image_object = new Image();
+        image_object.src = target_question.media_question.Media_directory ;
+        image_object.onload = () => {
+          ui_question['media_question'] = target_question.media_question ;
+          $timeout( function(){ $rootScope.$apply(); } , 150 );
+          $timeout( function(){ $rootScope.close_current_image_uploader();  } , 500 );
+        }
       }
       $timeout(function(){$(".prog-part").fadeOut(); } , 500 );
     });
