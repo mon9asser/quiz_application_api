@@ -4040,11 +4040,13 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
          progress : ( event ) => {
            $rootScope.image_uploader_proceed['show_progress'] = true ;
            var percent = Math.round (event.loaded / event.total) * 100;
+           console.log(percent);
            $rootScope.image_uploader_proceed['progress'] = percent ;
+           $timeout(function(){$rootScope.$apply()} , 200);
          }
       }
     }).then((response) => {
-      console.log(response);
+      console.log(response.data);
       if(response.data.status_code == 1 ){
         // ==> Callback from database
         var quiz_data = response.data.data;
