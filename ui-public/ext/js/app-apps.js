@@ -282,6 +282,7 @@ apps.controller("apps-controller" , [
     label_1 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50]
   }
   $rootScope.image_uploader_proceed = {
+    show_progress : false ,
     progress : 0 ,
     status_code : undefined ,
     message : undefined
@@ -4007,10 +4008,12 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
   }
   $rootScope.storing_cropped_image_for_media_question = () => {
     $rootScope.image_uploader_proceed = {
+        show_progress : false ,
         progress : 0 ,
         status_code : undefined ,
         message : undefined
     };
+
     var questionId = $("#question_id").val();
     var x = $('#cropping-image-x').val();
     var y = $('#cropping-image-y').val();
@@ -4035,65 +4038,50 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
       headers : { 'Content-Type' : undefined} ,
       uploadEventHandlers : {
          progress : ( event ) => {
+           $rootScope.image_uploader_proceed['show_progress'] = true ;
            var percent = Math.round (event.loaded / event.total) * 100;
            $rootScope.image_uploader_proceed['progress'] = percent ;
          }
       }
     }).then((response) => {
-      console.log(response.data);
-         if(response.data.status_code != undefined){
-          // ==> Show it in ui
-          $rootScope.image_uploader_proceed['status_code'] = response.data.status_code ;
-          $rootScope.image_uploader_proceed['message'] = ( response.data.status_code == 0 ) ?  response.data.error :  response.data.data ;
-
-
-          // ==> show image in ui
-          if(response.data.status_code == 1 ){
-             // = 1 uploaded object
-
-             if( $rootScope.image_uploader_proceed.message.questions == undefined ) return false ;
-
-
-             var all_questions = $rootScope.image_uploader_proceed.message.questions ;
-             var target_question = all_questions.find(x => x._id == questionId ) ;
-             if(target_question == undefined && target_question.media_question == undefined ) {
-               // ==> Show it in ui
-               $rootScope.image_uploader_proceed['status_code'] = 0 ;
-               $rootScope.image_uploader_proceed['progress'] = 0 ;
-               $rootScope.image_uploader_proceed['message'] = "Image not uploaded , please make sure from internet connection speed !";
-               return false ;
-             }
-
-
-             // = 2 ui question object
-             var ui_question = $rootScope._questions_.find(x => x._id == questionId );
-             if(ui_question == undefined ) return false ;
-             if(ui_question.media_question == undefined )  ui_question['media_question'] = target_question.media_question ;
-
-             // = 3 show image
-             var image_object = new Image();
-             image_object.src = target_question.media_question.Media_directory ;
-             image_object.onload = () => {
-
-               ui_question['media_question'] = target_question.media_question ;
-               $timeout( function(){ $rootScope.close_current_image_uploader();  } , 100 );
-             }
-
-          }
-
-
-          // ==> close window of uploader
-
-             console.log($rootScope.image_uploader_proceed);
+      console.log(response);
+      if(response.data.status_code == 1 ){
+        // ==> Callback from database
+        var quiz_data = response.data.data;
+        var current_questions = quiz_data.questions ;
+        var target_question = current_questions.find(x => x._id == questionId );
+        if( target_question == undefined ) {
+          $rootScope.close_current_image_uploader();
+          return false;
         }
 
-        if(response.data.status_code == undefined){
-          $rootScope.image_uploader_proceed['status_code'] = 0 ;
-          $rootScope.image_uploader_proceed['progress'] = 0 ;
-          $rootScope.image_uploader_proceed['message'] = "Image not uploaded please make sure from your internet connection speed!" ;
-        }
+        // ==> Callback from Scope Object
+        var ui_question = $rootScope._questions_.find(x => x._id == questionId );
+         if(ui_question == undefined ) {
+           $rootScope.close_current_image_uploader();
+           return false;
+         }
+         if(ui_question.media_question == undefined )
+          ui_question['media_question'] = target_question.media_question ;
 
 
+         // ==> List into image Object
+         var image = new Image();
+         image.src = target_question.media_question.Media_directory ;
+
+         image.onload = () => {
+            ui_question['media_question'] = target_question.media_question ;
+            $timeout( function(){ $rootScope.$apply(); } , 150 );
+            $timeout( function(){ $rootScope.close_current_image_uploader();  } , 300);
+         };
+      }else {
+        $rootScope.image_uploader_proceed = {
+            show_progress : true ,
+            progress : 0 ,
+            status_code : 0 ,
+            message : response.data.error
+        };
+      }
     } , ( error ) => {
       if( error ){
         $rootScope.image_uploader_proceed['status_code'] = 0 ;

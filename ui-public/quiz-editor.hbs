@@ -235,14 +235,9 @@
           </div>
 
           <!-- Uploader Spinner -->
-          <div class="image-uploader-progress" ng:if="image_uploader_proceed.progress != undefined && image_uploader_proceed.progress > 0 ">
-             <div class="progress-image-bar">
-               <div class="current-progression" ng:style="{width : image_uploader_proceed.progress + '%'}"></div>
-             </div>
-             <div class="progressbar-text">
-               <span ng:if="image_uploader_proceed.progress == 100"> <i class="fa fa-check"></i> Completed</span>
-               <span ng:if="image_uploader_proceed.progress < 100">{> image_uploader_proceed.progress + '%'<} Uploaded !</span>
-             </div>
+          <div class="image-uploader-progress text-center" ng:if="image_uploader_proceed.show_progress == true">
+            <h2 class="proresstxt" ng:if="image_uploader_proceed.progress != 100 ">{> image_uploader_proceed.progress <}% Completed ... </h2>
+             <h2 class="proresstxt" ng:if="image_uploader_proceed.progress == 100 "><i class="fa fa-check"></i>{> image_uploader_proceed.progress <}% Completed ... </h2>
           </div>
           <!-- End Uploader Spinner -->
 

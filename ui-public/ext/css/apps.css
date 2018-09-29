@@ -5375,6 +5375,14 @@ ul.all-mobile-question-lists > li:hover {
   font-family: RobotoRegular;
     color: #214d73;
 }
+.proresstxt {
+  font-family: RobotoRegular;
+  color: #214d73;
+  top: 30%;
+  display: block;
+  position: relative;
+  width: 100%;
+}
 
 .sk-fading-circle .sk-circle {
   width: 100%;
