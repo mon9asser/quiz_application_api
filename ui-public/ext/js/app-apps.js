@@ -4231,7 +4231,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
        var image = new Image() ;
        image.src = media_dir ;
        image.onload = () => {
-         $timeout(function(){ $rootScope.apply(); } , 200)
+         $timeout(function(){ $rootScope.$apply(); } , 200)
          $timeout(function(){ $rootScope.close_current_image_uploader(); } , 600 );
        }
      }
