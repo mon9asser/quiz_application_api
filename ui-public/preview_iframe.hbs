@@ -378,9 +378,9 @@
                    <div class="container screen-container screen_opg_editor box-result-screen"> <!-- label-question -->
                        <div>
                             <!-- Case successed in quiz  -->
-                            <div ng:if="_user_activity_.report_attendees.passed_the_grade == true" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
+                            <div ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == true" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
                             <!-- Case failed in quiz  -->
-                            <div ng:if="_user_activity_.report_attendees.passed_the_grade == false" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
+                            <div ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == false" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
 
                               <!-- The Grade  -->
                               <div class="quiz-grade">
