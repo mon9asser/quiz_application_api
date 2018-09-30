@@ -5230,6 +5230,195 @@ qtnrRouters.post("/:app_id/question/:question_id/cropping_system"  , question_an
 
 
 
+
+
+
+
+
+// =====> medida uplader for answers
+qtnrRouters.post("/:app_id/question/:question_id/answer/:answer_id/cropping_system"  , question_answer_images.single("media_field") , ( req , res )=>{
+  var respond_object = new Object();
+  var questionId = req.params.question_id;
+  var answerId = req.params.answer_id;
+  var appId = req.params.app_id;
+
+
+  var file_path = 'ui-public/themeimages/';
+  var file_name = '___answer_media_' + answerId ;
+
+
+  var imagePath =  req.file.path ;
+  var fileExtension = path.extname(imagePath);
+  var new_filename = "answer_media_"+answerId+fileExtension.toLowerCase();
+  var new_file_path = file_path + new_filename ;
+  var main_filename = req.file.originalname ;
+  var main_file_path = file_path  + req.file.originalname ;
+
+  // ==> Error Object
+  var respond_object = new Object();
+  respond_object['status_code'] = 0 ;
+  respond_object['message'] = "Failed"; // error
+
+  // ==> image is exists
+  if(req.file.path == undefined || req.file.path == null || !req.file.path){
+    var respond_object = new Object();
+    respond_object['status_code'] = 0 ;
+    respond_object['message'] = "Failed";
+    respond_object['error'] = "Image not found ! , please choose an image from your pc";
+    res.send(respond_object);
+    return false ;
+  }
+
+  // ==> its not an image
+  var match_to = ['.png' , '.jpg' , '.jpeg' , '.gif'];
+  if(fileExtension == undefined || match_to.indexOf(fileExtension.toLowerCase()) == -1 ){
+    var respond_object = new Object();
+    respond_object['status_code'] = 0 ;
+    respond_object['message'] = "Failed";
+    respond_object['error'] = "That's not an image , please upload an image with png , jpg or gif";
+    res.send(respond_object);
+    return false ;
+  }
+
+  // ==> if image exists
+  if( ! fs.existsSync( main_file_path ) ){
+    var respond_object = new Object();
+    respond_object['status_code'] = 0 ;
+    respond_object['message'] = "Failed";
+    respond_object['error'] = "Image not uploaded , please try later";
+    res.send(respond_object);
+    return false ;
+  }
+
+
+  // ==> Image Coordinates
+  if(req.body.width == undefined || req.body.height == undefined ||req.body.x == undefined || req.body.y == undefined){
+    var respond_object = new Object();
+    respond_object['status_code'] = 0 ;
+    respond_object['message'] = "Failed";
+    respond_object['error'] = "Image Coordinates are required !";
+    res.send(respond_object);
+    return false ;
+  }
+
+  // ==> Change image name
+  var scaler ,  measurement = 250 , img_width = parseInt(req.body.width) ; // kb
+  var scaler =  ( img_width <= 250 ) ? 1 : parseInt( img_width /  measurement ) ;  // scaler per each 250px
+
+
+  // ==> Delay
+  setTimeout(function(){
+    gm(main_file_path).
+    quality(70).
+    crop(req.body.width, req.body.height, req.body.x , req.body.y ).
+    resize(req.body.width / scaler , req.body.height / scaler ).
+    write( new_file_path , function( error){
+
+      // ==> Show error if found it
+      if(error){
+        var respond_object = new Object();
+        respond_object['status_code'] = 0 ;
+        respond_object['message'] = "Failed";
+        respond_object['error'] = "Error an occurred , cropping issue please try Later";
+        res.send(respond_object);
+        return false ;
+      }
+
+      // ==> rename Main File
+      var new_file_path_ = file_path + '___' +new_filename ;
+       fs.rename( main_file_path  , new_file_path_  , ( err ) => {
+         if( err ) {
+           var respond_object = new Object();
+           respond_object['status_code'] = 0 ;
+           respond_object['message'] = "Failed";
+           respond_object['error'] = "Internet connection is too slow , please try Later";
+           res.send(respond_object);
+           return false ;
+         }
+       });
+
+
+
+       // ==> Storing image in database
+       qtnr.findOne({ _id:appId }).then( (   qtnairsDocument ) => {
+
+         if(!qtnairsDocument || qtnairsDocument == null ){
+           var respond_object = new Object();
+           respond_object['status_code'] = 0 ;
+           respond_object['message'] = "Failed";
+           respond_object['error'] = "Application does not exists !";
+           res.send(respond_object);
+           return false ;
+         }
+
+         var questions = qtnairsDocument.questions ;
+         var this_question = questions.find( x => x._id == questionId ) ;
+         if(this_question == undefined ){
+           var respond_object = new Object();
+           respond_object['status_code'] = 0 ;
+           respond_object['message'] = "Failed";
+           respond_object['error'] = "Question does not exists";
+           res.send(respond_object);
+           return false ;
+         }
+
+         var this_answer = this_question.answers_format.find(x => x._id == answerId );
+         if( this_answer == undefined ){
+           var respond_object = new Object();
+           respond_object['status_code'] = 0 ;
+           respond_object['message'] = "Failed";
+           respond_object['error'] = "Answer does not exists";
+           res.send(respond_object);
+           return false ;
+         }
+
+
+         if(this_question.question_type == 0 ){
+           if( this_answer.media_optional == undefined )
+           this_answer['media_optional'] = new Object();
+
+           this_answer.media_optional['media_name'] = new_filename;
+           this_answer.media_optional['media_type']= 0;
+           this_answer.media_optional['Media_directory']= config.server_ip + 'themeimages/'+ new_filename;;
+           this_answer.media_optional['image_cropped']= new_filename;
+           this_answer.media_optional['image_full']= '___' +new_filename  ;
+           this_answer.media_optional['image_updated_date']= new Date();
+         }
+
+         if(this_question.question_type == 1 ){
+           this_answer['media_name'] = new_filename;
+           this_answer['media_type']= 0;
+           this_answer['Media_directory']= config.server_ip + 'themeimages/'+ new_filename;;
+           this_answer['image_cropped']= new_filename;
+           this_answer['image_full']= '___' +new_filename  ;
+           this_answer['image_updated_date']= new Date();
+         }
+
+         qtnairsDocument.markModified('questions');
+         qtnairsDocument.save().then((data)=>{
+           var respond_object = new Object();
+           respond_object['status_code'] = 1 ;
+           respond_object['message'] = "Success";
+           respond_object['data'] = data;
+           res.send(respond_object);
+           return false ;
+          });
+       }).catch((err)=>{
+         respond_object['status_code'] = 0 ;
+         respond_object['message'] = "Failed";
+         respond_object['error'] = "Somethinf went wrong , please try Later";
+         res.send(respond_object);
+         return false ;
+       });
+    });
+  } , 100 );
+
+
+
+});
+
+
+
 qtnrRouters.get("/:app_id/player/data" , ( req , res ) => {
   var app_id = req.params.app_id;
   qtnr.findOne({_id : app_id}).populate('app_report').populate('att__draft').exec(function(error, creatorQuestionnaires) {
