@@ -1298,7 +1298,7 @@ apps.controller("apps-controller" , [
       $('.box-overlay').height($(document).height());
 
       if($('.box-overlay').height() == 0 ){
-        $('.box-overlay').height($(document).height() );
+        $('.box-overlay').height( $(document).height() );
       }
     $(".media-uploader").fadeIn();
 
@@ -4231,6 +4231,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
        var image = new Image() ;
        image.src = media_dir ;
        image.onload = () => {
+         $timeout(function(){ $rootScope.apply(); } , 200)
          $timeout(function(){ $rootScope.close_current_image_uploader(); } , 600 );
        }
      }
