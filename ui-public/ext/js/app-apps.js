@@ -4231,6 +4231,11 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
        var image = new Image() ;
        image.src = media_dir ;
        image.onload = () => {
+         if( target_uploaded_qs.question_type == 0 )
+         target_answer_scope['media_optional'] = target_answer.media_optional ;
+         if( target_uploaded_qs.question_type == 1 )
+         target_answer_scope['Media_directory'] = target_answer.Media_directory ;
+
          $timeout(function(){ $rootScope.$apply(); } , 200)
          $timeout(function(){ $rootScope.close_current_image_uploader(); } , 600 );
        }
