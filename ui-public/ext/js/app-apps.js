@@ -510,7 +510,7 @@ apps.controller("apps-controller" , [
     // ==> build event
     $timeout(function(){
       // ==> expire warning
-      $(".redactor-in-2").bind("change , input , keyup" , function(){
+        $(".redactor-in-2").bind("change , input , keyup" , function(){
         // $(".resume-text ,.expired_message_block").hide();
         // $timeout(function(){ $(".expire-warning-text").show(); } , 5);
          $timeout(function(){
@@ -1564,7 +1564,7 @@ apps.controller("apps-controller" , [
       if ( $rootScope._application_.app_type == 1 )
       answer_object_data['is_correct'] = false ;
 
-      $rootScope.create_answer_redactors();
+
     }
     if ( question.question_type == 1 ){
       answer_object_data['media_src'] = "No Media Here !";
@@ -4458,10 +4458,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
        } , 5)
     }
   }
-  // ==> Calling all function according timeout
-  $rootScope.create_answer_redactors = () => {
-      // $R(".answer-redactors" , { air: true } );
-  };
+
   $timeout(function(){
 
     $("#question-pt , #answers-pt").slideDown();
@@ -4473,5 +4470,8 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     // $rootScope.switching_editor_preview(true);
   }, 500 );
 
+  $timeout( function(){
+    // $(".answer-redactors").summernote({ airMode: true  });
+  } , 1000 )
 
 }]);

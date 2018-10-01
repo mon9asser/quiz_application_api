@@ -136,7 +136,10 @@
                    </div> -->
 
                    <div ng:class="(answer_value.media_optional != undefined)?'add_dashed_border':''"  ng:if="answer_value.value != undefined" class="text-answers">
-                      <textarea class="answer-redactors" name="name"  ng:model="answer_value.value" placeholder="{> answer_value.value <}"></textarea>
+                      <textarea class="answer-redactors" name="name"  ng:model="answer_value.value" placeholder="{> answer_value.value <}" ></textarea>
+                      <!-- <div class="answer-redactors">
+                        {> answer_value.value <}
+                      </div> -->
                    </div>
 
                  </li>
