@@ -68,6 +68,65 @@ apps.filter("make_it_zero" , () => {
      else return score_value ;
   }
 });
+
+// ==> Setting
+apps.directive('ngCustomEditor', ['$parse' , '$rootScope' , '$timeout', function($parse , $rootScope , $timeout ){
+  return {
+          /* elementType - question_id -answer_id   */
+           restrict: 'A',
+           compile: function( $element, attr) {
+
+               return function( scope , element, attr , index ) {
+
+                  $rootScope.redactor_object = {
+                   airMode: true ,
+                   code : "" ,
+                   popover : {
+                     air : [
+                       ['color', ['color']],
+                       ['fontsize', ['fontsize']],
+                       ['font', ['bold', 'underline', 'italic'  , 'strikethrough', 'clear' ]]
+                     ]
+                   } ,
+                   callbacks : {
+                     onInit:  () => {
+                         if( attr.elementType == 'question' )
+                         $(".question-redactor").next('.note-editor').find(".note-editable").html('');
+                         if( attr.elementType == 'description' )
+                         $(".description-redactor").next('.note-editor').find(".note-editable").html('');
+                         if( attr.elementType == 'answer' )
+                         $(".answer-redactors-x").next('.note-editor').find(".note-editable").html('');
+                     } ,
+                     onChange : ( content ) => {
+                       var this_question = $rootScope._questions_.find(x => x._id == attr.questionId ) ;
+
+                        if( attr.elementType == 'question' ){
+                          // ==> currQuestion
+                            if( this_question != undefined )
+                            this_question.question_body = content ;
+
+                        }
+                        if( attr.elementType == 'description' ){
+                            if( this_question != undefined )
+                              this_question.question_description.value = content ;
+                         }
+                        if( attr.elementType == 'answer' ){
+                          if( this_question != undefined ){
+                            var this_answer = this_question.answers_format.find(x => x._id == attr.answerId)
+                            if(this_answer != undefined )
+                            this_answer.value = content ;
+                          }
+                        }
+                        $timeout(function(){ $rootScope.$apply() } , 100 );
+                     }
+                   }
+                 };
+
+                 element.summernote( $rootScope.redactor_object );
+               };
+           }
+    }
+}]);
 apps.filter("apply_html_with_date_filtering" , ['$sce'  , ( $sce  ) => {
   return ( returned_values ) => {
     var time_hr = (date) => {
@@ -287,6 +346,7 @@ apps.controller("apps-controller" , [
     status_code : undefined ,
     message : undefined
   };
+  $rootScope.is_unsaved_data = false ;
   $rootScope.media_current_upload = false ;
   $rootScope.is_submitted = false ;
   $rootScope.is_reviewed  = false ;
@@ -329,11 +389,18 @@ apps.controller("apps-controller" , [
     }
   };
 
+  $rootScope.current_mode = (is_view) => {
+    var classes = "";
+      if( is_view == 0 ) classes = "editor_mode_type";
+      if( is_view == 1 ) classes = "preview_mode_type";
+    return classes ;
+  }
   $rootScope.changed_day_numbers = (number) => {
     time_epiration.expiration_day_counts = number ;
    };
+  $rootScope.redactor_object = new Object();
   $rootScope._user_activity_ = null ;
-  $rootScope.is_view = false ;
+  $rootScope.is_view = 0 ;
   $rootScope.unsolved_questions = [];
   $rootScope.theme_stylesheet = new Array();
   $rootScope.progressbar_models = "/time-progress-temps/progressbar-1.hbs" ;
@@ -494,7 +561,9 @@ apps.controller("apps-controller" , [
       $rootScope.init_first_question();
       $(".modal-content-overlay").fadeOut();
       $timeout(function(){
-        $rootScope.loading_redactor_for_message();
+        // if($rootScope._questions_ != null && $rootScope._questions_.length != 0 )
+        // $rootScope.load_question_redactor($rootScope._questions_[0].question_body)
+        // $rootScope.load_description_redactor( $rootScope._questions_[0].question_description.value ) ;
       } , 400)
     } , 600);
   });
@@ -510,100 +579,107 @@ apps.controller("apps-controller" , [
     // ==> build event
     $timeout(function(){
       // ==> expire warning
-        $(".redactor-in-2").bind("change , input , keyup" , function(){
-        // $(".resume-text ,.expired_message_block").hide();
-        // $timeout(function(){ $(".expire-warning-text").show(); } , 5);
-         $timeout(function(){
-           $("#docQuestions > li").each(function(){
-             $(this).removeClass("marked_question")
-           });
-           $rootScope.switching_editor_preview(true);
-           var expire_warning_val = $R(".set_redactor" , "source.getCode")[0];
-           $rootScope.screen_type = 4 ;
-           $rootScope.storing_redactor_values('expire_warning' , expire_warning_val  )
-        } , 200 );
-      });
+      //   $(".redactor-in-2").bind("change , input , keyup" , function(){
+      //   // $(".resume-text ,.expired_message_block").hide();
+      //   // $timeout(function(){ $(".expire-warning-text").show(); } , 5);
+      //    $timeout(function(){
+      //      $("#docQuestions > li").each(function(){
+      //        $(this).removeClass("marked_question")
+      //      });
+      //      $rootScope.switch_int_mode(1);
+      //      // var expire_warning_val = $R(".set_redactor" , "source.getCode")[0];
+      //      var expire_warning_val = "";
+      //      $rootScope.screen_type = 4 ;
+      //      $rootScope.storing_redactor_values('expire_warning' , expire_warning_val  )
+      //   } , 200 );
+      // });
       // ==> expire message
-      $(".redactor-in-3").bind("change , input, keyup" , function(){
-         $timeout(function(){
-           $("#docQuestions > li").each(function(){
-             $(this).removeClass("marked_question")
-           });
-           $rootScope.screen_type = 5 ;
-           $rootScope.switching_editor_preview(true);
-           $(".resume-text , .expire-warning-text").hide();
-           $(".expired_message_block").show();
-            var expire_message_val = $R(".set_redactor" , "source.getCode")[1];
-               $rootScope.storing_redactor_values( 'expire_message' , expire_message_val  );
-         }, 200 );
-      });
+      // $(".redactor-in-3").bind("change , input, keyup" , function(){
+      //    $timeout(function(){
+      //      $("#docQuestions > li").each(function(){
+      //        $(this).removeClass("marked_question")
+      //      });
+      //      $rootScope.screen_type = 5 ;
+      //      $rootScope.switch_int_mode(1);
+      //      $(".resume-text , .expire-warning-text").hide();
+      //      $(".expired_message_block").show();
+      //      // var expire_message_val = $R(".set_redactor" , "source.getCode")[1];
+      //       var expire_message_val = ""
+      //          $rootScope.storing_redactor_values( 'expire_message' , expire_message_val  );
+      //    }, 200 );
+      // });
       // ==> starting messages
-      $(".redactor-in-4").bind("change , input, keyup" , function(){
-         $timeout(function(){
-           $("#docQuestions > li").each(function(){
-             $(this).removeClass("marked_question")
-           });
-           $rootScope.switching_editor_preview(true);
-           $rootScope.screen_type = 0 ;
-            var starting_text = $R(".set_redactor" , "source.getCode")[2];
-            $rootScope._settings_.titles.title_start_with = starting_text;
-         }, 200 );
-      });
+      // $(".redactor-in-4").bind("change , input, keyup" , function(){
+      //    $timeout(function(){
+      //      $("#docQuestions > li").each(function(){
+      //        $(this).removeClass("marked_question")
+      //      });
+      //      $rootScope.switch_int_mode(1);
+      //      $rootScope.screen_type = 0 ;
+      //      // var starting_text = $R(".set_redactor" , "source.getCode")[2];
+      //       var starting_text = "";
+      //       $rootScope._settings_.titles.title_start_with = starting_text;
+      //    }, 200 );
+      // });
       // ==> ending message
-      $(".redactor-in-5").bind("change , input, keyup" , function(){
-         $timeout(function(){
-           $rootScope.switching_editor_preview(true);
-           $rootScope.screen_type = 1 ;
-            var ending_text = $R(".set_redactor" , "source.getCode")[3];
-            $rootScope._settings_.titles.title_end_with = ending_text;
-         }, 200 );
-      });
+      // $(".redactor-in-5").bind("change , input, keyup" , function(){
+      //    $timeout(function(){
+      //      $rootScope.switch_int_mode(1);
+      //      $rootScope.screen_type = 1 ;
+      //      // var ending_text = $R(".set_redactor" , "source.getCode")[3];
+      //       var ending_text = "";
+      //       $rootScope._settings_.titles.title_end_with = ending_text;
+      //    }, 200 );
+      // });
       // ==> success message
-      $(".redactor-in-6").bind("change , input, keyup" , function(){
-         $timeout(function(){
-           $("#docQuestions > li").each(function(){
-             $(this).removeClass("marked_question")
-           });
-           $rootScope.switching_editor_preview(true);
-            $rootScope.screen_type = 2 ;
-            $rootScope.text_result_screens = true ;
-            var pass_text = $R(".set_redactor" , "source.getCode")[4];
-            $rootScope._settings_.titles.title_success_with = pass_text;
-         }, 200 );
-      });
+      // $(".redactor-in-6").bind("change , input, keyup" , function(){
+      //    $timeout(function(){
+      //      $("#docQuestions > li").each(function(){
+      //        $(this).removeClass("marked_question")
+      //      });
+      //      $rootScope.switch_int_mode(1);
+      //       $rootScope.screen_type = 2 ;
+      //       $rootScope.text_result_screens = true ;
+      //       // var pass_text = $R(".set_redactor" , "source.getCode")[4];
+      //       var pass_text = ""
+      //       $rootScope._settings_.titles.title_success_with = pass_text;
+      //    }, 200 );
+      // });
       // ==> failed message
-      $(".redactor-in-7").bind("change , input, keyup" , function(){
-         $timeout(function(){
-           $("#docQuestions > li").each(function(){
-             $(this).removeClass("marked_question")
-           });
-           $rootScope.switching_editor_preview(true);
-            $rootScope.screen_type = 2 ;
-            $rootScope.text_result_screens = false ;
-            var fail_text = $R(".set_redactor" , "source.getCode")[5];
-            $rootScope._settings_.titles.title_failed_with = fail_text;
-         }, 200 );
-      });
+      // $(".redactor-in-7").bind("change , input, keyup" , function(){
+      //    $timeout(function(){
+      //      $("#docQuestions > li").each(function(){
+      //        $(this).removeClass("marked_question")
+      //      });
+      //     $rootScope.switch_int_mode(1);
+      //       $rootScope.screen_type = 2 ;
+      //       $rootScope.text_result_screens = false ;
+      //       // var fail_text = $R(".set_redactor" , "source.getCode")[5];
+      //       var fail_text =""
+      //       $rootScope._settings_.titles.title_failed_with = fail_text;
+      //    }, 200 );
+      // });
       // ==> resume message
       /*
       .resume-text ,
       .expired_message_block
       */
-      $(".redactor-in-8").bind("change , input, keyup" , function(){
-        $(".expire-warning-text , .expired_message_block").hide();
-        $timeout(function(){ $(".resume-text").show(); } , 5);
-
-        $rootScope.screen_type = 4 ;
-         $timeout(function(){
-           $("#docQuestions > li").each(function(){
-             $(this).removeClass("marked_question")
-           });
-           $rootScope.switching_editor_preview(true);
-            var title_resume = $R(".set_redactor" , "source.getCode")[6];
-            $rootScope._settings_.titles.title_resume = title_resume;
-            $timeout(function(){ /*console.log($rootScope._settings_.titles);*/ } , 201);
-         }, 200 );
-      });
+      // $(".redactor-in-8").bind("change , input, keyup" , function(){
+      //   $(".expire-warning-text , .expired_message_block").hide();
+      //   $timeout(function(){ $(".resume-text").show(); } , 5);
+      //
+      //   $rootScope.screen_type = 4 ;
+      //    $timeout(function(){
+      //      $("#docQuestions > li").each(function(){
+      //        $(this).removeClass("marked_question")
+      //      });
+      //      $rootScope.switch_int_mode(1);
+      //      // var title_resume = $R(".set_redactor" , "source.getCode")[6];
+      //       var title_resume =""
+      //       $rootScope._settings_.titles.title_resume = title_resume;
+      //       $timeout(function(){ /*console.log($rootScope._settings_.titles);*/ } , 201);
+      //    }, 200 );
+      // });
 
     } , 200 );
   }
@@ -818,13 +894,13 @@ apps.controller("apps-controller" , [
         {
           // ==>
           document.getElementById("switch-editor").checked = true ;
-          $rootScope.is_view = true ;
+          $rootScope.is_view = 1 ;
           $(".editor-page").css({ "transform" : "translate3d(-100% , 0 , 0)" , height : '0px'});
           $(".preview-page").css({ "transform" : "translate3d(-100%, 0px, 0px)" ,  height : 'auto'});
         }
         else if ( is_view == false ){
           document.getElementById("switch-editor").checked = false ;
-          $rootScope.is_view = false ;
+          $rootScope.is_view = 0 ;
           $(".editor-page").css({"transform" : "translate3d(0% , 0 , 0)" , height : 'auto'});
           $(".preview-page").css({"transform" : "translate3d(0% , 0 , 0)" , height : '0px'});
         }
@@ -852,6 +928,7 @@ apps.controller("apps-controller" , [
   $rootScope.add_new_question = ( question_type , atIndex = null ,  other_types = null ) => {
     if($rootScope._questions_.length > 200 )
     return false ;
+    $rootScope.switch_int_mode(0);
     var question_object = new Object() , answer_object = new Object() ;
     // => Build Default Question
     question_object['_id'] = $rootScope.question_ids['id_' +  $rootScope._questions_.length  ];
@@ -971,8 +1048,16 @@ apps.controller("apps-controller" , [
   $rootScope.image_source_link = (src) => {
     return src ;
   }
+  $rootScope.question_list_classes = () => {
+    var classes = "";
+    if($rootScope.screen_type != 3 ){
+      classes = "remove_marked_question"
+    }
+    return classes ;
+  }
   // => Mark Selected Question
   $rootScope.highlighted_question = (questionId) => {
+
       $rootScope.screen_type = 3;
         // => detect current question is exists or not
         var questionIndex = $rootScope._questions_.findIndex( x=> x._id == questionId );
@@ -994,9 +1079,11 @@ apps.controller("apps-controller" , [
         // ==> Fill and binding event handler with textarea box
 
         $timeout(function(){
+          // $rootScope.load_question_redactor($rootScope._questions_[$rootScope.question_index].question_body);
+          // $rootScope.load_description_redactor( $rootScope._questions_[$rootScope.question_index].question_description.value ) ;
           $rootScope.fill_boxes_with_question_objects(questionId);
           $rootScope.init_bootstrap_tooltip();
-        } , 300 );
+        } , 100 );
         $('.right_part').fadeIn();
         // ==> Detect if Unsaved data is happened
         // $rootScope.detect_if_there_unsaved_data (// $rootScope.is_unsaved_data )
@@ -1031,22 +1118,23 @@ apps.controller("apps-controller" , [
             // $rootScope._questions_[$rootScope.question_index].media_question
             // ==> Distrbute question data
             // ==> Question Text
-            $(".redactor-in-0").html(question.question_body);
-            $(".redactor-in-1").html(question.question_description.value);
-            $(".redactor-in-0 , #editor-quest-data").bind("input" , function (){
+            // $(".redactor-in-0").html(question.question_body);
+            // $(".redactor-in-1").html(question.question_description.value);
+            // $(".redactor-in-0 , #editor-quest-data").bind("input" , function (){
+            //
+            //     $timeout(function(){
+            //       // $rootScope._questions_[$rootScope.question_index].question_body = $R('#editor-quest-data' , 'source.getCode');
+            //         // $rootScope._questions_[$rootScope.question_index].question_body = $R('#editor-quest-data' , 'source.getCode');
+            //         // $rootScope.is_unsaved_data = true ;
+            //     } , 500 );
+            // });
 
-                $timeout(function(){
-                    $rootScope._questions_[$rootScope.question_index].question_body = $R('#editor-quest-data' , 'source.getCode');
-                    // $rootScope.is_unsaved_data = true ;
-                } , 500 );
-            });
-
-            $(".redactor-in-1 , #editor-desc-data").bind("input" , function (){
-                $timeout(function(){
-                    $rootScope._questions_[$rootScope.question_index].question_description.value = $R('#editor-desc-data' , 'source.getCode');
-                    // $rootScope.is_unsaved_data = true ;
-                } , 500 );
-            });
+            // $(".redactor-in-1 , #editor-desc-data").bind("input" , function (){
+            //     $timeout(function(){
+            //         // $rootScope._questions_[$rootScope.question_index].question_description.value = $R('#editor-desc-data' , 'source.getCode');
+            //         // $rootScope.is_unsaved_data = true ;
+            //     } , 500 );
+            // });
 
             $timeout(function(){
               $rootScope.$apply();
@@ -1600,6 +1688,23 @@ sort: false  */
       return $('[data-toggle="tooltip"]').tooltip();
          }
 
+  $rootScope.switch_int_mode = ( mode_type ) => {
+    /*
+    .button-switcher > span.editor-btn { color: #fff; }
+    .button-switcher > span.preview-btn { color: #999; }
+    */
+    $rootScope.is_view = mode_type ;
+     if ( mode_type == 0 ){
+       $('.button-switcher > span.editor-btn').css({ color : '#fff' })
+       $('.button-switcher > span.preview-btn').css({ color : '#999' })
+       $rootScope.switching_editor_preview(mode_type)
+     }
+     if ( mode_type == 1 ){
+       $('.button-switcher > span.preview-btn').css({ color : '#fff' })
+       $('.button-switcher > span.editor-btn').css({ color : '#999' })
+       $rootScope.switching_editor_preview(mode_type)
+     }
+  };
   $rootScope.sorting_answers_in_list = () => {
     var answers = $rootScope._questions_[$rootScope.question_index].answers_format;
     $timeout(function(){
@@ -1640,11 +1745,15 @@ sort: false  */
           var draggedRect = evt.draggedRect;
           var related = evt.related;
 
+
           var relatedRect = evt.relatedRect;
           var ParentID = $(dragged).parent().prop("id");
           var ParentEl = $(dragged).parent();
-          if(ParentID == "qs-sortable") {
-             ParentEl.find(dragged).html("");
+
+          var eldata = ParentEl.find(dragged).html();
+
+          if( ParentID == "docQuestions" ) {
+              ParentEl.find(dragged).html("");
              // set animation
              // ParentEl.find(dragged).addClass("animated wobble");
              ParentEl.find(dragged).css({
@@ -3216,12 +3325,12 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
         {
           $rootScope.question_index = ( $rootScope._questions_.length - 1 );
           $rootScope.screen_type = 3 ;
-          $rootScope.is_view = true;
+          $rootScope.is_view = 1;
         }
         if ( question_index == 0 ) {
           if($rootScope._settings_.enable_screens == true ){
             $rootScope.screen_type = 0;
-            $rootScope.is_view = true;
+            $rootScope.is_view = 1;
             $("#docQuestions > li").each(function(){
               $(this).removeClass('marked_question');
             })
@@ -3237,14 +3346,14 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
       {
         if($rootScope._settings_.enable_screens == true )
           {
-            $rootScope.is_view = true;
+            $rootScope.is_view = 1;
             $rootScope.screen_type = 1;
             // $("#docQuestions").children("li").each(function(){
             //    if( $(this).hasClass('marked_question') )
             //    $(this).removeClass('marked_question');
             // });
           }else {
-            $rootScope.is_view = true;
+            $rootScope.is_view = 1;
             $rootScope.screen_type = 2;
           }
       }
@@ -3259,7 +3368,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
   $rootScope.start_the_quiz = (css_mode) => {
       if(css_mode == true ) return false;
       $rootScope.screen_type = 3 ;
-      $rootScope.is_view = true;
+      $rootScope.is_view = 1;
       $rootScope.question_index = 0 ;
       $rootScope.highlighted_by_color_only();
       $timeout(function(){$rootScope.$apply()} , 300);
@@ -3286,6 +3395,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     $(".retake-result-box").children(".fa").addClass("fa-spin");
     // ==> Randmoize Questions
     $rootScope.randomize_sorting_questions(true);
+    $rootScope._settings_.show_results_per_qs = false ;
     // ==> Randomize answers
     $rootScope._questions_.filter((object) => {
       return object.answers_format = $rootScope.randomize_arries(object.answers_format);
@@ -3330,7 +3440,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
       if($rootScope.unsolved_questions.length != 0 )
       return false;
 
-      $rootScope.is_view = true;
+      $rootScope.is_view = 1;
       $rootScope.screen_type = 2;
       $(".preview-page , .swiper-wrapper").css({  height : 'auto'});
      // $rootScope._questions_.are_all_questions_tracked( attended_questions );
@@ -3374,7 +3484,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     }
 
     $rootScope.screen_type = screen_number ;
-    $rootScope.switching_editor_preview(true);
+    $rootScope.switch_int_mode(1);
     if(question_index != null ){
       $rootScope.question_index = question_index ;
     }
@@ -3385,7 +3495,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
 
    if(is_enabled == true ){
      $(".switch").trigger('click');
-     $rootScope.switching_editor_preview(true);
+     $rootScope.switch_int_mode(1);
      $rootScope.enable_css_mode = true;
       $('body , html').bind('mouseover' , function(e){
         var target = e.target;
@@ -4470,8 +4580,89 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     // $rootScope.switching_editor_preview(true);
   }, 500 );
 
-  $timeout( function(){
-    // $(".answer-redactors").summernote({ airMode: true  });
-  } , 1000 )
 
+// description-redactor
+$rootScope.load_description_redactor = ( description_text ) => {
+    var description_redactor_object = {
+      airMode: true ,
+      popover : {
+        air : [
+          ['color', ['color']],
+          ['fontsize', ['fontsize']],
+          ['font', ['bold', 'underline', 'italic'  , 'strikethrough', 'clear' ]]
+        ]
+      } ,
+      callbacks : {
+        onChange : ( content ) => {
+          // ==> STORING IT TEXT
+          $rootScope._questions_[$rootScope.question_index].question_description.value = content ;
+          // ==> Placeholder
+          if(content == ''){
+            $(".description-redactor").next('.note-editor').find('.note-editable').children('').html('');
+            $(".description-redactor").next('.note-editor').find(".note-editable").attr("data-text" , "Question Description ... ");
+          }
+
+          $timeout(function(){ $rootScope.$apply(); } , 150 )
+        }
+      }
+    };
+
+     $(".description-redactor").summernote(  description_redactor_object );
+
+     if( description_text != '' )
+     {
+       // ==> Question Texts
+       $(".description-redactor").next('.note-editor').find(".note-editable").html(description_text);
+     }
+     else
+     {
+       // ==> Placeholder
+       $(".description-redactor").next('.note-editor').find(".note-editable").html('');
+       $(".description-redactor").next('.note-editor').find(".note-editable").attr("data-text" , "Question Description ...");
+     }
+}
+ $rootScope.load_question_redactor = ( question_text ) => {
+     var question_redactor_object = {
+       airMode: true ,
+       popover : {
+         air : [
+           ['color', ['color']],
+           ['fontsize', ['fontsize']],
+           ['font', ['bold', 'underline', 'italic'  , 'strikethrough', 'clear' ]]
+         ]
+       } ,
+       callbacks : {
+         onChange : ( content ) => {
+           // ==> STORING IT TEXT
+           $rootScope._questions_[$rootScope.question_index].question_body = content ;
+           // ==> Placeholder
+           if(content == ''){
+             $(".question-redactor").next('.note-editor').find(".note-editable").html('');
+             $(".question-redactor").next('.note-editor').find(".note-editable").attr("data-text" , "Add your question here !");
+           }
+
+           $timeout(function(){ $rootScope.$apply(); } , 150 )
+         }
+       }
+     };
+
+      $(".question-redactor").summernote(  question_redactor_object);
+
+      if( question_text != '' )
+      {
+        // ==> Question Texts
+         $(".question-redactor").next('.note-editor').find(".note-editable").html(question_text);
+      }
+      else
+      {
+        // ==> Placeholder
+         $(".question-redactor").next('.note-editor').find(".note-editable").html('');
+         $(".question-redactor").next('.note-editor').find(".note-editable").attr("data-text" , "Add your question here !");
+      }
+ }
+
+
+ $rootScope.someFunction = function ()  {
+   alert();
+ }
 }]);

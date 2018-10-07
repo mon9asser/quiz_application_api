@@ -4,15 +4,20 @@
       <meta charset="utf-8">
       <title>Survey Editor</title>
 
+      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.css" />
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.10/summernote-bs4.css" />
+
       <link href="{{ server_ip }}ext/frameworks/css/cropper.css" rel="stylesheet">
-      <link href="{{ server_ip }}ext/frameworks/css/redactor.min.css" rel="stylesheet">
+      <!-- <link href="{{ server_ip }}ext/frameworks/css/redactor.min.css" rel="stylesheet"> -->
       <link href="{{ server_ip }}ext/frameworks/css/spectrum.css" rel="stylesheet">
       <link href="{{ server_ip }}ext/css/swiper.min.css" rel="stylesheet">
+
       <link href="{{ server_ip }}ext/css/apps.css" rel="stylesheet">
       <link href="{{ server_ip }}ext/css/editor-mobile.css" rel="stylesheet">
+
       <style media="screen">
         .editor-block {
           width: 95% !important;
@@ -33,8 +38,10 @@
         .settings_menu {  top: -4px !important; }
       </style>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.js"></script>
 	    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" charset="utf-8"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.10/summernote-bs4.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js" charset="utf-8"></script>
 
   </head>
@@ -165,11 +172,16 @@
                 </div>
 
                 <div class="switched-button switch-mode">
-                  <div ng:if="screen_type == 3" class="input-switch" ng:class="(screen_type == 0 ) ? 'display_editor_preview_option':'dontdisplay_editor_preview_option'">
+                  <!-- <div ng:if="screen_type == 3" class="input-switch" ng:class="(screen_type == 0 ) ? 'display_editor_preview_option':'dontdisplay_editor_preview_option'">
                     <label for="switch-editor">Edit</label>
                     <input type="checkbox" id="switch-editor" ng:model="is_view" ng:change="switching_editor_preview(is_view)" class="input" />
                     <label for="switch-editor" class="switch"></label>
                     <label for="switch-editor">Preview</label>
+                  </div> -->
+                  <div ng:if="screen_type == 3" class="button-switcher">
+                    <span class="selected-mode" ng:class="current_mode(is_view)"></span>
+                    <span ng:style="{color : ( is_view == 1 ) ? '#999' : '#fff'}" ng:click="switch_int_mode(0)" class="editor-btn">Editor Mode</span>
+                    <span ng:style="{color : ( is_view == 0 ) ? '#999' : '#fff'}" ng:click="switch_int_mode(1)" class="preview-btn">Preview Mode</span>
                   </div>
                   <div ng:if="screen_type != 3">
                       <span ng:if="screen_type == 0">Welcome Screen</span>
@@ -178,11 +190,11 @@
                   </div>
                 </div>
                 <!--
-                ++++++++++++++++++++++++++++ Start Mbile menu
+                ++++++++++++++++++++++++++++ Start Mbile menu marked_question
                 -->
                 <div class="mobile-question-list">
                   <ul class="all-mobile-question-lists">
-                    <li class="qs-{>qs_value._id<}" ng:click="highlighted_question(qs_value._id)" ng:repeat="(qs_key , qs_value) in _questions_ track by $index">
+                    <li  class="qs-{>qs_value._id<}" ng:click="highlighted_question(qs_value._id)" ng:repeat="(qs_key , qs_value) in _questions_ track by $index">
                       <span>
                         <i ng:if="qs_value.question_type == 0" class="icon-insert-template"></i>
                         <i ng:if="qs_value.question_type == 1" class="icon-image"></i>
@@ -310,15 +322,15 @@
     <script src="{{ server_ip }}ext/frameworks/js/spectrum.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/cropper.js"></script>
 
-    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor.min.js"></script>
-    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-color.js"></script>
+    <!-- <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor.min.js"></script> -->
+    <!-- <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-color.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-size.js"></script>
-    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-family.js"></script>
+    <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/redactor-font-family.js"></script> -->
 
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sweetalert.min.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/frameworks/js/sortable.min.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/js/swiper.min.js"></script>
-    <script type="text/javascript" src="{{ server_ip }}ext/js/redactor-angular.js"></script>
+    <!-- <script type="text/javascript" src="{{ server_ip }}ext/js/redactor-angular.js"></script> -->
     <script type="text/javascript" src="{{ server_ip }}ext/js/a-application.js"></script>
     <script type="text/javascript" src="{{ server_ip }}ext/js/app-apps.js"></script>
   </body>

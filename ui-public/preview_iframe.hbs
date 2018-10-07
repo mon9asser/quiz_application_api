@@ -66,7 +66,7 @@
     </div>
     <!-- Quiz is expired !  -->
     <!-- Resume & expiration screens  -->
-    <div ng:show="(is_expired && starting_screens != 2 )" class="">
+    <div ng:style="{'margin-top' : ( _settings_.time_settings.is_with_time == false && _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}" ng:show="(is_expired && starting_screens != 2 )" class="">
       <div class="swiper-wrapper quiz-contents">
         <div class="swiper-slide welcoming-screen-x ng-scope">
            <div data-selected-block="question-slide" class="container  x-widther screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-welcome-screen selector">
@@ -82,21 +82,23 @@
       <div class="swiper-wrapper quiz-contents">
 
          <!-- Result Screens  -->
-         <div ng:if="starting_screens == 2 && _application_.app_type == 1 "  class="swiper-slide welcoming-screen-x">
+         <div ng:style="{'margin-top' : ( _settings_.time_settings.is_with_time == false && _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}" ng:style="{'margin-top' : ( _settings_.time_settings.is_with_time == false && _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}" ng:if="starting_screens == 2 && _application_.app_type == 1 "  class="swiper-slide welcoming-screen-x">
               <!-- Result screen contents  -->
             <div class="container screen-container screen_opg_editor box-result-screen"> <!-- label-question -->
                    <div>
                            <!-- Case successed in quiz  -->
-                            <div ng:if="_user_activity_.report_attendees.passed_the_grade == true" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
+                            <div  ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == true" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
                            <!-- Case failed in quiz  -->
-                            <div ng:if="_user_activity_.report_attendees.passed_the_grade == false" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
-                          <!-- The Grade  -->
+                           <div  ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == false" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
+                            <div  ng:show="_settings_.grade_settings.is_graded == false"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div>
+
+                            <!-- The Grade  -->
                             <div class="quiz-grade">
                                 <!-- <div style="background: #f9f9f9;" class="grade_result_loder text-center">
                                 Loading results ..
                                 </div> -->
                                 <div class="quiz-grade grade-score text-center result-screen-score-text">
-                                  <h3 ng:cloak> {> _settings_.label_btns.lbl_score_with <} : {> _user_activity_.report_attendee_details.correct_answers  + "/" + _questions_.length <}</h3>
+                                  <h3 ng:cloak> {> _settings_.label_btns.lbl_score_with <} : {> _user_activity_.report_attendee_details.correct_answers | filter_by_zero  <} / {> _questions_.length <}</h3>
                                 </div>
                                <div class="quiz-grade grade-score text-center result-screen-grade-text">
                                   <h5 ng:cloak>{> _settings_.label_btns.lbl_grade_with <} : {> _user_activity_.report_attendee_details.score | math_around_it <}%</h5>
@@ -120,7 +122,7 @@
             <!-- End Result screen contents  -->
          </div>
          <!-- Welcome Screen -->
-         <div ng:if="_settings_.enable_screens == true && starting_screens == 0" class="swiper-slide welcoming-screen-x">
+         <div ng:style="{'margin-top' : ( _settings_.time_settings.is_with_time == false && _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}" ng:if="_settings_.enable_screens == true && starting_screens == 0" class="swiper-slide welcoming-screen-x">
            <div class="container screen-container screen_opg_editor box-welcome-screen">
               <div ng:cloak class="description-body redactor-styles welcome-screen-text-block w-screen-text" ng:bind:html="_settings_.titles.title_start_with | apply_html"></div>
               <div class="qusu-details text-right">
@@ -132,7 +134,7 @@
            </div>
          </div>
          <!-- Resume & expiration screens  -->
-         <div ng:if="starting_screens == 1 && _application_.app_type == 1" class="swiper-slide">
+         <div ng:style="{'margin-top' : ( _settings_.time_settings.is_with_time == false && _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}" ng:if="starting_screens == 1 && _application_.app_type == 1" class="swiper-slide">
            <!-- Resume & expiration screens (final work) -->
            <div class="container x-widther screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-resume-screen selector">
               <div>
@@ -148,7 +150,7 @@
            </div>
          </div>
          <!-- Question screens  -->
-         <div id="question-{>obj_val._id<}" ng:repeat="(obj_key , obj_val) in _questions_ track by $index" class="swiper-slide">
+         <div ng:style="{'margin-top' : ( _settings_.time_settings.is_with_time == false && _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}" id="question-{>obj_val._id<}" ng:repeat="(obj_key , obj_val) in _questions_ track by $index" class="swiper-slide">
            <div class="container screen-container question_opg_editor_block question-screen-box">
              <!-- Question Container  -->
              <div class="question-container">
@@ -349,7 +351,7 @@
            </div>
          </div>
          <!-- Ending Screens  -->
-         <div ng:if="_settings_.enable_screens == true" class="swiper-slide">
+         <div ng:style="{'margin-top' : ( _settings_.time_settings.is_with_time == false && _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}" ng:if="_settings_.enable_screens == true" class="swiper-slide">
            <div class="selector screen_opg_editor container screen-container about-quiz screen-ending-starting select_box_brd goodbye-screen-block box-goodbye-screen x-widther">
              <div class="selector description-body redactor-styles select_texts goodbye-screen-text-block goodbye-screen-text ng-binding" ng:bind:html="_settings_.titles.title_end_with | apply_html"></div>
              <div  class="selector warning_case select_box_data goodbye-screen-text-warning-block goodbye-screen-warning-text goodbye-screen-text "></div>
@@ -373,7 +375,7 @@
            </div>
          </div>
          <!-- Result Screens  -->
-         <div ng:if="_application_.app_type == 1" class="swiper-slide welcoming-screen-x">
+         <div ng:style="{'margin-top' : ( _settings_.time_settings.is_with_time == false && _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}" ng:if="_application_.app_type == 1" class="swiper-slide welcoming-screen-x">
                    <!-- Result screen contents  -->
                    <div class="container screen-container screen_opg_editor box-result-screen"> <!-- label-question -->
                        <div>
@@ -381,6 +383,7 @@
                             <div ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == true" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
                             <!-- Case failed in quiz  -->
                             <div ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == false" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
+                              <div  ng:show="_settings_.grade_settings.is_graded == false"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div>
 
                               <!-- The Grade  -->
                               <div class="quiz-grade">
@@ -388,7 +391,7 @@
                                   Loading results ..
                                 </div> -->
                                 <div class="quiz-grade grade-score text-center result-screen-score-text">
-                                  <h3 ng:cloak> {> _settings_.label_btns.lbl_score_with <} : {> _user_activity_.report_attendee_details.correct_answers  + "/" + _questions_.length <}</h3>
+                                  <h3 ng:cloak> {> _settings_.label_btns.lbl_score_with <} : {> _user_activity_.report_attendee_details.correct_answers | filter_by_zero  <} / {> _questions_.length <} </h3>
                                 </div>
                                 <div ng:if="_settings_.grade_settings.is_graded" class="quiz-grade grade-score text-center result-screen-grade-text">
                                   <h5 ng:cloak>{> _settings_.label_btns.lbl_grade_with <} : {> _user_activity_.report_attendee_details.score | math_around_it <}%</h5>

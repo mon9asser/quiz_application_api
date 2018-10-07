@@ -29,7 +29,10 @@
                 <li ng:show="_application_.app_type == 1">
                   <input ng:change="change_in_view( 2 )" ng:model="_settings_.grade_settings.is_graded" type="checkbox" id="passing-grade" class="switch_1 input-checkboxes">
                   <label for="passing-grade" style=" margin-left: 10px;" >Passing Grade</label>
-                  <input ng:model="_settings_.grade_settings.value" min="40" max="100" type="number" name="" value="" style="width:80px; float:right;">
+                  <div class="passgrade_block">
+                    <input ng:model="_settings_.grade_settings.value" min="40" max="100" type="number" name="" value="" >
+                    <span style="float:right;">%</span>
+                  </div>
                 </li>
                 <li ng:show="_application_.app_type == 1" class="righ-check-box">
                   <label for="show-qs-resulat" style=" margin-left: 10px;" >Show Result on each question</label>
@@ -81,6 +84,7 @@
                 <li class="righ-check-box dropdown">
                   <label style=" margin-left: 10px;" >Styles</label>
                   <i class="fa fa-caret-down i-icons" data-toggle="dropdown" aria-hidden="true"></i>
+
                   <ul class="dropdown-menu">
                     <li ng:click ="set_model_type(1 , 0)">
                       <a href="#" class="text-center" style="padding: 10px 20px;">

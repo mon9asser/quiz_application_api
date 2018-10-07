@@ -768,7 +768,7 @@ vertical-align: middle;
 }
 .text-answers {
     width: 100%;
-    display: block;
+    display: inline-block;
     padding: 8px 10px;
 }
 .writanswer-input , .writanswer-input:focus , .writanswer-input:active{
@@ -4503,6 +4503,8 @@ transition: all 2s linear, color 2s linear;
   border: none;
   border: 1px dashed #ffffff52;
 
+  background: transparent;
+  border: none;
 }
 .items > ul > li.righ-check-box > input[type='checkbox']{
   float: right;
@@ -5238,9 +5240,7 @@ padding-top: 0px;
   background: #ff63470d;
 }
 .resume-text , .expire-warning-text , .expired_message_block { display: none; }
-.redactor-styles {
-  padding: 0px !important;
-}
+
 .redactor-in-0  , .redactor-in-1 {
   padding: 15px 10px !important;
 }
@@ -5593,4 +5593,130 @@ ul li span.status-progress {
 @keyframes sk-circleFadeDelay {
   0%, 39%, 100% { opacity: 0; }
   40% { opacity: 1; }
+}
+
+.button-switcher {
+  display: inline-flex;
+  width: auto;
+  overflow: hidden;
+  position: relative;
+  height: auto;
+      margin-top: -5px;
+      vertical-align: middle;
+      border:1px dashed #eee;
+      cursor: pointer;
+          background: #fbfbfb;
+              border: 1px dashed #bfe9fc;
+}
+.button-switcher > span {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+
+  padding: 8px;
+  font-family: RobotoRegular;
+}
+
+.button-switcher > .preview-btn::after {
+  background: green ;
+}
+.button-switcher > span.editor-btn { color: #fff; }
+.button-switcher > span.preview-btn { color: #999; }
+.button-switcher > span.selected-mode{
+  width: 91px;
+  background: #00a8ff;
+  position: absolute;
+  height: 100%;
+  transform: translate3d(0, 0,0);
+  webkit-transition: transform .2s linear ;
+  transition: transform .2s linear ;
+  -moz-transition: transform .2s linear  ;
+  box-shadow: 0px 0px 5px 0px #0aa6f9;
+}
+
+.button-switcher > span.editor_mode_type
+{
+    width: 91px;
+    background: #00a8ff;
+    position: absolute;
+    height: 100%;
+    transform: translate3d(0, 0,0);
+}
+
+.button-switcher > span.preview_mode_type
+{
+     width: 103px;
+    background: #00a8ff;
+    position: absolute;
+    height: 100%;
+    transform: translate3d(91px , 0,0);
+}
+
+
+
+.btn-0 > span.editor-btn { color: #fff; }
+.btn-0 > span.preview-btn { color: #999; }
+
+.remove_marked_question{
+    border-color: #eee !important;
+    background: #fff !important;
+}
+.passgrade_block
+{
+  display: inline-flex;
+  padding: 0px;
+  float: right;
+  margin-top: 5px;
+}
+.passgrade_block > span { background: transparent ; border: none ; display: inline-block; padding: 0px; margin: 0px ;color: #fff; }
+.passgrade_block > input , .passgrade_block > input:focus , .passgrade_block > input:hover {  width: 50px;  margin-right: 3px; direction:rtl;   text-align: right;  width: 50px; outline: none; background: transparent ; border: none ; display: inline-block; padding: 0px; margin: 0px ; color: #fff;}
+/* New Redactor style */
+.question-redactor  , .note-editable , .description-redactor  {
+  display: block;
+  width: 100%;
+  position: relative;
+  border:1px dashed #eeeeef;
+  background:#fdfdfd;
+  padding: 10px;
+  color: #999 ;
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: left;
+}
+.redactor-css[contenteditable="true"]:focus , .redactor-css[contenteditable="true"] ,
+.note-editable[contenteditable="true"]:focus , .note-editable[contenteditable="true"]
+{
+  outline-color: transparent !important ;
+}
+
+.note-btn-group > button.btn {
+  border: 1px solid #eee;
+    background: #fff !important;
+    color: #999;
+}
+.open>.dropdown-menu {
+  width: auto !important;
+}
+.note-placeholder {
+  display: block;
+  z-index: 200;
+  margin-top: 22px;
+  margin-left: 10px;
+  color: #ccc;
+}
+.note-editable:empty:not(:focus):before{
+        content:attr(data-text)
+}
+
+.text-answers > .note-editor > .note-editing-area > .note-editable,
+.text-answers > .note-editor > .note-editing-area > .note-editable:focus ,
+.text-answers > .note-editor > .note-editing-area > .note-editable:hover ,
+.text-answers > .note-editor > .note-editing-area > .note-editable:active {
+  padding: 0px;
+      line-height: normal;
+    min-height: 23px;
+      display: inline-block;
+      line-height: 1.5;
+      background: transparent ;
+      border:none;
 }

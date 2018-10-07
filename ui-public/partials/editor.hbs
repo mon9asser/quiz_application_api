@@ -8,7 +8,9 @@
          <div class="clearFix"></div>
          <div style="display:none;" class="x-editor-x-body open-this-tab" id="question-pt">
            <div id="dynamic-layer" class="col-sm-9 top-margins">
-             <textarea ng:model="_questions_[question_index].question_body" placeholder="Add your question here !"  redactor = "{buttons: ['formatting', '|','html' , 'bold', 'italic' , 'underline' , 'deleted' , 'link'  ] , plugins: ['fontcolor']}" id="editor-quest-data" class="form-control quest-title-edit textarea-qs redactor-editor"></textarea>
+             <!--  Question Redactor -->
+             <div  class="question-redactor text-left redactor-css" question_id="{>_questions_[question_index]._id<}" question_data ="{>_questions_[question_index].question_body<}"  element-type="question" ng:custom:editor ></div>
+             <!-- <textarea ng:model="_questions_[question_index].question_body" placeholder="Add your question here !"  redactor = "{buttons: ['formatting', '|','html' , 'bold', 'italic' , 'underline' , 'deleted' , 'link'  ] , plugins: ['fontcolor']}" id="editor-quest-data" class="form-control quest-title-edit textarea-qs redactor-editor"></textarea> -->
            </div>
            <!-- Media  -->
 
@@ -68,7 +70,8 @@
              </div>
               <!-- ng:if="_questions_[question_index].question_description.is_enabled == true" -->
              <div ng:show="_questions_[question_index].question_description.is_enabled" class="row-cols margin-top" style="padding-bottom: 5px;">
-               <textarea style="background:#eee;" ng:model="_questions_[question_index].question_description.value"  id="editor-desc-data" name="name" class="form-control descriptions description-field description-field-x redactor-editor" placeholder="Description ..."  redactor = "{buttons: ['formatting', '|','html' , 'bold', 'italic' , 'underline' , 'deleted' , 'link'  ] , plugins: ['fontcolor']}"></textarea>
+               <!-- <textarea style="background:#eee;" ng:model="_questions_[question_index].question_description.value"  id="editor-desc-data" name="name" class="form-control descriptions description-field description-field-x redactor-editor" placeholder="Description ..."  redactor = "{buttons: ['formatting', '|','html' , 'bold', 'italic' , 'underline' , 'deleted' , 'link'  ] , plugins: ['fontcolor']}"></textarea> -->
+               <div  class="description-redactor text-left redactor-css" question_id="{>_questions_[question_index]._id<}" placeholder="{>_questions_[question_index].question_description.value<}" element-type="description" ng:custom:editor ></div>
              </div>
            </div>
          </div>
@@ -136,10 +139,8 @@
                    </div> -->
 
                    <div ng:class="(answer_value.media_optional != undefined)?'add_dashed_border':''"  ng:if="answer_value.value != undefined" class="text-answers">
-                      <textarea class="answer-redactors" name="name"  ng:model="answer_value.value" placeholder="{> answer_value.value <}" ></textarea>
-                      <!-- <div class="answer-redactors">
-                        {> answer_value.value <}
-                      </div> -->
+                      <!-- <textarea class="answer-redactors" name="name"  ng:model="answer_value.value" placeholder="{> answer_value.value <}" ></textarea> -->
+                      <div answer_id="{>answer_value._id<}" question_id="{>_questions_[question_index]._id<}" placeholder="{>answer_value.value<}" element-type="answer" class="answer-redactors-x" ng:custom:editor ></div>
                    </div>
 
                  </li>

@@ -36,6 +36,14 @@ var application_exception = {
   date_started : 0
 };
 
+apps.filter('filter_by_zero' , [
+  ()=>{
+    return (val) => {
+      if( val == undefined || val == '' ) val = 0 ;
+      return val ;
+    }
+  }
+]);
 apps.filter("detect_zero_issue" , [
   ()=>{
     return (val) => {
