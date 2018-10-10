@@ -87,11 +87,10 @@
             <div class="container screen-container screen_opg_editor box-result-screen"> <!-- label-question -->
                    <div>
                            <!-- Case successed in quiz  -->
-                            <div  ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == true" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
+                           <div  ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == true" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
                            <!-- Case failed in quiz  -->
                            <div  ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == false" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
-                            <div  ng:show="_settings_.grade_settings.is_graded == false"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div>
-
+                           <div  ng:show="_settings_.grade_settings.is_graded == false"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div>
                             <!-- The Grade  -->
                             <div class="quiz-grade">
                                 <!-- <div style="background: #f9f9f9;" class="grade_result_loder text-center">
@@ -309,7 +308,7 @@
                <!--  End Rating Answers-->
                <div ng:if="obj_val.question_type == 4" class="block-of-fre-txts">
                  <!-- Case it 4 => Free texts -->
-                 <textarea ng:if="obj_val.question_type == 4" ng:model="obj_val.answers_format[0].answer_value" ng:change="build_free_text_data(obj_val)" class="free-text-values" placeholder="Write your answer here !"></textarea>
+                 <textarea maxlength="{>obj_val.answer_settings.character_counts<}" ng:if="obj_val.question_type == 4" ng:model="obj_val.answers_format[0].answer_value" ng:change="build_free_text_data(obj_val)" class="free-text-values" placeholder="Write your answer here !"></textarea>
                </div>
              </div>
              <!-- Messages and warnings -->
@@ -375,18 +374,18 @@
            </div>
          </div>
          <!-- Result Screens  -->
-         <div ng:style="{'margin-top' : ( _settings_.time_settings.is_with_time == false && _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}" ng:if="_application_.app_type == 1" class="swiper-slide welcoming-screen-x">
+         <div ng:style="{'margin-top' : ( _settings_.time_settings.is_with_time == false && _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}"  class="swiper-slide welcoming-screen-x">
                    <!-- Result screen contents  -->
                    <div class="container screen-container screen_opg_editor box-result-screen"> <!-- label-question -->
                        <div>
                             <!-- Case successed in quiz  -->
-                            <div ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == true" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
+                            <div ng:if="_application_.app_type == 1" ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == true" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
                             <!-- Case failed in quiz  -->
-                            <div ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == false" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
-                              <div  ng:show="_settings_.grade_settings.is_graded == false"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div>
+                            <div ng:if="_application_.app_type == 1" ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == false" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
+                            <div ng:if="_application_.app_type == 1"  ng:show="_settings_.grade_settings.is_graded == false"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div>
 
                               <!-- The Grade  -->
-                              <div class="quiz-grade">
+                              <div class="quiz-grade" ng:if="_application_.app_type == 1">
                                 <!-- <div style="background: #f9f9f9;" class="grade_result_loder text-center">
                                   Loading results ..
                                 </div> -->
@@ -397,6 +396,11 @@
                                   <h5 ng:cloak>{> _settings_.label_btns.lbl_grade_with <} : {> _user_activity_.report_attendee_details.score | math_around_it <}%</h5>
                                 </div>
                               </div>
+
+                              <div ng:if="_application_.app_type == 0 "  class=" description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text">
+                                <h1 class="completed_msg selector" box-target-class="completed_msg" box-target-type="box-texts"> <i class="fa fa-check"></i>Completed successfully !</h1>
+                              </div>
+
                               <!-- Question buttons  -->
                               <div class="qusu-details text-right">
                                   <button ng:click="review_the_quiz(1)" ng:cloak ng:if="_settings_.review_setting == true" class="button-take-this review-result-box" type="button" name="button">

@@ -2096,12 +2096,13 @@ span.loadin-editor{
 .single-question-container {
   display: inline-block;
   position: absolute;
-  top: -4px;
+  /* top: -4px; */
   right: 0px;
   left: 0px;
   right: 0px;
-  line-height:3.4;
-    padding-left: 45px;
+  line-height: 3;
+  padding-left: 45px;
+  top: 2px;
 }
 .single-question-container:hover {
       background:ghostwhite; /* #f5f5dc40; */
@@ -5719,4 +5720,27 @@ ul li span.status-progress {
       line-height: 1.5;
       background: transparent ;
       border:none;
+}
+.selected-style{
+  background: #eee;
+  border-bottom: 1px solid #ddd;
+}
+
+/* .popover {
+  left: 70px !important;
+} */
+
+.completed_msg {
+  display: inline-block;
+font-size: 20px;
+vertical-align: middle;
+text-align: center;
+width: 100%;
+
+color: #00a8ff;
+
+}
+
+.completed_msg > i { margin-right: 10px;
+font-size: 20px;
 }

@@ -162,7 +162,7 @@
                       <div class="scale-optn" ng:if="_questions_[question_index].answers_format[0].ratscal_type == 0 ">
                         <ul box-target-type="box-containers" box-target-class="scalet-o li span" class=" selector scalet-o ul_scal_{>_questions_[question_index]._id<}" ng:cloak >
                           <li style="width: auto;" data-index='0' ng:repeat="(key_ , val_) in _questions_[question_index].answers_format[0].rating_scale_answers track by $index"> <!-- index , class_name , answer_id , question_id , rs_type -->
-                            <span ng:class="list_classes_of_this_scale(_questions_[question_index]._id , val_._id , val_)" ng:click="select_rating_scale__($index , 1 , _questions_[question_index]._id , _questions_[question_index].answers_format[0]._id , _questions_[question_index].question_type )" box-target-type="box-texts" box-target-class="scalet-o li span" class=" selector spanex scale_value_{>_questions_[question_index].answers_format[0]._id<}" ng:click="select_this_rating_value( $index , 'scale_value_'+_questions_[question_index].answers_format[0]._id  , _questions_[question_index].answers_format[0]._id , _questions_[question_index]._id , _questions_[question_index].answers_format[0].ratscal_type )">
+                            <span ng:class="list_classes_of_this_scale(_questions_[question_index]._id , val_._id , val_)" ng:click="mark_scale_number( $index , 1 , _questions_[question_index]._id , _questions_[question_index].answers_format[0]._id , _questions_[question_index].question_type )" box-target-type="box-texts" box-target-class="scalet-o li span" class=" selector spanex scale_value_{>_questions_[question_index].answers_format[0]._id<}" ng:click="select_this_rating_value( $index , 'scale_value_'+_questions_[question_index].answers_format[0]._id  , _questions_[question_index].answers_format[0]._id , _questions_[question_index]._id , _questions_[question_index].answers_format[0].ratscal_type )">
                                 {> $index + 1 <}
                             </span>
                           </li>
@@ -190,7 +190,7 @@
            <ul box-target-type="box-texts" box-target-class="start-o li span" class=" selector start-o rating_scale_block">
              <!--  Ratings  -->
              <li style="width: auto;" data-index='0' ng:repeat="(ratingscale_keys , ratingscale_vale)  in _questions_[question_index].answers_format[0].rating_scale_answers track by $index">
-               <span style="font-size:35px" ng:click="select_rating_scale__($index , 1 , _questions_[question_index]._id , _questions_[question_index].answers_format[0]._id , _questions_[question_index].question_type )" href="#">
+               <span style="font-size:35px" ng:class="list_classes_of_this_rating(obj_val._id , ratingscale_vale._id , ratingscale_vale  )" ng:click="select_rating_scale__($index , 1 , _questions_[question_index]._id , _questions_[question_index].answers_format[0]._id , _questions_[question_index].question_type )" href="#">
                    <i class="fa fa-star-o"></i>
                </span>
              </li>
@@ -198,8 +198,9 @@
          </div>
           <!--  End Rating Answers-->
          <div ng:if="_questions_[question_index].question_type == 4" class="block-of-fre-txts">
-           <!-- Case it 4 => Free texts -->
-           <textarea class="free-text-values" placeholder="Write your answer here !"></textarea>
+           <!-- Case it 4 => Free texts maxlength -->
+           <textarea maxlength="{>_questions_[question_index].answer_settings.character_counts<}" class="free-text-values" placeholder="Write your answer here !"></textarea>
+           <!-- <textarea ng:disabled="_questions_[question_index].answers_format[0].is_disabled" ng:change="detect_chars(_questions_[question_index].answers_format[0].answer_val , _questions_[question_index].answer_settings.character_counts )" ng:model="_questions_[question_index].answers_format[0].answer_val" class="free-text-values" placeholder="Write your answer here !"></textarea> -->
          </div>
        </div>
        <!--End Answer Container -->
@@ -325,12 +326,12 @@
    =============================>>> Result  Screen
    ---------------------------------------------------------
    -->
-   <div ng:if="screen_type == 2 && _application_.app_type == 1 " box-target-class="box-result-screen" box-target-type="box-containers" data-selected-block ="question-slide" style="margin-bottom:20px;" class="selector x-widther container screen-container screen-ending-starting screen_opg_editor select_box_brd box-result-screen result-screen-block">
+   <div ng:if="screen_type == 2" box-target-class="box-result-screen" box-target-type="box-containers" data-selected-block ="question-slide" style="margin-bottom:20px;" class="selector x-widther container screen-container screen-ending-starting screen_opg_editor select_box_brd box-result-screen result-screen-block">
      <div>
 
-       <div ng:if="_settings_.grade_settings.is_graded == true" box-target-class="result-screen-text" box-target-type="box-texts" ng:show="text_result_screens" class="selector description-body redactor-styles title_success_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
-       <div ng:if="_settings_.grade_settings.is_graded == true" box-target-class="result-screen-text" box-target-type="box-texts" ng:hide="text_result_screens" class="selector description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
-       <div class="quiz-grade">
+       <div ng:if="_settings_.grade_settings.is_graded == true  && _application_.app_type == 1 " box-target-class="result-screen-text" box-target-type="box-texts" ng:show="text_result_screens" class="selector description-body redactor-styles title_success_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
+       <div ng:if="_settings_.grade_settings.is_graded == true  && _application_.app_type == 1 " box-target-class="result-screen-text" box-target-type="box-texts" ng:hide="text_result_screens" class="selector description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
+       <div class="quiz-grade" ng:if=" _application_.app_type == 1">
           <div class="quiz-grade grade-score text-center">
               <h3 box-target-class="result-screen-score-text" box-target-type="box-texts" class="selector select_texts result-screen-score-text-block result-screen-score-text" ng:mouseover="show_hovred_element('select_texts')">{> _settings_.label_btns.lbl_score_with <} :  {>this_attendee_draft.att_draft[0].report_attendee_details.correct_answers | make_it_zero<}/{> _questions_.length <} </h3>
           </div>
@@ -338,7 +339,25 @@
               <h5 box-target-class="result-screen-grade-text" box-target-type="box-texts" class="selector select_texts result-screen-grade-text-block result-screen-grade-text" ng:mouseover="show_hovred_element('select_texts')">{> _settings_.label_btns.lbl_grade_with <} : {> this_attendee_draft.att_draft[0].report_attendee_details.score | math_around_it <}%</h5>
           </div>
        </div>
-       <div class="qusu-details text-right">
+
+       <div ng:if="_application_.app_type == 0 "  class=" description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text">
+         <h1 class="completed_msg selector" box-target-class="completed_msg" box-target-type="box-texts"> <i class="fa fa-check"></i>Completed successfully !</h1>
+       </div>
+
+       <div ng:if="_application_.app_type == 0 " class="qusu-details text-right">
+             <span ng:click="review_this_survey(enable_css_mode)" ng:show="_settings_.review_setting" data-tpco box-target-class="review-result-box" box-target-type="box-buttons" class="selector button-take-this select_button review-result-box-block review-result-box" type="button" name="button">
+               <i class="fa fa-reply-all" aria-hidden="true"></i>
+                 {> _settings_.label_btns.lbl_review_with <}
+             </span>
+             <span ng:click="retake_this_survey(enable_css_mode)" ng:show="_settings_.retake_setting" data-tpco  box-target-class="retake-result-box" box-target-type="box-buttons" class="selector button-take-this retake-this-quiz select_button retake-result-box-block retake-result-box" type="button" name="button">
+               <i class="fa fa-repeat" aria-hidden="true"></i>
+               <span>
+                 {> _settings_.label_btns.lbl_retake_with <}
+               </span>
+             </span>
+        </div>
+
+       <div ng:if="_application_.app_type == 1 " class="qusu-details text-right">
              <span ng:click="review_this_quiz(enable_css_mode)" ng:show="_settings_.review_setting" data-tpco box-target-class="review-result-box" box-target-type="box-buttons" class="selector button-take-this select_button review-result-box-block review-result-box" type="button" name="button">
                <i class="fa fa-reply-all" aria-hidden="true"></i>
                  {> _settings_.label_btns.lbl_review_with <}

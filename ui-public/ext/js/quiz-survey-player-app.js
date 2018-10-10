@@ -196,7 +196,7 @@ apps.controller("player", [
     $scope.is_retake = false ;
     $scope.chars = ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'] ;
     $scope.is_resume = false;
-
+    $rootScope.is_reviewed = false ;
     $scope.question_labels = {
       label_0 : ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'] ,
       //  ['a', 'b', 'c', 'd', 'e',  'f', 'g', 'h', 'i', 'j', 'k', 'm', 'l', 'n', 'o', 'p', 'q',  'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ,       'aa', 'ab', 'ac', 'ad', 'ae',  'af', 'ag', 'ah', 'ai', 'aj', 'ak', 'am', 'al', 'an', 'ao', 'ap', 'aq',  'ar', 'as', 'at', 'au', 'av', 'aw', 'ax', 'ay', 'az'   'ba', 'bb', 'bc', 'bd', 'be',  'bf', 'bg', 'bh', 'bi', 'bb', 'bk', 'bm', 'bl', 'bn', 'bo', 'bp', 'bq',  'br', 'bs', 'bt', 'bu', 'bv', 'bw', 'bx', 'by', 'bz'],
@@ -238,7 +238,7 @@ apps.controller("player", [
         'fa-star':false
       };
 
-      if($scope._user_activity_.questions_data != undefined && $scope._user_activity_.questions_data.length != 0){
+      if( $scope._user_activity_ != null && $scope._user_activity_.questions_data != undefined && $scope._user_activity_.questions_data.length != 0){
          var current_question = $scope._user_activity_.questions_data.find( x => x.question_id == question_id );
          if( current_question != undefined ){
             var answer_rat_scale_id = current_question.answer_ids[0].answer_id_val;
@@ -259,7 +259,7 @@ apps.controller("player", [
     $scope.list_classes_of_this_scale = (question_id , answer_id , rating_object ) => {
 
         var classes = '';
-          if($scope._user_activity_.questions_data != undefined && $scope._user_activity_.questions_data.length != 0){
+          if($scope._user_activity_ != null && $scope._user_activity_.questions_data != undefined && $scope._user_activity_.questions_data.length != 0){
              var current_question = $scope._user_activity_.questions_data.find( x => x.question_id == question_id );
              if( current_question != undefined ){
                 var answer_rat_scale_id = current_question.answer_ids[0].answer_id_val;
@@ -605,6 +605,8 @@ apps.controller("player", [
       $scope.percentage_progress = currentWidth ;
     }
     $scope.review_the_quiz = (currentIndex) => {
+
+      $rootScope.is_reviewed = true ;
       $(".review-result-box").children(".fa").removeClass("fa-reply-all fa-arrow-right");
       $(".review-result-box").children(".fa").addClass("fa-spin fa-refresh");
       $timeout(function(){
@@ -621,12 +623,14 @@ apps.controller("player", [
 
 
          // ==> Show Correct answers
+        if($scope._application_.app_type == 1 )
         $scope._settings_.show_results_per_qs = true;
       } , 1000 );
 
     }
     $scope.retake_the_quiz = (currentIndex) => {
       $scope.is_retake = true ;
+      $rootScope.is_reviewed = false ;
       $(".retake-result-box").children("i.fa").removeClass("fa-arrow-right");
       $(".retake-result-box").children("i.fa").addClass("fa-repeat fa-spin");
 
@@ -803,14 +807,14 @@ apps.controller("player", [
 
     $scope.go_to_next_unsolved_question = () => {
       // ==> Go to next unsolved question
-      if($scope._user_activity_.report_questions == undefined )
+      if($scope._user_activity_ != null && $scope._user_activity_.report_questions == undefined )
       {
         $scope.swipperJs.slideNext();
       }
       else {
-          var solved_questions = $scope._user_activity_.report_questions.question_answers ;
+          var solved_questions = (  $scope._user_activity_ != null ) ? $scope._user_activity_.report_questions.question_answers : [] ;
           var questions = $scope._questions_ ;
-          var solved_questions = $scope._user_activity_.report_questions.question_answers ;
+          var solved_questions = (  $scope._user_activity_ != null ) ? $scope._user_activity_.report_questions.question_answers : [] ; 
           var unsolved_questions = questions.are_all_questions_tracked(solved_questions);
           if( unsolved_questions != undefined && unsolved_questions.length != 0 ){
             var qs_id = unsolved_questions[0]._id ;
@@ -889,6 +893,7 @@ apps.controller("player", [
 
     // ==> Storing Anwers
     $scope.select_answer = ( question , answer , rat_scale_answer_val = null ) => {
+      if($rootScope.is_reviewed == true ) return false ;
        // ==> Givens
        var app_type = $scope._application_.app_type;
        var app_settings = $scope._settings_;

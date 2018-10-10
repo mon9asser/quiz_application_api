@@ -69,7 +69,19 @@ apps.filter("make_it_zero" , () => {
   }
 });
 
+
 // ==> Setting
+apps.directive('ngRetrieveData', [ '$rootScope' , '$timeout' , function ( $rootScope , $timeout ){
+  return {
+    link : function( $scope, element, attrs ){
+      $timeout(function(){
+      // console.log($(element).next().prop("className"));
+    } , 500 );
+    }
+  }
+}]);
+
+
 apps.directive('ngCustomEditor', ['$parse' , '$rootScope' , '$timeout', function($parse , $rootScope , $timeout ){
   return {
           /* elementType - question_id -answer_id   */
@@ -89,32 +101,32 @@ apps.directive('ngCustomEditor', ['$parse' , '$rootScope' , '$timeout', function
                      ]
                    } ,
                    callbacks : {
-                     onInit:  () => {
-                         if( attr.elementType == 'question' )
-                         $(".question-redactor").next('.note-editor').find(".note-editable").html('');
-                         if( attr.elementType == 'description' )
-                         $(".description-redactor").next('.note-editor').find(".note-editable").html('');
-                         if( attr.elementType == 'answer' )
-                         $(".answer-redactors-x").next('.note-editor').find(".note-editable").html('');
-                     } ,
                      onChange : ( content ) => {
                        var this_question = $rootScope._questions_.find(x => x._id == attr.questionId ) ;
+
+
+
 
                         if( attr.elementType == 'question' ){
                           // ==> currQuestion
                             if( this_question != undefined )
                             this_question.question_body = content ;
-
+                            // load redactor data
+                            if( content == '')
+                            $rootScope.load_redactor_data_questions(this_question._id);
                         }
                         if( attr.elementType == 'description' ){
                             if( this_question != undefined )
                               this_question.question_description.value = content ;
+                            // load redactor data
+                            if( content == '')
+                            $rootScope.load_redactor_data_questions(this_question._id);
                          }
                         if( attr.elementType == 'answer' ){
                           if( this_question != undefined ){
                             var this_answer = this_question.answers_format.find(x => x._id == attr.answerId)
                             if(this_answer != undefined )
-                            this_answer.value = content ;
+                              this_answer.value = content ;
                           }
                         }
                         $timeout(function(){ $rootScope.$apply() } , 100 );
@@ -376,6 +388,7 @@ apps.controller("apps-controller" , [
       return true;
   }
   $rootScope.set_model_type = ( model_index , model_type) => {
+
     if(model_type == 0 ){
       $rootScope._settings_.progression_bar.progression_bar_layout = model_index;
       $rootScope.progressbar_models = "/time-progress-temps/progressbar-"+model_index+".hbs";
@@ -398,6 +411,7 @@ apps.controller("apps-controller" , [
   $rootScope.changed_day_numbers = (number) => {
     time_epiration.expiration_day_counts = number ;
    };
+
   $rootScope.redactor_object = new Object();
   $rootScope._user_activity_ = null ;
   $rootScope.is_view = 0 ;
@@ -1011,6 +1025,10 @@ apps.controller("apps-controller" , [
     if( question_type == 4 ){
       var answer_object = new Object()
       answer_object['_id'] = $rootScope.answer_ids[ 'id_' + question_object.answers_format.length ];;
+      if( question_object.answer_settings == undefined )
+      question_object['answer_settings'] = new Object();
+      if( question_object.answer_settings.character_counts == undefined)
+      question_object.answer_settings['character_counts'] = 200 ;
       question_object.answers_format.push( answer_object );
     }
 
@@ -1055,8 +1073,19 @@ apps.controller("apps-controller" , [
     }
     return classes ;
   }
+  $rootScope.detect_chars = (answer_val , char_counts) => {
+
+    // $rootScope._questions_[$rootScope.question_index].answers_format[0].is_disabled = true ;
+
+    if($rootScope._questions_[$rootScope.question_index].answers_format[0].answer_val.length > char_counts )
+     $rootScope._questions_[$rootScope.question_index].answers_format[0].is_disabled = true ;
+
+     console.log(char_counts);
+  }
   // => Mark Selected Question
   $rootScope.highlighted_question = (questionId) => {
+      $rootScope.is_reviewed = false ;
+
 
       $rootScope.screen_type = 3;
         // => detect current question is exists or not
@@ -1064,10 +1093,7 @@ apps.controller("apps-controller" , [
         if( questionIndex == -1 ) return false ;
 
 
-        $("#docQuestions , ul.all-mobile-question-lists").children("li").each(function(){
-           if( $(this).hasClass('marked_question') )
-           $(this).removeClass('marked_question');
-        });
+        $('.marked_question').removeClass('marked_question');
 
         $timeout(function(){
           $("#docQuestions , ul.all-mobile-question-lists").children('li.qs-'+questionId.toString()).addClass('marked_question');
@@ -1077,13 +1103,16 @@ apps.controller("apps-controller" , [
         $("#question_id").val(questionId)
 
         // ==> Fill and binding event handler with textarea box
+        $rootScope.init_bootstrap_tooltip();
+        // ==> Question redactors
+        $rootScope.load_redactor_data_questions(questionId);
+        // ==> answer redactors
+      $timeout(function(){
+        if( $rootScope._questions_[questionIndex].question_type == 0 )
+        $rootScope.load_redactor_data_answers(questionId , $rootScope._questions_[questionIndex].answers_format );
+      })
 
-        $timeout(function(){
-          // $rootScope.load_question_redactor($rootScope._questions_[$rootScope.question_index].question_body);
-          // $rootScope.load_description_redactor( $rootScope._questions_[$rootScope.question_index].question_description.value ) ;
-          $rootScope.fill_boxes_with_question_objects(questionId);
-          $rootScope.init_bootstrap_tooltip();
-        } , 100 );
+
         $('.right_part').fadeIn();
         // ==> Detect if Unsaved data is happened
         // $rootScope.detect_if_there_unsaved_data (// $rootScope.is_unsaved_data )
@@ -1179,6 +1208,10 @@ apps.controller("apps-controller" , [
       $("#save_css_change").html("Apply Changes");
     });
   }
+
+  $rootScope.load_dtr = () => {
+    console.log("Loaded !!!!! ------------------------------------------ ");
+  }
   $rootScope.saving_quiz_settings = () => {
 
 
@@ -1266,7 +1299,7 @@ apps.controller("apps-controller" , [
               $timeout(function(){
                 $rootScope.highlighted_question($rootScope._questions_[0]._id);
 
-                 $rootScope.fill_boxes_with_question_objects($rootScope._questions_[$rootScope.question_index]._id);
+                //  $rootScope.fill_boxes_with_question_objects($rootScope._questions_[$rootScope.question_index]._id);
                 if($rootScope._questions_[$rootScope.question_index].question_type != 2 )
                  {
                    if($rootScope._questions_[0].question_type == 1 || $rootScope._questions_[0].question_type == 0)
@@ -1339,12 +1372,20 @@ apps.controller("apps-controller" , [
 
   }
   // ===> Delete This Answer
-  $rootScope.delete_this_answer = (answerId) => {
-    var question = $rootScope._questions_[$rootScope.question_index];
-    if(question._id == undefined) return false ;
-    var answer_index = question.answers_format.findIndex(x => x._id == answerId);
-    if(answer_index == -1) return false ;
-    question.answers_format.splice (answer_index , 1);
+  $rootScope.delete_this_answer = (questionId , answerId) => {
+
+
+    var this_question = $rootScope._questions_.find(x => x._id == questionId ) ;
+    if(this_question != undefined ){
+      var this_answer = this_question.answers_format.find(x => x._id == answerId )
+      if(this_answer != undefined ){
+        var index = this_question.answers_format.findIndex(x => x._id == answerId )
+        if(index != -1 )
+          this_question.answers_format.splice( index , 1 );
+      }
+    }
+
+
   }
   // destory cropper
 
@@ -1662,6 +1703,10 @@ apps.controller("apps-controller" , [
 
     question.answers_format.push(answer_object_data);
     $timeout(function(){
+      if ( question.question_type == 0 )
+      $rootScope.load_redactor_data_answers(question_id , question.answers_format );
+    })
+    $timeout(function(){
       $rootScope.sorting_answers_in_list();
       $rootScope.init_bootstrap_tooltip();
       $timeout(function(){ $rootScope.storing_questions_into_database(); } , 500 );
@@ -1737,6 +1782,7 @@ sort: false  */
        group: {
            name: "question-list",
            pull: "clone",
+           put: false,
            revertClone: false,
        },
        onMove : function (evt){
@@ -1752,16 +1798,14 @@ sort: false  */
 
           var eldata = ParentEl.find(dragged).html();
 
-          if( ParentID == "docQuestions" ) {
-              ParentEl.find(dragged).html("");
-             // set animation
-             // ParentEl.find(dragged).addClass("animated wobble");
-             ParentEl.find(dragged).css({
-               minHeight : '40px' ,
-               background : "ghostwhite"
-             });
-             ParentEl.find(dragged).remove();
-           }
+          ParentEl.find(dragged).html("");
+           // set animation
+           // ParentEl.find(dragged).addClass("animated wobble");
+           ParentEl.find(dragged).css({
+             minHeight : '40px' ,
+             background : "ghostwhite"
+           });
+           ParentEl.find(dragged).remove();
 
         } ,
        onEnd  : function (evt) {
@@ -1852,6 +1896,7 @@ $rootScope.select_rating_scale__ = function ( index , type , question_id = null 
         }
      }
      if( type == 0 ) { // ==> Scale .scalet-o li span
+       alert();
         if($('.scalet-o').children("li").eq(index).children("span").hasClass("highlighted_scale")){
           $('.scalet-o').children("li").eq(index).children("span").removeClass("highlighted_scale");
         }else {
@@ -1864,6 +1909,18 @@ $rootScope.select_rating_scale__ = function ( index , type , question_id = null 
 
 
  };
+ $rootScope.mark_scale_number =  function ( index , type , question_id = null  , answer_id = null , question_type = null ){
+
+
+      var question = $scope._questions_.find(x => x._id == question_id)
+      var answer = question.answers_format.find(x => x._id == answer_id );
+      var rat_answer_val = (index + 1 );
+
+      $rootScope.select_answer(question , answer  , null , rat_answer_val );
+      $timeout( function(){
+        $scope.$apply();
+      },300 )
+  };
  $rootScope.select_this_rating_value = (index , class_name , answer_id , question_id , rs_type  ) => {
 
 
@@ -2195,8 +2252,36 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
 
    return classes ;
   };
-  $rootScope.select_answer = ( question , answer , css_mode) => {
+
+  $rootScope.list_classes_of_this_rating = (question_id , answer_id , rating_object ) => {
+    // var classes = {
+    //   'fa-star-o' : true,
+    //   'fa-star':false
+    // };
+    //
+    //
+    // if($scope._user_activity_ != null && $scope._user_activity_.questions_data != undefined && $scope._user_activity_.questions_data.length != 0){
+    //    var current_question = $scope._user_activity_.questions_data.find( x => x.question_id == question_id );
+    //
+    //    if( current_question != undefined ){
+    //       var answer_rat_scale_id = current_question.answer_ids[0].answer_id_val;
+    //       var answer_scale_value = current_question.answer_ids[0].answer_object.rating_scale_answers.find(x => x._id == answer_rat_scale_id ).rat_scl_value ;
+    //
+    //        if (rating_object.rat_scl_value <= answer_scale_value) {
+    //
+    //          classes = {
+    //            'fa-star-o' : false ,
+    //            'fa-star': true
+    //          };
+    //        }
+    //    }
+    // }
+    //
+    // return classes ;
+  }
+  $rootScope.select_answer = ( question , answer , css_mode , rat_scale_answer_val = null ) => {
     if ( css_mode == true ) return false;
+    if( $rootScope.is_reviewed == true ) return false ;
 
        var app_type = $rootScope._application_.app_type;
        var app_settings = $rootScope._settings_;
@@ -2504,13 +2589,15 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
 
                // ==> Build Question Data
                // console.log(answer_ratScale);
-               var usr = $rootScope._user_activity_[attendee_index];
+
+               var usr = $rootScope._user_activity_ ;
                var question_data_index = usr.questions_data.findIndex(x => x.question_id == question_id);
                var answer_ratScale = $rootScope._questions_[questionIndex].answers_format[0].rating_scale_answers.find(x => x.rat_scl_value == rat_scale_answer_val) ;
                var ratsclaeoptions = $rootScope._questions_[questionIndex].answers_format[0] ;
                ratsclaeoptions['answer_value'] = answer_ratScale.rat_scl_value ;
                var rating_scale_answer = {answer_id : ratsclaeoptions._id , answer_id_val :  answer_ratScale._id ,  answer_object :   ratsclaeoptions , answer_index : 0}
-               var question_exists = usr.questions_data.findIndex(x => x._id == question_id );
+               var question_exists = usr.questions_data.findIndex(x => x.question_id == question_id );
+
                if(question_exists == -1){
                  usr.questions_data.push({
                    question_id: question_id,
@@ -2540,9 +2627,25 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
                  $rootScope.show_unsolved_question_message();
             }
 
+            console.log($rootScope._user_activity_);
        }, 100 );
 
   };
+
+
+  $rootScope.list_classes_of_this_scale = (question_id , answer_id , rating_object ) => {
+    var classes = '';
+      if($scope._user_activity_ != null && $scope._user_activity_.questions_data != undefined && $scope._user_activity_.questions_data.length != 0){
+         var current_question = $scope._user_activity_.questions_data.find( x => x.question_id == question_id );
+         if( current_question != undefined ){
+            var answer_rat_scale_id = current_question.answer_ids[0].answer_id_val;
+            var answer_scale_value = current_question.answer_ids[0].answer_object.rating_scale_answers.find(x => x._id == answer_rat_scale_id ).rat_scl_value ;
+            if (rating_object.rat_scl_value == answer_scale_value) classes  = "selected-scale-number"
+         }
+      }
+
+      return classes ;
+  }
   $rootScope.show_unsolved_question_message = () => {
     // if( $rootScope._user_activity_.report_questions == undefined ){
     //   // $rootScope.join_this_quiz();
@@ -3374,6 +3477,21 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
       $timeout(function(){$rootScope.$apply()} , 300);
       $(".preview-page, .swiper-wrapper").css({  height : 'auto'});
   }
+  $rootScope.review_this_survey = ( css_mode ) => {
+    if ( css_mode == true ) return false;
+    $rootScope.is_reviewed = true ;
+    $(".review-result-box").children(".fa").removeClass("fa-reply-all");
+    $(".review-result-box").children(".fa").addClass("fa-refresh fa-spin");
+
+    $timeout(function(){
+      $rootScope.screen_type = 3 ;
+      $rootScope.question_index = 0 ;
+      $rootScope.is_submitted = false ;
+      $rootScope.highlighted_question($rootScope._questions_[0]._id);
+      $(".review-result-box").children(".fa").addClass("fa-reply-all");
+      $(".review-result-box").children(".fa").removeClass("fa-refresh fa-spin");
+    } , 1000 );
+  }
   $rootScope.review_this_quiz = (css_mode) => {
     if ( css_mode == true ) return false;
     $rootScope.is_reviewed = true ;
@@ -3388,6 +3506,29 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
       $rootScope.highlighted_question($rootScope._questions_[0]._id);
       $(".review-result-box").children(".fa").addClass("fa-reply-all");
       $(".review-result-box").children(".fa").removeClass("fa-refresh fa-spin");
+    } , 1000 );
+  };
+  $rootScope.retake_this_survey = (css_mode) => {
+      if ( css_mode == true ) return false;
+      $rootScope.is_reviewed = false ;
+    $(".retake-result-box").children(".fa").addClass("fa-spin");
+    // ==> Randmoize Questions
+    $rootScope.randomize_sorting_questions(true);
+    $rootScope._settings_.show_results_per_qs = false ;
+    // ==> Randomize answers
+    $rootScope._questions_.filter((object) => {
+      return object.answers_format = $rootScope.randomize_arries(object.answers_format);
+    });
+
+    $timeout(function(){
+
+      $rootScope.this_attendee_draft = undefined ;
+      $rootScope.screen_type = 3 ;
+      $rootScope.question_index = 0 ;
+      $rootScope.is_submitted = false ;
+      $rootScope.highlighted_question($rootScope._questions_[0]._id);
+      $rootScope._user_activity_ = null ;
+      $(".retake-result-box").children(".fa").removeClass("fa-spin");
     } , 1000 );
   };
   $rootScope.retake_this_quiz = (css_mode) => {
@@ -4661,8 +4802,53 @@ $rootScope.load_description_redactor = ( description_text ) => {
       }
  }
 
+$rootScope.load_redactor_data_answers = ( question_id  , answer_lists  ) => {
+   var answers = answer_lists ;
+   var answer_zooming = (answer) => {
+     var answer_element = $('.answer_id_'+ answer._id) ;
+     var answer_editor = answer_element.next('.note-editor').find(".note-editable") ;
+     answer_editor.html('')
 
- $rootScope.someFunction = function ()  {
-   alert();
- }
+     var splited_answer = answer.value.split(" ");
+     console.log(splited_answer);
+       if(answer.value == '' || (answer.value.toLowerCase().includes('answer') == true && splited_answer.length == 2 && !isNaN(splited_answer[1])) )
+       answer_editor.attr("data-text" , answer.value )
+       else
+       answer_editor.html( answer.value );
+   };
+   answers.map(answer_zooming)
+}
+ $rootScope.load_redactor_data_questions = ( question_id = null ) => {
+   if(question_id == null )
+   question_id = $rootScope._questions_[$rootScope.question_index];
+
+   var question_editor = $(".question-redactor") ;
+   var description_editor = $(".description-redactor");
+   var question_data = $rootScope._questions_.find( x => x._id == question_id );
+   if( question_data != undefined ){
+
+     var question_field = question_editor.next('.note-editor').find('.note-editable');
+     var description_field = description_editor.next('.note-editor').find('.note-editable');
+
+     // ==> Question text
+     if(question_data.question_body == '')
+      {
+        question_field.html('');
+        question_field.attr('data-text' , 'Add your question here !');
+      }
+      else
+      question_field.html(question_data.question_body);
+
+      // ==> question description
+      if(question_data.question_description.value == '')
+      {
+        description_field.html('');
+        description_field.attr('data-text' , 'Write your question description here  !');
+      }
+        else
+        description_field.html(question_data.question_description.value);
+
+   }
+ };
+
 }]);

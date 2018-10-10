@@ -323,6 +323,7 @@ apps.controller("player", [
           } , 1000);
             var app = results.data;
             // console.log(app);
+
             $scope._application_ = app;
             $scope._questions_ = $scope._application_.questions;
             $scope._settings_ = $scope._application_.settings;
@@ -383,6 +384,7 @@ apps.controller("player", [
                     allowSlidePrev : false ,
                     noSwiping : false
                   });
+
                 } , 1000 )
               }
             }
@@ -400,6 +402,8 @@ apps.controller("player", [
             // ==> Hide loading div
 
             // ==> Loading swipperJs
+
+
             $timeout(function(){
               try {
                   // $scope.swipperJs.allowTouchMove = $scope._settings_.allow_touch_move;
@@ -469,14 +473,26 @@ apps.controller("player", [
                           $scope.join_this_quiz();
                       }
                   });
+
+
               } catch (e){}
             } , 1000 ) ;
 
 
 
             $timeout(function(){
+
               if( $scope._settings_.enable_screens == false && $scope.isEmpty($scope._user_activity_) )
-                  $scope.start_the_quiz_();
+                {
+                    $scope.start_the_quiz_();
+
+                }
+
+
+
+
+
+
             } , 1000 );
         }).catch((error) => {
           // // // console.log(error);
@@ -639,6 +655,7 @@ apps.controller("player", [
 
 
          // ==> Show Correct answers
+        if($scope._application_.app_type == 1 )
         $scope._settings_.show_results_per_qs = true;
       } , 1000 );
 
@@ -658,6 +675,8 @@ apps.controller("player", [
 
 
         $scope.truncate_attendee_data(currentIndex);
+        
+        $scope.swipperJs.slideTo(0);
       } , 1000 );
     }
 
@@ -667,6 +686,7 @@ apps.controller("player", [
       $scope.finished_is_clicked = false ;
       $scope._user_activity_ = new Object();
       $scope._online_report_ = undefined ;
+
       $scope.loading_application_data();
     };
     $scope.timer_proccess = () => {
@@ -724,7 +744,6 @@ apps.controller("player", [
        if( $scope._user_activity_ != null && $scope._user_activity_.impr_application_object != undefined )
         $scope._user_activity_.impr_application_object.att__draft = $scope.user_id ;
 
-       console.log("Online Report ....");
     };
     $scope.go_to_next_question = () => {
       // $scope.start_the_quiz();
@@ -794,6 +813,8 @@ apps.controller("player", [
       // ==> Start timer
       if( $scope._settings_.time_settings.is_with_time == true )
       $scope.timer_proccess();
+      // ==> Slide to
+
     }
     $scope.start_the_quiz = () => {
       $scope.is_resume = true ;
@@ -856,6 +877,8 @@ apps.controller("player", [
 
     // ==> Storing Anwers
     $scope.select_answer = ( question , answer , rat_scale_answer_val = null ) => {
+      if( $scope.disable_funcs == true )
+        return false ;
        // ==> Givens
        var app_type = $scope._application_.app_type;
        var app_settings = $scope._settings_;

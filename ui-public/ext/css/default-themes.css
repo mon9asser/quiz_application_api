@@ -706,7 +706,7 @@ sub.timer-type {
   color: #00a8ff;
 }
 .scalet-o li span.selected-scale-number {
-  background: rgb(193, 124, 126);
+  background: #00a8ff;
     color: rgb(255, 255, 255);
 }
 
@@ -714,4 +714,19 @@ ul.scalet-o > div li:last-child > span {
   border-right-width:  1px ; /*solid#00a8ff*/
   border-right-style: solid ; /*solid#00a8ff*/
   border-radius: 0px 10px 10px 0px;
+ }
+
+ .completed_msg {
+   display: inline-block;
+ font-size: 20px;
+ vertical-align: middle;
+ text-align: center;
+ width: 100%;
+
+ color: #00a8ff;
+
+ }
+
+ .completed_msg > i { margin-right: 10px;
+ font-size: 20px;
  }
