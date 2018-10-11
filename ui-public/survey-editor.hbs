@@ -154,11 +154,11 @@
                          </div>
                        </div>
                      </li>
-                     <div ng:if="_questions_.length == 0" class="qs-status">
+                     <li ng:hide="_questions_.length != 0 || on_drag_status == true" class="qs-status">
                          <h2>
                           Drag drop questions here !
                          </h2>
-                     </div>
+                     </li>
                   <ul>
                 </div>
              </div>

@@ -118,6 +118,7 @@
              <!-- +++++ Start Left Columns -->
              <div id="left-part-question-lists" class="left_part col-md-5 col-sm-6 col-xs-12">
                 <div class="question-data qsdragged-list qs-dropped background_drag_drop" style="margin-top:0px !important;">
+                   
                   <ul id="docQuestions" class="dropped-qs dropped-qs-2">
                     <!--   ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " -->
                      <li ng:class="question_list_classes()" class="question-li-x qs-{>qs_value._id<}" ng:click="highlighted_question(qs_value._id)" id="questoin_tag_{>qs_value._id<}" data-index="{>$index<}" data-question-id="{>qs_value._id<}" ng:repeat="(qs_key , qs_value) in _questions_ track by $index" ng:cloak>
@@ -137,11 +138,11 @@
                          </div>
                        </div>
                      </li>
-                     <div ng:if="_questions_.length == 0" class="qs-status">
+                     <li ng:hide="(_questions_.length != 0 || on_drag_status == true) ? true : false" class="qs-status">
                          <h2>
                           Drag drop questions here !
                          </h2>
-                     </div>
+                     </li>
                   <ul>
                 </div>
              </div>

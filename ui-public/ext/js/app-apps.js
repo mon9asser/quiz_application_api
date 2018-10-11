@@ -92,8 +92,7 @@ apps.directive('ngCustomEditor', ['$parse' , '$rootScope' , '$timeout', function
 
                   $rootScope.redactor_object = {
                    airMode: true ,
-                   code : "" ,
-                   popover : {
+                   popover : { 
                      air : [
                        ['color', ['color']],
                        ['fontsize', ['fontsize']],
@@ -451,6 +450,7 @@ apps.controller("apps-controller" , [
   $rootScope.is_add_new_unsaved = false;
   // $rootScope.is_unsaved_data = false ;
   $rootScope.media_for = 'questions' ;
+  $rootScope.on_drag_status = false ;
   $rootScope.enable_css_mode = false;
   $rootScope._application_ = null ;
   $rootScope._questions_ = [] ;
@@ -1785,43 +1785,59 @@ sort: false  */
            put: false,
            revertClone: false,
        },
+       onStart : function (){
+         $rootScope.on_drag_status = true ;
+       } ,
        onMove : function (evt){
-
+          $rootScope.on_drag_status = true ;
+          $timeout(function(){ $rootScope.$apply(); } , 300 )
           var dragged = evt.dragged;
           var draggedRect = evt.draggedRect;
           var related = evt.related;
-
 
           var relatedRect = evt.relatedRect;
           var ParentID = $(dragged).parent().prop("id");
           var ParentEl = $(dragged).parent();
 
-          var eldata = ParentEl.find(dragged).html();
+          // var eldata = ParentEl.find(dragged).html();
 
-          ParentEl.find(dragged).html("");
+          // ParentEl.find(dragged).html("");
            // set animation
            // ParentEl.find(dragged).addClass("animated wobble");
            ParentEl.find(dragged).css({
              minHeight : '40px' ,
-             background : "ghostwhite"
+             background : "ghostwhite" ,
+             lineHeight : '3.2',
+             paddingLeft:'14px'
            });
-           ParentEl.find(dragged).remove();
+           // ParentEl.find(dragged).remove();
 
-        } ,
+        }
+        ,
        onEnd  : function (evt) {
-           var Item = evt.item;
-           evt.oldIndex;
-  		     evt.newIndex;
-           var question_type = Item.getAttribute('data-question-type') ;
-           // ==> Remove current gost
-           var isScaleRating = null ;
-           if( question_type == 3 ){
-              isScaleRating = Item.getAttribute('data-is-scale');
+
+          var dragged = evt.to.getAttribute("id");
+
+          if( dragged == "docQuestions" )
+            {
+                var Item = evt.item;
+                evt.oldIndex;
+       		      evt.newIndex;
+                var question_type = Item.getAttribute('data-question-type') ;
+                // ==> Remove current gost
+                var isScaleRating = null ;
+                if( question_type == 3 ){
+                  isScaleRating = Item.getAttribute('data-is-scale');
+                }
+                $rootScope.add_new_question ( question_type , evt.newIndex ,  isScaleRating ) ;
+                $timeout(function(){
+                  $("#docQuestions").find("li.question_bult_in").remove();
+                } , 10);
             }
-            $rootScope.add_new_question ( question_type , evt.newIndex ,  isScaleRating ) ;
-           $timeout(function(){
-             $("#docQuestions").find("li.question_bult_in").remove();
-           } , 10);
+
+
+            $rootScope.on_drag_status = false ;
+            $timeout(function(){ $rootScope.$apply(); } , 300 )
        }
     })
 
@@ -1831,8 +1847,11 @@ sort: false  */
         disabled: false ,
         animation: 250 ,
         handle: '.drag-handler',
-        onStart : function (evt) { } ,
+        onStart : function (evt) {
+
+        } ,
         onEnd  : function (evt) {
+
           var block = evt
           var new_index = block.newIndex ;
           var old_index = block.oldIndex ;
