@@ -675,7 +675,7 @@ apps.controller("player", [
 
 
         $scope.truncate_attendee_data(currentIndex);
-        
+
         $scope.swipperJs.slideTo(0);
       } , 1000 );
     }
@@ -1749,7 +1749,7 @@ apps.controller("player", [
       var solved_questions = $scope._user_activity_;
       // console.log(solved_questions);
       if( solved_questions == null ) return  { current_score : 0 , main_score : all_questions.length } ;
-      var solved = ( solved_questions.report_questions == undefined ) ? [] : solved_questions.report_questions.question_answers ;
+      var solved = ( solved_questions.questions_data == undefined ) ? [] : solved_questions.questions_data ;
 
       if(type == 1 ){
         var calcs = Math.round(solved.length * 100 / all_questions.length );

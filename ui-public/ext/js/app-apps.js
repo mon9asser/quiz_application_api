@@ -92,7 +92,7 @@ apps.directive('ngCustomEditor', ['$parse' , '$rootScope' , '$timeout', function
 
                   $rootScope.redactor_object = {
                    airMode: true ,
-                   popover : { 
+                   popover : {
                      air : [
                        ['color', ['color']],
                        ['fontsize', ['fontsize']],
@@ -100,7 +100,9 @@ apps.directive('ngCustomEditor', ['$parse' , '$rootScope' , '$timeout', function
                      ]
                    } ,
                    callbacks : {
+
                      onChange : ( content ) => {
+                       $rootScope.is_unsaved_data = true ;
                        var this_question = $rootScope._questions_.find(x => x._id == attr.questionId ) ;
 
 
@@ -358,6 +360,9 @@ apps.controller("apps-controller" , [
     message : undefined
   };
   $rootScope.is_unsaved_data = false ;
+  $rootScope.is_unsaved_data_func = () => {
+    $rootScope.is_unsaved_data = true ;
+  }
   $rootScope.media_current_upload = false ;
   $rootScope.is_submitted = false ;
   $rootScope.is_reviewed  = false ;
@@ -475,6 +480,12 @@ apps.controller("apps-controller" , [
   $rootScope.current_answer_id = null ;
   $rootScope.current_media_video = new Object();
   $rootScope.screen_type = 3 ;
+  $rootScope._application_draft_ =  {} ;
+  $rootScope._settings_draft_    =  {} ;
+  $rootScope.question_ids_draft  =  [];
+  $rootScope.answer_ids_draft    =  [] ;
+  // console.log($rootScope.retrieve_data_url);
+  $rootScope._questions_draft_   =  [];
   $rootScope.media_data = undefined // => to display media in uploader box
   $rootScope.go_to_screen_number = (screen_number) => {
     $rootScope.screen_type = screen_number ;
@@ -581,6 +592,62 @@ apps.controller("apps-controller" , [
       } , 400)
     } , 600);
   });
+
+
+
+  // ==> Calculate the momory size of
+$rootScope.memory_size_of_object  = ( obj ) => {
+      var bytes = 0;
+       function sizeOf(obj) {
+         if(obj !== null && obj !== undefined) {
+                   switch(typeof obj) {
+                   case 'number':
+                       bytes += 8;
+                       break;
+                   case 'string':
+                       bytes += obj.length * 2;
+                       break;
+                   case 'boolean':
+                       bytes += 4;
+                       break;
+                   case 'object':
+                       var objClass = Object.prototype.toString.call(obj).slice(8, -1);
+                       if(objClass === 'Object' || objClass === 'Array') {
+                           for(var key in obj) {
+                               if(!obj.hasOwnProperty(key)) continue;
+                               sizeOf(obj[key]);
+                           }
+                       } else bytes += obj.toString().length * 2;
+                       break;
+                   }
+               }
+               return bytes;
+           };
+
+           function formatByteSize(bytes) {
+               if(bytes < 1024) return bytes + " bytes";
+               else if(bytes < 1048576) return(bytes / 1024).toFixed(3) + " KiB";
+               else if(bytes < 1073741824) return(bytes / 1048576).toFixed(3) + " MiB";
+               else return(bytes / 1073741824).toFixed(3) + " GiB";
+           };
+
+           return formatByteSize(sizeOf(obj));
+    }
+
+/*HERE +++++*/
+$rootScope.loading_application_data = () => {
+  $http({ method : "GET" , url : $rootScope.retrieve_data_url }).then(( resp )=>{
+    $rootScope._application_draft_ =  resp.data ;
+    $rootScope._settings_draft_    =  resp.data.settings;
+    $rootScope.question_ids_draft  =  resp.data.question_ids;
+    $rootScope.answer_ids_draft    =  resp.data.answer_ids;
+    // console.log($rootScope.retrieve_data_url);
+    $rootScope._questions_draft_   =  resp.data.questions;
+    // $rootScope.randomize_sorting_questions($rootScope._settings_.randomize_settings);
+  });
+}
+
+  $rootScope.loading_application_data();
   $rootScope.storing_redactor_values = ( property , value ) => {
       $rootScope._settings_.expiration[property] = value ;
   }
@@ -1084,9 +1151,24 @@ apps.controller("apps-controller" , [
   }
   // => Mark Selected Question
   $rootScope.highlighted_question = (questionId) => {
+
+    if($rootScope.is_unsaved_data == true ){
+      if( confirm("Would you like to discard the changes ? ")){
+        $rootScope.loading_application_data();
+        // ==> Restore old data
+        $rootScope._questions_[$rootScope.question_index] = $rootScope._questions_draft_[$rootScope.question_index] ;
+        var db_qs_data = $rootScope._questions_draft_[$rootScope.question_index] ;
+        var current_qs = $rootScope._questions_[$rootScope.question_index] ;
+
+        $timeout(function(){
+          $rootScope.$apply();
+        } , 300 )
+        $rootScope.is_unsaved_data = false ;
+      }else
+      return false ;
+    }
+
       $rootScope.is_reviewed = false ;
-
-
       $rootScope.screen_type = 3;
         // => detect current question is exists or not
         var questionIndex = $rootScope._questions_.findIndex( x=> x._id == questionId );
@@ -1118,6 +1200,7 @@ apps.controller("apps-controller" , [
         // $rootScope.detect_if_there_unsaved_data (// $rootScope.is_unsaved_data )
       }
     $rootScope.saving_this_question = () => {
+      $rootScope.is_unsaved_data = false ;
       $("#saving-changes").html("Saving ...")
       $timeout(function(){
         $("#saving-changes").html("Save Changes");
@@ -1336,6 +1419,7 @@ apps.controller("apps-controller" , [
     return classes ;
   }
   $rootScope.change_answer_of_single_choices = (is_single_choice) => {
+    $rootScope.is_unsaved_data = true;
     if(is_single_choice == true){
       var answers = $rootScope._questions_[$rootScope.question_index].answers_format;
       var only_one = answers[answers.length - 1];
@@ -1720,6 +1804,7 @@ apps.controller("apps-controller" , [
       method : "POST" ,
       data : { data : $rootScope._questions_ }
      }).then((response)=>{
+       $rootScope.loading_application_data();
        // console.log(response);
        //  console.log("Updated +++++++++++++++");
     });
@@ -1872,7 +1957,7 @@ sort: false  */
   };
 $rootScope.step_number_of_rating_scale = (step_number) => {
   $rootScope._questions_[$rootScope.question_index].answers_format[0].rating_scale_answers = new Array();
-
+  $rootScope.is_unsaved_data = true ;
   for (var i = 0; i < step_number ; i++) {
     $rootScope._questions_[$rootScope.question_index].answers_format[0].rating_scale_answers.push({
       _id : $rootScope._questions_[$rootScope.question_index].answers_format[0]._id + '_' +  (i + 1 )   ,
@@ -4754,6 +4839,7 @@ $rootScope.load_description_redactor = ( description_text ) => {
       } ,
       callbacks : {
         onChange : ( content ) => {
+          $rootScope.is_unsaved_data = true ;
           // ==> STORING IT TEXT
           $rootScope._questions_[$rootScope.question_index].question_description.value = content ;
           // ==> Placeholder
@@ -4793,6 +4879,7 @@ $rootScope.load_description_redactor = ( description_text ) => {
        } ,
        callbacks : {
          onChange : ( content ) => {
+           $rootScope.is_unsaved_data = true ;
            // ==> STORING IT TEXT
            $rootScope._questions_[$rootScope.question_index].question_body = content ;
            // ==> Placeholder

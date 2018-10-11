@@ -413,7 +413,7 @@ apps.controller("player", [
                       var current_slider = $(".swiper-wrapper").find(".swiper-slide-active");
                       var element_id = current_slider.prop("id") ;
 
-                      if(element_id != ''){
+                      if(element_id != '' && element_id != undefined){
                         if(element_id.split("-") != undefined && element_id.split("-").pop() != undefined ){
                           var questionId = element_id.split("-").pop();
                           var thisQuestion  = $scope._questions_.find(x => x._id == questionId);
@@ -628,6 +628,36 @@ apps.controller("player", [
       } , 1000 );
 
     }
+    $scope.retake_the_survey = (index) => {
+
+      $scope.is_retake = true ;
+      $rootScope.is_reviewed = false ;
+      $(".retake-result-box").children("i.fa").removeClass("fa-arrow-right");
+      $(".retake-result-box").children("i.fa").addClass("fa-repeat fa-spin");
+      $timeout(function(){
+        var url = $scope.server_ip + 'api/'+ $scope.application_id  +'/truncate/attendee/data/object';
+        $http({
+          url : url ,
+          method : "POST" ,
+          data : { user_id : $scope.user_id }
+        }).then((res) => {
+          $(".retake-result-box").children("i.fa").removeClass("fa-spin");
+          $scope._application_.att__draft = null ;
+          $scope._application_.app_report = null;
+          $scope._user_activity_ = null ;
+          $scope._online_report_ = undefined ;
+          $scope.loading_application_data();
+          $timeout(function(){
+             $scope.randomize_sorting_questions(true);
+             $scope.finished_is_clicked = false ;
+             if($scope._user_activity_ == null )
+             $scope._user_activity_ = new Object();
+             $scope._user_activity_['user_completed_status'] = false;
+             $scope.$apply();
+          } , 1000);
+        });
+      } , 1000 );
+    };
     $scope.retake_the_quiz = (currentIndex) => {
       $scope.is_retake = true ;
       $rootScope.is_reviewed = false ;
@@ -814,7 +844,7 @@ apps.controller("player", [
       else {
           var solved_questions = (  $scope._user_activity_ != null ) ? $scope._user_activity_.report_questions.question_answers : [] ;
           var questions = $scope._questions_ ;
-          var solved_questions = (  $scope._user_activity_ != null ) ? $scope._user_activity_.report_questions.question_answers : [] ; 
+          var solved_questions = (  $scope._user_activity_ != null ) ? $scope._user_activity_.report_questions.question_answers : [] ;
           var unsolved_questions = questions.are_all_questions_tracked(solved_questions);
           if( unsolved_questions != undefined && unsolved_questions.length != 0 ){
             var qs_id = unsolved_questions[0]._id ;
@@ -1247,7 +1277,7 @@ apps.controller("player", [
 
 
     $scope.build_free_text_data = (question) => {
-      var question_ = $scope._user_activity_.questions_data.find(x => x.question_id == question._id );
+      var question_ = ( $scope._user_activity_.questions_data != undefined ) ?  $scope._user_activity_.questions_data.find(x => x.question_id == question._id ) : $scope._user_activity_['questions_data'] = [] ;
       var answer_id =   question.answers_format[0]._id;
       var answer_val =  question.answers_format[0].answer_value;
 
@@ -1642,6 +1672,65 @@ apps.controller("player", [
       $scope._online_report_collection();
 
     };
+    $scope.submit_the_survey_into_reports = () => {
+      $scope.finished_is_clicked = true ;
+      var solved_questions = ( $scope._user_activity_ != null && $scope._user_activity_.report_questions != undefined )  ? $scope._user_activity_.report_questions.question_answers : [] ;
+      var questions = $scope._questions_ ;
+      $scope.unsolved_questions = questions.are_all_questions_tracked(solved_questions);
+      if($scope.unsolved_questions != undefined   ){
+        if( $scope.unsolved_questions.length != 0 )
+          return false;
+      }
+      if( $scope._settings_.enable_screens == false ){
+        if( $scope.isEmpty( $scope._online_report_ ) == true ){
+          $scope._online_report_ = new Object();
+          $scope._online_report_['att_draft'] = new Array();
+          $scope._online_report_['application_id'] =  $scope.application_id ;
+          $scope._online_report_['questionnaire_info'] = $scope.application_id;
+        }
+
+        if ($scope._online_report_.att_draft == undefined)
+          $scope._online_report_.att_draft = new Array();
+
+        var _user_activity_ = $scope._online_report_.att_draft.findIndex ( x => x.user_id == $scope.user_id) ;
+
+        if( _user_activity_ == -1 ){
+            $scope._online_report_.att_draft.push({
+              'questions_data' : new Array() ,
+              'is_loaded':true ,
+              'start_expiration_time' : new Date() ,
+              'user_id' : $scope.user_id ,
+              'user_info':$scope.user_id ,
+              'is_completed':false ,
+              'user_completed_status' : false ,
+              'impr_application_object': $scope._application_
+            });
+        }
+
+        $scope._user_activity_ = $scope._online_report_.att_draft.find(x => x.user_id == $scope.user_id);
+      }
+
+      $(".submit-button-goodbye-screen").children(".x-isc-up").removeClass("fa-arrow-right");
+      $(".submit-button-goodbye-screen").children(".x-isc-up").addClass("fa-refresh fa-spin");
+
+      $(".submit-in-qsa").children(".x-isc-up").removeClass("fa-arrow-right");
+      $(".submit-in-qsa").children(".x-isc-up").addClass("fa-refresh fa-spin");
+
+      $timeout(function(){
+         $scope._offline_report_collection();
+         $timeout(function(){
+          $(".submit-button-goodbye-screen").children(".fa").removeClass("fa-refresh fa-spin");
+          $(".submit-button-goodbye-screen").children(".fa").addClass("fa-arrow-right");
+          $(".submit-in-qsa").children(".fa").removeClass("fa-refresh fa-spin");
+          $(".submit-in-qsa").children(".fa").addClass("fa-arrow-right");
+          $scope.swipperJs.slideTo(0);
+          // if($scope._settings_.enable_screens == false )
+          // { $scope.swipperJs.slideNext(); }
+          // else
+          // $scope.swipperJs.slideTo($scope._questions_.length + 2);
+        } , 1000 )
+      } , 200 );
+    };
     $scope.submit_the_quiz_into_reports = () => {
 
 
@@ -1757,7 +1846,7 @@ apps.controller("player", [
       var all_questions = $scope._questions_;
       var solved_questions = $scope._user_activity_;
       if( solved_questions == null ) return  { current_score : 0 , main_score : all_questions.length } ;
-      var solved = ( solved_questions.report_questions == undefined ) ? [] : solved_questions.report_questions.question_answers ;
+      var solved = ( solved_questions.questions_data == undefined ) ? [] : solved_questions.questions_data ;
 
       if(type == 1 ){
         var calcs = Math.round(solved.length * 100 / all_questions.length );

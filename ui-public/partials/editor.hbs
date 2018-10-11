@@ -66,7 +66,7 @@
            <div class="col-xs-12 col-md-12">
              <div class="enable-description-values">
                <label style="font-size:15px;" id="enable-desc-data">Enable Description</label>
-               <input style="float: right; margin-bottom: 10px; margin-top: 0px; margin-left: 15px;" ng:model="_questions_[question_index].question_description.is_enabled" type="checkbox" for="enable-desc-data" class="switch_1 input-checkboxes ">
+               <input style="float: right; margin-bottom: 10px; margin-top: 0px; margin-left: 15px;" ng:model="_questions_[question_index].question_description.is_enabled"  ng:change="is_unsaved_data_func()" type="checkbox" for="enable-desc-data" class="switch_1 input-checkboxes ">
              </div>
               <!-- ng:if="_questions_[question_index].question_description.is_enabled == true" -->
              <div ng:show="_questions_[question_index].question_description.is_enabled" class="row-cols margin-top" style="padding-bottom: 5px;">
@@ -161,7 +161,7 @@
                      <span class="fa fa-check"></span>
                    </li>
                  </ul>
-                 <input type="text" name="" value="" ng:model="answer_value.boolean_value">
+                 <input type="text" name="" value="" ng:change="is_unsaved_data_func()" ng:model="answer_value.boolean_value">
                </li>
              </ul>
            </div>
@@ -200,7 +200,7 @@
 
                     <li class="required_qs">
                       <div class="checkbox-toggle answer-settins">
-                         <input ng:model="_questions_[question_index].answer_settings.is_required" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                         <input ng:change="is_unsaved_data_func()" ng:model="_questions_[question_index].answer_settings.is_required" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
                          <span class="title-checkbox" data-toggle="tooltip" data-placement="right" title="This question need to be answered by the attendee before continuing to the next question">
                            Required
                              <i class="help-links">?</i>
@@ -227,7 +227,7 @@
                    </li>
                    <li class="super_sizer_qs" ng:if="_questions_[question_index].question_type <= 1">
                      <div class="checkbox-toggle answer-settins">
-                         <input ng:model="_questions_[question_index].answer_settings.super_size" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                         <input ng:change="is_unsaved_data_func()" ng:model="_questions_[question_index].answer_settings.super_size" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
                          <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Show Image/Video in larger size">
                            Super Size
                            <i class="help-links">?</i>
@@ -246,14 +246,14 @@
                    <li class="show_lbls_qs" ng:if="_questions_[question_index].question_type == 3 && _questions_[question_index].answers_format[0].ratscal_type == 0 ">
                       <div class="scale-options">
                         <div class="checkbox-toggle answer-settins">
-                          <input ng:model="_questions_[question_index].answers_format[0].show_labels" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                          <input ng:change="is_unsaved_data_func()" ng:model="_questions_[question_index].answers_format[0].show_labels" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
                           <span class="title-checkbox">Show labels</span>
                         </div>
                       </div>
                       <div class="scale-options item-labels" ng:if="_questions_[question_index].answers_format[0].show_labels == true">
-                         <input ng:model="_questions_[question_index].answers_format[0].started_at" class="lab" type="text" placeholder="Left">
-                         <input ng:model="_questions_[question_index].answers_format[0].centered_at" class="lab" type="text" placeholder="Center">
-                         <input ng:model="_questions_[question_index].answers_format[0].ended_at" class="lab" type="text" placeholder="Right">
+                         <input ng:change="is_unsaved_data_func()" ng:model="_questions_[question_index].answers_format[0].started_at" class="lab" type="text" placeholder="Left">
+                         <input ng:change="is_unsaved_data_func()" ng:model="_questions_[question_index].answers_format[0].centered_at" class="lab" type="text" placeholder="Center">
+                         <input ng:change="is_unsaved_data_func()" ng:model="_questions_[question_index].answers_format[0].ended_at" class="lab" type="text" placeholder="Right">
                       </div>
                     </li>
                    <li class="steps_qs" ng:if="_questions_[question_index].question_type == 3 ">
@@ -266,12 +266,12 @@
                          </div> <!-- Slide Range -->
                     </li>
                     <li  ng:if="_questions_[question_index].question_type == 4 ">
-                      <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Some Texts here Q">
+                      <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Max characters for free text question">
                         Max characters ( {> _questions_[question_index].answer_settings.character_counts <} )
                        <i class="help-links">?</i>
                      </span>
                       <div class="rating_scale_options">
-                          <input ng:model="_questions_[question_index].answer_settings.character_counts" id="char_max_slider" min="100" max="2000" type="range" name="">
+                          <input ng:change="is_unsaved_data_func()" ng:model="_questions_[question_index].answer_settings.character_counts" id="char_max_slider" min="100" max="2000" type="range" name="">
                       </div> <!-- Slide Range -->
                      </li>
 

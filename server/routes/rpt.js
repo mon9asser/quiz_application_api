@@ -3545,10 +3545,12 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
 
         var qs_id = QS.question_id ;
         // var attendee_answer_value = QS.answer_ids[0].answer_object.answer_value ;
-        var attendee_answer_value = QS.answer_ids[0].answer_object.answer_value ;
+        // var attendee_answer_value = QS.answer_ids[0].answer_object.answer_value ;
+       var attendee_answer_value = QS.answer_ids[0].answer_object.rating_scale_answers.find(x => x._id == QS.answer_ids[0].answer_id_val ).rat_scl_value
         var attendee_idx = QS.attendee_id ;
 
-        var question_acc = question_access.find(x => x.question_id == qs_id);
+
+        var question_acc = question_access.find( x => x.question_id == qs_id);
 
         if( question_acc == undefined ){
 
@@ -3563,6 +3565,7 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
                    ]
            });
 
+           // console.log(question_acc);
         }else {
 
           var att_id = question_acc.attendees.indexOf( attendee_idx );
@@ -3618,13 +3621,17 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
        var get_question_data = question_access.find(x => x.question_id == question_id );
 
        if(get_question_data != undefined ){
+
         var leng_attendees = get_question_data.answers.find(x => x.answer_id == rat_scale_val ) ;
+
+        // console.log(get_question_data.answers);
          var count_it_right_now = ( xAnswer ) => {
            return xAnswer.attendees.length;
          };
          var count_all_answers = get_question_data.answers.map(count_it_right_now)
          var count_all_values = count_all_answers.reduce((x , y ) => x + y) ;
          var percentage_vvl = 100 / count_all_values ;
+
          if(leng_attendees == undefined )
          rat_counts = 0 ;
          else
@@ -3635,6 +3642,8 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
        if(rat_counts.toString().length >= 5 )
        rat_counts = rat_counts.toString().substring(0 , 5 )
        rat_counts = parseFloat(rat_counts);
+
+       // console.log("Value :- "+ rat_counts);
        return rat_counts ;
     }
 
