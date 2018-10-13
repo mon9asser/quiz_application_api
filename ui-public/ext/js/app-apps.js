@@ -102,7 +102,7 @@ apps.directive('ngCustomMessageEditors', ['$parse' , '$rootScope' , '$timeout', 
             onInit : function(){
 
               $timeout(function(){
-                console.log($rootScope._settings_);
+
                 if( attr.messageName == "expiry-warning"){
                   var expire_warning = $rootScope._settings_.expiration.expire_warning ;
                   $("div[message-name='expiry-warning']").next('.note-editor').find('.note-editable').html("");
@@ -1304,7 +1304,11 @@ $rootScope.loading_application_data = () => {
   }
   // => Mark Selected Question
   $rootScope.highlighted_question = (questionId) => {
-
+    // ==> Expand erea 
+    $timeout(function(){
+      expand_collapsed_items('#question-pt');
+      expand_collapsed_items('#answers-pt')
+    } , 300 )
     if($rootScope.is_unsaved_data == true ){
       if( confirm("Would you like to discard the changes ? ")){
         $rootScope.loading_application_data();
