@@ -116,6 +116,9 @@ apps.filter("apply_html_with_date_filtering" , ['$sce'  , ( $sce  ) => {
     var date_american = calculated_date.getMonth() + "/" +splited_date[2] + "/" +calculated_date.getFullYear() ;
 
 
+    var dd_mm_yyyy = splited_date[2] + "/" + calculated_date.getMonth() + "/" + calculated_date.getFullYear() ;
+    var mm_dd_yyyy = calculated_date.getMonth() + "/" + splited_date[2] + "/" +  calculated_date.getFullYear() ;
+
 
     var filter_date_format = (formative_date) => {
       switch (formative_date) {
@@ -134,6 +137,14 @@ apps.filter("apply_html_with_date_filtering" , ['$sce'  , ( $sce  ) => {
         case "{{ day_counts }}" :
             return days_cn.toFixed(1) ;
         break;
+
+        case "{{ date | dd/mm/yyyy }}" :
+        return dd_mm_yyyy ;
+        break;
+        case "{{ date | mm/dd/yyyy }}" :
+        return mm_dd_yyyy ;
+        break;
+
         case "{{ time_ago }}" :
             var hrs = time_ago_hrs ;
             if( time_ago_hrs.length > 2 )
@@ -154,7 +165,9 @@ apps.filter("apply_html_with_date_filtering" , ['$sce'  , ( $sce  ) => {
       "{{ date | american }}" ,
       "{{ hour_counts }}" ,
       "{{ day_counts }}" ,
-      "{{ time_ago }}"
+      "{{ time_ago }}",
+      "{{ date | mm/dd/yyyy }}" ,
+      "{{ date | dd/mm/yyyy }}"
     ];
 
     for (var i = 0; i < formative_array.length; i++) {

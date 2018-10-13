@@ -149,27 +149,52 @@ apps.directive('ngCustomMessageEditors', ['$parse' , '$rootScope' , '$timeout', 
               } , 200 );
             } ,
             onChange : function (content){
+              // ==> Switch into preview
+              $(".preview-btn").trigger("click");
               if( attr.messageName == "expiry-warning")
-                $rootScope._settings_.expiration.expire_warning = content ;
+                {
+                  $rootScope._settings_.expiration.expire_warning = content ;
+                  $rootScope.screen_type = 4 ;
+                }
 
               if( attr.messageName == "expiry-message" )
-                $rootScope._settings_.expiration.expire_message = content ;
+                {
+                  $rootScope._settings_.expiration.expire_message = content ;
+                  $rootScope.screen_type = 5 ;
+                }
 
               if( attr.messageName == "welcome-screen" )
-                $rootScope._settings_.titles.title_start_with = content ;
+                {
+                  $rootScope._settings_.titles.title_start_with = content ;
+                  $rootScope.screen_type = 0 ;
+                }
 
               if( attr.messageName == "ending-screen" )
-                $rootScope._settings_.titles.title_end_with = content ;
+                {
+                  $rootScope._settings_.titles.title_end_with = content ;
+                  $rootScope.screen_type = 1 ;
+                }
 
-                if( attr.messageName == "pass-quiz-screen" )
+              if( attr.messageName == "pass-quiz-screen" )
+                {
                   $rootScope._settings_.titles.title_success_with = content ;
+                  $rootScope.screen_type = 2 ;
+                }
 
 
-                  if( attr.messageName == "failed-quiz-screen" )
-                    $rootScope._settings_.titles.title_failed_with = content ;
+              if( attr.messageName == "failed-quiz-screen" )
+                 {
+                   $rootScope._settings_.titles.title_failed_with = content ;
+                   $rootScope.screen_type = 2 ;
+                 }
 
-                    if( attr.messageName == "resume-screen" )
-                      $rootScope._settings_.titles.title_resume = content ;
+              if( attr.messageName == "resume-screen" )
+                 {
+                   $rootScope._settings_.titles.title_resume = content ;
+                   $rootScope.screen_type = 4 ;
+                 }
+
+              $timeout(function(){ $rootScope.$apply(); } , 300 )
             }
           }
         });
@@ -288,6 +313,9 @@ apps.filter("apply_html_with_date_filtering" , ['$sce'  , ( $sce  ) => {
    var date_american = calculated_date.getMonth() + "/" +splited_date[2] + "/" +calculated_date.getFullYear() ;
    var hr_sys = ( day_counts * 24 )
 
+   var dd_mm_yyyy = splited_date[2] + "/" + calculated_date.getMonth() + "/" + calculated_date.getFullYear() ;
+   var mm_dd_yyyy = calculated_date.getMonth() + "/" + splited_date[2] + "/" +  calculated_date.getFullYear() ;
+
    var filter_date_format = (formative_date) => {
 
      switch (formative_date) {
@@ -300,6 +328,14 @@ apps.filter("apply_html_with_date_filtering" , ['$sce'  , ( $sce  ) => {
        break;
        case "{{ date | american }}" :
          return date_american ;
+         break;
+
+       case "{{ date | dd/mm/yyyy }}" :
+       return dd_mm_yyyy ;
+       break;
+       case "{{ date | mm/dd/yyyy }}" :
+       return mm_dd_yyyy ;
+
        break;
        case "{{ hour_counts }}" :
          return hr_sys ;
@@ -323,8 +359,9 @@ apps.filter("apply_html_with_date_filtering" , ['$sce'  , ( $sce  ) => {
       "{{ date | american }}" ,
       "{{ hour_counts }}" ,
       "{{ time_ago }}" ,
-      "{{ day_counts }}"
-
+      "{{ day_counts }}" ,
+      "{{ date | dd/mm/yyyy }}" ,
+      "{{ date | mm/dd/yyyy }}" ,
     ];
 
     for (var i = 0; i < formative_array.length; i++) {
