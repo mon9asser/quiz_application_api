@@ -102,7 +102,7 @@ apps.directive('ngCustomMessageEditors', ['$parse' , '$rootScope' , '$timeout', 
             onInit : function(){
 
               $timeout(function(){
-
+                 
                 if( attr.messageName == "expiry-warning"){
                   var expire_warning = $rootScope._settings_.expiration.expire_warning ;
                   $("div[message-name='expiry-warning']").next('.note-editor').find('.note-editable').html("");
@@ -1351,7 +1351,6 @@ $rootScope.loading_application_data = () => {
         $('.right_part').fadeIn();
         // ==> Detect if Unsaved data is happened
         // $rootScope.detect_if_there_unsaved_data (// $rootScope.is_unsaved_data )
-         
       }
     $rootScope.saving_this_question = () => {
       $rootScope.is_unsaved_data = false ;
