@@ -1351,9 +1351,7 @@ $rootScope.loading_application_data = () => {
         $('.right_part').fadeIn();
         // ==> Detect if Unsaved data is happened
         // $rootScope.detect_if_there_unsaved_data (// $rootScope.is_unsaved_data )
-        $timeout(function(){
-          $(".question-opener , .answer-sc-block").on("click");
-        } , 500 );
+         
       }
     $rootScope.saving_this_question = () => {
       $rootScope.is_unsaved_data = false ;
