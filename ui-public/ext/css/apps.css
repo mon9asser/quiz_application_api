@@ -5673,7 +5673,7 @@ ul li span.status-progress {
 .passgrade_block > span { background: transparent ; border: none ; display: inline-block; padding: 0px; margin: 0px ;color: #fff; }
 .passgrade_block > input , .passgrade_block > input:focus , .passgrade_block > input:hover {  width: 50px;  margin-right: 3px; direction:rtl;   text-align: right;  width: 50px; outline: none; background: transparent ; border: none ; display: inline-block; padding: 0px; margin: 0px ; color: #fff;}
 /* New Redactor style */
-.question-redactor  , .note-editable , .description-redactor  {
+.question-redactor  , .note-editable , .description-redactor , .msg-redactors  {
   display: block;
   width: 100%;
   position: relative;

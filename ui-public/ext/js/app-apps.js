@@ -81,7 +81,27 @@ apps.directive('ngRetrieveData', [ '$rootScope' , '$timeout' , function ( $rootS
   }
 }]);
 
+apps.directive('ngCustomMessageEditors', ['$parse' , '$rootScope' , '$timeout', function($parse , $rootScope , $timeout ){
+  return {
+    restrict: 'A',
+    compile: function( $element, attr) {
+      return function( scope , element, attr , index ) {
+        console.log(attr);
+        var custom_redactor = {
+            
+           callbacks : {
+             onChange : ( content ) => {
+             }
+           }
+        };
 
+        element.summernote( custom_redactor );
+
+
+      }
+    }
+  }
+}]);
 apps.directive('ngCustomEditor', ['$parse' , '$rootScope' , '$timeout', function($parse , $rootScope , $timeout ){
   return {
           /* elementType - question_id -answer_id   */

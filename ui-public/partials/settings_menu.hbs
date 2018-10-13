@@ -81,7 +81,7 @@
                   <label for="enable-progress-bar" style=" margin-left: 10px;" >Enable Progress bar</label>
                   <input ng:model="_settings_.progression_bar.is_available" type="checkbox" id="enable-progress-bar" class="switch_1 input-checkboxes">
                 </li>
-                <li class="righ-check-box dropdown">
+                <li class="righ-check-box dropdown" ng:show="_settings_.progression_bar.is_available">
                   <label style=" margin-left: 10px;" >Styles</label>
                   <i class="fa fa-caret-down i-icons" data-toggle="dropdown" aria-hidden="true"></i>
 
@@ -120,7 +120,7 @@
             </a>
             <div class="items">
               <ul>
-                <li>
+                <li ng:show="_settings_.time_settings.is_with_time">
                   <div class="time-frames">
                     <input style="color:#b3b3b3;" ng:hide="(_settings_.time_settings.timer_type == false)" ng:disabled="( _settings_.time_settings.timer_type == false || _settings_.time_settings.is_with_time == false)" ng:model="_settings_.time_settings.hours" ng:change="time_hrs_is_changed(_settings_.time_settings.hours)" type="number" min="00" max="9" name="" value="00">
                     <span  style="color:#b3b3b3;" ng:hide="(_settings_.time_settings.timer_type == false)">:</span>
@@ -133,11 +133,11 @@
                   <label for="enable-timer" style=" margin-left: 10px;" >Enable Timer</label>
                   <input ng:change="timer_is_enabled(_settings_.time_settings.is_with_time)" ng:model="_settings_.time_settings.is_with_time" type="checkbox" id="enable-timer" class="switch_1 input-checkboxes">
                 </li>
-                <li class="righ-check-box">
+                <li class="righ-check-box" ng:show="_settings_.time_settings.is_with_time">
                   <label for="time-types" style=" margin-left: 10px;" >Enable Hours</label>
                   <input ng:model="_settings_.time_settings.timer_type" type="checkbox" id="time-types" class="switch_1 input-checkboxes">
                 </li>
-                <li class="righ-check-box dropdown">
+                <li class="righ-check-box dropdown" ng:show="_settings_.time_settings.is_with_time">
                  <label style=" margin-left: 10px;" >Styles</label>
                  <i class="fa fa-caret-down i-icons" data-toggle="dropdown" aria-hidden="true"></i>
                  <ul class="dropdown-menu popover">
@@ -183,31 +183,32 @@
           </li>
           <li  ng:hide="_application_.app_type == 0"  class="nav-parent">
             <a href="#">
-              Expiration Options
+              Expiry Options
               <span class="nav-next"></span>
             </a>
             <div class="items">
               <ul>
                 <li class="righ-check-box">
                   <label for="allow-expiration-date" style=" margin-left: 10px;" >
-                    Enable Expiration System
+                    Enable Expiry System
                   </label>
                   <input ng:model="_settings_.expiration.is_set" type="checkbox" id="allow-expiration-date" class="switch_1 input-checkboxes">
                 </li>
-                <li  class="righ-check-box">
+                <li  class="righ-check-box" ng:show="_settings_.expiration.is_set">
                   <label style="margin-left: 10px;" >
                     Number Of Days
                   </label>
                   <input ng:disabled="!_settings_.expiration.is_set" ng:change="changed_day_numbers(_settings_.expiration.through_time)" max="50" min="1" ng:model="_settings_.expiration.through_time" type="number" name="" value="" style="width:80px; float:right;">
                 </li>
-                <li  class="righ-check-box marked_instructions">
+                <li  class="righ-check-box marked_instructions"  ng:show="_settings_.expiration.is_set">
                   <label style="margin-left: 10px;">
-                    Expire Warning
+                    Expiry Warning
                   </label>
-                  <textarea ng:disabled="!_settings_.expiration.is_set" ng:change="change_in_view( 4 )"  style="min-height: 100px; resize: vertical;" ng:model="_settings_.expiration.expire_warning" class="text-area-style set_redactor" name="name"></textarea>
+                  <div class="msg-redactors" ng:custom:message:editors></div>
+                  <!-- <textarea ng:disabled="!_settings_.expiration.is_set" ng:change="change_in_view( 4 )"  style="min-height: 100px; resize: vertical;" ng:model="_settings_.expiration.expire_warning" class="text-area-style set_redactor" name="name"></textarea> -->
                 </li>
-                <li class="righ-check-box marked_instructions">
-                  <label style=" margin-left: 10px;">Expire Message</label>
+                <li class="righ-check-box marked_instructions"  ng:show="_settings_.expiration.is_set">
+                  <label style=" margin-left: 10px;">Expiry Message</label>
                   <textarea ng:disabled="!_settings_.expiration.is_set" ng:change="change_in_view( 5 )" style="min-height: 100px; resize: vertical;" ng:model="_settings_.expiration.expire_message" class="text-area-style set_redactor" name="name"></textarea>
                 </li>
               </ul>

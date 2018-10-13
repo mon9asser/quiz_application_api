@@ -82,13 +82,22 @@
                                 <!-- <div style="background: #f9f9f9;" class="grade_result_loder text-center">
                                 Loading results ..
                                 </div> -->
-                                <div class="quiz-grade grade-score text-center result-screen-score-text">
+                                <div ng:if="_settings_.grade_settings.is_graded == true  && _application_.app_type == 1" class="quiz-grade grade-score text-center result-screen-score-text">
                                   <h3 ng:cloak> {> _settings_.label_btns.lbl_score_with <} :{> _user_activity_.report_attendee_details.correct_answers | detect_zero_issue  <} / {> _questions_.length <} </h3>
                                 </div>
                                <div ng:if="_settings_.grade_settings.is_graded == true" class="quiz-grade grade-score text-center result-screen-grade-text">
                                   <h5 ng:cloak>{> _settings_.label_btns.lbl_grade_with <} : {> _user_activity_.report_attendee_details.score | math_around_it <}%</h5>
                               </div>
                             </div>
+
+
+                            <div class="quiz-grade text-center" ng:if="_settings_.grade_settings.is_graded == false  && _application_.app_type == 1">
+                              <h5 box-target-class="thank-text" box-target-type="box-texts" class="selector select_texts thank-text">
+                                Thank you !
+                             </h5>
+                            </div>
+
+
                             <!-- Question buttons  -->
                             <div class="qusu-details text-right">
                                 <button ng:click="review_the_quiz(0)" ng:cloak ng:if="_settings_.review_setting == true" class="button-take-this review-result-box" type="button" name="button">
@@ -319,16 +328,23 @@
 
                               <!-- The Grade  -->
                               <div class="quiz-grade">
-                                <!-- <div style="background: #f9f9f9;" class="grade_result_loder text-center">
-                                  Loading results ..
-                                </div> -->
-                                <div class="quiz-grade grade-score text-center result-screen-score-text">
-                                  <h3 ng:cloak> {> _settings_.label_btns.lbl_score_with <} : {> _user_activity_.report_attendee_details.correct_answers | detect_zero_issue  <} / {> _questions_.length <}</h3>
+                                    <!-- <div style="background: #f9f9f9;" class="grade_result_loder text-center">
+                                    Loading results ..
+                                    </div> -->
+                                    <div ng:if="_settings_.grade_settings.is_graded == true  && _application_.app_type == 1" class="quiz-grade grade-score text-center result-screen-score-text">
+                                      <h3 ng:cloak> {> _settings_.label_btns.lbl_score_with <} :{> _user_activity_.report_attendee_details.correct_answers | detect_zero_issue  <} / {> _questions_.length <} </h3>
+                                    </div>
+                                   <div ng:if="_settings_.grade_settings.is_graded == true" class="quiz-grade grade-score text-center result-screen-grade-text">
+                                      <h5 ng:cloak>{> _settings_.label_btns.lbl_grade_with <} : {> _user_activity_.report_attendee_details.score | math_around_it <}%</h5>
+                                  </div>
                                 </div>
-                                <div ng:if="_settings_.grade_settings.is_graded == true" class="quiz-grade grade-score text-center result-screen-grade-text">
-                                  <h5 ng:cloak>{> _settings_.label_btns.lbl_grade_with <} : {> _user_activity_.report_attendee_details.score | math_around_it <}%</h5>
+
+
+                                <div class="quiz-grade text-center" ng:if="_settings_.grade_settings.is_graded == false  && _application_.app_type == 1">
+                                  <h5 box-target-class="thank-text" box-target-type="box-texts" class="selector select_texts thank-text">
+                                    Thank you !
+                                 </h5>
                                 </div>
-                              </div>
                               <!-- Question buttons  -->
                               <div class="qusu-details text-right">
                                   <button ng:click="review_the_quiz(1)" ng:cloak ng:if="_settings_.review_setting == true" class="button-take-this review-result-box" type="button" name="button">

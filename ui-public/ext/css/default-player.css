@@ -1491,3 +1491,10 @@ button {
  }
  .block-labels > .first-lbl{ float: left; }
  .block-labels > .third-lbl{ float: right; }
+
+.thank-text {
+  font-size: 20px;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    color: #777;
+}
