@@ -5707,7 +5707,7 @@ ul li span.status-progress {
   color: #ccc;
 }
 .note-editable:empty:not(:focus):before{
-        content:attr(data-text)
+  content:attr(data-text)
 }
 
 .text-answers > .note-editor > .note-editing-area > .note-editable,
@@ -5730,7 +5730,9 @@ ul li span.status-progress {
 /* .popover {
   left: 70px !important;
 } */
-
+.popover{
+  z-index: 10000;
+}
 .completed_msg {
   display: inline-block;
 font-size: 20px;
@@ -5744,4 +5746,24 @@ color: #00a8ff;
 
 .completed_msg > i { margin-right: 10px;
 font-size: 20px;
+}
+
+.righ-check-box > .note-editor > .note-editing-area > .note-editable {
+  display: inline-block;
+  width: 100%;
+  position: relative;
+  background: transparent;
+  /* padding: 10px; */
+  color: #eee;
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: left;
+  border: 0px;
+}
+.righ-check-box > .note-editor > .note-editing-area > .note-editable > p
+{
+  width: 100%;
+    display: inline-block;
+    padding: 0px;
+    margin: 0px;
 }

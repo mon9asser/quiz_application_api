@@ -86,16 +86,93 @@ apps.directive('ngCustomMessageEditors', ['$parse' , '$rootScope' , '$timeout', 
     restrict: 'A',
     compile: function( $element, attr) {
       return function( scope , element, attr , index ) {
-        console.log(attr);
-        var custom_redactor = {
-            
-           callbacks : {
-             onChange : ( content ) => {
-             }
-           }
-        };
+        // var message-name="expiry-warning"
 
-        element.summernote( custom_redactor );
+
+        element.summernote({
+          airMode : true ,
+          popover : {
+            air : [
+              ['color', ['color']],
+              ['fontsize', ['fontsize']],
+              ['font', ['bold', 'underline', 'italic'  , 'strikethrough', 'clear' ]]
+            ]
+          } ,
+          callbacks : {
+            onInit : function(){
+
+              $timeout(function(){
+                console.log($rootScope._settings_);
+                if( attr.messageName == "expiry-warning"){
+                  var expire_warning = $rootScope._settings_.expiration.expire_warning ;
+                  $("div[message-name='expiry-warning']").next('.note-editor').find('.note-editable').html("");
+                  $("div[message-name='expiry-warning']").next('.note-editor').find('.note-editable').html(expire_warning);
+                }
+                if( attr.messageName == "expiry-message" ){
+                  var expiry_msg = $rootScope._settings_.expiration.expire_message ;
+                  $("div[message-name='expiry-message']").next('.note-editor').find('.note-editable').html("");
+                  $("div[message-name='expiry-message']").next('.note-editor').find('.note-editable').html(expiry_msg);
+                }
+                if( attr.messageName == "welcome-screen"){
+                  var welcome_screen_text = $rootScope._settings_.titles.title_start_with ;
+                  $("div[message-name='welcome-screen']").next('.note-editor').find('.note-editable').html("");
+                  $("div[message-name='welcome-screen']").next('.note-editor').find('.note-editable').html(welcome_screen_text);
+                }
+
+                if( attr.messageName == "ending-screen"){
+                  var title_end_with = $rootScope._settings_.titles.title_end_with ;
+                  $("div[message-name='ending-screen']").next('.note-editor').find('.note-editable').html("");
+                  $("div[message-name='ending-screen']").next('.note-editor').find('.note-editable').html(title_end_with);
+                }
+
+                if( attr.messageName == "pass-quiz-screen"){
+                  var pass = $rootScope._settings_.titles.title_success_with ;
+                  $("div[message-name='pass-quiz-screen']").next('.note-editor').find('.note-editable').html("");
+                  $("div[message-name='pass-quiz-screen']").next('.note-editor').find('.note-editable').html(pass);
+                }
+
+
+                if( attr.messageName == "failed-quiz-screen"){
+                  var failed = $rootScope._settings_.titles.title_failed_with ;
+                  $("div[message-name='failed-quiz-screen']").next('.note-editor').find('.note-editable').html("");
+                  $("div[message-name='failed-quiz-screen']").next('.note-editor').find('.note-editable').html(failed);
+                }
+
+
+                if( attr.messageName == "resume-screen"){
+                  var resume = $rootScope._settings_.titles.title_resume ;
+                  $("div[message-name='resume-screen']").next('.note-editor').find('.note-editable').html("");
+                  $("div[message-name='resume-screen']").next('.note-editor').find('.note-editable').html(resume);
+                }
+
+
+              } , 200 );
+            } ,
+            onChange : function (content){
+              if( attr.messageName == "expiry-warning")
+                $rootScope._settings_.expiration.expire_warning = content ;
+
+              if( attr.messageName == "expiry-message" )
+                $rootScope._settings_.expiration.expire_message = content ;
+
+              if( attr.messageName == "welcome-screen" )
+                $rootScope._settings_.titles.title_start_with = content ;
+
+              if( attr.messageName == "ending-screen" )
+                $rootScope._settings_.titles.title_end_with = content ;
+
+                if( attr.messageName == "pass-quiz-screen" )
+                  $rootScope._settings_.titles.title_success_with = content ;
+
+
+                  if( attr.messageName == "failed-quiz-screen" )
+                    $rootScope._settings_.titles.title_failed_with = content ;
+
+                    if( attr.messageName == "resume-screen" )
+                      $rootScope._settings_.titles.title_resume = content ;
+            }
+          }
+        });
 
 
       }
@@ -125,9 +202,6 @@ apps.directive('ngCustomEditor', ['$parse' , '$rootScope' , '$timeout', function
                        $rootScope.is_unsaved_data = true ;
                        var this_question = $rootScope._questions_.find(x => x._id == attr.questionId ) ;
 
-
-
-
                         if( attr.elementType == 'question' ){
                           // ==> currQuestion
                             if( this_question != undefined )
@@ -135,6 +209,13 @@ apps.directive('ngCustomEditor', ['$parse' , '$rootScope' , '$timeout', function
                             // load redactor data
                             if( content == '')
                             $rootScope.load_redactor_data_questions(this_question._id);
+                            var question_editor = $(".question-redactor") ;
+                            var question_field = question_editor.next('.note-editor').find('.note-editable');
+                            console.log();
+                            if(this_question.question_body =="")
+                            question_field.css("color" , "#999")
+                            else
+                            question_field.css("color" , "#000")
                         }
                         if( attr.elementType == 'description' ){
                             if( this_question != undefined )
@@ -142,12 +223,27 @@ apps.directive('ngCustomEditor', ['$parse' , '$rootScope' , '$timeout', function
                             // load redactor data
                             if( content == '')
                             $rootScope.load_redactor_data_questions(this_question._id);
+                            var description_editor = $(".description-redactor");
+                            var description_field = description_editor.next('.note-editor').find('.note-editable');
+                            if(this_question.question_description.value == "")
+                            description_field.css("color" , "#999")
+                            else
+                            description_field.css("color" , "#000")
                          }
                         if( attr.elementType == 'answer' ){
                           if( this_question != undefined ){
                             var this_answer = this_question.answers_format.find(x => x._id == attr.answerId)
                             if(this_answer != undefined )
-                              this_answer.value = content ;
+                            {
+                                this_answer.value = content ;
+                                if(this_answer.value =="")
+                                 element.next(".note-editor").children(".note-editing-area").children(".note-editable").css("color","#999");
+                                 else
+                                 element.next(".note-editor").children(".note-editing-area").children(".note-editable").css("color","#000");
+
+                            }
+
+
                           }
                         }
                         $timeout(function(){ $rootScope.$apply() } , 100 );
@@ -4936,11 +5032,21 @@ $rootScope.load_redactor_data_answers = ( question_id  , answer_lists  ) => {
      answer_editor.html('')
 
      var splited_answer = answer.value.split(" ");
+
+     /*
+      element.next(".note-editor").children(".note-editing-area").children(".note-editable").css("color","#000");
+     */
      console.log(splited_answer);
        if(answer.value == '' || (answer.value.toLowerCase().includes('answer') == true && splited_answer.length == 2 && !isNaN(splited_answer[1])) )
-       answer_editor.attr("data-text" , answer.value )
+       {
+         answer_editor.attr("data-text" , answer.value )
+         answer_editor.css({color : "#999"});
+       }
        else
-       answer_editor.html( answer.value );
+       {
+         answer_editor.html( answer.value );
+          answer_editor.css({color : "#000"});
+       }
    };
    answers.map(answer_zooming)
 }
@@ -4961,19 +5067,26 @@ $rootScope.load_redactor_data_answers = ( question_id  , answer_lists  ) => {
       {
         question_field.html('');
         question_field.attr('data-text' , 'Add your question here !');
+        question_field.css({color : '#999'})
       }
       else
-      question_field.html(question_data.question_body);
+      {
+        question_field.html(question_data.question_body);
+          question_field.css({color : '#000'})
+      }
 
       // ==> question description
       if(question_data.question_description.value == '')
       {
         description_field.html('');
         description_field.attr('data-text' , 'Write your question description here  !');
+          description_field.css({color : '#999'})
       }
-        else
-        description_field.html(question_data.question_description.value);
-
+      else
+        {
+          description_field.html(question_data.question_description.value);
+          description_field.css({color : '#000'})
+        }
    }
  };
 
