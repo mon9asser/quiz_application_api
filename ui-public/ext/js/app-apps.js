@@ -1304,11 +1304,7 @@ $rootScope.loading_application_data = () => {
   }
   // => Mark Selected Question
   $rootScope.highlighted_question = (questionId) => {
-    // ==> Expand erea
-    $timeout(function(){
-      $rootScope.expand_collapsed_items('#question-pt');
-      $rootScope.expand_collapsed_items('#answers-pt')
-    } , 300 )
+ 
     if($rootScope.is_unsaved_data == true ){
       if( confirm("Would you like to discard the changes ? ")){
         $rootScope.loading_application_data();
