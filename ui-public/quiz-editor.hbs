@@ -118,7 +118,7 @@
              <!-- +++++ Start Left Columns -->
              <div id="left-part-question-lists" class="left_part col-md-5 col-sm-6 col-xs-12">
                 <div class="question-data qsdragged-list qs-dropped background_drag_drop" style="margin-top:0px !important;">
-                   
+
                   <ul id="docQuestions" class="dropped-qs dropped-qs-2">
                     <!--   ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " -->
                      <li ng:class="question_list_classes()" class="question-li-x qs-{>qs_value._id<}" ng:click="highlighted_question(qs_value._id)" id="questoin_tag_{>qs_value._id<}" data-index="{>$index<}" data-question-id="{>qs_value._id<}" ng:repeat="(qs_key , qs_value) in _questions_ track by $index" ng:cloak>
@@ -162,7 +162,7 @@
 
                   <div ng:if="screen_type == 3" class="button-switcher">
                     <span class="selected-mode" ng:class="current_mode(is_view)"></span>
-                    <span ng:style="{color : ( is_view == 1 ) ? '#999' : '#fff'}" ng:click="switch_int_mode(0)" class="editor-btn">Editor Mode</span>
+                    <span ng:style="{color : ( is_view == 1 ) ? '#999' : '#fff'}" ng:click="switch_int_mode(0)" class="editor-btn">Edit Mode</span>
                     <span ng:style="{color : ( is_view == 0 ) ? '#999' : '#fff'}" ng:click="switch_int_mode(1)" class="preview-btn">Preview Mode</span>
                   </div>
                   <div ng:if="screen_type != 3">
