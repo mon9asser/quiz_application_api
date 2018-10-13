@@ -789,7 +789,10 @@ apps.controller("player", [
          method: "POST",
          data : { "user_activity" : $scope._user_activity_ }
       }).then(function(resp){
-        console.log($scope._user_activity_);
+        console.log(resp);
+        if( $scope._user_activity_.user_completed_status == undefined  )
+          $scope._user_activity_['user_completed_status'] = true ;
+
         if( $scope._user_activity_.user_completed_status != undefined  )
           $scope._user_activity_.user_completed_status = true ;
 

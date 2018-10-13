@@ -102,7 +102,7 @@ apps.directive('ngCustomMessageEditors', ['$parse' , '$rootScope' , '$timeout', 
             onInit : function(){
 
               $timeout(function(){
-                 
+                console.log($rootScope._settings_);
                 if( attr.messageName == "expiry-warning"){
                   var expire_warning = $rootScope._settings_.expiration.expire_warning ;
                   $("div[message-name='expiry-warning']").next('.note-editor').find('.note-editable').html("");
