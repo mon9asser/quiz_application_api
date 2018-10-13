@@ -146,7 +146,7 @@ apps.directive('ngCustomMessageEditors', ['$parse' , '$rootScope' , '$timeout', 
                 }
 
 
-              } , 2000 );
+              } , 5000 );
             } ,
             onChange : function (content){
               // ==> Switch into preview
