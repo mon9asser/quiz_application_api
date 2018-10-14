@@ -780,7 +780,7 @@ apps.controller("player", [
         $scope.swipperJs.slideNext();
     };
     $scope._offline_report_collection = () => {
-
+      console.log("We're inside report  function +++++ ");
       var url = $scope.server_ip + 'api/'+ $scope.application_id  +'/add/attended/quiz/report';
 
       $scope._user_activity_['is_completed'] = true
@@ -789,7 +789,7 @@ apps.controller("player", [
          method: "POST",
          data : { "user_activity" : $scope._user_activity_ }
       }).then(function(resp){
-        console.log(resp);
+      console.log("Response is reday for calling +++++ ");
         if( $scope._user_activity_.user_completed_status == undefined  )
           $scope._user_activity_['user_completed_status'] = true ;
 
@@ -1733,7 +1733,11 @@ apps.controller("player", [
       $(".submit-in-qsa").children(".x-isc-up").addClass("fa-refresh fa-spin");
 
       $timeout(function(){
+        console.log("Save in offline report ++++++");
          $scope._offline_report_collection();
+      } , 200)
+      $timeout(function(){
+        console.log("Close button animation ");
          $timeout(function(){
           $(".submit-button-goodbye-screen").children(".fa").removeClass("fa-refresh fa-spin");
           $(".submit-button-goodbye-screen").children(".fa").addClass("fa-arrow-right");
