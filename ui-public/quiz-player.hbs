@@ -92,9 +92,7 @@
 
 
                             <div class="quiz-grade text-center" ng:if="_settings_.grade_settings.is_graded == false  && _application_.app_type == 1">
-                              <h5 box-target-class="thank-text" box-target-type="box-texts" class="selector select_texts thank-text">
-                                Thank you !
-                             </h5>
+                              <h5 box-target-class="thank-text" box-target-type="box-texts" class="selector select_texts thank-text" ng:bind:html="_settings_.titles.title_end_with | apply_html"></h5>
                             </div>
 
 
@@ -341,9 +339,7 @@
 
 
                                 <div class="quiz-grade text-center" ng:if="_settings_.grade_settings.is_graded == false  && _application_.app_type == 1">
-                                  <h5 box-target-class="thank-text" box-target-type="box-texts" class="selector select_texts thank-text">
-                                    Thank you !
-                                 </h5>
+                                  <h5 box-target-class="thank-text" box-target-type="box-texts" class="selector select_texts thank-text" ng:bind:html="_settings_.titles.title_end_with | apply_html"></h5>
                                 </div>
                               <!-- Question buttons  -->
                               <div class="qusu-details text-right">

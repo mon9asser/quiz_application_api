@@ -1218,7 +1218,8 @@ apps.controller("player", [
        $scope.build_question_lists(question , answer , report_questions);
 
 
-
+       if ( question_type == 3 || question_type == 4 )
+       $scope.build_question_lists_for_these_questions ( question , answer , report_questions );
 
 
       $timeout(function(){
@@ -1228,7 +1229,8 @@ apps.controller("player", [
               var usr = $scope._online_report_.att_draft.find(x => x.user_id == $scope.user_id );
               $scope._user_activity_ = usr ;
 
-              if( $scope.finished_is_clicked == true && $scope._application_.app_type == 1)
+              // if( $scope.finished_is_clicked == true && $scope._application_.app_type == 1)
+              if( $scope.finished_is_clicked == true)
                  $scope.show_unsolved_question_message();
             }
 
@@ -1266,6 +1268,21 @@ apps.controller("player", [
 
       // ==> Saving in db
       $scope.select_answer ( question , question.answers_format[0] );
+    }
+
+    $scope.build_question_lists_for_these_questions = ( question , answer , report_questions ) => {
+      if(report_questions.question_answers == undefined )
+        report_questions['question_answers'] = new Array();
+
+        console.log(report_questions);
+      var question_finder = report_questions.question_answers.find(x => x.question_id == question._id ) ;
+      if(question_finder == undefined){
+        report_questions.question_answers.push({
+          question_id : question._id ,
+          user_answers :[{ _id : answer._id }]
+        });
+      }else
+        question_finder.user_answers = new Array({ _id : answer._id });
     }
     $scope.show_solved_answers = (index , question_id , answer_id , is_correct) => {
         var app_settings = $scope._settings_ ;

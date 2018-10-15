@@ -220,7 +220,7 @@
               Messages and Texts
               <span class="nav-next"></span>
             </a>
-            <div class="items">
+            <div class="items message-texts-section">
               <ul>
                 <li ng:show="_settings_.enable_screens" class="righ-check-box">
                   <label class="redactor-xxxx" style=" margin-left: 10px;">Welcome Page </label>
@@ -370,10 +370,10 @@
                   <input ng:change="enable_css_mode_func(enable_css_mode)" ng:model="enable_css_mode" type="checkbox" id="enable-css-mode" class="switch_1 input-checkboxes">
                 </li>
               </ul>
-              <div class="container-of-classes">
+              <div ng:show="enable_css_mode" class="container-of-classes">
                 <code>Hover over element you want to change the style and you can then edit them</code>
               </div>
-              <div class="pellet-containerz">
+              <div ng:show="enable_css_mode" class="pellet-containerz">
                 <h4 class="element_types" ng:if="selecotor_name == '.Answers'">Basic</h4>
                 <ul>
                   <li ng:show="css_pellet_mode.radial_text_color == true">

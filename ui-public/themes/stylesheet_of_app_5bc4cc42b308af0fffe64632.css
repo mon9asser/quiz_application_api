@@ -1,0 +1,7 @@
+.question-box-text { border-color:rgb(255, 0, 0); }
+.player-body-screen { background-color:rgb(249, 203, 156); }
+.question-screen-box { border-color:rgb(0, 0, 255); }
+.continue-answer-question-button { background-color:green; }
+.answer-container ul li { background-color:rgb(102, 102, 102); }
+.answer-container ul li:hover { background-color:rgb(204, 0, 0); }
+.back-answer-question-button { background-color:rgb(0, 255, 255); }

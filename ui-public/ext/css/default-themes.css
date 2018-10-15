@@ -730,3 +730,7 @@ ul.scalet-o > div li:last-child > span {
  .completed_msg > i { margin-right: 10px;
  font-size: 20px;
  }
+ .answer-container ul > li:hover {
+   background: #ffffff;;
+   color: #999;
+ }

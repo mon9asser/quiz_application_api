@@ -344,9 +344,7 @@
           </div>
        </div>
        <div class="quiz-grade" ng:if="_settings_.grade_settings.is_graded == false  && _application_.app_type == 1">
-         <h5 box-target-class="thank-text" box-target-type="box-texts" class="selector select_texts thank-text">
-           Thank you !
-        </h5>
+         <h5 box-target-class="thank-text" box-target-type="box-texts" class="selector select_texts thank-text" ng:bind:html="_settings_.titles.title_end_with | apply_html"></h5>
        </div>
        <div ng:if="_application_.app_type == 0 "  class=" description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text">
          <h1 class="completed_msg selector" box-target-class="completed_msg" box-target-type="box-texts"> <i class="fa fa-check"></i>Completed successfully !</h1>

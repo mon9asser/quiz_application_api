@@ -107,35 +107,41 @@ apps.directive('ngCustomMessageEditors', ['$parse' , '$rootScope' , '$timeout', 
                   var expire_warning = $rootScope._settings_.expiration.expire_warning ;
                   $("div[message-name='expiry-warning']").next('.note-editor').find('.note-editable').html("");
                   $("div[message-name='expiry-warning']").next('.note-editor').find('.note-editable').html(expire_warning);
+                  $rootScope.storing_placholder_if_item_empty(expire_warning , attr.messageName );
                 }
                 if( attr.messageName == "expiry-message" ){
                   var expiry_msg = $rootScope._settings_.expiration.expire_message ;
                   $("div[message-name='expiry-message']").next('.note-editor').find('.note-editable').html("");
                   $("div[message-name='expiry-message']").next('.note-editor').find('.note-editable').html(expiry_msg);
+                  $rootScope.storing_placholder_if_item_empty(expiry_msg , attr.messageName );
                 }
                 if( attr.messageName == "welcome-screen"){
                   var welcome_screen_text = $rootScope._settings_.titles.title_start_with ;
                   $("div[message-name='welcome-screen']").next('.note-editor').find('.note-editable').html("");
                   $("div[message-name='welcome-screen']").next('.note-editor').find('.note-editable').html(welcome_screen_text);
+                  $rootScope.storing_placholder_if_item_empty( welcome_screen_text , attr.messageName );
                 }
 
                 if( attr.messageName == "ending-screen"){
-                  var title_end_with = $rootScope._settings_.titles.title_end_with ;
+                  var title_end_with = $rootScope._settings_.titles.title_end_with  ;
                   $("div[message-name='ending-screen']").next('.note-editor').find('.note-editable').html("");
                   $("div[message-name='ending-screen']").next('.note-editor').find('.note-editable').html(title_end_with);
+                  $rootScope.storing_placholder_if_item_empty( title_end_with , attr.messageName );
                 }
 
                 if( attr.messageName == "pass-quiz-screen"){
                   var pass = $rootScope._settings_.titles.title_success_with ;
                   $("div[message-name='pass-quiz-screen']").next('.note-editor').find('.note-editable').html("");
                   $("div[message-name='pass-quiz-screen']").next('.note-editor').find('.note-editable').html(pass);
+                  $rootScope.storing_placholder_if_item_empty( pass , attr.messageName );
                 }
 
 
                 if( attr.messageName == "failed-quiz-screen"){
-                  var failed = $rootScope._settings_.titles.title_failed_with ;
+                  var failed = $rootScope._settings_.titles.title_failed_with;
                   $("div[message-name='failed-quiz-screen']").next('.note-editor').find('.note-editable').html("");
                   $("div[message-name='failed-quiz-screen']").next('.note-editor').find('.note-editable').html(failed);
+                  $rootScope.storing_placholder_if_item_empty( failed , attr.messageName );
                 }
 
 
@@ -143,6 +149,7 @@ apps.directive('ngCustomMessageEditors', ['$parse' , '$rootScope' , '$timeout', 
                   var resume = $rootScope._settings_.titles.title_resume ;
                   $("div[message-name='resume-screen']").next('.note-editor').find('.note-editable').html("");
                   $("div[message-name='resume-screen']").next('.note-editor').find('.note-editable').html(resume);
+                  $rootScope.storing_placholder_if_item_empty( resume , attr.messageName );
                 }
 
 
@@ -155,30 +162,35 @@ apps.directive('ngCustomMessageEditors', ['$parse' , '$rootScope' , '$timeout', 
                 {
                   $rootScope._settings_.expiration.expire_warning = content ;
                   $rootScope.screen_type = 4 ;
+                  $rootScope.storing_placholder_if_item_empty($rootScope._settings_.expiration.expire_warning , attr.messageName );
                 }
 
               if( attr.messageName == "expiry-message" )
                 {
                   $rootScope._settings_.expiration.expire_message = content ;
                   $rootScope.screen_type = 5 ;
+                  $rootScope.storing_placholder_if_item_empty($rootScope._settings_.expiration.expire_message , attr.messageName );
                 }
 
               if( attr.messageName == "welcome-screen" )
                 {
                   $rootScope._settings_.titles.title_start_with = content ;
                   $rootScope.screen_type = 0 ;
+                  $rootScope.storing_placholder_if_item_empty($rootScope._settings_.titles.title_start_with , attr.messageName );
                 }
 
               if( attr.messageName == "ending-screen" )
                 {
                   $rootScope._settings_.titles.title_end_with = content ;
                   $rootScope.screen_type = 1 ;
+                  $rootScope.storing_placholder_if_item_empty($rootScope._settings_.titles.title_end_with , attr.messageName );
                 }
 
               if( attr.messageName == "pass-quiz-screen" )
                 {
                   $rootScope._settings_.titles.title_success_with = content ;
                   $rootScope.screen_type = 2 ;
+                  $rootScope.storing_placholder_if_item_empty($rootScope._settings_.titles.title_success_with , attr.messageName );
                 }
 
 
@@ -186,12 +198,14 @@ apps.directive('ngCustomMessageEditors', ['$parse' , '$rootScope' , '$timeout', 
                  {
                    $rootScope._settings_.titles.title_failed_with = content ;
                    $rootScope.screen_type = 2 ;
+                   $rootScope.storing_placholder_if_item_empty( $rootScope._settings_.titles.title_failed_with , attr.messageName );
                  }
 
               if( attr.messageName == "resume-screen" )
                  {
                    $rootScope._settings_.titles.title_resume = content ;
                    $rootScope.screen_type = 4 ;
+                   $rootScope.storing_placholder_if_item_empty( $rootScope._settings_.titles.title_resume , attr.messageName );
                  }
 
               $timeout(function(){ $rootScope.$apply(); } , 300 )
@@ -1306,18 +1320,46 @@ $rootScope.loading_application_data = () => {
   $rootScope.highlighted_question = (questionId) => {
 
     if($rootScope.is_unsaved_data == true ){
-      if( confirm("Would you like to discard the changes ? ")){
-        $rootScope.loading_application_data();
-        // ==> Restore old data
-        $rootScope._questions_[$rootScope.question_index] = $rootScope._questions_draft_[$rootScope.question_index] ;
-        var db_qs_data = $rootScope._questions_draft_[$rootScope.question_index] ;
-        var current_qs = $rootScope._questions_[$rootScope.question_index] ;
+      swal({
+        title: "Save it ?",
+        text: "Would you like to Save the last changes ?",
+        icon: "warning",
+        buttons: ["No!", "Yes"],
+        dangerMode: true,
+      }).then((will_do)=>{
+        if(will_do){
+          $rootScope.saving_this_question();
+          swal("Question is saved successfully", {
+            icon: "success",
+          });
+        } else{
+          $rootScope.loading_application_data();
+          // ==> Restore old data
+          $rootScope._questions_[$rootScope.question_index] = $rootScope._questions_draft_[$rootScope.question_index] ;
+          var db_qs_data = $rootScope._questions_draft_[$rootScope.question_index] ;
+          var current_qs = $rootScope._questions_[$rootScope.question_index] ;
 
-        $timeout(function(){
-          $rootScope.$apply();
-        } , 300 )
-        $rootScope.is_unsaved_data = false ;
-      }else
+          $timeout(function(){
+            $(".question-redactor").next(".note-editor").children(".note-editing-area").find(".note-editable").html(db_qs_data.question_body);
+            $(".description-redactor").next(".note-editor").children(".note-editing-area").find(".note-editable").html(db_qs_data.question_description);
+            $rootScope.load_redactor_data_answers( db_qs_data._id , db_qs_data.answers_format)
+            $rootScope.$apply();
+          } , 300 )
+          $rootScope.is_unsaved_data = false ;
+        }
+      })
+      // if( confirm("Would you like to discard the changes ? ")){
+      //   $rootScope.loading_application_data();
+      //   // ==> Restore old data
+      //   $rootScope._questions_[$rootScope.question_index] = $rootScope._questions_draft_[$rootScope.question_index] ;
+      //   var db_qs_data = $rootScope._questions_draft_[$rootScope.question_index] ;
+      //   var current_qs = $rootScope._questions_[$rootScope.question_index] ;
+      //
+      //   $timeout(function(){
+      //     $rootScope.$apply();
+      //   } , 300 )
+      //   $rootScope.is_unsaved_data = false ;
+      // }else
       return false ;
     }
 
@@ -5087,6 +5129,18 @@ $rootScope.load_redactor_data_answers = ( question_id  , answer_lists  ) => {
    };
    answers.map(answer_zooming)
 }
+ $rootScope.storing_placholder_if_item_empty = (contents , element) => {
+   console.log(contents == element);
+   if(contents == '')
+   {
+     $("div[message-name='"+element+"']").next('.note-editor').find('.note-editable').attr("data-text" , "Write your text here !");
+     if($("div[message-name='"+element+"']").next('.note-editor').find('.note-editable').hasClass('msg-placeholder-field') == false)
+     $("div[message-name='"+element+"']").next('.note-editor').find('.note-editable').addClass("msg-placeholder-field");
+   }else {
+     if($("div[message-name='"+element+"']").next('.note-editor').find('.note-editable').hasClass('msg-placeholder-field') )
+     $("div[message-name='"+element+"']").next('.note-editor').find('.note-editable').removeClass('msg-placeholder-field')
+   }
+ }
  $rootScope.load_redactor_data_questions = ( question_id = null ) => {
    if(question_id == null )
    question_id = $rootScope._questions_[$rootScope.question_index];

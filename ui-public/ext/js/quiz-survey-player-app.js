@@ -780,10 +780,10 @@ apps.controller("player", [
         $scope.swipperJs.slideNext();
     };
     $scope._offline_report_collection = () => {
-      console.log("We're inside report  function +++++ ");
-      var url = $scope.server_ip + 'api/'+ $scope.application_id  +'/add/attended/quiz/report';
 
-      $scope._user_activity_['is_completed'] = true
+      var url = $scope.server_ip + 'api/'+ $scope.application_id  +'/add/attended/quiz/report';
+      $scope._user_activity_['is_completed'] = true;
+
       return $http({
          url : url ,
          method: "POST",
@@ -1269,7 +1269,8 @@ apps.controller("player", [
        $scope.build_question_lists(question , answer , report_questions);
 
 
-
+       if ( question_type == 3 || question_type == 4 )
+       $scope.build_question_lists_for_these_questions ( question , answer , report_questions );
 
 
       $timeout(function(){
@@ -1279,7 +1280,8 @@ apps.controller("player", [
               var usr = $scope._online_report_.att_draft.find(x => x.user_id == $scope.user_id );
               $scope._user_activity_ = usr ;
 
-              if( $scope.finished_is_clicked == true && $scope._application_.app_type == 1)
+              // if( $scope.finished_is_clicked == true && $scope._application_.app_type == 1)
+              if( $scope.finished_is_clicked == true)
                  $scope.show_unsolved_question_message();
             }
 
@@ -1435,6 +1437,20 @@ apps.controller("player", [
     //   }
     // };
 
+    $scope.build_question_lists_for_these_questions = ( question , answer , report_questions ) => {
+      if(report_questions.question_answers == undefined )
+        report_questions['question_answers'] = new Array();
+
+        console.log(report_questions);
+      var question_finder = report_questions.question_answers.find(x => x.question_id == question._id ) ;
+      if(question_finder == undefined){
+        report_questions.question_answers.push({
+          question_id : question._id ,
+          user_answers :[{ _id : answer._id }]
+        });
+      }else
+        question_finder.user_answers = new Array({ _id : answer._id });
+    }
     $scope.build_attendee_reports = ( question , answer , question_reports ) => {
       if($scope._online_report_ == null) return false ;
 
@@ -1652,8 +1668,11 @@ apps.controller("player", [
         // ==> End Zooming
       }
       solved_questions.user_answers.map(zoom_in_usr_answers)
+
+
+      console.log($scope._user_activity_);
       // // // console.log("Bulding attendee online report");
-    }
+    } // ==> Ended here +++++++++++++++
 
     // ==> inProgress funcs
     $scope.show_unsolved_question_message = () => {
@@ -1671,7 +1690,6 @@ apps.controller("player", [
       }
     }
     $scope.go_to_this_unsolved_question = () => {
-
       if($scope.unsolved_questions.length > 0 ){
         var question_id = $scope.unsolved_questions[0]._id ;
         var question_index = $scope._questions_.findIndex ( x => x._id == question_id )
