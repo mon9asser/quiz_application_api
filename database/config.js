@@ -3,7 +3,7 @@ const _ = require("lodash");
 var config = {
     server_ip:             'http://localhost:9000/'  , // http://35.166.78.187/
     port :                  ':27017' ,
-    database_name :         '/todo' ,
+    database_name :         '/courses' ,
     host_name:              'mongodb://localhost' ,
     options :               { useMongoClient : true  }   ,
     server_port :           process.env.port || 9000  ,
