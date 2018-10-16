@@ -90,7 +90,7 @@
                            <div  ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == true" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
                            <!-- Case failed in quiz  -->
                            <div  ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == false" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
-                           <div  ng:show="_settings_.grade_settings.is_graded == false"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div>
+                           <!-- <div  ng:cloak ng:show="_settings_.grade_settings.is_graded == false"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div> -->
                             <!-- The Grade  -->
                             <div class="quiz-grade">
                                 <!-- <div style="background: #f9f9f9;" class="grade_result_loder text-center">
@@ -326,7 +326,7 @@
                      <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                      {> _settings_.label_btns.lbl_back_with <}
                </button>
-               <button ng:if="( _settings_.enable_screens == true && $index == ( _questions_.length - 1 ) ) || ( $index != ( _questions_.length - 1 ) ) || ( $index == ( _questions_.length - 1 && _settings_.enable_screens == true ))" ng:click="next_finish_the_quiz($index)"  class="button-take-this continue-answer-question-button-block" type="button" name="button">
+               <button ng:if="( _settings_.enable_screens == true && $index == ( _questions_.length - 1 ) ) || ( $index != ( _questions_.length - 1 ) ) || ( $index == ( _questions_.length - 1 && _settings_.enable_screens == true ))" ng:click="next_finish_the_quiz($index)"  class="button-take-this continue-answer-question-button-block continue-answer-question-button" type="button" name="button">
                  <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                  <span ng:cloak ng:if="$index != ( _questions_.length - 1 )">
                      {> _settings_.label_btns.lbl_continue_with <}
@@ -336,7 +336,17 @@
                  </span>
                </button>
 
-                <button ng:style="(_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true) ? { opacity : '0.5' , cursor: 'none' } : { opacity : '1' ,  cursor: 'pointer' }" ng:disabled='(_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true ) || ( _user_activity_.attendee_questions == undefined || _user_activity_.attendee_questions.length == 0 )'  ng:if="( _settings_.enable_screens == false && $index == ( _questions_.length - 1 )  )" ng:click="submit_the_quiz_into_reports($index)" class="selector button-take-this submi_the_quiz_handler select_button submit-button-goodbye-screen submit-button-goodbye-screen-block" type="button" name="button">
+                <!-- <button ng:style="(_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true) ? { opacity : '0.5' , cursor: 'none' } : { opacity : '1' ,  cursor: 'pointer' }" ng:disabled='(_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true ) || ( _user_activity_.attendee_questions == undefined || _user_activity_.attendee_questions.length == 0 )'  ng:if="( _settings_.enable_screens == false && $index == ( _questions_.length - 1 )  )" ng:click="submit_the_quiz_into_reports($index)" class="selector button-take-this submi_the_quiz_handler select_button submit-button-goodbye-screen submit-button-goodbye-screen-block" type="button" name="button">
+                  <i ng:if="_user_activity_.user_completed_status == undefined || _user_activity_.user_completed_status == false " class="fa fa-arrow-right fac-icon-submit x-isc-up" aria-hidden="true"></i>
+                  <i ng:if="_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true " class="fa fa-check fac-icon-submit x-isc-up" aria-hidden="true"></i>
+                  <span ng:cloak ng:if="_user_activity_.user_completed_status == undefined || _user_activity_.user_completed_status == false">
+                      {> _settings_.label_btns.lbl_submit_quiz_with <}
+                  </span>
+                  <span ng:cloak ng:if="_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true ">
+                       Submitted
+                  </span>
+                </button> -->
+                <button ng:style="(_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true) ? { opacity : '0.5' , cursor: 'none' } : { opacity : '1' ,  cursor: 'pointer' }"  ng:if="( _settings_.enable_screens == false && $index == ( _questions_.length - 1 )  )" ng:click="submit_the_quiz_into_reports($index)" class="selector button-take-this submi_the_quiz_handler select_button submit-button-goodbye-screen submit-button-goodbye-screen-block" type="button" name="button">
                   <i ng:if="_user_activity_.user_completed_status == undefined || _user_activity_.user_completed_status == false " class="fa fa-arrow-right fac-icon-submit x-isc-up" aria-hidden="true"></i>
                   <i ng:if="_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true " class="fa fa-check fac-icon-submit x-isc-up" aria-hidden="true"></i>
                   <span ng:cloak ng:if="_user_activity_.user_completed_status == undefined || _user_activity_.user_completed_status == false">
@@ -382,7 +392,7 @@
                             <div ng:if="(_application_.app_type == 1 && _settings_.grade_settings.is_graded == true)" ng:show="(_user_activity_.report_attendee_details != undefined && _user_activity_.report_attendee_details.pass_mark != undefined && _user_activity_.report_attendee_details.pass_mark == true )" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
                             <!-- Case failed in quiz  -->
                             <div ng:if="(_application_.app_type == 1 && _settings_.grade_settings.is_graded == true )" ng:show="(_user_activity_.report_attendee_details == undefined || _user_activity_.report_attendee_details.pass_mark == undefined || _user_activity_.report_attendee_details.pass_mark == false )" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
-                            <div ng:if="(_application_.app_type == 1 && _settings_.grade_settings.is_graded == false )"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div>
+                            <!-- <div ng:cloak ng:if="(_application_.app_type == 1 && _settings_.grade_settings.is_graded == false )"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div> -->
 
                               <!-- The Grade  -->
                               <div class="quiz-grade" ng:if="_application_.app_type == 1">
@@ -400,7 +410,7 @@
                                 <h5 box-target-class="thank-text" box-target-type="box-texts" class="selector select_texts thank-text" ng:bind:html="_settings_.titles.title_end_with | apply_html"></h5>
                               </div>
                               <div ng:if="_application_.app_type == 0"  class="text-center description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text">
-                                <h1 class="completed_msg selector text-center" box-target-class="completed_msg" box-target-type="box-texts"> <i class="fa fa-check"></i>Completed successfully !</h1>
+                                <div class="completed_msg selector" box-target-class="completed_msg" box-target-type="box-texts" ng:bind:html="_settings_.titles.title_completed_survey | apply_html"></div>
                               </div>
 
                               <!-- Question buttons  -->

@@ -16,7 +16,8 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
              title_end_with: "Write Ending Text" ,
              title_success_with : " Success quiz Text" ,
              title_failed_with : "Quiz Failed Text" ,
-             title_resume : "Quiz Resume Text"
+             title_resume : "Quiz Resume Text" ,
+             title_completed_survey : "Completed Successfully"
            } ,
          label_btns : {
            lbl_start_with:"Start" ,

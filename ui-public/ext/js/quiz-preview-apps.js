@@ -1670,7 +1670,6 @@ apps.controller("player", [
       var solved_questions = ( $scope._user_activity_ != null && $scope._user_activity_.report_questions != undefined )  ? $scope._user_activity_.report_questions.question_answers : [] ;
       var questions = $scope._questions_ ;
       $scope.unsolved_questions = questions.are_all_questions_tracked(solved_questions);
-
       if( $scope.unsolved_questions != undefined && $scope.unsolved_questions.length != 0 )
       return false;
 

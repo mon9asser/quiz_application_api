@@ -152,6 +152,14 @@ apps.directive('ngCustomMessageEditors', ['$parse' , '$rootScope' , '$timeout', 
                   $rootScope.storing_placholder_if_item_empty( resume , attr.messageName );
                 }
 
+                if( attr.messageName == "complete-survey"){
+                  var completed_survey = $rootScope._settings_.titles.title_completed_survey ;
+                  $("div[message-name='complete-survey']").next('.note-editor').find('.note-editable').html("");
+                  $("div[message-name='complete-survey']").next('.note-editor').find('.note-editable').html(completed_survey);
+                  $rootScope.storing_placholder_if_item_empty( resume , attr.messageName );
+                }
+
+
 
               } , 5000 );
             } ,
@@ -201,12 +209,19 @@ apps.directive('ngCustomMessageEditors', ['$parse' , '$rootScope' , '$timeout', 
                    $rootScope.storing_placholder_if_item_empty( $rootScope._settings_.titles.title_failed_with , attr.messageName );
                  }
 
-              if( attr.messageName == "resume-screen" )
-                 {
-                   $rootScope._settings_.titles.title_resume = content ;
-                   $rootScope.screen_type = 4 ;
-                   $rootScope.storing_placholder_if_item_empty( $rootScope._settings_.titles.title_resume , attr.messageName );
-                 }
+                 if( attr.messageName == "resume-screen" )
+                    {
+                      $rootScope._settings_.titles.title_resume = content ;
+                      $rootScope.screen_type = 4 ;
+                      $rootScope.storing_placholder_if_item_empty( $rootScope._settings_.titles.title_resume , attr.messageName );
+                    }
+
+                    if( attr.messageName == "complete-survey" )
+                       {
+                         $rootScope._settings_.titles.title_completed_survey = content ;
+                         $rootScope.screen_type = 2 ;
+                         $rootScope.storing_placholder_if_item_empty( $rootScope._settings_.titles.title_completed_survey , attr.messageName );
+                       }
 
               $timeout(function(){ $rootScope.$apply(); } , 300 )
             }
@@ -1176,6 +1191,17 @@ $rootScope.loading_application_data = () => {
   $rootScope.add_new_question = ( question_type , atIndex = null ,  other_types = null ) => {
     if($rootScope._questions_.length > 200 )
     return false ;
+
+    var answer_tab = $(".answer-sc-block").next(".x-editor-x-body");
+    var question_tab = $(".question-opener").next(".x-editor-x-body");
+     
+    if( question_tab.css("display") == 'none' ) {
+      $rootScope.expand_collapsed_items('#question-pt')
+     }
+    if( answer_tab.css("display") == 'none' ) {
+      $rootScope.expand_collapsed_items('#answers-pt');
+     }
+
     $rootScope.switch_int_mode(0);
     var question_object = new Object() , answer_object = new Object() ;
     // => Build Default Question

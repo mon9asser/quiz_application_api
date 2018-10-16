@@ -5,8 +5,8 @@
          <div class="x-editor-x-title question-opener"  ng:click="expand_collapsed_items('#question-pt')" >
            Question
          </div>
-         <div class="clearFix"></div>
-         <div style="display:none;" class="x-editor-x-body open-this-tab" id="question-pt">
+         <!-- <div class="clearFix"></div> -->
+         <div class="x-editor-x-body open-this-tab" id="question-pt">
            <div id="dynamic-layer" class="col-sm-9 top-margins">
              <!--  Question Redactor -->
              <div  class="question-redactor text-left redactor-css" question_id="{>_questions_[question_index]._id<}" question_data ="{>_questions_[question_index].question_body<}"  element-type="question" ng:custom:editor ></div>
@@ -80,7 +80,7 @@
          <div class="x-editor-x-title answer-sc-block" ng:click="expand_collapsed_items('#answers-pt')">
              Answers
          </div>
-         <div style="display:none;"class="x-editor-x-body" id="answers-pt">
+         <div class="x-editor-x-body" id="answers-pt">
            <!-- Multiple Choices and Media choices -->
            <div ng:if="_questions_[question_index].question_type <= 1" class="multi-answers-part">
               <ul class="choices-part" id="block-answers">

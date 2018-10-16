@@ -81,7 +81,7 @@
                            <div ng:if="_application_.app_type == 1" ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == true" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
                            <!-- Case failed in quiz  -->
                            <div ng:if="_application_.app_type == 1" ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == false" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
-                           <div ng:if="_application_.app_type == 1"  ng:show="_settings_.grade_settings.is_graded == false"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div>
+                           <!-- <div ng:if="_application_.app_type == 1"  ng:show="_settings_.grade_settings.is_graded == false"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div> -->
 
                              <!-- The Grade  -->
                              <div class="quiz-grade" ng:if="_application_.app_type == 1">
@@ -97,7 +97,7 @@
                              </div>
 
                              <div ng:if="_application_.app_type == 0 "  class=" description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text">
-                               <h1 class="completed_msg selector" box-target-class="completed_msg" box-target-type="box-texts"> <i class="fa fa-check"></i>Completed successfully !</h1>
+                               <div class="completed_msg selector" box-target-class="completed_msg" box-target-type="box-texts" ng:bind:html="_settings_.titles.title_completed_survey | apply_html"></div>
                              </div>
 
                              <!-- Question buttons  -->
@@ -323,7 +323,7 @@
                       <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                       {> _settings_.label_btns.lbl_back_with <}
                 </button>
-                <button ng:if="( _settings_.enable_screens == true && $index == ( _questions_.length - 1 ) ) || ( $index != ( _questions_.length - 1 ) ) || ( $index == ( _questions_.length - 1 && _settings_.enable_screens == true ))" ng:click="next_finish_the_quiz($index)"  class="button-take-this continue-answer-question-button-block" type="button" name="button">
+                <button ng:if="( _settings_.enable_screens == true && $index == ( _questions_.length - 1 ) ) || ( $index != ( _questions_.length - 1 ) ) || ( $index == ( _questions_.length - 1 && _settings_.enable_screens == true ))" ng:click="next_finish_the_quiz($index)"  class="button-take-this continue-answer-question-button-block continue-answer-question-button" type="button" name="button">
                   <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                   <span ng:cloak ng:if="$index != ( _questions_.length - 1 )">
                       {> _settings_.label_btns.lbl_continue_with <}
@@ -377,7 +377,7 @@
                             <div ng:if="_application_.app_type == 1" ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == true" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
                             <!-- Case failed in quiz  -->
                             <div ng:if="_application_.app_type == 1" ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == false" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
-                            <div ng:if="_application_.app_type == 1"  ng:show="_settings_.grade_settings.is_graded == false"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div>
+                            <!-- <div ng:if="_application_.app_type == 1"  ng:show="_settings_.grade_settings.is_graded == false"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div> -->
 
                               <!-- The Grade  -->
                               <div class="quiz-grade" ng:if="_application_.app_type == 1">
@@ -393,7 +393,7 @@
                               </div>
 
                               <div ng:if="_application_.app_type == 0 "  class=" description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text">
-                                <h1 class="completed_msg selector" box-target-class="completed_msg" box-target-type="box-texts"> <i class="fa fa-check"></i>Completed successfully !</h1>
+                                <div class="completed_msg selector" box-target-class="completed_msg" box-target-type="box-texts" ng:bind:html="_settings_.titles.title_completed_survey | apply_html"></div>
                               </div>
 
                               <!-- Question buttons  -->

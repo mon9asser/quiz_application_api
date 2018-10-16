@@ -2637,7 +2637,8 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
                    title_end_with: "Write Ending Text" ,
                    title_success_with : " Success quiz Text" ,
                    title_failed_with : "Quiz Failed Text",
-                   title_resume : "Quiz Resume Text"
+                   title_resume : "Quiz Resume Text",
+                   title_completed_survey : "Completed Successfully"
                  } ,
                label_btns : {
                    lbl_start_with:"Start" ,
@@ -5067,6 +5068,7 @@ qtnrRouters.get("/:app_id/application/get/all"  , ( req , res )=>{
      if ( qtnairsDocument.stylesheet_properties != undefined ) application_object['stylesheet_properties'] = qtnairsDocument.stylesheet_properties ;
      if ( qtnairsDocument.theme_style != undefined ) application_object['theme_style'] = qtnairsDocument.theme_style ;
 
+     apply_stylesheet_access_for_this_app(qtnairsDocument);
 
     res.json(application_object);
   });
@@ -5154,7 +5156,7 @@ qtnrRouters.post("/:app_id/question/:question_id/cropping_system"  , question_an
         res.send(respond_object);
         return false ;
       }
-      
+
       // ==> rename Main File
       var new_file_path_ = file_path + '___' +new_filename ;
        fs.rename( main_file_path  , new_file_path_  , ( err ) => {
@@ -5418,13 +5420,27 @@ qtnrRouters.post("/:app_id/question/:question_id/answer/:answer_id/cropping_syst
 });
 
 
-
+var apply_stylesheet_access_for_this_app = (app) => {
+  var styles = (app.stylesheet_properties == undefined ) ? '' : app.stylesheet_properties ;
+  var file_stylesheet = "ui-public/themes/stylesheet_of_app_"+ app._id + '.css' ;
+  if (! fs.existsSync(file_stylesheet) ) {
+     fs.appendFile( file_stylesheet , styles , ( err ) => {
+       if(err) console.log(err);
+     });
+   }
+}
 qtnrRouters.get("/:app_id/player/data" , ( req , res ) => {
   var app_id = req.params.app_id;
   qtnr.findOne({_id : app_id}).populate('app_report').populate('att__draft').exec(function(error, creatorQuestionnaires) {
     if(error){
         res.send({error : "This Application doesn't exists !" })
+
     }
+
+
+    // ==> Create stylesheet file if it does not exitst
+    apply_stylesheet_access_for_this_app(creatorQuestionnaires);
+
 
     res.send(creatorQuestionnaires);
   });

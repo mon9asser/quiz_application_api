@@ -333,7 +333,7 @@
        <div ng:show="(_user_activity_.report_attendee_details != undefined && _user_activity_.report_attendee_details.pass_mark != undefined && _user_activity_.report_attendee_details.pass_mark == true )" ng:if="_settings_.grade_settings.is_graded == true  && _application_.app_type == 1 " box-target-class="result-screen-text" box-target-type="box-texts" class="selector description-body redactor-styles title_success_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
        <!-- failed  -->
        <div ng:show="(_user_activity_.report_attendee_details == undefined || _user_activity_.report_attendee_details.pass_mark == undefined || _user_activity_.report_attendee_details.pass_mark == false )" ng:if="_settings_.grade_settings.is_graded == true  && _application_.app_type == 1 " box-target-class="result-screen-text" box-target-type="box-texts" class="selector description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text"  ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
-       <div ng:if="_application_.app_type == 1"  ng:show="_settings_.grade_settings.is_graded == false"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div>
+       <!-- <div ng:if="_application_.app_type == 1"  ng:show="_settings_.grade_settings.is_graded == false"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div> -->
        <!-- ng:hide="text_result_screens"  -->
        <div class="quiz-grade" ng:if="_settings_.grade_settings.is_graded == true  && _application_.app_type == 1">
           <div  ng:if="_settings_.grade_settings.is_graded == true  && _application_.app_type == 1" class="quiz-grade grade-score text-center">
@@ -347,7 +347,7 @@
          <h5 box-target-class="thank-text" box-target-type="box-texts" class="selector select_texts thank-text" ng:bind:html="_settings_.titles.title_end_with | apply_html"></h5>
        </div>
        <div ng:if="_application_.app_type == 0 "  class=" description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text">
-         <h1 class="completed_msg selector" box-target-class="completed_msg" box-target-type="box-texts"> <i class="fa fa-check"></i>Completed successfully !</h1>
+         <div class="completed_msg selector" box-target-class="completed_msg" box-target-type="box-texts" ng:bind:html="_settings_.titles.title_completed_survey | apply_html"></div>
        </div>
 
        <div ng:if="_application_.app_type == 0 " class="qusu-details text-right">
