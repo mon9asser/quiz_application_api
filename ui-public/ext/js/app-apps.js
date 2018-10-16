@@ -1194,13 +1194,15 @@ $rootScope.loading_application_data = () => {
 
     var answer_tab = $(".answer-sc-block").next(".x-editor-x-body");
     var question_tab = $(".question-opener").next(".x-editor-x-body");
-     
-    if( question_tab.css("display") == 'none' ) {
-      $rootScope.expand_collapsed_items('#question-pt')
-     }
-    if( answer_tab.css("display") == 'none' ) {
-      $rootScope.expand_collapsed_items('#answers-pt');
-     }
+
+    $timeout(function(){
+      if( question_tab.css("display") == 'none' ) {
+        $rootScope.expand_collapsed_items('#question-pt')
+       }
+      if( answer_tab.css("display") == 'none' ) {
+        $rootScope.expand_collapsed_items('#answers-pt');
+       }
+    } , 500)
 
     $rootScope.switch_int_mode(0);
     var question_object = new Object() , answer_object = new Object() ;
