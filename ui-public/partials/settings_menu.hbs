@@ -84,10 +84,9 @@
                 <li class="righ-check-box dropdown" ng:show="_settings_.progression_bar.is_available">
                   <label style=" margin-left: 10px;" >Styles</label>
                   <i class="fa fa-caret-down i-icons" data-toggle="dropdown" aria-hidden="true"></i>
-
                   <ul class="dropdown-menu">
                     <li ng:class="( _settings_.progression_bar.progression_bar_layout == 1 ) ? 'selected-style' : ''" ng:click ="set_model_type(1 , 0)">
-                      <a href="#" class="text-center" style="padding: 10px 20px;">
+                      <a href="#" class="text-center hrsx" style="padding: 10px 20px;">
                         <div class="progress-bx" style="outline-color: transparent;">
                            <span box-target-type="box-texts" box-target-class="progress-bar-txt" class="progress-bar-txt selector" contenteditable="false" style="outline: transparent solid 3px; outline-offset: 4px;" onkeydown="if(event.metaKey) return true; return false;">50%</span>
                            <div style="width: 140px;" class="progress-ctmain selector" box-target-type="box-containers" box-target-class="progress-ctmain" contenteditable="false" style="outline: transparent solid 3px; outline-offset: 4px;" onkeydown="if(event.metaKey) return true; return false;">
@@ -97,7 +96,7 @@
                       </a>
                     </li>
                     <li ng:class="( _settings_.progression_bar.progression_bar_layout == 2 ) ? 'selected-style' : ''" ng:click ="set_model_type(2 , 0)">
-                      <a href="#" class="text-center" style="float: none;">
+                      <a href="#" class="text-center hrsx" style="float: none;">
                         <div class="progress-container option-container text-left" style="margin:0px auto; float:none;">
                           <div class="progress-bx">
                             <span box-target-type="box-texts" box-target-class="progress-text2" class="progress-text2">
@@ -142,7 +141,7 @@
                  <i class="fa fa-caret-down i-icons" data-toggle="dropdown" aria-hidden="true"></i>
                  <ul class="dropdown-menu popover">
                    <li ng:class="( _settings_.time_settings.timer_layout == 1 ) ? 'selected-style' : ''" ng:click ="set_model_type(1 , 1)">
-                     <a href="#" class="text-center" style="padding: 10px 20px;">
+                     <a href="#" class="text-center hrsx" style="padding: 10px 20px;">
                        <div>
                            <div ng:hide="(_settings_.time_settings.timer_type == false)" ng:disabled="( _settings_.time_settings.timer_type == false )" class="tick-group">
                                <span ng:bind="_settings_.time_settings.hours"></span>
@@ -160,7 +159,7 @@
                      </a>
                    </li>
                    <li ng:class="( _settings_.time_settings.timer_layout == 2 ) ? 'selected-style' : ''">
-                     <a    ng:click ="set_model_type(2 , 1)" href="#" class="text-center" style="float: none;">
+                     <a ng:click ="set_model_type(2 , 1)" href="#" class="text-center hrsx" style="float: none;">
                        <div class="time-container option-container text-right"  style="overflow: hidden;width: auto;padding: 9px 0px; float:none;">
                            <div class="time-models-act selector" box-target-class="time-models-act" box-target-type="box-labels">
                              05
@@ -408,7 +407,7 @@
                   </li>
                   <li ng:show="css_pellet_mode.fontFamily == true">
                     <span>Font Family</span>
-                    <select  ng:change="apply_stylesheet_in_views('font-family' , font_family_models)" ng:model="font_family_models" class="select_borders">
+                      <select  ng:change="apply_stylesheet_in_views('font-family' , font_family_models)" ng:model="font_family_models" class="select_borders">
                       <option value="arial">Arial</option>
                       <option value='"helvetica neue", helvetica, arial, sans-serif'>Helvetica</option>
                       <option value="RobotoRegular">Roboto Regular</option>

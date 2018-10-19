@@ -16,7 +16,6 @@
       <link href="{{ server_ip }}ext/css/swiper.min.css" rel="stylesheet">
 
       <link href="{{ server_ip }}ext/css/apps.css" rel="stylesheet">
-      <link href="{{ server_ip }}ext/css/editor-mobile.css" rel="stylesheet">
 
       <style media="screen">
         .editor-block {
@@ -64,6 +63,10 @@
     <div class="editor-contents" ng:controller="apps-controller">
       <!-- ++++ Start Editor Contents ++++  -->
       <div class="side-left-bar">
+        <!-- Menu ( open close ) -->
+        <span class="mobile-menu-qs">
+          <i class="fa fa-list"></i>
+        </span>
         <!-- ++++ Start left bar ++++  -->
         <div class="question-data" style="overflow-y: inherit;">
           <ul id="qs-sortable" class="question-x">
@@ -132,7 +135,7 @@
         <div class="container-fluid row-x-body">
            <div class="row">
              <!-- +++++ Start Left Columns -->
-             <div id="left-part-question-lists" class="left_part col-md-5 col-sm-6 col-xs-12">
+             <div id="left-part-question-lists" class="left_part col-md-5 col-sm-12 col-xs-12">
                 <div class="question-data qsdragged-list qs-dropped background_drag_drop" style="margin-top:0px !important;">
                   <ul id="docQuestions" class="dropped-qs dropped-qs-2">
                      <li class="question-li-x qs-{>qs_value._id<}" ng:click="highlighted_question(qs_value._id)" id="questoin_tag_{>qs_value._id<}" data-index="{>$index<}" data-question-id="{>qs_value._id<}" ng:class="(deleted_question_id == qs_value._id) ? 'animated zoomOut':'' " ng:repeat="(qs_key , qs_value) in _questions_ track by $index" ng:cloak>
@@ -165,7 +168,7 @@
              <!-- +++++ End Left Columns -->
 
              <!-- +++++ Start Right Columns -->
-              <div class="right_part col-md-7 col-sm-6 col-xs-12">
+              <div class="right_part col-md-7 col-sm-12 col-xs-12">
 
                 <div class="helper-guids">
 
@@ -189,26 +192,7 @@
                       <span ng:if="screen_type == 2">Done</span>
                   </div>
                 </div>
-                <!--
-                ++++++++++++++++++++++++++++ Start Mbile menu marked_question
-                -->
-                <div class="mobile-question-list">
-                  <ul class="all-mobile-question-lists">
-                    <li  class="qs-{>qs_value._id<}" ng:click="highlighted_question(qs_value._id)" ng:repeat="(qs_key , qs_value) in _questions_ track by $index">
-                      <span>
-                        <i ng:if="qs_value.question_type == 0" class="icon-insert-template"></i>
-                        <i ng:if="qs_value.question_type == 1" class="icon-image"></i>
-                        <i ng:if="qs_value.question_type == 2" class="icon-check-circle"></i>
-                        <i ng:if="qs_value.question_type == 3" class="fa" ng:class="(qs_value.answers_format[0].ratscal_type == 0) ? 'fa-signal' :'fa-star-o' "></i>
-                        <i ng:if="qs_value.question_type == 4" class="fa fa-text-width"></i>
-                      </span>
-                    </li>
 
-                  </ul>
-                </div>
-                <!--
-                ++++++++++++++++++++++++++++ END Mbile menu
-                -->
                 <!-- Question Container -->
                  <div class="question-editor swipper-container-block">
                    <div class="swiper-container swiper-data">

@@ -88,7 +88,7 @@
                     <span class="fa fa-bars drag-tools"  data-toggle="tooltip" title="Move" ></span>
                    <!-- Answer Controlling -->
                    <ul class="answer-pt-controller">
-                     <li  ng:if="answer_value.is_correct != undefined" data-toggle="tooltip" title="Correct Answer" ng:click="make_this_correct_incorrect_answer(answer_value._id)">
+                     <li  ng:if="answer_value.is_correct != undefined && _application_.app_type == 1" data-toggle="tooltip" title="Correct Answer" ng:click="make_this_correct_incorrect_answer(answer_value._id)">
                        <span class="fa fa-check"></span>
                      </li>
                      <li data-toggle="tooltip" title="Delete" ng:click="delete_this_answer( _questions_[question_index]._id ,  answer_value._id)">
@@ -157,7 +157,7 @@
                <li ng:repeat="(answer_key , answer_value) in _questions_[question_index].answers_format track by $index" ng:class="make_answer_classes(answer_value , _questions_[question_index].question_type)" class="answer-classes">
                  <!-- Answer Controlling -->
                  <ul class="answer-pt-controller">
-                   <li  ng:if="answer_value.is_correct != undefined" data-toggle="tooltip" title="Correct Answer" ng:click="make_this_correct_incorrect_answer(answer_value._id)">
+                   <li  ng:if="answer_value.is_correct != undefined && _application_.app_type == 1" data-toggle="tooltip" title="Correct Answer" ng:click="make_this_correct_incorrect_answer(answer_value._id)">
                      <span class="fa fa-check"></span>
                    </li>
                  </ul>

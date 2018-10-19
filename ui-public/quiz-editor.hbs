@@ -15,7 +15,7 @@
       <link href="{{ server_ip }}ext/css/swiper.min.css" rel="stylesheet">
 
       <link href="{{ server_ip }}ext/css/apps.css" rel="stylesheet">
-      <link href="{{ server_ip }}ext/css/editor-mobile.css" rel="stylesheet">
+      <!-- <link href="{{ server_ip }}ext/css/editor-mobile.css" rel="stylesheet"> -->
 
       <style media="screen">
         .editor-block {
@@ -66,6 +66,10 @@
     <div class="editor-contents" ng:controller="apps-controller">
       <!-- ++++ Start Editor Contents ++++  -->
       <div class="side-left-bar">
+        <!-- Menu ( open close ) -->
+        <span class="mobile-menu-qs">
+          <i class="fa fa-list"></i>
+        </span>
         <!-- ++++ Start left bar ++++  -->
         <div class="question-data">
           <ul id="qs-sortable" class="question-x">
@@ -175,26 +179,7 @@
                 </div>
 
 
-                <!--
-                ++++++++++++++++++++++++++++ Start Mbile menu
-                -->
-                <div class="mobile-question-list">
-                  <ul class="all-mobile-question-lists">
-                    <li class="qs-{>qs_value._id<}" ng:click="highlighted_question(qs_value._id)" ng:repeat="(qs_key , qs_value) in _questions_ track by $index">
-                      <span>
-                        <i ng:if="qs_value.question_type == 0" class="icon-insert-template"></i>
-                        <i ng:if="qs_value.question_type == 1" class="icon-image"></i>
-                        <i ng:if="qs_value.question_type == 2" class="icon-check-circle"></i>
-                        <i ng:if="qs_value.question_type == 3" class="fa" ng:class="(qs_value.answers_format[0].ratscal_type == 0) ? 'fa-signal' :'fa-star-o' "></i>
-                        <i ng:if="qs_value.question_type == 4" class="fa fa-text-width"></i>
-                      </span>
-                    </li>
 
-                  </ul>
-                </div>
-                <!--
-                ++++++++++++++++++++++++++++ END Mbile menu
-                -->
 
                 <!-- Question Container -->
                  <div class="question-editor swipper-container-block">

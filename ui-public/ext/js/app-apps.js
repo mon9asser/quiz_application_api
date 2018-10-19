@@ -1646,6 +1646,7 @@ $rootScope.loading_application_data = () => {
     if(is_single_choice == true){
       var answers = $rootScope._questions_[$rootScope.question_index].answers_format;
       var only_one = answers[answers.length - 1];
+      if( $rootScope._application_.app_type == 1 )
       only_one.is_correct = true;
       if(answers != undefined ){
         for (var i = 0; i < answers.length; i++) {
@@ -5138,21 +5139,23 @@ $rootScope.load_redactor_data_answers = ( question_id  , answer_lists  ) => {
      var answer_editor = answer_element.next('.note-editor').find(".note-editable") ;
      answer_editor.html('')
 
-     var splited_answer = answer.value.split(" ");
+     var splited_answer =  ( answer.value != undefined ) ? answer.value.split(" ") : [];
 
      /*
       element.next(".note-editor").children(".note-editing-area").children(".note-editable").css("color","#000");
      */
      console.log(splited_answer);
-       if(answer.value == '' || (answer.value.toLowerCase().includes('answer') == true && splited_answer.length == 2 && !isNaN(splited_answer[1])) )
+       if(answer.value != undefined && ( answer.value == '' || (answer.value.toLowerCase().includes('answer') == true && splited_answer.length == 2 && !isNaN(splited_answer[1])) ) )
        {
          answer_editor.attr("data-text" , answer.value )
          answer_editor.css({color : "#999"});
        }
        else
        {
-         answer_editor.html( answer.value );
-          answer_editor.css({color : "#000"});
+         if(answer.value != undefined ){
+           answer_editor.html( answer.value );
+           answer_editor.css({color : "#000"});
+          }
        }
    };
    answers.map(answer_zooming)
@@ -5209,4 +5212,30 @@ $rootScope.load_redactor_data_answers = ( question_id  , answer_lists  ) => {
    }
  };
 
+
+  $timeout(function(){
+    $(".mobile-menu-qs").on("click" , function(){
+       var question_menu = $(".side-left-bar");
+
+       if( question_menu.offset().left != 0){
+           $(".side-left-bar").css({
+             left : "0px"
+           });
+           $(".update-rows").css({
+             marginLeft : "130px" ,
+             marginRight : "-130px"
+           });
+       }else {
+
+           $(".side-left-bar").css({
+             left : "-126px"
+           });
+           $(".update-rows").css({
+             marginLeft : "0px" ,
+             marginRight : "0px"
+           });
+       }
+
+    })
+  } , 500 )
 }]);
