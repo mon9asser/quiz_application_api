@@ -14,6 +14,31 @@ const {qtnr} = require("../../models/questionnaires");
 const {drft} = require("../../models/attendee_draft");
 const {rpt} = require("../../models/reports");
 const {insertIntoApiKey} = require("./qtnr");
+const psi = require('psi');
+
+
+var psi_for_status_code_in_server = ( api_url ) => {
+
+  // Get the PageSpeed Insights report
+  psi(api_url).then(data => {
+    console.log(data.ruleGroups.SPEED.score);
+    console.log(data.pageStats);
+    console.log("------------------------------------------------");
+  });
+
+  // Output a formatted report to the terminal
+  psi.output(api_url).then(() => {
+    console.log('done');
+    console.log("------------------------------------------------");
+  });
+
+  // Supply options to PSI and get back speed and usability scores
+  psi(api_url, {nokey: 'true', strategy: 'mobile'}).then(data => {
+    console.log('Speed score:', data.ruleGroups.SPEED.score);
+    console.log('Usability score:', data.ruleGroups.USABILITY.score);
+    console.log("------------------------------------------------");
+  });
+}
 
 
 var infceRouter = express.Router();
@@ -67,6 +92,11 @@ infceRouter.get("/:app_id/:player_type/player/:token/data" , verify_access_token
 infceRouter.get("/:app_id/editor/:token" , verify_access_tokens_admin_user , (req , res)=>{
   // ================> Params
   var app_id = req.params.app_id ;
+  var token = req.params.token ;
+  console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+  console.log(" ===> Quiz Editor Page insight ");
+  console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+  psi_for_status_code_in_server( config.server_ip + 'api/' + app_id + '/editor/' +token );
 
   // ================> Verif"This Application does not exists !" ,ied Items
   var Verified_user = req.user ;

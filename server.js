@@ -14,6 +14,8 @@ const {infceRouter} = require("./server/routes/infce");
 const {usr} = require("./models/users");
 const cors= require('cors');
 
+
+
 const app = express();
 // const exphbs  = require('express-handlebars'); // => Deprecated !!
 
@@ -89,6 +91,9 @@ http.globalAgent.maxSockets = 50;
 // http.createServer((req,res)=>{
 //   console.log(`Started up at port ${config.server_port}`);
 // }).listen(config.server_port);
+
+
+
 app.listen(config.server_port , ()=>{
   console.log(`Started up at port ${config.server_port}`);
 });
