@@ -13,11 +13,21 @@ const {drftRouter} = require("./server/routes/drft");
 const {infceRouter} = require("./server/routes/infce");
 const {usr} = require("./models/users");
 const cors= require('cors');
-
+const compression = require('compression')
 
 
 const app = express();
 // const exphbs  = require('express-handlebars'); // => Deprecated !!
+function shouldCompress (req, res) {
+  if (req.headers['x-no-compression']) {
+    // don't compress responses with this request header
+    return false
+  }
+
+  // fallback to standard filter function
+  return compression.filter(req, res)
+}
+app.use(compression({filter: shouldCompress}))
 
 // Use `.hbs` for extensions and find partials in `views/partials`.
 app.engine('hbs', hbs.express4({
