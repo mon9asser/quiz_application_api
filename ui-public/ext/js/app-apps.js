@@ -546,6 +546,8 @@ apps.controller("apps-controller" , [
     $rootScope.is_unsaved_data = true ;
   }
   $rootScope.media_current_upload = false ;
+  $rootScope.show_apply_changes = false ;
+  $scope.apply_in_all_slides = true ;
   $rootScope.is_submitted = false ;
   $rootScope.is_reviewed  = false ;
   $rootScope.progress_value = 0 ;
@@ -3935,6 +3937,8 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     if(is_enabeld == true )
     $(".time-frames > input, .time-frames > input , .time-frames > span").css("color" , "#fff")
     else $(".time-frames > input, .time-frames > input  , .time-frames > span").css("color" , "#b3b3b3")
+    if(is_enabeld == true)
+    $rootScope.change_in_view(3);
   }
   $rootScope.enable_screen_func = (is_enabled_screen) => {
     if( is_enabled_screen == false )
@@ -3958,12 +3962,35 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
       $rootScope.question_index = question_index ;
     }
   }
+  $rootScope.apply_css_changes = (is_apply) => {
+     //=> class for all
+     // => class for spesific question .this_slide_ID //
+
+    // ==> if it false , apply it for only one slide
+    // ==> apply for all slides
+    if(is_apply == false )
+    {
+      var this_class = 'this_slide_' + $rootScope._questions_[$rootScope.question_index]._id ;
+      // ==> Apply styles for selected slide ( current question )
+      if( $("div[box-question-slide]").hasClass( this_class ) ){
+        console.log(this_class);
+      }
+    }else {
+      // apply in all slides
+    }
+  }
   $rootScope.enable_css_mode_func = ( is_enabled ) => {
     $("#enabled_css").val( is_enabled );
     // $rootScope.switching_editor_preview(true);
 
    if(is_enabled == true ){
+
      $(".switch").trigger('click');
+
+     $timeout(function(){
+        $(".player-body-screen").trigger("click");
+     } , 300 );
+
      $rootScope.switch_int_mode(1);
      $rootScope.enable_css_mode = true;
       $('body , html').bind('mouseover' , function(e){
@@ -4003,555 +4030,628 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
 
             var current_class = $("."+e.target.getAttribute('box-target-class')) ;
             $rootScope.selector_class = "." + e.target.getAttribute('box-target-class')
-            // ==> Show Options
-            if(e.target.getAttribute('box-target-type') == 'box-buttons'){
 
-              $rootScope.border_models_color = current_class.css("border-color");
-              $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
 
-              $rootScope.color_models = current_class.css("color");
-              $('.color_models').spectrum('set' , $rootScope.color_models );
+            $rootScope.show_apply_changes = false; ;
 
-              $rootScope.background_models = current_class.css("background-color");
-              $('.background_models').spectrum('set' , $rootScope.background_models );
+            if( e.target.getAttribute('box-question-slide') != undefined )
+            {
 
-              $rootScope.font_size_models = parseInt(current_class.css("font-size"));
-              var current_class = $("."+e.target.getAttribute('box-target-class')) ;;
+               // ==> Show options ( all slides or spesific slide )
+               $rootScope.show_apply_changes = true ;
+               // ==> Apply on slide
+                var this_slide = $("."+e.target.getAttribute('box-question-slide'));
 
-              $rootScope.font_family_models = current_class.css("font-family").toString().toLowerCase();
+                if( e.target.getAttribute('box-target-type') == 'box-containers' ){
+                  // ==> fill colors
 
-              $rootScope.border_style_models = current_class.css("border-style").toString();
-              $rootScope.border_left_models = current_class.css("border-left-width").toString();
-              $rootScope.border_right_models = current_class.css("border-right-width").toString();
-              $rootScope.border_top_models = current_class.css("border-top-width").toString();
-              $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
+                  $rootScope.background_models = current_class.css("background-color");
+                  $rootScope.border_models_color = current_class.css("border-color");
 
-              $rootScope.selecotor_name = ".Buttons";
-              $rootScope.css_pellet_mode.background = true;
-              $rootScope.css_pellet_mode.border = true;
-              $rootScope.css_pellet_mode.color = true ;
-              $rootScope.css_pellet_mode.fontSize = true ;
-              $rootScope.css_pellet_mode.fontFamily = true ;
-              $rootScope.css_pellet_mode.width = false ;
+                  $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
+                  $('.background_models').spectrum('set' , $rootScope.background_models );
+                  if(current_class.css("border-style") == undefined ) {
 
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
+                    // alert("is Working only when you set 'Single Response' to false !");
+                    return false ;
+                  }
+                  $rootScope.border_style_models = current_class.css("border-style").toString();
+                  $rootScope.border_left_models = current_class.css("border-left-width").toString();
+                  $rootScope.border_right_models = current_class.css("border-right-width").toString();
+                  $rootScope.border_top_models = current_class.css("border-top-width").toString();
+                  $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
 
-              $rootScope.css_pellet_mode.radial_strock = false ;
-              $rootScope.css_pellet_mode.radial_fill = false ;
-              $rootScope.css_pellet_mode.radial_text_color = false ;
-            }
-            if(e.target.getAttribute('box-target-type') == 'box-player'){
-              // ==> fill colors
-              $rootScope.background_models = current_class.css("background-color");
-              $('.background_models').spectrum('set' , $rootScope.background_models );
+                  // ==> show inputs
+                  $rootScope.selecotor_name = ".Container";
+                  $rootScope.css_pellet_mode.background = true;
+                  $rootScope.css_pellet_mode.border = true;
+                  $rootScope.css_pellet_mode.width = false ;
+                  $rootScope.css_pellet_mode.color = false ;
+                  $rootScope.css_pellet_mode.fontSize = false ;
+                  $rootScope.css_pellet_mode.fontFamily = false ;
 
-              // ==> show inputs
-              $rootScope.selecotor_name = ".Player-Page";
-              $rootScope.css_pellet_mode.background = true;
-              $rootScope.css_pellet_mode.border = false;
-              $rootScope.css_pellet_mode.color = false ;
-              $rootScope.css_pellet_mode.fontSize = false ;
-              $rootScope.css_pellet_mode.fontFamily = false ;
-              $rootScope.css_pellet_mode.width = false ;
+                  $rootScope.css_pellet_mode.hover_background = false ;
+                  $rootScope.css_pellet_mode.hover_border = false ;
+                  $rootScope.css_pellet_mode.hover_color = false ;
+                  $rootScope.css_pellet_mode.selected_background = false ;
+                  $rootScope.css_pellet_mode.selected_border = false ;
+                  $rootScope.css_pellet_mode.selected_color = false ;
+                  $rootScope.css_pellet_mode.correct_background = false ;
+                  $rootScope.css_pellet_mode.correct_border = false ;
+                  $rootScope.css_pellet_mode.correct_color = false ;
+                  $rootScope.css_pellet_mode.correct_icon_background = false ;
+                  $rootScope.css_pellet_mode.correct_icon_border = false ;
+                  $rootScope.css_pellet_mode.correct_icon_color = false ;
+                  $rootScope.css_pellet_mode.wrong_background = false ;
+                  $rootScope.css_pellet_mode.wrong_border = false ;
+                  $rootScope.css_pellet_mode.wrong_color = false ;
+                  $rootScope.css_pellet_mode.wrong_icon_background = false ;
+                  $rootScope.css_pellet_mode.wrong_icon_border = false ;
+                  $rootScope.css_pellet_mode.wrong_icon_color = false ;
+                  $rootScope.css_pellet_mode.rating_color = false ;
+                  $rootScope.css_pellet_mode.scale_color = false ;
+                  $rootScope.css_pellet_mode.scale_hover_color = false ;
+                  $rootScope.css_pellet_mode.scale_background = false ;
+                  $rootScope.css_pellet_mode.scale_hover_background = false ;
+                  $rootScope.css_pellet_mode.free_boxtext_background = false ;
+                  $rootScope.css_pellet_mode.free_boxtext_color = false ;
 
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
+                  $rootScope.css_pellet_mode.radial_strock = false ;
+                  $rootScope.css_pellet_mode.radial_fill = false ;
+                  $rootScope.css_pellet_mode.radial_text_color = false ;
+                }
+            }else {
+              // ==> Show Options
+              if( e.target.getAttribute('box-target-type') == 'box-buttons' ){
 
-              $rootScope.css_pellet_mode.radial_strock = false ;
-              $rootScope.css_pellet_mode.radial_fill = false ;
-              $rootScope.css_pellet_mode.radial_text_color = false ;
-
-            }
-            if(e.target.getAttribute('box-target-type') == 'box-containers'){
-              // ==> fill colors
-
-              $rootScope.background_models = current_class.css("background-color");
-              $rootScope.border_models_color = current_class.css("border-color");
-
-              $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
-              $('.background_models').spectrum('set' , $rootScope.background_models );
-              if(current_class.css("border-style") == undefined ) {
-
-                // alert("is Working only when you set 'Single Response' to false !");
-                return false ;
-              }
-              $rootScope.border_style_models = current_class.css("border-style").toString();
-              $rootScope.border_left_models = current_class.css("border-left-width").toString();
-              $rootScope.border_right_models = current_class.css("border-right-width").toString();
-              $rootScope.border_top_models = current_class.css("border-top-width").toString();
-              $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
-
-              // ==> show inputs
-              $rootScope.selecotor_name = ".Container";
-              $rootScope.css_pellet_mode.background = true;
-              $rootScope.css_pellet_mode.border = true;
-              $rootScope.css_pellet_mode.width = false ;
-              $rootScope.css_pellet_mode.color = false ;
-              $rootScope.css_pellet_mode.fontSize = false ;
-              $rootScope.css_pellet_mode.fontFamily = false ;
-
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
-
-              $rootScope.css_pellet_mode.radial_strock = false ;
-              $rootScope.css_pellet_mode.radial_fill = false ;
-              $rootScope.css_pellet_mode.radial_text_color = false ;
-            }
-            if(e.target.getAttribute('box-target-type') == 'box-answers'){
-                // ==> Fetch Style results
-
-                // Basic answers
-                // var current_class = e.target.getAttribute('box-target-class');
-                // console.log(current_class);
-                $rootScope.selecotor_name = ".Answers";
-                $rootScope.background_models = current_class.css("background-color");
                 $rootScope.border_models_color = current_class.css("border-color");
-                $rootScope.color_models = current_class.css("color");
-                $rootScope.font_size_models = parseInt(current_class.css("font-size"));
-
-                $rootScope.font_family_models = (current_class.css("font-family") != undefined )? current_class.css("font-family").toString().toLowerCase():'';
-                $rootScope.border_style_models = (current_class.css("border-style") != undefined ) ? current_class.css("border-style").toString() : '';
-                $rootScope.border_left_models = (current_class.css("border-left-width") != undefined ) ? current_class.css("border-left-width").toString() : '';
-                $rootScope.border_right_models = (current_class.css("border-right-width") != undefined ) ? current_class.css("border-right-width").toString() : '';
-                $rootScope.border_top_models = (current_class.css("border-top-width") != undefined ) ? current_class.css("border-top-width").toString() : '';
-                $rootScope.border_bottom_models = (current_class.css("border-bottom-width") != undefined ) ? current_class.css("border-bottom-width").toString() : '';
                 $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
-                $('.background_models').spectrum('set' , $rootScope.background_models );
+
+                $rootScope.color_models = current_class.css("color");
                 $('.color_models').spectrum('set' , $rootScope.color_models );
 
+                $rootScope.background_models = current_class.css("background-color");
+                $('.background_models').spectrum('set' , $rootScope.background_models );
 
-                // ==> Hover answers
-                var hover_classes = $('.'+e.target.getAttribute('box-target-class') +':hover');
-                $rootScope.hover_border_models_color = hover_classes.css('border-color');
-                $rootScope.hover_background_models  = hover_classes.css('background-color');
-                $rootScope.hover_color_models = hover_classes.css('color');
-                $rootScope.hover_border_style_models = hover_classes.css('border-style');
-                $rootScope.hover_border_left_models = hover_classes.css('border-left-width');
-                $rootScope.hover_border_right_models = hover_classes.css('border-right-width');
-                $rootScope.hover_border_top_models = hover_classes.css('border-top-width');
-                $rootScope.hover_border_bottom_models = hover_classes.css('border-bottom-width');
-                $('.hover_border_models_color').spectrum('set' , $rootScope.hover_border_models_color );
-                $('.hover_background_models').spectrum('set' , $rootScope.hover_background_models );
-                $('.hover_color_models').spectrum('set' , $rootScope.hover_color_models );
+                $rootScope.font_size_models = parseInt(current_class.css("font-size"));
+                var current_class = $("."+e.target.getAttribute('box-target-class')) ;;
 
-                // ==> Selected Answers (selected_answer) =>
-                var selected_classes = $('.'+e.target.getAttribute('box-target-class') +'.selected_answer');
-                $rootScope.selected_border_models_color = selected_classes.css('border-color');
-                $rootScope.selected_background_models  = selected_classes.css('background-color');
-                $rootScope.selected_color_models = selected_classes.css('color');
-                $rootScope.selected_border_style_models = selected_classes.css('border-style');
-                $rootScope.selected_border_left_models = selected_classes.css('border-left-width');
-                $rootScope.selected_border_right_models = selected_classes.css('border-right-width');
-                $rootScope.selected_border_top_models = selected_classes.css('border-top-width');
-                $rootScope.selected_border_bottom_models = selected_classes.css('border-bottom-width');
-                $('.selected_border_models_color').spectrum('set' , $rootScope.selected_border_models_color );
-                $('.selected_background_models').spectrum('set' , $rootScope.selected_background_models );
-                $('.selected_color_models').spectrum('set' , $rootScope.selected_color_models );
+                $rootScope.font_family_models = current_class.css("font-family").toString().toLowerCase();
 
+                $rootScope.border_style_models = current_class.css("border-style").toString();
+                $rootScope.border_left_models = current_class.css("border-left-width").toString();
+                $rootScope.border_right_models = current_class.css("border-right-width").toString();
+                $rootScope.border_top_models = current_class.css("border-top-width").toString();
+                $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
 
-                var question_type = $rootScope._questions_[$rootScope.question_index].question_type ;
-                if(question_type == undefined) return false ;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
+                $rootScope.selecotor_name = ".Buttons";
                 $rootScope.css_pellet_mode.background = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
                 $rootScope.css_pellet_mode.border = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
                 $rootScope.css_pellet_mode.color = true ;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
                 $rootScope.css_pellet_mode.fontSize = true ;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
                 $rootScope.css_pellet_mode.fontFamily = true ;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
                 $rootScope.css_pellet_mode.width = false ;
 
-
-                /* Consider the following cases +++++ */
-                // ==> Case Hover in answer
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.hover_background = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.hover_border = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.hover_color = true ;
-
-                // ==> Case select answer
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.selected_background = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.selected_border = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.selected_color = true ;
-
-                // ==> Case correct answer
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.correct_background = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.correct_border = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.correct_color = true ;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.correct_icon_background = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.correct_icon_border = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.correct_icon_color = true ;
-
-                // ==> Case wrong answer
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.wrong_background = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.wrong_border = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.wrong_color = true ;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.wrong_icon_background = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.wrong_icon_border = true;
-                if( question_type == 0 || question_type == 1 || question_type == 2)
-                $rootScope.css_pellet_mode.wrong_icon_color = true ;
-
-                // ==> rating and scale answers
-                if( question_type == 3 )
-                $rootScope.css_pellet_mode.rating_color = false;
-                // ==> Do border for scale answers
-                if( question_type == 3 )
+                $rootScope.css_pellet_mode.hover_background = false ;
+                $rootScope.css_pellet_mode.hover_border = false ;
+                $rootScope.css_pellet_mode.hover_color = false ;
+                $rootScope.css_pellet_mode.selected_background = false ;
+                $rootScope.css_pellet_mode.selected_border = false ;
+                $rootScope.css_pellet_mode.selected_color = false ;
+                $rootScope.css_pellet_mode.correct_background = false ;
+                $rootScope.css_pellet_mode.correct_border = false ;
+                $rootScope.css_pellet_mode.correct_color = false ;
+                $rootScope.css_pellet_mode.correct_icon_background = false ;
+                $rootScope.css_pellet_mode.correct_icon_border = false ;
+                $rootScope.css_pellet_mode.correct_icon_color = false ;
+                $rootScope.css_pellet_mode.wrong_background = false ;
+                $rootScope.css_pellet_mode.wrong_border = false ;
+                $rootScope.css_pellet_mode.wrong_color = false ;
+                $rootScope.css_pellet_mode.wrong_icon_background = false ;
+                $rootScope.css_pellet_mode.wrong_icon_border = false ;
+                $rootScope.css_pellet_mode.wrong_icon_color = false ;
+                $rootScope.css_pellet_mode.rating_color = false ;
                 $rootScope.css_pellet_mode.scale_color = false ;
-                if( question_type == 3 )
                 $rootScope.css_pellet_mode.scale_hover_color = false ;
-                if( question_type == 3 )
-                $rootScope.css_pellet_mode.scale_background = false;
-                if( question_type == 3 )
-                $rootScope.css_pellet_mode.scale_hover_background = false;
-
-                // ==> Free texts answers
-                if( question_type == 4 )
-                $rootScope.css_pellet_mode.free_boxtext_background = false;
-                if( question_type == 4 )
-                $rootScope.css_pellet_mode.free_boxtext_color = false;
-                // ==> consider to set border in this option
-
+                $rootScope.css_pellet_mode.scale_background = false ;
+                $rootScope.css_pellet_mode.scale_hover_background = false ;
+                $rootScope.css_pellet_mode.free_boxtext_background = false ;
+                $rootScope.css_pellet_mode.free_boxtext_color = false ;
 
                 $rootScope.css_pellet_mode.radial_strock = false ;
                 $rootScope.css_pellet_mode.radial_fill = false ;
                 $rootScope.css_pellet_mode.radial_text_color = false ;
+              }
+              if( e.target.getAttribute('box-target-type') == 'box-player' ){
+                // ==> fill colors
+                $rootScope.background_models = current_class.css("background-color");
+                $('.background_models').spectrum('set' , $rootScope.background_models );
+
+                // ==> show inputs
+                $rootScope.selecotor_name = ".Player-Page";
+                $rootScope.css_pellet_mode.background = true;
+                $rootScope.css_pellet_mode.border = false;
+                $rootScope.css_pellet_mode.color = false ;
+                $rootScope.css_pellet_mode.fontSize = false ;
+                $rootScope.css_pellet_mode.fontFamily = false ;
+                $rootScope.css_pellet_mode.width = false ;
+
+                $rootScope.css_pellet_mode.hover_background = false ;
+                $rootScope.css_pellet_mode.hover_border = false ;
+                $rootScope.css_pellet_mode.hover_color = false ;
+                $rootScope.css_pellet_mode.selected_background = false ;
+                $rootScope.css_pellet_mode.selected_border = false ;
+                $rootScope.css_pellet_mode.selected_color = false ;
+                $rootScope.css_pellet_mode.correct_background = false ;
+                $rootScope.css_pellet_mode.correct_border = false ;
+                $rootScope.css_pellet_mode.correct_color = false ;
+                $rootScope.css_pellet_mode.correct_icon_background = false ;
+                $rootScope.css_pellet_mode.correct_icon_border = false ;
+                $rootScope.css_pellet_mode.correct_icon_color = false ;
+                $rootScope.css_pellet_mode.wrong_background = false ;
+                $rootScope.css_pellet_mode.wrong_border = false ;
+                $rootScope.css_pellet_mode.wrong_color = false ;
+                $rootScope.css_pellet_mode.wrong_icon_background = false ;
+                $rootScope.css_pellet_mode.wrong_icon_border = false ;
+                $rootScope.css_pellet_mode.wrong_icon_color = false ;
+                $rootScope.css_pellet_mode.rating_color = false ;
+                $rootScope.css_pellet_mode.scale_color = false ;
+                $rootScope.css_pellet_mode.scale_hover_color = false ;
+                $rootScope.css_pellet_mode.scale_background = false ;
+                $rootScope.css_pellet_mode.scale_hover_background = false ;
+                $rootScope.css_pellet_mode.free_boxtext_background = false ;
+                $rootScope.css_pellet_mode.free_boxtext_color = false ;
+
+                $rootScope.css_pellet_mode.radial_strock = false ;
+                $rootScope.css_pellet_mode.radial_fill = false ;
+                $rootScope.css_pellet_mode.radial_text_color = false ;
+
+              }
+              if( e.target.getAttribute('box-target-type') == 'box-containers' ){
+                // ==> fill colors
+
+                $rootScope.background_models = current_class.css("background-color");
+                $rootScope.border_models_color = current_class.css("border-color");
+
+                $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
+                $('.background_models').spectrum('set' , $rootScope.background_models );
+                if(current_class.css("border-style") == undefined ) {
+
+                  // alert("is Working only when you set 'Single Response' to false !");
+                  return false ;
+                }
+                $rootScope.border_style_models = current_class.css("border-style").toString();
+                $rootScope.border_left_models = current_class.css("border-left-width").toString();
+                $rootScope.border_right_models = current_class.css("border-right-width").toString();
+                $rootScope.border_top_models = current_class.css("border-top-width").toString();
+                $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
+
+                // ==> show inputs
+                $rootScope.selecotor_name = ".Container";
+                $rootScope.css_pellet_mode.background = true;
+                $rootScope.css_pellet_mode.border = true;
+                $rootScope.css_pellet_mode.width = false ;
+                $rootScope.css_pellet_mode.color = false ;
+                $rootScope.css_pellet_mode.fontSize = false ;
+                $rootScope.css_pellet_mode.fontFamily = false ;
+
+                $rootScope.css_pellet_mode.hover_background = false ;
+                $rootScope.css_pellet_mode.hover_border = false ;
+                $rootScope.css_pellet_mode.hover_color = false ;
+                $rootScope.css_pellet_mode.selected_background = false ;
+                $rootScope.css_pellet_mode.selected_border = false ;
+                $rootScope.css_pellet_mode.selected_color = false ;
+                $rootScope.css_pellet_mode.correct_background = false ;
+                $rootScope.css_pellet_mode.correct_border = false ;
+                $rootScope.css_pellet_mode.correct_color = false ;
+                $rootScope.css_pellet_mode.correct_icon_background = false ;
+                $rootScope.css_pellet_mode.correct_icon_border = false ;
+                $rootScope.css_pellet_mode.correct_icon_color = false ;
+                $rootScope.css_pellet_mode.wrong_background = false ;
+                $rootScope.css_pellet_mode.wrong_border = false ;
+                $rootScope.css_pellet_mode.wrong_color = false ;
+                $rootScope.css_pellet_mode.wrong_icon_background = false ;
+                $rootScope.css_pellet_mode.wrong_icon_border = false ;
+                $rootScope.css_pellet_mode.wrong_icon_color = false ;
+                $rootScope.css_pellet_mode.rating_color = false ;
+                $rootScope.css_pellet_mode.scale_color = false ;
+                $rootScope.css_pellet_mode.scale_hover_color = false ;
+                $rootScope.css_pellet_mode.scale_background = false ;
+                $rootScope.css_pellet_mode.scale_hover_background = false ;
+                $rootScope.css_pellet_mode.free_boxtext_background = false ;
+                $rootScope.css_pellet_mode.free_boxtext_color = false ;
+
+                $rootScope.css_pellet_mode.radial_strock = false ;
+                $rootScope.css_pellet_mode.radial_fill = false ;
+                $rootScope.css_pellet_mode.radial_text_color = false ;
+              }
+              if( e.target.getAttribute('box-target-type') == 'box-answers' ){
+                  // ==> Fetch Style results
+
+                  // Basic answers
+                  // var current_class = e.target.getAttribute('box-target-class');
+                  // console.log(current_class);
+                  $rootScope.selecotor_name = ".Answers";
+                  $rootScope.background_models = current_class.css("background-color");
+                  $rootScope.border_models_color = current_class.css("border-color");
+                  $rootScope.color_models = current_class.css("color");
+                  $rootScope.font_size_models = parseInt(current_class.css("font-size"));
+
+                  $rootScope.font_family_models = (current_class.css("font-family") != undefined )? current_class.css("font-family").toString().toLowerCase():'';
+                  $rootScope.border_style_models = (current_class.css("border-style") != undefined ) ? current_class.css("border-style").toString() : '';
+                  $rootScope.border_left_models = (current_class.css("border-left-width") != undefined ) ? current_class.css("border-left-width").toString() : '';
+                  $rootScope.border_right_models = (current_class.css("border-right-width") != undefined ) ? current_class.css("border-right-width").toString() : '';
+                  $rootScope.border_top_models = (current_class.css("border-top-width") != undefined ) ? current_class.css("border-top-width").toString() : '';
+                  $rootScope.border_bottom_models = (current_class.css("border-bottom-width") != undefined ) ? current_class.css("border-bottom-width").toString() : '';
+                  $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
+                  $('.background_models').spectrum('set' , $rootScope.background_models );
+                  $('.color_models').spectrum('set' , $rootScope.color_models );
+
+
+                  // ==> Hover answers
+                  var hover_classes = $('.'+e.target.getAttribute('box-target-class') +':hover');
+                  $rootScope.hover_border_models_color = hover_classes.css('border-color');
+                  $rootScope.hover_background_models  = hover_classes.css('background-color');
+                  $rootScope.hover_color_models = hover_classes.css('color');
+                  $rootScope.hover_border_style_models = hover_classes.css('border-style');
+                  $rootScope.hover_border_left_models = hover_classes.css('border-left-width');
+                  $rootScope.hover_border_right_models = hover_classes.css('border-right-width');
+                  $rootScope.hover_border_top_models = hover_classes.css('border-top-width');
+                  $rootScope.hover_border_bottom_models = hover_classes.css('border-bottom-width');
+                  $('.hover_border_models_color').spectrum('set' , $rootScope.hover_border_models_color );
+                  $('.hover_background_models').spectrum('set' , $rootScope.hover_background_models );
+                  $('.hover_color_models').spectrum('set' , $rootScope.hover_color_models );
+
+                  // ==> Selected Answers (selected_answer) =>
+                  var selected_classes = $('.'+e.target.getAttribute('box-target-class') +'.selected_answer');
+                  $rootScope.selected_border_models_color = selected_classes.css('border-color');
+                  $rootScope.selected_background_models  = selected_classes.css('background-color');
+                  $rootScope.selected_color_models = selected_classes.css('color');
+                  $rootScope.selected_border_style_models = selected_classes.css('border-style');
+                  $rootScope.selected_border_left_models = selected_classes.css('border-left-width');
+                  $rootScope.selected_border_right_models = selected_classes.css('border-right-width');
+                  $rootScope.selected_border_top_models = selected_classes.css('border-top-width');
+                  $rootScope.selected_border_bottom_models = selected_classes.css('border-bottom-width');
+                  $('.selected_border_models_color').spectrum('set' , $rootScope.selected_border_models_color );
+                  $('.selected_background_models').spectrum('set' , $rootScope.selected_background_models );
+                  $('.selected_color_models').spectrum('set' , $rootScope.selected_color_models );
+
+
+                  var question_type = $rootScope._questions_[$rootScope.question_index].question_type ;
+                  if(question_type == undefined) return false ;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.background = true;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.border = true;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.color = true ;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.fontSize = true ;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.fontFamily = true ;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.width = false ;
+
+
+                  /* Consider the following cases +++++ */
+                  // ==> Case Hover in answer
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.hover_background = true;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.hover_border = true;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.hover_color = true ;
+
+                  // ==> Case select answer
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.selected_background = true;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.selected_border = true;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.selected_color = true ;
+
+                  // ==> Case correct answer
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.correct_background = true;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.correct_border = true;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.correct_color = true ;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.correct_icon_background = true;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.correct_icon_border = true;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.correct_icon_color = true ;
+
+                  // ==> Case wrong answer
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.wrong_background = true;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.wrong_border = true;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.wrong_color = true ;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.wrong_icon_background = true;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.wrong_icon_border = true;
+                  if( question_type == 0 || question_type == 1 || question_type == 2)
+                  $rootScope.css_pellet_mode.wrong_icon_color = true ;
+
+                  // ==> rating and scale answers
+                  if( question_type == 3 )
+                  $rootScope.css_pellet_mode.rating_color = false;
+                  // ==> Do border for scale answers
+                  if( question_type == 3 )
+                  $rootScope.css_pellet_mode.scale_color = false ;
+                  if( question_type == 3 )
+                  $rootScope.css_pellet_mode.scale_hover_color = false ;
+                  if( question_type == 3 )
+                  $rootScope.css_pellet_mode.scale_background = false;
+                  if( question_type == 3 )
+                  $rootScope.css_pellet_mode.scale_hover_background = false;
+
+                  // ==> Free texts answers
+                  if( question_type == 4 )
+                  $rootScope.css_pellet_mode.free_boxtext_background = false;
+                  if( question_type == 4 )
+                  $rootScope.css_pellet_mode.free_boxtext_color = false;
+                  // ==> consider to set border in this option
+
+
+                  $rootScope.css_pellet_mode.radial_strock = false ;
+                  $rootScope.css_pellet_mode.radial_fill = false ;
+                  $rootScope.css_pellet_mode.radial_text_color = false ;
+              }
+              if( e.target.getAttribute('box-target-type') == 'box-texts' ){
+                // ==> fill colors
+                $rootScope.color_models = current_class.css("color");
+                $('.color_models').spectrum('set' , $rootScope.color_models );
+
+                $rootScope.font_size_models = parseInt(current_class.css("font-size"));
+                $rootScope.font_family_models = current_class.css("font-family").toString().toLowerCase();
+
+                $rootScope.selecotor_name = ".Texts";
+                $rootScope.css_pellet_mode.background = false;
+                $rootScope.css_pellet_mode.border = false;
+                $rootScope.css_pellet_mode.color = true ;
+                $rootScope.css_pellet_mode.fontSize = true ;
+                $rootScope.css_pellet_mode.fontFamily = true ;
+                $rootScope.css_pellet_mode.width = false ;
+
+                $rootScope.css_pellet_mode.hover_background = false ;
+                $rootScope.css_pellet_mode.hover_border = false ;
+                $rootScope.css_pellet_mode.hover_color = false ;
+                $rootScope.css_pellet_mode.selected_background = false ;
+                $rootScope.css_pellet_mode.selected_border = false ;
+                $rootScope.css_pellet_mode.selected_color = false ;
+                $rootScope.css_pellet_mode.correct_background = false ;
+                $rootScope.css_pellet_mode.correct_border = false ;
+                $rootScope.css_pellet_mode.correct_color = false ;
+                $rootScope.css_pellet_mode.correct_icon_background = false ;
+                $rootScope.css_pellet_mode.correct_icon_border = false ;
+                $rootScope.css_pellet_mode.correct_icon_color = false ;
+                $rootScope.css_pellet_mode.wrong_background = false ;
+                $rootScope.css_pellet_mode.wrong_border = false ;
+                $rootScope.css_pellet_mode.wrong_color = false ;
+                $rootScope.css_pellet_mode.wrong_icon_background = false ;
+                $rootScope.css_pellet_mode.wrong_icon_border = false ;
+                $rootScope.css_pellet_mode.wrong_icon_color = false ;
+                $rootScope.css_pellet_mode.rating_color = false ;
+                $rootScope.css_pellet_mode.scale_color = false ;
+                $rootScope.css_pellet_mode.scale_hover_color = false ;
+                $rootScope.css_pellet_mode.scale_background = false ;
+                $rootScope.css_pellet_mode.scale_hover_background = false ;
+                $rootScope.css_pellet_mode.free_boxtext_background = false ;
+                $rootScope.css_pellet_mode.free_boxtext_color = false ;
+
+                $rootScope.css_pellet_mode.radial_strock = false ;
+                $rootScope.css_pellet_mode.radial_fill = false ;
+                $rootScope.css_pellet_mode.radial_text_color = false ;
+              }
+              if( e.target.getAttribute('box-target-type') == "box-media" ){
+                $rootScope.selecotor_name = ".Media Container";
+                $rootScope.media_container = parseInt(current_class.width());
+
+                $rootScope.css_pellet_mode.background = false;
+                $rootScope.css_pellet_mode.border = false;
+                $rootScope.css_pellet_mode.color = false ;
+                $rootScope.css_pellet_mode.fontSize = false ;
+                $rootScope.css_pellet_mode.fontFamily = false ;
+                $rootScope.css_pellet_mode.width = true ;
+
+                $rootScope.css_pellet_mode.hover_background = false ;
+                $rootScope.css_pellet_mode.hover_border = false ;
+                $rootScope.css_pellet_mode.hover_color = false ;
+                $rootScope.css_pellet_mode.selected_background = false ;
+                $rootScope.css_pellet_mode.selected_border = false ;
+                $rootScope.css_pellet_mode.selected_color = false ;
+                $rootScope.css_pellet_mode.correct_background = false ;
+                $rootScope.css_pellet_mode.correct_border = false ;
+                $rootScope.css_pellet_mode.correct_color = false ;
+                $rootScope.css_pellet_mode.correct_icon_background = false ;
+                $rootScope.css_pellet_mode.correct_icon_border = false ;
+                $rootScope.css_pellet_mode.correct_icon_color = false ;
+                $rootScope.css_pellet_mode.wrong_background = false ;
+                $rootScope.css_pellet_mode.wrong_border = false ;
+                $rootScope.css_pellet_mode.wrong_color = false ;
+                $rootScope.css_pellet_mode.wrong_icon_background = false ;
+                $rootScope.css_pellet_mode.wrong_icon_border = false ;
+                $rootScope.css_pellet_mode.wrong_icon_color = false ;
+                $rootScope.css_pellet_mode.rating_color = false ;
+                $rootScope.css_pellet_mode.scale_color = false ;
+                $rootScope.css_pellet_mode.scale_hover_color = false ;
+                $rootScope.css_pellet_mode.scale_background = false ;
+                $rootScope.css_pellet_mode.scale_hover_background = false ;
+                $rootScope.css_pellet_mode.free_boxtext_background = false ;
+                $rootScope.css_pellet_mode.free_boxtext_color = false ;
+
+                $rootScope.css_pellet_mode.radial_strock = false ;
+                $rootScope.css_pellet_mode.radial_fill = false ;
+                $rootScope.css_pellet_mode.radial_text_color = false ;
+              }
+              if( e.target.getAttribute('box-target-type') == 'box-labels' ){
+
+                $rootScope.border_models_color = current_class.css("border-color");
+                $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
+
+                $rootScope.color_models = current_class.css("color");
+                $('.color_models').spectrum('set' , $rootScope.color_models );
+
+                $rootScope.background_models = current_class.css("background-color");
+                $('.background_models').spectrum('set' , $rootScope.background_models );
+
+                $rootScope.selecotor_name = ".Box";
+                $rootScope.css_pellet_mode.background = true;
+                $rootScope.css_pellet_mode.border = true;
+                $rootScope.css_pellet_mode.color = true ;
+                $rootScope.css_pellet_mode.fontSize = false ;
+                $rootScope.css_pellet_mode.fontFamily = false ;
+                $rootScope.css_pellet_mode.width = false ;
+
+                $rootScope.css_pellet_mode.hover_background = false ;
+                $rootScope.css_pellet_mode.hover_border = false ;
+                $rootScope.css_pellet_mode.hover_color = false ;
+                $rootScope.css_pellet_mode.selected_background = false ;
+                $rootScope.css_pellet_mode.selected_border = false ;
+                $rootScope.css_pellet_mode.selected_color = false ;
+                $rootScope.css_pellet_mode.correct_background = false ;
+                $rootScope.css_pellet_mode.correct_border = false ;
+                $rootScope.css_pellet_mode.correct_color = false ;
+                $rootScope.css_pellet_mode.correct_icon_background = false ;
+                $rootScope.css_pellet_mode.correct_icon_border = false ;
+                $rootScope.css_pellet_mode.correct_icon_color = false ;
+                $rootScope.css_pellet_mode.wrong_background = false ;
+                $rootScope.css_pellet_mode.wrong_border = false ;
+                $rootScope.css_pellet_mode.wrong_color = false ;
+                $rootScope.css_pellet_mode.wrong_icon_background = false ;
+                $rootScope.css_pellet_mode.wrong_icon_border = false ;
+                $rootScope.css_pellet_mode.wrong_icon_color = false ;
+                $rootScope.css_pellet_mode.rating_color = false ;
+                $rootScope.css_pellet_mode.scale_color = false ;
+                $rootScope.css_pellet_mode.scale_hover_color = false ;
+                $rootScope.css_pellet_mode.scale_background = false ;
+                $rootScope.css_pellet_mode.scale_hover_background = false ;
+                $rootScope.css_pellet_mode.free_boxtext_background = false ;
+                $rootScope.css_pellet_mode.free_boxtext_color = false ;
+
+                $rootScope.css_pellet_mode.radial_strock = false ;
+                $rootScope.css_pellet_mode.radial_fill = false ;
+                $rootScope.css_pellet_mode.radial_text_color = false ;
+              }
+              if( e.target.getAttribute('box-target-type') == 'box-svg-container' ){
+                $rootScope.selecotor_name = ".Radial";
+                $rootScope.css_pellet_mode.background = false;
+                $rootScope.css_pellet_mode.border = false;
+                $rootScope.css_pellet_mode.color = false ;
+                $rootScope.css_pellet_mode.fontSize = false ;
+                $rootScope.css_pellet_mode.fontFamily = false ;
+                $rootScope.css_pellet_mode.width = false ;
+
+                $rootScope.css_pellet_mode.hover_background = false ;
+                $rootScope.css_pellet_mode.hover_border = false ;
+                $rootScope.css_pellet_mode.hover_color = false ;
+                $rootScope.css_pellet_mode.selected_background = false ;
+                $rootScope.css_pellet_mode.selected_border = false ;
+                $rootScope.css_pellet_mode.selected_color = false ;
+                $rootScope.css_pellet_mode.correct_background = false ;
+                $rootScope.css_pellet_mode.correct_border = false ;
+                $rootScope.css_pellet_mode.correct_color = false ;
+                $rootScope.css_pellet_mode.correct_icon_background = false ;
+                $rootScope.css_pellet_mode.correct_icon_border = false ;
+                $rootScope.css_pellet_mode.correct_icon_color = false ;
+                $rootScope.css_pellet_mode.wrong_background = false ;
+                $rootScope.css_pellet_mode.wrong_border = false ;
+                $rootScope.css_pellet_mode.wrong_color = false ;
+                $rootScope.css_pellet_mode.wrong_icon_background = false ;
+                $rootScope.css_pellet_mode.wrong_icon_border = false ;
+                $rootScope.css_pellet_mode.wrong_icon_color = false ;
+                $rootScope.css_pellet_mode.rating_color = false ;
+                $rootScope.css_pellet_mode.scale_color = false ;
+                $rootScope.css_pellet_mode.scale_hover_color = false ;
+                $rootScope.css_pellet_mode.scale_background = false ;
+                $rootScope.css_pellet_mode.scale_hover_background = false ;
+                $rootScope.css_pellet_mode.free_boxtext_background = false ;
+                $rootScope.css_pellet_mode.free_boxtext_color = false ;
+
+                // ==> Fill colors
+                // HERE++++++
+                var number = e.target.getAttribute('box-target-number') ;
+                var class_text_color = ".track-text";
+                var class_fill_track = ".track-progress";
+                var class_stroke_track = ".track-all";
+
+                var target_class_text = class_text_color+'-'+number;
+                var target_fill_track = class_fill_track+'-'+number;
+                var target_stroke_track = class_stroke_track+'-'+number;
+
+                // ==> Case it Progress
+                $rootScope.radial_text_colors = $(target_class_text).css("fill");
+                $('.radial_text_colors').spectrum('set' , $rootScope.radial_text_colors );
+
+                $rootScope.radial_fill_colors = $(target_fill_track).css("fill");
+                $('.radial_fill_colors').spectrum('set' , $rootScope.radial_fill_colors );
+
+                $rootScope.radial_storck_colors = $(target_stroke_track).css("fill");
+                $('.radial_storck_colors').spectrum('set' , $rootScope.radial_storck_colors );
+
+
+                $rootScope.css_pellet_mode.radial_strock = true ;
+                $rootScope.css_pellet_mode.radial_fill = true ;
+                $rootScope.css_pellet_mode.radial_text_color = true ;
+              }
+              if( e.target.getAttribute('box-target-type') == 'box-timer' ){
+                $rootScope.selecotor_name = ".Timer";
+                $rootScope.css_pellet_mode.background = true;
+                $rootScope.css_pellet_mode.border = true;
+                $rootScope.css_pellet_mode.color = true ;
+                $rootScope.css_pellet_mode.fontSize = false ;
+                $rootScope.css_pellet_mode.fontFamily = false ;
+                $rootScope.css_pellet_mode.width = false ;
+                $rootScope.css_pellet_mode.hover_background = false ;
+                $rootScope.css_pellet_mode.hover_border = false ;
+                $rootScope.css_pellet_mode.hover_color = false ;
+                $rootScope.css_pellet_mode.selected_background = false ;
+                $rootScope.css_pellet_mode.selected_border = false ;
+                $rootScope.css_pellet_mode.selected_color = false ;
+                $rootScope.css_pellet_mode.correct_background = false ;
+                $rootScope.css_pellet_mode.correct_border = false ;
+                $rootScope.css_pellet_mode.correct_color = false ;
+                $rootScope.css_pellet_mode.correct_icon_background = false ;
+                $rootScope.css_pellet_mode.correct_icon_border = false ;
+                $rootScope.css_pellet_mode.correct_icon_color = false ;
+                $rootScope.css_pellet_mode.wrong_background = false ;
+                $rootScope.css_pellet_mode.wrong_border = false ;
+                $rootScope.css_pellet_mode.wrong_color = false ;
+                $rootScope.css_pellet_mode.wrong_icon_background = false ;
+                $rootScope.css_pellet_mode.wrong_icon_border = false ;
+                $rootScope.css_pellet_mode.wrong_icon_color = false ;
+                $rootScope.css_pellet_mode.rating_color = false ;
+                $rootScope.css_pellet_mode.scale_color = false ;
+                $rootScope.css_pellet_mode.scale_hover_color = false ;
+                $rootScope.css_pellet_mode.scale_background = false ;
+                $rootScope.css_pellet_mode.scale_hover_background = false ;
+                $rootScope.css_pellet_mode.free_boxtext_background = false ;
+                $rootScope.css_pellet_mode.free_boxtext_color = false ;
+
+                // ==> Get current colors
+                $rootScope.color_models = current_class.css("color");
+                $('.color_models').spectrum('set' , $rootScope.color_models );
+                $rootScope.background_models = current_class.css("background-color");
+                $rootScope.border_models_color = current_class.css("border-color");
+
+                $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
+                $('.background_models').spectrum('set' , $rootScope.background_models );
+
+                $rootScope.border_style_models = current_class.css("border-style").toString();
+                $rootScope.border_left_models = current_class.css("border-left-width").toString();
+                $rootScope.border_right_models = current_class.css("border-right-width").toString();
+                $rootScope.border_top_models = current_class.css("border-top-width").toString();
+                $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
+
+              }
             }
-            if(e.target.getAttribute('box-target-type') == 'box-texts'){
-              // ==> fill colors
-              $rootScope.color_models = current_class.css("color");
-              $('.color_models').spectrum('set' , $rootScope.color_models );
 
-              $rootScope.font_size_models = parseInt(current_class.css("font-size"));
-              $rootScope.font_family_models = current_class.css("font-family").toString().toLowerCase();
-
-              $rootScope.selecotor_name = ".Texts";
-              $rootScope.css_pellet_mode.background = false;
-              $rootScope.css_pellet_mode.border = false;
-              $rootScope.css_pellet_mode.color = true ;
-              $rootScope.css_pellet_mode.fontSize = true ;
-              $rootScope.css_pellet_mode.fontFamily = true ;
-              $rootScope.css_pellet_mode.width = false ;
-
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
-
-              $rootScope.css_pellet_mode.radial_strock = false ;
-              $rootScope.css_pellet_mode.radial_fill = false ;
-              $rootScope.css_pellet_mode.radial_text_color = false ;
-            }
-            if(e.target.getAttribute('box-target-type') == "box-media"){
-              $rootScope.selecotor_name = ".Media Container";
-              $rootScope.media_container = parseInt(current_class.width());
-
-              $rootScope.css_pellet_mode.background = false;
-              $rootScope.css_pellet_mode.border = false;
-              $rootScope.css_pellet_mode.color = false ;
-              $rootScope.css_pellet_mode.fontSize = false ;
-              $rootScope.css_pellet_mode.fontFamily = false ;
-              $rootScope.css_pellet_mode.width = true ;
-
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
-
-              $rootScope.css_pellet_mode.radial_strock = false ;
-              $rootScope.css_pellet_mode.radial_fill = false ;
-              $rootScope.css_pellet_mode.radial_text_color = false ;
-            }
-            if(e.target.getAttribute('box-target-type') == 'box-labels'){
-
-              $rootScope.border_models_color = current_class.css("border-color");
-              $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
-
-              $rootScope.color_models = current_class.css("color");
-              $('.color_models').spectrum('set' , $rootScope.color_models );
-
-              $rootScope.background_models = current_class.css("background-color");
-              $('.background_models').spectrum('set' , $rootScope.background_models );
-
-              $rootScope.selecotor_name = ".Box";
-              $rootScope.css_pellet_mode.background = true;
-              $rootScope.css_pellet_mode.border = true;
-              $rootScope.css_pellet_mode.color = true ;
-              $rootScope.css_pellet_mode.fontSize = false ;
-              $rootScope.css_pellet_mode.fontFamily = false ;
-              $rootScope.css_pellet_mode.width = false ;
-
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
-
-              $rootScope.css_pellet_mode.radial_strock = false ;
-              $rootScope.css_pellet_mode.radial_fill = false ;
-              $rootScope.css_pellet_mode.radial_text_color = false ;
-            }
-            if(e.target.getAttribute('box-target-type') == 'box-svg-container'){
-              $rootScope.selecotor_name = ".Radial";
-              $rootScope.css_pellet_mode.background = false;
-              $rootScope.css_pellet_mode.border = false;
-              $rootScope.css_pellet_mode.color = false ;
-              $rootScope.css_pellet_mode.fontSize = false ;
-              $rootScope.css_pellet_mode.fontFamily = false ;
-              $rootScope.css_pellet_mode.width = false ;
-
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
-
-              // ==> Fill colors
-              // HERE++++++
-              var number = e.target.getAttribute('box-target-number') ;
-              var class_text_color = ".track-text";
-              var class_fill_track = ".track-progress";
-              var class_stroke_track = ".track-all";
-
-              var target_class_text = class_text_color+'-'+number;
-              var target_fill_track = class_fill_track+'-'+number;
-              var target_stroke_track = class_stroke_track+'-'+number;
-
-              // ==> Case it Progress
-              $rootScope.radial_text_colors = $(target_class_text).css("fill");
-              $('.radial_text_colors').spectrum('set' , $rootScope.radial_text_colors );
-
-              $rootScope.radial_fill_colors = $(target_fill_track).css("fill");
-              $('.radial_fill_colors').spectrum('set' , $rootScope.radial_fill_colors );
-
-              $rootScope.radial_storck_colors = $(target_stroke_track).css("fill");
-              $('.radial_storck_colors').spectrum('set' , $rootScope.radial_storck_colors );
-
-
-              $rootScope.css_pellet_mode.radial_strock = true ;
-              $rootScope.css_pellet_mode.radial_fill = true ;
-              $rootScope.css_pellet_mode.radial_text_color = true ;
-            }
-            if(e.target.getAttribute('box-target-type') == 'box-timer'){
-              $rootScope.selecotor_name = ".Timer";
-              $rootScope.css_pellet_mode.background = true;
-              $rootScope.css_pellet_mode.border = true;
-              $rootScope.css_pellet_mode.color = true ;
-              $rootScope.css_pellet_mode.fontSize = false ;
-              $rootScope.css_pellet_mode.fontFamily = false ;
-              $rootScope.css_pellet_mode.width = false ;
-              $rootScope.css_pellet_mode.hover_background = false ;
-              $rootScope.css_pellet_mode.hover_border = false ;
-              $rootScope.css_pellet_mode.hover_color = false ;
-              $rootScope.css_pellet_mode.selected_background = false ;
-              $rootScope.css_pellet_mode.selected_border = false ;
-              $rootScope.css_pellet_mode.selected_color = false ;
-              $rootScope.css_pellet_mode.correct_background = false ;
-              $rootScope.css_pellet_mode.correct_border = false ;
-              $rootScope.css_pellet_mode.correct_color = false ;
-              $rootScope.css_pellet_mode.correct_icon_background = false ;
-              $rootScope.css_pellet_mode.correct_icon_border = false ;
-              $rootScope.css_pellet_mode.correct_icon_color = false ;
-              $rootScope.css_pellet_mode.wrong_background = false ;
-              $rootScope.css_pellet_mode.wrong_border = false ;
-              $rootScope.css_pellet_mode.wrong_color = false ;
-              $rootScope.css_pellet_mode.wrong_icon_background = false ;
-              $rootScope.css_pellet_mode.wrong_icon_border = false ;
-              $rootScope.css_pellet_mode.wrong_icon_color = false ;
-              $rootScope.css_pellet_mode.rating_color = false ;
-              $rootScope.css_pellet_mode.scale_color = false ;
-              $rootScope.css_pellet_mode.scale_hover_color = false ;
-              $rootScope.css_pellet_mode.scale_background = false ;
-              $rootScope.css_pellet_mode.scale_hover_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_background = false ;
-              $rootScope.css_pellet_mode.free_boxtext_color = false ;
-
-              // ==> Get current colors
-              $rootScope.color_models = current_class.css("color");
-              $('.color_models').spectrum('set' , $rootScope.color_models );
-              $rootScope.background_models = current_class.css("background-color");
-              $rootScope.border_models_color = current_class.css("border-color");
-
-              $('.border_models_color').spectrum('set' , $rootScope.border_models_color );
-              $('.background_models').spectrum('set' , $rootScope.background_models );
-
-              $rootScope.border_style_models = current_class.css("border-style").toString();
-              $rootScope.border_left_models = current_class.css("border-left-width").toString();
-              $rootScope.border_right_models = current_class.css("border-right-width").toString();
-              $rootScope.border_top_models = current_class.css("border-top-width").toString();
-              $rootScope.border_bottom_models = current_class.css("border-bottom-width").toString();
-
-            }
             $timeout(function(){
               $rootScope.$apply();
             } , 50);
@@ -5172,6 +5272,11 @@ $rootScope.load_redactor_data_answers = ( question_id  , answer_lists  ) => {
      $("div[message-name='"+element+"']").next('.note-editor').find('.note-editable').removeClass('msg-placeholder-field')
    }
  }
+ $rootScope.slide_to_expiry_screen = ( is_enabled ) => {
+   if(is_enabled == true ){
+     $rootScope.change_in_view(4);
+   }
+ };
  $rootScope.load_redactor_data_questions = ( question_id = null ) => {
    if(question_id == null )
    question_id = $rootScope._questions_[$rootScope.question_index];

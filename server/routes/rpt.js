@@ -2588,8 +2588,9 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
               if ( questionnaire.app_type == 1 )
               detailes_report.items['score']= ( an_online_report.report_attendee_details != undefined ) ?  an_online_report.report_attendee_details.score : 0;
               detailes_report.items['completed_status']=  ( is_completed_or == -1 ) ? false : true ;
-              detailes_report.items['created_at'] = ( an_online_report.report_attendee_details != undefined ) ?  an_online_report.report_attendee_details.created_at : "unkonwn date";
-              detailes_report.items['completed_date'] =  ( an_online_report.report_attendee_details != undefined ) ? an_online_report.report_attendee_details.completed_date : "unkonwn date";
+
+              detailes_report.items['created_at'] = ( an_online_report.report_attendee_details != undefined ) ?  an_online_report.report_attendee_details.created_at : "unknown date";
+              detailes_report.items['completed_date'] =  ( an_online_report.report_attendee_details != undefined ) ? an_online_report.report_attendee_details.completed_date : "unknown date";
 
 
                if( req.body.questions != null && req.body.questions == true ){
@@ -2646,6 +2647,9 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
                   attendee_object['attendee_id'] =  an_online_rpt.user_id ;
                   attendee_object['name'] = (user_index != -1) ? user_info.name: 'unkonwn';
                   attendee_object['email'] = (user_index != -1) ? user_info.email : 'unkonwn';
+                  var this_usr_dt = online_report.find(x => x.user_id == an_online_rpt.user_id ) ;
+                  if(this_usr_dt == undefined ) this_usr_dt['start_expiration_time'] = new Date();
+
                   if( questionnaire.app_type == 1 )
                   attendee_object['correct_answers'] = ( detailed_online_report == undefined ) ? 0 : detailed_online_report.correct_answers ;
                   if( questionnaire.app_type == 1 )
@@ -2655,8 +2659,11 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
                   if( questionnaire.app_type == 1 )
                   attendee_object['score'] = ( detailed_online_report == undefined ) ? 0: detailed_online_report.score;
                   attendee_object['completed_status'] = ( is_completed_or == -1 ) ? false : true ;
-                  attendee_object['created_at'] = ( detailed_online_report != undefined ) ?  detailed_online_report.created_at : "unkonwn date";
-                  attendee_object['completed_date'] = ( detailed_online_report != undefined ) ?  detailed_online_report.completed_date : "unkonwn date";
+
+
+
+                  attendee_object['created_at'] = ( detailed_online_report != undefined ) ?  detailed_online_report.created_at : this_usr_dt.start_expiration_time;
+                  attendee_object['completed_date'] = ( detailed_online_report != undefined ) ?  detailed_online_report.completed_date :  this_usr_dt.start_expiration_time ;
 
                    if( req.body.questions != null && req.body.questions == true ){
                         if( an_online_rpt.attendee_questions != undefined ){
@@ -2686,8 +2693,9 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
                       var from = new Date(req.body.date.date_from);
                       var to = new Date(req.body.date.date_to);
-
+                      console.log(attendee_object);
                      var date_passed = new Date(attendee_object.completed_date);
+
                      if ( date_passed >= from && date_passed <= to ) {
                         detailes_report.items.push(attendee_object);
                       }

@@ -79,7 +79,7 @@
               <ul>
                 <li class="righ-check-box">
                   <label for="enable-progress-bar" style=" margin-left: 10px;" >Enable Progress bar</label>
-                  <input ng:model="_settings_.progression_bar.is_available" type="checkbox" id="enable-progress-bar" class="switch_1 input-checkboxes">
+                  <input ng:change="change_in_view(3)" ng:model="_settings_.progression_bar.is_available" type="checkbox" id="enable-progress-bar" class="switch_1 input-checkboxes">
                 </li>
                 <li class="righ-check-box dropdown" ng:show="_settings_.progression_bar.is_available">
                   <label style=" margin-left: 10px;" >Styles</label>
@@ -191,7 +191,7 @@
                   <label for="allow-expiration-date" style=" margin-left: 10px;" >
                     Enable Expiry System
                   </label>
-                  <input ng:model="_settings_.expiration.is_set" type="checkbox" id="allow-expiration-date" class="switch_1 input-checkboxes">
+                  <input ng:change="slide_to_expiry_screen(_settings_.expiration.is_set)" ng:model="_settings_.expiration.is_set" type="checkbox" id="allow-expiration-date" class="switch_1 input-checkboxes">
                 </li>
                 <li  class="righ-check-box" ng:show="_settings_.expiration.is_set">
                   <label style="margin-left: 10px;" >
@@ -231,12 +231,12 @@
                   <div class="msg-redactors" message-name="ending-screen" ng:custom:message:editors></div>
                   <!-- <textarea ng:keyup="go_to_screen_number(1)" ng:model="_settings_.titles.title_end_with" class="text-area-style set_redactor" name="name"></textarea> -->
                 </li>
-                <li ng:show="_application_.app_type == 1" class="righ-check-box">
+                <li ng:show="(_application_.app_type == 1 && _settings_.grade_settings.is_graded == true)" class="righ-check-box">
                   <label class="redactor-xxxx"  style=" margin-left: 10px;">Quiz Pass Page  </label>
                   <div class="msg-redactors" message-name="pass-quiz-screen" ng:custom:message:editors></div>
                   <!-- <textarea  ng:keyup="go_to_screen_number(2)" ng:model="_settings_.titles.title_success_with" class="text-area-style set_redactor" name="name"></textarea> -->
                 </li>
-                <li ng:show="_application_.app_type == 1" class="righ-check-box">
+                <li ng:show="(_application_.app_type == 1 && _settings_.grade_settings.is_graded == true)" class="righ-check-box">
                   <label class="redactor-xxxx"  style=" margin-left: 10px;">Quiz Fail Page </label>
                   <div class="msg-redactors" message-name="failed-quiz-screen" ng:custom:message:editors></div>
                   <!-- <textarea ng:keyup="go_to_screen_number(2)" ng:model="_settings_.titles.title_failed_with" class="text-area-style set_redactor" name="name"></textarea> -->
@@ -380,6 +380,10 @@
               <div ng:show="enable_css_mode" class="pellet-containerz">
                 <h4 class="element_types" ng:if="selecotor_name == '.Answers'">Basic</h4>
                 <ul>
+                  <li ng:show="show_apply_changes">
+                    <span>Apply styles in all question slides </span>
+                    <input class="switch_1" type="checkbox" ng:change="apply_css_changes(apply_in_all_slides)" ng:model="apply_in_all_slides" checked>
+                  </li>
                   <li ng:show="css_pellet_mode.radial_text_color == true">
                     <span>Text Color</span>
                     <input ng:change="apply_stylesheet_in_views( 'fill', radial_text_colors)" ng:model="radial_text_colors" class="radial_text_colors" type="text" name="" value="">
@@ -479,6 +483,7 @@
                 <!--  Hover Cases -->
                 <h4 class="element_types" ng:if="selecotor_name == '.Answers'">Hover Cases</h4>
                 <ul>
+
                   <li ng:show="css_pellet_mode.hover_background == true">
                     <span>Background</span>
                     <input ng:change="apply_stylesheet_in_views('background-color' , hover_background_models , 'hover')" ng:model="hover_background_models" class="hover_background_models" type="text" name="" value="">

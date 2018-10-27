@@ -4909,9 +4909,13 @@ textarea.text-area-style:focus {
 	cursor: pointer;
 }
 *[contentEditable='true']:focus {
-	outline: #20fdb9 solid 2px !important;
+	outline: #ff0000 solid 3px !important;
 	outline-offset: 4px;
 	cursor: pointer;
+
+  -webkit-transition: outline .2s linear;
+  transition: outline .2s linear;
+  -moz-transition: outline .2s linear;
 }
 button[contentEditable='true']:focus {
 	outline: #20fdb9 solid 3px !important;
@@ -5807,4 +5811,10 @@ ul li span.status-progress {
   .mobile-menu-qs { display: inline-block; }
   .side-left-bar { left:-126px  }
   .update-rows { margin-left:0px; }
+}
+.pellet-containerz > ul > li > input[type="checkbox"].switch_1{
+  border:none;
+}
+.pellet-containerz > ul > li > input[type="checkbox"].switch_1::after {
+  top: -1px ;
 }
