@@ -2579,6 +2579,11 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
               detailes_report.items['email'] = this_user.email ;
               detailes_report.items['name'] = this_user.name;
 
+              var this_usr_dt = online_report.find(x => x.user_id == an_online_report.user_id ) ;
+              if(this_usr_dt == undefined ) this_usr_dt['start_expiration_time'] = new Date();
+
+
+
               if( questionnaire.app_type == 1 )
               detailes_report.items['correct_answers'] = ( an_online_report.report_attendee_details != undefined ) ? an_online_report.report_attendee_details.wrong_answers : 0;
               if( questionnaire.app_type == 1 )
@@ -2589,8 +2594,8 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
               detailes_report.items['score']= ( an_online_report.report_attendee_details != undefined ) ?  an_online_report.report_attendee_details.score : 0;
               detailes_report.items['completed_status']=  ( is_completed_or == -1 ) ? false : true ;
 
-              detailes_report.items['created_at'] = ( an_online_report.report_attendee_details != undefined ) ?  an_online_report.report_attendee_details.created_at : "unknown date";
-              detailes_report.items['completed_date'] =  ( an_online_report.report_attendee_details != undefined ) ? an_online_report.report_attendee_details.completed_date : "unknown date";
+              detailes_report.items['created_at'] = ( an_online_report.report_attendee_details != undefined ) ?  an_online_report.report_attendee_details.created_at : this_usr_dt.start_expiration_time;
+              detailes_report.items['completed_date'] =  ( an_online_report.report_attendee_details != undefined ) ? an_online_report.report_attendee_details.completed_date : this_usr_dt.start_expiration_time;
 
 
                if( req.body.questions != null && req.body.questions == true ){
