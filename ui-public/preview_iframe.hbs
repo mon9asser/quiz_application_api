@@ -154,7 +154,7 @@
              <!-- Question Container  -->
              <div class="question-container">
                <!-- Question Text -->
-                <div class="question-body question_opg_editor question-box-text">
+                <div ng:style="{ color : ( obj_val.question_body == '' )? '#888' : '' }" class="question-body question_opg_editor question-box-text">
                   <!-- Question Label (Serial number) -->
                   <span  class="label-question question-label-box">
                     <span ng:cloak class="qs-numericals">
@@ -198,15 +198,11 @@
                <!-- Boolean && multiple choices && Media Choices -->
                <ul id="question-ul-{>obj_val._id<}"  ng:class="( (obj_val.question_type == 0 || obj_val.question_type == 1 ) && obj_val.answer_settings.single_choice == false )? 'border_line' : '' " class="answer_opg_editor question-list" ng:if="obj_val.question_type <= 2">
                  <div style="top:0px;bottom:0px;left:0px;right:0px; position:absolute; background:transparent ; z-index:10000;" ng:show="disable_funcs"></div>
-                 <li ng:style="(obj_val.question_type == 2 ) ? { width : '48%'}:'' " ng:if="answer_value != null" class="selector answer_opg_editor question-answer-row-select-blk question-answer-row-select answer-{>answer_value._id<}" ng:repeat="(anskey , answer_value) in obj_val.answers_format track by $index"  ng:class="show_solved_answers($parent.$index , obj_val._id ,answer_value._id , answer_value.is_correct )" ng:click="select_answer ( obj_val , answer_value )">
+                 <li ng:if="answer_value != null" class="selector answer_opg_editor question-answer-row-select-blk question-answer-row-select answer-{>answer_value._id<}" ng:repeat="(anskey , answer_value) in obj_val.answers_format track by $index"  ng:class="show_solved_answers($parent.$index , obj_val._id ,answer_value._id , answer_value.is_correct )" ng:click="select_answer ( obj_val , answer_value )">
                    <!-- Answer label -->
                    <!-- {> question_labels['label_' + _settings_.indexes.questions.toString()][question_index] | uppercase <} -->
-                   <!-- <span box-target-type="box-labels" box-target-class="answer_label"  class="answer_label selector">{> question_labels['label_' + _settings_.indexes.answers.toString()][$index] | uppercase <}</span> -->
-                   <label  ng:cloak class="selector labels select_box_brd answer_numbering_block answer_numbering_block_box">
-                     {> show_question_answer_serials( $index , _settings_.indexes.answers )| uppercase <}
-                   </label>
 
-                  <!-- Answer Media  -->
+                   <!-- Answer Media  -->
                    <!-- answer media for 0 -->
                    <div ng:if="answer_value.media_optional != undefined && obj_val.question_type == 0" class="media-data-answer">
                      <!-- Case it Image -->
@@ -226,7 +222,7 @@
                    <div ng:if="obj_val.question_type == 1" class="media-data-answer">
                      <!-- Case There is not any media  -->
                      <div ng:if='answer_value.media_type == undefined' class="not-media-there">
-                        <img ng:cloak ng:src="{> server_ip + 'img/media-default-icone.jpg'<}" class="image-responsive" alt="Image">
+                        <img style="border: 37px solid transparent; " ng:cloak ng:src="{> server_ip + 'img/media-default-icone.jpg'<}" class="image-responsive" alt="Image">
                      </div>
                      <!-- Case it Image -->
                      <img ng:cloak ng:if="answer_value.Media_directory != undefined && answer_value.media_type == 0" ng:src="{>answer_value.Media_directory + '?' + answer_value.image_updated_date <}" alt="Image"  class="image-responsive">
@@ -241,6 +237,10 @@
                         </video>
                      </div>
                    </div>
+                   <!-- <span box-target-type="box-labels" box-target-class="answer_label"  class="answer_label selector">{> question_labels['label_' + _settings_.indexes.answers.toString()][$index] | uppercase <}</span> -->
+                   <label ng:class="( obj_val.question_type == 1 ) ? 'media-answer-1' : ''" ng:cloak class="selector labels select_box_brd answer_numbering_block answer_numbering_block_box">
+                     {> show_question_answer_serials( $index , _settings_.indexes.answers )| uppercase <}
+                   </label>
                     <!-- Answer Texts  -->
                     <div ng:if="obj_val.question_type == 0" class="answer-texts answer_txt_val">
                       <span ng:cloak class="answer_text" ng:bind:html="answer_value.value | apply_html"></span>

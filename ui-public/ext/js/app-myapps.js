@@ -135,6 +135,21 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
 
        $.getJSON($scope.json_apk_file , function(api_key_data){
          setTimeout(function(){
+           if ( $scope.applicationType == 0 ){
+             // ==> Survey
+             $scope.application_settings.titles.title_resume = "Resume your survey now";
+             $scope.application_settings.titles.title_success_with = "";
+             $scope.application_settings.titles.title_failed_with = "";
+             $scope.application_settings.titles.title_start_with = "Start the survey now";
+             $scope.application_settings.titles.title_end_with = "Thank you for completing the survey";
+           }else {
+             // ==> Quiz
+              $scope.application_settings.titles.title_resume = "Resume your quiz now";
+              $scope.application_settings.titles.title_success_with = "Congratulations ! You have successfully completed the quiz";
+              $scope.application_settings.titles.title_failed_with = "Unfortunately , You have not successfully completed the quiz";
+              $scope.application_settings.titles.title_start_with = "Start the quiz now";
+              $scope.application_settings.titles.title_end_with = "Thank you for completing the quiz";
+           }
            $http({
                method : "POST" ,
                url    : $scope.api_url ,

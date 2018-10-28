@@ -117,7 +117,9 @@
                    <div ng:if="_questions_[question_index].question_type == 1" class="media-data-answer">
                      <!-- Case There is not any media  -->
                      <div ng:if='answer_value.media_type == undefined' ng:click="add_new_media_for_answer(answer_value._id , this)" class="not-media-there">
-                        <img ng:src="{> server_ip + 'img/media-default-icone.jpg'<}" class="image-responsive" alt="Image">
+                       <!-- <i class="fa fa-picture-o" aria-hidden="true"></i> -->
+                       <img style="border: 37px solid transparent; " ng:cloak ng:src="{> server_ip + 'img/media-default-icone.jpg'<}" class="image-responsive" alt="Image">
+                        <!-- <img ng:src="{> server_ip + 'img/media-default-icone.jpg'<}" class="image-responsive" alt="Image"> -->
                      </div>
                      <!-- Case it Image -->
                      <img ng:if="answer_value.Media_directory != undefined && answer_value.media_type == 0" ng:src="{>answer_value.Media_directory + '?' + answer_value.image_updated_date <}" alt="Image"  class="image-responsive">
@@ -216,6 +218,15 @@
                          </span>
                       </div>
                    </li>
+                   <!-- <li ng:if="detect_media_status(_questions_[question_index].question_type , _questions_[question_index] )" class="single_response_qs" ng:if="_questions_[question_index].question_type <= 1">
+                     <div class="checkbox-toggle answer-settins">
+                        <input ng:change="change_answer_style(_questions_[question_index].answer_settings.answer_style)" ng:model="_questions_[question_index].answer_settings.answer_style" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
+                        <span class="title-checkbox"  data-toggle="tooltip" data-placement="right" title="Answer Style">
+                          Answer Style
+                          <i class="help-links">?</i>
+                        </span>
+                     </div>
+                  </li> -->
                    <li class="randomize_qs" ng:if="_questions_[question_index].question_type <= 1">
                      <div class="checkbox-toggle answer-settins">
                          <input ng:model="_questions_[question_index].answer_settings.is_randomized" ng:change="is_randomized_answer_with(_questions_[question_index].answer_settings.is_randomized)" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
@@ -225,7 +236,7 @@
                          </span>
                       </div>
                    </li>
-                   <li class="super_sizer_qs" ng:if="_questions_[question_index].question_type <= 1">
+                   <li class="super_sizer_qs" ng:if="_questions_[question_index].question_type <= 2">
                      <div class="checkbox-toggle answer-settins">
                          <input ng:change="is_unsaved_data_func()" ng:model="_questions_[question_index].answer_settings.super_size" type="checkbox" id="check-toggle-2" class="switch_1 input-checkboxes">
                          <span class="title-checkbox"   data-toggle="tooltip" data-placement="right" title="Show Image/Video in larger size">

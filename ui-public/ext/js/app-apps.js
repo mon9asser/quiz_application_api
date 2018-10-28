@@ -1154,6 +1154,9 @@ $rootScope.loading_application_data = () => {
          return formatByteSize(sizeOf(obj));
        }
 
+$rootScope.detect_media_status = ( question_type , question_object ) => {
+  return true;
+};
   $rootScope.switching_editor_previewd = (is_view) => {
         if( is_view == true)
         {
@@ -1231,6 +1234,7 @@ $rootScope.loading_application_data = () => {
       $rootScope.build_question_settings ( 'is_required' , false , question_object._id );
       $rootScope.build_question_settings ( 'single_choice' , true , question_object._id );
       $rootScope.build_question_settings ( 'super_size' , false , question_object._id );
+      $rootScope.build_question_settings ( 'answer_style' , false , question_object._id );
     }
     if( question_type == 1 ){
        // answer_object['_id'] = $rootScope.answer_ids[ 'id_' + question_object.answers_format.length ];
@@ -1262,6 +1266,7 @@ $rootScope.loading_application_data = () => {
        answer_object_2['is_correct'] = true ;
        $rootScope.build_question_settings ( 'is_randomized' , false , question_object._id );
        $rootScope.build_question_settings ( 'is_required' , false , question_object._id );
+       $rootScope.build_question_settings ( 'super_size' , false , question_object._id );
        // => Push To Answer Array
        question_object.answers_format.push( answer_object_2 );
     }
@@ -1728,6 +1733,7 @@ $rootScope.loading_application_data = () => {
   }
   // ==> Add media for question
   $rootScope.add_new_media_for_answer = (answer_id , thisElem) => {
+
     var main_answer_blocks = $('.answer-pt-controller');
     var current_box = main_answer_blocks.children("li").eq(thisElem.$index);
     $(".box-data").css({ top : ( parseInt(current_box.offset().top - 110) ) + 'px'});
@@ -1785,6 +1791,11 @@ $rootScope.loading_application_data = () => {
         }
       }
 
+
+      // ==> animate to target box
+      $("html , body").animate({
+        scrollTop : $(".box-data").offset().top - 200
+      } , 200 );
       // console.log($rootScope.media_data);
    }
   // => Close Current window
@@ -2530,9 +2541,13 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
     index = $rootScope._questions_.findIndex(x => x._id == question_id );
 
 
-    if( index != -1 && $rootScope._questions_[index].answer_settings.super_size == true || ( $rootScope._questions_[index] != undefined && $rootScope._questions_[index].question_type == 2 ) )
+    if( index != -1 && $rootScope._questions_[index].answer_settings.super_size == true || ( $rootScope._questions_[index] != undefined && $rootScope._questions_[index].question_type == 2 && $rootScope._questions_[index].answer_settings.super_size == true ) )
     classes += "super_size_class ";
 
+
+    // if( index != -1 && $rootScope._questions_[index].question_type == 2 && $rootScope._questions_[index].answer_settings.super_size == true )
+    // classes += "super_size_class ";
+    console.log(classes);
     // ==> List solved questions
     if( $rootScope._user_activity_ != undefined && $rootScope._user_activity_ != null ){
       var user_index =   $rootScope._user_activity_;

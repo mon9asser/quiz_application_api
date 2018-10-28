@@ -147,7 +147,7 @@
              <!-- Question Container  -->
              <div class="question-container">
                <!-- Question Text -->
-                <div class="question-body question_opg_editor question-box-text">
+                <div class="question-body question_opg_editor question-box-text" ng:style="{ color : ( obj_val.question_body == '' )? '#888' : '' }">
                   <!-- Question Label (Serial number) -->
                   <span  class="label-question question-label-box">
                     <span ng:cloak class="qs-numericals">
@@ -194,9 +194,7 @@
                    <!-- Answer label -->
                    <!-- {> question_labels['label_' + _settings_.indexes.questions.toString()][question_index] | uppercase <} -->
                    <!-- <span box-target-type="box-labels" box-target-class="answer_label"  class="answer_label selector">{> question_labels['label_' + _settings_.indexes.answers.toString()][$index] | uppercase <}</span> -->
-                   <label ng:cloak class="selector labels select_box_brd answer_numbering_block answer_numbering_block_box">
-                     {> show_question_answer_serials( $index , _settings_.indexes.answers )| uppercase <}
-                   </label>
+
 
                   <!-- Answer Media  -->
                    <!-- answer media for 0 -->
@@ -218,7 +216,7 @@
                    <div ng:if="obj_val.question_type == 1" class="media-data-answer">
                      <!-- Case There is not any media  -->
                      <div ng:if='answer_value.media_type == undefined' class="not-media-there">
-                        <img ng:cloak ng:src="{> server_ip + 'img/media-default-icone.jpg'<}" class="image-responsive" alt="Image">
+                        <img style="border: 37px solid transparent; " ng:cloak ng:src="{> server_ip + 'img/media-default-icone.jpg'<}" class="image-responsive" alt="Image">
                      </div>
                      <!-- Case it Image -->
                      <img ng:cloak ng:if="answer_value.Media_directory != undefined && answer_value.media_type == 0" ng:src="{>answer_value.Media_directory + '?' + answer_value.image_updated_date <}" alt="Image"  class="image-responsive">
@@ -233,6 +231,10 @@
                         </video>
                      </div>
                    </div>
+
+                   <label ng:class="( obj_val.question_type == 1 ) ? 'media-answer-1' : ''" ng:cloak class="selector labels select_box_brd answer_numbering_block answer_numbering_block_box">
+                     {> show_question_answer_serials( $index , _settings_.indexes.answers )| uppercase <}
+                   </label>
                     <!-- Answer Texts  -->
                     <div ng:if="obj_val.question_type == 0" class="answer-texts answer_txt_val">
                       <span ng:cloak class="answer_text">{> answer_value.value <}</span>

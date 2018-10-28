@@ -1294,7 +1294,7 @@ apps.controller("player", [
         index = $scope._questions_.findIndex(x => x._id == question_id );
 
 
-        if( index != -1 && $scope._questions_[index].answer_settings.super_size == true || ( $scope._questions_[index] != undefined && $scope._questions_[index].question_type == 2 ) )
+        if( index != -1 && $scope._questions_[index].answer_settings.super_size == true || ( $scope._questions_[index] != undefined && $scope._questions_[index].question_type == 2  && $rootScope._questions_[index].answer_settings.super_size == true ) )
         classes += "super_size_class ";
 
         // ==> List solved questions

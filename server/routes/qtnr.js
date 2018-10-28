@@ -2723,6 +2723,23 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
         res.status(404).send(notes.notifications.catch_doesnt_existing_data("Application Type"));
       });
     }
+
+    if ( req.body.app_type == 1 )
+    {
+      // ==> QUIZ title_start_with title_end_with
+      req.body.app_settings.titles.title_resume = "Resume your quiz now";
+      req.body.app_settings.titles.title_success_with = "Congratulations ! You have successfully completed the quiz";
+      req.body.app_settings.titles.title_failed_with = "Unfortunately , You have not successfully completed the quiz";
+      req.body.app_settings.titles.title_start_with = "Start the quiz now";
+      req.body.app_settings.titles.title_end_with = "Thank you for completing the quiz";
+    }else {
+      // ==> SURVEY
+      req.body.app_settings.titles.title_resume = "Resume your survey now";
+      req.body.app_settings.titles.title_success_with = "";
+      req.body.app_settings.titles.title_failed_with = "";
+      req.body.app_settings.titles.title_start_with = "Start the survey now";
+      req.body.app_settings.titles.title_end_with = "Thank you for completing the survey";
+    }
     // Builde And Init Default !
     req.body.createdAt = new Date();
     req.body.updatedAt = new Date();

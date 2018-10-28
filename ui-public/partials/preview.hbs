@@ -19,6 +19,10 @@
       border-bottom: 1px solid #e4e4e6;
       border-right: 1px solid #e4e4e6;
    }
+   .answer-container ul li.super_size_class {
+    width: 98%;
+    display: inline-block;
+}
  </style>
 
 
@@ -46,7 +50,7 @@
    -->
 
     <div ng:if="screen_type == 3" box-question-slide="this_slide_{>_questions_[question_index]._id<}" box-target-type="box-containers" box-target-class="question-screen-box" class="selector x-widther container screen-container survey-player-questions question_typeco_object question_opg_editor_block select_box_brd question-screen-block question-screen-box this_slide_{>_questions_[question_index]._id<}">
-       <div box-target-type="box-containers" box-target-class="question-box-text" class="selector text-left question-body load_qs_theme question_opg_editor select_box_brd question-box-block question-box-text">
+       <div ng:style="{ color : ( _questions_[question_index].question_body == '' )? '#888' : '' }" box-target-type="box-containers" box-target-class="question-box-text" class="selector text-left question-body load_qs_theme question_opg_editor select_box_brd question-box-block question-box-text">
           <span box-target-type="box-labels" box-target-class="question-label-box" class="selector label-question default_theme_texts_bg select_box_brd question-label-block question-label-box">
             <span class="qs-numericals select_numbers">
               {> show_question_answer_serials(question_index , _settings_.indexes.questions )| uppercase <}
@@ -97,11 +101,8 @@
        <div class="answer-container answer-block-selector">
           <ul box-target-type="box-containers" box-target-class="border_line" id="question-ul-{>_questions_[question_index]._id<}"  ng:class="( (_questions_[question_index].question_type == 0 || _questions_[question_index].question_type == 1 ) && _questions_[question_index].answer_settings.single_choice == false )? 'border_line' : '' " class="answer_opg_editor question-list" ng:if="_questions_[question_index].question_type <= 2">
             <div style="top:0px;bottom:0px;left:0px;right:0px; position:absolute; background:transparent ; z-index:10000;" ng:show="disable_funcs"></div>
-            <li ng:if="answer_value != null" class="selector answer_opg_editor question-answer-row-select-blk question-answer-row-select answer-{>answer_value._id<}" ng:repeat="(anskey , answer_value) in _questions_[question_index].answers_format track by $index"  ng:class="show_solved_answers( _questions_[question_index]._id ,answer_value._id , answer_value.is_correct )" ng:click="select_answer ( _questions_[question_index] , answer_value )" box-target-class="answer-container ul li" box-target-type="box-answers" ng:style="(_questions_[question_index].question_type == 2 ) ? { width : '48%'}:'' ">
-              <!-- Answer Label -->
-              <label box-target-type="box-labels" box-target-class="answer_numbering_block_box"  ng:cloak class="selector labels select_box_brd answer_numbering_block answer_numbering_block_box">
-                {> show_question_answer_serials( $index , _settings_.indexes.answers )| uppercase <}
-              </label>
+            <li ng:if="answer_value != null" class="selector answer_opg_editor question-answer-row-select-blk question-answer-row-select answer-{>answer_value._id<}" ng:repeat="(anskey , answer_value) in _questions_[question_index].answers_format track by $index"  ng:class="show_solved_answers( _questions_[question_index]._id ,answer_value._id , answer_value.is_correct )" ng:click="select_answer ( _questions_[question_index] , answer_value )" box-target-class="answer-container ul li" box-target-type="box-answers">
+
               <!-- answer media for 0 -->
               <div ng:if="answer_value.media_optional != undefined && _questions_[question_index].question_type == 0" class="media-data-answer">
                 <!-- Case it Image -->
@@ -118,10 +119,10 @@
                 </div>
               </div>
               <!-- answer media for 1 -->
-              <div ng:if="_questions_[question_index].question_type == 1" class="media-data-answer">
+              <div ng:if="_questions_[question_index].question_type == 1" class="media-data-answer media-answer-block">
                 <!-- Case There is not any media  -->
                 <div ng:if='answer_value.media_type == undefined' class="not-media-there">
-                   <img ng:cloak ng:src="{> server_ip + 'img/media-default-icone.jpg'<}" class="image-responsive" alt="Image">
+                   <img style="border: 37px solid transparent; " ng:cloak ng:src="{> server_ip + 'img/media-default-icone.jpg'<}" class="image-responsive" alt="Image">
                 </div>
                 <!-- Case it Image -->
                 <img ng:cloak ng:if="answer_value.Media_directory != undefined && answer_value.media_type == 0" ng:src="{>answer_value.Media_directory + '?' + answer_value.image_updated_date <}" alt="Image"  class="image-responsive">
@@ -136,17 +137,24 @@
                    </video>
                 </div>
               </div>
-              <!-- Answer Texts  -->
-              <div ng:if="_questions_[question_index].question_type == 0" class="answer-texts answer_txt_val">
-                <span ng:cloak class="answer_text" ng:bind:html="answer_value.value | apply_html"></span>
-              </div>
-              <!-- Case Boolean questions -->
-              <div class="answer_txt_val" ng:if="_questions_[question_index].question_type == 2">
-                <span ng:cloak class="answer_text">{> answer_value.boolean_value <}</span>
-              </div>
 
-              <span class="iconxs-correct-answers fa fa-times wrong-ico"></span>
-              <span class="iconxs-correct-answers fa fa-check correct-ico"></span>
+              <div class="block-answer-text">
+                  <!-- Answer Label -->
+                  <label ng:class="( _questions_[question_index].question_type == 1 ) ? 'media-answer-1' : ''" ng:cloak class="selector labels select_box_brd answer_numbering_block answer_numbering_block_box">
+                    {> show_question_answer_serials( $index , _settings_.indexes.answers )| uppercase <}
+                  </label>
+                  <!-- Answer Texts  -->
+                  <div ng:if="_questions_[question_index].question_type == 0" class="answer-texts answer_txt_val">
+                    <span ng:cloak class="answer_text" ng:bind:html="answer_value.value | apply_html"></span>
+                  </div>
+                  <!-- Case Boolean questions -->
+                  <div class="answer_txt_val" ng:if="_questions_[question_index].question_type == 2">
+                    <span ng:cloak class="answer_text">{> answer_value.boolean_value <}</span>
+                  </div>
+
+                  <span class="iconxs-correct-answers fa fa-times wrong-ico"></span>
+                  <span class="iconxs-correct-answers fa fa-check correct-ico"></span>
+              </div>
             </li>
           </ul>
           <!-- Case Answers is (Rating Scale)  -->

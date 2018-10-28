@@ -672,6 +672,8 @@ apps.controller("player", [
       } , 1000 );
     };
     $scope.retake_the_quiz = (currentIndex) => {
+
+
       $scope.is_retake = true ;
       $rootScope.is_reviewed = false ;
       $(".retake-result-box").children("i.fa").removeClass("fa-arrow-right");
@@ -686,6 +688,7 @@ apps.controller("player", [
 
 
         $scope.truncate_attendee_data(currentIndex);
+
       } , 1000 );
     }
 
@@ -700,6 +703,7 @@ apps.controller("player", [
         data : { user_id : $scope.user_id }
       }).then((res)=>{
         $(".retake-result-box").children("i.fa").removeClass("fa-spin")
+        window.location.reload();
         // ==> Truncate from two views ( offline + online )
         // $scope._application_.att__draft = null ;
         // $scope._application_.app_report = null;
@@ -718,7 +722,7 @@ apps.controller("player", [
 
           $scope.$apply();
 
-          $scope.swipperJs.slideTo(currentIndex);
+          // $scope.swipperJs.slideTo(currentIndex);
 
           $timeout(function(){
             $scope.finished_is_clicked = false ;
@@ -1095,7 +1099,7 @@ apps.controller("player", [
                  if( app_type == 1 && report_questions.question_answers.length != 0 ){
                      // ==> Mark if this question is right
 
-                     var filter_wrong_answers = report_questions.question_answers[qs_index].user_answers.filter(x => x.is_correct == false ) ;
+                     var filter_wrong_answers = ( report_questions.question_answers[qs_index] != undefined ) ? report_questions.question_answers[qs_index].user_answers.filter(x => x.is_correct == false ) : [] ;
                      if(filter_wrong_answers.length != 0){
                         // wrong question
                         if( report_questions.question_answers[qs_index].is_correct == undefined )
@@ -1103,9 +1107,11 @@ apps.controller("player", [
                           report_questions.question_answers[qs_index].is_correct = false;
                      }else {
                        // correct answer
+                       if(report_questions.question_answers[qs_index] != undefined ){
                        if( report_questions.question_answers[qs_index].is_correct == undefined )
                          report_questions.question_answers[qs_index]['is_correct'] = true;
                          report_questions.question_answers[qs_index].is_correct = true;
+                         }
                      }
                  }
                }
@@ -1331,7 +1337,7 @@ apps.controller("player", [
         index = $scope._questions_.findIndex(x => x._id == question_id );
 
 
-        if( index != -1 && $scope._questions_[index].answer_settings.super_size == true || ( $scope._questions_[index] != undefined && $scope._questions_[index].question_type == 2 ) )
+        if( index != -1 && $scope._questions_[index].answer_settings.super_size == true || ( $scope._questions_[index] != undefined && $scope._questions_[index].question_type == 2 && $rootScope._questions_[index].answer_settings.super_size == true ) )
         classes += "super_size_class ";
 
 
