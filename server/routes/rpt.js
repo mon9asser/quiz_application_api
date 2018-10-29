@@ -2606,8 +2606,8 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
                           detailes_report.items['questions'] = an_online_report.attendee_questions.filter(filter_question_texts);
                         }
                       else
-                      detailes_report.items['questions'] ="No questions meet your selected criteria" ;
-                    }else detailes_report.items['questions'] ="No questions meet your selected criteria"
+                      detailes_report.items['questions'] = new Array() ;
+                    }else detailes_report.items['questions'] = new Array() ;
                }
                 // => End questions
 
@@ -2680,9 +2680,9 @@ rptRouters.post("/:app_id/detailed/report", api_key_report_auth ,( req , res ) =
 
                           }
                           else
-                          attendee_object['questions'] = "No questions meet your selected criteria"
+                          attendee_object['questions'] = new Array() ;
                         }else
-                         attendee_object['questions'] = "No questions meet your selected criteria"
+                         attendee_object['questions'] = new Array() ;
                    }
 
 
