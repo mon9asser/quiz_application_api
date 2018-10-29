@@ -409,7 +409,7 @@ apps.controller("player", [
                     var previous_index = this_slide[0].previousIndex;
                     if(current_index == 1 && previous_index == 0 && ( $scope._user_activity_ != null && ( $scope._user_activity_ != null && $scope._user_activity_.user_completed_status != undefined) || ($scope._user_activity_  == null || $scope._user_activity_.user_completed_status == false) )){
                       if($scope._settings_.navigation_btns == false && ( $scope._user_activity_ == null ))
-                       $scope.start_the_quiz();
+                       $scope.start_the_quiz_x();
                     }
                     if($scope._user_activity_ != null && $scope._user_activity_.is_completed == true ){
                       if( $scope._settings_.time_settings.is_with_time == true )
@@ -472,7 +472,7 @@ apps.controller("player", [
 
             $timeout(function(){
               if( $scope._settings_.enable_screens == false && $scope.isEmpty($scope._user_activity_) )
-                  $scope.start_the_quiz();
+                  $scope.start_the_quiz_x();
             } , 1000 );
         }).catch((error) => {
           // // // console.log(error);
@@ -659,7 +659,7 @@ apps.controller("player", [
           $scope._application_.app_report = null;
           $scope._user_activity_ = null ;
           $scope._online_report_ = undefined ;
-          $scope.loading_application_data();
+          // $scope.loading_application_data();
           $timeout(function(){
              $scope.randomize_sorting_questions(true);
              $scope.finished_is_clicked = false ;
@@ -702,37 +702,39 @@ apps.controller("player", [
         method : "POST" ,
         data : { user_id : $scope.user_id }
       }).then((res)=>{
-        $(".retake-result-box").children("i.fa").removeClass("fa-spin")
+        $(".retake-result-box").children("i.fa").removeClass("fa-spin");
+        console.log(res);
+        return false ;
         window.location.reload();
         // ==> Truncate from two views ( offline + online )
         // $scope._application_.att__draft = null ;
         // $scope._application_.app_report = null;
         // $scope._user_activity_ = null ;
         // $scope._online_report_ = undefined ;
-        $scope.loading_application_data();
-        $timeout(function(){
-          $scope._application_.att__draft = null ;
-          $scope._application_.app_report = null;
-          $scope._user_activity_ = null ;
-          $scope._online_report_ = undefined ;
-          $scope.randomize_sorting_questions(true);
-        } , 1000)
-        $timeout(function(){
-
-
-          $scope.$apply();
+        // $scope.loading_application_data();
+        // $timeout(function(){
+        //   $scope._application_.att__draft = null ;
+        //   $scope._application_.app_report = null;
+        //   $scope._user_activity_ = null ;
+        //   $scope._online_report_ = undefined ;
+        //   $scope.randomize_sorting_questions(true);
+        // } , 1000)
+        // $timeout(function(){
+        //
+        //
+        //   $scope.$apply();
 
           // $scope.swipperJs.slideTo(currentIndex);
 
-          $timeout(function(){
-            $scope.finished_is_clicked = false ;
-            if($scope._user_activity_ == null )
-            $scope._user_activity_ = new Object();
-            $scope._user_activity_['user_completed_status'] = false;
-            $scope.start_the_quiz();
-          } , 2000 );
-
-        } , 300 );
+        //   $timeout(function(){
+        //     $scope.finished_is_clicked = false ;
+        //     if($scope._user_activity_ == null )
+        //     $scope._user_activity_ = new Object();
+        //     $scope._user_activity_['user_completed_status'] = false;
+        //     $scope.start_the_quiz();
+        //   } , 2000 );
+        //
+        // } , 300 );
 
       }).catch((err)=>{
         console.log(err);
@@ -881,6 +883,14 @@ apps.controller("player", [
 
       }
     };
+    $scope.start_the_quiz_x = () => {
+      $scope.is_resume = true ;
+      // ==> Joing to quiz
+      $scope.join_this_quiz();
+      // ==> Start timer
+      if( $scope._settings_.time_settings.is_with_time == true )
+      $scope.timer_proccess();
+    }
     $scope.start_the_quiz = () => {
       $scope.is_resume = true ;
       // ==> Joing to quiz

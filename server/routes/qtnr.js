@@ -5490,6 +5490,8 @@ qtnrRouters.post("/:app_id/truncate/attendee/data/object" , (req , res) => {
   drft.findOne({'application_id' : app_id }).then((online)=>{
     if( online && online != null ){
        var usrIndex = online.att_draft.findIndex(x => x.user_id == user_id );
+
+       console.log("User Indext in online report :- " + usrIndex );
        if(usrIndex != -1 ){
          online.att_draft.splice(usrIndex , 1 );
        }
@@ -5502,13 +5504,20 @@ qtnrRouters.post("/:app_id/truncate/attendee/data/object" , (req , res) => {
   rpt.findOne({'questionnaire_id' : app_id }).then((offline)=>{
     if(offline && offline != null ){
       var usrIndexDetails = offline.attendee_details.findIndex(x => x.attendee_id == user_id );
+      console.log("User Indext in offline detailed report :- " + usrIndexDetails );
       if(usrIndexDetails != -1 ){
         offline.attendee_details.splice(usrIndexDetails , 1 );
       }
+
       var usrIndexAttendee = offline.attendees.findIndex(x => x.attendee_id == user_id );
+
       if(usrIndexAttendee != -1 ){
         offline.attendees.splice(usrIndexAttendee , 1 );
       }
+        console.log("+++++++++++++++ Attendee Details");
+        console.log(offline.attendee_details );
+        console.log("+++++++++++++++ Attendee");
+        console.log(offline.attendees );
       offline.markModified("attendees");
       offline.save();
     }
@@ -5516,6 +5525,9 @@ qtnrRouters.post("/:app_id/truncate/attendee/data/object" , (req , res) => {
 
   res.send("Completed ++++ ");
 });
+
+
+
 module.exports = {
     qtnrRouters
 };

@@ -1366,6 +1366,9 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
           $rootScope.saving_this_question();
           swal("Question is saved successfully", {
             icon: "success",
+          }).then(()=>{
+            // var questionIndex = $rootScope._questions_.findIndex( x=> x._id == questionId );
+            $rootScope.highlighted_question(questionId);
           });
         } else{
           $rootScope.loading_application_data();
