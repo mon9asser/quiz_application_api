@@ -1865,6 +1865,7 @@ apps.controller("player", [
       $scope.submit_the_quiz_into_reports();
     };
     $scope.storing_excuted_time_in_db = () => {
+      console.log("excuted in db ");
        $scope._online_report_collection();
     }
     $scope.calculating_completed_time = () => {

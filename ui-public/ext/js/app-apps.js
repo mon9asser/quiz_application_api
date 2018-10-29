@@ -1382,8 +1382,12 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
             $(".description-redactor").next(".note-editor").children(".note-editing-area").find(".note-editable").html(db_qs_data.question_description);
             $rootScope.load_redactor_data_answers( db_qs_data._id , db_qs_data.answers_format)
             $rootScope.$apply();
+            $timeout(function(){
+                // $rootScope.highlighted_question(questionId);
+            } , 200 ) ;
           } , 300 )
           $rootScope.is_unsaved_data = false ;
+
         }
       })
       // if( confirm("Would you like to discard the changes ? ")){
@@ -2110,6 +2114,58 @@ sort: false  */
            put: false,
            revertClone: false,
        },
+       onChoose : function (){
+         if($rootScope.is_unsaved_data == true ){
+           swal({
+             title: "Save it ?",
+             text: "Would you like to Save the last changes ?",
+             icon: "warning",
+             buttons: ["No!", "Yes"],
+             dangerMode: true,
+           }).then((will_do)=>{
+             if(will_do){
+               $rootScope.saving_this_question();
+               swal("Question is saved successfully", {
+                 icon: "success",
+               }).then(()=>{
+                 // var questionIndex = $rootScope._questions_.findIndex( x=> x._id == questionId );
+                 $rootScope.highlighted_question(questionId);
+               });
+             } else{
+               $rootScope.loading_application_data();
+               // ==> Restore old data
+               $rootScope._questions_[$rootScope.question_index] = $rootScope._questions_draft_[$rootScope.question_index] ;
+               var db_qs_data = $rootScope._questions_draft_[$rootScope.question_index] ;
+               var current_qs = $rootScope._questions_[$rootScope.question_index] ;
+
+               $timeout(function(){
+                 $(".question-redactor").next(".note-editor").children(".note-editing-area").find(".note-editable").html(db_qs_data.question_body);
+                 $(".description-redactor").next(".note-editor").children(".note-editing-area").find(".note-editable").html(db_qs_data.question_description);
+                 $rootScope.load_redactor_data_answers( db_qs_data._id , db_qs_data.answers_format)
+                 $rootScope.$apply();
+                 $timeout(function(){
+                     // $rootScope.highlighted_question(questionId);
+                 } , 200 ) ;
+               } , 300 )
+               $rootScope.is_unsaved_data = false ;
+
+             }
+           })
+           // if( confirm("Would you like to discard the changes ? ")){
+           //   $rootScope.loading_application_data();
+           //   // ==> Restore old data
+           //   $rootScope._questions_[$rootScope.question_index] = $rootScope._questions_draft_[$rootScope.question_index] ;
+           //   var db_qs_data = $rootScope._questions_draft_[$rootScope.question_index] ;
+           //   var current_qs = $rootScope._questions_[$rootScope.question_index] ;
+           //
+           //   $timeout(function(){
+           //     $rootScope.$apply();
+           //   } , 300 )
+           //   $rootScope.is_unsaved_data = false ;
+           // }else
+           return false ;
+         }
+       } ,
        onStart : function (){
          $rootScope.on_drag_status = true ;
        } ,
