@@ -331,8 +331,17 @@ apps.controller("player", [
               // ==> Questions
               $scope.randomize_sorting_questions($scope._settings_.randomize_settings);
               // ==> Answers
-
             }
+
+
+            // ==> Randomize case it with retake
+            var params = window.location.href.split("?") ;
+            var is_retake = params[ params.length - 1 ].indexOf("retake=true") ;
+            if( is_retake != -1 ){
+               $scope.randomize_sorting_questions( true );
+            }
+
+
             if( $scope.is_retake == true )
             {
               $scope.is_retake = false ;
@@ -703,9 +712,11 @@ apps.controller("player", [
         data : { user_id : $scope.user_id }
       }).then((res)=>{
         $(".retake-result-box").children("i.fa").removeClass("fa-spin");
-        console.log(res);
-        return false ;
-        window.location.reload();
+
+        var current_window_url = window.location.href ;
+        var retake_url = current_window_url +'?retake=true&&private_key='+$scope.user_id;
+        window.location = retake_url;
+
         // ==> Truncate from two views ( offline + online )
         // $scope._application_.att__draft = null ;
         // $scope._application_.app_report = null;
@@ -737,7 +748,7 @@ apps.controller("player", [
         // } , 300 );
 
       }).catch((err)=>{
-        console.log(err);
+        // console.log(err);
       })
     };
     $scope.timer_proccess = () => {
@@ -759,7 +770,9 @@ apps.controller("player", [
        }
 
        // ==> Update value property
-       $scope.storing_excuted_time_in_db();
+       $timeout(function(){
+           $scope.storing_excuted_time_in_db();
+       } , 600 );
 
        // ==> Update Settings of this user
 
@@ -795,7 +808,7 @@ apps.controller("player", [
          method: "POST",
          data : { "user_activity" : $scope._user_activity_ }
       }).then(function(resp){
-      console.log("Response is reday for calling +++++ ");
+      // console.log("Response is reday for calling +++++ ");
         if( $scope._user_activity_.user_completed_status == undefined  )
           $scope._user_activity_['user_completed_status'] = true ;
 
@@ -805,7 +818,7 @@ apps.controller("player", [
             // ==> Online Report ...
             $scope._online_report_collection();
       } , function(err){
-        console.log(err);
+        // console.log(err);
       });
     };
     $scope._online_report_collection = () => {
@@ -815,13 +828,18 @@ apps.controller("player", [
        if( $scope._user_activity_ != null && $scope._user_activity_.impr_application_object != undefined )
         $scope._user_activity_.impr_application_object.att__draft = $scope.user_id ;
 
+        
         $http({
           "url" : url ,
           "method" : "POST"  ,
           "data" : {  "user_activity" : $scope._user_activity_ }
         }).then(function(res){
-          // console.log(res.data);
-        }).catch(function(err){ console.log(err); })
+          console.log(res.data);
+        }).catch(function(err){
+            // console.log(err);
+           // console.log(err);
+          })
+
     };
     $scope.go_to_next_question = () => {
       // $scope.start_the_quiz();
@@ -1308,8 +1326,6 @@ apps.controller("player", [
        } , 150 );
     };
 
-
-
     $scope.build_free_text_data = (question) => {
       var question_ = ( $scope._user_activity_.questions_data != undefined ) ?  $scope._user_activity_.questions_data.find(x => x.question_id == question._id ) : $scope._user_activity_['questions_data'] = [] ;
       var answer_id =   question.answers_format[0]._id;
@@ -1345,9 +1361,11 @@ apps.controller("player", [
         var classes = "";
 
         index = $scope._questions_.findIndex(x => x._id == question_id );
-
-
-        if( index != -1 && $scope._questions_[index].answer_settings.super_size == true || ( $scope._questions_[index] != undefined && $scope._questions_[index].question_type == 2 && $rootScope._questions_[index].answer_settings.super_size == true ) )
+        /*
+         && $scope._questions_[index].answer_settings.super_size == true
+         */
+         // console.log($scope._questions_[index]);
+        if( index != -1 && $scope._questions_[index].answer_settings.super_size == true || ( $scope._questions_[index] != undefined && $scope._questions_[index].question_type == 2 && $scope._questions_[index].answer_settings.super_size == true) )
         classes += "super_size_class ";
 
 
@@ -1457,7 +1475,7 @@ apps.controller("player", [
       if(report_questions.question_answers == undefined )
         report_questions['question_answers'] = new Array();
 
-        console.log(report_questions);
+        // console.log(report_questions);
       var question_finder = report_questions.question_answers.find(x => x.question_id == question._id ) ;
       if(question_finder == undefined){
         report_questions.question_answers.push({
@@ -1686,7 +1704,7 @@ apps.controller("player", [
       solved_questions.user_answers.map(zoom_in_usr_answers)
 
 
-      console.log($scope._user_activity_);
+      // console.log($scope._user_activity_);
       // // // console.log("Bulding attendee online report");
     } // ==> Ended here +++++++++++++++
 
@@ -1767,11 +1785,11 @@ apps.controller("player", [
       $(".submit-in-qsa").children(".x-isc-up").addClass("fa-refresh fa-spin");
 
       $timeout(function(){
-        console.log("Save in offline report ++++++");
+        // console.log("Save in offline report ++++++");
          $scope._offline_report_collection();
       } , 200)
       $timeout(function(){
-        console.log("Close button animation ");
+        // console.log("Close button animation ");
          $timeout(function(){
           $(".submit-button-goodbye-screen").children(".fa").removeClass("fa-refresh fa-spin");
           $(".submit-button-goodbye-screen").children(".fa").addClass("fa-arrow-right");
@@ -1865,7 +1883,8 @@ apps.controller("player", [
       $scope.submit_the_quiz_into_reports();
     };
     $scope.storing_excuted_time_in_db = () => {
-      console.log("excuted in db ");
+      // console.log("excuted in db ");
+
        $scope._online_report_collection();
     }
     $scope.calculating_completed_time = () => {

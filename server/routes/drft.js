@@ -213,61 +213,61 @@ drft.findOne({application_id: app_id } , (err , draftDocument) => {
 
 // => server_ip/api/:app_id/attendee_collection/:user_id
 // http://localhost:9000/api/5b8edc55aea5bf606d5a62e3/attendee_collection/5b73412725aab524b49e6c49
-drftRouter.post("/:app_id/attendee_collection/:user_id" , (req , res) => {
-  // att_draft
+drftRouter.post("/:app_id/attendee_collection/:user_id" , ( req , res ) => {
+
+  // => Some Givens
   var app_id = req.params.app_id ;
   var user_activity = req.body.user_activity ;
   var usr_id = req.params.user_id ;
 
-  drft.findOne({ "application_id" : app_id }).then((response)=>{
-    if(response == null || !response ) {
-      // ==> Storing For First Time
-      drf_data = {
+  drft.findOne({"application_id" : app_id} , ( err , app ) => {
+
+    if(err ){
+      return new Promise((resolve , reject)=>{
+        return false ;
+      })
+    }
+
+   if( app == null ){
+    // 1 - Saving information
+    var new_app_object = {
         att_draft : new Array(user_activity) ,
         application_id : app_id ,
         questionnaire_info :  app_id
-      }
-      var activity = new drft(drf_data);
-      activity.save().then((resp)=>{
+    };
+    var app_activity = new drft(new_app_object);
+    app_activity.save(( err , application ) => {
 
-        // ==> Updating the id for quationnaire
-        qtnr.findById({_id :app_id }, function (err, doc) {
-              if (err) console.log(err);
-              doc.att__draft = resp._id;
-              doc.save();
-        });
-
-        res.send(resp);
-        return false;
-      }).catch((err)=>{
-        res.send(err);
+      if (err) {
+        res.send(err)
         return false ;
-      });
+      };
 
+      var appId = application.application_id ;
+      qtnr.findOne({_id :appId }).then((results) => {
+          console.log(results);
+        results.att__draft = appId ;
+        results.save();
+      })
 
-    }else {
-      // ==> we found this app in our db
-      var user_app = response;
-      var usr_act_ind = user_app.att_draft.findIndex(x => x.user_id == usr_id );
-      if(usr_act_ind != -1 ){
-          user_app.att_draft.splice(usr_act_ind , 1 );
-      }
-      // ==> Add New Uer
-      user_app.att_draft.push(user_activity);
+    });
 
-      // ==> Saveing
-      response.markModified("att_draft");
-      response.save().then((resp)=>{
-        res.send(resp);
-        return false;
-      }).catch((err)=>{
-        res.send(err);
-        return false ;
-      });
-    }
-    res.send(response);
-    return false;
-  }).catch(function(err){ res.send(err); })
+   }else {
+     // 2 -  saving new attendees
+     var usr_index = app.att_draft.findIndex( x => x.user_id ==usr_id );
+     if( usr_index != -1 ){
+       app.att_draft.splice( usr_index , 1 );
+     }
+     setTimeout(function(){
+       // => attendees
+       app.att_draft.push(user_activity);
+       app.markModified('att_draft');
+       app.save();
+     } , 200);
+   }
+
+  });
+
 });
 
 

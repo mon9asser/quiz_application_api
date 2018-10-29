@@ -273,8 +273,8 @@
                       {> _settings_.label_btns.lbl_finish_with <}
                   </span>
                 </button>
-
-                <button ng:style="(_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true) ? { opacity : '0.5' , cursor: 'none' } : { opacity : '1' ,  cursor: 'pointer' }" ng:disabled='(_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true ) || ( _user_activity_.attendee_questions == undefined || _user_activity_.attendee_questions.length == 0 )'  ng:if="( _settings_.enable_screens == false && $index == ( _questions_.length - 1 )  )" ng:click="submit_the_quiz_into_reports($index)" class="selector button-take-this submi_the_quiz_handler select_button submit-button-goodbye-screen submit-button-goodbye-screen-block" type="button" name="button">
+                <!-- ng:disabled='(_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true ) || ( _user_activity_.attendee_questions == undefined || _user_activity_.attendee_questions.length == 0 )' -->
+                <button ng:style="(_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true) ? { opacity : '0.5' , cursor: 'none' } : { opacity : '1' ,  cursor: 'pointer' }"   ng:if="( _settings_.enable_screens == false && $index == ( _questions_.length - 1 )  )" ng:click="submit_the_quiz_into_reports($index)" class="selector button-take-this submi_the_quiz_handler select_button submit-button-goodbye-screen submit-button-goodbye-screen-block" type="button" name="button">
                   <i ng:if="_user_activity_.user_completed_status == undefined || _user_activity_.user_completed_status == false " class="fa fa-arrow-right fac-icon-submit x-isc-up" aria-hidden="true"></i>
                   <i ng:if="_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true " class="fa fa-check fac-icon-submit x-isc-up" aria-hidden="true"></i>
                   <span ng:cloak ng:if="_user_activity_.user_completed_status == undefined || _user_activity_.user_completed_status == false">
@@ -303,7 +303,7 @@
                      <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                       {> _settings_.label_btns.lbl_back_with <}
                  </button>
-                 <button ng:style="(_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true) ? { opacity : '0.5' , cursor: 'none' } : { opacity : '1' ,  cursor: 'pointer' }" ng:disabled='(_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true ) || (_user_activity_.attendee_questions == undefined || _user_activity_.attendee_questions.length == 0 )' ng:click="submit_the_quiz_into_reports()" class="selector button-take-this submi_the_quiz_handler select_button submit-button-goodbye-screen submit-button-goodbye-screen-block" type="button" name="button">
+                 <button ng:style="(_user_activity_.user_completed_status != undefined && _user_activity_.user_completed_status == true) ? { opacity : '0.5' , cursor: 'none' } : { opacity : '1' ,  cursor: 'pointer' }"  ng:click="submit_the_quiz_into_reports()" class="selector button-take-this submi_the_quiz_handler select_button submit-button-goodbye-screen submit-button-goodbye-screen-block" type="button" name="button">
                      <i class="fa fa-arrow-right fac-icon-submit x-isc-up" aria-hidden="true"></i>
                      <span ng:cloak class="ng-binding">
                          {> _settings_.label_btns.lbl_submit_quiz_with <}
