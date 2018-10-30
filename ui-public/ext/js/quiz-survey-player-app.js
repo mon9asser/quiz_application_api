@@ -664,6 +664,12 @@ apps.controller("player", [
           data : { user_id : $scope.user_id }
         }).then((res) => {
           $(".retake-result-box").children("i.fa").removeClass("fa-spin");
+
+          var current_window_url = window.location.href ;
+          var retake_url = current_window_url +'?retake=true&&private_key='+$scope.user_id;
+          window.location = retake_url;
+
+          return false;
           $scope._application_.att__draft = null ;
           $scope._application_.app_report = null;
           $scope._user_activity_ = null ;
@@ -811,17 +817,12 @@ apps.controller("player", [
          method: "POST",
          data : { "user_activity" : $scope._user_activity_ }
       }).then(function(resp){
-      // console.log("Response is reday for calling +++++ ");
+      // console.log("Response is reday for calling +++++ "); 
+
         if( $scope._user_activity_.user_completed_status == undefined  )
           $scope._user_activity_['user_completed_status'] = true ;
 
-        if( $scope._user_activity_.user_completed_status != undefined  )
-          $scope._user_activity_.user_completed_status = true ;
 
-            // ==> Online Report ...
-            $scope._online_report_collection();
-      } , function(err){
-        // console.log(err);
       });
     };
     $scope._online_report_collection = () => {
@@ -907,13 +908,19 @@ apps.controller("player", [
     $scope.start_the_quiz_x = () => {
 
       // ==> Check if this quiz already completed
-
-      if($scope._offline_report_ != null ){
-          if($scope._offline_report_.attendees != undefined){
-            if( $scope._offline_report_.attendees.is_completed != undefined && $scope._offline_report_.attendees.is_completed == true )
-            return false;
-          }
-      }
+      // $timeout(function(){
+      //   console.log($scope._application_);
+      // } , 2000 );
+      //  return false;
+      // if($scope._offline_report_ != null ){
+      //     if($scope._offline_report_.attendees != undefined){
+      //       if( $scope._offline_report_.attendees.is_completed != undefined && $scope._offline_report_.attendees.is_completed == true )
+      //       {
+      //         alert();
+      //         return false;
+      //       }
+      //     }
+      // }
 
       $scope.is_resume = true ;
       // ==> Joing to quiz
@@ -1753,16 +1760,21 @@ apps.controller("player", [
       $scope._online_report_collection();
 
     };
+
     $scope.submit_the_survey_into_reports = () => {
       $scope.finished_is_clicked = true ;
+      // ==> Get unsolved questions
       var solved_questions = ( $scope._user_activity_ != null && $scope._user_activity_.report_questions != undefined )  ? $scope._user_activity_.report_questions.question_answers : [] ;
       var questions = $scope._questions_ ;
       $scope.unsolved_questions = questions.are_all_questions_tracked(solved_questions);
-      if($scope.unsolved_questions != undefined   ){
+      if( $scope.unsolved_questions != undefined   ){
         if( $scope.unsolved_questions.length != 0 )
-          return false;
+        return false;
       }
+
+      // ==> Case Welcome and ending screen are disabled
       if( $scope._settings_.enable_screens == false ){
+
         if( $scope.isEmpty( $scope._online_report_ ) == true ){
           $scope._online_report_ = new Object();
           $scope._online_report_['att_draft'] = new Array();
@@ -1774,18 +1786,17 @@ apps.controller("player", [
           $scope._online_report_.att_draft = new Array();
 
         var _user_activity_ = $scope._online_report_.att_draft.findIndex ( x => x.user_id == $scope.user_id) ;
-
         if( _user_activity_ == -1 ){
-            $scope._online_report_.att_draft.push({
-              'questions_data' : new Array() ,
-              'is_loaded':true ,
-              'start_expiration_time' : new Date() ,
-              'user_id' : $scope.user_id ,
-              'user_info':$scope.user_id ,
-              'is_completed':false ,
-              'user_completed_status' : false ,
-              'impr_application_object': $scope._application_
-            });
+          $scope._online_report_.att_draft.push({
+            'questions_data' : new Array() ,
+            'is_loaded':true ,
+            'start_expiration_time' : new Date() ,
+            'user_id' : $scope.user_id ,
+            'user_info':$scope.user_id ,
+            'is_completed':false ,
+            'user_completed_status' : false ,
+            'impr_application_object': $scope._application_
+          });
         }
 
         $scope._user_activity_ = $scope._online_report_.att_draft.find(x => x.user_id == $scope.user_id);
@@ -1793,32 +1804,25 @@ apps.controller("player", [
 
       $(".submit-button-goodbye-screen").children(".x-isc-up").removeClass("fa-arrow-right");
       $(".submit-button-goodbye-screen").children(".x-isc-up").addClass("fa-refresh fa-spin");
-
       $(".submit-in-qsa").children(".x-isc-up").removeClass("fa-arrow-right");
       $(".submit-in-qsa").children(".x-isc-up").addClass("fa-refresh fa-spin");
 
+      // ==> Storing into offline report
+      $timeout(function(){ $scope._offline_report_collection(); } , 200 );
+      // ==> Storing into online report
+      $timeout(function(){ $scope._online_report_collection(); } , 500 );
+
       $timeout(function(){
-        // console.log("Save in offline report ++++++");
-         $scope._offline_report_collection();
-      } , 200)
-      $timeout(function(){
-        // console.log("Close button animation ");
-         $timeout(function(){
-          $(".submit-button-goodbye-screen").children(".fa").removeClass("fa-refresh fa-spin");
-          $(".submit-button-goodbye-screen").children(".fa").addClass("fa-arrow-right");
-          $(".submit-in-qsa").children(".fa").removeClass("fa-refresh fa-spin");
-          $(".submit-in-qsa").children(".fa").addClass("fa-arrow-right");
-          $scope.swipperJs.slideTo(0);
-          // if($scope._settings_.enable_screens == false )
-          // { $scope.swipperJs.slideNext(); }
-          // else
-          // $scope.swipperJs.slideTo($scope._questions_.length + 2);
-        } , 1000 )
-      } , 200 );
+        $(".submit-button-goodbye-screen").children(".fa").removeClass("fa-refresh fa-spin");
+        $(".submit-button-goodbye-screen").children(".fa").addClass("fa-arrow-right");
+        $(".submit-in-qsa").children(".fa").removeClass("fa-refresh fa-spin");
+        $(".submit-in-qsa").children(".fa").addClass("fa-arrow-right");
+        $scope.swipperJs.slideNext();
+      } , 1000 );
+
     };
+
     $scope.submit_the_quiz_into_reports = () => {
-
-
       $scope.finished_is_clicked = true ;
       var solved_questions = ( $scope._user_activity_ != null && $scope._user_activity_.report_questions != undefined )  ? $scope._user_activity_.report_questions.question_answers : [] ;
       var questions = $scope._questions_ ;

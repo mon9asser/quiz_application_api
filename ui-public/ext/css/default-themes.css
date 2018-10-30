@@ -744,3 +744,7 @@ ul.scalet-o > div li:last-child > span {
    background: #ffffff;;
    color: #999;
  }
+
+ ul.start-o > li:hover {
+   background: transparent;
+ }

@@ -20,7 +20,7 @@
             <sub ng:if="calculating_completed_time().type == 1" class="min-word">Secs</sub>
         </div>
       </div>
-
+     
       <div ng:if="(  _user_activity_.user_completed_status == undefined || _user_activity_.user_completed_status == false ) ">
           <div ng:hide="(_settings_.time_settings.timer_type == false)" ng:disabled="( _settings_.time_settings.timer_type == false || _settings_.time_settings.is_with_time == false)" class="tick-group">
               <span ng:cloak>{> _settings_.time_settings.hours | time_style <}</span>

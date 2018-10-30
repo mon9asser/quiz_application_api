@@ -5490,9 +5490,8 @@ qtnrRouters.post("/:app_id/truncate/attendee/data/object" , (req , res) => {
   drft.findOne({'application_id' : app_id }).then((online)=>{
     if( online && online != null ){
        var usrIndex = online.att_draft.findIndex(x => x.user_id == user_id );
-
        // console.log("User Indext in online report :- " + usrIndex );
-       if(usrIndex != -1 ){
+       if( usrIndex != -1 ){
          online.att_draft.splice(usrIndex , 1 );
        }
        online.markModified("att_draft");

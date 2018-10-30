@@ -210,116 +210,94 @@ drft.findOne({application_id: app_id } , (err , draftDocument) => {
 
 });
 
+var update_attendee_draft_quesationnaire = ( app_id , attendee_drft_id ) => {
 
+  var application_id  = app_id ;
+  var attendee_draft_id = attendee_drft_id ;
+  qtnr.findOne({ _id : application_id  }).then( (doc_obj)=>{
+    if (doc_obj != null ) {
+      if(doc_obj.att__draft == undefined )
+      doc_obj['att__draft'] = '';
+
+      doc_obj['att__draft'] = attendee_draft_id ;
+      doc_obj.markModified("questions");
+      doc_obj.save().then((resl) => {
+        console.log(resl);
+      }).catch((err) => {
+        console.log(err);
+      });
+    }
+  }).catch((err) => {
+    if(err != null ){
+        return new Promise(( resolve , reject )=> {
+          res.send(err);
+          return false ;
+        });
+      }
+  });
+};
 // => server_ip/api/:app_id/attendee_collection/:user_id
 // http://localhost:9000/api/5b8edc55aea5bf606d5a62e3/attendee_collection/5b73412725aab524b49e6c49
 drftRouter.post("/:app_id/attendee_collection/:user_id" , ( req , res ) => {
-
   // => Some Givens
   var app_id = req.params.app_id ;
   var user_activity = req.body.user_activity ;
   var usr_id = req.params.user_id ;
 
   drft.findOne({"application_id" : app_id}).then((object)=>{
-    setTimeout(function(){
-      if( object != null ){
-        // ==> Update the current
-        if( object.application_id == app_id ){
 
-          // => get current user
-          var usr_object_index = object.att_draft.findIndex( x => x.user_id == usr_id );
-          if( usr_object_index == -1 ){
-            // ==> Add this new user
+    if( object != null ) {
+      if( object.application_id == app_id ){
+        var usr_object_index = object.att_draft.findIndex( x => x.user_id == usr_id );
+        if( usr_object_index == -1 ){
             object.att_draft.push(user_activity);
             object.markModified('att_draft');
-            object.save().then((results)=>{
-              // res.send(results);
-              return false ;
-            }).catch((err) => {
-             console.log(err);
-              return false ;
-            });
-          }else {
-            // ==> update the current
-            object.att_draft.splice( usr_object_index , 1)
-            object.att_draft.push(user_activity);
-            object.markModified('att_draft');
-            object.save().then((results)=>{
-
-            }).catch((err) => {
-
-              // res.send("an error +++++++++++++++++ ") ;
-              return false ;
-              // res.send(err);
-              // return false ;
-            });
-
-            return false;
-          }
-
+            object.save();
         }else {
-          // ==> add new one
-          var attendee_draft = new drft({
-            att_draft : new Array(user_activity),
-            application_id : app_id ,
-            questionnaire_info :  app_id
-          });
-          attendee_draft.save().then(( attendee_draft_object )=>{
-            // ==> Save and update application id into questionnaires
-            qtnr.findOne({ _id :appId }).then((questionnanire_doc)=>{
-              res.send(attendee_draft_object);
-              return false;
-            }).catch(( err )=>{
-              res.send(err);
-              return false;
-            });
-
-            res.send(attendee_draft_object);
-            return false ;
-          }).catch((err)=>{
-            res.send(err);
-            return false ;
-          });
+            object.att_draft.splice( usr_object_index , 1);
+            object.att_draft.push(user_activity);
+            object.markModified('att_draft');
+            object.save();
         }
       }else {
-        // ==> Add new application
-        var attendee_draft = new drft({
-          att_draft : new Array(user_activity),
-          application_id : app_id ,
-          questionnaire_info :  app_id
-        });
-        attendee_draft.save().then(( attendee_draft_object )=>{
+        // ==> Add new appication
+        var app = new drft({ att_draft : new Array(user_activity), application_id : app_id , questionnaire_info :  app_id }) ;
+        app.save((err , app_res) => {
 
-          // ==> Save and update application id into questionnaires
-          qtnr.findOne({ _id :appId }).then((questionnanire_doc)=>{
-            res.send(attendee_draft_object);
-            return false;
-          }).catch(( err )=>{
-            res.send(err);
-            return false;
-          });
-
-          res.send(attendee_draft_object);
-          return false ;
-        }).catch((err)=>{
-          // res.send(err);
-          return false ;
+          if ( err != null ){
+            return new Promise((resolve, reject) => {
+              res.send(err );
+              return false;
+            });
+          }
+          update_attendee_draft_quesationnaire( app_id , app_res._id );
         });
       }
+    } else {
+      // ==> Add new appication
+      var app = new drft({ att_draft : new Array(user_activity), application_id : app_id , questionnaire_info :  app_id }) ;
+      app.save((err , app_res) => {
 
+        if ( err != null ){
+          return new Promise((resolve, reject) => {
+            res.send(err );
+            return false;
+          });
+        }
+        update_attendee_draft_quesationnaire( app_id , app_res._id );
+      });
+    }
 
-
-
-
-    } , 500 );
   }).catch((err) => {
-    return new Promise((resolve , reject)=>{
-       res.status(404).send(err);
-       return false ;
+    return new Promise((resolve , reject )=>{
+      res.send({ error : err });
+      return false;
     });
   });
 
+
   res.send("completed !!");
+
 });
 
 
