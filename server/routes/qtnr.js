@@ -5519,7 +5519,13 @@ qtnrRouters.post("/:app_id/truncate/attendee/data/object" , (req , res) => {
         // console.log("+++++++++++++++ Attendee");
         // console.log(offline.attendees );
       offline.markModified("attendees");
-      offline.save();
+      offline.save().then((eRes) => {
+
+      }).catch((err)=>{
+        if(err)
+        res.send(err);
+        return false;
+      });
     }
   });
 

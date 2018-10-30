@@ -220,54 +220,103 @@ drftRouter.post("/:app_id/attendee_collection/:user_id" , ( req , res ) => {
   var user_activity = req.body.user_activity ;
   var usr_id = req.params.user_id ;
 
-  drft.findOne({"application_id" : app_id} , ( err , app ) => {
+  drft.findOne({"application_id" : app_id}).then((object)=>{
+    setTimeout(function(){
+      if( object != null ){
+        // ==> Update the current
+        if( object.application_id == app_id ){
 
-    if(err ){
-      return new Promise((resolve , reject)=>{
-        return false ;
-      })
-    }
+          // => get current user
+          var usr_object_index = object.att_draft.findIndex( x => x.user_id == usr_id );
+          if( usr_object_index == -1 ){
+            // ==> Add this new user
+            object.att_draft.push(user_activity);
+            object.markModified('att_draft');
+            object.save().then((results)=>{
+              // res.send(results);
+              return false ;
+            }).catch((err) => {
+             console.log(err);
+              return false ;
+            });
+          }else {
+            // ==> update the current
+            object.att_draft.splice( usr_object_index , 1)
+            object.att_draft.push(user_activity);
+            object.markModified('att_draft');
+            object.save().then((results)=>{
 
-   if( app == null ){
-    // 1 - Saving information
-    var new_app_object = {
-        att_draft : new Array(user_activity) ,
-        application_id : app_id ,
-        questionnaire_info :  app_id
-    };
-    var app_activity = new drft(new_app_object);
-    app_activity.save(( err , application ) => {
+            }).catch((err) => {
 
-      if (err) {
-        res.send(err)
-        return false ;
-      };
+              // res.send("an error +++++++++++++++++ ") ;
+              return false ;
+              // res.send(err);
+              // return false ;
+            });
 
-      var appId = application.application_id ;
-      qtnr.findOne({_id :appId }).then((results) => {
-          console.log(results);
-        results.att__draft = appId ;
-        results.save();
-      }).catch((err)=>{
-        console.log(err);
-      })
+            return false;
+          }
 
+        }else {
+          // ==> add new one
+          var attendee_draft = new drft({
+            att_draft : new Array(user_activity),
+            application_id : app_id ,
+            questionnaire_info :  app_id
+          });
+          attendee_draft.save().then(( attendee_draft_object )=>{
+            // ==> Save and update application id into questionnaires
+            qtnr.findOne({ _id :appId }).then((questionnanire_doc)=>{
+              res.send(attendee_draft_object);
+              return false;
+            }).catch(( err )=>{
+              res.send(err);
+              return false;
+            });
+
+            res.send(attendee_draft_object);
+            return false ;
+          }).catch((err)=>{
+            res.send(err);
+            return false ;
+          });
+        }
+      }else {
+        // ==> Add new application
+        var attendee_draft = new drft({
+          att_draft : new Array(user_activity),
+          application_id : app_id ,
+          questionnaire_info :  app_id
+        });
+        attendee_draft.save().then(( attendee_draft_object )=>{
+
+          // ==> Save and update application id into questionnaires
+          qtnr.findOne({ _id :appId }).then((questionnanire_doc)=>{
+            res.send(attendee_draft_object);
+            return false;
+          }).catch(( err )=>{
+            res.send(err);
+            return false;
+          });
+
+          res.send(attendee_draft_object);
+          return false ;
+        }).catch((err)=>{
+          // res.send(err);
+          return false ;
+        });
+      }
+
+
+
+
+
+    } , 500 );
+  }).catch((err) => {
+    return new Promise((resolve , reject)=>{
+       res.status(404).send(err);
+       return false ;
     });
-
-   }else {
-     // 2 -  saving new attendees
-     var usr_index = app.att_draft.findIndex( x => x.user_id ==usr_id );
-     if( usr_index != -1 ){
-       app.att_draft.splice( usr_index , 1 );
-     }
-     setTimeout(function(){
-       // => attendees
-       app.att_draft.push(user_activity);
-       app.markModified('att_draft');
-       app.save();
-     } , 200);
-   }
-
   });
 
   res.send("completed !!");

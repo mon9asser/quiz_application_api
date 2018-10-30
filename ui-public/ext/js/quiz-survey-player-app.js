@@ -753,6 +753,9 @@ apps.controller("player", [
     };
     $scope.timer_proccess = () => {
 
+
+
+
      var start_the_quiz_timer = () => {
 
        $scope._settings_.time_settings.seconds-- ;
@@ -828,7 +831,7 @@ apps.controller("player", [
        if( $scope._user_activity_ != null && $scope._user_activity_.impr_application_object != undefined )
         $scope._user_activity_.impr_application_object.att__draft = $scope.user_id ;
 
-        
+
         $http({
           "url" : url ,
           "method" : "POST"  ,
@@ -902,6 +905,16 @@ apps.controller("player", [
       }
     };
     $scope.start_the_quiz_x = () => {
+
+      // ==> Check if this quiz already completed
+
+      if($scope._offline_report_ != null ){
+          if($scope._offline_report_.attendees != undefined){
+            if( $scope._offline_report_.attendees.is_completed != undefined && $scope._offline_report_.attendees.is_completed == true )
+            return false;
+          }
+      }
+
       $scope.is_resume = true ;
       // ==> Joing to quiz
       $scope.join_this_quiz();
