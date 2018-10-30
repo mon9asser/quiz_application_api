@@ -248,6 +248,8 @@ drftRouter.post("/:app_id/attendee_collection/:user_id" , ( req , res ) => {
           console.log(results);
         results.att__draft = appId ;
         results.save();
+      }).catch((err)=>{
+        console.log(err);
       })
 
     });
@@ -268,6 +270,7 @@ drftRouter.post("/:app_id/attendee_collection/:user_id" , ( req , res ) => {
 
   });
 
+  res.send("completed !!");
 });
 
 
