@@ -243,7 +243,7 @@ drftRouter.post("/:app_id/attendee_collection/:user_id" , ( req , res ) => {
   var app_id = req.params.app_id ;
   var user_activity = req.body.user_activity ;
   var usr_id = req.params.user_id ;
-
+  console.log(user_activity);
   drft.findOne({"application_id" : app_id}).then((object)=>{
 
     if( object != null ) {
