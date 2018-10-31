@@ -545,6 +545,7 @@ apps.controller("apps-controller" , [
   $rootScope.is_unsaved_data_func = () => {
     $rootScope.is_unsaved_data = true ;
   }
+  $rootScope.nav_status = 0 ; 
   $rootScope.media_current_upload = false ;
   $rootScope.show_apply_changes = false ;
   $scope.apply_in_all_slides = true ;
@@ -2373,28 +2374,49 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
 
   };
 
-
-  $rootScope.nav_container_manager = ( nav_status ) => {
+  window.onresize = ( event ) => {
     var question_list_left = $(".left_part");
     var nav_menu = $(".nav-container");
     var body_window = $(".row-x-body");
     var fixed_number = 23 ;
     var translate_number_negative = -(question_list_left.width() +fixed_number ) ;
-    var translate_number_positive =  0 ;
-    // ==> Open The nav menu
-    if(nav_status == 0 ){
+    if($rootScope.nav_status == 0){
+      // alert( question_list_left.width() );
+        body_window.css({ transform : 'translate3d(0px , 0,0)'})
+        nav_menu.css({ transform : 'translate3d('+( question_list_left.width() + 17 )+'px , 0,0)'})
+
+    }
+    if($rootScope.nav_status == 1){
       body_window.css({ transform : 'translate3d('+translate_number_negative+'px , 0,0)'})
       nav_menu.css({ transform : 'translate3d('+translate_number_positive+'px , 0,0)'})
-      // ==> Change Nav number of status
-      $rootScope.nav_status = 1;
     }
-    // ==> Close The nav menu 19
-    if(nav_status == 1 ){
-      body_window.css({ transform : 'translate3d(0px , 0,0)'})
-      nav_menu.css({ transform : 'translate3d('+( question_list_left.width() + 17 )+'px , 0,0)'})
-      // ==> Change Nav number of status
-      $rootScope.nav_status = 0
-    }
+  };
+  $rootScope.nav_container_manager = ( nav_status ) => {
+
+        $rootScope.nav_status = nav_status ;
+        var question_list_left = $(".left_part");
+        var nav_menu = $(".nav-container");
+        var body_window = $(".row-x-body");
+        var fixed_number = 23 ;
+        var translate_number_negative = -(question_list_left.width() +fixed_number ) ;
+        // alert(question_list_left.width());
+        var translate_number_positive =  0 ;
+        // ==> Open The nav menu
+        if(nav_status == 0 ){
+          // alert(translate_number_negative);
+          body_window.css({ transform : 'translate3d('+translate_number_negative+'px , 0,0)'})
+          nav_menu.css({ transform : 'translate3d('+translate_number_positive+'px , 0,0)'})
+          // ==> Change Nav number of status
+          $rootScope.nav_status = 1;
+        }
+        // ==> Close The nav menu 19
+        if(nav_status == 1 ){
+            // alert( question_list_left.width() );
+          body_window.css({ transform : 'translate3d(0px , 0,0)'})
+          nav_menu.css({ transform : 'translate3d('+( question_list_left.width() + 17 )+'px , 0,0)'})
+          // ==> Change Nav number of status
+          $rootScope.nav_status = 0
+        }
 
   };
   $rootScope.navigation_menu_manger = () => {
