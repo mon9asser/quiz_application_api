@@ -73,7 +73,7 @@
     <div class="swiper-container">
       <div class="swiper-wrapper quiz-contents">
         <!--  Case it completed -->
-         <div ng:if="(_user_activity_  && ( _user_activity_.user_completed_status != undefined &&  _user_activity_.user_completed_status == true ) )" ng:style="{'margin-top' : ( _settings_.time_settings.is_with_time == false && _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}"  class="swiper-slide welcoming-screen-x">
+         <div ng:hide="(starting_screens == 1)" ng:if=" (survey_is_submitted == false  && _user_activity_  && ( _user_activity_.user_completed_status != undefined &&  _user_activity_.user_completed_status == true ) )" ng:style="{'margin-top' : ( _settings_.time_settings.is_with_time == false && _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}"  class="swiper-slide welcoming-screen-x">
                   <!-- Result screen contents  -->
                   <div class="container screen-container screen_opg_editor box-result-screen"> <!-- label-question -->
                       <div>
@@ -118,7 +118,7 @@
                   <!-- End Result screen contents  -->
           </div>
          <!-- Welcome Screen -->
-         <div ng:style="{'margin-top' : (  _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}" ng:if="_settings_.enable_screens == true && starting_screens == 0" class="swiper-slide welcoming-screen-x">
+         <div ng:style="{'margin-top' : (  _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}" ng:if="(_settings_.enable_screens == true && starting_screens == 0) &&   ( _user_activity_.user_completed_status == undefined ||  _user_activity_.user_completed_status == false )" class="swiper-slide welcoming-screen-x">
            <div class="container screen-container screen_opg_editor box-welcome-screen">
               <div ng:cloak class="description-body redactor-styles welcome-screen-text-block w-screen-text" ng:bind:html="_settings_.titles.title_start_with | apply_html"></div>
               <div class="qusu-details text-right">
@@ -130,14 +130,14 @@
            </div>
          </div>
          <!-- Resume & expiration screens  -->
-         <div ng:style="{'margin-top' : (  _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}" ng:if="starting_screens == 1" class="swiper-slide">
+         <div ng:style="{'margin-top' : (  _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}" ng:if="( survey_is_submitted == false )  && (starting_screens == 1) &&  ( _user_activity_.user_completed_status == undefined ||  _user_activity_.user_completed_status == false )" class="swiper-slide">
            <!-- Resume & expiration screens (final work) -->
            <div class="container x-widther screen-container screen-ending-starting screen_opg_editor welcome-screen select_box_brd welcome-screen-block box-resume-screen selector">
               <div>
                 <div ng:cloak class="resume-text   description-body redactor-styles select_texts welcome-screen-text-block box-resume-text" ng:bind:html="_settings_.titles.title_resume  | apply_html_with_date_filtering"></div>
                 <div ng:if="_settings_.expiration.is_set == true" class="expire-warning-text   description-body redactor-styles select_texts welcome-screen-text-block box-resume-text" ng:bind:html="_settings_.expiration.expire_warning  | apply_html_with_date_filtering"></div>
                   <div class="qusu-details text-right">
-                    <button ng:cloak ng:click="go_to_next_unsolved_question()" style="border-radius:5px;" class="selector button-take-this select_button welcome-screen-button-block resume-screen-button ng-binding selector_line" type="button" name="button">
+                    <button ng:cloak ng:click="swipperJs.slideNext()" style="border-radius:5px;" class="selector button-take-this select_button welcome-screen-button-block resume-screen-button ng-binding selector_line" type="button" name="button">
                         <i class="fa fa-sign-in" aria-hidden="true" style="outline-color: transparent;"></i>
                           {> _settings_.label_btns.lbl_resume_with <}
                     </button>
@@ -366,51 +366,7 @@
              </div>
            </div>
          </div>
-         <!-- Result Screen -->
-         <div ng:style="{'margin-top' : ( _settings_.time_settings.is_with_time == false && _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}"  class="swiper-slide welcoming-screen-x">
-                   <!-- Result screen contents  -->
-                   <div class="container screen-container screen_opg_editor box-result-screen"> <!-- label-question -->
-                       <div>
-                            <!-- Case successed in quiz  -->
-                            <div ng:if="_application_.app_type == 1" ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == true" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_success_with | apply_html"></div>
-                            <!-- Case failed in quiz  -->
-                            <div ng:if="_application_.app_type == 1" ng:show="_settings_.grade_settings.is_graded == true" ng:if="_user_activity_.report_attendees.passed_the_grade == false" class="description-body redactor-styles result-screen-text" ng:bind:html="_settings_.titles.title_failed_with | apply_html"></div>
-                            <!-- <div ng:if="_application_.app_type == 1"  ng:show="_settings_.grade_settings.is_graded == false"  class="description-body redactor-styles result-screen-text"> {>(_application_.app_type == 1 )? "Quiz" : "Survey"<} is Completed </div> -->
-
-                              <!-- The Grade  -->
-                              <div class="quiz-grade" ng:if="_application_.app_type == 1">
-                                <!-- <div style="background: #f9f9f9;" class="grade_result_loder text-center">
-                                  Loading results ..
-                                </div> -->
-                                <div class="quiz-grade grade-score text-center result-screen-score-text">
-                                  <h3 ng:cloak> {> _settings_.label_btns.lbl_score_with <} : {> _user_activity_.report_attendee_details.correct_answers | filter_by_zero  <} / {> _questions_.length <} </h3>
-                                </div>
-                                <div ng:if="_settings_.grade_settings.is_graded" class="quiz-grade grade-score text-center result-screen-grade-text">
-                                  <h5 ng:cloak>{> _settings_.label_btns.lbl_grade_with <} : {> _user_activity_.report_attendee_details.score | math_around_it <}%</h5>
-                                </div>
-                              </div>
-
-                              <div ng:if="_application_.app_type == 0 "  class=" description-body redactor-styles title_failed_with select_texts result-screen-text-block result-screen-text">
-                                <div class="completed_msg selector" box-target-class="completed_msg" box-target-type="box-texts" ng:bind:html="_settings_.titles.title_completed_survey | apply_html"></div>
-                              </div>
-
-                              <!-- Question buttons  -->
-                              <div class="qusu-details text-right">
-                                  <button ng:click="review_the_quiz(1)" ng:cloak ng:if="_settings_.review_setting == true" class="button-take-this review-result-box" type="button" name="button">
-                                    <i class="fa fa-reply-all" aria-hidden="true"></i>
-                                    {> _settings_.label_btns.lbl_review_with <}
-                                  </button>
-                                   <button ng:click="retake_the_survey(1)" ng:cloak  ng:if="_settings_.retake_setting == true" class="button-take-this retake-this-quiz retake-result-box" type="button" name="button">
-                                    <i class="fa fa-repeat" aria-hidden="true"></i>
-                                    <span>
-                                      {> _settings_.label_btns.lbl_retake_with <}
-                                    </span>
-                                  </button>
-                             </div>
-                      </div>
-                   </div>
-                   <!-- End Result screen contents  -->
-            </div>
+        
          <!-- Completed survey  -->
          <div ng:if="(_user_activity_  && ( _user_activity_.user_completed_status != undefined &&  _user_activity_.user_completed_status == true ) )" ng:style="{'margin-top' : ( _settings_.time_settings.is_with_time == false && _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}"  class="swiper-slide welcoming-screen-x">
                   <!-- Result screen contents  -->

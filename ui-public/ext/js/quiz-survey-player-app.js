@@ -223,6 +223,7 @@ apps.controller("player", [
     // ==> Veriable scopes
     $scope.timer_proc = null ;
     $scope.unsolved_questions = [] ;
+    $scope.survey_is_submitted = false;
     $scope.finished_is_clicked = false ;
     $scope.percentage_progress = 0 ;
     $scope.question_number = 0 ;
@@ -817,12 +818,7 @@ apps.controller("player", [
          method: "POST",
          data : { "user_activity" : $scope._user_activity_ }
       }).then(function(resp){
-      // console.log("Response is reday for calling +++++ "); 
-
-        if( $scope._user_activity_.user_completed_status == undefined  )
-          $scope._user_activity_['user_completed_status'] = true ;
-
-
+      // console.log("Response is reday for calling +++++ ");
       });
     };
     $scope._online_report_collection = () => {
@@ -1067,6 +1063,7 @@ apps.controller("player", [
 
        if( $scope._user_activity_ != null && $scope._user_activity_.user_completed_status != undefined && $scope._user_activity_.user_completed_status == true)
        return false;
+
 
        if( $scope._user_activity_ != undefined && $scope._user_activity_.report_questions != undefined){
          var solved_questions = $scope._user_activity_.report_questions.question_answers.find(x => x.question_id == question_id );
@@ -1761,7 +1758,12 @@ apps.controller("player", [
 
     };
 
+    $scope.submit_the_survey_into_reports____testingonly = () => {
+      $scope._user_activity_['user_completed_status'] = true ;
+    }
     $scope.submit_the_survey_into_reports = () => {
+      $scope.survey_is_submitted = true ;
+      // $scope._user_activity_['user_completed_status'] = true ;
       $scope.finished_is_clicked = true ;
       // ==> Get unsolved questions
       var solved_questions = ( $scope._user_activity_ != null && $scope._user_activity_.report_questions != undefined )  ? $scope._user_activity_.report_questions.question_answers : [] ;
@@ -1802,23 +1804,31 @@ apps.controller("player", [
         $scope._user_activity_ = $scope._online_report_.att_draft.find(x => x.user_id == $scope.user_id);
       }
 
+
       $(".submit-button-goodbye-screen").children(".x-isc-up").removeClass("fa-arrow-right");
       $(".submit-button-goodbye-screen").children(".x-isc-up").addClass("fa-refresh fa-spin");
       $(".submit-in-qsa").children(".x-isc-up").removeClass("fa-arrow-right");
       $(".submit-in-qsa").children(".x-isc-up").addClass("fa-refresh fa-spin");
 
+
+      // ==> Show Survey result
+      // if( $scope._user_activity_.user_completed_status == undefined  || $scope._user_activity_.user_completed_status == false )
+       ;
+       // ==> Set completed status
+      $timeout(function(){ $scope._user_activity_['user_completed_status'] = true } , 500 ) ;
       // ==> Storing into offline report
-      $timeout(function(){ $scope._offline_report_collection(); } , 200 );
+      $timeout(function(){ $scope._offline_report_collection(); } , 800 );
       // ==> Storing into online report
-      $timeout(function(){ $scope._online_report_collection(); } , 500 );
+      $timeout(function(){ $scope._online_report_collection(); } , 1000 );
 
       $timeout(function(){
+        if( $scope._settings_.enable_screens == false ) location.reload();
         $(".submit-button-goodbye-screen").children(".fa").removeClass("fa-refresh fa-spin");
         $(".submit-button-goodbye-screen").children(".fa").addClass("fa-arrow-right");
         $(".submit-in-qsa").children(".fa").removeClass("fa-refresh fa-spin");
         $(".submit-in-qsa").children(".fa").addClass("fa-arrow-right");
-        $scope.swipperJs.slideNext();
-      } , 1000 );
+        // $scope.swipperJs.slideNext();
+      } , 1500 );
 
     };
 
