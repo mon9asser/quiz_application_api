@@ -545,7 +545,7 @@ apps.controller("apps-controller" , [
   $rootScope.is_unsaved_data_func = () => {
     $rootScope.is_unsaved_data = true ;
   }
-  $rootScope.nav_status = 0 ; 
+  $rootScope.nav_status = 0 ;
   $rootScope.media_current_upload = false ;
   $rootScope.show_apply_changes = false ;
   $scope.apply_in_all_slides = true ;
@@ -2375,21 +2375,14 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
   };
 
   window.onresize = ( event ) => {
-    var question_list_left = $(".left_part");
-    var nav_menu = $(".nav-container");
-    var body_window = $(".row-x-body");
-    var fixed_number = 23 ;
-    var translate_number_negative = -(question_list_left.width() +fixed_number ) ;
-    if($rootScope.nav_status == 0){
-      // alert( question_list_left.width() );
-        body_window.css({ transform : 'translate3d(0px , 0,0)'})
-        nav_menu.css({ transform : 'translate3d('+( question_list_left.width() + 17 )+'px , 0,0)'})
+    $rootScope.navbar_menu_init();
 
-    }
-    if($rootScope.nav_status == 1){
-      body_window.css({ transform : 'translate3d('+translate_number_negative+'px , 0,0)'})
-      nav_menu.css({ transform : 'translate3d('+translate_number_positive+'px , 0,0)'})
-    }
+    // var nav_menu = $(".nav-container");
+    var body_window = $(".row-x-body");
+
+    body_window.css({ transform : 'translate3d(0px , 0,0)'})
+    // nav_menu.css({ transform : 'translate3d('+( question_list_left.width() + 17 )+'px , 0,0)'})
+
   };
   $rootScope.nav_container_manager = ( nav_status ) => {
 
