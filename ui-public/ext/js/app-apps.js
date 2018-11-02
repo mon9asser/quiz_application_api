@@ -2376,7 +2376,6 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
 
   window.onresize = ( event ) => {
     $rootScope.navbar_menu_init();
-
     // var nav_menu = $(".nav-container");
     var body_window = $(".row-x-body");
 

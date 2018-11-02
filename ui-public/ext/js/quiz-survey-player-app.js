@@ -1880,12 +1880,15 @@ apps.controller("player", [
       $(".submit-in-qsa").children(".x-isc-up").addClass("fa-refresh fa-spin");
 
 
+
+      // ==> Set completed status
+     $timeout(function(){ $scope._user_activity_['user_completed_status'] = true } , 500 ) ;
+     // ==> Storing into offline report
+     $timeout(function(){ $scope._offline_report_collection(); } , 800 );
+     // ==> Storing into online report
+     $timeout(function(){ $scope._online_report_collection(); } , 1000 );
+
       $timeout(function(){
-        // ==> Offline Report ...
-        $scope._offline_report_collection();
-
-
-
 
         if( $scope._settings_.time_settings.is_with_time == true )
         $timeout.cancel($scope.timer_proc);
@@ -1900,7 +1903,7 @@ apps.controller("player", [
           { $scope.swipperJs.slideNext(); }
           else
           $scope.swipperJs.slideTo($scope._questions_.length + 2);
-        } , 1000 )
+        } , 1500 )
       } , 100)
     }
     $scope.submit_the_quiz = () => {
