@@ -5060,12 +5060,14 @@ qtnrRouters.get("/:app_id/application/get/all"  , ( req , res )=>{
       application_object['question_ids'] = new Object();
 
       if( application_object['answer_ids'] == undefined )
-        application_object['answer_ids'] = new Object();
+        application_object['answer_ids'] = new Array();
 
 
      for (var i = 0; i <= 200 ; i++) {
        application_object['question_ids']['id_'+i] =  mongoose.Types.ObjectId()
-       application_object['answer_ids']['id_'+i] =  mongoose.Types.ObjectId()
+       // application_object['answer_ids']['id_'+i] =  mongoose.Types.ObjectId()
+       if( application_object.answer_ids.findIndex(x => x._id == mongoose.Types.ObjectId() ) == -1 )
+           application_object.answer_ids.push({ _id :  mongoose.Types.ObjectId() });
      }
 
 
@@ -5382,6 +5384,10 @@ qtnrRouters.post("/:app_id/question/:question_id/answer/:answer_id/cropping_syst
          }
 
          var this_answer = this_question.answers_format.find(x => x._id == answerId );
+         console.log("----------------------------------------------");
+         console.log(answerId);
+         console.log(" ======================>>>>> " + this_answer );
+
          if( this_answer == undefined ){
            var respond_object = new Object();
            respond_object['status_code'] = 0 ;
@@ -5392,7 +5398,7 @@ qtnrRouters.post("/:app_id/question/:question_id/answer/:answer_id/cropping_syst
          }
 
 
-         if(this_question.question_type == 0 ){
+         if( this_question.question_type == 0 ){
            if( this_answer.media_optional == undefined )
            this_answer['media_optional'] = new Object();
 

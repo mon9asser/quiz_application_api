@@ -4,6 +4,11 @@ Array.prototype.are_all_questions_tracked = function( solved_questions ){
     return solved_questions.findIndex(x => x.question_id == i._id ) === -1 ;
   });
 }
+Array.prototype.get_unused_ids = function ( answer_list ) {
+  return this.filter(function(i){
+    return answer_list.findIndex(x => x._id == i._id) === -1
+  });
+}
 Array.prototype.is_tracked = function(answer){
   return this.filter(function(i){
     return answer.findIndex (x => x._id == i._id ) === -1
@@ -48,7 +53,7 @@ var time_epiration = {
 // }
 apps.filter("time_style" , () => {
   return (time) => {
-    // // // console.log(time.toString().length);
+    // // // // console.log(time.toString().length);
     if(time.toString().length == 1 )
       time = "0" + time ;
     return time ;
@@ -62,7 +67,7 @@ apps.filter( 'apply_html' , ['$sce' , ( $sce ) => {
 }]);
 apps.filter("make_it_zero" , () => {
   return (score_value) => {
-    // console.log(score_value);
+    // // console.log(score_value);
      if ( score_value == undefined )
      return 0 ;
      else return score_value ;
@@ -75,7 +80,7 @@ apps.directive('ngRetrieveData', [ '$rootScope' , '$timeout' , function ( $rootS
   return {
     link : function( $scope, element, attrs ){
       $timeout(function(){
-      // console.log($(element).next().prop("className"));
+      // // console.log($(element).next().prop("className"));
     } , 500 );
     }
   }
@@ -102,7 +107,7 @@ apps.directive('ngCustomMessageEditors', ['$parse' , '$rootScope' , '$timeout', 
             onInit : function(){
 
               $timeout(function(){
-                console.log($rootScope._settings_);
+                // console.log($rootScope._settings_);
                 if( attr.messageName == "expiry-warning"){
                   var expire_warning = $rootScope._settings_.expiration.expire_warning ;
                   $("div[message-name='expiry-warning']").next('.note-editor').find('.note-editable').html("");
@@ -265,7 +270,7 @@ apps.directive('ngCustomEditor', ['$parse' , '$rootScope' , '$timeout', function
                             $rootScope.load_redactor_data_questions(this_question._id);
                             var question_editor = $(".question-redactor") ;
                             var question_field = question_editor.next('.note-editor').find('.note-editable');
-                            console.log();
+                            // console.log();
                             if(this_question.question_body =="")
                             question_field.css("color" , "#999")
                             else
@@ -450,7 +455,7 @@ apps.filter("apply_html_with_date_filtering" , ['$sce'  , ( $sce  ) => {
 //         //   return new Date() ;
 //         // }else
 //         origin_formative = origin_formative.replace("&nbsp;" , " ");
-//         console.log( origin_formative + ' >> '+ origin_formative.length);
+//         // console.log( origin_formative + ' >> '+ origin_formative.length);
 //         if( origin_formative.length > 22 ) return "<span class='warn-expression'> You can not use more than one expression ! </span>" ;
 //         if ( origin_formative.toString().toLowerCase().includes("time_ago") && origin_formative.length == 14) {   return time_epiration.expiration_day_counts ; }
 //         else if ( origin_formative.toString().toLowerCase().includes("day_counts") && origin_formative.length == 16) {  return time_epiration.expiration_day_counts ; }
@@ -669,7 +674,7 @@ apps.controller("apps-controller" , [
   $rootScope._settings_draft_    =  {} ;
   $rootScope.question_ids_draft  =  [];
   $rootScope.answer_ids_draft    =  [] ;
-  // console.log($rootScope.retrieve_data_url);
+  // // console.log($rootScope.retrieve_data_url);
   $rootScope._questions_draft_   =  [];
   $rootScope.media_data = undefined // => to display media in uploader box
   $rootScope.go_to_screen_number = (screen_number) => {
@@ -753,7 +758,7 @@ apps.controller("apps-controller" , [
     $rootScope._settings_    =  $rootScope._application_.settings;
     $rootScope.question_ids  =  $rootScope._application_.question_ids;
     $rootScope.answer_ids    =  $rootScope._application_.answer_ids;
-    // console.log($rootScope.retrieve_data_url);
+    // // console.log($rootScope.retrieve_data_url);
     $rootScope._questions_   =  $rootScope._application_.questions;
     // $rootScope.randomize_sorting_questions($rootScope._settings_.randomize_settings);
 
@@ -826,7 +831,7 @@ $rootScope.loading_application_data = () => {
     $rootScope._settings_draft_    =  resp.data.settings;
     $rootScope.question_ids_draft  =  resp.data.question_ids;
     $rootScope.answer_ids_draft    =  resp.data.answer_ids;
-    // console.log($rootScope.retrieve_data_url);
+    // // console.log($rootScope.retrieve_data_url);
     $rootScope._questions_draft_   =  resp.data.questions;
     // $rootScope.randomize_sorting_questions($rootScope._settings_.randomize_settings);
   });
@@ -943,7 +948,7 @@ $rootScope.loading_application_data = () => {
       //      // var title_resume = $R(".set_redactor" , "source.getCode")[6];
       //       var title_resume =""
       //       $rootScope._settings_.titles.title_resume = title_resume;
-      //       $timeout(function(){ /*console.log($rootScope._settings_.titles);*/ } , 201);
+      //       $timeout(function(){ /*// console.log($rootScope._settings_.titles);*/ } , 201);
       //    }, 200 );
       // });
 
@@ -982,7 +987,7 @@ $rootScope.loading_application_data = () => {
   }
   // ==> Check if answer with media for Tooltip
   $rootScope.case_it_with_media = ( question , answer ) => {
-    // console.log(answer);
+    // // console.log(answer);
     if(question.question_type == 0 ){
 
       var value ;
@@ -1038,7 +1043,7 @@ $rootScope.loading_application_data = () => {
     $rootScope.video_object['video_type'] = videoType ;
     $rootScope.video_object['video_id'] = videoId ;
     $rootScope.video_object['embed_url'] = video_src_value ;
-    // console.log($rootScope.video_object);
+    // // console.log($rootScope.video_object);
     $rootScope.extracting_videos( video_src_value , videoType , video , videoId );
 
   }
@@ -1224,7 +1229,7 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
     }
     // question_object['media_question'] =
     question_object['answer_settings'] = new Object();
-    answer_object['_id'] = $rootScope.answer_ids[ 'id_' + question_object.answers_format.length] + '' + $rootScope._questions_.length ;
+    answer_object['_id'] = $rootScope.answer_ids[question_object.answers_format.length]._id ;
     if( question_type == 0 ) {
       answer_object['value'] = "Answer " + ( question_object.answers_format.length + 1 )
       if ( $rootScope._application_.app_type == 1 )
@@ -1350,7 +1355,7 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
     if($rootScope._questions_[$rootScope.question_index].answers_format[0].answer_val.length > char_counts )
      $rootScope._questions_[$rootScope.question_index].answers_format[0].is_disabled = true ;
 
-     console.log(char_counts);
+     // console.log(char_counts);
   }
   // => Mark Selected Question
   $rootScope.highlighted_question = (questionId) => {
@@ -1531,7 +1536,7 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
   }
 
   $rootScope.load_dtr = () => {
-    console.log("Loaded !!!!! ------------------------------------------ ");
+    // console.log("Loaded !!!!! ------------------------------------------ ");
   }
   $rootScope.saving_quiz_settings = () => {
 
@@ -1556,7 +1561,7 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
   }
   // => Show Image
   $rootScope.image_uploader_is_touched = () => {
-      // console.log($rootScope.media_image_model[0].files[0]);
+      // // console.log($rootScope.media_image_model[0].files[0]);
   }
 
   $rootScope.collect_hour_params = () => {
@@ -1704,11 +1709,16 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
       if(this_answer != undefined ){
         var index = this_question.answers_format.findIndex(x => x._id == answerId )
         if(index != -1 )
-          this_question.answers_format.splice( index , 1 );
+          {
+            var target_answer_id = this_question.answers_format[index]._id;
+            if( target_answer_id == answerId )
+                this_question.answers_format.splice( index , 1 );
+          }
       }
     }
 
-
+    // => Save Deletion into db
+    $timeout(function(){   $rootScope.storing_questions_into_database(); } , 100 );
   }
   // destory cropper
 
@@ -1741,7 +1751,7 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
   }
   // ==> Add media for question
   $rootScope.add_new_media_for_answer = (answer_id , thisElem) => {
-
+    // console.log(answer_id);
     var main_answer_blocks = $('.answer-pt-controller');
     var current_box = main_answer_blocks.children("li").eq(thisElem.$index);
     $(".box-data").css({ top : ( parseInt(current_box.offset().top - 110) ) + 'px'});
@@ -1804,7 +1814,7 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
       $("html , body").animate({
         scrollTop : $(".box-data").offset().top - 200
       } , 200 );
-      // console.log($rootScope.media_data);
+      // // console.log($rootScope.media_data);
    }
   // => Close Current window
   $rootScope.close_current_image_uploader = () => {
@@ -1906,7 +1916,7 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
                var context = canvas.getContext("2d");
                img.src =   "data:image/gif;base64," + base64  ;
                context.drawImage(img, 0, 0, width, height);
-               console.log(context);
+               // console.log(context);
                */
 
                $rootScope.image_view_source =  e.target.result  ;
@@ -1927,7 +1937,7 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
 
           }
 
-        // console.log($rootScope.media_image_uploader[0].files[0]);
+        // // console.log($rootScope.media_image_uploader[0].files[0]);
   };
 
   $rootScope.active_this_label = (index_number ) => {
@@ -1939,13 +1949,13 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
 
 
   $rootScope.loading_answer_media_image = (image , date) => {
-    // console.log(image + ' ' +  date);
+    // // console.log(image + ' ' +  date);
     return {
       backgroundImage : 'url("'+image +'?' + date +'")'
     } ;
   }
   $rootScope.loading_answer_media_image_media_choices = (image , date) => {
-    // console.log(image + ' ' +  date);
+    // // console.log(image + ' ' +  date);
     return {
       backgroundImage : 'url("'+image +'?' + date +'")'
     } ;
@@ -2010,13 +2020,30 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
 
     return Question.media_question = undefined ;
   };
+  $rootScope.create_unexisting_answer_id = (ids , answer_array ) => {
+    var unused_ids = ids.get_unused_ids(answer_array);
+    if(unused_ids[0] != undefined && unused_ids[0]._id != undefined ){
+      return unused_ids[0]._id ;
+    }else {
+      return null ;
+    }
+
+    return null ;
+  };
   $rootScope.add_new_answer = ( question_id ) => {
     if(question_id == undefined) return false ;
     var question = $rootScope._questions_.find(x => x._id == question_id );
     if(question == undefined ) return false ;
     var answer_object_data = new Object();
+
+    // ==> Get unexisting id
+  //  // console.log($rootScope.answer_ids);
+
     // ==> Fill according to question type
-    answer_object_data['_id'] = $rootScope.answer_ids[ 'id_' + question.answers_format.length] + '' + $rootScope._questions_.length ;
+    var get_id = $rootScope.create_unexisting_answer_id($rootScope.answer_ids , question.answers_format  );
+    if( get_id == null ) return false ;
+    answer_object_data['_id'] = get_id ; // + '' + $rootScope._questions_.length ;
+
     if ( question.question_type == 0 ){
       answer_object_data['value'] = "Answer " + ( question.answers_format.length + 1 )
       if ( $rootScope._application_.app_type == 1 )
@@ -2050,8 +2077,8 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
       data : { data : $rootScope._questions_ }
      }).then((response)=>{
        $rootScope.loading_application_data();
-       // console.log(response);
-       //  console.log("Updated +++++++++++++++");
+       // // console.log(response);
+       //  // console.log("Updated +++++++++++++++");
     });
   };
 /*,
@@ -2367,7 +2394,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
       $timeout(function(){
         var question = $rootScope._questions_.find(x => x._id == question_id);
         if( question == undefined ) return false;
-        // console.log(question);
+        // // console.log(question);
         if( question.answer_settings == undefined ) question['answer_settings'] = new Object();
         question.answer_settings[setting_name] = setting_value ;
       })
@@ -2375,12 +2402,12 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
   };
 
   window.onresize = ( event ) => {
-    $rootScope.navbar_menu_init();
-    // var nav_menu = $(".nav-container");
+    // $rootScope.navbar_menu_init();
+    var nav_menu = $(".nav-container");
     var body_window = $(".row-x-body");
-
+    var question_list_left = $(".left_part");
     body_window.css({ transform : 'translate3d(0px , 0,0)'})
-    // nav_menu.css({ transform : 'translate3d('+( question_list_left.width() + 17 )+'px , 0,0)'})
+    nav_menu.css({ transform : 'translate3d('+( question_list_left.width() + 17 )+'px , 0,0)'})
 
   };
   $rootScope.nav_container_manager = ( nav_status ) => {
@@ -2460,11 +2487,11 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
   $rootScope.build_question_lists = ( question , answer , question_reports ) => {
 
 
-    // console.log( $rootScope._user_activity_ );
+    // // console.log( $rootScope._user_activity_ );
 
     // ==> Get solved questions
     var usr = ( $rootScope._user_activity_ == undefined ||  $rootScope._user_activity_ == null) ?  undefined : $rootScope._user_activity_ ;
-    // console.log(usr);
+    // // console.log(usr);
     if( usr == undefined ) return false ;
 
     // ==> Report questions
@@ -2595,13 +2622,13 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
 
 
 
-         // // // // console.log(solved_question_id);
-         // // // // console.log(solved_questions);
-         // // // console.log(usr.report_questions);
+         // // // // // console.log(solved_question_id);
+         // // // // // console.log(solved_questions);
+         // // // // console.log(usr.report_questions);
         // ==> End Zooming
       }
       solved_questions.user_answers.map(zoom_in_usr_answers)
-      // // // console.log("Bulding attendee online report");
+      // // // // console.log("Bulding attendee online report");
       }
     // ==> Storing Anwers
   $rootScope.show_solved_answers  = (  question_id , answer_id , is_correct ) => {
@@ -2620,7 +2647,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
 
     // if( index != -1 && $rootScope._questions_[index].question_type == 2 && $rootScope._questions_[index].answer_settings.super_size == true )
     // classes += "super_size_class ";
-    console.log(classes);
+    // console.log(classes);
     // ==> List solved questions
     if( $rootScope._user_activity_ != undefined && $rootScope._user_activity_ != null ){
       var user_index =   $rootScope._user_activity_;
@@ -3006,7 +3033,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
 
 
                // ==> Build Question Data
-               // console.log(answer_ratScale);
+               // // console.log(answer_ratScale);
 
                var usr = $rootScope._user_activity_ ;
                var question_data_index = usr.questions_data.findIndex(x => x.question_id == question_id);
@@ -3045,7 +3072,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
                  $rootScope.show_unsolved_question_message();
             }
 
-            console.log($rootScope._user_activity_);
+            // console.log($rootScope._user_activity_);
        }, 100 );
 
   };
@@ -3150,7 +3177,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
         usr.report_attendees.results.result.raw_value = correct_questions ;
         usr.is_completed = is_completed ;
         $rootScope._user_activity_ = usr ;
-        // // console.log($rootScope._user_activity_);
+        // // // console.log($rootScope._user_activity_);
         if( $rootScope.is_submitted == true ){
             var usr_ = $rootScope._user_activity_ ;
             $rootScope.unsolved_questions = $rootScope._questions_.are_all_questions_tracked( usr_.questions_data );
@@ -3159,7 +3186,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
         $timeout(function(){ $rootScope.$apply(); } , 50 );
   };
   $rootScope.storing_answer_into_online_report = () => {
-    // console.log("storing is disabled !");
+    // // console.log("storing is disabled !");
   }
   $rootScope.select_this_answer=( questionId , answerId , question , answer , app_id , user_id , is_correct , answerIndex , css_mode )=>{
 
@@ -3578,7 +3605,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
                     if(findAttendeeIndex != - 1){
                       // ==> Attendee Object [FOUND]
                       var attendeeInfo = $rootScope.this_attendee_draft.att_draft[findAttendeeIndex];
-                      // console.log({attendeeInfo : attendeeInfo});
+                      // // console.log({attendeeInfo : attendeeInfo});
                       if(attendeeInfo.questions_data == undefined )
                       attendeeInfo.questions_data = new Array();
                       var findQuestionIndex = attendeeInfo.questions_data.findIndex(x => x.question_id == object.question_id);
@@ -3692,8 +3719,8 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
                                      answer_body : object.answer ,
                                      is_correct : object.is_correct
                              }
-                             // console.log({attendeeInfo: attendeeInfo});
-                            // console.log(attendeeInfo);
+                             // // console.log({attendeeInfo: attendeeInfo});
+                            // // console.log(attendeeInfo);
                       }else {
                         // ==> Question FOUND ==> Update here !
                          var findAnswer = findQuestion.answer_ids.find(x => x.answer_id == object.answer_id);
@@ -3823,7 +3850,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
                 }
 
                 $timeout(function(){  $rootScope.$apply(); } , 300);
-                // console.log({
+                // // console.log({
                 //   currAttendee : $rootScope.this_attendee_draft
                 // });
     }
@@ -3862,7 +3889,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
   $rootScope.go_to_next_slide = (css_mode) => {
     if(css_mode == true ) return false;
     var question_index = $rootScope.question_index;
-    // console.log(question_index == ( $rootScope._questions_.length - 1 ) );
+    // // console.log(question_index == ( $rootScope._questions_.length - 1 ) );
     if( question_index == ( $rootScope._questions_.length - 1 ) )
       {
         if($rootScope._settings_.enable_screens == true )
@@ -4061,7 +4088,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
       var this_class = 'this_slide_' + $rootScope._questions_[$rootScope.question_index]._id ;
       // ==> Apply styles for selected slide ( current question )
       if( $("div[box-question-slide]").hasClass( this_class ) ){
-        console.log(this_class);
+        // console.log(this_class);
       }
     }else {
       // apply in all slides
@@ -4358,7 +4385,7 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
 
                   // Basic answers
                   // var current_class = e.target.getAttribute('box-target-class');
-                  // console.log(current_class);
+                  // // console.log(current_class);
                   $rootScope.selecotor_name = ".Answers";
                   $rootScope.background_models = current_class.css("background-color");
                   $rootScope.border_models_color = current_class.css("border-color");
@@ -5332,7 +5359,7 @@ $rootScope.load_redactor_data_answers = ( question_id  , answer_lists  ) => {
      /*
       element.next(".note-editor").children(".note-editing-area").children(".note-editable").css("color","#000");
      */
-     console.log(splited_answer);
+     // console.log(splited_answer);
        if(answer.value != undefined && ( answer.value == '' || (answer.value.toLowerCase().includes('answer') == true && splited_answer.length == 2 && !isNaN(splited_answer[1])) ) )
        {
          answer_editor.attr("data-text" , answer.value )
@@ -5349,7 +5376,7 @@ $rootScope.load_redactor_data_answers = ( question_id  , answer_lists  ) => {
    answers.map(answer_zooming)
 }
  $rootScope.storing_placholder_if_item_empty = (contents , element) => {
-   console.log(contents == element);
+   // console.log(contents == element);
    if(contents == '')
    {
      $("div[message-name='"+element+"']").next('.note-editor').find('.note-editable').attr("data-text" , "Write your text here !");
