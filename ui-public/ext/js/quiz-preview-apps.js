@@ -1290,6 +1290,73 @@ apps.controller("player", [
         // ==> List super size
         var classes = "";
 
+        index = $scope._questions_.findIndex(x => x._id == question_id );
+        /*
+         && $scope._questions_[index].answer_settings.super_size == true
+         */
+         // console.log($scope._questions_[index]);
+        if( index != -1 && $scope._questions_[index].answer_settings.super_size == true || ( $scope._questions_[index] != undefined && $scope._questions_[index].question_type == 2 && $scope._questions_[index].answer_settings.super_size == true) )
+        classes += "super_size_class ";
+
+
+        // ==> List solved questions
+        if( $scope._online_report_ != undefined && $scope._online_report_.att_draft != undefined && $scope._online_report_.att_draft != null ){
+          var users = $scope._online_report_.att_draft.filter(x => x != null );
+        // console.log($scope._online_report_.att_draft.findIndex(null));
+
+          var user_index =  $scope._online_report_.att_draft.findIndex(x => x.user_id == $scope.user_id ) ;
+          if( user_index != -1 ){
+            var usr_act = $scope._online_report_.att_draft[user_index];
+            if(usr_act.report_questions != undefined )
+            {
+              var current_question = usr_act.report_questions.question_answers.find(x => x.question_id == question_id );
+              if(current_question != undefined )
+              {
+
+                if( app_settings.show_results_per_qs && $scope._user_activity_.report_questions != undefined ){
+
+                   var this_question = $scope._user_activity_.report_questions.question_answers.find(x => x.question_id == question_id );
+                   if(this_question != undefined){
+                     if( this_question.is_correct == false ){
+                       // ==> Solved "wrong answers";
+                        // .... Show all right answers
+                        var basic_question = $scope._questions_.find(x => x._id == question_id) ;
+                        var basic_answer = basic_question.answers_format.find(x => x._id == answer_id ) ;
+                        if( basic_answer.is_correct == true ) classes += "right_answer ";
+                        // .... Show Solved wrong answer
+                        var all_wrong_answers = this_question.user_answers.filter(x => x.is_correct == false );
+                        var these_wrong_answers = all_wrong_answers.find(x => x._id == answer_id) ;
+                        if(these_wrong_answers != undefined) classes += "wrong_answer ";
+                     }else {
+                       // ==> Solved "right answers";
+                       // .... Show only solved answer
+                       var basic_question = $scope._questions_.find(x => x._id == question_id) ;
+                       var basic_answer = basic_question.answers_format.find(x => x._id == answer_id ) ;
+                       // if( basic_answer.is_correct == true ) classes += "right_answer ";
+                       var solved_right_answers = this_question.user_answers.filter(x => x.is_correct == true );
+                        var these_right_answers = solved_right_answers.find(x => x._id == answer_id) ;
+                        if(these_right_answers != undefined ) classes += "right_answer ";
+                     }
+                   }
+                }else {
+                  var current_answer = current_question.user_answers.find(x => x._id == answer_id) ;
+                  if(current_answer != undefined )
+                    classes += "selected_answer ";
+                }
+              }
+            }
+          }
+        }
+
+
+       return classes ;
+    };
+    $scope.show_solved_answers_ = (index , question_id , answer_id , is_correct) => {
+        var app_settings = $scope._settings_ ;
+
+        // ==> List super size
+        var classes = "";
+
 
         index = $scope._questions_.findIndex(x => x._id == question_id );
 
