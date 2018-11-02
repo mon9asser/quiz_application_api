@@ -680,25 +680,24 @@ apps.controller("player", [
 
       $timeout(function(){
         $(".retake-result-box").children("i.fa").removeClass("fa-spin");
-        if( $scope._settings_.enable_screens == true ) currentIndex = 1 ;
-        if( $scope._settings_.enable_screens == false ) currentIndex = 1 ;
+        // if( $scope._settings_.enable_screens == true ) currentIndex = 1 ;
+        // if( $scope._settings_.enable_screens == false ) currentIndex = 1 ;
         // fa fa-repeat
 
 
         $scope.truncate_attendee_data(currentIndex);
 
-        $scope.swipperJs.slideTo(0);
+        // $scope.swipperJs.slideTo(0);
       } , 1000 );
     }
 
 
     $scope.truncate_attendee_data = (currentIndex) => {
-      // console.log("Retake , truncate data ... ");
-      $scope.finished_is_clicked = false ;
-      $scope._user_activity_ = new Object();
-      $scope._online_report_ = undefined ;
+      $(".retake-result-box").children("i.fa").removeClass("fa-spin");
 
-      $scope.loading_application_data();
+      var current_window_url = window.location.href ;
+      var retake_url = current_window_url +'?retake=true&&private_key='+$scope.user_id;
+      window.location = retake_url;
     };
     $scope.timer_proccess = () => {
 
