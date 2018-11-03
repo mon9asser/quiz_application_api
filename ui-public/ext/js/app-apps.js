@@ -1378,7 +1378,8 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
             // var questionIndex = $rootScope._questions_.findIndex( x=> x._id == questionId );
             $rootScope.highlighted_question(questionId);
           });
-        } else{
+        } else {
+          // $rootScope._questions_ = [] ;
           $rootScope.loading_application_data();
           // ==> Restore old data
           $rootScope._questions_[$rootScope.question_index] = $rootScope._questions_draft_[$rootScope.question_index] ;
@@ -1395,7 +1396,6 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
             } , 200 ) ;
           } , 300 )
           $rootScope.is_unsaved_data = false ;
-
         }
       })
       // if( confirm("Would you like to discard the changes ? ")){

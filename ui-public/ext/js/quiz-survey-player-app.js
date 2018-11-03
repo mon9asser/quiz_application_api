@@ -455,6 +455,7 @@ apps.controller("player", [
                             if(thisQuestion.question_type == 0 || thisQuestion.question_type == 1 ){
                               var answer_settings = thisQuestion.answer_settings ;
                               // answer_settings.is_randomized
+                              if( answer_settings.is_randomized == true )
                               $scope.is_randomized_answer_with(answer_settings.is_randomized ,thisQuestionIndex );
                             }
                           }

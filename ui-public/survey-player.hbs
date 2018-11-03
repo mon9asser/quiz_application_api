@@ -122,10 +122,10 @@
            <div class="container screen-container screen_opg_editor box-welcome-screen">
               <div ng:cloak class="description-body redactor-styles welcome-screen-text-block w-screen-text" ng:bind:html="_settings_.titles.title_start_with | apply_html"></div>
               <div class="qusu-details text-right">
-                <button ng:cloak ng:click="start_the_quiz()" class="button-take-this welcome-screen-button" type="button" name="button">
+                <span ng:cloak ng:click="start_the_quiz()" class="button-take-this welcome-screen-button" type="button" name="button">
                     <i class="fa fa-sign-in" aria-hidden="true"></i>
                     {> _settings_.label_btns.lbl_start_with <}
-                </button>
+                </span>
               </div>
            </div>
          </div>
@@ -366,7 +366,7 @@
              </div>
            </div>
          </div>
-        
+
          <!-- Completed survey  -->
          <div ng:if="(_user_activity_  && ( _user_activity_.user_completed_status != undefined &&  _user_activity_.user_completed_status == true ) )" ng:style="{'margin-top' : ( _settings_.time_settings.is_with_time == false && _settings_.progression_bar.is_available == false ) ? '10%' : '0px'}"  class="swiper-slide welcoming-screen-x">
                   <!-- Result screen contents  -->

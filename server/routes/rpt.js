@@ -3484,6 +3484,7 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
     if(req.body.date != undefined){
       // ==> Search by date
       var show_attendee_with_times_offline = ( AT ) => {
+
         var completed_date = new Date ( AT.completed_date );
         var date_from = new Date (req.body.date.date_from);
         var date_to = new Date (req.body.date.date_to);
@@ -3494,17 +3495,31 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
           }
       };
       var show_attendee_with_times = ( AT ) => {
-        if(AT.report_attendee_details != undefined ){
-          var completed_date = new Date ( AT.report_attendee_details.completed_date );
+        // if(AT.report_attendee_details != undefined ){
+        //   var completed_date = new Date ( AT.report_attendee_details.completed_date );
+        //   var date_from = new Date (req.body.date.date_from);
+        //   var date_to = new Date (req.body.date.date_to);
+        //   console.log(AT.start_expiration_time);
+        //   // // // console.log(completed_date >= date_from && completed_date <= date_to);
+        //   if( completed_date >= date_from && completed_date <= date_to )
+        //     _online_report_.push(AT);
+        // }
+
+          var completed_date = new Date ( (AT.report_attendee_details != undefined && AT.report_attendee_details.completed_date != undefined ) ? AT.report_attendee_details.completed_date  : AT.start_expiration_time ) ;
           var date_from = new Date (req.body.date.date_from);
           var date_to = new Date (req.body.date.date_to);
+          console.log(AT.start_expiration_time);
           // // // console.log(completed_date >= date_from && completed_date <= date_to);
           if( completed_date >= date_from && completed_date <= date_to )
             _online_report_.push(AT);
-        }
+
+
       };
       if(_document_.att__draft != undefined)
-       _document_.att__draft.att_draft.map(show_attendee_with_times);
+       {
+         _document_.att__draft.att_draft.map(show_attendee_with_times);
+
+       }
        if(_document_.app_report != undefined)
        _document_.app_report.attendee_details.map(show_attendee_with_times_offline);
     }else {
