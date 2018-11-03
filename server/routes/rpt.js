@@ -3925,9 +3925,8 @@ rptRouters.post(
            surveys : new Array()
          }
 
-         if(date_object.report_attendee_details != undefined ){
-
-             var completed_date = new Date (date_object.report_attendee_details.completed_date) ;
+         
+             var completed_date = new Date ((date_object.report_attendee_details != undefined && date_object.report_attendee_details.completed_date != undefined ) ? date_object.report_attendee_details.completed_date : date_object.start_expiration_time) ;
              var date_from = new Date (from);
              var date_to = new Date (to);
              // console.log( completed_date >= date_from  );
@@ -3941,7 +3940,7 @@ rptRouters.post(
                  all_attendees.surveys.push(attendee_atgs.surveys.length);
                }
              }
-         }
+
 
 
       };
@@ -3998,14 +3997,12 @@ rptRouters.post(
         var counts = 0 ;
         var atts_x = new Array ();
         var zoome_in_quiz_students = (current_object) => {
-          if(current_object.report_attendee_details != undefined ) {
-          var completed_date_in_one =  new Date (current_object.report_attendee_details.completed_date) ;
+          var completed_date_in_one =  new Date ( ( current_object.report_attendee_details != undefined && current_object.report_attendee_details.completed_date != undefined ) ? current_object.report_attendee_details.completed_date : current_object.start_expiration_time ) ;
+
           var started_at_date = new Date(req.body.date.date_from);
           var ended_at_date = new Date(req.body.date.date_to);
           if(completed_date_in_one >= started_at_date && completed_date_in_one <= ended_at_date )
-            atts_x.push(current_object);
-            }
-
+           atts_x.push(current_object);
         }
         if(apps.att__draft != undefined)
         apps.att__draft.att_draft.map(zoome_in_quiz_students);
