@@ -1230,8 +1230,10 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
     // question_object['media_question'] =
     question_object['answer_settings'] = new Object();
     answer_object['_id'] = $rootScope.answer_ids[question_object.answers_format.length]._id ;
+    answer_object['answer_serial'] = 1 ;
+
     if( question_type == 0 ) {
-      answer_object['value'] = "Answer " + ( question_object.answers_format.length + 1 )
+      answer_object['value'] = "Answer 1";
       if ( $rootScope._application_.app_type == 1 )
       answer_object['is_correct'] = false ;
       // => Push To Answer Array
@@ -2037,19 +2039,16 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
     var answer_object_data = new Object();
 
     // ==> Get unexisting id
-  //  // console.log($rootScope.answer_ids);
-
     // ==> Fill according to question type
     var get_id = $rootScope.create_unexisting_answer_id($rootScope.answer_ids , question.answers_format  );
     if( get_id == null ) return false ;
     answer_object_data['_id'] = get_id ; // + '' + $rootScope._questions_.length ;
+    answer_object_data['answer_serial'] = parseInt( question.answers_format[question.answers_format.length - 1].answer_serial ) + 1 ;
 
     if ( question.question_type == 0 ){
-      answer_object_data['value'] = "Answer " + ( question.answers_format.length + 1 )
+      answer_object_data['value'] = "Answer " + parseInt( question.answers_format[question.answers_format.length - 1].answer_serial + 1 )
       if ( $rootScope._application_.app_type == 1 )
       answer_object_data['is_correct'] = false ;
-
-
     }
     if ( question.question_type == 1 ){
       answer_object_data['media_src'] = "No Media Here !";
@@ -2403,11 +2402,14 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
 
   window.onresize = ( event ) => {
     // $rootScope.navbar_menu_init();
-    var nav_menu = $(".nav-container");
-    var body_window = $(".row-x-body");
-    var question_list_left = $(".left_part");
-    body_window.css({ transform : 'translate3d(0px , 0,0)'})
+      var nav_menu = $(".nav-container");
+    // var body_window = $(".row-x-body");
+      var question_list_left = $(".left_part");
+    // body_window.css({ transform : 'translate3d(0px , 0,0)'})
+    // nav_menu.css({ transform : 'translate3d('+( question_list_left.width() + 17 )+'px , 0,0)'})
+    nav_menu.css({width : question_list_left.width() + 17 + 'px'});
     nav_menu.css({ transform : 'translate3d('+( question_list_left.width() + 17 )+'px , 0,0)'})
+
 
   };
   $rootScope.nav_container_manager = ( nav_status ) => {
