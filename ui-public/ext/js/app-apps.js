@@ -1300,8 +1300,9 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
         $rootScope.build_question_settings ( 'is_required' , false , question_object._id );
     }
     if( question_type == 4 ){
-      var answer_object = new Object()
-      // answer_object['_id'] = $rootScope.answer_ids[ 'id_' + question_object.answers_format.length ];;
+      var answer_object = new Object();
+      console.log($rootScope.answer_ids[question_object.answers_format.length]);
+       answer_object['_id'] = $rootScope.answer_ids[question_object.answers_format.length]._id ;
       if( question_object.answer_settings == undefined )
       question_object['answer_settings'] = new Object();
       if( question_object.answer_settings.character_counts == undefined)
