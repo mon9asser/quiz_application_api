@@ -1232,7 +1232,7 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
     answer_object['_id'] = $rootScope.answer_ids[question_object.answers_format.length]._id ;
     answer_object['answer_serial'] = 1 ;
 
-    if( question_type == 0 ) {
+    if( question_type == 0 ){
       answer_object['value'] = "Answer 1";
       if ( $rootScope._application_.app_type == 1 )
       answer_object['is_correct'] = false ;
@@ -1301,7 +1301,7 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
     }
     if( question_type == 4 ){
       var answer_object = new Object()
-      answer_object['_id'] = $rootScope.answer_ids[ 'id_' + question_object.answers_format.length ];;
+      // answer_object['_id'] = $rootScope.answer_ids[ 'id_' + question_object.answers_format.length ];;
       if( question_object.answer_settings == undefined )
       question_object['answer_settings'] = new Object();
       if( question_object.answer_settings.character_counts == undefined)
