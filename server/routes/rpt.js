@@ -3702,7 +3702,7 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
     var get_answers_percentage_free_text_answers = ( question_id , report , question_attendee_counts ) => {
       var question_finder = _questions_.find(x => x._id == question_id );
       var answer_arguments = new Array() ;
-      if( question_finder != undefined  ){
+      if( question_finder != undefined && question_finder.answers_format[0] != null ){
 
 
         // && question_finder.answers_format != undefined && question_finder.answers_format[0] != null
