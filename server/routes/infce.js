@@ -21,25 +21,25 @@ var psi_for_status_code_in_server = ( api_url ) => {
 
   // Get the PageSpeed Insights report
   psi('http://35.166.78.187/api/5bc73cc884b3961bae7fcad2/editor/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmM3M2NiOTg0YjM5NjFiYWU3ZmNhZDEiLCJkYXRlX21hZGUiOiIyMDE4LTEwLTIwVDA4OjA2OjExLjk1NFoiLCJpYXQiOjE1NDAwMjI3NzF9.AuGqDgYZe0h2Go7r793uzHlhBrj5zWyheCbQ3T4ApnY').then(data => {
-    console.log(data.ruleGroups.SPEED.score);
-    console.log(data.pageStats);
-    console.log("------------------------------------------------");
+    // console.log(data.ruleGroups.SPEED.score);
+    // console.log(data.pageStats);
+    // console.log("------------------------------------------------");
   });
 
   // Output a formatted report to the terminal
   psi.output('http://35.166.78.187/api/5bc73cc884b3961bae7fcad2/editor/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmM3M2NiOTg0YjM5NjFiYWU3ZmNhZDEiLCJkYXRlX21hZGUiOiIyMDE4LTEwLTIwVDA4OjA2OjExLjk1NFoiLCJpYXQiOjE1NDAwMjI3NzF9.AuGqDgYZe0h2Go7r793uzHlhBrj5zWyheCbQ3T4ApnY').then(() => {
-    console.log('done');
-    console.log("------------------------------------------------");
+    // console.log('done');
+    // console.log("------------------------------------------------");
   });
 
- 
+
 
 
   // Supply options to PSI and get back speed and usability scores
   psi('http://35.166.78.187/api/5bc73cc884b3961bae7fcad2/editor/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmM3M2NiOTg0YjM5NjFiYWU3ZmNhZDEiLCJkYXRlX21hZGUiOiIyMDE4LTEwLTIwVDA4OjA2OjExLjk1NFoiLCJpYXQiOjE1NDAwMjI3NzF9.AuGqDgYZe0h2Go7r793uzHlhBrj5zWyheCbQ3T4ApnY', {nokey: 'true' }).then(data => {
-    console.log('Speed score:', data.ruleGroups.SPEED.score);
-    console.log('Usability score:', data.ruleGroups.USABILITY.score);
-    console.log("------------------------------------------------");
+    // console.log('Speed score:', data.ruleGroups.SPEED.score);
+    // console.log('Usability score:', data.ruleGroups.USABILITY.score);
+    // console.log("------------------------------------------------");
   });
 }
 

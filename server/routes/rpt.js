@@ -3704,6 +3704,13 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
       var answer_arguments = new Array() ;
       if( question_finder != undefined ){
 
+        console.log("Question Body --------------------------");
+        console.log(question_finder);
+        console.log("Answer Format --------------------------");
+        console.log(question_finder.answers_format);
+        console.log("Answer Format Index --------------------------");
+        console.log(question_finder.answers_format[0]);
+        
         var anwer_id = question_finder.answers_format[0]._id ;
         var get_all_free_text_questions = (QS) => {
            if( QS.question_id == question_id ){
@@ -3925,7 +3932,7 @@ rptRouters.post(
            surveys : new Array()
          }
 
-         
+
              var completed_date = new Date ((date_object.report_attendee_details != undefined && date_object.report_attendee_details.completed_date != undefined ) ? date_object.report_attendee_details.completed_date : date_object.start_expiration_time) ;
              var date_from = new Date (from);
              var date_to = new Date (to);
