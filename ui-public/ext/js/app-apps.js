@@ -2117,17 +2117,10 @@ sort: false  */
         handle: '.drag-tools',
         ghostClass: 'shadow_element' ,
         onEnd : (evt) => {
-
-          var old_index = evt.oldIndex ;
-          var new_index = evt.newIndex;
-          var target_answer = answers[old_index];
-          // ==> Remove in Old index
-          answers.splice(old_index , 1);
-          // ==> Send it into new index
-          $timeout(function(){
-            answers.splice( new_index ,0,  target_answer );
-            $timeout(function(){ $rootScope.init_bootstrap_tooltip(); }  , 300)
-          }, 300 );
+           var old_index = evt.oldIndex ;
+           var new_index = evt.newIndex;
+           console.log( "New Index : " + new_index );
+           console.log( "Old Index : " + old_index );
         }
       });
     } , 300 )
