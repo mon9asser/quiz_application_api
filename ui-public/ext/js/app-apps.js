@@ -2044,10 +2044,13 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
     var get_id = $rootScope.create_unexisting_answer_id($rootScope.answer_ids , question.answers_format  );
     if( get_id == null ) return false ;
     answer_object_data['_id'] = get_id ; // + '' + $rootScope._questions_.length ;
-    answer_object_data['answer_serial'] = parseInt( question.answers_format[question.answers_format.length - 1].answer_serial ) + 1 ;
+
+
+
+    answer_object_data['answer_serial'] = parseInt( ( question.answers_format[question.answers_format.length - 1] != undefined ) ? question.answers_format[question.answers_format.length - 1].answer_serial : 0 ) + 1 ;
 
     if ( question.question_type == 0 ){
-      answer_object_data['value'] = "Answer " + parseInt( question.answers_format[question.answers_format.length - 1].answer_serial + 1 )
+      answer_object_data['value'] = "Answer " + parseInt( (question.answers_format[question.answers_format.length - 1]) ? question.answers_format[question.answers_format.length - 1].answer_serial + 1 : 1 )
       if ( $rootScope._application_.app_type == 1 )
       answer_object_data['is_correct'] = false ;
     }
@@ -2260,7 +2263,7 @@ sort: false  */
 
         } ,
         onEnd  : function (evt) {
-
+          // issue here
           var block = evt
           var new_index = block.newIndex ;
           var old_index = block.oldIndex ;
