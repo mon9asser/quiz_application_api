@@ -2109,8 +2109,19 @@ sort: false  */
        $rootScope.switching_editor_preview(mode_type)
      }
   };
+
+  $rootScope.update_answers = (arr, old_index, new_index) => {
+    if (new_index >= arr.length) {
+        var k = new_index - arr.length + 1;
+        while (k--) {
+            arr.push(undefined);
+        }
+    }
+    arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+    return arr;
+};
   $rootScope.sorting_answers_in_list = () => {
-    var answers = $rootScope._questions_[$rootScope.question_index].answers_format;
+    var question = $rootScope._questions_[$rootScope.question_index];
     $timeout(function(){
       Sortable.create( document.getElementById('block-answers') , {
         animation: 150 ,
@@ -2119,8 +2130,9 @@ sort: false  */
         onEnd : (evt) => {
            var old_index = evt.oldIndex ;
            var new_index = evt.newIndex;
-           console.log( "New Index : " + new_index );
-           console.log( "Old Index : " + old_index );
+           var answer_list = question.answers_format;
+           question.answers_format = $rootScope.update_answers(answer_list , old_index , new_index);
+           $timeout( function(){ $rootScope.init_bootstrap_tooltip(); }  , 300 );
         }
       });
     } , 300 )
