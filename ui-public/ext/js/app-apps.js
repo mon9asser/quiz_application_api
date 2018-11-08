@@ -2065,7 +2065,6 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
     $timeout(function(){
       $rootScope.sorting_answers_in_list();
       $rootScope.init_bootstrap_tooltip();
-      $timeout(function(){ $rootScope.storing_questions_into_database(); } , 500 );
     } , 300);
   };
   // => Storing Data of questions into db
@@ -2157,6 +2156,7 @@ sort: false  */
                  icon: "success",
                }).then(()=>{
                  // var questionIndex = $rootScope._questions_.findIndex( x=> x._id == questionId );
+                 if(questionId != undefined )
                  $rootScope.highlighted_question(questionId);
                });
              } else{
@@ -4792,6 +4792,9 @@ $rootScope.mark_rating_scale = (rat_scale_type , currIndex) => {
 
   // ==> Upload Image
   $rootScope.storing_image_with_cropped_data = () => {
+
+    $timeout(function(){ $rootScope.storing_questions_into_database(); } , 500 );
+
     if ( $rootScope.media_for == 'questions' ) {
       if ( $rootScope.media_type == 0 ) $rootScope.storing_cropped_image_for_media_question();
       if ( $rootScope.media_type == 1 ) $rootScope.storing_video_for_media_question();

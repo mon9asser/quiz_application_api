@@ -3706,7 +3706,7 @@ rptRouters.post("/:app_id/statistics/report" , api_key_report_auth , (req , res)
 
 
         // && question_finder.answers_format != undefined && question_finder.answers_format[0] != null
-
+       
         var anwer_id = question_finder.answers_format[0]._id ;
         var get_all_free_text_questions = (QS) => {
            if( QS.question_id == question_id ){
