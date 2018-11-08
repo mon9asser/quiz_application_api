@@ -345,6 +345,7 @@ apps.controller("player", [
             if( $scope.isEmpty($scope._user_activity_) == true || $scope.is_retake == true )
             {
               // ==> Questions
+              if( $scope._settings_.randomize_settings == true )
               $scope.randomize_sorting_questions($scope._settings_.randomize_settings);
               // ==> Answers
 
