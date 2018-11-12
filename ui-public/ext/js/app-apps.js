@@ -1203,6 +1203,8 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
     if($rootScope._questions_.length > 200 )
     return false ;
 
+   ;
+
     var answer_tab = $(".answer-sc-block").next(".x-editor-x-body");
     var question_tab = $(".question-opener").next(".x-editor-x-body");
 
@@ -1221,6 +1223,7 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
     question_object['_id'] = $rootScope.question_ids['id_' +  $rootScope._questions_.length  ];
     question_object['question_body'] =  '' ;
     question_object['answers_format'] = new Array();
+    question_object.answers_format = [] ;
     question_object['question_type'] =  parseInt(question_type);
     question_object['created_at'] = new Date();
     question_object['question_description'] = {
@@ -1317,6 +1320,7 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
        $rootScope._questions_.splice( atIndex , 0 ,  question_object );
        // ==> Selecting according to question index
         $timeout(function(){
+
           $rootScope.highlighted_question(question_object._id);
           // ==> Slide To Bottom
           var scroll_top = 0 ;
@@ -2090,7 +2094,7 @@ sort: false  */
   // => init tooltip
   $rootScope.init_bootstrap_tooltip = ( ) => {
       return $('[data-toggle="tooltip"]').tooltip();
-         }
+  }
 
   $rootScope.switch_int_mode = ( mode_type ) => {
     /*
@@ -2110,33 +2114,47 @@ sort: false  */
      }
   };
 
-  $rootScope.update_answers = (arr, old_index, new_index) => {
-    if (new_index >= arr.length) {
-        var k = new_index - arr.length + 1;
-        while (k--) {
-            arr.push(undefined);
-        }
-    }
-    arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
-    return arr;
+//   $rootScope.update_answers = (arr, old_index, new_index) => {
+//     if (new_index >= arr.length) {
+//         var k = new_index - arr.length + 1;
+//         while (k--) {
+//             arr.push(undefined);
+//         }
+//     }
+//     arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+//     return arr;
+// };
+$rootScope.update_answers = (arr, old_index, new_index) => {
+  if (new_index >= arr.length) {
+      var k = new_index - arr.length + 1;
+      while (k--) {
+          arr.push(undefined);
+      }
+  }
+  arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+  return arr;
 };
   $rootScope.sorting_answers_in_list = () => {
-    var question = $rootScope._questions_[$rootScope.question_index];
+    // var question = $rootScope._questions_[$rootScope.question_index];
     $timeout(function(){
       Sortable.create( document.getElementById('block-answers') , {
         animation: 150 ,
         handle: '.drag-tools',
         ghostClass: 'shadow_element' ,
         onEnd : (evt) => {
-           var old_index = evt.oldIndex ;
-           var new_index = evt.newIndex;
-           var answer_list = question.answers_format;
-           question.answers_format = $rootScope.update_answers(answer_list , old_index , new_index);
-           $timeout( function(){ $rootScope.init_bootstrap_tooltip(); }  , 300 );
+         //   var old_index = evt.oldIndex ;
+         //   var new_index = evt.newIndex;
+         //   var answer_list = question.answers_format;
+         //    $rootScope._questions_[$rootScope.question_index].answers_format = $rootScope.update_answers(answer_list , old_index , new_index);
+         //    // question.answers_format = $rootScope.update_answers(answer_list , old_index , new_index);
+         // $timeout( function(){ $rootScope.init_bootstrap_tooltip(); $rootScope.$apply() ; }  , 300 );
         }
       });
     } , 300 )
   }
+
+
+
   // ==> Sorting Questions
   $rootScope.init_drag_drop = () => {
     Sortable.create (document.getElementById("qs-sortable") , {
