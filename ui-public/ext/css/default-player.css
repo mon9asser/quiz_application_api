@@ -1076,16 +1076,7 @@
    color: #00a8ff;
    cursor: pointer;
  }
- .scalet-o li span {
-     background: #fbfafa;
-     display: inline-block;
-     border-left: 1px solid #00a8ff;
-     border-bottom: 1px solid #00a8ff;
-     border-top: 1px solid #00a8ff;
-     padding: 10px 20px;
-     color: #00a8ff;
-     font-size: 15px;
- }
+
  .scalet-o li span.highlighted_scale {
    background: #00a8ff !important;
    color: #fff;
@@ -1096,15 +1087,9 @@
    font-size: 15px;
    color: #999;
  }
- .scalet-o li:last-child span {
-   border-radius: 0px 10px 10px 0px;
- }
- .scalet-o li:first-child span {
-   border-radius: 10px 0px   0px 10px;
- }
- .scalet-o li:last-child span  {
-   border-right: 1px solid #00a8ff;
- }
+
+
+
 .stylesheet-inputs{
   width: 2px;
   float: right !important;
@@ -1524,4 +1509,26 @@ button {
     padding-top: 15px;
     padding-bottom: 10px;
     color: #777;
+}
+
+
+
+.scalet-o li span {
+    background: #fbfafa;
+    display: inline-block;
+    border-left: 1px solid #00a8ff;
+    border-bottom: 1px solid #00a8ff;
+    border-top: 1px solid #00a8ff;
+    padding: 10px 20px;
+    color: #00a8ff;
+    font-size: 15px;
+}
+.scalet-o li:first-child > span {
+  border-radius: 10px 0px 0px 10px;
+}
+.scalet-o li:last-child  > span  {
+  border-radius: 0px 10px 10px 0px;
+}
+.scalet-o li:last-child  > span  {
+  border-right: 1px solid #00a8ff;
 }

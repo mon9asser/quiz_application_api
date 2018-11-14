@@ -368,11 +368,13 @@ ul li.wrong_answer > .answer-contents > .text-values {  color: #D91E18; }
 ul li.wrong_answer > .answer-contents > .answer-results-wrong { color: #D91E18; }
 ul li.wrong_answer > div > .no-media-here { color: #D91E18;}
 /*=====================================================================================*/
+
 .scalet-o li span {     color: #00a8ff;   }
 .scalet-o li span {     background: #fbfafa   }
 .scalet-o li span { border-color: #00a8ff  }
 .scalet-o-selected { color: #fff;  background: #00a8ff }
 .timeobjx > ul li.hrs > span { color: #fff;}
+/* .scalet-o li:first-child span  { border-right-width: 1px; border-right-style: solid ; border-right-color: red;} */
 .no-media-here {
   font-size: 12px;
 }

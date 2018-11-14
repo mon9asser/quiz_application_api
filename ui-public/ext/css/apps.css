@@ -827,8 +827,12 @@ li.wc-screens {
 	text-align: center;
 	margin-top: 20px;
 	margin-bottom: 15px;
+
+  -webkit-transition: all .5s ease-in-out;
+  transition: all .5s ease-in-out;
+  -moz-transition: all .5s ease-in-out;
 }
-.choices-part > li {
+.choices-part > li , .choices-part > li.dndPlaceholder {
 	display: inline-block;
 	width: 45%;
 	position: relative;
@@ -5850,3 +5854,8 @@ border-radius: 20px;
   content: 'Column(s)';
   color: #999; #a94442;
 } */
+
+.choices-part > li.dndPlaceholder {
+ background-color: #f5f5f58f;
+ border: 1px solid transparent;
+}

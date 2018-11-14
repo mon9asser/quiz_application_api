@@ -2732,6 +2732,8 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
       req.body.app_settings.titles.title_failed_with = "Unfortunately , You have not successfully completed the quiz";
       req.body.app_settings.titles.title_start_with = "Start the quiz now";
       req.body.app_settings.titles.title_end_with = "Thank you for completing the quiz";
+
+
     }else {
       // ==> SURVEY
       req.body.app_settings.titles.title_resume = "Resume your survey now";
@@ -2739,6 +2741,8 @@ qtnrRouters.post("/create", auth_verify_api_keys_tokens ,  (req, res) => {
       req.body.app_settings.titles.title_failed_with = "";
       req.body.app_settings.titles.title_start_with = "Start the survey now";
       req.body.app_settings.titles.title_end_with = "Thank you for completing the survey";
+      req.body.app_settings.label_btns.lbl_submit_quiz_with = "Submit Survey";
+      req.body.app_settings.label_btns.there_are_many_options = "You can select many choices in this question" ;
     }
     // Builde And Init Default !
     req.body.createdAt = new Date();

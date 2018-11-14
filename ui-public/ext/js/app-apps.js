@@ -95,6 +95,7 @@ apps.directive('ngCustomMessageEditors', ['$parse' , '$rootScope' , '$timeout', 
 
 
         element.summernote({
+          disableDragAndDrop: true ,
           airMode : true ,
           popover : {
             air : [
@@ -248,6 +249,7 @@ apps.directive('ngCustomEditor', ['$parse' , '$rootScope' , '$timeout', function
 
                   $rootScope.redactor_object = {
                    airMode: true ,
+                   disableDragAndDrop: true ,
                    popover : {
                      air : [
                        ['color', ['color']],
@@ -1633,11 +1635,11 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
                 $rootScope.highlighted_question($rootScope._questions_[0]._id);
 
                 //  $rootScope.fill_boxes_with_question_objects($rootScope._questions_[$rootScope.question_index]._id);
-                if($rootScope._questions_[$rootScope.question_index].question_type != 2 )
-                 {
-                   if($rootScope._questions_[0].question_type == 1 || $rootScope._questions_[0].question_type == 0)
-                   $timeout(function(){ $rootScope.sorting_answers_in_list(); } , 700  );
-                 }
+                // if($rootScope._questions_[$rootScope.question_index].question_type != 2 )
+                //  {
+                //    if($rootScope._questions_[0].question_type == 1 || $rootScope._questions_[0].question_type == 0)
+                //    $timeout(function(){ $rootScope.sorting_answers_in_list(); } , 700  );
+                //  }
               })
               // $rootScope.current_media_question = ( $rootScope._questions_[0].media_question == undefined ) ? undefined : $rootScope._questions_[0].media_question ;
             }
@@ -2070,7 +2072,7 @@ $rootScope.detect_media_status = ( question_type , question_object ) => {
       $rootScope.load_redactor_data_answers(question_id , question.answers_format );
     })
     $timeout(function(){
-      $rootScope.sorting_answers_in_list();
+      // $rootScope.sorting_answers_in_list();
       $rootScope.init_bootstrap_tooltip();
     } , 300);
   };
@@ -2134,9 +2136,11 @@ $rootScope.update_answers = (arr, old_index, new_index) => {
   arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
   return arr;
 };
+
+
   $rootScope.sorting_answers_in_list = () => {
     // var question = $rootScope._questions_[$rootScope.question_index];
-    $timeout(function(){
+    // $timeout(function(){
       Sortable.create( document.getElementById('block-answers') , {
         animation: 150 ,
         handle: '.drag-tools',
@@ -2145,12 +2149,12 @@ $rootScope.update_answers = (arr, old_index, new_index) => {
          //   var old_index = evt.oldIndex ;
          //   var new_index = evt.newIndex;
          //   var answer_list = question.answers_format;
-         //    $rootScope._questions_[$rootScope.question_index].answers_format = $rootScope.update_answers(answer_list , old_index , new_index);
+         //   $rootScope._questions_[$rootScope.question_index].answers_format = $rootScope.update_answers(answer_list , old_index , new_index);
          //    // question.answers_format = $rootScope.update_answers(answer_list , old_index , new_index);
          // $timeout( function(){ $rootScope.init_bootstrap_tooltip(); $rootScope.$apply() ; }  , 300 );
         }
       });
-    } , 300 )
+    // } , 300 )
   }
 
 
@@ -2182,6 +2186,7 @@ $rootScope.update_answers = (arr, old_index, new_index) => {
                  icon: "success",
                }).then(()=>{
                  // var questionIndex = $rootScope._questions_.findIndex( x=> x._id == questionId );
+                  var questionId = $rootScope._questions_[$rootScope.question_index]._id ;
                  if(questionId != undefined )
                  $rootScope.highlighted_question(questionId);
                });
@@ -5463,6 +5468,52 @@ $rootScope.load_redactor_data_answers = ( question_id  , answer_lists  ) => {
         }
    }
  };
+
+
+ $rootScope.drag_is_started = (answer_object , index) => {
+   $(".choices-part").css({
+     background : "rgba(255, 241, 71, 0.11)",
+     border: "1px solid #fde04d"
+   }); 
+    $timeout(function(){
+      $(".choices-part > li.dndPlaceholder").css({
+        padding : "5px"
+      })
+    } , 100)
+ }
+ $rootScope.dropCallback = function(index, item, external, type) {
+        $scope.logListEvent('dropped at', index, external, type);
+        // Return false here to cancel drop. Return true if you insert the item yourself.
+        return item;
+    };
+ $rootScope.drag_is_ended =    ( answer_object )  =>  {
+   $(".choices-part").css({
+     background : "transparent",
+     border: "0px solid transparent"
+   })
+   var answer = answer_object ;
+    var splited_answer =  ( answer.value != undefined ) ? answer.value.split(" ") : [];
+   $rootScope.is_unsaved_data = true ;
+   var question_type = $rootScope._questions_[$rootScope.question_index].question_type ;
+   if( question_type == 0 ) {
+     var answer_li = $("li[data-answer-id='"+answer_object._id+"']");
+
+     if(answer.value != undefined && ( answer.value == '' || (answer.value.toLowerCase().includes('answer') == true && splited_answer.length == 2 && !isNaN(splited_answer[1])) ) )
+     {
+       answer_li.find('.note-editable').html('');
+       answer_li.find('.note-editable').attr("data-text" , answer.value )
+       answer_li.find('.note-editable').css({color : "#999"});
+     }
+     else
+     {
+       if(answer.value != undefined ){
+         answer_li.find('.note-editable').html( answer.value );
+         answer_li.find('.note-editable').css({color : "#000"});
+        }
+     }
+     // answer_li.find('.note-editable').html(answer_object.value);
+   }
+ }
 
 
   $timeout(function(){

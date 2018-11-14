@@ -240,7 +240,7 @@
                    </label>
                     <!-- Answer Texts  -->
                     <div ng:if="obj_val.question_type == 0" class="answer-texts answer_txt_val">
-                      <span ng:cloak class="answer_text">{> answer_value.value <}</span>
+                      <span ng:cloak class="answer_text" ng:bind:html="answer_value.value | apply_html"></span>
                     </div>
                     <!-- Case Boolean questions -->
                     <div class="answer_txt_val" ng:if="obj_val.question_type == 2">

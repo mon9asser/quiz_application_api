@@ -86,10 +86,19 @@
 
 
            <div ng:if="_questions_[question_index].question_type <= 1" class="multi-answers-part">
-              <ul class="choices-part" id="block-answers">
+              <ul class="choices-part" id="block-answers" dnd-list="_questions_[question_index].answers_format" dnd-external-sources="true">
 
-                 <li data-answer-id="{>answer_value._id<}" class="answers_x answer_li_{>answer_value._id<}" ng:if="answer_value != null" ng:repeat="(answer_key , answer_value) in _questions_[question_index].answers_format" ng:class="make_answer_classes(answer_value , _questions_[question_index].question_type)">
-                    <span class="fa fa-bars drag-tools"  data-toggle="tooltip" title="Move" ></span>
+                 <li data-answer-id="{>answer_value._id<}" class="answers_x answer_li_{>answer_value._id<}" ng:if="answer_value != null"  ng:class="make_answer_classes(answer_value , _questions_[question_index].question_type)"
+                    ng:repeat="(answer_key , answer_value) in _questions_[question_index].answers_format"
+                    dnd-draggable="answer_value"
+                    dnd-moved="_questions_[question_index].answers_format.splice($index, 1)"
+                    dnd-dragend="drag_is_ended(answer_value)"
+                    dnd-dragstart="drag_is_started(answer_value , $index)"
+                    dnd-effect-allowed="copyMove"
+                    dnd-dragover="dragoverCallback(index, external, type)"
+                    dnd-callback="_questions_[question_index].answers_format.length"
+                   >
+                    <span dnd-handle class="fa fa-bars drag-tools"  data-toggle="tooltip" title="Move" ></span>
                    <!-- Answer Controlling -->
                    <ul class="answer-pt-controller">
                      <li  ng:if="answer_value.is_correct != undefined && _application_.app_type == 1" data-toggle="tooltip" title="Correct Answer" ng:click="make_this_correct_incorrect_answer(answer_value._id)">
@@ -146,7 +155,7 @@
 
                    <div ng:class="(answer_value.media_optional != undefined)?'add_dashed_border':''"  ng:if="answer_value.value != undefined" class="text-answers">
                       <!-- <textarea class="answer-redactors" name="name"  ng:model="answer_value.value" placeholder="{> answer_value.value <}" ></textarea> -->
-                        <div ng:class="'answer_id_'+answer_value._id" answer_id="{>answer_value._id<}" question_id="{>_questions_[question_index]._id<}" placeholder="{>answer_value.value<}" element-type="answer" class="answer-redactors-x" ng:custom:editor></div>
+                        <div  ng:class="'answer_id_'+answer_value._id" answer_id="{>answer_value._id<}" question_id="{>_questions_[question_index]._id<}" placeholder="{>answer_value.value<}" element-type="answer" class="answer-redactors-x" ng:custom:editor></div>
                    </div>
 
                  </li>

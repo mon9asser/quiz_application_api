@@ -104,6 +104,7 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
         $scope.applicationType = 0;
         $scope.application_title = appType + " " +( $scope.survey_applications.length + 1 );
         $scope.application_description = "This description for "+appType + " " +( $scope.survey_applications.length + 1 );
+
       } ;
   };
 
@@ -142,6 +143,8 @@ apps.controller("my-applications-controller" , ["$rootScope" , "$http" , "$scope
              $scope.application_settings.titles.title_failed_with = "";
              $scope.application_settings.titles.title_start_with = "Start the survey now";
              $scope.application_settings.titles.title_end_with = "Thank you for completing the survey";
+             $scope.application_settings.label_btns.lbl_submit_quiz_with = "Submit Survey";
+             $scope.application_settings.label_btns.there_are_many_options = "You can select many choices in this question" ;
            }else {
              // ==> Quiz
               $scope.application_settings.titles.title_resume = "Resume your quiz now";
